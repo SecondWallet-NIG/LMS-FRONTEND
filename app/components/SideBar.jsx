@@ -8,14 +8,15 @@ import { RiBox3Line } from "react-icons/ri";
 import { SlCup } from "react-icons/sl";
 import { FiDollarSign } from "react-icons/fi";
 import { MdPeopleOutline } from "react-icons/md";
-import { AiOutlineCalculator } from "react-icons/ai";
+import {
+  AiOutlineCalculator,
+  AiFillCustomerService,
+  AiOutlineSetting,
+} from "react-icons/ai";
+import { BiMapAlt } from "react-icons/bi";
+import { CgFileDocument } from "react-icons/cg";
+import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../public/images/Logo.png";
-//images {temporary}
-import plansIcon from "../../public/images/plans links icon.png";
-import reportIcon from "../../public/images/report link icon.png";
-import teamManagementIcon from "../../public/images/team managemant link icon.png";
-import settingsIcon from "../../public/images/settings icon.png";
-import signOutIcon from "../../public/images/signout icon.png";
 
 const SideBar = () => {
   const [isActive, setIsActive] = useState("dashboard");
@@ -165,26 +166,28 @@ const SideBar = () => {
             href={"#"}
             className="py-2 flex items-center gap-2 rounded-lg hover:bg-swLightGray"
           >
-            <Image src={plansIcon} alt="dashboard icon" /> <p>Plans</p>
+            <BiMapAlt size={20} />
+            <p>Plans</p>
           </Link>
           <Link
             href={"#"}
             className="py-2 flex items-center gap-2 rounded-lg hover:bg-swLightGray"
           >
-            <Image src={reportIcon} alt="my tasks icon" /> <p>Report</p>
+            <CgFileDocument size={20} />
+            <p>Report</p>
           </Link>
           <Link
             href={"#"}
             className="py-2 flex items-center gap-2 rounded-lg hover:bg-swLightGray"
           >
-            <Image src={teamManagementIcon} alt="create loan icon" />
+            <AiFillCustomerService size={20} />
             <p>Team managemant</p>
           </Link>
           <Link
             href={"#"}
             className="py-2 flex items-center gap-2 rounded-lg hover:bg-swLightGray"
           >
-            <Image src={settingsIcon} alt="loan application icon" />
+            <AiOutlineSetting size={20} />
             <p>Settings</p>
           </Link>
         </div>
@@ -193,7 +196,8 @@ const SideBar = () => {
       <div className="py-5 border-t border-t-swGray mt-auto text-sm xl:text-base">
         <div className="px-3 lg:px-8">
           <Link href={"#"} className="py-2 flex items-center gap-2 rounded-lg">
-            <Image src={signOutIcon} alt="dashboard icon" /> <p>Sign Out</p>
+            <GoSignOut size={20} />
+            <p>Sign Out</p>
           </Link>
         </div>
       </div>

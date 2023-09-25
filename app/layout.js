@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className={inter.className}>
           <SideBar />
-          <div className="ml-[16.67%]">{children}</div>
+          <div className="md:ml-[25%] xl:ml-[16.67%]">{children}</div>
         </body>
       </html>
     </Provider>
