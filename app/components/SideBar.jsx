@@ -88,12 +88,22 @@ const Sidebar = () => {
             }}
             hasDropdown={true}
             dropdownContent={
-              <div>
-                <p>All</p>
-                <p>New loans</p>
-                <p>Pending loans</p>
-                <p>Approved loans</p>
-                <p>Rejected loans</p>
+              <div className="py-2 bg-white ">
+                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                  All
+                </p>
+                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                  New loans
+                </p>
+                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                  Pending loans
+                </p>
+                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                  Approved loans
+                </p>
+                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                  Rejected loans
+                </p>
               </div>
             }
           />

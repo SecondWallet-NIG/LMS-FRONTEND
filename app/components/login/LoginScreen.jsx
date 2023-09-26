@@ -1,6 +1,7 @@
 // LoginScreen.js
 import React, { useState } from "react";
 import { BsBarChart , BsPeopleFill, BsCalculator, BsInfoCircle} from "react-icons/bs";
+import { MdOutlineEmail, MdKey } from "react-icons/md";
 import InputField from "../shared/input/InputField";
 
 const LoginScreen = () => {
@@ -32,6 +33,7 @@ const LoginScreen = () => {
             value={email}
             onChange={handleEmailChange}
             endIcon={<BsInfoCircle  />}
+            startIcon={<MdOutlineEmail />}
           />
         </div>
         <div className="mt-2">
@@ -43,6 +45,7 @@ const LoginScreen = () => {
             value={password}
             onChange={handlePasswordChange}
             endIcon={<BsInfoCircle  />}
+            startIcon={<MdKey />}
           />
         </div>
 

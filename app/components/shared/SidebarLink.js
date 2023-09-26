@@ -29,6 +29,7 @@ const SidebarLink = ({
       <div className="w-full relative">
         <div
           onClick={hasDropdown ? toggleDropdown : null}
+          onMouseEnter={hasDropdown ? toggleDropdown : null}
           className={`py-2 px-5 w-full flex items-center gap-2 rounded-lg hover:text-swBlue hover:bg-swLightGray relative bg-opacity-100`}
           style={{
             fontFamily: "sans-serif inter",
@@ -36,6 +37,7 @@ const SidebarLink = ({
             fontStyle: "normal",
             fontWeight: "500",
             lineHeight: "24px",
+            color: "#545454" // create this color properly @onifade
           }}
         >
           <span
