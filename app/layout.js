@@ -16,10 +16,9 @@ const metadata = {
 export default function RootLayout({ children }) {
   return (
     <Provider store={store}>
-      <html lang="en">
+      <html lang="en" className="h-full">
         <body className={inter.className}>
-          <SideBar />
-          <div className="md:ml-[25%] xl:ml-[16.67%]">{children}</div>
+          <div className="">{children}</div>
         </body>
       </html>
     </Provider>

@@ -2,10 +2,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react"; // Assuming this is a React functional component
 import { getPost } from "@/redux/slices/postSlice";
-import Layout from "./components/DashboardLayout";
-import LoginScreen from "./components/login/LoginScreen";
+import DashboardLayout from "../components/DashboardLayout";
 
-export default function Home() {
+const Dashboard = () => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.post.data); // Assuming 'post' is the slice name
   console.log({ posts });
@@ -15,6 +14,10 @@ export default function Home() {
     dispatch(getPost());
   }, [dispatch]);
   return (
-    <LoginScreen />
+    <DashboardLayout>
+      <main>Hello</main>
+    </DashboardLayout>
   );
-}
+};
+
+export default Dashboard;
