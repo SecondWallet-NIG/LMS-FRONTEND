@@ -1,110 +1,139 @@
-"use client"
+"use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import SidebarLink from "./shared/SidebarLink";
 
 //icons
-import { FiDollarSign } from "react-icons/lu";
 import { RiBox3Line } from "react-icons/ri";
-import { BsBarChart , BsPeopleFill, BsCalculator} from "react-icons/bs";
-import { TbAntennaBars5 , TbNewSection, TbFileDollar, TbReportMoney} from "react-icons/tb";
-
-import { SlCup } from "react-icons/sl";
-import { MdPeopleOutline } from "react-icons/md";
+import { BsPeopleFill, BsCalculator } from "react-icons/bs";
 import {
-  AiOutlineCalculator,
-  AiFillCustomerService,
-  AiOutlineSetting,
-} from "react-icons/ai";
+  TbAntennaBars5,
+  TbNewSection,
+  TbFileDollar,
+  TbReportMoney,
+} from "react-icons/tb";
+import { AiFillCustomerService, AiOutlineSetting } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
-import { CgFileDocument } from "react-icons/cg";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../public/images/Logo.png";
-import Image from "next/image";
 
 const Sidebar = () => {
-  const [isActive, setIsActive] = useState("dashboard");
+  const [activeLink, setActiveLink] = useState("");
   return (
     <main className=" h-full border-r border-r-swGray flex flex-col font-medium">
       <div className="flex justify-center items-center p-5 border-b border-b-swGray -ml-5">
-       <Image src={companyLogo} />
+        <Image src={companyLogo} alt="company logo" />
       </div>
 
       <div className="py-5 border-b border-b-swGray text-sm xl:text-base">
         <div className="px-3 lg:px-8">
-          <SidebarLink
-            icon={
-              <TbAntennaBars5
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
-                size={20}
-              />
-            }
-            text="Dashboard"
-            link="/dashboard"
-            isActive={true}
-          />
+          <div>
+            <SidebarLink
+              icon={
+                <TbAntennaBars5
+                  className={`${activeLink === "dashboard" && "text-swBlue"}`}
+                  size={20}
+                />
+              }
+              text="Dashboard"
+              link="/dashboard"
+              isActive={activeLink === "dashboard"}
+              onClick={() => {
+                setActiveLink("dashboard");
+              }}
+            />
+          </div>
           <SidebarLink
             icon={
               <RiBox3Line
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
+                className={`${activeLink === "my-tasks" && "text-swBlue"}`}
                 size={20}
               />
             }
             text="My tasks"
             link="/my-tasks"
+            isActive={activeLink === "my-tasks"}
+            onClick={() => {
+              setActiveLink("my-tasks");
+            }}
           />
           <SidebarLink
             icon={
               <TbNewSection
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
+                className={`${activeLink === "create-loan" && "text-swBlue"}`}
                 size={20}
               />
             }
             text="Create loan"
             link="/create-loan"
+            isActive={activeLink === "create-loan"}
+            onClick={() => {
+              setActiveLink("create-loan");
+            }}
           />
           <SidebarLink
             icon={
               <TbFileDollar
                 className={`${
-                  isActive === "loan-applications" && "text-swBlue"
+                  activeLink === "loan-applications" && "text-swBlue"
                 }`}
                 size={20}
               />
             }
             text="Loan applications"
             link="/loan-applications"
+            isActive={activeLink === "loan-applications"}
+            onClick={() => {
+              setActiveLink("loan-applications");
+            }}
+            hasDropdown={true}
+            dropdownContent={
+              <div>
+                <p>All</p>
+                <p>New loans</p>
+                <p>Pending loans</p>
+                <p>Approved loans</p>
+                <p>Rejected loans</p>
+              </div>
+            }
           />
           <SidebarLink
             icon={
               <BsPeopleFill
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
+                className={`${activeLink === "custmers" && "text-swBlue"}`}
                 size={20}
               />
             }
             text="Customers"
             link="/customers"
             hasDropdown={true}
-            dropdownContent={<div>Customers Dropdown Content</div>} // Customize the dropdown content
+            dropdownContent={
+              <div>
+                <p>All</p>
+                <p>Approved customers</p>
+                <p>Pending customers</p>
+              </div>
+            } // Customize the dropdown content
+            isActive={activeLink === "customers"}
+            onClick={() => {
+              setActiveLink("customers");
+            }}
           />
           <SidebarLink
             icon={
               <BsCalculator
                 className={`${
-                  isActive === "loan-applications" && "text-swBlue"
+                  activeLink === "intrest-calculator" && "text-swBlue"
                 }`}
                 size={20}
               />
             }
             text="Interest calculator"
             link="/interest-calculator"
+            isActive={activeLink === "intrest-calculator"}
+            onClick={() => {
+              setActiveLink("intrest-calculator");
+            }}
           />
         </div>
       </div>
@@ -112,67 +141,32 @@ const Sidebar = () => {
       <div className="py-5 border-b border-b-swGray text-sm xl:text-base">
         <div className="px-3 lg:px-8">
           <SidebarLink
-            icon={
-              <RiBox3Line
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
-                size={20}
-              />
-            }
+            icon={<BiMapAlt size={20} />}
             text="Plans"
             link="/plans"
           />
           <SidebarLink
-            icon={
-              <RiBox3Line
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
-                size={20}
-              />
-            }
+            icon={<TbReportMoney size={20} />}
             text="Report"
             link="/report"
           />
           <SidebarLink
-            icon={
-              <RiBox3Line
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
-                size={20}
-              />
-            }
+            icon={<AiFillCustomerService size={20} />}
             text="Team management"
             link="/team-management"
           />
           <SidebarLink
-            icon={
-              <RiBox3Line
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
-                size={20}
-              />
-            }
+            icon={<AiOutlineSetting size={20} />}
             text="Settings"
             link="/settings"
           />
         </div>
       </div>
 
-      <div className="py-5 border-t border-t-swGray text-sm xl:text-base">
+      <div className="pb-2 border-t border-t-swGray text-sm xl:text-base mt-auto">
         <div className="px-3 lg:px-8">
           <SidebarLink
-            icon={
-              <RiBox3Line
-                className={`${
-                  isActive === "loan-applications" && "text-swBlue"
-                }`}
-                size={20}
-              />
-            }
+            icon={<GoSignOut size={20} />}
             text="Sign Out"
             link="/sign-out"
           />
