@@ -21,7 +21,7 @@ const Sidebar = () => {
   const [activeLink, setActiveLink] = useState("");
   return (
     <main className=" h-full border-r border-r-swGray flex flex-col font-medium">
-      <div className="flex justify-center items-center p-5 border-b border-b-swGray -ml-5">
+      <div className="flex justify-center items-center p-5 border-b border-b-swGray md:-ml-5">
         <Image src={companyLogo} alt="company logo" />
       </div>
 
@@ -119,9 +119,15 @@ const Sidebar = () => {
             hasDropdown={true}
             dropdownContent={
               <div>
-                <p>All</p>
-                <p>Approved customers</p>
-                <p>Pending customers</p>
+                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                  All
+                </p>
+                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                  Approved customers
+                </p>
+                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                  Pending customers
+                </p>
               </div>
             } // Customize the dropdown content
             isActive={activeLink === "customers"}

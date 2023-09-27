@@ -21,6 +21,12 @@ const SidebarLink = ({
     <div
       onClick={onClick}
       className={`relative flex items-center cursor-pointer overflow-hidden z-50 bg-white`}
+      onMouseEnter={() => {
+        hasDropdown && setIsDropdownOpen(true);
+      }}
+      onMouseLeave={() => {
+        hasDropdown && setIsDropdownOpen(false);
+      }}
     >
       {!hasDropdown && (
         <div className={`${isActive && "bg-swBlue"} h-5 w-1 rounded-full`} />
@@ -29,15 +35,13 @@ const SidebarLink = ({
       <div className="w-full relative">
         <div
           onClick={hasDropdown ? toggleDropdown : null}
-          onMouseEnter={hasDropdown ? toggleDropdown : null}
-          className={`py-2 px-5 w-full flex items-center gap-2 rounded-lg hover:text-swBlue hover:bg-swLightGray relative bg-opacity-100`}
+          className={`py-2 px-5 w-full flex items-center gap-2 rounded-lg text-swBrown hover:text-swBlue hover:bg-swLightGray relative`}
           style={{
             fontFamily: "sans-serif inter",
             fontSize: "0.875rem",
             fontStyle: "normal",
             fontWeight: "500",
             lineHeight: "24px",
-            color: "#545454" // create this color properly @onifade
           }}
         >
           <span
@@ -56,7 +60,7 @@ const SidebarLink = ({
           </span>
           {hasDropdown && (
             <button
-              onClick={toggleDropdown}
+              // onClick={toggleDropdown}
               className={`ml-auto focus:outline-none ${
                 isDropdownOpen ? "rotate-0" : "rotate-90"
               } transform transition`}

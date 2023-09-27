@@ -5,11 +5,9 @@ import { store } from "@/redux/store";
 import "../globals.css";
 import { Inter } from "next/font/google";
 import SideBar from "./SideBar";
+import NavBar from "./NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
-
-
-
 
 const DashboardLayout = ({ children }) => {
   return (
@@ -19,11 +17,15 @@ const DashboardLayout = ({ children }) => {
           <div className="h-full w-1/5">
             <SideBar />
           </div>
-          <div className="h-full w-4/5">{children}</div> {/* Set content height to 100% */}
+          <div className="flex flex-col w-4/5">
+            <NavBar />
+            <div className="h-full w-4/5">{children}</div>
+            {/* Set content height to 100% */}
+          </div>
         </div>
       </div>
     </Provider>
   );
-}
+};
 
 export default DashboardLayout;
