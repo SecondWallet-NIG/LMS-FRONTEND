@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { BsBarChart , BsPeopleFill, BsCalculator, BsInfoCircle} from "react-icons/bs";
 import { MdOutlineEmail, MdKey } from "react-icons/md";
 import InputField from "../shared/input/InputField";
+import Button from "../shared/button/button";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -49,12 +50,12 @@ const LoginScreen = () => {
           />
         </div>
 
-        <button
+        <Button
           onClick={handleLogin}
           className="bg-swBlue w-full text-white py-2 px-4 rounded-md mt-4 hover:bg-bswBlue"
         >
           Login 
-        </button>
+        </Button>
         <p className="text-sm mt-2 pt-2 text-center">
           <a href="#">Forgot Password</a> | <a href="#">Change Password</a>
         </p>
