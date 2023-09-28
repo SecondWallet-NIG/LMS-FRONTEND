@@ -18,8 +18,6 @@ export const getPost = createAsyncThunk('post/getPost', async () => {
   return response.data;
 });
 
-const hello = getPost();
-console.log({hello});
 
 
 const postSlice = createSlice({
