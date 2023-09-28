@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineEmail, MdKey } from "react-icons/md";
 import InputField from "../shared/input/InputField";
-import Button from "../shared/button/Button";
+import Button from "../shared/buttonComponent/Button";
+import Link from 'next/link'
 import axios from "axios";
 
 //slice
@@ -96,7 +97,6 @@ const LoginScreen = () => {
             name="password"
             inputType="password"
             placeholder="Password"
-            hintText="This is your password"
             required={true}
             //  value={loginData.password}
             onChange={handleInputChange}
@@ -117,7 +117,7 @@ const LoginScreen = () => {
           {loading === true ? "Logging In..." : "Log In"}
         </Button>
         <p className="text-sm mt-2 pt-2 text-center">
-          <a href="#">Forgot Password</a> | <a href="#">Change Password</a>
+          <Link href="/forgetPassword">Forget Password</Link> | <a href="#">Change Password</a>
         </p>
       </div>
       <ToastContainer />
