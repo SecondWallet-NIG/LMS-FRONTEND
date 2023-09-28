@@ -14,6 +14,7 @@ const Dashboard = () => {
     dispatch(getPost());
   }, [dispatch]);
   return (
+
     <DashboardLayout>
       <main>Hello</main>
     </DashboardLayout>

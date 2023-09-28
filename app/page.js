@@ -1,9 +1,9 @@
-"use client";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react"; // Assuming this is a React functional component
-import { getPost } from "@/redux/slices/postSlice";
-import Layout from "./components/DashboardLayout";
-import LoginScreen from "./components/login/LoginScreen";
+"use client"
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react'; // Assuming this is a React functional component
+import { getPost } from '@/redux/slices/postSlice';
+import ForgetPassword from './forgetPassword/page';
+import LoginScreen from './components/login/LoginScreen';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -14,7 +14,5 @@ export default function Home() {
     // Dispatch the fetchPosts action when the component mounts
     dispatch(getPost());
   }, [dispatch]);
-  return (
-    <LoginScreen />
-  );
+  return (<LoginScreen />)
 }
