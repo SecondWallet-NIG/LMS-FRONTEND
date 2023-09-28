@@ -5,3 +5,5 @@ export const cls = (input) =>
     .filter((cond) => typeof cond === "string")
     .join(" ")
     .trim();
+
+export const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
