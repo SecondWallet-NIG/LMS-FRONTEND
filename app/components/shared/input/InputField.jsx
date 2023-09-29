@@ -5,53 +5,55 @@ const InputField = ({
   placeholder,
   inputType,
   borderColor,
+  dropDown,
+  customSelect,
   required,
   onChange,
   value,
   name,
   hintText,
   endIcon,
-  startIcon // New prop for the icon before placeholder
+  startIcon, // New prop for the icon before placeholder
+  onclick,
+  inputOpen,
+  isActive,
 }) => {
   return (
-    <div className="">
-      <label htmlFor={name} className="block text-gray-700 text-xs mb-2">
+    <div
+      className={`${
+        inputOpen === isActive && !customSelect && !dropDown && "mb-5 "
+      } relative flex items-center p-2 w-full translate-all ${borderColor} duration-1000 cursor-pointer rounded border hover:border-swBlue }`}
+      onClick={onclick}
+    >
+      {/* Added flex container */}
+      {startIcon && <span className=" flex items-center">{startIcon}</span>}
+      <label htmlFor={name} className="text-gray-700 stext-xs z-50">
         {label}
         {required && <span className="text-red-600 ml-1">*</span>}
       </label>
-
-      <div className="relative flex items-center"> {/* Added flex container */}
-        {startIcon && ( 
-          <span className="absolute inset-y-0 left-0 pl-3 pt-5 pr-2 pb-5 flex items-center">
-            {startIcon}
-          </span>
-        )}
-
+      {!customSelect && !dropDown && (
         <input
           type={inputType}
           id={name}
           name={name}
           placeholder={placeholder}
-          className={`pl-8 w-full h-10 px-3 py-2 rounded border ${borderColor} ${
-            required ? "border-gray-300" : "border-gray-300"
-          } focus:outline-none focus:${borderColor}`}
+          className={`w-[100.4%] p-2 -ml-[0.6rem] ${
+            inputOpen === isActive
+              ? "opacity-100 translate-y-8 outline-none focus:outline-none rounded rounded-t-none border border-t-0 border-swBlue w-[100.4%]"
+              : "opacity-0 outline-none focus:outline-none rounded rounded-t-none border border-t-0 cursor-pointer w-[100.3%]"
+          } transition-all duration-1000 ease-in-out absolute`}
           required={required}
           onChange={onChange}
           value={value}
         />
+      )}
 
-        {endIcon && (
-          <span className="absolute inset-y-0 right-0 pr-3  pt-5 pb-5 flex items-center">
-            {endIcon}
-          </span>
-        )}
-
-
-      </div>
-
-      {hintText && (
-          <p className="text-gray-500 text-xs mt-2">{hintText}</p>
-        )}
+      {hintText && <p className="text-gray-500 text-xs mt-2">{hintText}</p>}
+      {endIcon && (
+        <span className="absolute inset-y-0 right-0 pr-3 flex items-center">
+          {endIcon}
+        </span>
+      )}
     </div>
   );
 };

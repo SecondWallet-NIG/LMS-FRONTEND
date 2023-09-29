@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import SideBar from "./components/sideBar/SideBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
