@@ -10,15 +10,17 @@ const SidebarLink = ({
   hasDropdown,
   dropdownContent,
   onClick,
+  pathname,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
+  };  
 
   return (
-    <div
+    <Link
+      href={link}
       onClick={onClick}
       className={`relative flex items-center cursor-pointer overflow-hidden z-50 bg-white`}
       onMouseEnter={() => {
@@ -29,13 +31,17 @@ const SidebarLink = ({
       }}
     >
       {!hasDropdown && (
-        <div className={`${isActive && "bg-swBlue"} h-5 w-1 rounded-full`} />
+        <div
+          className={`${
+            pathname === `/${isActive}` ? "bg-swBlue" : ""
+          } h-5 w-1 rounded-full`}
+        />
       )}
 
       <div className="w-full relative">
         <div
           onClick={hasDropdown ? toggleDropdown : null}
-          className={`py-2 px-5 w-full flex items-center gap-2 rounded-lg text-swBrown hover:text-swBlue hover:bg-swLightGray relative`}
+          className={`py-2 px-2 lg:px-3 xl:px-5 w-full flex items-center gap-2 rounded-lg text-swBrown hover:text-swBlue hover:bg-swLightGray relative`}
           style={{
             fontFamily: "sans-serif inter",
             fontSize: "0.875rem",
@@ -45,7 +51,7 @@ const SidebarLink = ({
           }}
         >
           <span
-            className={`${isActive && "text-swBlue"} ${
+            className={`${pathname === `/${isActive}` && "text-swBlue"} ${
               !hasDropdown && "-ml-1"
             } relative`}
           >
@@ -53,7 +59,7 @@ const SidebarLink = ({
           </span>
           <span
             className={`flex-grow transition-colors hover:text-swBlue ${
-              isActive && "text-swBlue"
+              pathname === `/${isActive}` && "text-swBlue"
             } relative`}
           >
             {text}
@@ -87,7 +93,7 @@ const SidebarLink = ({
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
