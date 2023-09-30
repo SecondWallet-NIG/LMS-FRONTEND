@@ -83,9 +83,6 @@ const CreateLoan = () => {
           <InputField
             required={true}
             hintText="Content here"
-            borderColor={`border-swGray ${
-              isInputOpen === "loan-amount" && "border-swBlue"
-            }`}
             activeBorderColor="border-swBlue"
             label="Loan amount"
             placeholder="Start typing"
@@ -103,9 +100,6 @@ const CreateLoan = () => {
           <InputField
             required={true}
             hintText="Content here"
-            borderColor={`border-swGray ${
-              isInputOpen === "duration" && "border-swBlue"
-            }`}
             activeBorderColor="border-swBlue"
             label="Duration"
             placeholder="Start typing"

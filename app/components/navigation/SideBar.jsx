@@ -189,7 +189,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="pb-2 border-t border-t-swGray text-sm xl:text-base mt-auto">
+      <div className="py-1 border-t border-t-swGray text-sm xl:text-base mt-auto">
         <div className="px-3 lg:px-8">
           <SidebarLink
             icon={<GoSignOut size={20} />}

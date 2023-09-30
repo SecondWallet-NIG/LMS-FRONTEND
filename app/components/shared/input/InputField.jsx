@@ -24,8 +24,10 @@ const InputField = ({
   return (
     <div
       className={`${
-        inputOpen === isActive && !customSelect && !dropDown && "mb-5 "
-      } relative flex items-center p-2 w-full translate-all ${borderColor} duration-1000 cursor-pointer rounded border hover:border-swBlue }`}
+        inputOpen === isActive && !customSelect && !dropDown
+          ? "mb-5 border border-swBlue"
+          : "border hover:border-swBlue"
+      } relative flex items-center p-2 w-full translate-all duration-1000 cursor-pointer rounded  }`}
       onClick={onclick}
     >
       {/* Added flex container */}
@@ -42,8 +44,8 @@ const InputField = ({
           placeholder={placeholder}
           className={`w-[100%] p-2 -ml-[0.55rem] ${
             inputOpen === isActive
-              ? "opacity-100 translate-y-8 outline-none focus:outline-none rounded rounded-t-none border border-t-0 border-swBlue w-[100%]"
-              : "opacity-0 outline-none focus:outline-none rounded rounded-t-none border border-t-0 cursor-pointer w-[100%]"
+              ? "opacity-100 translate-y-8 outline-none focus:outline-none rounded rounded-t-none border border-t-0 border-swBlue w-[100.2%]"
+              : "opacity-0 outline-none focus:outline-none rounded rounded-t-none border border-t-0 cursor-pointer w-[100.2%]"
           } transition-all duration-1000 ease-in-out absolute`}
           required={required}
           onChange={onChange}
