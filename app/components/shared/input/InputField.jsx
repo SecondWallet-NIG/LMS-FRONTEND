@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 
 const InputField = ({
   label,
@@ -18,6 +19,8 @@ const InputField = ({
   inputOpen,
   isActive,
 }) => {
+  const [isEndIconHovered, setIsEndIconHovered] = useState(false);
+
   return (
     <div
       className={`${
@@ -37,20 +40,34 @@ const InputField = ({
           id={name}
           name={name}
           placeholder={placeholder}
-          className={`w-[100.4%] p-2 -ml-[0.6rem] ${
+          className={`w-[100%] p-2 -ml-[0.55rem] ${
             inputOpen === isActive
-              ? "opacity-100 translate-y-8 outline-none focus:outline-none rounded rounded-t-none border border-t-0 border-swBlue w-[100.4%]"
-              : "opacity-0 outline-none focus:outline-none rounded rounded-t-none border border-t-0 cursor-pointer w-[100.3%]"
+              ? "opacity-100 translate-y-8 outline-none focus:outline-none rounded rounded-t-none border border-t-0 border-swBlue w-[100%]"
+              : "opacity-0 outline-none focus:outline-none rounded rounded-t-none border border-t-0 cursor-pointer w-[100%]"
           } transition-all duration-1000 ease-in-out absolute`}
           required={required}
           onChange={onChange}
           value={value}
         />
       )}
-
-      {hintText && <p className="text-gray-500 text-xs mt-2">{hintText}</p>}
+      <div className={`absolute -top-12 right-0`}>
+        {hintText && isEndIconHovered && (
+          <div className="bg-white shadow-md p-2 w-fit rounded text-center relative font-semibold">
+            Content here
+            <div className="bg-white h-3 w-3 rotate-45 absolute right-[15%]"></div>
+          </div>
+        )}
+      </div>
       {endIcon && (
-        <span className="absolute inset-y-0 right-0 pr-3 flex items-center">
+        <span
+          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          onMouseEnter={() => {
+            setIsEndIconHovered(!isEndIconHovered);
+          }}
+          onMouseLeave={() => {
+            setIsEndIconHovered(!isEndIconHovered);
+          }}
+        >
           {endIcon}
         </span>
       )}

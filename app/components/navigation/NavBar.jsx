@@ -4,7 +4,7 @@ import { HiMiniUserCircle } from "react-icons/hi2";
 
 const NavBar = () => {
   return (
-    <main className="flex justify-end p-[0.68rem] border-b border-b-swGray w-full px-10">
+    <main className="fixed flex justify-end p-[0.68rem] ml-auto border-b border-b-swGray w-3/4 lg:w-[78%] xl:w-4/5 px-10">
       <div className=" flex gap-5 items-center">
         <div className="relative">
           <FaBell size={20} />
