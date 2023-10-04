@@ -132,8 +132,8 @@ const ResetPasswordScreen = ({
             }
           />
         </div>
-        <div className="mt-4">
-          Your password should contain
+        <div className="mt-4 text-swGray">
+          <p>Your password should contain</p>
           <div className="flex gap-1">
             <input
               type="radio"
