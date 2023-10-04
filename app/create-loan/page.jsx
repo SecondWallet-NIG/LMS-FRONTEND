@@ -4,9 +4,19 @@ import Dashboard from "../dashboard/page";
 import { IoMdAdd } from "react-icons/io";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
+import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
 import { AiOutlineExclamationCircle, AiOutlinePaperClip } from "react-icons/ai";
 import Button from "../components/shared/buttonComponent/Button";
+
+const customNoOptionsMessage = () => {
+  return (
+    <div>
+      {/* Custom message with a link */}
+      <p>Not found. <Link href="/create">Create new customer</Link></p>
+    </div>
+  );
+};
 
 const CreateLoan = () => {
   const [isInputOpen, setIsInputOpen] = useState(false);
@@ -14,78 +24,46 @@ const CreateLoan = () => {
   return (
     <Dashboard>
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
-        <p className="text-lg font-semibold">Initiate loan application</p>
+     <div className="flex justify-between">
+     <p className="text-lg font-semibold">Initiate loan application</p>
+   
+   <Button
+   
+     href=""
+     className="hidden flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
+   >
+     <IoMdAdd size={20} />
+     <p>Add new customer</p>
+   </Button>
+     </div>
+      
         <div className="flex flex-col gap-5 mt-5">
           <p className="font-semibold">Loan details</p>
-          <div className="flex gap-5 items-start">
-            <InputField
-              required={true}
-              customSelect={true}
-              borderColor={`border-swGray`}
-              activeBorderColor="border-swBlue"
-              label="Search and select customer"
-              placeholder="Start typing"
-              endIcon={<MdKeyboardArrowDown size={20} />}
-              isActive="select-customer"
-              onclick={() => {
-                isInputOpen === "select-customer"
-                  ? setIsInputOpen(null)
-                  : setIsInputOpen("select-customer");
-              }}
-              inputOpen={isInputOpen}
-            />
-            <div className="p-[0.1rem] -mt-[0.1rem] rounded roundned-md bg-white hover:bg-swLightGray font-semibold">
-              <Link
-                href=""
-                className="flex gap-1 py-2 px-3 border-2 bg-white border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
-              >
-                <IoMdAdd size={20} />
-                <p>Add new customer</p>
-              </Link>
-            </div>
-          </div>
-          <InputField
+          <SelectField
+            label={"Customer Name/ID"}
             required={true}
-            dropDown={true}
-            borderColor={`border-swGray ${
-              isInputOpen === "loan-package" && "border-swBlue"
-            }`}
-            activeBorderColor="border-swBlue"
-            label="Loan package"
-            placeholder="Start typing"
-            endIcon={<MdKeyboardArrowDown size={20} />}
-            isActive="loan-package"
-            onclick={() => {
-              isInputOpen === "loan-package"
-                ? setIsInputOpen(null)
-                : setIsInputOpen("loan-package");
-            }}
-            inputOpen={isInputOpen}
+            placeholder={"Search and select customer"}
+            isSearchable={true}
+            noOptionsMessage={customNoOptionsMessage}
+          />
+          <SelectField
+            label={"Loan Package "}
+            required={true}
+            placeholder={"Select loan package"}
+            isSearchable={false}
+          />
+          <SelectField
+            label={"Asset Type"}
+            required={true}
+            placeholder={"Select asset type"}
+            isSearchable={false}
           />
           <InputField
             required={true}
-            dropDown={true}
-            borderColor={`border-swGray ${
-              isInputOpen === "asset-type" && "border-swBlue"
-            }`}
-            activeBorderColor="border-swBlue"
-            label="Asset type"
-            placeholder="Start typing"
-            endIcon={<MdKeyboardArrowDown size={20} />}
-            isActive="asset-type"
-            onclick={() => {
-              isInputOpen === "asset-type"
-                ? setIsInputOpen(null)
-                : setIsInputOpen("asset-type");
-            }}
-            inputOpen={isInputOpen}
-          />
-          <InputField
-            required={true}
-            hintText="Content here"
+            hintText={"Enter the loan amount in digit (Naira currency)"}
             activeBorderColor="border-swBlue"
             label="Loan amount"
-            placeholder="Start typing"
+            placeholder="Enter loan amount"
             endIcon={
               <AiOutlineExclamationCircle className="text-swGray" size={20} />
             }
@@ -99,10 +77,10 @@ const CreateLoan = () => {
           />
           <InputField
             required={true}
-            hintText="Content here"
+            hintText={"Enter the loan duration in months"}
             activeBorderColor="border-swBlue"
             label="Duration"
-            placeholder="Start typing"
+            placeholder="Enter loan duration"
             endIcon={
               <AiOutlineExclamationCircle className="text-swGray" size={20} />
             }

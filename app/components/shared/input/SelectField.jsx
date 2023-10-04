@@ -1,0 +1,64 @@
+import React from "react";
+import Select from "react-select";
+
+const options = [
+  { value: "chocolate", label: "Chocolate" },
+  { value: "strawberry", label: "Strawberry" },
+  { value: "vanilla", label: "Vanilla" },
+];
+
+const formatOptionLabel = ({ label, isSelected }) => (
+  <div className="flex">
+    <div className="w-2 h-2 bg-[#17B26A] rounded-full inline-block mr-2 mt-1.5"></div> {/* Dot */}
+    <div style={{ display: isSelected ? 'none' : 'block' }}>{label}</div>
+  </div>
+);
+
+
+const customStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    height: "40px", 
+    borderColor: state.isFocused
+      ? "your-custom-border-color"
+      : provided.borderColor,
+    boxShadow: state.isFocused ? "none" : provided.boxShadow,
+  }),
+
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? "#f5f5f5" : "white", 
+    color: state.isFocused ? "#000000" : "#000000",
+    borderRadius: "5px", 
+    margin: "5px",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "#f5f5f5", 
+    },
+  }),
+};
+
+const SelectField = ({
+  label,
+  required,
+  placeholder,
+  isSearchable,
+  noOptionsMessage,
+}) => (
+  <div>
+    <label htmlFor={name} className="block text-gray-700 text-xs mb-2">
+      {label}
+      {required && <span className="text-red-600 ml-1">*</span>}
+    </label>
+    <Select
+      styles={customStyles}
+      isSearchable={isSearchable}
+      options={options}
+      placeholder={placeholder}
+      noOptionsMessage={noOptionsMessage}
+      formatOptionLabel={formatOptionLabel}
+    />
+  </div>
+);
+
+export default SelectField;

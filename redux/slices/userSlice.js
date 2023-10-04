@@ -9,9 +9,16 @@ export const createUser = createAsyncThunk('user/createUser', async (userData) =
 });
 
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData) => {
-    const response = await axios.post('http://localhost:8000/api/auth/login', loginData);
+  try {
+    const response = await axios.post('https://secondwallet-stag.onrender.com/api/auth/login', loginData);
     return response.data;
-  });
+  } catch (error) {
+    if (error.response.data.error === "Incorrect email or password") {
+      throw new Error("Please check all inputs and fill correctly")
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
 
 export const updateUser = createAsyncThunk('user/updateUser', async ({ userId, updatedData }) => {
   const response = await axios.put(`/api/user/${userId}`, updatedData);
@@ -48,7 +55,7 @@ const userSlice = createSlice({
         state.loading = 'succeeded';
         state.data = action.payload;
       })
-      .addCase(createUser.rejected, (state, action) => {
+      .addCase(createUser.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })
@@ -60,7 +67,8 @@ const userSlice = createSlice({
         state.loading = 'succeeded';
         state.data = action.payload;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginUser.rejected, (state, action,) => {
+        console.log("action.error.message", action.error.message);
         state.loading = 'failed';
         state.error = action.error.message;
       })

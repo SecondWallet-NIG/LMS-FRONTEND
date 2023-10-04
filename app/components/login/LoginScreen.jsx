@@ -6,9 +6,8 @@ import InputField from "../shared/input/InputField";
 import Button from "../shared/buttonComponent/Button";
 import Link from 'next/link'
 import axios from "axios";
-
-//slice
-import { loginUser } from "@/redux/slices/userSlice";
+import Image from 'next/image';
+import companyLogo from "../../../public/images/Logo.png"
 
 //toast
 import { toast, ToastContainer } from "react-toastify";
@@ -51,31 +50,33 @@ const LoginScreen = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+        "https://secondwallet-stag.onrender.com/api/auth/login",
         loginData
       );
       setLoading(false);
       toast.success(response.data.message);
 
       const user = response.data.data.user;
+      localStorage.setItem("user", JSON.stringify(user))
 
       if (user.firstLogin) {
-        router.push("/dashboard");
+        router.push("/onboarding");
       } else {
-        router.push("/dashboard");
+        router.push("/onboarding");
       }
-      dispatch(login(user));
-      return response.data;
     } catch (error) {
-      toast.error(error.response.data.error);
+      toast.error(error?.response?.data?.error);
       setLoading(false);
-      return error.response.data.error;
+
     }
   };
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <div className="w-[30%] bg-white p-6 rounded-lg shadow-md">
+      <div className="w-[30%] bg-white p-6 ">
+      <div className="flex justify-center items-center mb-20 -ml-5">
+        <Image src={companyLogo} alt="company logo" />
+      </div>
         <h2 className="text-2xl text-center font-semibold mb-4">
           Log into your account
         </h2>
@@ -109,7 +110,7 @@ const LoginScreen = () => {
           disabled={
             !validInput.email || !validInput.password || loading === "pending"
           }
-          className={`w-full text-white py-2 px-4 rounded-md mt-4 ${
+          className={`w-full text-white py-2 px-4 rounded-md mt-8 ${
             (!validInput.email || !validInput.password) &&
             "bg-gray-300 cursor-not-allowed"
           } ${validInput.email && validInput.password && "bg-swBlue"} `}
@@ -117,7 +118,7 @@ const LoginScreen = () => {
           {loading === true ? "Logging In..." : "Log In"}
         </Button>
         <p className="text-sm mt-2 pt-2 text-center">
-          <Link href="/forgetPassword">Forget Password</Link> | <a href="#">Change Password</a>
+          <Link href="/forgetPassword">Forget Password</Link> 
         </p>
       </div>
       <ToastContainer />

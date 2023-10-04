@@ -1,11 +1,12 @@
-import React, { useState  } from "react";
-import Button from "../shared/button/Button";
+import React, { useState, useEffect } from "react";
+import Button from "../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
-
+import Image from "next/image";
+import companyLogo from "../../../public/images/Logo.png";
+import ResetPasswordScreen from "../reset-password/ResetPasswordScreen";
+import ResetSuccessful from "../resetSuccesfully/ResetSuccessful";
 
 const OnboardingScreen = () => {
-    const user = useSelector((state) => state.auth.user);
-    console.log({user});
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -13,6 +14,8 @@ const OnboardingScreen = () => {
     email: "",
     password: "",
   });
+
+  const [user, setUser] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,88 +35,42 @@ const OnboardingScreen = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission (e.g., send data to the server)
     console.log("Form data submitted:", formData);
   };
 
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user")));
+  }, []);
+
   return (
-    <div
-      className="h-screen flex justify-center items-center"
-      style={{ background: "#f0f0f0" }}
-    >
-      <div
-        className="w-[30%] bg-white p-6 rounded-lg shadow-md"
-        style={{ minWidth: "400px" }}
-      >
-        <div>
-          <h1 className="text-2xl font-semibold mb-4">Three-Step Form</h1>
-          <form onSubmit={handleSubmit}>
-            {step === 1 && (
-              <div>
-                <h2 className="text-xl font-semibold mb-2">
-                  Hi {user.firstName} {user.lastName},
+    <div className="">
+      <div>
+        {step === 1 && (
+          <div className="flex justify-center items-center h-screen">
+            <form onSubmit={handleSubmit}>
+              <div className="items-center text-center">
+                <div className="flex justify-center items-center mb-20">
+                  <Image src={companyLogo} alt="company logo" />
+                </div>
+                <h2 className="text-xl font-semibold mb-8">
+                  Hi {user?.firstName} {user?.lastName},
                 </h2>
                 <p className="mb-4">
                   You’ve been added to the Second Wallet Loan Management App as
-                  a {user.role}.
+                  an Admin.
                 </p>
                 <p>Let’s set up your account</p>
-                <Button onClick={handleNextStep} className="mt-4">
+                <Button onClick={handleNextStep} className="mt-4 block w-full">
                   Set up account
                 </Button>
               </div>
-            )}
+            </form>
+          </div>
+        )}
 
-            {step === 2 && (
-              <div>
-                <h2 className="text-xl font-semibold mb-4">
-                  Step 2: Email and Password
-                </h2>
-                <label className="block mb-2">
-                  Email:
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="border rounded px-2 py-1 w-full"
-                    required
-                  />
-                </label>
-                <label className="block mb-4">
-                  Password:
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className="border rounded px-2 py-1 w-full"
-                    required
-                  />
-                </label>
-                <div className="flex justify-between">
-                  <Button onClick={handlePrevStep}>Previous</Button>
-                  <Button type="submit">Next</Button>
-                </div>
-              </div>
-            )}
+        {step === 2 && <ResetPasswordScreen onNextStep={handleNextStep} />}
 
-            {step === 3 && (
-              <div>
-                <h2 className="text-xl font-semibold mb-4">
-                  Step 3: Review and Submit
-                </h2>
-                <p className="mb-2">First Name: {formData.firstName}</p>
-                <p className="mb-2">Last Name: {formData.lastName}</p>
-                <p className="mb-2">Email: {formData.email}</p>
-                <div className="flex justify-between">
-                  <Button onClick={handlePrevStep}>Previous</Button>
-                  <Button type="submit">Submit</Button>
-                </div>
-              </div>
-            )}
-          </form>
-        </div>
+        {step === 3 && <ResetSuccessful />}
       </div>
     </div>
   );

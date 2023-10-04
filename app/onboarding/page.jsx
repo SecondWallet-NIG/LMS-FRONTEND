@@ -5,9 +5,5 @@ import OnboardingScreen from "../components/login/OnboardingScreen";
 import ProtectedRoute from "../components/protected-route/ProtectedRoute";
 
 export default function Home() {
-  return (
-    <ProtectedRoute>
-      <OnboardingScreen />;
-    </ProtectedRoute>
-  );
+  return <OnboardingScreen />;
 }
