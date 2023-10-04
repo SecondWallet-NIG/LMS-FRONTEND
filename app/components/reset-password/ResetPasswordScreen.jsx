@@ -45,7 +45,6 @@ const ResetPasswordScreen = ({
 
     if (num === 1) {
       setPassword(e.target.value);
-      setIsValid();
     }
   };
 
@@ -69,8 +68,6 @@ const ResetPasswordScreen = ({
   const handleRadioClick = (e) => {
     e.preventDefault();
   };
-
-  console.log(password);
 
   return (
     <div className="flex justify-center  items-center">
