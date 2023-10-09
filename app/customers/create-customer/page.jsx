@@ -113,9 +113,6 @@ const CreateCustomer = () => {
               : "bg-swLightGray text-swGray cursor-not-allowed"
           } font-sembold p-2 pr-3 w-fit flex gap-1 rounded-md mt-5 mx-auto`}
           disabled={selectedFiles.length > 0 ? false : true}
-          onClick={() => {
-            alert("hello");
-          }}
         >
           Create customers profile
         </button>
