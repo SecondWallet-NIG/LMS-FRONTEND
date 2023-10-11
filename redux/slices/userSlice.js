@@ -1,6 +1,9 @@
 // store/slices/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { API_URL } from '@/constant';
+console.log({API_URL});
+
 
 // Replace the URL with your user-related API endpoints
 export const createUser = createAsyncThunk('user/createUser', async (userData) => {
@@ -10,11 +13,35 @@ export const createUser = createAsyncThunk('user/createUser', async (userData) =
 
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData) => {
   try {
-    const response = await axios.post('https://secondwallet-stag.onrender.com/api/auth/login', loginData);
+    const response = await axios.post(API_URL +'/auth/login', loginData);
     return response.data;
   } catch (error) {
     if (error.response.data.error === "Incorrect email or password") {
-      throw new Error("Please check all inputs and fill correctly")
+      throw new Error("Incorrect email or password")
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
+export const getVerifyToken = createAsyncThunk('auth/getToken', async (payload) => {
+  try {
+    const response = await axios.post(API_URL +'/auth/reset-password/verify-email', payload);
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error === "User not found") {
+      throw new Error("User not found")
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
+export const verifyToken = createAsyncThunk('auth/verifyToken', async (payload) => {
+  try {
+    const response = await axios.post(API_URL +'/auth/reset-password/verify-token ', payload);
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error === "Invalid Token! Try again") {
+      throw new Error("Invalid Token! Try again")
     }
     else throw new Error("An error occured, please try again later")
   }
@@ -30,6 +57,17 @@ export const getUser = createAsyncThunk('user/getUser', async (userId) => {
   return response.data;
 });
 
+export const resetPassword = createAsyncThunk('auth/restPassword', async (payload) => {
+  try {
+    const response = await axios.post(API_URL +'/auth/reset-password ', payload);
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error === "Invalid Token! Try again") {
+      throw new Error("Invalid Token! Try again")
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -93,6 +131,42 @@ const userSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getUser.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(getVerifyToken.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(getVerifyToken.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getVerifyToken.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(verifyToken.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(verifyToken.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(verifyToken.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.error.message;
       });

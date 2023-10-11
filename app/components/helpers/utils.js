@@ -7,3 +7,13 @@ export const cls = (input) =>
     .trim();
 
 export const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+export const genderOptions = [
+  { value: "Male", label: "Male" },
+  { value: "Female", label: "Female" },
+];
+
+export const countryOptions = [
+  { value: "nigeria", label: "Nigeria" },
+];
+

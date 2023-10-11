@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import companyLogo from "../../public/images/Logo.png";
 import InputField from "../components/shared/input/InputField";
 import Button from "../components/shared/buttonComponent/Button";
@@ -8,13 +8,40 @@ import PrevNextBtn from "../components/prevNextBtn/PrevNextBtn";
 import Verification from "../components/verification/Verification";
 import ResetSuccessful from "../components/resetSuccesfully/ResetSuccessful";
 import ResetPasswordScreen from "../components/reset-password/ResetPasswordScreen";
+import { getVerifyToken } from "@/redux/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { isValidEmail } from "../components/helpers/utils";
+
+//toast
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ForgetPassword = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const { loading, error, data: userData } = useSelector((state) => state.user);
+
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("");
+
+  const [payload, setPayload] = useState({
+    email: "",
+  });
+
+  const [validInput, setValidInput] = useState({
+    email: false,
+  });
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    const { name, value } = e.target;
+    setPayload({ ...payload, [name]: value });
+
+    if (name === "email") {
+      const isValid = isValidEmail(value);
+      console.log({isValid});
+      setValidInput({ ...validInput, email: isValid });
+    }
   };
 
   const handleNextStep = () => {
@@ -29,8 +56,24 @@ const ForgetPassword = () => {
     }
   };
 
+  const handleVerifyEmail = () => {
+    dispatch(getVerifyToken(payload))
+      .unwrap()
+      .then(() => {
+        // Handle a successful login here if needed
+        localStorage.setItem("email", JSON.stringify(payload.email) )
+        toast.success("Please check your email for the verification code");
+        handleNextStep();
+      })
+      .catch((error) => {
+        // Handle the error and show a toast with the error message
+        toast.error(error.message);
+      });
+  };
+
   return (
     <div>
+      <ToastContainer />
       <div className="mb-3">
         <PrevNextBtn
           step={step}
@@ -56,18 +99,22 @@ const ForgetPassword = () => {
                 </p>
                 <div className="mt-2">
                   <InputField
-                    type="email"
+                    name="email"
+                    inputType="email"
                     placeholder="Email Address"
                     required={true}
-                    value={email}
+                   // value={payload.email}
                     onChange={handleEmailChange}
                   />
                 </div>
                 <Button
-                  onClick={handleNextStep}
-                  className="bg-swBlue w-full text-white py-2 px-4 rounded-md mt-4 hover:bg-bswBlue"
+                  onClick={handleVerifyEmail}
+                  disabled={!validInput.email || loading === "pending"}
+                  className={`w-full text-white py-2 px-4 rounded-md mt-8 ${
+                    !validInput.email && "bg-gray-300 cursor-not-allowed"
+                  } ${validInput.email && "bg-swBlue"} `}
                 >
-                  Send email
+                  {loading === true ? "Processing..." : "Verify Email"}
                 </Button>
                 <p className="text-sm mt-2 pt-2 text-center">
                   <a href="#">Login</a>
@@ -79,7 +126,7 @@ const ForgetPassword = () => {
         {step === 2 && (
           <div>
             <Verification
-              email={email}
+           //   email={email}
               step={step}
               setStep={setStep}
               onEmailChange={handleEmailChange}

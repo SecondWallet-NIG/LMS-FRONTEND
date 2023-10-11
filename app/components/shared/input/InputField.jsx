@@ -13,6 +13,7 @@ const InputField = ({
   endIcon,
   startIcon,
   disabled,
+  maxLength // Add maxLength prop
 }) => {
   return (
     <div className="">
@@ -36,12 +37,13 @@ const InputField = ({
           className={`w-full h-10 px-3 py-2 rounded border ${borderColor} ${
             required ? "border-gray-300" : "border-gray-300"
           } focus:outline-none focus:${borderColor} ${
-            startIcon ? "pl-8" : "" // Apply pl-8 if startIcon is present
+            startIcon ? "pl-8" : ""
           }`}
           required={required}
           onChange={onChange}
           value={value}
           disabled={disabled}
+          maxLength={maxLength} // Pass maxLength prop
         />
 
         {endIcon && (
@@ -51,7 +53,9 @@ const InputField = ({
         )}
       </div>
 
-      {hintText && <p className="text-gray-500 text-xs mt-2">{hintText}</p>}
+      {hintText && (
+        <p className="text-gray-500 text-xs mt-2">{hintText}</p>
+      )}
     </div>
   );
 };

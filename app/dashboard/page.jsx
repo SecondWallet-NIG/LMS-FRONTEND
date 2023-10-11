@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getPost } from "@/redux/slices/postSlice";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
+import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 
 const Dashboard = ({ children }) => {
   const dispatch = useDispatch();
@@ -10,7 +11,9 @@ const Dashboard = ({ children }) => {
 
   return (
     <DashboardLayout>
-      <main>{children}</main>
+      <main>
+        {children}
+      </main>
     </DashboardLayout>
   );
 };

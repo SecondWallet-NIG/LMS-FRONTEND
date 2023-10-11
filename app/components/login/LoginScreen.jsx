@@ -1,13 +1,13 @@
 // LoginScreen.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineEmail, MdKey } from "react-icons/md";
 import InputField from "../shared/input/InputField";
 import Button from "../shared/buttonComponent/Button";
-import Link from 'next/link'
+import Link from "next/link";
 import axios from "axios";
-import Image from 'next/image';
-import companyLogo from "../../../public/images/Logo.png"
+import Image from "next/image";
+import companyLogo from "../../../public/images/Logo.png";
 
 //toast
 import { toast, ToastContainer } from "react-toastify";
@@ -16,13 +16,15 @@ import { useRouter } from "next/navigation";
 import { isValidEmail } from "../helpers/utils";
 
 //redux
-import { useDispatch } from "react-redux";
-import { login } from "@/redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "@/redux/slices/userSlice";
 
 const LoginScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+
+  const { loading, error, data: userData } = useSelector((state) => state.user);
+  // const [loading, setLoading] = useState(false);
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -46,7 +48,7 @@ const LoginScreen = () => {
     }
   };
 
-  const handleLogin = async () => {
+  const _handleLogin = async () => {
     try {
       setLoading(true);
       const response = await axios.post(
@@ -57,7 +59,7 @@ const LoginScreen = () => {
       toast.success(response.data.message);
 
       const user = response.data.data.user;
-      localStorage.setItem("user", JSON.stringify(user))
+  ///    localStorage.setItem("user", JSON.stringify(user));
 
       if (user.firstLogin) {
         router.push("/onboarding");
@@ -67,16 +69,47 @@ const LoginScreen = () => {
     } catch (error) {
       toast.error(error?.response?.data?.error);
       setLoading(false);
-
     }
   };
 
+  const handleLogin = () => {
+    // Dispatch the loginUser async thunk with the loginData
+    dispatch(loginUser(loginData))
+      .unwrap()
+      .then(() => {
+        // Handle a successful login here if needed
+        toast.success("Login successful");
+      })
+      .catch((error) => {
+        // Handle the error and show a toast with the error message
+        toast.error(error.message);
+      });
+  };
+
+  // Handle the response data when it changes
+  useEffect(() => {
+    if (userData) {
+      // You can access the user data from the Redux store here
+      console.log("Logged in user data:", userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      // Redirect or perform other actions based on the user data
+      if (userData.firstLogin) {
+        // Redirect to onboarding for first-time users
+        router.push("/onboarding");
+      } else {
+        // Redirect to the main application page
+        router.push("/dashboard");
+      }
+    }
+  }, [userData]);
+
   return (
     <div className="h-screen flex justify-center items-center">
+      <ToastContainer />
       <div className="w-[30%] bg-white p-6 ">
-      <div className="flex justify-center items-center mb-20 -ml-5">
-        <Image src={companyLogo} alt="company logo" />
-      </div>
+        <div className="flex justify-center items-center mb-20 -ml-5">
+          <Image src={companyLogo} alt="company logo" />
+        </div>
         <h2 className="text-2xl text-center font-semibold mb-4">
           Log into your account
         </h2>
@@ -118,7 +151,7 @@ const LoginScreen = () => {
           {loading === true ? "Logging In..." : "Log In"}
         </Button>
         <p className="text-sm mt-2 pt-2 text-center">
-          <Link href="/forgetPassword">Forget Password</Link> 
+          <Link href="/forgetPassword">Forget Password</Link>
         </p>
       </div>
       <ToastContainer />
