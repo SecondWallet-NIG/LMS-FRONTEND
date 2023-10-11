@@ -40,7 +40,7 @@ const DisbursementCard = ({ data }) => {
           } border rounded-lg p-2 w-full`}
         >
           <p className="font-semibold">{item.disbursement_type}</p>
-          <div className="flex justify-between items-center my-4">
+          <div className="flex justify-between items-center my-4 mt-8">
             <p className="text-2xl font-semibold">{item.disbursement_no}</p>
             <p className="font-semibold">
               &#8358;{" "}
@@ -56,7 +56,7 @@ const DisbursementCard = ({ data }) => {
                 : item.disbursement_type.includes("Pending")
                 ? "bg-red-100"
                 : "bg-swLightGray"
-            } w-full flex justify-between items-center text-[0.65rem] px-2 rounded-full`}
+            } w-full flex justify-between items-center text-[0.65rem] px-2 rounded-full mt-8`}
           >
             <span>
               {" "}

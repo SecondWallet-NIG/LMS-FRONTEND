@@ -23,12 +23,12 @@ const SidebarLink = ({
       href={link}
       onClick={onClick}
       className={`relative flex items-center cursor-pointer overflow-hidden z-50 bg-white`}
-      onMouseEnter={() => {
-        hasDropdown && setIsDropdownOpen(true);
-      }}
-      onMouseLeave={() => {
-        hasDropdown && setIsDropdownOpen(false);
-      }}
+      // onMouseEnter={() => {
+      //   hasDropdown && setIsDropdownOpen(true);
+      // }}
+      // onMouseLeave={() => {
+      //   hasDropdown && setIsDropdownOpen(false);
+      // }}
     >
       {!hasDropdown && (
         <div

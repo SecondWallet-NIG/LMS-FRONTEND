@@ -2,10 +2,20 @@ import React, { useState, useRef } from "react";
 import companyLogo from "../../../public/images/Logo.png";
 import Button from "../shared/buttonComponent/button";
 import Image from "next/image";
-import InputField from "../shared/input/InputField";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { verifyToken } from "@/redux/slices/userSlice";
+
+//toast
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Verification = ({ email, step, setStep, onEmailChange, onNextStep }) => {
   const inputRefs = useRef([]);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const { loading, error, data: userData } = useSelector((state) => state.user);
   const [verificationCodes, setVerificationCodes] = useState(["", "", "", "", "", ""]);
 
   const handleInputChange = (e, index) => {
@@ -15,6 +25,7 @@ const Verification = ({ email, step, setStep, onEmailChange, onNextStep }) => {
     const updatedCodes = [...verificationCodes];
     updatedCodes[index] = value;
     setVerificationCodes(updatedCodes);
+
   
     // Clear the previous input and center cursor in the new input
     if (value && index < inputRefs.current.length - 1) {
@@ -27,12 +38,36 @@ const Verification = ({ email, step, setStep, onEmailChange, onNextStep }) => {
   };
   
 
+  const handleSubmit = () => {
+  
+    const verificationCode = verificationCodes.join('');
+    const user = JSON.parse(localStorage.getItem("email"))
+
+
+    const payload = {
+      email: user,
+      verificationToken: verificationCode
+    }
+    dispatch(verifyToken(payload))
+    .unwrap()
+    .then(() => {
+      toast.success("success");
+      localStorage.setItem("verificationCode", JSON.stringify(verificationCode) )
+      onNextStep();
+    })
+    .catch((error) => {
+      toast.error(error.message);
+    });
+
+  };
+
   const handleReset = () => {
     onNextStep();
   };
 
   return (
     <div>
+      <ToastContainer />
       <div className="flex justify-center items-center mt-20 -ml-5">
         <Image src={companyLogo} alt="company logo" />
       </div>
@@ -45,6 +80,7 @@ const Verification = ({ email, step, setStep, onEmailChange, onNextStep }) => {
             {Array.from({ length: 6 }, (_, index) => (
               <input
                 key={index}
+                name="code"
                 type="text"
                 className="w-12 h-12 text-4xl border rounded focus:outline-none focus:border-blue-500"
                 maxLength="1"
@@ -56,7 +92,7 @@ const Verification = ({ email, step, setStep, onEmailChange, onNextStep }) => {
             ))}
           </div>
           <Button
-            onClick={handleReset}
+            onClick={handleSubmit}
             className="bg-swBlue w-full text-white py-2 px-4 rounded-md mt-4 hover:bg-bswBlue"
           >
             Reset password

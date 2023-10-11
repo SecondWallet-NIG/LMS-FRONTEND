@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 
-const options = [
+const _options = [
   { value: "chocolate", label: "Chocolate" },
   { value: "strawberry", label: "Strawberry" },
   { value: "vanilla", label: "Vanilla" },
@@ -9,11 +9,9 @@ const options = [
 
 const formatOptionLabel = ({ label, isSelected }) => (
   <div className="flex">
-    <div className="w-2 h-2 bg-[#17B26A] rounded-full inline-block mr-2 mt-1.5"></div> {/* Dot */}
     <div style={{ display: isSelected ? 'none' : 'block' }}>{label}</div>
   </div>
 );
-
 
 const customStyles = {
   control: (provided, state) => ({
@@ -44,21 +42,33 @@ const SelectField = ({
   placeholder,
   isSearchable,
   noOptionsMessage,
-}) => (
-  <div>
-    <label htmlFor={label} className="block text-gray-700 text-xs mb-2">
-      {label}
-      {required && <span className="text-red-600 ml-1">*</span>}
-    </label>
-    <Select
-      styles={customStyles}
-      isSearchable={isSearchable}
-      options={options}
-      placeholder={placeholder}
-      noOptionsMessage={noOptionsMessage}
-      formatOptionLabel={formatOptionLabel}
-    />
-  </div>
-);
+  optionValue,
+  onChange,
+  value
+}) => {
+  const handleSelectChange = (selectedOption) => {
+    if (onChange) {
+      onChange(selectedOption);
+    }
+  };
+
+  return (
+    <div>
+      <label htmlFor={name} className="block text-gray-700 text-xs mb-2">
+        {required && <span className="text-red-600 ml-1">*</span>}
+      </label>
+      <Select
+        styles={customStyles}
+        isSearchable={isSearchable}
+        options={optionValue ? optionValue : _options}
+        placeholder={placeholder}
+        value={value}
+        noOptionsMessage={noOptionsMessage}
+        formatOptionLabel={formatOptionLabel}
+        onChange={handleSelectChange} // Step 4: Pass the onChange function
+      />
+    </div>
+  );
+};
 
 export default SelectField;

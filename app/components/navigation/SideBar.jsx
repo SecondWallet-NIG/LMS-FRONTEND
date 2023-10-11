@@ -23,8 +23,6 @@ const Sidebar = () => {
 
   const [activeLink, setActiveLink] = useState("");
 
-  // console.log(pathname);
-
   return (
     <main className=" h-full border-r border-r-swGray flex flex-col font-medium">
       <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-swGray">
@@ -119,19 +117,19 @@ const Sidebar = () => {
           <SidebarLink
             icon={
               <BsPeopleFill
-                className={`${activeLink === "custmers" && "text-swBlue"}`}
+                className={`${activeLink === "customers" && "text-swBlue"}`}
                 size={20}
               />
             }
             pathname={pathname}
             text="Customers"
-            link=""
+            link="/customers"
             hasDropdown={true}
             dropdownContent={
               <div>
-                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                <a href="/customers"className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
                   All
-                </p>
+                </a>
                 <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
                   Approved customers
                 </p>
@@ -159,6 +157,23 @@ const Sidebar = () => {
             isActive={"interest-calculator"}
             onClick={() => {
               setActiveLink("intrest-calculator");
+            }}
+          />
+               <SidebarLink
+            icon={
+              <BsCalculator
+                className={`${
+                  activeLink === "disbursement" && "text-swBlue"
+                }`}
+                size={20}
+              />
+            }
+            pathname={pathname}
+            text="disbursement"
+            link="/disbursement/all"
+            isActive={"disbursement"}
+            onClick={() => {
+              setActiveLink("disbursement");
             }}
           />
         </div>

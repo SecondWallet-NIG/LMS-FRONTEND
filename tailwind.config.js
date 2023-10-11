@@ -11,7 +11,7 @@ module.exports = {
     extend: {
       screens: { xxs: "270px", xs: "350px", ...defaultTheme.screens },
       colors: {
-        swGray: "#BEBEBE",
+        swGray: "#545454",
         swLightGray: "#f5f5f5",
         swBlue: "#2769B3",
         swBrown: "#545454",

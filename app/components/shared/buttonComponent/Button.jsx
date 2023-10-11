@@ -12,8 +12,8 @@ const classes = {
     large: 'px-8 py-3 text-lg'
   },
   variant: {
-    primary: 'bg-blue-500 hover:bg-blue-800 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-white',
-    secondary: 'bg-gray-200 hover:bg-gray-800 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 text-gray-900 hover:text-white',
+    primary: 'bg-blue-500 hover:bg-swBlue text-white',
+    secondary: 'bg-gray-200 hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 text-gray-900 hover:text-white',
     danger: 'bg-red-500 hover:bg-red-800 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 text-white'
   }
 }
