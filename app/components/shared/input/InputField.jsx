@@ -12,7 +12,7 @@ const InputField = ({
   hintText,
   endIcon,
   startIcon,
-  disabled
+  disabled,
 }) => {
   return (
     <div className="">
@@ -22,39 +22,36 @@ const InputField = ({
       </label>
 
       <div className="relative flex items-center">
-  {startIcon && (
-    <span className="absolute inset-y-0 left-0 pl-3 pt-5 pr-2 pb-5 flex items-center">
-      {startIcon}
-    </span>
-  )}
-
-  <input
-    type={inputType}
-    id={name}
-    name={name}
-    placeholder={placeholder}
-    className={`w-full h-10 px-3 py-2 rounded border ${borderColor} ${
-      required ? "border-gray-300" : "border-gray-300"
-    } focus:outline-none focus:${borderColor} ${
-      startIcon ? "pl-8" : "" // Apply pl-8 if startIcon is present
-    }`}
-    required={required}
-    onChange={onChange}
-    value={value}
-    disabled={disabled}
-  />
-
-  {endIcon && (
-    <span className="absolute inset-y-0 right-0 pr-3 pt-5 pb-5 flex items-center">
-      {endIcon}
-    </span>
-  )}
-</div>
-
-
-      {hintText && (
-          <p className="text-gray-500 text-xs mt-2">{hintText}</p>
+        {startIcon && (
+          <span className="absolute inset-y-0 left-0 pl-3 pt-5 pr-2 pb-5 flex items-center">
+            {startIcon}
+          </span>
         )}
+
+        <input
+          type={inputType}
+          id={name}
+          name={name}
+          placeholder={placeholder}
+          className={`w-full h-10 px-3 py-2 rounded border ${borderColor} ${
+            required ? "border-gray-300" : "border-gray-300"
+          } focus:outline-none focus:${borderColor} ${
+            startIcon ? "pl-8" : "" // Apply pl-8 if startIcon is present
+          }`}
+          required={required}
+          onChange={onChange}
+          value={value}
+          disabled={disabled}
+        />
+
+        {endIcon && (
+          <span className="absolute inset-y-0 right-0 pr-3 pt-5 pb-5 flex items-center">
+            {endIcon}
+          </span>
+        )}
+      </div>
+
+      {hintText && <p className="text-gray-500 text-xs mt-2">{hintText}</p>}
     </div>
   );
 };

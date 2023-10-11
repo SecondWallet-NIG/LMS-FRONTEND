@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const CenterModal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
@@ -9,7 +9,7 @@ const CenterModal = ({ isOpen, onClose, children }) => {
         <button className=" " onClick={onClose}>
           close
         </button>
-       
+
         {children}
       </div>
     </div>
