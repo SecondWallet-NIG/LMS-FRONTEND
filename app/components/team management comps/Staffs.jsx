@@ -4,8 +4,19 @@ import { MdOutlineSort } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
 import { BiPlus } from "react-icons/bi";
 import StaffsModal from "../modals/teamManagement/StaffsModal";
+import { useState } from "react";
 
 const Staffs = () => {
+  const [isModal, setIsModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModal(false);
+  };
+
   return (
     <main>
       <TeamManagementCard />
@@ -38,12 +49,15 @@ const Staffs = () => {
               </div>
             </div>
             <div className="p-[0.11rem] hover:bg-swGray rounded-md cursor-pointer">
-              <div className=" flex gap-2 items-center bg-swBlue pl-4 pr-5 py-2 rounded-md font-semibold text-white">
+              <div
+                className=" flex gap-2 items-center bg-swBlue pl-4 pr-5 py-2 rounded-md font-semibold text-white"
+                onClick={handleOpenModal}
+              >
                 <BiPlus size={20} />
                 <p>New Staff</p>
               </div>
             </div>
-            <StaffsModal isOpen={true} />
+            <StaffsModal isOpen={isModal} onClose={handleCloseModal} />
           </div>
         </div>
       </div>

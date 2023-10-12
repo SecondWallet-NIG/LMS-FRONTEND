@@ -1,9 +1,21 @@
+import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { FiFilter, FiSearch } from "react-icons/fi";
 import { MdOutlineSort } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
+import RolesModal from "../modals/teamManagement/RolesModal";
 
 const Roles = () => {
+  const [isModal, setIsModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModal(false);
+  };
+
   return (
     <main>
       <div className="px-6 py-2 mt-10">
@@ -35,12 +47,16 @@ const Roles = () => {
               </div>
             </div>
             <div className="p-[0.11rem] hover:bg-swGray rounded-md cursor-pointer">
-              <div className=" flex gap-2 items-center bg-swBlue pl-4 pr-5 py-2 rounded-md font-semibold text-white">
+              <div
+                className=" flex gap-2 items-center bg-swBlue pl-4 pr-5 py-2 rounded-md font-semibold text-white"
+                onClick={handleOpenModal}
+              >
                 <BiPlus size={20} />
                 <p>New Role </p>
               </div>
             </div>
           </div>
+          <RolesModal isOpen={isModal} onClose={handleCloseModal} />
         </div>
       </div>
     </main>

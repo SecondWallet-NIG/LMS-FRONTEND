@@ -4,7 +4,6 @@ import { FiUser } from "react-icons/fi";
 import InputField from "../../shared/input/InputField";
 import SelectField from "../../shared/input/SelectField";
 import { useState } from "react";
-import { SlArrowRight } from "react-icons/sl";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 const StaffsModal = ({ isOpen, onClose, children, width }) => {
@@ -44,7 +43,11 @@ const StaffsModal = ({ isOpen, onClose, children, width }) => {
             <p className="text-base font-semibold">Add a new staff</p>
             <p className="text-xs">Staff information</p>
           </div>
-          <AiOutlineClose size={20} />
+          <AiOutlineClose
+            size={20}
+            onClick={onClose}
+            className="cursor-pointer"
+          />
         </div>
         <div className="pt-8 px-5 pb-16 bg-white">
           <div className="flex justify-between">
