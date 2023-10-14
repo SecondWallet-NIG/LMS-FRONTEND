@@ -2,14 +2,10 @@
 import Link from "next/link";
 import Dashboard from "../dashboard/page";
 import { IoMdAdd } from "react-icons/io";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState, useEffect } from "react";
-import { AiOutlineExclamationCircle, AiOutlinePaperClip } from "react-icons/ai";
 import Button from "../components/shared/buttonComponent/Button";
-import CenterModal from "../components/modals/CenterModal";
-import EmploymentDetailsModal from "../components/modals/EmploymentDetailsModal";
 import { genderOptions, countryOptions } from "../components/helpers/utils";
 import { bankArr, statesAndLgas } from "@/constant";
 
@@ -19,7 +15,6 @@ import { useRouter } from "next/navigation";
 
 import { useDispatch, useSelector } from "react-redux";
 import { createCustomer } from "@/redux/slices/customerSlice";
-import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import SuccessModal from "../components/modals/SuccessModal";
 
 const customNoOptionsMessage = () => {
@@ -156,6 +151,13 @@ const CreateCustomer = () => {
     }
   };
 
+  const btnLeftFunc = () => {
+    router.push("/create-customer");
+  };
+  const btnRightFunc = () => {
+    router.push("/customers/profile");
+  };
+
   const states = statesAndLgas.map((item, index) => ({
     value: item.state,
     label: item.state,
@@ -200,11 +202,12 @@ const CreateCustomer = () => {
     dispatch(createCustomer(payload))
       .unwrap()
       .then(() => {
-        toast.success("Customer added successfully");
         document.getElementById("add-customer-form").reset();
+        resetForm();
+        openModal();
       })
       .catch((error) => {
-        toast.error("An error occured");
+        toast.error(`An error occured`);
       });
   };
 
@@ -220,14 +223,7 @@ const CreateCustomer = () => {
         <div className="flex justify-between">
           <p className="text-lg font-semibold">Create customer profile</p>
 
-          <button
-            href=""
-            className="flex gap-1 py-2 px-3 border-2 bg-swLightGray text-black border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
-            onClick={openModal}
-          >
-            <IoMdAdd size={20} />
-            <p>Add new customer</p>
-          </button>
+       
         </div>
 
         <form id="add-customer-form">
@@ -477,8 +473,17 @@ const CreateCustomer = () => {
         </form>
       </main>
       <div className="">
-        <SuccessModal isOpen={isModalOpen} onClose={closeModal} />
-
+        <SuccessModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          btnLeft="Add Customer"
+          btnRight="View Customer"
+          description="Customers profile has been successfully created. You can update the
+            profile or create a new customer"
+          title="Successfully created"
+          btnLeftFunc={btnLeftFunc}
+          btnRightFunc={btnRightFunc}
+        />
       </div>
     </Dashboard>
   );

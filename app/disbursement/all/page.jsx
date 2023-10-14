@@ -1,6 +1,6 @@
 "use client"
 import Dashboard from "@/app/dashboard/page.jsx";
-import DisbursementCard from "../../components/cards/DisbursementCard.jsx";
+import DisbursementCard from "@/app/components/cards/DisbursmentCard/DisbursementCard";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable.jsx";
 
 const AllDisburments = () => {

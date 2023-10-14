@@ -96,21 +96,21 @@ const Sidebar = () => {
             hasDropdown={true}
             dropdownContent={
               <div className="py-2 bg-white ">
-                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
                   All
-                </p>
-                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                </div>
+                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
                   New loans
-                </p>
-                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                </div>
+                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
                   Pending loans
-                </p>
-                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                </div>
+                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
                   Approved loans
-                </p>
-                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+                </div>
+                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
                   Rejected loans
-                </p>
+                </div>
               </div>
             }
           />
@@ -125,19 +125,19 @@ const Sidebar = () => {
             text="Customers"
             link="/customers"
             hasDropdown={true}
-            dropdownContent={
-              <div>
-                <a href="/customers"className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-                  All
-                </a>
-                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-                  Approved customers
-                </p>
-                <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-                  Pending customers
-                </p>
-              </div>
-            } // Customize the dropdown content
+            // dropdownContent={
+            //   <div>
+            //     <a href=""className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+            //       All
+            //     </a>
+            //     <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+            //       Approved customers
+            //     </p>
+            //     <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
+            //       Pending customers
+            //     </p>
+            //   </div>
+            // } // Customize the dropdown content
             onClick={() => {
               setActiveLink("customers");
             }}

@@ -6,7 +6,7 @@ import SelectField from "../../shared/input/SelectField";
 import { useState } from "react";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
-const StaffsModal = ({ isOpen, onClose, children, width }) => {
+const StaffsModal = ({ isOpen, onClose, width }) => {
   const [selectedStaffRole, setSelectedStaffRole] = useState("");
   if (!isOpen) return null;
   const modalStyles = {

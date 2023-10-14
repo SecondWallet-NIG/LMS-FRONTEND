@@ -1,7 +1,26 @@
 import React from "react";
+import { BiCheckCircle } from "react-icons/bi";
+import {
+  BsCheck,
+  BsCheckCircle,
+  BsCheckCircleFill,
+  BsMarkdown,
+  BsXLg,
+} from "react-icons/bs";
 import Button from "../shared/buttonComponent/Button";
 
-const SuccessModal = ({ isOpen, onClose, children, width }) => {
+const SuccessModal = ({
+  isOpen,
+  onClose,
+  children,
+  width,
+  description,
+  btnLeft,
+  btnRight,
+  btnLeftFunc,
+  btnRightFunc,
+  title,
+}) => {
   if (!isOpen) return null;
   const modalStyles = {
     width: width || "90%", // Use full width on mobile
@@ -12,35 +31,36 @@ const SuccessModal = ({ isOpen, onClose, children, width }) => {
     <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50">
       <div className="bg-white p-4 rounded-md shadow-md" style={modalStyles}>
         <div className="flex justify-between">
-          <p className="text-lg font-semibold">Successfully created</p>
+          <p className="text-lg font-semibold">{title}</p>
 
-          <button
-            className="text-white bg-gray-400 pl-2 pr-2"
-            onClick={onClose}
-          >
-            X
+          <button className="text-swGray pl-2 pr-2" onClick={onClose}>
+            <BsXLg fontWeight="500" />
           </button>
         </div>
 
         <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
-          <div className="flex flex-col gap-5 mt-5">
-            Customers profile has been successfully created. You can update the
-            profile or create a new customer
+          <div className="flex justify-center">
+            <BsCheckCircleFill color="#2769B3" size="60" />
           </div>
-          <div className="flex ">
+          <div className="flex  text-center flex-col gap-5 mt-5">
+            {description}
+          </div>
+          <div className="flex justify-between">
             <Button
-              disabled={true}
+              onClick={btnLeftFunc}
+              disabled={false}
               variant={"secondary"}
-              className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10"
+              className="py-2 px-5 text-center rounded-md gap-2 border w-[180px] mt-10"
             >
-              View Customer
+              {btnLeft}
             </Button>
             <Button
-              disabled={true}
-              variant={"secondary"}
-              className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10"
+              onClick={btnRightFunc}
+              disabled={false}
+              variant={"primary"}
+              className="py-2 px-5 text-center rounded-md  gap-2 border w-[180px] mt-10"
             >
-              View Customer
+              {btnRight}
             </Button>
           </div>
         </main>

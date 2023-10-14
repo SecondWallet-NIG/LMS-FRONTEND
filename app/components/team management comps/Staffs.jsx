@@ -1,10 +1,12 @@
+"use client"
+import { useState } from "react";
 import { FiFilter, FiSearch } from "react-icons/fi";
 import TeamManagementCard from "../cards/Team management card/TeamManagementCard";
 import { MdOutlineSort } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
 import { BiPlus } from "react-icons/bi";
 import StaffsModal from "../modals/teamManagement/StaffsModal";
-import { useState } from "react";
+
 
 const Staffs = () => {
   const [isModal, setIsModal] = useState(false);
@@ -54,7 +56,7 @@ const Staffs = () => {
                 onClick={handleOpenModal}
               >
                 <BiPlus size={20} />
-                <p>New Staff</p>
+                <p onClick={handleOpenModal}>New Staff</p>
               </div>
             </div>
             <StaffsModal isOpen={isModal} onClose={handleCloseModal} />

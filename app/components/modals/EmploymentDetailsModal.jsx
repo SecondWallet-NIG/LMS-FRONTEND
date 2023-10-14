@@ -7,7 +7,7 @@ const EmploymentDetailsModal = ({ isOpen, onClose, children, width }) => {
   if (!isOpen) return null;
   const modalStyles = {
     width: width || '90%', // Use full width on mobile
-    maxWidth: '800px', // Set a maximum width for larger screens
+    maxWidth: '1000px', // Set a maximum width for larger screens
   };
   
 

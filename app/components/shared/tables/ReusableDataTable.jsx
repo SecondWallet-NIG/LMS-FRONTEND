@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { FiFilter } from "react-icons/fi";
+import { MdOutlineSort } from "react-icons/md";
 import Select from "react-select";
 import Button from "../buttonComponent/Button";
 
@@ -84,7 +86,7 @@ function ReusableDataTable({
   };
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); 
+    setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
@@ -136,18 +138,26 @@ function ReusableDataTable({
   return (
     <div className="container p-4">
       <div className="flex justify-between">
-        <div
-          className="flex border border-1 items-center mb-4 pl-2 pr-2"
-          style={{ width: "max-content" }}
-        >
-          <p className="mr-2 text-swGray">Items:</p>
-          <Select
-            styles={customStyles}
-            options={options}
-            value={{ value: perPage, label: perPage }}
-            onChange={handleSelectChange}
-            isSearchable={false}
-          />
+        <div className="flex gap-2 ">
+          <div
+            className="flex border border-1 items-center mb-4 pl-2 pr-2"
+            style={{ width: "max-content" }}
+          >
+            <p className="mr-2 text-swGray">Items:</p>
+            <Select
+              styles={customStyles}
+              options={options}
+              value={{ value: perPage, label: perPage }}
+              onChange={handleSelectChange}
+              isSearchable={false}
+            />
+          </div>
+          <div className="flex gap-3 items-center">
+            <button className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4">
+              <FiFilter size={20} />
+              <p>Filter</p>
+            </button>
+          </div>
         </div>
 
         <div className="mb-4 flex">
@@ -159,7 +169,10 @@ function ReusableDataTable({
             className="px-2 py-1 rounded outline-none border border-gray-300 h-10"
           />
           <div>
-            <Button className="bg-swBlue text-white py-2 px-4 rounded-md ml-2" onClick={btnTextClick}>
+            <Button
+              className="bg-swBlue text-white py-2 px-4 rounded-md ml-2"
+              onClick={btnTextClick}
+            >
               {btnText}
             </Button>
           </div>
