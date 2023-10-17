@@ -12,6 +12,7 @@ import { FiDatabase, FiEdit2, FiPhone, FiSearch } from "react-icons/fi";
 import { LuCalendar } from "react-icons/lu";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ActivityLogs from "@/app/components/customers/ActivityLogs";
+import Summary from "@/app/components/customers/Summary";
 
 const CustomerProfile = () => {
   const router = useRouter();
@@ -43,7 +44,7 @@ const CustomerProfile = () => {
   };
   return (
     <DashboardLayout>
-      <div className="p-8">
+      <div className="p-4 lg:p-8">
         <div className="flex gap-2 border-b border-swGray pb-3">
           <div className="w-1/2">
             <div className="flex ">
@@ -121,7 +122,7 @@ const CustomerProfile = () => {
           </div>
         </div>
         <div className="flex">
-          <div className="w-[30%] border-r border-swGray">
+          <div className="w-[30%] border-r h-full border-swGray">
             <div className="flex gap-2">
               <Button
                 onClick={() => handleInfoToggle("bio-data")}
@@ -338,6 +339,7 @@ const CustomerProfile = () => {
             </div>
             <div className="p-2">
               {activityButton === "activity-logs" && <ActivityLogs />}
+              {activityButton === "summary" && <Summary />}
             </div>
           </div>
         </div>
