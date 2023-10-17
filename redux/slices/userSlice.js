@@ -2,13 +2,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
-console.log({API_URL});
+
 
 
 // Replace the URL with your user-related API endpoints
 export const createUser = createAsyncThunk('user/createUser', async (userData) => {
-  const response = await axios.post('/api/user', userData);
-  return response.data;
+  try {
+    const response = await axios.post(API_URL + '/user/create', userData);
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error === "Incorrect email or password") {
+      throw new Error("Incorrect email or password")
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+
 });
 
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData) => {

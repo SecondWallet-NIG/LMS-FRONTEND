@@ -39,7 +39,6 @@ const ForgetPassword = () => {
 
     if (name === "email") {
       const isValid = isValidEmail(value);
-      console.log({isValid});
       setValidInput({ ...validInput, email: isValid });
     }
   };
@@ -66,7 +65,6 @@ const ForgetPassword = () => {
         handleNextStep();
       })
       .catch((error) => {
-        // Handle the error and show a toast with the error message
         toast.error(error.message);
       });
   };

@@ -3,6 +3,8 @@ import { FiFilter } from "react-icons/fi";
 import { MdOutlineSort } from "react-icons/md";
 import Select from "react-select";
 import Button from "../buttonComponent/Button";
+import Image from "next/image";
+import sketch from "../../../../public/images/sketch.jpg";
 
 function ReusableDataTable({
   apiEndpoint,
@@ -11,6 +13,7 @@ function ReusableDataTable({
   sortedBy,
   btnText,
   btnTextClick,
+  dataTransformer
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,12 +62,20 @@ function ReusableDataTable({
       apiUrl += `&search=${searchTerm}`;
     }
 
+  
+
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
-        setData(data.results);
+        if (dataTransformer && typeof dataTransformer === 'function') {
+          const transformedData = dataTransformer(data.results);
+          setData(transformedData ? transformedData : data.results);
+        } else {
+          setData(data.results);
+        }
         setPaginationLinks(data.links);
       });
+    
   };
 
   const handlePageChange = (page, perPage) => {
@@ -137,121 +148,136 @@ function ReusableDataTable({
 
   return (
     <div className="container p-4">
-      <div className="flex justify-between">
-        <div className="flex gap-2 ">
-          <div
-            className="flex border border-1 items-center mb-4 pl-2 pr-2"
-            style={{ width: "max-content" }}
-          >
-            <p className="mr-2 text-swGray">Items:</p>
-            <Select
-              styles={customStyles}
-              options={options}
-              value={{ value: perPage, label: perPage }}
-              onChange={handleSelectChange}
-              isSearchable={false}
-            />
-          </div>
-          <div className="flex gap-3 items-center">
-            <button className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4">
-              <FiFilter size={20} />
-              <p>Filter</p>
-            </button>
-          </div>
-        </div>
-
-        <div className="mb-4 flex">
-          <input
-            type="search"
-            placeholder="search..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="px-2 py-1 rounded outline-none border border-gray-300 h-10"
-          />
-          <div>
-            <Button
-              className="bg-swBlue text-white py-2 px-4 rounded-md ml-2"
-              onClick={btnTextClick}
-            >
-              {btnText}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <table className="table-auto w-full border-collapse border">
-        <thead>
-          <tr>
-            {headers.map((header) => (
-              <th
-                key={header.id}
-                className={`px-4 py-2 bg-swLightGray text-gray-500 border cursor-pointer text-start ${
-                  header.id === sortField ? "font-light" : "font-light"
-                }`}
-                onClick={() => handleSort(header.id)}
+      {data?.length > 0 ? (
+        <div className="">
+          <div className="flex justify-between">
+            <div className="flex gap-2 ">
+              <div
+                className="flex border border-1 items-center mb-4 pl-2 pr-2"
+                style={{ width: "max-content" }}
               >
-                {header.label}
-                {header.id === sortField && (
-                  <span className="ml-1">
-                    {sortDirection === "asc" ? "↑" : "↓"}
-                  </span>
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data?.map((item) => (
-            <tr
-              key={item._id}
-              className="border pt-2 pb-2 hover:bg-swLightGray"
-              style={{ cursor: "pointer" }}
-            >
-              {headers.map((header) => (
-                <td
-                  key={header.id}
-                  className="px-5 py-3 border font-400 text-xs text-swGray border-none"
+                <p className="mr-2 text-swGray">Items:</p>
+                <Select
+                  styles={customStyles}
+                  options={options}
+                  value={{ value: perPage, label: perPage }}
+                  onChange={handleSelectChange}
+                  isSearchable={false}
+                />
+              </div>
+              <div className="flex gap-3 items-center">
+                <button className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4">
+                  <FiFilter size={20} />
+                  <p>Filter</p>
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-4 flex">
+              <input
+                type="search"
+                placeholder="search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="px-2 py-1 rounded outline-none border border-gray-300 h-10"
+              />
+              {btnText ? (
+                <div>
+                  <Button
+                    className="bg-swBlue text-white py-2 px-4 rounded-md ml-2"
+                    onClick={btnTextClick}
+                  >
+                    {btnText}
+                  </Button>
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <table className="table-auto w-full border-collapse border">
+            <thead>
+              <tr>
+                {headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className={`px-4 py-2 bg-swLightGray text-gray-500 border cursor-pointer text-start ${
+                      header.id === sortField ? "font-light" : "font-light"
+                    }`}
+                    onClick={() => handleSort(header.id)}
+                  >
+                    {header.label}
+                    {header.id === sortField && (
+                      <span className="ml-1">
+                        {sortDirection === "asc" ? "↑" : "↓"}
+                      </span>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              {data?.map((item) => (
+                <tr
+                  key={item._id}
+                  className="border pt-2 pb-2 hover:bg-swLightGray"
+                  style={{ cursor: "pointer" }}
                 >
-                  {item[header.id]}
-                </td>
+                  {headers.map((header) => (
+                    <td
+                      key={header.id}
+                      className="px-5 py-3 border font-400 text-xs text-swGray border-none"
+                    >
+                      {item[header.id]}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="mt-4 flex items-center justify-between">
-        <button
-          onClick={() => handlePageChange(currentPage - 1, perPage)}
-          disabled={
-            !paginationLinks || !paginationLinks.prev || currentPage === 1
-          }
-          className="px-2 py-1 rounded bg-swLightGray text-gray-700 mr-2"
-        >
-          Previous
-        </button>
-        <div>
-          {getPageNumbers().map((pageNumber) => (
+            </tbody>
+          </table>
+          <div className="mt-4 flex items-center justify-between">
             <button
-              key={pageNumber}
-              onClick={() => handlePageChange(pageNumber, perPage)}
-              className={`px-3 py-1.5 ${
-                currentPage === pageNumber
-                  ? "bg-blue-500 text-white"
-                  : "bg-swLightGray text-gray-700"
-              }`}
+              onClick={() => handlePageChange(currentPage - 1, perPage)}
+              disabled={
+                !paginationLinks || !paginationLinks.prev || currentPage === 1
+              }
+              className="px-2 py-1 rounded bg-swLightGray text-gray-700 mr-2"
             >
-              {pageNumber}
+              Previous
             </button>
-          ))}
+            <div>
+              {getPageNumbers().map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber, perPage)}
+                  className={`px-3 py-1.5 ${
+                    currentPage === pageNumber
+                      ? "bg-blue-500 text-white"
+                      : "bg-swLightGray text-gray-700"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => handlePageChange(currentPage + 1, perPage)}
+              disabled={!paginationLinks || !paginationLinks.next}
+              className="px-2 py-1 rounded bg-swLightGray text-gray-700 ml-2"
+            >
+              Next
+            </button>
+          </div>
         </div>
-        <button
-          onClick={() => handlePageChange(currentPage + 1, perPage)}
-          disabled={!paginationLinks || !paginationLinks.next}
-          className="px-2 py-1 rounded bg-swLightGray text-gray-700 ml-2"
-        >
-          Next
-        </button>
+      ) : (
+        <div class="min-h-500 flex items-center justify-center">
+        <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
+          <Image src={sketch} alt="company logo" />
+          <p class="text-center text-lg">This list is empty</p>
+        </div>
       </div>
+      
+      )}
     </div>
   );
 }

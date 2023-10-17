@@ -21,7 +21,7 @@ const TeamManagementCard = ({ data }) => {
           className={`w-full rounded-lg p-3 border border-swGray }`}
         >
           <p className="text-swBlue font-semibold">{item.staff_type}</p>
-          <p className="font-semibold text-4xl mt-8">{item.staff_no}</p>
+          <p className="font-semibold text-swGray text-3xl mt-4 mb-4">{item.staff_no}</p>
         </div>
       ))}
     </main>
