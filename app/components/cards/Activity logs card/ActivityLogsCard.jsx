@@ -74,7 +74,7 @@ const ActivityLogsCard = ({ data }) => {
               </div>
               <div className="p-2 w-full border border-gray-300 bg-gray-100 mt-2 rounded-lg font-medium">
                 <div className="flex justify-between mb-2 text-lg">
-                  <p  className="text-sm">{item.amount}</p>
+                  <p  className="text-sm text-swBlue">{item.amount}</p>
                   <p className="text-sm">{item.disbursed_by?.id}</p>
                 </div>
                 <p className="text-sm">

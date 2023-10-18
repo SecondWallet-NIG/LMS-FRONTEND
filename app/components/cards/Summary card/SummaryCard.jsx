@@ -64,8 +64,8 @@ const SummaryCard = ({ data }) => {
             </p>
           </div>
           <div className="flex items-center justify-between font-semibold mt-5">
-            <p className="text-4xl">{item.number}</p>
-            <p className="text-base">{item.amount} NGN</p>
+            <p className="text-3xl text-swBlue">{item.number}</p>
+            <p className="text-base text-swGray">{item.amount} NGN</p>
           </div>
         </div>
       ))}
