@@ -13,7 +13,7 @@ function ReusableDataTable({
   sortedBy,
   btnText,
   btnTextClick,
-  dataTransformer
+  dataTransformer,
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,20 +62,16 @@ function ReusableDataTable({
       apiUrl += `&search=${searchTerm}`;
     }
 
-  
-
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
-        if (dataTransformer && typeof dataTransformer === 'function') {
+        if (typeof dataTransformer === "function") {
           const transformedData = dataTransformer(data.results);
-          setData(transformedData ? transformedData : data.results);
+          setData(transformedData);
         } else {
           setData(data.results);
         }
-        setPaginationLinks(data.links);
       });
-    
   };
 
   const handlePageChange = (page, perPage) => {
@@ -271,12 +267,11 @@ function ReusableDataTable({
         </div>
       ) : (
         <div class="min-h-500 flex items-center justify-center">
-        <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
-          <Image src={sketch} alt="company logo" />
-          <p class="text-center text-lg">This list is empty</p>
+          <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
+            <Image src={sketch} alt="company logo" />
+            <p class="text-center text-lg">This list is empty</p>
+          </div>
         </div>
-      </div>
-      
       )}
     </div>
   );

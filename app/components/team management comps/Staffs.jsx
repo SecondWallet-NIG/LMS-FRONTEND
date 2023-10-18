@@ -31,7 +31,7 @@ const Staffs = () => {
   };
 
   const customDataTransformer = (apiData) => {
-    return apiData.map((item) => ({
+    return apiData?.results.map((item) => ({
       name: (
         <div>
           <div className="text-md font-semibold text-gray-700">{`${item.firstName} ${item.lastName}`}</div>
