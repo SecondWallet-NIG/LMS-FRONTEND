@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import companyLogo from "../../../public/images/Logo.png";
-import Button from "../shared/buttonComponent/button";
+import Button from "../shared/buttonComponent/Button";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";

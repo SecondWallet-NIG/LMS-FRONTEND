@@ -2,7 +2,7 @@
 import React from 'react';
 import PreviousBtn from '../shared/previousBtn/PreviousBtn';
 import NextBtn from '../shared/nextBtn/NextBtn';
-import PaginationIcon from "../../../public/images/pagination.svg";
+import PaginationIcon from "../../../public/images/Pagination.svg";
 import Image from "next/image";
 
 const PrevNextBtn = ({ step, handlePrev, handleNext, disablePrev, disableNext }) => {
