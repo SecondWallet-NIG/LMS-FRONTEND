@@ -45,6 +45,7 @@ const SelectField = ({
   optionValue,
   onChange,
   value,
+  name
 }) => {
   const handleSelectChange = (selectedOption) => {
     if (onChange) {
