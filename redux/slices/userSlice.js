@@ -1,27 +1,23 @@
-// store/slices/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
 
 
-
-// Replace the URL with your user-related API endpoints
 export const createUser = createAsyncThunk('user/createUser', async (userData) => {
   try {
     const response = await axios.post(API_URL + '/user/create', userData);
     return response.data;
   } catch (error) {
-    if (error.response.data.error === "Incorrect email or password") {
-      throw new Error("Incorrect email or password")
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
     }
     else throw new Error("An error occured, please try again later")
   }
-
 });
 
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData) => {
   try {
-    const response = await axios.post(API_URL +'/auth/login', loginData);
+    const response = await axios.post(API_URL + '/auth/login', loginData);
     return response.data;
   } catch (error) {
     if (error.response.data.error === "Incorrect email or password") {
@@ -33,7 +29,7 @@ export const loginUser = createAsyncThunk('user/loginUser', async (loginData) =>
 
 export const getVerifyToken = createAsyncThunk('auth/getToken', async (payload) => {
   try {
-    const response = await axios.post(API_URL +'/auth/reset-password/verify-email', payload);
+    const response = await axios.post(API_URL + '/auth/reset-password/verify-email', payload);
     return response.data;
   } catch (error) {
     if (error.response.data.error === "User not found") {
@@ -45,7 +41,7 @@ export const getVerifyToken = createAsyncThunk('auth/getToken', async (payload) 
 
 export const verifyToken = createAsyncThunk('auth/verifyToken', async (payload) => {
   try {
-    const response = await axios.post(API_URL +'/auth/reset-password/verify-token ', payload);
+    const response = await axios.post(API_URL + '/auth/reset-password/verify-token ', payload);
     return response.data;
   } catch (error) {
     if (error.response.data.error === "Invalid Token! Try again") {
@@ -60,14 +56,21 @@ export const updateUser = createAsyncThunk('user/updateUser', async ({ userId, u
   return response.data;
 });
 
-export const getUser = createAsyncThunk('user/getUser', async (userId) => {
-  const response = await axios.get(`/api/user/${userId}`);
-  return response.data;
+export const getUserById = createAsyncThunk('user/getUser', async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
 });
 
 export const resetPassword = createAsyncThunk('auth/restPassword', async (payload) => {
   try {
-    const response = await axios.post(API_URL +'/auth/reset-password ', payload);
+    const response = await axios.post(API_URL + '/auth/reset-password ', payload);
     return response.data;
   } catch (error) {
     if (error.response.data.error === "Invalid Token! Try again") {
@@ -84,7 +87,6 @@ const userSlice = createSlice({
     error: null,
   },
   reducers: {
-    // Reducer logic for actions not handled by createAsyncThunk
     clearUserState: (state) => {
       state.data = null;
       state.loading = 'idle';
@@ -114,7 +116,6 @@ const userSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(loginUser.rejected, (state, action,) => {
-        console.log("action.error.message", action.error.message);
         state.loading = 'failed';
         state.error = action.error.message;
       })
@@ -130,15 +131,15 @@ const userSlice = createSlice({
         state.loading = 'failed';
         state.error = action.error.message;
       })
-      .addCase(getUser.pending, (state) => {
+      .addCase(getUserById.pending, (state) => {
         state.loading = 'pending';
         state.error = null;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(getUserById.fulfilled, (state, action) => {
         state.loading = 'succeeded';
         state.data = action.payload;
       })
-      .addCase(getUser.rejected, (state, action) => {
+      .addCase(getUserById.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })

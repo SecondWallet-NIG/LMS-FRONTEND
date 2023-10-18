@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
@@ -10,14 +11,18 @@ import Button from "../../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 
-const StaffsModal = ({ isOpen, onClose, width, data , selected }) => {
+const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
+  if (!isOpen) return null;
   const dispatch = useDispatch();
+
+  const { loading, error } = useSelector((state) => state.user);
+
 
   const successPopup = (selected) => {
     selected(true);
   };
 
-  if (!isOpen) return null;
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -115,7 +120,6 @@ const StaffsModal = ({ isOpen, onClose, width, data , selected }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validateForm();
-
     if (isValid) {
       console.log("Form data:", formData);
       dispatch(createUser(formData))
@@ -127,14 +131,13 @@ const StaffsModal = ({ isOpen, onClose, width, data , selected }) => {
           onClose(); // Close the modal here
         })
         .catch((error) => {
-          console.log("An error occurred");
+          toast.error(error?.message)
         });
     }
   };
 
   return (
     <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-10">
-      <ToastContainer />
       <form style={modalStyles} id="add-user-form">
         <div className="rounded-2xl overflow-auto border border-swGray h-[80%] scrollbar-hide">
           <div className="bg-swBlue flex justify-between items-center p-3 text-white">
@@ -255,8 +258,12 @@ const StaffsModal = ({ isOpen, onClose, width, data , selected }) => {
             >
               Cancel
             </button>
-            <Button onClick={handleSubmit} className="block  rounded-full">
-              Create User
+            <Button
+              disabled={loading === "pending" ? true : false}
+              onClick={handleSubmit}
+              className="block  rounded-full"
+            >
+              {loading === "pending" ? "Processing" : " Create User"}
             </Button>
           </div>
         </div>

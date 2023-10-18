@@ -5,7 +5,7 @@ import Select from "react-select";
 import Button from "../buttonComponent/Button";
 import Image from "next/image";
 import sketch from "../../../../public/images/sketch.jpg";
-
+import { useRouter } from "next/navigation";
 function ReusableDataTable({
   apiEndpoint,
   initialData,
@@ -14,6 +14,7 @@ function ReusableDataTable({
   btnText,
   btnTextClick,
   dataTransformer,
+  onClickRow
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +25,7 @@ function ReusableDataTable({
   );
   const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
   const [paginationLinks, setPaginationLinks] = useState(null);
-
+  const router = useRouter()
   const options = [
     { value: 5, label: "5" },
     { value: 10, label: "10" },
@@ -213,10 +214,10 @@ function ReusableDataTable({
                 ))}
               </tr>
             </thead>
-
             <tbody>
               {data?.map((item) => (
                 <tr
+                  onClick={() => router.push(`${onClickRow}/${item.id || item._id}`)}
                   key={item._id}
                   className="border pt-2 pb-2 hover:bg-swLightGray"
                   style={{ cursor: "pointer" }}

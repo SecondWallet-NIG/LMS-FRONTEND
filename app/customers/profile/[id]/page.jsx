@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Button from "@/app/components/shared/buttonComponent/Button";
@@ -13,9 +13,16 @@ import { LuCalendar } from "react-icons/lu";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ActivityLogs from "@/app/components/customers/ActivityLogs";
 import Summary from "@/app/components/customers/Summary";
+import { useDispatch, useSelector } from "react-redux";
+import { getCustomerById } from "@/redux/slices/customerSlice";
+import { useParams } from "next/navigation";
 
 const CustomerProfile = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  console.log({ id });
+  const { loading, error, data } = useSelector((state) => state.customer);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeButton, setActiveButton] = useState("bio-data");
   const [activityButton, setActivityButton] = useState("activity-logs");
@@ -42,6 +49,10 @@ const CustomerProfile = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  useEffect(() => {
+   dispatch(getCustomerById(id)) ;
+   
+  }, []);
   return (
     <DashboardLayout>
       <div className="p-4 lg:p-8">
@@ -59,7 +70,7 @@ const CustomerProfile = () => {
                 />
               </div>
               <div className="ml-4 h-fit">
-                <p className="text-sm mb-2">Adebisi Tolani Obaje</p>
+                <p className="text-sm mb-2">{data?.firstName} {data?.middleName} {data?.lastName}</p>
                 <p className="text-xs">SW-456789</p>
 
                 <div className="flex gap-2 items-center h-fit w-fit mt-4">
@@ -122,7 +133,7 @@ const CustomerProfile = () => {
           </div>
         </div>
         <div className="flex">
-          <div className="w-[30%] border-r h-full border-swGray">
+          <div className="w-[30%] h-full ">
             <div className="flex gap-2">
               <Button
                 onClick={() => handleInfoToggle("bio-data")}
@@ -180,11 +191,11 @@ const CustomerProfile = () => {
                       </Button>
                     </div>
                     <div className="w-3/5 text-sm text-swGray font-semibold">
-                      <p className="pt-3">D.O.B</p>
-                      <p className="pt-3">Gender</p>
-                      <p className="pt-3">NIN/SSN</p>
-                      <p className="pt-3">Phone</p>
-                      <p className="pt-3">Email</p>
+                      <p className="pt-3">{data?.dateOfBirth}</p>
+                      <p className="pt-3">{data?.gender}</p>
+                      <p className="pt-3">{data?.nin}</p>
+                      <p className="pt-3">{data?.phoneNumber}</p>
+                      <p className="pt-3">{data?.email}</p>
                     </div>
                   </div>
                 </div>
@@ -207,15 +218,14 @@ const CustomerProfile = () => {
                       <p className="pt-3">Country: </p>
                       <p className="pt-3">State: </p>
                       <p className="pt-3">Lga: </p>
-                      <p className="pt-3">House no: </p>
                       <p className="pt-3">Address: </p>
                     </div>
                     <div className="w-3/5 text-sm text-swGray font-semibold">
-                      <p className="pt-3">D.O.B</p>
-                      <p className="pt-3">Gender</p>
-                      <p className="pt-3">NIN/SSN</p>
-                      <p className="pt-3">Phone</p>
-                      <p className="pt-3">Email</p>
+                      <p className="pt-3">Nigeria</p>
+                      <p className="pt-3">Ekiti state</p>
+                      <p className="pt-3">Ijero LGA/LCDA</p>
+                      <p className="pt-3">{data?.address}</p>
+             
                     </div>
                   </div>
                 </div>
@@ -236,15 +246,15 @@ const CustomerProfile = () => {
                   <div className="flex gap-2">
                     <div className="w-2/5 text-sm text-swGray">
                       <p className="pt-3">Bank Name: </p>
-                      <p className="pt-3">Acct Number: </p>
-                      <p className="pt-3">Beneficiary: </p>
+                      <p className="pt-3">Account Number: </p>
+                      <p className="pt-3">Account Name: </p>
                       <p className="pt-3">Bvn: </p>
                     </div>
                     <div className="w-3/5 text-sm text-swGray font-semibold">
-                      <p className="pt-3">D.O.B</p>
-                      <p className="pt-3">Gender</p>
-                      <p className="pt-3">NIN/SSN</p>
-                      <p className="pt-3">Phone</p>
+                      <p className="pt-3">{data?.bankAccount.bankName}</p>
+                      <p className="pt-3">{data?.bankAccount.accountNumber}</p>
+                      <p className="pt-3">{data?.bankAccount.accountName}</p>
+                      <p className="pt-3">{data?.bvn}</p>
                     </div>
                   </div>
                 </div>
@@ -283,8 +293,8 @@ const CustomerProfile = () => {
               </div>
             )}
           </div>
-          <div className="w-[70%]">
-            <div className="border-b border-swGray pb-2">
+          <div className="w-[70%] border-l h-screen border-swGray">
+            <div className=" pb-2">
               <div className="flex ml-4 gap-2">
                 <Button
                   onClick={() => handleActivityToggle("activity-logs")}

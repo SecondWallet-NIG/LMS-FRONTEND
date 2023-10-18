@@ -184,12 +184,12 @@ const Sidebar = () => {
           <SidebarLink
             icon={<BiMapAlt size={20} />}
             text="Plans"
-            link="/plans"
+            link="/dashboard"
           />
           <SidebarLink
             icon={<TbReportMoney size={20} />}
             text="Report"
-            link="/report"
+            link="/dashboard"
           />
           <SidebarLink
             icon={<AiFillCustomerService size={20} />}
@@ -199,7 +199,7 @@ const Sidebar = () => {
           <SidebarLink
             icon={<AiOutlineSetting size={20} />}
             text="Settings"
-            link="/settings"
+            link="/dashboard"
           />
         </div>
       </div>

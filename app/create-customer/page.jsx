@@ -44,7 +44,7 @@ const CreateCustomer = () => {
     error,
     data: userData,
   } = useSelector((state) => state.customer);
-
+  console.log({loading});
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -464,10 +464,12 @@ const CreateCustomer = () => {
 
           <div className="flex justify-center">
             <Button
+              disabled={loading === "pending" ? true : false}
               onClick={handleSubmit}
               className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10 bg-swBlue"
             >
-              Create customer profile
+              {loading === "pending" ? "Processing..." : "Create customer profile"}
+              
             </Button>
           </div>
         </form>

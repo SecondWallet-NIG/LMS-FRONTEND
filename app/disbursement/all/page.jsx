@@ -18,7 +18,7 @@ const AllDisburments = () => {
         <div className="p-5">
           <DisbursementCard />
           <ReusableDataTable
-        apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
+        apiEndpoint="http://localhost:8000/api/customer/profile-information"
         initialData={[]}
         headers={headers}
       />
