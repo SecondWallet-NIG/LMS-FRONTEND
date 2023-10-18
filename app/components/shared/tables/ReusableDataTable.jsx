@@ -68,8 +68,10 @@ function ReusableDataTable({
         if (typeof dataTransformer === "function") {
           const transformedData = dataTransformer(data.results);
           setData(transformedData);
+          setPaginationLinks(data.links)
         } else {
           setData(data.results);
+          setPaginationLinks(data.links)
         }
       });
   };
