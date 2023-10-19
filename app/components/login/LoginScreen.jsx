@@ -77,7 +77,7 @@ const LoginScreen = () => {
       .unwrap()
       .then(() => {
         // Handle a successful login here if needed
-        console.log({data});
+        console.log({ data });
         toast.success("Login successful");
       })
       .catch((error) => {
@@ -119,6 +119,7 @@ const LoginScreen = () => {
         </h2>
         <div className="mt-2">
           <InputField
+           css={"relative"}
             name="email"
             label="Email address"
             inputType="email"
@@ -132,6 +133,7 @@ const LoginScreen = () => {
         </div>
         <div className="mt-4">
           <InputField
+            css={"relative"}
             name="password"
             label="Password"
             inputType={!seePassword ? "password" : "text"}
