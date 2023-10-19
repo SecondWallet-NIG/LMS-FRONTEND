@@ -13,7 +13,9 @@ const customNoOptionsMessage = () => {
   return (
     <div>
       {/* Custom message with a link */}
-      <p>Not found. <Link href="/create">Create new customer</Link></p>
+      <p>
+        Not found. <Link href="/create">Create new customer</Link>
+      </p>
     </div>
   );
 };
@@ -24,19 +26,18 @@ const CreateLoan = () => {
   return (
     <Dashboard>
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
-     <div className="flex justify-between">
-     <p className="text-lg font-semibold">Initiate loan application</p>
-   
-   <Button
-   
-     href=""
-     className="hidden flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
-   >
-     <IoMdAdd size={20} />
-     <p>Add new customer</p>
-   </Button>
-     </div>
-      
+        <div className="flex justify-between">
+          <p className="text-lg font-semibold">Initiate loan application</p>
+
+          <Button
+            href=""
+            className="hidden flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
+          >
+            <IoMdAdd size={20} />
+            <p>Add new customer</p>
+          </Button>
+        </div>
+
         <div className="flex flex-col gap-5 mt-5">
           <p className="font-semibold">Loan details</p>
           <SelectField

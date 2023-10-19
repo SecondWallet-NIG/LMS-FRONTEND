@@ -110,7 +110,7 @@ const LoginScreen = () => {
   return (
     <div className="h-screen flex justify-center items-center">
       <ToastContainer />
-      <div className="w-[30%] bg-white p-6 ">
+      <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[40%] bg-white p-6 ">
         <div className="flex justify-center items-center mb-20 -ml-5">
           <Image src={companyLogo} alt="company logo" />
         </div>

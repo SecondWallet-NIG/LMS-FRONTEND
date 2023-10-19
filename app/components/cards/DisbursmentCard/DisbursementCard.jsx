@@ -25,7 +25,7 @@ const DisbursementCard = ({ data }) => {
   ];
 
   return (
-    <main className="grid lg:grid-cols-4 grid-cols-2 gap-2 text-sm">
+    <main className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-2 text-sm">
       {data.map((item, index) => (
         <div
           key={index}
