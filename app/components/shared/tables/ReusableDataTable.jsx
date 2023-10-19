@@ -103,47 +103,41 @@ function ReusableDataTable({
     fetchData(currentPage, perPage, sortField, sortDirection);
   }, [apiEndpoint, currentPage, perPage, sortField, sortDirection, searchTerm]);
 
+
   const getPageNumbers = () => {
     if (!paginationLinks || !paginationLinks.last) return [];
-
+  
     const lastLink = paginationLinks.last;
     const pageMatch = lastLink.match(/[?&]page=([^&]+)/);
-
+  
     if (!pageMatch) return [];
-
+  
     const totalPages = parseInt(pageMatch[1], 10);
     const pageNumbers = [];
-
+  
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      pageNumbers.push(1);
-
       if (currentPage <= 3) {
-        for (let i = 2; i <= 4; i++) {
+        for (let i = 1; i <= 5; i++) {
           pageNumbers.push(i);
         }
-        pageNumbers.push("...");
-        pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
-        pageNumbers.push("...");
-        for (let i = totalPages - 3; i <= totalPages; i++) {
+        for (let i = totalPages - 4; i <= totalPages; i++) {
           pageNumbers.push(i);
         }
       } else {
-        pageNumbers.push("...");
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+        for (let i = currentPage - 2; i <= currentPage + 2; i++) {
           pageNumbers.push(i);
         }
-        pageNumbers.push("...");
-        pageNumbers.push(totalPages);
       }
     }
-
+  
     return pageNumbers;
   };
+  
 
   return (
     <div className="container p-4">
