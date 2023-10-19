@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const header = [
   { id: "firstName", label: "First Name" },
@@ -14,22 +15,27 @@ const header = [
   { id: "nin", label: "NIN" },
 ];
 
-
-
 const Customers = () => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <DashboardLayout>
-      <ReusableDataTable
-        onClickRow="/customers/profile"
-        headers={header}
-        initialData={[]}
-        apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
-        btnText="+ create customer"
-        btnTextClick={() => {
-          router.push("/create-customer")
-        }}
-      />
+      <div className="w-full">
+        <ReusableDataTable
+          onClickRow="/customers/profile"
+          headers={header}
+          initialData={[]}
+          apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
+          btnText={
+            <div className="flex gap-1 items-center p-1">
+              <AiOutlinePlus size={15} />
+              <p className="hidden lg:block">create customer</p>
+            </div>
+          }
+          btnTextClick={() => {
+            router.push("/create-customer");
+          }}
+        />
+      </div>
     </DashboardLayout>
   );
 };

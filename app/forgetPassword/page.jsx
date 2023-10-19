@@ -60,7 +60,7 @@ const ForgetPassword = () => {
       .unwrap()
       .then(() => {
         // Handle a successful login here if needed
-        localStorage.setItem("email", JSON.stringify(payload.email) )
+        localStorage.setItem("email", JSON.stringify(payload.email));
         toast.success("Please check your email for the verification code");
         handleNextStep();
       })
@@ -88,7 +88,7 @@ const ForgetPassword = () => {
               <Image src={companyLogo} alt="company logo" />
             </div>
             <div className="h-[70%] flex justify-center items-center mt-20">
-              <div className="w-[30%] bg-white p-6 rounded-lg shadow-md">
+              <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[40%] bg-white p-6 rounded-lg">
                 <h2 className="text-2xl flex justify-center items-center  text-justify font-semibold mb-4">
                   Reset password
                 </h2>
@@ -101,7 +101,7 @@ const ForgetPassword = () => {
                     inputType="email"
                     placeholder="Email Address"
                     required={true}
-                   // value={payload.email}
+                    // value={payload.email}
                     onChange={handleEmailChange}
                   />
                 </div>
@@ -124,7 +124,7 @@ const ForgetPassword = () => {
         {step === 2 && (
           <div>
             <Verification
-           //   email={email}
+              //   email={email}
               step={step}
               setStep={setStep}
               onEmailChange={handleEmailChange}

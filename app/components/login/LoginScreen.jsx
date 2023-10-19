@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { isValidEmail } from "../helpers/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "@/redux/slices/userSlice";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -30,6 +31,8 @@ const LoginScreen = () => {
     email: false,
     password: false,
   });
+
+  const [seePassword, setSeePassword] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +58,7 @@ const LoginScreen = () => {
       toast.success(response.data.message);
 
       const user = response.data.data.user;
-  ///    localStorage.setItem("user", JSON.stringify(user));
+      ///    localStorage.setItem("user", JSON.stringify(user));
 
       if (user.firstLogin) {
         router.push("/onboarding");
@@ -100,10 +103,14 @@ const LoginScreen = () => {
     }
   }, [userData]);
 
+  const handleSeePassWord = () => {
+    setSeePassword(!seePassword);
+  };
+
   return (
     <div className="h-screen flex justify-center items-center">
       <ToastContainer />
-      <div className="w-[30%] bg-white p-6 ">
+      <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[40%] bg-white p-6 ">
         <div className="flex justify-center items-center mb-20 -ml-5">
           <Image src={companyLogo} alt="company logo" />
         </div>
@@ -113,9 +120,9 @@ const LoginScreen = () => {
         <div className="mt-2">
           <InputField
             name="email"
+            label="Email address"
             inputType="email"
             placeholder="Email Address"
-            hintText="This is your email address"
             required={true}
             //   value={loginData.email}
             onChange={handleInputChange}
@@ -123,15 +130,22 @@ const LoginScreen = () => {
             startIcon={<MdOutlineEmail />}
           />
         </div>
-        <div className="mt-2">
+        <div className="mt-4">
           <InputField
             name="password"
-            inputType="password"
+            label="Password"
+            inputType={!seePassword ? "password" : "text"}
             placeholder="Password"
             required={true}
             //  value={loginData.password}
             onChange={handleInputChange}
-            endIcon={<BsInfoCircle />}
+            endIcon={
+              !seePassword ? (
+                <AiOutlineEye size={20} onClick={handleSeePassWord} />
+              ) : (
+                <AiOutlineEyeInvisible size={20} onClick={handleSeePassWord} />
+              )
+            }
             startIcon={<MdKey />}
           />
         </div>

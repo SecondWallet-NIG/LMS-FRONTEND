@@ -11,9 +11,7 @@ const Dashboard = ({ children }) => {
 
   return (
     <DashboardLayout>
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
     </DashboardLayout>
   );
 };

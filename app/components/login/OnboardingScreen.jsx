@@ -46,7 +46,7 @@ const OnboardingScreen = () => {
     <div className="">
       <div>
         {step === 1 && (
-          <div className="flex justify-center items-center h-screen">
+          <div className="flex justify-center items-center h-screen mx-4">
             <form onSubmit={handleSubmit}>
               <div className="items-center text-center">
                 <div className="flex justify-center items-center mb-20">

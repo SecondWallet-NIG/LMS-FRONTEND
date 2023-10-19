@@ -44,7 +44,7 @@ const CreateCustomer = () => {
     error,
     data: userData,
   } = useSelector((state) => state.customer);
-  console.log({loading});
+  console.log({ loading });
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -222,15 +222,13 @@ const CreateCustomer = () => {
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
         <div className="flex justify-between">
           <p className="text-lg font-semibold">Create customer profile</p>
-
-       
         </div>
 
         <form id="add-customer-form">
           <div className="flex flex-col gap-5 mt-5">
             <p className="font-semibold">Personal information</p>
-            <div className="flex space-x-4">
-              <div className="w-1/3">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full md:w-1/3">
                 <InputField
                   required={true}
                   name="firstName"
@@ -248,7 +246,7 @@ const CreateCustomer = () => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="w-1/3">
+              <div className="w-full md:w-1/3">
                 <InputField
                   name="middleName"
                   required={true}
@@ -266,7 +264,7 @@ const CreateCustomer = () => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="w-1/3">
+              <div className="w-full md:w-1/3">
                 <InputField
                   name="lastName"
                   placeholder="Enter last name"
@@ -339,8 +337,8 @@ const CreateCustomer = () => {
           </div>
           <div className="flex flex-col gap-5 mt-5">
             <p className="font-semibold">Contact information</p>
-            <div className="flex space-x-4">
-              <div className="w-1/3">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full md:w-1/3">
                 <SelectField
                   name="country"
                   label={"Country"}
@@ -353,7 +351,7 @@ const CreateCustomer = () => {
                   }
                 />
               </div>
-              <div className="w-1/3">
+              <div className="w-full md:w-1/3">
                 <SelectField
                   name="state"
                   label={"State"}
@@ -367,7 +365,7 @@ const CreateCustomer = () => {
                   }}
                 />
               </div>
-              <div className="w-1/3">
+              <div className="w-full md:w-1/3">
                 <SelectField
                   name="dateOfBirth"
                   label={"LGA"}
@@ -468,8 +466,9 @@ const CreateCustomer = () => {
               onClick={handleSubmit}
               className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10 bg-swBlue"
             >
-              {loading === "pending" ? "Processing..." : "Create customer profile"}
-              
+              {loading === "pending"
+                ? "Processing..."
+                : "Create customer profile"}
             </Button>
           </div>
         </form>
