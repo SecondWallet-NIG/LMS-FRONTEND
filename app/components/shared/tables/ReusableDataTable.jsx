@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import { FiFilter } from "react-icons/fi";
 import { MdOutlineSort } from "react-icons/md";
@@ -18,6 +19,7 @@ function ReusableDataTable({
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(1)
   const [perPage, setPerPage] = useState(5);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
   const [sortDirection, setSortDirection] = useState(
@@ -76,15 +78,28 @@ function ReusableDataTable({
         }
       });
   };
+  const getTotalPages = () => {
+    if (!paginationLinks || !paginationLinks.last) return [];
+  
+    const lastLink = paginationLinks.last;
+    const pageMatch = lastLink.match(/[?&]page=([^&]+)/);
+  
+    if (!pageMatch) return [];
+  
+    let totalPages = parseInt(pageMatch[1], 10);
+      setTotal(totalPages)
+  }
 
   const handlePageChange = (page, perPage) => {
     setCurrentPage(page);
     fetchData(page, perPage, sortField, sortDirection);
+    getTotalPages();
   };
 
   const handleSelectChange = (selectedOption) => {
     setPerPage(selectedOption.value);
     handlePageChange(1, selectedOption.value);
+    getTotalPages();
   };
 
   const handleSort = (field) => {
@@ -93,6 +108,7 @@ function ReusableDataTable({
     setSortField(field);
     setSortDirection(newSortDirection);
     fetchData(currentPage, perPage, field, newSortDirection);
+    getTotalPages();
   };
 
   const handleSearchChange = (event) => {
@@ -100,7 +116,8 @@ function ReusableDataTable({
   };
 
   useEffect(() => {
-    fetchData(currentPage, perPage, sortField, sortDirection);
+    fetchData(currentPage, perPage, sortField, sortDirection)
+      getTotalPages();
   }, [apiEndpoint, currentPage, perPage, sortField, sortDirection, searchTerm]);
 
   const getPageNumbers = () => {
@@ -110,7 +127,7 @@ function ReusableDataTable({
     const pageMatch = lastLink.match(/[?&]page=([^&]+)/);
 
     if (!pageMatch) return [];
-
+  
     const totalPages = parseInt(pageMatch[1], 10);
     const pageNumbers = [];
 
@@ -136,54 +153,55 @@ function ReusableDataTable({
 
     return pageNumbers;
   };
+  
 
   return (
     <div className=" p-4 w-full mx-auto text-xs md:text-sm">
       {/* {data?.length > 0 ? ( */}
-      <div className="">
-        <div className="flex flex-col md:flex-row justify-between md:items-center">
-          <div className="flex gap-2 items-center justify-between w-full md:w-fit">
-            <div
-              className="flex border border-1 items-center mb-4 pl-2"
-              // style={{ width: "max-content" }}
-            >
-              <p className="mr-2 text-swGray">Items:</p>
-              <Select
-                styles={customStyles}
-                options={options}
-                value={{ value: perPage, label: perPage }}
-                onChange={handleSelectChange}
-                isSearchable={false}
-              />
-            </div>
-            <div className="flex gap-3 items-center">
-              <button className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4">
-                <FiFilter size={20} />
-                <p>Filter</p>
-              </button>
-            </div>
-          </div>
-
-          <div className="mb-4 flex items-center justify-between w-full md:w-fit">
-            <input
-              type="search"
-              placeholder="search..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="px-2 rounded outline-none border w-full border-gray-300 h-10"
-            />
-            {btnText ? (
-              <div>
-                <Button
-                  className="bg-swBlue text-white md:p-2 rounded-md ml-2 whitespace-nowrap"
-                  onClick={btnTextClick}
-                >
-                  {btnText}
-                </Button>
+        <div className="">
+          <div className="flex justify-between">
+            <div className="flex gap-2 ">
+              <div
+                className="flex border border-1 items-center mb-4 pl-2 pr-2"
+                style={{ width: "max-content" }}
+              >
+                <p className="mr-2 text-swGray">Items:</p>
+                <Select
+                  styles={customStyles}
+                  options={options}
+                  value={{ value: perPage, label: perPage }}
+                  onChange={handleSelectChange}
+                  isSearchable={false}
+                />
               </div>
-            ) : null}
+              <div className="flex gap-3 items-center">
+                <button className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4">
+                  <FiFilter size={20} />
+                  <p>Filter</p>
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-4 flex">
+              <input
+                type="search"
+                placeholder="search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="px-2 py-1 rounded outline-none border border-gray-300 h-10"
+              />
+              {btnText ? (
+                <div>
+                  <Button
+                    className="bg-swBlue text-white py-2 px-4 rounded-md ml-2"
+                    onClick={btnTextClick}
+                  >
+                    {btnText}
+                  </Button>
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
 
         <table className="table-auto w-full border-collapse border overflow-hidden">
           <thead>
