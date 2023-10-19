@@ -190,7 +190,7 @@ const CustomerProfile = () => {
                         <p className="whitespace-nowrap">Add details</p>
                       </Button>
                     </div>
-                    <div className="w-3/5 text-sm text-swGray font-semibold">
+                    <div className="w-3/5 text-xs text-swGray font-medium">
                       <p className="pt-3">{data?.dateOfBirth}</p>
                       <p className="pt-3">{data?.gender}</p>
                       <p className="pt-3">{data?.nin}</p>
@@ -214,13 +214,13 @@ const CustomerProfile = () => {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <div className="w-2/5 text-sm text-swGray">
+                    <div className="w-2/5 text-xs text-swGray font-medium">
                       <p className="pt-3">Country: </p>
                       <p className="pt-3">State: </p>
                       <p className="pt-3">Lga: </p>
                       <p className="pt-3">Address: </p>
                     </div>
-                    <div className="w-3/5 text-sm text-swGray font-semibold">
+                    <div className="w-3/5 text-sm text-xs text-swGray font-medium">
                       <p className="pt-3">Nigeria</p>
                       <p className="pt-3">Ekiti state</p>
                       <p className="pt-3">Ijero LGA/LCDA</p>
@@ -244,13 +244,13 @@ const CustomerProfile = () => {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <div className="w-2/5 text-sm text-swGray">
+                    <div className="w-2/5 text-xs text-swGray font-medium">
                       <p className="pt-3">Bank Name: </p>
                       <p className="pt-3">Account Number: </p>
                       <p className="pt-3">Account Name: </p>
                       <p className="pt-3">Bvn: </p>
                     </div>
-                    <div className="w-3/5 text-sm text-swGray font-semibold">
+                    <div className="w-3/5 text-xs text-swGray font-medium">
                       <p className="pt-3">{data?.bankAccount.bankName}</p>
                       <p className="pt-3">{data?.bankAccount.accountNumber}</p>
                       <p className="pt-3">{data?.bankAccount.accountName}</p>

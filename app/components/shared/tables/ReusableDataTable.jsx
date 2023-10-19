@@ -147,7 +147,7 @@ function ReusableDataTable({
 
   return (
     <div className="container p-4">
-      {data?.length > 0 ? (
+      {/* {data?.length > 0 ? ( */}
         <div className="">
           <div className="flex justify-between">
             <div className="flex gap-2 ">
@@ -268,14 +268,14 @@ function ReusableDataTable({
             </button>
           </div>
         </div>
-      ) : (
-        <div class="min-h-500 flex items-center justify-center">
-          <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
-            <Image src={sketch} alt="company logo" />
-            <p class="text-center text-lg">This list is empty</p>
-          </div>
-        </div>
-      )}
+      {/* // ) : (
+      //   <div class="min-h-500 flex items-center justify-center">
+      //     <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
+      //       <Image src={sketch} alt="company logo" />
+      //       <p class="text-center text-lg">This list is empty</p>
+      //     </div>
+      //   </div>
+      // )} */}
     </div>
   );
 }
