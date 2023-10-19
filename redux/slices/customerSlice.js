@@ -15,6 +15,19 @@ export const createCustomer = createAsyncThunk('customer/create', async (payload
   }
 });
 
+export const getCustomerById = createAsyncThunk('customer/getCustomerById', async (customerId) => {
+  try {
+    const response = await axios.get(`${API_URL}/customer/profile-information/${customerId}`);
+    console.log({response});
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
 // export const getVerifyToken = createAsyncThunk('auth/getToken', async (payload) => {
 //   try {
 //     const response = await axios.post(API_URL +'/auth/reset-password/verify-email', payload);
@@ -86,6 +99,19 @@ const customerSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(createCustomer.rejected, (state, action,) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(getCustomerById.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(getCustomerById.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getCustomerById.rejected, (state, action,) => {
         console.log("action.error.message", action.error.message);
         state.loading = 'failed';
         state.error = action.error.message;

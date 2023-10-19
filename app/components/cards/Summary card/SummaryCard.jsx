@@ -7,12 +7,12 @@ const SummaryCard = ({ data }) => {
     <main className="grid grid-cols-3 gap-4">
       {data.map((item, index) => (
         <div key={index} className="p-3 bg-gray-100 text-base rounded-xl">
-          <div className="flex gap-2 items-center">
-            <div>
+          <div className="flex gap-2 text-red items-center">
+            <div className="">
               {item.loan_type === "total_loan_applications" ||
               item.loan_type === "amount_borrowed" ? (
                 <FaCircle
-                  size={20}
+                  size={15}
                   className={`${
                     item.loan_type === "total_loan_applications"
                       ? "text-blue-600"
@@ -26,7 +26,7 @@ const SummaryCard = ({ data }) => {
               {item.loan_type === "approved" ||
               item.loan_type === "proposed_interest" ? (
                 <FaSquareFull
-                  size={20}
+                  size={15}
                   className={`${
                     item.loan_type === "approved"
                       ? "text-purple-600"
@@ -39,7 +39,7 @@ const SummaryCard = ({ data }) => {
               {item.loan_type === "disbursed" ||
               item.loan_type === "interest_paid" ? (
                 <PiDiamondFill
-                  size={20}
+                  size={15}
                   className={`${
                     item.loan_type === "disbursed"
                       ? "text-yellow-400"
@@ -50,22 +50,22 @@ const SummaryCard = ({ data }) => {
                 ""
               )}
               {item.loan_type === "complete_repayments" && (
-                <BsFillStarFill size={20} className="text-green-500" />
+                <BsFillStarFill size={15} className="text-green-500" />
               )}
               {item.loan_type === "debts" && (
-                <BsTriangleFill size={20} className="text-red-500" />
+                <BsTriangleFill size={15} className="text-red-500" />
               )}
               {item.loan_type === "rejected/cancelled" && (
-                <BsPentagonFill size={20} className="text-orange-400" />
+                <BsPentagonFill size={15} className="text-orange-400" />
               )}
             </div>
-            <p className="capitalize font-semibold">
+            <p className="capitalize font-medium text-sm  text-swGray">
               {item.loan_type.replace(/_/g, " ")}
             </p>
           </div>
           <div className="flex items-center justify-between font-semibold mt-5">
-            <p className="text-3xl text-swBlue">{item.number}</p>
-            <p className="text-base text-swGray">{item.amount} NGN</p>
+            <p className="text-xl text-swBlue">{item.number}</p>
+            <p className="text-sm text-swGray font-light">{item.amount} NGN</p>
           </div>
         </div>
       ))}

@@ -54,14 +54,14 @@ const ActivityLogsCard = ({ data }) => {
             </div>
             <div className="w-full">
               <div className="flex gap-3 -mt-2">
-                <p className="p-0 m-0">
+                <p className="pb-2 m-0 text-sm">
                   {item.loan_state === "disbursed"
                     ? "Loan disbursed by"
                     : item.loan_state === "created"
                     ? "Loan created by"
                     : "Credit approved by"}
                 </p>
-                <div className="flex gap-1 px-1 border border-gray-300 items-center rounded-md">
+                <div className="flex gap-1 px-1 items-center rounded-md">
                   <div className={`p-[0.15rem] rounded-full bg-purple-600`} />
                   <Image
                     src={item.by.profile_pic}
@@ -72,14 +72,14 @@ const ActivityLogsCard = ({ data }) => {
                   <p className="text-xs">{item.by.name}</p>
                 </div>
               </div>
-              <div className="p-2 w-full border border-gray-300 bg-gray-100 mt-2 rounded-lg font-medium">
+              <div className="p-4 w-full border border-gray-300 bg-gray-100 mt-2 rounded-lg font-medium">
                 <div className="flex justify-between mb-2 text-lg">
                   <p  className="text-sm text-swBlue">{item.amount}</p>
                   <p className="text-sm">{item.disbursed_by?.id}</p>
                 </div>
-                <p className="text-sm">
+                <p className="text-sm text-swGray ">
                   Basic loan
-                  <span className="font-light"> for a duration of</span>
+                  <span className="font-light"> for a duration of </span>
                   {item.duration}
                 </p>
               </div>

@@ -8,14 +8,10 @@ import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
 import companyLogo from "../../../public/images/Logo.png";
-
-//toast
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { isValidEmail } from "../helpers/utils";
-
-//redux
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "@/redux/slices/userSlice";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -81,6 +77,7 @@ const LoginScreen = () => {
       .unwrap()
       .then(() => {
         // Handle a successful login here if needed
+        console.log({data});
         toast.success("Login successful");
       })
       .catch((error) => {
@@ -93,10 +90,10 @@ const LoginScreen = () => {
   useEffect(() => {
     if (userData) {
       // You can access the user data from the Redux store here
-      console.log("Logged in user data:", userData);
+      console.log("Logged in user data...:", userData);
       localStorage.setItem("user", JSON.stringify(userData));
       // Redirect or perform other actions based on the user data
-      if (userData.firstLogin) {
+      if (userData?.data?.user.firstLogin === true) {
         // Redirect to onboarding for first-time users
         router.push("/onboarding");
       } else {

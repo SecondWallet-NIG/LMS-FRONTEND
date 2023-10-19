@@ -21,6 +21,7 @@ const Customers = () => {
   return (
     <DashboardLayout>
       <ReusableDataTable
+        onClickRow="/customers/profile"
         headers={header}
         initialData={[]}
         apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"

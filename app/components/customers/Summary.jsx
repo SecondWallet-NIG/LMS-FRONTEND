@@ -17,9 +17,9 @@ const Summary = () => {
   ];
   return (
     <main>
-      <p className="font-semibold text-lg mb-3">Loan Stats</p>
+      <p className="font-semibold text-md mb-4">Loan Stats</p>
       <SummaryCard data={data} />
-      <p className="font-semibold text-lg my-3">Financials</p>
+      <p className="font-semibold  text-md my-4">Financials</p>
       <SummaryCard data={FinancialsData} />
     </main>
   );

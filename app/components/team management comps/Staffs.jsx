@@ -1,21 +1,23 @@
 "use client";
 import { useState, useEffect } from "react";
-import { FiFilter, FiSearch } from "react-icons/fi";
 import TeamManagementCard from "../cards/Team management card/TeamManagementCard";
-import { MdOutlineSort } from "react-icons/md";
-import { SlOptionsVertical } from "react-icons/sl";
-import { BiPlus } from "react-icons/bi";
 import StaffsModal from "../modals/teamManagement/StaffsModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getRoles } from "@/redux/slices/roleSlice";
 import SuccessModal from "../modals/SuccessModal";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import Button from "../shared/buttonComponent/Button";
+import { ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
+
 const Staffs = () => {
   const [isModal, setIsModal] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const dispatch = useDispatch();
+  const router = useRouter();
   const { loading, error, data } = useSelector((state) => state.role);
+
   const headers = [
     { id: "name", label: "Name and Staff ID" },
     { id: "role", label: "Staff Role" },
@@ -32,6 +34,7 @@ const Staffs = () => {
 
   const customDataTransformer = (apiData) => {
     return apiData?.results.map((item) => ({
+      id: item._id,
       name: (
         <div>
           <div className="text-md font-semibold text-gray-700">{`${item.firstName} ${item.lastName}`}</div>
@@ -58,12 +61,15 @@ const Staffs = () => {
     }));
   };
 
+
+
   useEffect(() => {
     dispatch(getRoles());
   }, []);
 
   return (
-    <main>
+    <div>
+      <ToastContainer />
       <TeamManagementCard />
       <div className="px-6 py-2">
         <div className="flex  justify-between">
@@ -77,6 +83,7 @@ const Staffs = () => {
         </div>
         <div className="flex justify-between items-center">
           <ReusableDataTable
+            onClickRow= "/team-management"
             dataTransformer={customDataTransformer}
             apiEndpoint="https://secondwallet-stag.onrender.com/api/user"
             initialData={[]}
@@ -102,7 +109,7 @@ const Staffs = () => {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 

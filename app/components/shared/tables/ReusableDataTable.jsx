@@ -5,7 +5,7 @@ import Select from "react-select";
 import Button from "../buttonComponent/Button";
 import Image from "next/image";
 import sketch from "../../../../public/images/sketch.jpg";
-
+import { useRouter } from "next/navigation";
 function ReusableDataTable({
   apiEndpoint,
   initialData,
@@ -14,6 +14,7 @@ function ReusableDataTable({
   btnText,
   btnTextClick,
   dataTransformer,
+  onClickRow
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +25,7 @@ function ReusableDataTable({
   );
   const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
   const [paginationLinks, setPaginationLinks] = useState(null);
-
+  const router = useRouter()
   const options = [
     { value: 5, label: "5" },
     { value: 10, label: "10" },
@@ -102,51 +103,45 @@ function ReusableDataTable({
     fetchData(currentPage, perPage, sortField, sortDirection);
   }, [apiEndpoint, currentPage, perPage, sortField, sortDirection, searchTerm]);
 
+
   const getPageNumbers = () => {
     if (!paginationLinks || !paginationLinks.last) return [];
-
+  
     const lastLink = paginationLinks.last;
     const pageMatch = lastLink.match(/[?&]page=([^&]+)/);
-
+  
     if (!pageMatch) return [];
-
+  
     const totalPages = parseInt(pageMatch[1], 10);
     const pageNumbers = [];
-
+  
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      pageNumbers.push(1);
-
       if (currentPage <= 3) {
-        for (let i = 2; i <= 4; i++) {
+        for (let i = 1; i <= 5; i++) {
           pageNumbers.push(i);
         }
-        pageNumbers.push("...");
-        pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
-        pageNumbers.push("...");
-        for (let i = totalPages - 3; i <= totalPages; i++) {
+        for (let i = totalPages - 4; i <= totalPages; i++) {
           pageNumbers.push(i);
         }
       } else {
-        pageNumbers.push("...");
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+        for (let i = currentPage - 2; i <= currentPage + 2; i++) {
           pageNumbers.push(i);
         }
-        pageNumbers.push("...");
-        pageNumbers.push(totalPages);
       }
     }
-
+  
     return pageNumbers;
   };
+  
 
   return (
     <div className="container p-4">
-      {data?.length > 0 ? (
+      {/* {data?.length > 0 ? ( */}
         <div className="">
           <div className="flex justify-between">
             <div className="flex gap-2 ">
@@ -213,10 +208,10 @@ function ReusableDataTable({
                 ))}
               </tr>
             </thead>
-
             <tbody>
               {data?.map((item) => (
                 <tr
+                  onClick={() => router.push(`${onClickRow}/${item.id || item._id}`)}
                   key={item._id}
                   className="border pt-2 pb-2 hover:bg-swLightGray"
                   style={{ cursor: "pointer" }}
@@ -267,14 +262,14 @@ function ReusableDataTable({
             </button>
           </div>
         </div>
-      ) : (
-        <div class="min-h-500 flex items-center justify-center">
-          <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
-            <Image src={sketch} alt="company logo" />
-            <p class="text-center text-lg">This list is empty</p>
-          </div>
-        </div>
-      )}
+      {/* // ) : (
+      //   <div class="min-h-500 flex items-center justify-center">
+      //     <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
+      //       <Image src={sketch} alt="company logo" />
+      //       <p class="text-center text-lg">This list is empty</p>
+      //     </div>
+      //   </div>
+      // )} */}
     </div>
   );
 }
