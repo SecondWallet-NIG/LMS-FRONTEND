@@ -71,8 +71,8 @@ const Staffs = () => {
     <div>
       <ToastContainer />
       <TeamManagementCard />
-      <div className="px-6 py-2">
-        <div className="flex  justify-between">
+      <div className="py-2">
+        <div className="px-4 flex  justify-between">
           <p className="text-lg font-semibold">Staff list</p>
           <Button
             onClick={handleOpenModal}
