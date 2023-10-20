@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import { FiFilter } from "react-icons/fi";
 import { MdOutlineSort } from "react-icons/md";
@@ -18,6 +19,7 @@ function ReusableDataTable({
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(1)
   const [perPage, setPerPage] = useState(5);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
   const [sortDirection, setSortDirection] = useState(
@@ -76,15 +78,28 @@ function ReusableDataTable({
         }
       });
   };
+  const getTotalPages = () => {
+    if (!paginationLinks || !paginationLinks.last) return [];
+  
+    const lastLink = paginationLinks.last;
+    const pageMatch = lastLink.match(/[?&]page=([^&]+)/);
+  
+    if (!pageMatch) return [];
+  
+    let totalPages = parseInt(pageMatch[1], 10);
+      setTotal(totalPages)
+  }
 
   const handlePageChange = (page, perPage) => {
     setCurrentPage(page);
     fetchData(page, perPage, sortField, sortDirection);
+    getTotalPages();
   };
 
   const handleSelectChange = (selectedOption) => {
     setPerPage(selectedOption.value);
     handlePageChange(1, selectedOption.value);
+    getTotalPages();
   };
 
   const handleSort = (field) => {
@@ -93,6 +108,7 @@ function ReusableDataTable({
     setSortField(field);
     setSortDirection(newSortDirection);
     fetchData(currentPage, perPage, field, newSortDirection);
+    getTotalPages();
   };
 
   const handleSearchChange = (event) => {
@@ -100,7 +116,8 @@ function ReusableDataTable({
   };
 
   useEffect(() => {
-    fetchData(currentPage, perPage, sortField, sortDirection);
+    fetchData(currentPage, perPage, sortField, sortDirection)
+      getTotalPages();
   }, [apiEndpoint, currentPage, perPage, sortField, sortDirection, searchTerm]);
 
   const getPageNumbers = () => {
@@ -110,7 +127,7 @@ function ReusableDataTable({
     const pageMatch = lastLink.match(/[?&]page=([^&]+)/);
 
     if (!pageMatch) return [];
-
+  
     const totalPages = parseInt(pageMatch[1], 10);
     const pageNumbers = [];
 
@@ -136,6 +153,7 @@ function ReusableDataTable({
 
     return pageNumbers;
   };
+  
 
   return (
     <div className="w-full mx-auto text-xs md:text-sm">
@@ -162,7 +180,6 @@ function ReusableDataTable({
                 <p>Filter</p>
               </button>
             </div>
-          </div>
 
           <div className="mb-4 flex items-center justify-between w-full md:w-fit">
             <input
@@ -182,8 +199,8 @@ function ReusableDataTable({
                 </Button>
               </div>
             ) : null}
+
           </div>
-        </div>
 
         <table className="table-auto w-full border-collapse border overflow-hidden">
           <thead>

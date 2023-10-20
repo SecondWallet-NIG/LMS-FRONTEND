@@ -50,8 +50,26 @@ const CustomerProfile = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  function calculateLoanInterest(principal, monthlyInterestRate, months) {
+    if (principal <= 0 || monthlyInterestRate <= 0 || months <= 0) {
+      throw new Error("Principal, monthly interest rate, and months must be greater than zero.");
+    }
+  
+    const interest = principal * monthlyInterestRate * months;
+    return interest;
+  }
+  
+  // Example usage:
+  const principal = 1000;  // Replace with your principal amount
+  const monthlyInterestRate = 0.01;  // 1% monthly interest rate
+  const months = 12;  // Replace with the number of months
+  
+  const interest = calculateLoanInterest(principal, monthlyInterestRate, months);
+  console.log(`Interest on a loan of $${principal} at a monthly interest rate of ${(monthlyInterestRate * 100).toFixed(2)}% for ${months} months is $${interest.toFixed(2)}`);
+  
   useEffect(() => {
     dispatch(getCustomerById(id));
+
   }, []);
   return (
     <DashboardLayout>

@@ -8,7 +8,7 @@ import LoginScreen from './components/login/LoginScreen';
 export default function Home() {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.post.data); // Assuming 'post' is the slice name
-  console.log({ posts });
+
 
   useEffect(() => {
     // Dispatch the fetchPosts action when the component mounts

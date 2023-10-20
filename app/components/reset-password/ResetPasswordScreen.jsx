@@ -94,6 +94,7 @@ const ResetPasswordScreen = ({
         </h2>
         <div className="mt-2">
           <InputField
+           css={"relative"}
             name="newPassword"
             inputType={passwordVisible ? "text" : "password"}
             placeholder="Enter New Password"
@@ -121,6 +122,7 @@ const ResetPasswordScreen = ({
         </div>
         <div className="mt-2">
           <InputField
+           css={"relative"}
             name="newPasswordConfirmation"
             inputType={ndPasswordVisible ? "text" : "password"}
             placeholder="Confirm New Password"
