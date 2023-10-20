@@ -16,6 +16,7 @@ import Summary from "@/app/components/customers/Summary";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
+import EditableButton from "@/app/components/shared/editableBuutonComponent/EditableButton";
 
 const CustomerProfile = () => {
   const router = useRouter();
@@ -50,13 +51,12 @@ const CustomerProfile = () => {
     setIsModalOpen(false);
   };
   useEffect(() => {
-   dispatch(getCustomerById(id)) ;
-   
+    dispatch(getCustomerById(id));
   }, []);
   return (
     <DashboardLayout>
       <div className="p-4 lg:p-8">
-        <div className="flex gap-2 border-b border-swGray pb-3">
+        <div className="flex gap-2 border-b border-gray-300 pb-3">
           <div className="w-1/2">
             <div className="flex ">
               <div>
@@ -70,7 +70,9 @@ const CustomerProfile = () => {
                 />
               </div>
               <div className="ml-4 h-fit">
-                <p className="text-sm mb-2">{data?.firstName} {data?.middleName} {data?.lastName}</p>
+                <p className="text-sm mb-2">
+                  {data?.firstName} {data?.middleName} {data?.lastName}
+                </p>
                 <p className="text-xs">SW-456789</p>
 
                 <div className="flex gap-2 items-center h-fit w-fit mt-4">
@@ -133,33 +135,39 @@ const CustomerProfile = () => {
           </div>
         </div>
         <div className="flex">
-          <div className="w-[30%] h-full ">
-            <div className="flex gap-2">
-              <Button
+          <div className="w-[30%] h-full">
+            <div className="flex gap-2 text-xs lg:text-sm mt-2 items-center flex-wrap">
+              <EditableButton
                 onClick={() => handleInfoToggle("bio-data")}
-                variant={"secondary"}
-                className="py-1.5 px-2 text-center text-sm rounded-md  gap-2 border mt-2"
+                className={`${
+                  activeButton === "bio-data" &&
+                  "font-semibold text-swBlue bg-blue-50"
+                } p-2 rounded-md border cursor-pointer whitespace-nowrap`}
               >
                 Personal Info
-              </Button>
-              <Button
+              </EditableButton>
+              <EditableButton
                 onClick={() => handleInfoToggle("work")}
-                variant={"secondary"}
-                className="py-1.5 px-2 text-center text-sm rounded-md  gap-2 border mt-2"
+                className={`${
+                  activeButton === "work" &&
+                  "font-semibold text-swBlue bg-blue-50"
+                } p-2 rounded-md border cursor-pointer`}
               >
                 Work
-              </Button>
-              <Button
+              </EditableButton>
+              <EditableButton
                 onClick={() => handleInfoToggle("document")}
-                variant={"secondary"}
-                className="py-1.5 px-2 text-center text-sm rounded-md  gap-2 border mt-2"
+                className={`${
+                  activeButton === "document" &&
+                  "font-semibold text-swBlue bg-blue-50"
+                } p-2 rounded-md border cursor-pointer`}
               >
                 Documents
-              </Button>
+              </EditableButton>
             </div>
             {activeButton == "bio-data" && (
               <div>
-                <div className="p-4">
+                <div className="p-2">
                   <div
                     className="text-sm font-semibold flex justify-between"
                     onMouseEnter={() => handleInfoHoverIn("bio-data")}
@@ -173,33 +181,45 @@ const CustomerProfile = () => {
                       />
                     )}
                   </div>
-                  <div className="flex gap-2">
-                    <div className="w-2/5 text-sm text-swGray">
+
+                  <div className="w-2/5 text-xs text-swGray">
+                    <div className="flex gap-1">
                       <p className="pt-3">D.O.B: </p>
+                      <p className="pt-3 whitespace-nowrap">
+                        {data?.dateOfBirth}
+                      </p>
+                    </div>
+                    <div className="flex gap-1">
                       <p className="pt-3">Gender: </p>
+                      <p className="pt-3 whitespace-nowrap">{data?.gender}</p>
+                    </div>
+                    <div className="flex gap-1">
                       <p className="pt-3">NIN/SSN: </p>
+                      <p className="pt-3 whitespace-nowrap">{data?.nin}</p>
+                    </div>
+                    <div className="flex gap-1">
                       <p className="pt-3">Phone: </p>
+                      <p className="pt-3 whitespace-nowrap">
+                        {data?.phoneNumber}
+                      </p>
+                    </div>
+                    <div className="flex gap-1">
                       <p className="pt-3">Email: </p>
-                      <Button
-                        onClick={() => handleActivityToggle("activity-log")}
-                        variant={"secondary"}
-                        size={"normal"}
-                        className="py-1.5 text-sm rounded-md items-center flex gap-1 border mt-2"
-                      >
-                        <AiOutlinePlus size={20} />{" "}
-                        <p className="whitespace-nowrap">Add details</p>
-                      </Button>
+                      <p className="pt-3 whitespace-nowrap">{data?.email}</p>
                     </div>
-                    <div className="w-3/5 text-xs text-swGray font-medium">
-                      <p className="pt-3">{data?.dateOfBirth}</p>
-                      <p className="pt-3">{data?.gender}</p>
-                      <p className="pt-3">{data?.nin}</p>
-                      <p className="pt-3">{data?.phoneNumber}</p>
-                      <p className="pt-3">{data?.email}</p>
-                    </div>
+
+                    <Button
+                      onClick={() => handleActivityToggle("activity-log")}
+                      variant={"secondary"}
+                      size={"normal"}
+                      className="py-1.5 text-sm rounded-md items-center flex gap-1 border mt-2"
+                    >
+                      <AiOutlinePlus size={20} />{" "}
+                      <p className="whitespace-nowrap">Add details</p>
+                    </Button>
                   </div>
                 </div>
-                <div className="p-4 border-t border-swGray">
+                <div className="p-2 border-t border-text-300">
                   <div
                     className="text-sm font-semibold flex justify-between"
                     onMouseEnter={() => handleInfoHoverIn("address")}
@@ -213,23 +233,27 @@ const CustomerProfile = () => {
                       />
                     )}
                   </div>
-                  <div className="flex gap-2">
-                    <div className="w-2/5 text-xs text-swGray font-medium">
+                  <div className="mt-2 text-xs">
+                    <div className="flex gap-1">
                       <p className="pt-3">Country: </p>
-                      <p className="pt-3">State: </p>
-                      <p className="pt-3">Lga: </p>
-                      <p className="pt-3">Address: </p>
-                    </div>
-                    <div className="w-3/5 text-sm text-xs text-swGray font-medium">
                       <p className="pt-3">Nigeria</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <p className="pt-3">State: </p>
                       <p className="pt-3">Ekiti state</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <p className="pt-3">Lga: </p>
                       <p className="pt-3">Ijero LGA/LCDA</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <p className="pt-3">Address: </p>
+
                       <p className="pt-3">{data?.address}</p>
-             
                     </div>
                   </div>
                 </div>
-                <div className="p-4 border-t border-swGray">
+                <div className="p-2 border-t border-gray-300">
                   <div
                     className="text-sm font-semibold flex justify-between"
                     onMouseEnter={() => handleInfoHoverIn("bank")}
@@ -243,17 +267,21 @@ const CustomerProfile = () => {
                       />
                     )}
                   </div>
-                  <div className="flex gap-2">
-                    <div className="w-2/5 text-xs text-swGray font-medium">
+                  <div className="text-xs">
+                    <div className="flex gap-1">
                       <p className="pt-3">Bank Name: </p>
-                      <p className="pt-3">Account Number: </p>
-                      <p className="pt-3">Account Name: </p>
-                      <p className="pt-3">Bvn: </p>
-                    </div>
-                    <div className="w-3/5 text-xs text-swGray font-medium">
                       <p className="pt-3">{data?.bankAccount.bankName}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <p className="pt-3">Account Number: </p>
                       <p className="pt-3">{data?.bankAccount.accountNumber}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <p className="pt-3">Account Name: </p>
                       <p className="pt-3">{data?.bankAccount.accountName}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <p className="pt-3">Bvn: </p>
                       <p className="pt-3">{data?.bvn}</p>
                     </div>
                   </div>
@@ -268,7 +296,7 @@ const CustomerProfile = () => {
                     <Button
                       onClick={openModal}
                       variant="primary"
-                      className="py-1.5 px-3 rounded-md flex gap-2 border w-fit mt-5"
+                      className="py-1.5 px-3 rounded-md flex gap-2 border w-fit mt-5 mx-3"
                     >
                       update work details
                     </Button>
@@ -293,44 +321,54 @@ const CustomerProfile = () => {
               </div>
             )}
           </div>
-          <div className="w-[70%] border-l h-screen border-swGray">
+          <div className="w-[70%] border-l h-screen border-gray-300">
             <div className=" pb-2">
-              <div className="flex ml-4 gap-2">
-                <Button
+              <div className="flex ml-4 gap-2 mt-2 text-xs lg:text-sm flex-wrap">
+                <EditableButton
                   onClick={() => handleActivityToggle("activity-logs")}
-                  variant={"secondary"}
-                  className="py-1.5 px-2 text-center text-sm rounded-md  gap-2 border mt-2"
+                  className={`${
+                    activityButton === "activity-logs" &&
+                    "font-semibold text-swBlue bg-blue-50"
+                  } p-2 rounded-md border cursor-pointer whitespace-nowrap`}
                 >
                   Activity logs
-                </Button>
-                <Button
+                </EditableButton>
+                <EditableButton
                   onClick={() => handleActivityToggle("summary")}
-                  variant={"secondary"}
-                  className="py-1.5 px-2 text-center text-sm rounded-md  gap-2 border mt-2"
+                  className={`${
+                    activityButton === "summary" &&
+                    "font-semibold text-swBlue bg-blue-50"
+                  } p-2 rounded-md border cursor-pointer`}
                 >
                   Summary
-                </Button>
-                <Button
+                </EditableButton>
+                <EditableButton
                   onClick={() => handleActivityToggle("loans")}
-                  variant={"secondary"}
-                  className="py-1.5 px-2 text-center text-sm rounded-md  gap-2 border mt-2"
+                  className={`${
+                    activityButton === "loans" &&
+                    "font-semibold text-swBlue bg-blue-50"
+                  } p-2 rounded-md border cursor-pointer`}
                 >
                   Loans
-                </Button>
-                <Button
+                </EditableButton>
+                <EditableButton
                   onClick={() => handleActivityToggle("disbursement")}
-                  variant={"secondary"}
-                  className="py-1.5 px-2 text-center text-sm rounded-md  gap-2 border mt-2"
+                  className={`${
+                    activityButton === "disbursement" &&
+                    "font-semibold text-swBlue bg-blue-50"
+                  } p-2 rounded-md border cursor-pointer`}
                 >
-                  Disbursements
-                </Button>
-                <Button
+                  Disbursment
+                </EditableButton>
+                <EditableButton
                   onClick={() => handleActivityToggle("repayment")}
-                  variant={"secondary"}
-                  className="py-1.5 px-2 text-center text-sm rounded-md  gap-2 border mt-2"
+                  className={`${
+                    activityButton === "repayment" &&
+                    "font-semibold text-swBlue bg-blue-50"
+                  } p-2 rounded-md border cursor-pointer`}
                 >
                   Repayments
-                </Button>
+                </EditableButton>
               </div>
               <div className="w-full mt-4 flex">
                 <div className="ml-auto flex gap-2">

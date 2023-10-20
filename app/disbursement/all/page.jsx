@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Dashboard from "@/app/dashboard/page.jsx";
 import DisbursementCard from "@/app/components/cards/DisbursmentCard/DisbursementCard";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable.jsx";
@@ -17,12 +17,13 @@ const AllDisburments = () => {
       <main>
         <div className="p-5">
           <DisbursementCard />
-          <ReusableDataTable
-        apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
-        initialData={[]}
-        headers={headers}
-      />
         </div>
+        <ReusableDataTable
+          onClickRow={"/customers/profile"}
+          apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
+          initialData={[]}
+          headers={headers}
+        />
       </main>
     </Dashboard>
   );

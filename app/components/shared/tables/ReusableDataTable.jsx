@@ -138,10 +138,10 @@ function ReusableDataTable({
   };
 
   return (
-    <div className=" p-4 w-full mx-auto text-xs md:text-sm">
+    <div className="w-full mx-auto text-xs md:text-sm">
       {/* {data?.length > 0 ? ( */}
       <div className="">
-        <div className="flex flex-col md:flex-row justify-between md:items-center">
+        <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
           <div className="flex gap-2 items-center justify-between w-full md:w-fit">
             <div
               className="flex border border-1 items-center mb-4 pl-2"
@@ -175,7 +175,7 @@ function ReusableDataTable({
             {btnText ? (
               <div>
                 <Button
-                  className="bg-swBlue text-white md:p-2 rounded-md ml-2 whitespace-nowrap"
+                  className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
                   onClick={btnTextClick}
                 >
                   {btnText}
