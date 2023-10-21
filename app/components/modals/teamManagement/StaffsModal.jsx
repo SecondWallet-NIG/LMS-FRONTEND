@@ -15,7 +15,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   if (!isOpen) return null;
   const dispatch = useDispatch();
 
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
 
 
   const successPopup = (selected) => {
@@ -45,7 +45,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
       value: item._id,
     }));
   };
-  const modifiedArray = modifyObjects(data);
+ // const modifiedArray = ;
   const modalStyles = {
     width: width || "90%",
     maxWidth: "800px",
@@ -220,7 +220,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
                   label={"Select User Role"}
                   required={true}
                   isSearchable={false}
-                  optionValue={modifiedArray}
+                  optionValue={modifyObjects(data)}
                   onChange={(selectedOption) =>
                     handleSelectChange(selectedOption, "role")
                   }

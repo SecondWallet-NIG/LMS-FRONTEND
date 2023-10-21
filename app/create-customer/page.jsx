@@ -44,7 +44,6 @@ const CreateCustomer = () => {
     error,
     data: userData,
   } = useSelector((state) => state.customer);
-  console.log({ loading });
   const openModal = () => {
     setIsModalOpen(true);
   };

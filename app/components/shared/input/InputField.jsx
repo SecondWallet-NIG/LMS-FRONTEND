@@ -20,7 +20,7 @@ const InputField = ({
     <div className="">
       <label htmlFor={name} className="block text-gray-700 text-xs mb-2">
         {label}
-        {required && <span className="text-red-600 ml-1">*</span>}
+        {required ? <span className="text-red-600 ml-1">*</span> : <div className="mb-2 text-white">*</div>}
       </label>
 
       <div className={`${css} relative flex items-center`}>

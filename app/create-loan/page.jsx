@@ -27,10 +27,49 @@ const customNoOptionsMessage = () => {
 };
 
 const CreateLoan = () => {
-  const [isInputOpen, setIsInputOpen] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector((state) => state.customer);
+  const [filteredData, setFilteredData] = useState(data);
+  const [isInputOpen, setIsInputOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [loanPackageText, setLoanPackageText] = useState(null);
+  const [interest, setInterest] = useState(null);
+  const [formData, setFormData] = useState({
+    customerId: "",
+    loanAmount: 0,
+    loanDuration: 0,
+    loanPackage: null,
+    repaymentNo: 0,
+    commitmentValue: 0,
+    commitmentTotal: 0,
+    numberOfRepayment: 0,
+    repaymentType: null,
+    assetType: null,
+  });
+
+  //supply interest rate on monthly basis
+  const loanPackagesData = [
+    { value: 5, label: "Basic Loans" },
+    { value: 5, label: "Payday / Salary Loan" },
+    { value: 5, label: "SME Loan" },
+    { value: 5, label: "Auto / Car Loan" },
+    { value: 5, label: "Asset Financing" },
+  ];
+  const assetTypeData = [
+    { value: 100, label: "Investment" },
+    { value: 200, label: "Building" },
+    { value: 300, label: "Construction" },
+    { value: 400, label: "Vehicles" },
+    { value: 500, label: "Machineries" },
+  ];
+  const repaymentData = [
+    { value: "Daily", label: "Daily" },
+    { value: "Weekly", label: "Weekly" },
+    { value: "Monthly", label: "Monthly" },
+    { value: "Quartely", label: "Quartely" },
+  ];
+  const commitmentType = [{ value: "Percentage", label: "Percentage" }];
 
   const modifyObjects = (arr) => {
     return arr?.map((item) => ({
@@ -39,122 +78,449 @@ const CreateLoan = () => {
     }));
   };
 
-  const modifiedArray = modifyObjects(data);
-  console.log({ modifiedArray });
+  const setInputState = async (e) => {
+    let { name, value } = e.target;
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const search = (e) => {
+    const filtered = data.filter((item) => {
+      const fullName =
+        `${item.firstName} ${item.lastName} ${item.email}`.toLowerCase();
+      return fullName.includes(e.toLowerCase());
+    });
+
+    setFilteredData(filtered);
+  };
+
+  const calCommitmentTotal = (e) => {
+    let { name, value } = e.target;
+    let total = (value * formData.loanAmount) / 100;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      commitmentTotal: total,
+    }));
+  };
+  const updateCommitmentTotal = (e) => {
+    let { name, value } = e.target;
+    let total = (value * formData.commitmentValue) / 100;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      commitmentTotal: total,
+    }));
+  };
+
+  const calculateInterest = (
+    principal,
+    monthlyRate,
+    timeDays,
+    repaymentType
+  ) => {
+    let monthsInYear = 12;
+
+    if (repaymentType === "Weekly") {
+      timeDays = timeDays * 7.5;
+    } else if (repaymentType === "Monthly") {
+      timeDays = timeDays * 30;
+    } else if (repaymentType === "Daily") {
+      timeDays = timeDays;
+    } else if (repaymentType === "Quartely") {
+      timeDays = timeDays * 30 * 3;
+    }
+
+    const interest = (principal * monthlyRate * ((timeDays * 12) / 360)) / 100;
+    setInterest(interest);
+  };
+
+  const handleSelectChange = async (selectedOption, name) => {
+    setFormData({
+      ...formData,
+      [name]: selectedOption.value,
+    });
+  };
 
   useEffect(() => {
     dispatch(getCustomers());
   }, []);
 
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
+
   return (
     <Dashboard>
-      <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
-        <div className="flex justify-between">
-          <p className="text-lg font-semibold">Initiate loan application</p>
+      <main className="flex text-sm">
+        <div className="w-2/3 pl-5 pr-5 pt-10 ">
+          <div className="flex justify-between">
+            <p className="text-lg font-semibold">Initiate loan application</p>
 
+            <Button
+              href=""
+              className="hidden flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
+            >
+              <IoMdAdd size={20} />
+              <p>Add new customer</p>
+            </Button>
+          </div>
+
+          <div className="flex flex-col gap-5 mt-5">
+            <p className="font-semibold">Loan details</p>
+            <div className="">
+              <label className="block mb-2 text-gray-700 text-xs">
+                Select Customer <span className="text-red-600 ml-1">*</span>
+              </label>
+              <div
+                className="border border-[#ccc] text-[#808080] p-2.5 rounded-md"
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+              >
+                {selectedCustomer != null ? (
+                  <div className="">
+                    {selectedCustomer.firstName} {selectedCustomer.lastName}
+                  </div>
+                ) : (
+                  <div> Search and select customer</div>
+                )}
+              </div>
+            </div>
+            <SelectField
+              name="loanPackage"
+              optionValue={loanPackagesData}
+              label={"Loan Package "}
+              required={true}
+              placeholder={"Select loan package"}
+              isSearchable={false}
+              onChange={(selectedOption) => {
+                handleSelectChange(selectedOption, "loanPackage");
+                setLoanPackageText(selectedOption.label);
+                if (
+                  formData.loanAmount &&
+                  formData.loanDuration &&
+                  formData.repaymentType
+                ) {
+                  calculateInterest(
+                    formData.loanAmount,
+                    selectedOption.value,
+                    formData.loanDuration,
+                    formData.repaymentType
+                  );
+                }
+              }}
+            />
+            <SelectField
+              name="assetType"
+              optionValue={assetTypeData}
+              label={"Asset Type"}
+              required={true}
+              placeholder={"Select asset type"}
+              isSearchable={false}
+              onChange={(selectedOption) =>
+                handleSelectChange(selectedOption, "assetType")
+              }
+            />
+            <InputField
+              name="loanAmount"
+              required={true}
+              inputType="number"
+              hintText={"Enter the loan amount in digit (Naira currency)"}
+              activeBorderColor="border-swBlue"
+              label="Loan amount"
+              placeholder="Enter loan amount"
+              isActive="loan-amount"
+              onChange={(e) => {
+                setInputState(e);
+                if (formData.commitmentValue > 0) {
+                  updateCommitmentTotal(e);
+                }
+                if (
+                  formData.loanPackage &&
+                  formData.loanDuration &&
+                  formData.repaymentType
+                ) {
+                  calculateInterest(
+                    e.target.value,
+                    formData.loanPackage,
+                    formData.loanDuration,
+                    formData.repaymentType
+                  );
+                }
+              }}
+              inputOpen={isInputOpen}
+            />
+            <div className="flex gap-2">
+              <div className="w-1/3">
+                <SelectField
+                  optionValue={commitmentType}
+                  label={"Commitment Fee"}
+                  required={true}
+                  placeholder={"Percentage"}
+                  isSearchable={false}
+                />
+              </div>
+              <div className="w-2/3">
+                <InputField
+                  disabled={formData.loanAmount > 0 ? false : true}
+                  required={false}
+                  name="commitmentValue"
+                  inputType="number"
+                  activeBorderColor="border-swBlue"
+                  placeholder="Enter Value"
+                  onChange={(e) => {
+                    setInputState(e);
+                    calCommitmentTotal(e);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <div className="w-1/3">
+                <SelectField
+                  optionValue={repaymentData}
+                  label={"Repayment Type"}
+                  required={true}
+                  placeholder={"Select repayment type"}
+                  isSearchable={false}
+                  onChange={(selectedOption) => {
+                    handleSelectChange(selectedOption, "repaymentType");
+                    if (
+                      formData.loanAmount &&
+                      formData.loanDuration &&
+                      formData.loanDuration
+                    ) {
+                      calculateInterest(
+                        formData.loanAmount,
+                        formData.loanPackage,
+                        formData.loanDuration,
+                        selectedOption.value
+                      );
+                    }
+                  }}
+                />
+              </div>
+              <div className="w-2/3">
+                <InputField
+                  name="loanDuration"
+                  required={true}
+                  inputType="number"
+                  activeBorderColor="border-swBlue"
+                  label="Loan Duration"
+                  placeholder="Enter loan duration"
+                  hintText="Enter loan duration based on REPAYMENT TYPE selected"
+                  onChange={(e) => {
+                    setInputState(e);
+                    if (
+                      formData.loanAmount &&
+                      formData.loanPackage &&
+                      formData.repaymentType
+                    ) {
+                      calculateInterest(
+                        formData.loanAmount,
+                        formData.loanPackage,
+                        e.target.value,
+                        formData.repaymentType
+                      );
+                    }
+                  }}
+                />
+              </div>
+            </div>
+
+          </div>
+          <div className="flex flex-col gap-5 mt-5">
+            <p className="font-semibold">Upload Collateral documents</p>
+            <p className="text-gray-700 -mt-3">
+              Document types uploaded should be JPEGS, PNG or PDF and should not
+              exceed 4mb
+            </p>
+            <button className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+              <AiOutlinePaperClip size={20} />
+              <p className="font-semibold">Select files</p>
+            </button>
+          </div>
+          <div className="flex flex-col gap-5 mt-5">
+            <p className="font-semibold">Upload Hard copy of filled form</p>
+            <p className="text-gray-700 -mt-3">
+              Document types uploaded should be JPEGS, PNG or PDF and should not
+              exceed 4mb
+            </p>
+            <button className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+              <AiOutlinePaperClip size={20} />
+              <p className="font-semibold">Select files</p>
+            </button>
+          </div>
           <Button
-            href=""
-            className="hidden flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
+            disabled={true}
+            variant={"secondary"}
+            className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10"
           >
-            <IoMdAdd size={20} />
-            <p>Add new customer</p>
+            Create loan
           </Button>
         </div>
 
-        <div className="flex flex-col gap-5 mt-5">
-          <p className="font-semibold">Loan details</p>
-          <div
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
-            Search and select customer
+        <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-swGray">
+          <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
+          {selectedCustomer != null ? (
+            <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+              <div className="text-sm font-semibold text-swGray">SWC-0001</div>
+              <div className="text-xs font-semibold text-swGray mt-2">
+                {selectedCustomer.firstName} {selectedCustomer.lastName}
+              </div>
+
+              <div className="flex justify-between">
+                <div className="text-swGray font-semibold text-xs my-2">
+                  {selectedCustomer.phoneNumber}
+                </div>
+                <div className="text-gray-600 font-semibold text-xs my-2">
+                  {selectedCustomer.email}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+              No Customer Added Yet
+            </div>
+          )}
+          <div className="flex pt-2">
+            <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+              Loan Package
+            </div>
+            <div className="w-2/3">
+              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                {loanPackageText || "No package selected yet"}
+              </div>
+            </div>
           </div>
-          <SelectField
-            label={"Customer Name/ID"}
-            required={true}
-            placeholder={"Search and select customer"}
-            isSearchable={true}
-            optionValue={modifiedArray}
-            noOptionsMessage={customNoOptionsMessage}
-          />
-          <SelectField
-            label={"Loan Package "}
-            required={true}
-            placeholder={"Select loan package"}
-            isSearchable={false}
-          />
-          <SelectField
-            label={"Asset Type"}
-            required={true}
-            placeholder={"Select asset type"}
-            isSearchable={false}
-          />
-          <InputField
-            required={true}
-            hintText={"Enter the loan amount in digit (Naira currency)"}
-            activeBorderColor="border-swBlue"
-            label="Loan amount"
-            placeholder="Enter loan amount"
-            isActive="loan-amount"
-            onclick={() => {
-              isInputOpen === "loan-amount"
-                ? setIsInputOpen(null)
-                : setIsInputOpen("loan-amount");
-            }}
-            inputOpen={isInputOpen}
-          />
-          <InputField
-            required={true}
-            hintText={"Enter the loan duration in months"}
-            activeBorderColor="border-swBlue"
-            label="Duration"
-            placeholder="Enter loan duration"
-            isActive="duration"
-            onclick={() => {
-              isInputOpen === "duration"
-                ? setIsInputOpen(null)
-                : setIsInputOpen("duration");
-            }}
-            inputOpen={isInputOpen}
-          />
+
+       
+
+          <div className="flex pt-2">
+            <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+              Loan Amount
+            </div>
+            <div className="w-2/3">
+              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                ₦
+                {formData.loanAmount
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+              </div>
+            </div>
+          </div>
+          <div className="flex pt-2">
+            <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+              Repayment Type
+            </div>
+            <div className="w-2/3">
+              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                {formData.repaymentType || "No Repayment Type Yet"} 
+              </div>
+            </div>
+          </div>
+          <div className="flex pt-2">
+            <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+              Loan Duration / Number of Repayment(s)
+            </div>
+            <div className="w-2/3">
+              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                {formData.loanDuration || 0}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex pt-2">
+            <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+              Commitment Fee
+            </div>
+            <div className="w-2/3 ">
+              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
+                <div>{formData.commitmentValue || 0.0}%</div>
+                <div>
+                  ₦
+                  {formData.commitmentTotal
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex pt-2">
+            <div className="w-full">
+              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                <div className="flex justify-between  text-xs font-semibold pt-2">
+                  <div>Loan Principal :</div>{" "}
+                  <div>₦{formData.loanAmount || 0}</div>
+                </div>
+                <div className="flex justify-between text-xs font-semibold pt-2">
+                  <div>Interest at maturity :</div> <div>₦{interest || 0}</div>
+                </div>
+                <div className="flex justify-between  text-xs font-semibold pt-2">
+                  <div>Commitment Fee :</div> <div>₦{formData.commitmentTotal || 0}</div>
+                </div>
+                <div className="flex justify-between  text-sm font-semibold pt-2">
+                  <div >Total Amount :</div>{" "}
+                  <div>
+                    ₦
+                    {parseFloat(interest) +
+                      parseFloat(formData.loanAmount) +
+                      parseFloat(formData.commitmentTotal) || 0}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-5 mt-5">
-          <p className="font-semibold">Upload Collateral documents</p>
-          <p className="text-gray-700 -mt-3">
-            Document types uploaded should be JPEGS, PNG or PDF and should not
-            exceed 4mb
-          </p>
-          <button className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-            <AiOutlinePaperClip size={20} />
-            <p className="font-semibold">Select files</p>
-          </button>
-        </div>
-        <div className="flex flex-col gap-5 mt-5">
-          <p className="font-semibold">Upload Hard copy of filled form</p>
-          <p className="text-gray-700 -mt-3">
-            Document types uploaded should be JPEGS, PNG or PDF and should not
-            exceed 4mb
-          </p>
-          <button className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-            <AiOutlinePaperClip size={20} />
-            <p className="font-semibold">Select files</p>
-          </button>
-        </div>
-        <Button
-          disabled={true}
-          variant={"secondary"}
-          className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10"
-        >
-          Create loan
-        </Button>
       </main>
-      <CenterModal width={"40%"} isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <CenterModal
+        width={"40%"}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
         <div className="h-[500px] overflow-y-scroll">
-          {data?.map((item) => (
+          <div className="mb-4 flex">
+            <input
+              type="search"
+              placeholder="Search Customer"
+              onChange={(e) => {
+                search(e.target.value);
+              }}
+              className="bg-swLightGray px-2 rounded outline-none border w-full border-swLightGray h-10 "
+            />
+            <button
+              className="p-2"
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          {Array.isArray(filteredData) && filteredData?.map((item) => (
             <div
               key={item._id}
-              className="mb-4 p-4 border rounded-lg shadow-md"
+              onClick={() => {
+                setSelectedCustomer(item);
+                setIsOpen(false);
+              }}
+              className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
             >
               <div className="flex justify-between items-center mb-2">
                 <div>
@@ -165,7 +531,7 @@ const CreateLoan = () => {
                     {item.email}
                   </div>
                 </div>
-                <div className=" text-xs text-gray-800 font-semibold">
+                <div className="text-xs text-gray-800 font-semibold">
                   {item.phoneNumber}
                 </div>
                 <div>

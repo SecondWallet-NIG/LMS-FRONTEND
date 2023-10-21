@@ -305,15 +305,15 @@ const CustomerProfile = () => {
                   <div className="text-xs md:text-sm">
                     <div className="flex gap-1">
                       <p className="pt-3">Bank Name: </p>
-                      <p className="pt-3">{data?.bankAccount.bankName}</p>
+                      <p className="pt-3">{data?.bankAccount?.bankName}</p>
                     </div>
                     <div className="flex gap-1">
                       <p className="pt-3">Account Number: </p>
-                      <p className="pt-3">{data?.bankAccount.accountNumber}</p>
+                      <p className="pt-3">{data?.bankAccount?.accountNumber}</p>
                     </div>
                     <div className="flex gap-1">
                       <p className="pt-3">Account Name: </p>
-                      <p className="pt-3">{data?.bankAccount.accountName}</p>
+                      <p className="pt-3">{data?.bankAccount?.accountName}</p>
                     </div>
                     <div className="flex gap-1">
                       <p className="pt-3">Bvn: </p>

@@ -54,7 +54,7 @@ const SelectField = ({
 
   return (
     <div>
-      <label htmlFor={name} className="block text-gray-700 text-xs mb-2">
+      <label className="block text-gray-700 text-xs mb-2">
         {label}
         {required && <span className="text-red-600 ml-1">*</span>}
       </label>
