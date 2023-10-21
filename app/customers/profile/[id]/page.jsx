@@ -357,8 +357,8 @@ const CustomerProfile = () => {
             )}
           </div>
           <div className="w-[70%] border-l h-screen border-gray-300">
-            <div className=" pb-2 flex justify-between border-b border-gray-300">
-              <div className="flex ml-4 gap-2 mt-2 text-xs lg:text-sm flex-wrap">
+            <div className="">
+              <div className="flex ml-4 gap-2 mt-2 text-xs lg:text-sm">
                 <EditableButton
                   onClick={() => handleActivityToggle("activity-logs")}
                   className={`${

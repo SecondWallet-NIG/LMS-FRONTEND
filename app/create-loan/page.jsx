@@ -247,6 +247,7 @@ const CreateLoan = () => {
             <div className="flex gap-2">
               <div className="w-1/3">
                 <SelectField
+                  disabled={formData.loanAmount === 0 ? true : false}
                   optionValue={commitmentType}
                   label={"Commitment Fee"}
                   required={true}
@@ -272,6 +273,7 @@ const CreateLoan = () => {
             <div className="flex gap-2">
               <div className="w-1/3">
                 <SelectField
+                  disabled={formData.loanAmount === 0 ? true : false}
                   optionValue={repaymentData}
                   label={"Repayment Type"}
                   required={true}
@@ -354,7 +356,7 @@ const CreateLoan = () => {
           </Button>
         </div>
 
-        <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-swGray">
+        <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
           <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
           {selectedCustomer != null ? (
             <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">

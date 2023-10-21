@@ -32,11 +32,17 @@ const Roles = () => {
       permissions: (
         <div className="text-md font-semibold text-gray-700">
           {item.permissions.map((x) => (
-            <div className="capitalize" key={x}>{x}</div>
+            <div className="capitalize" key={x}>
+              {x}
+            </div>
           ))}
         </div>
       ),
-      createdAt: item.createdAt?.slice(0, 10),
+      createdAt: (
+        <div className="text-md font-semibold text-gray-700">
+          {item.createdAt?.slice(0, 10)}
+        </div>
+      ),
     }));
   };
 

@@ -57,11 +57,13 @@ const Staffs = () => {
           {item?.role?.name}
         </div>
       ),
-      createdAt: item.createdAt?.slice(0, 10),
+      createdAt: (
+        <div className="text-md font-semibold text-gray-700">
+          {item.createdAt?.slice(0, 10)}
+        </div>
+      ),
     }));
   };
-
-
 
   useEffect(() => {
     dispatch(getRoles());

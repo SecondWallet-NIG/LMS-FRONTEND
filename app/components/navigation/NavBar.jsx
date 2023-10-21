@@ -5,7 +5,7 @@ import PagePath from "./PagePath";
 
 const NavBar = () => {
   return (
-    <main className="fixed bg-white flex justify-between items-center p-[0.68rem] md:ml-auto border-b border-b-swGray w-full md:w-3/4 lg:w-[78%] xl:w-4/5 px-5">
+    <main className="fixed bg-white flex justify-between items-center p-[0.68rem] md:ml-auto border-b border-b-gray-300 w-full md:w-3/4 lg:w-[78%] xl:w-4/5 px-5">
       <PagePath />
       <div className=" flex gap-5 items-center">
         <div className="relative">

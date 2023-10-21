@@ -24,12 +24,12 @@ const Sidebar = () => {
   const [activeLink, setActiveLink] = useState("");
 
   return (
-    <main className=" h-full border-r border-r-swGray flex flex-col font-medium">
-      <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-swGray">
+    <main className=" h-full border-r border-r-gray-300 flex flex-col font-medium">
+      <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300">
         <Image src={companyLogo} alt="company logo" priority={true} />
       </div>
 
-      <div className="py-5 border-b border-b-swGray text-sm xl:text-base">
+      <div className="py-5 border-b border-b-gray-300 text-sm xl:text-base">
         <div className="px-2 lg:px-3 xl:px-8">
           <div>
             <SidebarLink
@@ -179,7 +179,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="py-5 border-b border-b-swGray text-sm xl:text-base">
+      <div className="py-5 border-b border-b-gray-300 text-sm xl:text-base">
         <div className="px-3 lg:px-8">
           <SidebarLink
             icon={<BiMapAlt size={20} />}
