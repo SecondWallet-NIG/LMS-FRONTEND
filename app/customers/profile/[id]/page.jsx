@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
 import EditableButton from "@/app/components/shared/editableBuutonComponent/EditableButton";
+import InputField from "@/app/components/shared/input/InputField";
+import { IoIosClose } from "react-icons/io";
 
 const CustomerProfile = () => {
   const router = useRouter();
@@ -28,6 +30,7 @@ const CustomerProfile = () => {
   const [activeButton, setActiveButton] = useState("bio-data");
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [infoHover, setInfoHover] = useState("");
+  const [logSearch, setLogSearch] = useState(false);
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -52,29 +55,43 @@ const CustomerProfile = () => {
   };
   function calculateLoanInterest(principal, monthlyInterestRate, months) {
     if (principal <= 0 || monthlyInterestRate <= 0 || months <= 0) {
-      throw new Error("Principal, monthly interest rate, and months must be greater than zero.");
+      throw new Error(
+        "Principal, monthly interest rate, and months must be greater than zero."
+      );
     }
-  
+
     const interest = principal * monthlyInterestRate * months;
     return interest;
   }
-  
+
   // Example usage:
-  const principal = 1000;  // Replace with your principal amount
-  const monthlyInterestRate = 0.01;  // 1% monthly interest rate
-  const months = 12;  // Replace with the number of months
-  
-  const interest = calculateLoanInterest(principal, monthlyInterestRate, months);
-  console.log(`Interest on a loan of $${principal} at a monthly interest rate of ${(monthlyInterestRate * 100).toFixed(2)}% for ${months} months is $${interest.toFixed(2)}`);
-  
+  const principal = 1000; // Replace with your principal amount
+  const monthlyInterestRate = 0.01; // 1% monthly interest rate
+  const months = 12; // Replace with the number of months
+
+  const interest = calculateLoanInterest(
+    principal,
+    monthlyInterestRate,
+    months
+  );
+  console.log(
+    `Interest on a loan of $${principal} at a monthly interest rate of ${(
+      monthlyInterestRate * 100
+    ).toFixed(2)}% for ${months} months is $${interest.toFixed(2)}`
+  );
+
+  const handleLogSearch = (state) => {
+    state === "open" ? setLogSearch(true) : setLogSearch(false);
+    console.log(state);
+  };
+
   useEffect(() => {
     dispatch(getCustomerById(id));
-
   }, []);
   return (
     <DashboardLayout>
-      <div className="p-4 lg:p-8">
-        <div className="flex gap-2 border-b border-gray-300 pb-3">
+      <div className="overflow-x-hidden">
+        <div className="flex gap-2 border-b border-gray-300 items-end py-4 px-8">
           <div className="w-1/2">
             <div className="flex ">
               <div>
@@ -153,8 +170,8 @@ const CustomerProfile = () => {
           </div>
         </div>
         <div className="flex">
-          <div className="w-[30%] h-full">
-            <div className="flex gap-2 text-xs lg:text-sm mt-2 items-center flex-wrap">
+          <div className="w-[30%] h-full p-2 md:p-4">
+            <div className="flex gap-2 text-xs lg:text-sm  items-center flex-wrap">
               <EditableButton
                 onClick={() => handleInfoToggle("bio-data")}
                 className={`${
@@ -200,7 +217,7 @@ const CustomerProfile = () => {
                     )}
                   </div>
 
-                  <div className="w-2/5 text-xs text-swGray">
+                  <div className="w-2/5 text-xs md:text-sm text-swGray">
                     <div className="flex gap-1">
                       <p className="pt-3">D.O.B: </p>
                       <p className="pt-3 whitespace-nowrap">
@@ -251,7 +268,7 @@ const CustomerProfile = () => {
                       />
                     )}
                   </div>
-                  <div className="mt-2 text-xs">
+                  <div className="mt-2 text-xs md:text-sm">
                     <div className="flex gap-1">
                       <p className="pt-3">Country: </p>
                       <p className="pt-3">Nigeria</p>
@@ -285,7 +302,7 @@ const CustomerProfile = () => {
                       />
                     )}
                   </div>
-                  <div className="text-xs">
+                  <div className="text-xs md:text-sm">
                     <div className="flex gap-1">
                       <p className="pt-3">Bank Name: </p>
                       <p className="pt-3">{data?.bankAccount.bankName}</p>
@@ -340,7 +357,7 @@ const CustomerProfile = () => {
             )}
           </div>
           <div className="w-[70%] border-l h-screen border-gray-300">
-            <div className=" pb-2">
+            <div className=" pb-2 flex justify-between border-b border-gray-300">
               <div className="flex ml-4 gap-2 mt-2 text-xs lg:text-sm flex-wrap">
                 <EditableButton
                   onClick={() => handleActivityToggle("activity-logs")}
@@ -388,14 +405,42 @@ const CustomerProfile = () => {
                   Repayments
                 </EditableButton>
               </div>
-              <div className="w-full mt-4 flex">
-                <div className="ml-auto flex gap-2">
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem]">
-                    <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
-                      <FiSearch size={20} />
+              <div className="flex">
+                <div className="ml-auto flex gap-2 items-end">
+                  <InputField
+                    startIcon={<FiSearch size={20} />}
+                    endIcon={
+                      <IoIosClose
+                        size={20}
+                        className="cursor-pointer"
+                        onClick={() => {
+                          handleLogSearch("close");
+                        }}
+                      />
+                    }
+                    placeholder={"Search..."}
+                    css={`
+                      ${logSearch
+                        ? "translate-x-[3rem] opacity-1 z-10"
+                        : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
+                    `}
+                    borderColor="bg-gray-200"
+                  />
+                  <div
+                    className={`${
+                      logSearch ? "opacity-0" : "opacity-1"
+                    } transition-all ease-in-out p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem]`}
+                  >
+                    <div className="bg-white border border-gray-300 w-fit p-2 rounded-md cursor-pointer">
+                      <FiSearch
+                        size={20}
+                        onClick={() => {
+                          handleLogSearch("open");
+                        }}
+                      />
                     </div>
                   </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem]">
+                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem] cursor-pointer">
                     <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
                       <BsThreeDotsVertical size={20} />
                     </div>
