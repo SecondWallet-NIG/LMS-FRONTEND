@@ -1,13 +1,19 @@
 "use client";
 import Link from "next/link";
+import { useEffect } from "react";
 import Dashboard from "../dashboard/page";
 import { IoMdAdd } from "react-icons/io";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
-import { AiOutlineExclamationCircle, AiOutlinePaperClip } from "react-icons/ai";
+import { AiOutlinePaperClip } from "react-icons/ai";
 import Button from "../components/shared/buttonComponent/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { getCustomers } from "@/redux/slices/customerSlice";
+
+import CenterModal from "../components/modals/CenterModal";
+import EditableButton from "../components/shared/editableBuutonComponent/EditableButton";
 
 const customNoOptionsMessage = () => {
   return (
@@ -22,6 +28,23 @@ const customNoOptionsMessage = () => {
 
 const CreateLoan = () => {
   const [isInputOpen, setIsInputOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { loading, error, data } = useSelector((state) => state.customer);
+
+  const modifyObjects = (arr) => {
+    return arr?.map((item) => ({
+      label: item.firstName,
+      value: item._id,
+    }));
+  };
+
+  const modifiedArray = modifyObjects(data);
+  console.log({ modifiedArray });
+
+  useEffect(() => {
+    dispatch(getCustomers());
+  }, []);
 
   return (
     <Dashboard>
@@ -40,11 +63,19 @@ const CreateLoan = () => {
 
         <div className="flex flex-col gap-5 mt-5">
           <p className="font-semibold">Loan details</p>
+          <div
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          >
+            Search and select customer
+          </div>
           <SelectField
             label={"Customer Name/ID"}
             required={true}
             placeholder={"Search and select customer"}
             isSearchable={true}
+            optionValue={modifiedArray}
             noOptionsMessage={customNoOptionsMessage}
           />
           <SelectField
@@ -65,9 +96,6 @@ const CreateLoan = () => {
             activeBorderColor="border-swBlue"
             label="Loan amount"
             placeholder="Enter loan amount"
-            endIcon={
-              <AiOutlineExclamationCircle className="text-swGray" size={20} />
-            }
             isActive="loan-amount"
             onclick={() => {
               isInputOpen === "loan-amount"
@@ -82,9 +110,6 @@ const CreateLoan = () => {
             activeBorderColor="border-swBlue"
             label="Duration"
             placeholder="Enter loan duration"
-            endIcon={
-              <AiOutlineExclamationCircle className="text-swGray" size={20} />
-            }
             isActive="duration"
             onclick={() => {
               isInputOpen === "duration"
@@ -124,6 +149,37 @@ const CreateLoan = () => {
           Create loan
         </Button>
       </main>
+      <CenterModal width={"40%"} isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div className="h-[500px] overflow-y-scroll">
+          {data?.map((item) => (
+            <div
+              key={item._id}
+              className="mb-4 p-4 border rounded-lg shadow-md"
+            >
+              <div className="flex justify-between items-center mb-2">
+                <div>
+                  <div className="text-xs text-gray-800">
+                    {item.firstName} {item.lastName}
+                  </div>
+                  <div className="text-xs text-gray-600 font-semibold">
+                    {item.email}
+                  </div>
+                </div>
+                <div className=" text-xs text-gray-800 font-semibold">
+                  {item.phoneNumber}
+                </div>
+                <div>
+                  <EditableButton
+                    className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
+                  >
+                    Badge
+                  </EditableButton>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CenterModal>
     </Dashboard>
   );
 };

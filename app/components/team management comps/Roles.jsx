@@ -4,9 +4,15 @@ import { FiFilter, FiSearch } from "react-icons/fi";
 import { MdOutlineSort } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
 import RolesModal from "../modals/teamManagement/RolesModal";
+import ReusableDataTable from "../shared/tables/ReusableDataTable";
 
 const Roles = () => {
   const [isModal, setIsModal] = useState(false);
+  const headers = [
+    { id: "name", label: "Role Name" },
+    { id: "permissions", label: "Permissions" },
+    { id: "createdAt", label: "Date Added" },
+  ];
 
   const handleOpenModal = () => {
     setIsModal(true);
@@ -14,6 +20,24 @@ const Roles = () => {
 
   const handleCloseModal = () => {
     setIsModal(false);
+  };
+
+  const customDataTransformer = (apiData) => {
+    return apiData?.map((item) => ({
+      name: (
+        <div>
+          <div className="text-md font-semibold text-gray-700">{item.name}</div>
+        </div>
+      ),
+      permissions: (
+        <div className="text-md font-semibold text-gray-700">
+          {item.permissions.map((x) => (
+            <div className="capitalize" key={x}>{x}</div>
+          ))}
+        </div>
+      ),
+      createdAt: item.createdAt?.slice(0, 10),
+    }));
   };
 
   return (
@@ -56,8 +80,14 @@ const Roles = () => {
               </div>
             </div>
           </div>
-          <RolesModal isOpen={isModal} onClose={handleCloseModal} />
         </div>
+        <ReusableDataTable
+          dataTransformer={customDataTransformer}
+          apiEndpoint="http://localhost:8000/api/role/all"
+          initialData={[]}
+          headers={headers}
+        />
+        <RolesModal isOpen={isModal} onClose={handleCloseModal} />
       </div>
     </main>
   );

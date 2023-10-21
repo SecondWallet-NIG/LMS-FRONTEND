@@ -1,4 +1,3 @@
-"use client"
 import React, { useState, useEffect } from "react";
 import { FiFilter } from "react-icons/fi";
 import { MdOutlineSort } from "react-icons/md";
@@ -19,7 +18,6 @@ function ReusableDataTable({
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
-  const [total, setTotal] = useState(1)
   const [perPage, setPerPage] = useState(5);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
   const [sortDirection, setSortDirection] = useState(
@@ -68,38 +66,26 @@ function ReusableDataTable({
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
+        console.log({ data });
         if (typeof dataTransformer === "function") {
-          const transformedData = dataTransformer(data.results);
+          const transformedData = dataTransformer(data.results || data);
           setData(transformedData);
-          setPaginationLinks(data.links);
+          setPaginationLinks(data?.links);
         } else {
-          setData(data.results);
-          setPaginationLinks(data.links);
+          setData(data.results || data);
+          setPaginationLinks(data?.links);
         }
       });
   };
-  const getTotalPages = () => {
-    if (!paginationLinks || !paginationLinks.last) return [];
-  
-    const lastLink = paginationLinks.last;
-    const pageMatch = lastLink.match(/[?&]page=([^&]+)/);
-  
-    if (!pageMatch) return [];
-  
-    let totalPages = parseInt(pageMatch[1], 10);
-      setTotal(totalPages)
-  }
 
   const handlePageChange = (page, perPage) => {
     setCurrentPage(page);
     fetchData(page, perPage, sortField, sortDirection);
-    getTotalPages();
   };
 
   const handleSelectChange = (selectedOption) => {
     setPerPage(selectedOption.value);
     handlePageChange(1, selectedOption.value);
-    getTotalPages();
   };
 
   const handleSort = (field) => {
@@ -108,7 +94,6 @@ function ReusableDataTable({
     setSortField(field);
     setSortDirection(newSortDirection);
     fetchData(currentPage, perPage, field, newSortDirection);
-    getTotalPages();
   };
 
   const handleSearchChange = (event) => {
@@ -116,8 +101,7 @@ function ReusableDataTable({
   };
 
   useEffect(() => {
-    fetchData(currentPage, perPage, sortField, sortDirection)
-      getTotalPages();
+    fetchData(currentPage, perPage, sortField, sortDirection);
   }, [apiEndpoint, currentPage, perPage, sortField, sortDirection, searchTerm]);
 
   const getPageNumbers = () => {
@@ -127,7 +111,7 @@ function ReusableDataTable({
     const pageMatch = lastLink.match(/[?&]page=([^&]+)/);
 
     if (!pageMatch) return [];
-  
+
     const totalPages = parseInt(pageMatch[1], 10);
     const pageNumbers = [];
 
@@ -153,7 +137,6 @@ function ReusableDataTable({
 
     return pageNumbers;
   };
-  
 
   return (
     <div className="w-full mx-auto text-xs md:text-sm">
@@ -180,6 +163,7 @@ function ReusableDataTable({
                 <p>Filter</p>
               </button>
             </div>
+          </div>
 
           <div className="mb-4 flex items-center justify-between w-full md:w-fit">
             <input
@@ -199,8 +183,8 @@ function ReusableDataTable({
                 </Button>
               </div>
             ) : null}
-
           </div>
+        </div>
 
         <table className="table-auto w-full border-collapse border overflow-hidden">
           <thead>
@@ -208,8 +192,8 @@ function ReusableDataTable({
               {headers.map((header) => (
                 <th
                   key={header.id}
-                  className={`px-2 py-2 bg-swLightGray text-gray-500 border cursor-pointer text-start ${
-                    header.id === sortField ? "font-light" : "font-light"
+                  className={`px-5 py-4 bg-swLightGray text-black border-0 cursor-pointer text-start ${
+                    header.id === sortField ? "font-semibold" : "font-semibold"
                   }`}
                   onClick={() => handleSort(header.id)}
                 >
@@ -226,9 +210,11 @@ function ReusableDataTable({
           <tbody>
             {data?.map((item) => (
               <tr
-                onClick={() =>
-                  router.push(`${onClickRow}/${item.id || item._id}`)
-                }
+                onClick={() => {
+                  if (onClickRow) {
+                    router.push(`${onClickRow}/${item.id || item._id}`);
+                  }
+                }}
                 key={item._id}
                 className="border pt-2 pb-2 hover:bg-swLightGray"
                 style={{ cursor: "pointer" }}
@@ -236,7 +222,7 @@ function ReusableDataTable({
                 {headers.map((header) => (
                   <td
                     key={header.id}
-                    className="px-5 py-3 border font-400 text-xs text-swGray border-none"
+                    className="px-5 py-4 border font-400 text-xs text-swGray border-none"
                   >
                     {item[header.id]}
                   </td>
@@ -262,7 +248,7 @@ function ReusableDataTable({
                 onClick={() => handlePageChange(pageNumber, perPage)}
                 className={`px-3 py-1.5 ${
                   currentPage === pageNumber
-                    ? "bg-blue-500 text-white"
+                    ? "bg-swBlue text-white"
                     : "bg-swLightGray text-gray-700"
                 }`}
               >

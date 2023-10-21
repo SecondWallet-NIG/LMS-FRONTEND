@@ -21,7 +21,6 @@ const customStyles = {
       ? "your-custom-border-color"
       : provided.borderColor,
     boxShadow: state.isFocused ? "none" : provided.boxShadow,
-    zIndex: -1000
   }),
 
   option: (provided, state) => ({
@@ -46,7 +45,6 @@ const SelectField = ({
   optionValue,
   onChange,
   value,
-  name
 }) => {
   const handleSelectChange = (selectedOption) => {
     if (onChange) {
@@ -55,14 +53,12 @@ const SelectField = ({
   };
 
   return (
-    <div className="">
+    <div>
       <label htmlFor={name} className="block text-gray-700 text-xs mb-2">
         {label}
         {required && <span className="text-red-600 ml-1">*</span>}
       </label>
-      <div className="">
       <Select
-      className=""
         styles={customStyles}
         isSearchable={isSearchable}
         options={optionValue ? optionValue : _options}
@@ -72,8 +68,6 @@ const SelectField = ({
         formatOptionLabel={formatOptionLabel}
         onChange={handleSelectChange} // Step 4: Pass the onChange function
       />
-      </div>
-  
     </div>
   );
 };
