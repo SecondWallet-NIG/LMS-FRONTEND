@@ -15,17 +15,6 @@ import { getCustomers } from "@/redux/slices/customerSlice";
 import CenterModal from "../components/modals/CenterModal";
 import EditableButton from "../components/shared/editableBuutonComponent/EditableButton";
 
-const customNoOptionsMessage = () => {
-  return (
-    <div>
-      {/* Custom message with a link */}
-      <p>
-        Not found. <Link href="/create">Create new customer</Link>
-      </p>
-    </div>
-  );
-};
-
 const CreateLoan = () => {
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector((state) => state.customer);
@@ -189,6 +178,7 @@ const CreateLoan = () => {
               </div>
             </div>
             <SelectField
+              disabled={selectedCustomer === null ? true : false}
               name="loanPackage"
               optionValue={loanPackagesData}
               label={"Loan Package "}
@@ -213,6 +203,7 @@ const CreateLoan = () => {
               }}
             />
             <SelectField
+              disabled={formData.loanPackage === null ? true : false}
               name="assetType"
               optionValue={assetTypeData}
               label={"Asset Type"}
@@ -224,6 +215,7 @@ const CreateLoan = () => {
               }
             />
             <InputField
+              disabled={formData.assetType === null ? true : false}
               name="loanAmount"
               required={true}
               inputType="number"
@@ -304,6 +296,7 @@ const CreateLoan = () => {
               </div>
               <div className="w-2/3">
                 <InputField
+                  disabled={formData.repaymentType === null ? true : false}
                   name="loanDuration"
                   required={true}
                   inputType="number"
@@ -329,7 +322,6 @@ const CreateLoan = () => {
                 />
               </div>
             </div>
-
           </div>
           <div className="flex flex-col gap-5 mt-5">
             <p className="font-semibold">Upload Collateral documents</p>
@@ -396,8 +388,6 @@ const CreateLoan = () => {
             </div>
           </div>
 
-       
-
           <div className="flex pt-2">
             <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
               Loan Amount
@@ -417,7 +407,7 @@ const CreateLoan = () => {
             </div>
             <div className="w-2/3">
               <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                {formData.repaymentType || "No Repayment Type Yet"} 
+                {formData.repaymentType || "No Repayment Type Yet"}
               </div>
             </div>
           </div>
@@ -460,10 +450,11 @@ const CreateLoan = () => {
                   <div>Interest at maturity :</div> <div>₦{interest || 0}</div>
                 </div>
                 <div className="flex justify-between  text-xs font-semibold pt-2">
-                  <div>Commitment Fee :</div> <div>₦{formData.commitmentTotal || 0}</div>
+                  <div>Commitment Fee :</div>{" "}
+                  <div>₦{formData.commitmentTotal || 0}</div>
                 </div>
                 <div className="flex justify-between  text-sm font-semibold pt-2">
-                  <div >Total Amount :</div>{" "}
+                  <div>Total Amount :</div>{" "}
                   <div>
                     ₦
                     {parseFloat(interest) +
@@ -513,37 +504,38 @@ const CreateLoan = () => {
               </svg>
             </button>
           </div>
-          {Array.isArray(filteredData) && filteredData?.map((item) => (
-            <div
-              key={item._id}
-              onClick={() => {
-                setSelectedCustomer(item);
-                setIsOpen(false);
-              }}
-              className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
-            >
-              <div className="flex justify-between items-center mb-2">
-                <div>
-                  <div className="text-xs text-gray-800">
-                    {item.firstName} {item.lastName}
+          {Array.isArray(filteredData) &&
+            filteredData?.map((item) => (
+              <div
+                key={item._id}
+                onClick={() => {
+                  setSelectedCustomer(item);
+                  setIsOpen(false);
+                }}
+                className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <div className="text-xs text-gray-800">
+                      {item.firstName} {item.lastName}
+                    </div>
+                    <div className="text-xs text-gray-600 font-semibold">
+                      {item.email}
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-600 font-semibold">
-                    {item.email}
+                  <div className="text-xs text-gray-800 font-semibold">
+                    {item.phoneNumber}
                   </div>
-                </div>
-                <div className="text-xs text-gray-800 font-semibold">
-                  {item.phoneNumber}
-                </div>
-                <div>
-                  <EditableButton
-                    className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
-                  >
-                    Badge
-                  </EditableButton>
+                  <div>
+                    <EditableButton
+                      className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
+                    >
+                      Badge
+                    </EditableButton>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </CenterModal>
     </Dashboard>
