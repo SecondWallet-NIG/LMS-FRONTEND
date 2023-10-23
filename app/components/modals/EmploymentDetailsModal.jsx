@@ -9,10 +9,13 @@ import { createUser } from "@/redux/slices/userSlice";
 import Button from "../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useParams } from "next/navigation";
 
 const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
   if (!isOpen) return null;
   const dispatch = useDispatch();
+  const {id} = useParams();
+  console.log("mmmmmm", id);
 
   const { loading } = useSelector((state) => state.user);
 
@@ -57,6 +60,8 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
     { value: "Weekly", label: "Weekly" },
     { value: "Monthly", label: "Monthly" },
   ];
+
+  
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -134,7 +139,21 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
-      console.log("Form data:", formData);
+      const payload = {
+        "currentEmploymentStatus": formData.currentEmploymentStatus,
+        "employerInformation": {
+          "name": formData.employerName,
+          "natureOfBusiness": formData.employerName,
+          "address": formData.employerAddress,
+          "contact": formData.employerPhone
+        },
+        "jobTitle": formData.jobTitle,
+        "monthlyIncome": formData.monthlyIncome,
+        "incomeSource": formData.incomeSource,
+        "customerProfileInformation": id,
+        "createdBy": "650f659167a782d8868b76ee"
+      }
+      
       dispatch(createUser(formData))
         .unwrap()
         .then(() => {

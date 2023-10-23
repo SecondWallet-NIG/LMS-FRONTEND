@@ -76,8 +76,6 @@ const LoginScreen = () => {
     dispatch(loginUser(loginData))
       .unwrap()
       .then(() => {
-        // Handle a successful login here if needed
-        console.log({ data });
         toast.success("Login successful");
       })
       .catch((error) => {
@@ -88,7 +86,7 @@ const LoginScreen = () => {
   // Handle the response data when it changes
   useEffect(() => {
     if (userData) {
-      console.log("Logged in user data...:", userData);
+      console.log({userData});
       localStorage.setItem("user", JSON.stringify(userData));
       if (userData?.data?.user.firstLogin === true) {
         router.push("/onboarding");
