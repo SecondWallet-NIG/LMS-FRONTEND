@@ -24,7 +24,7 @@ const CustomerProfile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = useParams();
-  console.log({ id });
+
   const { loading, error, data } = useSelector((state) => state.customer);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeButton, setActiveButton] = useState("bio-data");
@@ -64,22 +64,6 @@ const CustomerProfile = () => {
     return interest;
   }
 
-  // Example usage:
-  const principal = 1000; // Replace with your principal amount
-  const monthlyInterestRate = 0.01; // 1% monthly interest rate
-  const months = 12; // Replace with the number of months
-
-  const interest = calculateLoanInterest(
-    principal,
-    monthlyInterestRate,
-    months
-  );
-  console.log(
-    `Interest on a loan of $${principal} at a monthly interest rate of ${(
-      monthlyInterestRate * 100
-    ).toFixed(2)}% for ${months} months is $${interest.toFixed(2)}`
-  );
-
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
     console.log(state);
@@ -106,7 +90,8 @@ const CustomerProfile = () => {
               </div>
               <div className="ml-4 h-fit">
                 <p className="text-sm mb-2">
-                  {data?.firstName} {data?.middleName} {data?.lastName}
+                  {data?.profileInfo.firstName} {data?.profileInfo.middleName}{" "}
+                  {data?.profileInfo.lastName}
                 </p>
                 <p className="text-xs">SW-456789</p>
 
@@ -217,37 +202,43 @@ const CustomerProfile = () => {
                     )}
                   </div>
 
-                  <div className="w-2/5 text-xs md:text-sm text-swGray">
-                    <div className="flex gap-1">
+                  <div className=" text-xs  text-swGray">
+                    <div className="flex justify-between">
                       <p className="pt-3">D.O.B: </p>
-                      <p className="pt-3 whitespace-nowrap">
-                        {data?.dateOfBirth}
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.dateOfBirth}
                       </p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">Gender: </p>
-                      <p className="pt-3 whitespace-nowrap">{data?.gender}</p>
-                    </div>
-                    <div className="flex gap-1">
-                      <p className="pt-3">NIN/SSN: </p>
-                      <p className="pt-3 whitespace-nowrap">{data?.nin}</p>
-                    </div>
-                    <div className="flex gap-1">
-                      <p className="pt-3">Phone: </p>
-                      <p className="pt-3 whitespace-nowrap">
-                        {data?.phoneNumber}
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.gender}
                       </p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 justify-between">
+                      <p className="pt-3">NIN/SSN: </p>
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.nin}
+                      </p>
+                    </div>
+                    <div className="flex gap-1 justify-between">
+                      <p className="pt-3">Phone: </p>
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.phoneNumber}
+                      </p>
+                    </div>
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">Email: </p>
-                      <p className="pt-3 whitespace-nowrap">{data?.email}</p>
+                      <p className="pt-3 font-semibold cursor-copy">
+                        {data?.profileInfo.email}
+                      </p>
                     </div>
 
                     <Button
                       onClick={() => handleActivityToggle("activity-log")}
                       variant={"secondary"}
                       size={"normal"}
-                      className="py-1.5 text-sm rounded-md items-center flex gap-1 border mt-2"
+                      className="py-1.5 text-sm rounded-md items-center flex gap-1 justify-between border mt-2"
                     >
                       <AiOutlinePlus size={20} />{" "}
                       <p className="whitespace-nowrap">Add details</p>
@@ -256,7 +247,7 @@ const CustomerProfile = () => {
                 </div>
                 <div className="p-2 border-t border-text-300">
                   <div
-                    className="text-sm font-semibold flex justify-between"
+                    className="text-sm font-semibold flex justify-between "
                     onMouseEnter={() => handleInfoHoverIn("address")}
                     onMouseLeave={() => handleInfoHoverIn("close")}
                   >
@@ -268,23 +259,25 @@ const CustomerProfile = () => {
                       />
                     )}
                   </div>
-                  <div className="mt-2 text-xs md:text-sm">
-                    <div className="flex gap-1">
+                  <div className="mt-2 text-xs text-swGray">
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">Country: </p>
-                      <p className="pt-3">Nigeria</p>
+                      <p className="pt-3 font-semibold">Nigeria</p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">State: </p>
-                      <p className="pt-3">Ekiti state</p>
+                      <p className="pt-3 font-semibold">Ekiti state</p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">Lga: </p>
-                      <p className="pt-3">Ijero LGA/LCDA</p>
+                      <p className="pt-3 font-semibold">Ijero LGA/LCDA</p>
                     </div>
-                    <div className="flex gap-1">
-                      <p className="pt-3">Address: </p>
+                    <div className="flex gap-1 justify-between">
+                      <p className="pt-3 ">Address: </p>
 
-                      <p className="pt-3">{data?.address}</p>
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.address}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -302,40 +295,135 @@ const CustomerProfile = () => {
                       />
                     )}
                   </div>
-                  <div className="text-xs md:text-sm">
-                    <div className="flex gap-1">
+                  <div className="text-xs text-swGray">
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">Bank Name: </p>
-                      <p className="pt-3">{data?.bankAccount?.bankName}</p>
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.bankAccount?.bankName}
+                      </p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">Account Number: </p>
-                      <p className="pt-3">{data?.bankAccount?.accountNumber}</p>
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.bankAccount?.accountNumber}
+                      </p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">Account Name: </p>
-                      <p className="pt-3">{data?.bankAccount?.accountName}</p>
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.bankAccount?.accountName}
+                      </p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 justify-between">
                       <p className="pt-3">Bvn: </p>
-                      <p className="pt-3">{data?.bvn}</p>
+                      <p className="pt-3 font-semibold">
+                        {data?.profileInfo.bvn}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
             )}
             {activeButton == "work" && (
-              <div className="pt-20 pb-24">
-                <div className="pt-8 text-center mr-auto ml-auto mt-4">
-                  <p> No work experience provided</p>
-                  <div className="flex justify-center">
-                    <Button
-                      onClick={openModal}
-                      variant="primary"
-                      className="py-1.5 px-3 rounded-md flex gap-2 border w-fit mt-5 mx-3"
-                    >
-                      update work details
-                    </Button>
+              <div className="">
+                <div className="text-center mr-auto ml-auto mt-4">
+                  {data?.employmentInformation === null ? (
+                    <div className="pt-20 pb-24">
+                      <p> No work experience provided</p>
+                      <Button
+                        onClick={openModal}
+                        variant="primary"
+                        className="py-1.5 px-3 rounded-md mx-auto flex gap-2 border w-fit mt-5 mx-3"
+                      >
+                        update work details
+                      </Button>
+                    </div>
+                  ) : (
+                    <div>
+                    <div className="p-2">
+                      <div
+                        className="text-sm font-semibold flex justify-between"
+                        onMouseEnter={() => handleInfoHoverIn("bio-data")}
+                        onMouseLeave={() => handleInfoHoverIn("close")}
+                      >
+                        <p>Employment details</p>
+                        {infoHover === "bio-data" && (
+                          <FiEdit2
+                            size={15}
+                            className="text-swGray hover:text-black"
+                          />
+                        )}
+                      </div>
+    
+                      <div className=" text-xs  text-swGray">
+                        <div className="flex justify-between">
+                          <p className="pt-3">Status: </p>
+                          <p className="pt-3 font-semibold">
+                            {data?.employmentInformation?.currentEmploymentStatus}
+                          </p>
+                        </div>
+                        <div className="flex gap-1 justify-between">
+                          <p className="pt-3">Employer Name: </p>
+                          <p className="pt-3 font-semibold">
+                          {data?.employmentInformation?.employerInformation.name}
+                          </p>
+                        </div>
+                        <div className="flex gap-1 justify-between">
+                          <p className="pt-3">Employer Phone: </p>
+                          <p className="pt-3 font-semibold">
+                          {data?.employmentInformation?.employerInformation.contact}
+                          </p>
+                        </div>
+                        <div className="flex gap-1 justify-between">
+                          <p className="pt-3">Job Title: </p>
+                          <p className="pt-3 font-semibold">
+                          {data?.employmentInformation?.jobTitle}
+                          </p>
+                        </div>
+                    
+    
+                      
+                      </div>
+                    </div>
+                    <div className="p-2 border-t border-text-300">
+                      <div
+                        className="text-sm font-semibold flex justify-between "
+                        onMouseEnter={() => handleInfoHoverIn("address")}
+                        onMouseLeave={() => handleInfoHoverIn("close")}
+                      >
+                        <p>Income details</p>
+                        {infoHover === "address" && (
+                          <FiEdit2
+                            size={15}
+                            className="text-swGray hover:text-black"
+                          />
+                        )}
+                      </div>
+                      <div className="mt-2 text-xs text-swGray">
+                        <div className="flex gap-1 justify-between">
+                          <p className="pt-3">Income Period: </p>
+                          <p className="pt-3 font-semibold">       {data?.employmentInformation?.incomeSource}</p>
+                        </div>
+                        <div className="flex gap-1 justify-between">
+                          <p className="pt-3">Amount Earned: </p>
+                          <p className="pt-3 font-semibold"> {data?.employmentInformation.monthlyIncome}</p>
+                        </div>
+                        <div className="flex gap-1 justify-between">
+                          <p className="pt-3">Annual Income: </p>
+                          <p className="pt-3 font-semibold">   {data?.employmentInformation.monthlyIncome}</p>
+                        </div>
+                        <div className="flex gap-1 justify-between">
+                          <p className="pt-3 ">Income Source: </p>
+    
+                          <p className="pt-3 font-semibold">
+                            {data?.employmentInformation.incomeSource}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+            
                   </div>
+                  )}
                 </div>
               </div>
             )}

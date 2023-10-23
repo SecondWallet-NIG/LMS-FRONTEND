@@ -17,7 +17,6 @@ export const loginUser = createAsyncThunk('user/loginUser', async (loginData) =>
 
 export const getRoles = createAsyncThunk('role/getRoles', async () => {
   const response = await axios.get(`${API_URL}/role/all`);
-  console.log("response.data",response.data);
   return response.data;
 });
 

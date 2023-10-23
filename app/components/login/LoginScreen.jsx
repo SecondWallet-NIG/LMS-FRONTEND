@@ -81,7 +81,6 @@ const LoginScreen = () => {
         toast.success("Login successful");
       })
       .catch((error) => {
-        // Handle the error and show a toast with the error message
         toast.error(error.message);
       });
   };
@@ -89,15 +88,11 @@ const LoginScreen = () => {
   // Handle the response data when it changes
   useEffect(() => {
     if (userData) {
-      // You can access the user data from the Redux store here
       console.log("Logged in user data...:", userData);
       localStorage.setItem("user", JSON.stringify(userData));
-      // Redirect or perform other actions based on the user data
       if (userData?.data?.user.firstLogin === true) {
-        // Redirect to onboarding for first-time users
         router.push("/onboarding");
       } else {
-        // Redirect to the main application page
         router.push("/dashboard");
       }
     }

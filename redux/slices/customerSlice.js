@@ -11,6 +11,22 @@ export const createCustomer = createAsyncThunk('customer/create', async (payload
     if (error.response.data.error === "Incorrect email or password") {
       throw new Error("Incorrect email or password")
     }
+    // if (error.response.data.error) {
+    //   throw new Error(error.response.data.error)
+    // }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
+export const createEmployment = createAsyncThunk('employment/create', async (payload) => {
+  try {
+    const response = await axios.post(API_URL +'/employment/create', payload);
+    return response.data;
+  } catch (error) {
+
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
     else throw new Error("An error occured, please try again later")
   }
 });
@@ -66,7 +82,18 @@ const customerSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(createCustomer.rejected, (state, action,) => {
-        console.log("action.error.message", action.error.message);
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(createEmployment.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(createEmployment.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(createEmployment.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })
