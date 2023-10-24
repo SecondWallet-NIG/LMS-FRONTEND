@@ -11,14 +11,16 @@ import { AiOutlineMail, AiOutlinePlus } from "react-icons/ai";
 import { FiDatabase, FiEdit2, FiPhone, FiSearch } from "react-icons/fi";
 import { LuCalendar } from "react-icons/lu";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import ActivityLogs from "@/app/components/customers/ActivityLogs";
-import Summary from "@/app/components/customers/Summary";
+import ActivityLogs from "@/app/components/customers/CustomerActivityLogs";
+import Summary from "@/app/components/customers/CustomerSummary";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
 import EditableButton from "@/app/components/shared/editableBuutonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import { IoIosClose } from "react-icons/io";
+import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
+import CustomerSummary from "@/app/components/customers/CustomerSummary";
 
 const CustomerProfile = () => {
   const router = useRouter();
@@ -549,8 +551,8 @@ const CustomerProfile = () => {
               </div>
             </div>
             <div className="p-2">
-              {activityButton === "activity-logs" && <ActivityLogs />}
-              {activityButton === "summary" && <Summary />}
+              {activityButton === "activity-logs" && <CustomerActivityLogs />}
+              {activityButton === "summary" && <CustomerSummary />}
             </div>
           </div>
         </div>

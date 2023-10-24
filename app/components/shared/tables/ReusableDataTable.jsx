@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { FiFilter } from "react-icons/fi";
+import { FiFilter, FiSearch } from "react-icons/fi";
 import { MdOutlineSort } from "react-icons/md";
 import Select from "react-select";
 import Button from "../buttonComponent/Button";
 import Image from "next/image";
 import sketch from "../../../../public/images/sketch.jpg";
 import { useRouter } from "next/navigation";
+import InputField from "../input/InputField";
+import { IoIosClose } from "react-icons/io";
+import { BsThreeDotsVertical } from "react-icons/bs";
 function ReusableDataTable({
   apiEndpoint,
   initialData,
@@ -16,7 +19,7 @@ function ReusableDataTable({
   dataTransformer,
   onClickRow,
   filters,
-  pagination
+  pagination,
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,6 +30,7 @@ function ReusableDataTable({
   );
   const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
   const [paginationLinks, setPaginationLinks] = useState(null);
+  const [logSearch, setLogSearch] = useState(false);
   const router = useRouter();
   const options = [
     { value: 5, label: "5" },
@@ -140,8 +144,12 @@ function ReusableDataTable({
     return pageNumbers;
   };
 
+  const handleLogSearch = (state) => {
+    state === "open" ? setLogSearch(true) : setLogSearch(false);
+  };
+
   return (
-    <div className="w-full mx-auto text-xs md:text-sm">
+    <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
       {/* {data?.length > 0 ? ( */}
       <div className="">
         {filters && (
@@ -169,13 +177,56 @@ function ReusableDataTable({
             </div>
 
             <div className="mb-4 flex items-center justify-between w-full md:w-fit">
-              <input
+              <div className="flex justify-center items-center gap-2 ml-auto">
+                <InputField
+                  startIcon={<FiSearch size={20} />}
+                  endIcon={
+                    <IoIosClose
+                      size={20}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        handleLogSearch("close");
+                      }}
+                    />
+                  }
+                  placeholder={"Search..."}
+                  css={`
+                    ${logSearch
+                      ? "translate-x-[3rem] opacity-1 z-10"
+                      : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
+                  `}
+                  borderColor="bg-gray-200 "
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+
+                <div
+                  className={`${
+                    logSearch ? "opacity-0" : "opacity-1"
+                  } transition-all ease-in-out p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex`}
+                >
+                  <div className="bg-white w-fit p-2 rounded-md cursor-pointer">
+                    <FiSearch
+                      size={20}
+                      onClick={() => {
+                        handleLogSearch("open");
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex cursor-pointer">
+                  <div className="bg-white w-fit p-2 rounded-md ">
+                    <BsThreeDotsVertical size={20} />
+                  </div>
+                </div>
+              </div>
+              {/* <input
                 type="search"
                 placeholder="search..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 className="px-2 rounded outline-none border w-full border-gray-300 h-10"
-              />
+              /> */}
               {btnText ? (
                 <div>
                   <Button

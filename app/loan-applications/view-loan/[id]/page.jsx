@@ -1,7 +1,8 @@
 "use client";
 import LoanProcessCard from "@/app/components/cards/loanProcessCard/LoanProcessCard";
-import ActivityLogs from "@/app/components/customers/ActivityLogs";
-import Summary from "@/app/components/customers/Summary";
+import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
+import ActivityLogs from "@/app/components/customers/CustomerActivityLogs";
+import Summary from "@/app/components/customers/CustomerSummary";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import EditableButton from "@/app/components/shared/editableBuutonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
@@ -131,10 +132,7 @@ const ViewLoan = () => {
           </section>
 
           <div className="p-5">
-            <section id="loan-details">
-
-              {/* <ReusableDataTables/> */}
-            </section>
+            <section id="loan-details">{/* <ReusableDataTables/> */}</section>
             <section></section>
             <section
               id="activities"
@@ -233,7 +231,7 @@ const ViewLoan = () => {
                 </div>
               </div>
               <div className="p-2">
-                {activityButton === "activity-logs" && <ActivityLogs />}
+                {activityButton === "activity-logs" && <CustomerActivityLogs />}
                 {activityButton === "summary" && <Summary />}
               </div>
             </section>
