@@ -24,6 +24,7 @@ const CreateLoan = () => {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [loanPackageText, setLoanPackageText] = useState(null);
   const [interest, setInterest] = useState(null);
+  const [noOfRepayments, setNoOfRepayment] = useState(0);
   const [formData, setFormData] = useState({
     customerId: "",
     loanAmount: 0,
@@ -34,10 +35,37 @@ const CreateLoan = () => {
     commitmentTotal: 0,
     numberOfRepayment: 0,
     repaymentType: null,
+    loanFrequency: null,
     assetType: null,
+    loanDurationMetrics: null,
+    interestType: null,
+    commitmentType: null,
   });
 
-  //supply interest rate on monthly basis
+  const calcRepaymentsNo = (repaymentType) => {
+    console.log("io", repaymentType);
+    let loanDuration = formData.loanDuration;
+   // let repaymentType = formData.repaymentType;
+    if (formData.loanDurationMetrics === "Yearly") {
+      loanDuration = formData.loanDuration * 12;
+    }
+    if (repaymentType === "Monthly") {
+      setNoOfRepayment(loanDuration);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        numberOfRepayment: loanDuration,
+      }));
+    }
+    if (repaymentType === "Quartely") {
+      setNoOfRepayment(loanDuration / 3);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        numberOfRepayment: loanDuration / 3,
+      }));
+    }
+  };
+  
+
   const loanPackagesData = [
     { value: 5, label: "Basic Loans" },
     { value: 5, label: "Payday / Salary Loan" },
@@ -53,10 +81,19 @@ const CreateLoan = () => {
     { value: 500, label: "Machineries" },
   ];
   const repaymentData = [
-    { value: "Daily", label: "Daily" },
-    { value: "Weekly", label: "Weekly" },
     { value: "Monthly", label: "Monthly" },
     { value: "Quartely", label: "Quartely" },
+  ];
+
+  const loanDurationMetricsData = [
+    { value: "Monthly", label: "Monthly" },
+    { value: "Yearly", label: "Yearly" },
+  ];
+
+  const interestTypeData = [
+    { value: "Flat Interest Rate", label: "Flat Interest Rate" },
+    { value: "Reducing Balance Rate", label: "Reducing Balance Rate" },
+    { value: "Interest Servicing", label: "Interest Servicing" },
   ];
   const commitmentType = [{ value: "Percentage", label: "Percentage" }];
 
@@ -109,8 +146,6 @@ const CreateLoan = () => {
     timeDays,
     repaymentType
   ) => {
-    let monthsInYear = 12;
-
     if (repaymentType === "Weekly") {
       timeDays = timeDays * 7.5;
     } else if (repaymentType === "Monthly") {
@@ -130,10 +165,52 @@ const CreateLoan = () => {
       ...formData,
       [name]: selectedOption.value,
     });
+
+  
   };
+  // function calculateReducingBalanceInstallments(principal, annualInterestRate, numberOfPayments) {
+  //   const monthlyInterestRate = annualInterestRate / 100;
+  //   const installmentPayments = [];
+
+  //   for (let i = 0; i < numberOfPayments; i++) {
+  //     const remainingPrincipal = principal - (i * (principal / numberOfPayments));
+  //     const installment = (remainingPrincipal * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments + i));
+  //     installmentPayments.push(installment);
+  //   }
+  //   console.log("Installments for each period:");
+  //   installmentPayments.forEach((installment, index) => {
+  //     console.log(`Month ${index + 1}: $${installment.toFixed(2)}`);
+  //   });
+  //   return installmentPayments;
+  // }
+  function calculateReducingBalanceInstallments(
+    principal,
+    annualInterestRate,
+    numberOfRepayments
+  ) {
+    const monthlyInterestRate = annualInterestRate / 100;
+    const installmentAmount =
+      principal / numberOfRepayments + monthlyInterestRate * principal;
+    const installmentPayments = [];
+
+    for (let i = 0; i < numberOfRepayments; i++) {
+      const interestPayment =
+        monthlyInterestRate *
+        (principal - i * (principal / numberOfRepayments));
+      const totalPayment = principal / numberOfRepayments + interestPayment;
+      installmentPayments.push(totalPayment);
+    }
+
+    installmentPayments.forEach((installment, index) => {
+      console.log(`Repayment ${index + 1}: $${installment.toFixed(2)}`);
+    });
+
+    return installmentPayments;
+  }
 
   useEffect(() => {
     dispatch(getCustomers());
+    calculateReducingBalanceInstallments(500000, 10, 5);
   }, []);
 
   useEffect(() => {
@@ -215,6 +292,7 @@ const CreateLoan = () => {
               }
             />
             <InputField
+              maxLength="1000000"
               disabled={formData.assetType === null ? true : false}
               name="loanAmount"
               required={true}
@@ -247,17 +325,53 @@ const CreateLoan = () => {
             <div className="flex gap-2">
               <div className="w-1/3">
                 <SelectField
+                  name="loanDurationMetrics"
                   disabled={formData.loanAmount === 0 ? true : false}
-                  optionValue={commitmentType}
-                  label={"Commitment Fee"}
+                  optionValue={loanDurationMetricsData}
+                  label={"Loan Duration Metrics"}
                   required={true}
-                  placeholder={"Percentage"}
+                  placeholder={"duration metics"}
                   isSearchable={false}
+                  onChange={(selectedOption) => {
+                    handleSelectChange(selectedOption, "loanDurationMetrics");
+                  }}
                 />
               </div>
               <div className="w-2/3">
                 <InputField
-                  disabled={formData.loanAmount > 0 ? false : true}
+                  disabled={
+                    formData.loanDurationMetrics === null ? true : false
+                  }
+                  required={false}
+                  name="loanDuration"
+                  inputType="number"
+                  activeBorderColor="border-swBlue"
+                  placeholder="Enter loan duration based on metrics"
+                  onChange={(e) => {
+                    setInputState(e);
+                    //  calCommitmentTotal(e);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <div className="w-1/3">
+                <SelectField
+                  name="commitmentType"
+                  disabled={formData.loanAmount === 0 ? true : false}
+                  optionValue={commitmentType}
+                  label={"Fees"}
+                  required={true}
+                  placeholder={"Percentage"}
+                  isSearchable={false}
+                  onChange={(selectedOption) => {
+                    handleSelectChange(selectedOption, "commitmentType");
+                  }}
+                />
+              </div>
+              <div className="w-2/3">
+                <InputField
+                  disabled={formData.commitmentType === null ? true : false}
                   required={false}
                   name="commitmentValue"
                   inputType="number"
@@ -273,54 +387,27 @@ const CreateLoan = () => {
             <div className="flex gap-2">
               <div className="w-1/3">
                 <SelectField
-                  disabled={formData.loanAmount === 0 ? true : false}
+                  disabled={formData.commitmentValue === 0 ? true : false}
                   optionValue={repaymentData}
                   label={"Repayment Type"}
                   required={true}
                   placeholder={"Select repayment type"}
                   isSearchable={false}
                   onChange={(selectedOption) => {
+                    console.log({selectedOption});
                     handleSelectChange(selectedOption, "repaymentType");
-                    if (
-                      formData.loanAmount &&
-                      formData.loanDuration &&
-                      formData.loanDuration
-                    ) {
-                      calculateInterest(
-                        formData.loanAmount,
-                        formData.loanPackage,
-                        formData.loanDuration,
-                        selectedOption.value
-                      );
-                    }
+                    calcRepaymentsNo(selectedOption.value);
                   }}
                 />
               </div>
               <div className="w-2/3">
                 <InputField
-                  disabled={formData.repaymentType === null ? true : false}
-                  name="loanDuration"
-                  required={true}
+                  disabled={true}
+                  name="numberOfRepayment"
                   inputType="number"
+                  value={formData.numberOfRepayment}
                   activeBorderColor="border-swBlue"
-                  label="Loan Duration"
-                  placeholder="Enter loan duration"
-                  hintText="Enter loan duration based on REPAYMENT TYPE selected"
-                  onChange={(e) => {
-                    setInputState(e);
-                    if (
-                      formData.loanAmount &&
-                      formData.loanPackage &&
-                      formData.repaymentType
-                    ) {
-                      calculateInterest(
-                        formData.loanAmount,
-                        formData.loanPackage,
-                        e.target.value,
-                        formData.repaymentType
-                      );
-                    }
-                  }}
+                  placeholder="Enter number of repayment"
                 />
               </div>
             </div>
@@ -415,11 +502,21 @@ const CreateLoan = () => {
           </div>
           <div className="flex pt-2">
             <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-              Loan Duration / Number of Repayment(s)
+              Loan Duration
             </div>
             <div className="w-2/3">
               <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
                 {formData.loanDuration || 0}
+              </div>
+            </div>
+          </div>
+          <div className="flex pt-2">
+            <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+              Numbers of Repayment
+            </div>
+            <div className="w-2/3">
+              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                {formData.numberOfRepayment || 0}
               </div>
             </div>
           </div>

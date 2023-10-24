@@ -44,7 +44,7 @@ const InputField = ({
           onChange={onChange}
           value={value}
           disabled={disabled}
-          maxLength={maxLength} // Pass maxLength prop
+          max={maxLength} // Pass maxLength prop
         />
 
         {endIcon && (
