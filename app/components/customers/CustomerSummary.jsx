@@ -1,6 +1,6 @@
-import SummaryCard from "../cards/Summary card/SummaryCard";
+import CustomerSummaryCard from "../cards/Summary card/CustomerSummaryCard";
 
-const Summary = () => {
+const CustomerSummary = () => {
   const data = [
     { loan_type: "total_loan_applications", number: 16, amount: 17983203.02 },
     { loan_type: "approved", number: 16, amount: 17983203.02 },
@@ -18,11 +18,11 @@ const Summary = () => {
   return (
     <main>
       <p className="font-semibold text-md mb-4">Loan Stats</p>
-      <SummaryCard data={data} />
+      <CustomerSummaryCard data={data} />
       <p className="font-semibold  text-md my-4">Financials</p>
-      <SummaryCard data={FinancialsData} />
+      <CustomerSummaryCard data={FinancialsData} />
     </main>
   );
 };
 
-export default Summary;
+export default CustomerSummary;

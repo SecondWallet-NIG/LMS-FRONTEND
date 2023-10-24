@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const ActivityLogsCard = ({ data }) => {
+const CustomerActivityLogsCard = ({ data }) => {
   data = [
     {
       loan_state: "disbursed",
@@ -74,7 +74,7 @@ const ActivityLogsCard = ({ data }) => {
               </div>
               <div className="p-4 w-full border border-gray-300 bg-gray-100 mt-2 rounded-lg font-medium">
                 <div className="flex justify-between mb-2 text-lg">
-                  <p  className="text-sm text-swBlue">{item.amount}</p>
+                  <p className="text-sm text-swBlue">{item.amount}</p>
                   <p className="text-sm">{item.disbursed_by?.id}</p>
                 </div>
                 <p className="text-sm text-swGray ">
@@ -94,4 +94,4 @@ const ActivityLogsCard = ({ data }) => {
   );
 };
 
-export default ActivityLogsCard;
+export default CustomerActivityLogsCard;

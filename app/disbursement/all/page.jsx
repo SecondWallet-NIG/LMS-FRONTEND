@@ -23,6 +23,8 @@ const AllDisburments = () => {
           apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
           initialData={[]}
           headers={headers}
+          filters={true}
+          pagination={true}
         />
       </main>
     </Dashboard>

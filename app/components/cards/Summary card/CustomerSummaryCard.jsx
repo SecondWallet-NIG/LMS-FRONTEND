@@ -2,7 +2,7 @@ import { BsFillStarFill, BsPentagonFill, BsTriangleFill } from "react-icons/bs";
 import { FaCircle, FaSquareFull } from "react-icons/fa";
 import { PiDiamondFill } from "react-icons/pi";
 
-const SummaryCard = ({ data }) => {
+const CustomerSummaryCard = ({ data }) => {
   return (
     <main className="grid grid-cols-3 gap-4">
       {data.map((item, index) => (
@@ -73,4 +73,4 @@ const SummaryCard = ({ data }) => {
   );
 };
 
-export default SummaryCard;
+export default CustomerSummaryCard;

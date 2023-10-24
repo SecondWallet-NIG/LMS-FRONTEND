@@ -14,14 +14,20 @@ const InputField = ({
   endIcon,
   startIcon,
   disabled,
-  maxLength // Add maxLength prop
+  maxLength, // Add maxLength prop
 }) => {
   return (
     <div className="">
-      <label htmlFor={name} className="block text-gray-700 text-xs mb-2">
-        {label}
-        {required ? <span className="text-red-600 ml-1">*</span> : <div className="mb-2 text-white">*</div>}
-      </label>
+      {label && (
+        <label htmlFor={name} className="block text-gray-700 text-xs mb-2">
+          {label}
+          {required ? (
+            <span className="text-red-600 ml-1">*</span>
+          ) : (
+            <div className="mb-2 text-white">*</div>
+          )}
+        </label>
+      )}
 
       <div className={`${css} relative flex items-center`}>
         {startIcon && (
@@ -37,9 +43,7 @@ const InputField = ({
           placeholder={placeholder}
           className={`w-full h-10 px-3 py-2 rounded border ${borderColor} ${
             required ? "border-gray-300" : "border-gray-300"
-          } focus:outline-none focus:${borderColor} ${
-            startIcon ? "pl-8" : ""
-          }`}
+          } focus:outline-none focus:${borderColor} ${startIcon ? "pl-8" : ""}`}
           required={required}
           onChange={onChange}
           value={value}
@@ -54,9 +58,7 @@ const InputField = ({
         )}
       </div>
 
-      {hintText && (
-        <p className="text-gray-500 text-xs mt-2">{hintText}</p>
-      )}
+      {hintText && <p className="text-gray-500 text-xs mt-2">{hintText}</p>}
     </div>
   );
 };

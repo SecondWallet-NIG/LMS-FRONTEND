@@ -5,6 +5,7 @@ import { MdOutlineSort } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
 import RolesModal from "../modals/teamManagement/RolesModal";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const Roles = () => {
   const [isModal, setIsModal] = useState(false);
@@ -48,50 +49,25 @@ const Roles = () => {
 
   return (
     <main>
-      <div className="px-6 py-2 mt-10">
-        <p className="text-lg font-semibold">Role list</p>
-        <div className="flex justify-between items-center">
-          <div className="flex gap-3 mt-3 items-center">
-            <div className="p-[0.11rem] hover:bg-swGray rounded-md cursor-pointer">
-              <div className=" flex gap-2 items-center border border-swGray bg-white py-2 px-4 rounded-md">
-                <FiFilter size={20} />
-                <p>Filter</p>
-              </div>
-            </div>
-            <div className="p-[0.11rem] hover:bg-swGray rounded-md cursor-pointer">
-              <div className=" flex gap-2 items-center border border-swGray bg-white py-2 px-4 rounded-md">
-                <MdOutlineSort size={20} />
-                <p>Sort</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex gap-3 mt-3 items-center">
-            <div className="p-[0.11rem] hover:bg-swGray rounded-md cursor-pointer">
-              <div className="flex justify-center items-center border border-swGray bg-white p-2 rounded-md">
-                <FiSearch size={20} />
-              </div>
-            </div>
-            <div className="p-[0.11rem] hover:bg-swGray rounded-md cursor-pointer">
-              <div className=" flex gap-2 items-center border border-swGray bg-white p-2 rounded-md">
-                <SlOptionsVertical size={20} />
-              </div>
-            </div>
-            <div className="p-[0.11rem] hover:bg-swGray rounded-md cursor-pointer">
-              <div
-                className=" flex gap-2 items-center bg-swBlue pl-4 pr-5 py-2 rounded-md font-semibold text-white"
-                onClick={handleOpenModal}
-              >
-                <BiPlus size={20} />
-                <p>New Role </p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className=" py-2 mt-10">
+        <p className="px-6 text-lg font-semibold">Role list</p>
+
         <ReusableDataTable
           dataTransformer={customDataTransformer}
           apiEndpoint="https://secondwallet-stag.onrender.com/api/role/all"
           initialData={[]}
           headers={headers}
+          filters={true}
+          pagination={true}
+          btnText={
+            <div
+              className="flex gap-1 items-center p-1"
+              onClick={handleOpenModal}
+            >
+              <AiOutlinePlus size={15} />
+              <p className="hidden lg:block">New role</p>
+            </div>
+          }
         />
         <RolesModal isOpen={isModal} onClose={handleCloseModal} />
       </div>
