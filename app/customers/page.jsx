@@ -34,6 +34,8 @@ const Customers = () => {
           btnTextClick={() => {
             router.push("/create-customer");
           }}
+          filters={true}
+          pagination={true}
         />
       </div>
     </DashboardLayout>

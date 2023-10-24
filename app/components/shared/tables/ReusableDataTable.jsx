@@ -15,6 +15,8 @@ function ReusableDataTable({
   btnTextClick,
   dataTransformer,
   onClickRow,
+  filters,
+  pagination
 }) {
   const [data, setData] = useState(initialData || []);
   const [currentPage, setCurrentPage] = useState(1);
@@ -142,49 +144,51 @@ function ReusableDataTable({
     <div className="w-full mx-auto text-xs md:text-sm">
       {/* {data?.length > 0 ? ( */}
       <div className="">
-        <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
-          <div className="flex gap-2 items-center justify-between w-full md:w-fit">
-            <div
-              className="flex border border-1 items-center mb-4 pl-2"
-              // style={{ width: "max-content" }}
-            >
-              <p className="mr-2 text-swGray">Items:</p>
-              <Select
-                styles={customStyles}
-                options={options}
-                value={{ value: perPage, label: perPage }}
-                onChange={handleSelectChange}
-                isSearchable={false}
-              />
-            </div>
-            <div className="flex gap-3 items-center">
-              <button className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4">
-                <FiFilter size={20} />
-                <p>Filter</p>
-              </button>
-            </div>
-          </div>
-
-          <div className="mb-4 flex items-center justify-between w-full md:w-fit">
-            <input
-              type="search"
-              placeholder="search..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="px-2 rounded outline-none border w-full border-gray-300 h-10"
-            />
-            {btnText ? (
-              <div>
-                <Button
-                  className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
-                  onClick={btnTextClick}
-                >
-                  {btnText}
-                </Button>
+        {filters && (
+          <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
+            <div className="flex gap-2 items-center justify-between w-full md:w-fit">
+              <div
+                className="flex border border-1 items-center mb-4 pl-2"
+                // style={{ width: "max-content" }}
+              >
+                <p className="mr-2 text-swGray">Items:</p>
+                <Select
+                  styles={customStyles}
+                  options={options}
+                  value={{ value: perPage, label: perPage }}
+                  onChange={handleSelectChange}
+                  isSearchable={false}
+                />
               </div>
-            ) : null}
+              <div className="flex gap-3 items-center">
+                <button className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4">
+                  <FiFilter size={20} />
+                  <p>Filter</p>
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-4 flex items-center justify-between w-full md:w-fit">
+              <input
+                type="search"
+                placeholder="search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="px-2 rounded outline-none border w-full border-gray-300 h-10"
+              />
+              {btnText ? (
+                <div>
+                  <Button
+                    className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                    onClick={btnTextClick}
+                  >
+                    {btnText}
+                  </Button>
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
+        )}
 
         <table className="table-auto w-full border-collapse border overflow-hidden">
           <thead>
@@ -231,39 +235,41 @@ function ReusableDataTable({
             ))}
           </tbody>
         </table>
-        <div className="mt-4 flex items-center justify-between">
-          <button
-            onClick={() => handlePageChange(currentPage - 1, perPage)}
-            disabled={
-              !paginationLinks || !paginationLinks.prev || currentPage === 1
-            }
-            className="px-2 py-1 rounded bg-swLightGray text-gray-700 mr-2"
-          >
-            Previous
-          </button>
-          <div>
-            {getPageNumbers().map((pageNumber) => (
-              <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber, perPage)}
-                className={`px-3 py-1.5 ${
-                  currentPage === pageNumber
-                    ? "bg-swBlue text-white"
-                    : "bg-swLightGray text-gray-700"
-                }`}
-              >
-                {pageNumber}
-              </button>
-            ))}
+        {pagination && (
+          <div className="mt-4 flex items-center justify-between">
+            <button
+              onClick={() => handlePageChange(currentPage - 1, perPage)}
+              disabled={
+                !paginationLinks || !paginationLinks.prev || currentPage === 1
+              }
+              className="px-2 py-1 rounded bg-swLightGray text-gray-700 mr-2"
+            >
+              Previous
+            </button>
+            <div>
+              {getPageNumbers().map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber, perPage)}
+                  className={`px-3 py-1.5 ${
+                    currentPage === pageNumber
+                      ? "bg-swBlue text-white"
+                      : "bg-swLightGray text-gray-700"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => handlePageChange(currentPage + 1, perPage)}
+              disabled={!paginationLinks || !paginationLinks.next}
+              className="px-2 py-1 rounded bg-swLightGray text-gray-700 ml-2"
+            >
+              Next
+            </button>
           </div>
-          <button
-            onClick={() => handlePageChange(currentPage + 1, perPage)}
-            disabled={!paginationLinks || !paginationLinks.next}
-            className="px-2 py-1 rounded bg-swLightGray text-gray-700 ml-2"
-          >
-            Next
-          </button>
-        </div>
+        )}
       </div>
       {/* // ) : (
       //   <div class="min-h-500 flex items-center justify-center">

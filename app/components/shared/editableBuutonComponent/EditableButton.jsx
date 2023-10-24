@@ -1,8 +1,8 @@
 const EditableButton = ({ children, className, onClick }) => {
   return (
-    <main className={className} onClick={onClick}>
+    <button className={className} onClick={onClick}>
       {children}
-    </main>
+    </button>
   );
 };
 

@@ -10,6 +10,7 @@ import Button from "../shared/buttonComponent/Button";
 import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const Staffs = () => {
   const [isModal, setIsModal] = useState(false);
@@ -74,21 +75,23 @@ const Staffs = () => {
       <ToastContainer />
       <TeamManagementCard />
       <div className="py-2">
-        <div className="px-4 flex  justify-between">
-          <p className="text-lg font-semibold">Staff list</p>
-          <Button
-            onClick={handleOpenModal}
-            className="bg-swBlue text-white py-2 px-4 rounded-md hover:bg-bswBlue"
-          >
-            Add Staff
-          </Button>
-        </div>
         <div className="flex justify-between items-center">
           <ReusableDataTable
             dataTransformer={customDataTransformer}
             apiEndpoint="https://secondwallet-stag.onrender.com/api/user"
             initialData={[]}
             headers={headers}
+            filters={true}
+            pagination={true}
+            btnText={
+              <div
+                className="flex gap-1 items-center p-1"
+                onClick={handleOpenModal}
+              >
+                <AiOutlinePlus size={15} />
+                <p className="hidden lg:block">New staff</p>
+              </div>
+            }
           />
           <div className="flex gap-3 mt-3 items-center">
             <StaffsModal

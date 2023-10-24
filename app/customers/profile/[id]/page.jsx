@@ -38,7 +38,6 @@ const CustomerProfile = () => {
 
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
-    console.log(buttonId);
   };
 
   const handleInfoHoverIn = (infoId) => {
@@ -84,19 +83,19 @@ const CustomerProfile = () => {
                     "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                   }
                   alt="user image"
-                  width={50}
-                  height={50}
+                  width={60}
+                  height={60}
                 />
               </div>
               <div className="ml-4 h-fit">
-                <p className="text-sm mb-2">
-                  {data?.profileInfo.firstName} {data?.profileInfo.middleName}{" "}
+                <p className="text-xl font-semibold text-swBlue mb-1">
+                  {data?.profileInfo.firstName} {data?.profileInfo.middleName}
                   {data?.profileInfo.lastName}
                 </p>
                 <p className="text-xs">SW-456789</p>
 
                 <div className="flex gap-2 items-center h-fit w-fit mt-4">
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex">
+                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
                     <Link
                       href="mailto: helloyt@gmail.com"
                       className="bg-white border border-gray-300 w-fit p-2 rounded-md"
@@ -104,7 +103,7 @@ const CustomerProfile = () => {
                       <AiOutlineMail size={15} />
                     </Link>
                   </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex">
+                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
                     <Link
                       href="mailto: helloyt@gmail.com"
                       className="bg-white border border-gray-300 w-fit p-2 rounded-md"
@@ -112,7 +111,7 @@ const CustomerProfile = () => {
                       <FiPhone size={15} />
                     </Link>
                   </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex">
+                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
                     <Link
                       href="mailto: helloyt@gmail.com"
                       className="bg-white border border-gray-300 w-fit p-2 rounded-md"
@@ -120,7 +119,7 @@ const CustomerProfile = () => {
                       <LuCalendar size={15} />
                     </Link>
                   </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex">
+                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
                     <Link
                       href="mailto: helloyt@gmail.com"
                       className="bg-white border border-gray-300 w-fit p-2 rounded-md"
@@ -139,7 +138,7 @@ const CustomerProfile = () => {
                 <span className="font-semibold"> John Deo</span>
               </p>
               <div className="flex gap-2 items-center">
-                <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem]">
+                <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem]">
                   <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
                     <BsThreeDotsVertical size={20} />
                   </div>
@@ -162,7 +161,7 @@ const CustomerProfile = () => {
                 className={`${
                   activeButton === "bio-data" &&
                   "font-semibold text-swBlue bg-blue-50"
-                } p-2 rounded-md border cursor-pointer whitespace-nowrap`}
+                } p-2 rounded-md cursor-pointer whitespace-nowrap`}
               >
                 Personal Info
               </EditableButton>
@@ -171,7 +170,7 @@ const CustomerProfile = () => {
                 className={`${
                   activeButton === "work" &&
                   "font-semibold text-swBlue bg-blue-50"
-                } p-2 rounded-md border cursor-pointer`}
+                } p-2 rounded-md cursor-pointer`}
               >
                 Work
               </EditableButton>
@@ -180,7 +179,7 @@ const CustomerProfile = () => {
                 className={`${
                   activeButton === "document" &&
                   "font-semibold text-swBlue bg-blue-50"
-                } p-2 rounded-md border cursor-pointer`}
+                } p-2 rounded-md cursor-pointer`}
               >
                 Documents
               </EditableButton>
@@ -340,89 +339,103 @@ const CustomerProfile = () => {
                     </div>
                   ) : (
                     <div>
-                    <div className="p-2">
-                      <div
-                        className="text-sm font-semibold flex justify-between"
-                        onMouseEnter={() => handleInfoHoverIn("bio-data")}
-                        onMouseLeave={() => handleInfoHoverIn("close")}
-                      >
-                        <p>Employment details</p>
-                        {infoHover === "bio-data" && (
-                          <FiEdit2
-                            size={15}
-                            className="text-swGray hover:text-black"
-                          />
-                        )}
+                      <div className="p-2">
+                        <div
+                          className="text-sm font-semibold flex justify-between"
+                          onMouseEnter={() => handleInfoHoverIn("bio-data")}
+                          onMouseLeave={() => handleInfoHoverIn("close")}
+                        >
+                          <p>Employment details</p>
+                          {infoHover === "bio-data" && (
+                            <FiEdit2
+                              size={15}
+                              className="text-swGray hover:text-black"
+                            />
+                          )}
+                        </div>
+
+                        <div className=" text-xs  text-swGray">
+                          <div className="flex justify-between">
+                            <p className="pt-3">Status: </p>
+                            <p className="pt-3 font-semibold">
+                              {
+                                data?.employmentInformation
+                                  ?.currentEmploymentStatus
+                              }
+                            </p>
+                          </div>
+                          <div className="flex gap-1 justify-between">
+                            <p className="pt-3">Employer Name: </p>
+                            <p className="pt-3 font-semibold">
+                              {
+                                data?.employmentInformation?.employerInformation
+                                  .name
+                              }
+                            </p>
+                          </div>
+                          <div className="flex gap-1 justify-between">
+                            <p className="pt-3">Employer Phone: </p>
+                            <p className="pt-3 font-semibold">
+                              {
+                                data?.employmentInformation?.employerInformation
+                                  .contact
+                              }
+                            </p>
+                          </div>
+                          <div className="flex gap-1 justify-between">
+                            <p className="pt-3">Job Title: </p>
+                            <p className="pt-3 font-semibold">
+                              {data?.employmentInformation?.jobTitle}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-    
-                      <div className=" text-xs  text-swGray">
-                        <div className="flex justify-between">
-                          <p className="pt-3">Status: </p>
-                          <p className="pt-3 font-semibold">
-                            {data?.employmentInformation?.currentEmploymentStatus}
-                          </p>
+                      <div className="p-2 border-t border-text-300">
+                        <div
+                          className="text-sm font-semibold flex justify-between "
+                          onMouseEnter={() => handleInfoHoverIn("address")}
+                          onMouseLeave={() => handleInfoHoverIn("close")}
+                        >
+                          <p>Income details</p>
+                          {infoHover === "address" && (
+                            <FiEdit2
+                              size={15}
+                              className="text-swGray hover:text-black"
+                            />
+                          )}
                         </div>
-                        <div className="flex gap-1 justify-between">
-                          <p className="pt-3">Employer Name: </p>
-                          <p className="pt-3 font-semibold">
-                          {data?.employmentInformation?.employerInformation.name}
-                          </p>
+                        <div className="mt-2 text-xs text-swGray">
+                          <div className="flex gap-1 justify-between">
+                            <p className="pt-3">Income Period: </p>
+                            <p className="pt-3 font-semibold">
+                              {" "}
+                              {data?.employmentInformation?.incomeSource}
+                            </p>
+                          </div>
+                          <div className="flex gap-1 justify-between">
+                            <p className="pt-3">Amount Earned: </p>
+                            <p className="pt-3 font-semibold">
+                              {" "}
+                              {data?.employmentInformation.monthlyIncome}
+                            </p>
+                          </div>
+                          <div className="flex gap-1 justify-between">
+                            <p className="pt-3">Annual Income: </p>
+                            <p className="pt-3 font-semibold">
+                              {" "}
+                              {data?.employmentInformation.monthlyIncome}
+                            </p>
+                          </div>
+                          <div className="flex gap-1 justify-between">
+                            <p className="pt-3 ">Income Source: </p>
+
+                            <p className="pt-3 font-semibold">
+                              {data?.employmentInformation.incomeSource}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex gap-1 justify-between">
-                          <p className="pt-3">Employer Phone: </p>
-                          <p className="pt-3 font-semibold">
-                          {data?.employmentInformation?.employerInformation.contact}
-                          </p>
-                        </div>
-                        <div className="flex gap-1 justify-between">
-                          <p className="pt-3">Job Title: </p>
-                          <p className="pt-3 font-semibold">
-                          {data?.employmentInformation?.jobTitle}
-                          </p>
-                        </div>
-                    
-    
-                      
                       </div>
                     </div>
-                    <div className="p-2 border-t border-text-300">
-                      <div
-                        className="text-sm font-semibold flex justify-between "
-                        onMouseEnter={() => handleInfoHoverIn("address")}
-                        onMouseLeave={() => handleInfoHoverIn("close")}
-                      >
-                        <p>Income details</p>
-                        {infoHover === "address" && (
-                          <FiEdit2
-                            size={15}
-                            className="text-swGray hover:text-black"
-                          />
-                        )}
-                      </div>
-                      <div className="mt-2 text-xs text-swGray">
-                        <div className="flex gap-1 justify-between">
-                          <p className="pt-3">Income Period: </p>
-                          <p className="pt-3 font-semibold">       {data?.employmentInformation?.incomeSource}</p>
-                        </div>
-                        <div className="flex gap-1 justify-between">
-                          <p className="pt-3">Amount Earned: </p>
-                          <p className="pt-3 font-semibold"> {data?.employmentInformation.monthlyIncome}</p>
-                        </div>
-                        <div className="flex gap-1 justify-between">
-                          <p className="pt-3">Annual Income: </p>
-                          <p className="pt-3 font-semibold">   {data?.employmentInformation.monthlyIncome}</p>
-                        </div>
-                        <div className="flex gap-1 justify-between">
-                          <p className="pt-3 ">Income Source: </p>
-    
-                          <p className="pt-3 font-semibold">
-                            {data?.employmentInformation.incomeSource}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-            
-                  </div>
                   )}
                 </div>
               </div>
@@ -445,14 +458,14 @@ const CustomerProfile = () => {
             )}
           </div>
           <div className="w-[70%] border-l h-screen border-gray-300">
-            <div className="">
-              <div className="flex ml-4 gap-2 mt-2 text-xs lg:text-sm">
+            <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap">
+              <div className="flex gap-2 text-xs lg:text-sm">
                 <EditableButton
                   onClick={() => handleActivityToggle("activity-logs")}
                   className={`${
                     activityButton === "activity-logs" &&
                     "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md border cursor-pointer whitespace-nowrap`}
+                  } p-2 rounded-md cursor-pointer whitespace-nowrap`}
                 >
                   Activity logs
                 </EditableButton>
@@ -461,7 +474,7 @@ const CustomerProfile = () => {
                   className={`${
                     activityButton === "summary" &&
                     "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md border cursor-pointer`}
+                  } p-2 rounded-md cursor-pointer`}
                 >
                   Summary
                 </EditableButton>
@@ -470,7 +483,7 @@ const CustomerProfile = () => {
                   className={`${
                     activityButton === "loans" &&
                     "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md border cursor-pointer`}
+                  } p-2 rounded-md cursor-pointer`}
                 >
                   Loans
                 </EditableButton>
@@ -479,7 +492,7 @@ const CustomerProfile = () => {
                   className={`${
                     activityButton === "disbursement" &&
                     "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md border cursor-pointer`}
+                  } p-2 rounded-md cursor-pointer`}
                 >
                   Disbursment
                 </EditableButton>
@@ -488,50 +501,49 @@ const CustomerProfile = () => {
                   className={`${
                     activityButton === "repayment" &&
                     "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md border cursor-pointer`}
+                  } p-2 rounded-md cursor-pointer`}
                 >
                   Repayments
                 </EditableButton>
               </div>
-              <div className="flex">
-                <div className="ml-auto flex gap-2 items-end">
-                  <InputField
-                    startIcon={<FiSearch size={20} />}
-                    endIcon={
-                      <IoIosClose
-                        size={20}
-                        className="cursor-pointer"
-                        onClick={() => {
-                          handleLogSearch("close");
-                        }}
-                      />
-                    }
-                    placeholder={"Search..."}
-                    css={`
-                      ${logSearch
-                        ? "translate-x-[3rem] opacity-1 z-10"
-                        : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
-                    `}
-                    borderColor="bg-gray-200"
-                  />
+
+              <div className="flex justify-center items-center gap-2 relative ml-auto">
+                <InputField
+                  startIcon={<FiSearch size={20} />}
+                  endIcon={
+                    <IoIosClose
+                      size={20}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        handleLogSearch("close");
+                      }}
+                    />
+                  }
+                  placeholder={"Search..."}
+                  css={`
+                    ${logSearch
+                      ? "translate-x-[3rem] opacity-1 z-10"
+                      : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
+                  `}
+                  borderColor="bg-gray-200 "
+                />
+                <div
+                  className={`${
+                    logSearch ? "opacity-0" : "opacity-1"
+                  } transition-all ease-in-out p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex`}
+                >
                   <div
-                    className={`${
-                      logSearch ? "opacity-0" : "opacity-1"
-                    } transition-all ease-in-out p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem]`}
+                    className="bg-white border border-gray-300 w-fit p-2 rounded-md cursor-pointer"
+                    onClick={() => {
+                      handleLogSearch("open");
+                    }}
                   >
-                    <div className="bg-white border border-gray-300 w-fit p-2 rounded-md cursor-pointer">
-                      <FiSearch
-                        size={20}
-                        onClick={() => {
-                          handleLogSearch("open");
-                        }}
-                      />
-                    </div>
+                    <FiSearch size={20} />
                   </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-300 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem] cursor-pointer">
-                    <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
-                      <BsThreeDotsVertical size={20} />
-                    </div>
+                </div>
+                <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex cursor-pointer">
+                  <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
+                    <BsThreeDotsVertical size={20} />
                   </div>
                 </div>
               </div>
