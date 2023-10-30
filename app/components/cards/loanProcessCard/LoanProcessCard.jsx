@@ -14,7 +14,7 @@ const LoanProcessCard = ({ data }) => {
       },
     },
     {
-      loan_status: "ccredit approved",
+      loan_status: "credit approved",
       by: {
         name: "mariam Joel",
         profile_pic: "https://cdn-icons-png.flaticon.com/512/4128/4128349.png",
@@ -39,13 +39,13 @@ const LoanProcessCard = ({ data }) => {
       {data.map((item, index) => (
         <div key={index} className="border-b border-gray-100 p-2">
           <div className="flex justify-between items-center">
-            <p className="font-semibold capitalize">{item.loan_status}</p>
+            <p className="font-semibold capitalize text-xs">{item.loan_status}</p>
             <div className="p-2 border border-gray-300 rounded-lg">
               <LuMessageSquare size={20} />
             </div>
           </div>
           <div className="flex items-end gap-2">
-            <p className="font-medium">{item.by.date}</p>
+            <p className="font-medium text-xs ">{item.by.date}</p>
             <p className="text-xs text-gray-200">{item.by.time}</p>
           </div>
           <div className="flex items-center gap-2 mt-2">
@@ -57,8 +57,8 @@ const LoanProcessCard = ({ data }) => {
               width={50}
             />
             <div>
-              <p className="font-medium">{item.by.name}</p>
-              <p className="font-medium text-swBlue">{item.by.position}</p>
+              <p className="font-medium text-xs text-swGray">{item.by.name}</p>
+              <p className="font-medium  text-xs text-swBlue">{item.by.position}</p>
             </div>
           </div>
         </div>

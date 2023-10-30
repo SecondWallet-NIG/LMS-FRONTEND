@@ -117,7 +117,9 @@ const ViewLoan = () => {
                 <div className="w-full bg-gray-100 rounded-xl p-2">
                   <p className="text-base font-medium">Loan ID:</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-2xl font-bold mt-4">GCL389281</p>
+                    <p className="text-xl text-swGray font-semibold mt-4">
+                      GCL389281
+                    </p>
                     <div className="p-2 rounded-md hover:bg-white hover:border-2 hover:border-gray-200 mt-2">
                       <IoCopyOutline size={20} />
                     </div>
@@ -125,11 +127,145 @@ const ViewLoan = () => {
                 </div>
                 <div className="w-full bg-gray-100 rounded-xl p-2">
                   <p className="text-base font-medium">Loan Amount:</p>
-                  <p className="text-2xl font-bold mt-4">300,000.00</p>
+                  <p className="text-xl text-swGray font-semibold mt-4">
+                    300,000.00
+                  </p>
                 </div>
               </div>
             </div>
           </section>
+          <div className="ml-5 mr-5 mt-5">
+            <h6 className="text-center font-semibold p-2">Loan Details</h6>
+            <div className="border rounded-lg">
+              <table className=" w-full ">
+                <thead className="bg-swLightGray ">
+                  <tr>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      Loan Type
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Purpose</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Maturity Amount</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Loan Period</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Maturity Date</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="text-start text-xs">
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>Basic Loan</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>Business</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>3,000,000</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>4 months</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>Content</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                    <EditableButton
+                      className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
+                    >
+                      Badge
+                    </EditableButton>
+                    </td>
+                
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="ml-5 mr-5 mt-5">
+            <h6 className="text-center font-semibold p-2">Loan Action</h6>
+            <div className="border rounded-lg">
+              <table className=" w-full ">
+                <thead className="bg-swLightGray ">
+                  <tr>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      Loan Type
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Purpose</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Maturity Amount</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Loan Period</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Maturity Date</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="text-start text-xs">
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>Basic Loan</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>Business</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>3,000,000</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>4 months</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>Content</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3">
+                    <EditableButton
+                      className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
+                    >
+                      Badge
+                    </EditableButton>
+                    </td>
+                
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
           <div className="p-5">
             <section id="loan-details">{/* <ReusableDataTables/> */}</section>
@@ -146,7 +282,7 @@ const ViewLoan = () => {
                     className={`${
                       activityButton === "activity-logs" &&
                       "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer whitespace-nowrap`}
+                    } p-2 rounded-md whitespace-nowrap`}
                   >
                     Activity logs
                   </EditableButton>
@@ -241,7 +377,7 @@ const ViewLoan = () => {
           id="loan_process"
           className="w-[30%] border-l border-gray-300 h-full"
         >
-          <p className="border-b border-gray-300 p-4 font-semibold  ">
+          <p className="border-b border-gray-300 p-4 text-swGray font-semibold">
             Loan Processes
           </p>
           <div className="p-2">

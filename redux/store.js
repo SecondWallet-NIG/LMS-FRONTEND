@@ -4,7 +4,10 @@ import postReducer from './slices/postSlice';
 import userReducer from './slices/userSlice';
 import authReducer from './slices/authSlice'
 import customerReducer from './slices/customerSlice';
+import interestTypeReducer from './slices/interestTypeSlice';
+import LoanPackageReducer from './slices/loanPackageSlice';
 import roleReducer from './slices/roleSlice';
+import loanApplicationReducer from './slices/loanApplicationSlice';
 
 
 export const store = configureStore({
@@ -13,7 +16,10 @@ export const store = configureStore({
     user: userReducer,
     auth: authReducer,
     customer: customerReducer,
-    role: roleReducer
+    role: roleReducer,
+    interestType: interestTypeReducer,
+    loanPackage: LoanPackageReducer,
+    loanApplication: loanApplicationReducer
   },
   // Add middleware or other configuration options as needed
 });

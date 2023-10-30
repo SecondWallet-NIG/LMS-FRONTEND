@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRoles } from "@/redux/slices/roleSlice";
 import SuccessModal from "../modals/SuccessModal";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
-import Button from "../shared/buttonComponent/Button";
 import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";

@@ -91,8 +91,8 @@ const CustomerProfile = () => {
               </div>
               <div className="ml-4 h-fit">
                 <p className="text-xl font-semibold text-swBlue mb-1">
-                  {data?.profileInfo.firstName} {data?.profileInfo.middleName}
-                  {data?.profileInfo.lastName}
+                  {data?.profileInfo?.firstName} {data?.profileInfo?.middleName}
+                  {data?.profileInfo?.lastName}
                 </p>
                 <p className="text-xs">SW-456789</p>
 

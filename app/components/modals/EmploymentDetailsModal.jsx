@@ -15,7 +15,6 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
   if (!isOpen) return null;
   const dispatch = useDispatch();
   const {id} = useParams();
-  console.log("mmmmmm", id);
 
   const { loading } = useSelector((state) => state.user);
 

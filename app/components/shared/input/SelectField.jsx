@@ -60,7 +60,7 @@ const SelectField = ({
         {required && <span className="text-red-600 ml-1">*</span>}
       </label>
       <Select
-      isDisabled={disabled}
+        isDisabled={disabled}
         styles={customStyles}
         isSearchable={isSearchable}
         options={optionValue ? optionValue : _options}
