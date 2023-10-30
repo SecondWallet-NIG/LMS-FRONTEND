@@ -4,6 +4,8 @@ import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLog
 import ActivityLogs from "@/app/components/customers/CustomerActivityLogs";
 import Summary from "@/app/components/customers/CustomerSummary";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
+import ViewLoanActivity from "@/app/components/loanApplication/ViewLoan/ViewLoanActivity";
+import ViewLoanSummary from "@/app/components/loanApplication/ViewLoan/ViewLoanSummary";
 import EditableButton from "@/app/components/shared/editableBuutonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
@@ -32,6 +34,14 @@ const ViewLoan = () => {
       maturity_date: "Maturity date",
       status: "Status",
     },
+  ];
+
+  const tableHeader = [
+    { id: "collection_date", label: "Collection date" },
+    { id: "amoount_collected", label: "Amount collected" },
+    { id: "collected_by", label: "Collected by" },
+    { id: "method", label: "Method" },
+    { id: "receipt", label: "Reciept" },
   ];
 
   const handleActivityToggle = (buttonId) => {
@@ -160,31 +170,22 @@ const ViewLoan = () => {
                     Summary
                   </EditableButton>
                   <EditableButton
-                    onClick={() => handleActivityToggle("loans")}
+                    onClick={() => handleActivityToggle("repayments")}
                     className={`${
-                      activityButton === "loans" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
-                  >
-                    Loans
-                  </EditableButton>
-                  <EditableButton
-                    onClick={() => handleActivityToggle("disbursement")}
-                    className={`${
-                      activityButton === "disbursement" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
-                  >
-                    Disbursment
-                  </EditableButton>
-                  <EditableButton
-                    onClick={() => handleActivityToggle("repayment")}
-                    className={`${
-                      activityButton === "repayment" &&
+                      activityButton === "repayments" &&
                       "font-semibold text-swBlue bg-blue-50"
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Repayments
+                  </EditableButton>
+                  <EditableButton
+                    onClick={() => handleActivityToggle("files")}
+                    className={`${
+                      activityButton === "files" &&
+                      "font-semibold text-swBlue bg-blue-50"
+                    } p-2 rounded-md cursor-pointer`}
+                  >
+                    Files
                   </EditableButton>
                 </div>
 
@@ -231,8 +232,13 @@ const ViewLoan = () => {
                 </div>
               </div>
               <div className="p-2">
-                {activityButton === "activity-logs" && <CustomerActivityLogs />}
-                {activityButton === "summary" && <Summary />}
+                {activityButton === "activity-logs" && <ViewLoanActivity />}
+                {activityButton === "summary" && <ViewLoanSummary />}
+                {activityButton === "repayments" && (
+                  <div className="-mx-2 -mt-2">
+                    <ReusableDataTable filters={false} headers={tableHeader} />
+                  </div>
+                )}
               </div>
             </section>
           </div>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const CustomerActivityLogsCard = ({ data }) => {
+const ActivityLogsCard = ({ data }) => {
   data = [
     {
       loan_state: "disbursed",
@@ -94,4 +94,4 @@ const CustomerActivityLogsCard = ({ data }) => {
   );
 };
 
-export default CustomerActivityLogsCard;
+export default ActivityLogsCard;
