@@ -7,13 +7,14 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
-import { AiOutlinePaperClip } from "react-icons/ai";
+import { AiOutlinePaperClip, AiOutlinePlus } from "react-icons/ai";
 import Button from "../components/shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "@/redux/slices/customerSlice";
 
 import CenterModal from "../components/modals/CenterModal";
 import EditableButton from "../components/shared/editableBuutonComponent/EditableButton";
+import { FiUser } from "react-icons/fi";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ const CreateLoan = () => {
   const calcRepaymentsNo = (repaymentType) => {
     console.log("io", repaymentType);
     let loanDuration = formData.loanDuration;
-   // let repaymentType = formData.repaymentType;
+    // let repaymentType = formData.repaymentType;
     if (formData.loanDurationMetrics === "Yearly") {
       loanDuration = formData.loanDuration * 12;
     }
@@ -64,7 +65,6 @@ const CreateLoan = () => {
       }));
     }
   };
-  
 
   const loanPackagesData = [
     { value: 5, label: "Basic Loans" },
@@ -165,8 +165,6 @@ const CreateLoan = () => {
       ...formData,
       [name]: selectedOption.value,
     });
-
-  
   };
   // function calculateReducingBalanceInstallments(principal, annualInterestRate, numberOfPayments) {
   //   const monthlyInterestRate = annualInterestRate / 100;
@@ -279,7 +277,7 @@ const CreateLoan = () => {
                 }
               }}
             />
-            <SelectField
+            {/* <SelectField
               disabled={formData.loanPackage === null ? true : false}
               name="assetType"
               optionValue={assetTypeData}
@@ -290,16 +288,16 @@ const CreateLoan = () => {
               onChange={(selectedOption) =>
                 handleSelectChange(selectedOption, "assetType")
               }
-            />
+            /> */}
             <InputField
               maxLength="1000000"
-              disabled={formData.assetType === null ? true : false}
+              disabled={formData.loanPackage === null ? true : false}
               name="loanAmount"
               required={true}
               inputType="number"
-              hintText={"Enter the loan amount in digit (Naira currency)"}
               activeBorderColor="border-swBlue"
-              label="Loan amount"
+              endIcon={<p className="text-swGray">NGN &#8358;</p>}
+              label="Loan amount (Principal)"
               placeholder="Enter loan amount"
               isActive="loan-amount"
               onChange={(e) => {
@@ -322,13 +320,13 @@ const CreateLoan = () => {
               }}
               inputOpen={isInputOpen}
             />
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-end">
               <div className="w-1/3">
                 <SelectField
                   name="loanDurationMetrics"
                   disabled={formData.loanAmount === 0 ? true : false}
                   optionValue={loanDurationMetricsData}
-                  label={"Loan Duration Metrics"}
+                  label={"Duration"}
                   required={true}
                   placeholder={"duration metics"}
                   isSearchable={false}
@@ -346,7 +344,7 @@ const CreateLoan = () => {
                   name="loanDuration"
                   inputType="number"
                   activeBorderColor="border-swBlue"
-                  placeholder="Enter loan duration based on metrics"
+                  placeholder="Enter number"
                   onChange={(e) => {
                     setInputState(e);
                     //  calCommitmentTotal(e);
@@ -354,7 +352,38 @@ const CreateLoan = () => {
                 />
               </div>
             </div>
-            <div className="flex gap-2">
+
+            <div className="w-full">
+              <SelectField
+                disabled={formData.loanDurationMetrics === 0 ? true : false}
+                optionValue={repaymentData}
+                label={"Repayment Type"}
+                required={true}
+                placeholder={"Select repayment type"}
+                isSearchable={false}
+                onChange={(selectedOption) => {
+                  console.log({ selectedOption });
+                  handleSelectChange(selectedOption, "repaymentType");
+                  calcRepaymentsNo(selectedOption.value);
+                }}
+              />
+            </div>
+            <div className="w-full">
+              <SelectField
+                disabled={formData.repaymentType === null ? true : false}
+                optionValue={interestTypeData}
+                label={"Interest Type"}
+                required={true}
+                placeholder={"Select interest type"}
+                isSearchable={false}
+                onChange={(selectedOption) => {
+                  console.log({ selectedOption });
+                  handleSelectChange(selectedOption, "interestType");
+                  calcRepaymentsNo(selectedOption.value);
+                }}
+              />
+            </div>
+            <div className="flex gap-2 items-end">
               <div className="w-1/3">
                 <SelectField
                   name="commitmentType"
@@ -377,38 +406,15 @@ const CreateLoan = () => {
                   inputType="number"
                   activeBorderColor="border-swBlue"
                   placeholder="Enter Value"
+                  endIcon={<p className="text-swGray">%</p>}
                   onChange={(e) => {
                     setInputState(e);
                     calCommitmentTotal(e);
                   }}
                 />
               </div>
-            </div>
-            <div className="flex gap-2">
-              <div className="w-1/3">
-                <SelectField
-                  disabled={formData.commitmentValue === 0 ? true : false}
-                  optionValue={repaymentData}
-                  label={"Repayment Type"}
-                  required={true}
-                  placeholder={"Select repayment type"}
-                  isSearchable={false}
-                  onChange={(selectedOption) => {
-                    console.log({selectedOption});
-                    handleSelectChange(selectedOption, "repaymentType");
-                    calcRepaymentsNo(selectedOption.value);
-                  }}
-                />
-              </div>
-              <div className="w-2/3">
-                <InputField
-                  disabled={true}
-                  name="numberOfRepayment"
-                  inputType="number"
-                  value={formData.numberOfRepayment}
-                  activeBorderColor="border-swBlue"
-                  placeholder="Enter number of repayment"
-                />
+              <div className="p-2 rounded-lg border-2 border-white hover:border-gray-300 cursor-pointer">
+                <AiOutlinePlus size={20} />
               </div>
             </div>
           </div>
@@ -422,6 +428,20 @@ const CreateLoan = () => {
               <AiOutlinePaperClip size={20} />
               <p className="font-semibold">Select files</p>
             </button>
+            <div className="w-full">
+              <InputField
+                required={true}
+                name="collateral_value"
+                label={"Collateral value"}
+                inputType="number"
+                activeBorderColor="border-swBlue"
+                endIcon={<p className="text-swGray">NGN &#8358;</p>}
+                placeholder="Enter amount"
+                onChange={(e) => {
+                  setInputState(e);
+                }}
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-5 mt-5">
             <p className="font-semibold">Upload Hard copy of filled form</p>
@@ -433,6 +453,19 @@ const CreateLoan = () => {
               <AiOutlinePaperClip size={20} />
               <p className="font-semibold">Select files</p>
             </button>
+            <div className="w-full">
+              <InputField
+                required={false}
+                name="loan_purpose"
+                label={"Loan purpose"}
+                inputType="text"
+                activeBorderColor="border-swBlue"
+                placeholder="Start typing"
+                onChange={(e) => {
+                  setInputState(e);
+                }}
+              />
+            </div>
           </div>
           <Button
             disabled={true}
@@ -446,24 +479,32 @@ const CreateLoan = () => {
         <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
           <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
           {selectedCustomer != null ? (
-            <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-              <div className="text-sm font-semibold text-swGray">SWC-0001</div>
-              <div className="text-xs font-semibold text-swGray mt-2">
-                {selectedCustomer.firstName} {selectedCustomer.lastName}
-              </div>
+            <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto flex gap-5">
+              {selectedCustomer.image ? (
+                ""
+              ) : (
+                <div className="p-3 rounded-full bg-white h-fit w-fit">
+                  <FiUser size={30} className="text-gray-400" />
+                </div>
+              )}
+              <div>
+                <p className="text-lg font-semibold">
+                  {selectedCustomer.firstName} {selectedCustomer.lastName}
+                </p>
 
-              <div className="flex justify-between">
-                <div className="text-swGray font-semibold text-xs my-2">
-                  {selectedCustomer.phoneNumber}
-                </div>
-                <div className="text-gray-600 font-semibold text-xs my-2">
-                  {selectedCustomer.email}
-                </div>
+                <p className="text-sm mb-2">{selectedCustomer.email}</p>
+
+                <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
+                  {selectedCustomer.nin}
+                </p>
               </div>
             </div>
           ) : (
-            <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-              No Customer Added Yet
+            <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
+              <div className="p-3 rounded-full bg-white">
+                <FiUser size={35} className="text-gray-400" />
+              </div>
+              <p className="text-xl font-semibold">Select Borrower</p>
             </div>
           )}
           <div className="flex pt-2">
