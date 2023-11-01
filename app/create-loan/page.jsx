@@ -224,7 +224,7 @@ const CreateLoan = () => {
 
             <Button
               href=""
-              className="hidden flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
+              className="flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
             >
               <IoMdAdd size={20} />
               <p>Add new customer</p>
