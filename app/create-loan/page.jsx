@@ -7,7 +7,12 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
-import { AiOutlinePaperClip, AiOutlinePlus } from "react-icons/ai";
+import {
+  AiFillDelete,
+  AiOutlineDelete,
+  AiOutlinePaperClip,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import Button from "../components/shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "@/redux/slices/customerSlice";
@@ -36,6 +41,9 @@ const CreateLoan = () => {
   const [loading, setLoading] = useState(false);
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileForm, setSelectedFileForm] = useState(null);
+
   // const [formData, setFormData] = useState({
   //   customerId: "",
   //   loanAmount: 0,
@@ -51,7 +59,6 @@ const CreateLoan = () => {
   //   commitmentType: null,
   // });
   const [formData, setFormData] = useState({
-
     loanAmount: 0,
     loanPackage: null,
     loanDuration: 0,
@@ -73,8 +80,7 @@ const CreateLoan = () => {
     createdBy: "60c1d48a90d7456b1b3c65e6",
     customerId: "",
   });
-  
-  
+
   const [currentStep, setCurrentStep] = useState(1);
 
   const validateFormData = (formData) => {
@@ -246,6 +252,16 @@ const CreateLoan = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+  };
+
+  const handleFileChange1 = (e) => {
+    const file = e.target.files[0];
+    setSelectedFileForm(file);
+  };
+
   useEffect(() => {
     dispatch(getCustomers());
     dispatch(getLoanPackage());
@@ -299,7 +315,7 @@ const CreateLoan = () => {
               <SelectField
                 disabled={selectedCustomer === null ? true : false}
                 name="loanPackage"
-                optionValue={loanPackagesData}
+                optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
                 label={"Loan Package "}
                 required={true}
                 placeholder={"Select loan package"}
@@ -307,18 +323,6 @@ const CreateLoan = () => {
                 onChange={(selectedOption) => {
                   handleSelectChange(selectedOption, "loanPackage");
                   setLoanPackageText(selectedOption.label);
-                  if (
-                    formData.loanAmount &&
-                    formData.loanDuration &&
-                    formData.repaymentType
-                  ) {
-                    calculateInterest(
-                      formData.loanAmount,
-                      selectedOption.value,
-                      formData.loanDuration,
-                      formData.repaymentType
-                    );
-                  }
                 }}
               />
               {formData.loanPackage === "65390f290d0a83675c9517b3" ? (
@@ -398,38 +402,81 @@ const CreateLoan = () => {
                   />
                 </div>
               </div>
-
-              <div className="w-full">
-                <SelectField
-                  disabled={formData.loanDurationMetrics === 0 ? true : false}
-                  optionValue={repaymentData}
-                  label={"Repayment Type"}
-                  required={true}
-                  placeholder={"Select repayment type"}
-                  isSearchable={false}
-                  onChange={(selectedOption) => {
-                    console.log({ selectedOption });
-                    handleSelectChange(selectedOption, "repaymentType");
-                    calcRepaymentsNo(selectedOption.value);
-                  }}
-                />
+              <div className="flex gap-2">
+                <div className="w-1/3">
+                  <SelectField
+                    name="commitmentType"
+                    disabled={formData.loanAmount === 0 ? true : false}
+                    optionValue={commitmentType}
+                    label={"Fees"}
+                    required={true}
+                    placeholder={"Percentage"}
+                    isSearchable={false}
+                    onChange={(selectedOption) => {
+                      handleSelectChange(selectedOption, "commitmentType");
+                    }}
+                  />
+                </div>
+                <div className="w-2/3">
+                  <InputField
+                    value={formData.commitmentValue}
+                    label="Percentage"
+                    disabled={formData.commitmentType === null ? true : false}
+                    required={true}
+                    name="commitmentValue"
+                    inputType="number"
+                    activeBorderColor="border-swBlue"
+                    placeholder="Enter Value"
+                    onChange={(e) => {
+                      setInputState(e);
+                      calCommitmentTotal(e);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <div className="w-1/3">
+                  <SelectField
+                    disabled={formData.commitmentValue === 0 ? true : false}
+                    optionValue={repaymentData}
+                    label={"Repayment Type"}
+                    required={true}
+                    placeholder={"Select repayment type"}
+                    isSearchable={false}
+                    onChange={(selectedOption) => {
+                      handleSelectChange(selectedOption, "repaymentType");
+                      calcRepaymentsNo(selectedOption.value);
+                    }}
+                  />
+                </div>
+                <div className="w-2/3">
+                  <InputField
+                    disabled={true}
+                    label="Number of Repayments"
+                    required={true}
+                    name="numberOfRepayment"
+                    inputType="number"
+                    value={formData.numberOfRepayment}
+                    activeBorderColor="border-swBlue"
+                    placeholder="Enter number of repayment"
+                  />
+                </div>
               </div>
               <div className="w-full">
                 <SelectField
-                  disabled={formData.repaymentType === null ? true : false}
-                  optionValue={interestTypeData}
+                  name="interestType"
+                  disabled={formData.numberOfRepayment === 0 ? true : false}
+                  optionValue={modifyInterestTypeData(interestType?.data?.data)}
                   label={"Interest Type"}
                   required={true}
                   placeholder={"Select interest type"}
                   isSearchable={false}
                   onChange={(selectedOption) => {
-                    console.log({ selectedOption });
                     handleSelectChange(selectedOption, "interestType");
-                    calcRepaymentsNo(selectedOption.value);
                   }}
                 />
               </div>
-              <div className="flex gap-2 items-end">
+              {/* <div className="flex gap-2 items-end">
                 <div className="w-1/3">
                   <SelectField
                     name="commitmentType"
@@ -462,66 +509,89 @@ const CreateLoan = () => {
                 <div className="p-2 rounded-lg border-2 border-white hover:border-gray-300 cursor-pointer">
                   <AiOutlinePlus size={20} />
                 </div>
-              </div>
+              </div> */}
             </div>
-            <div className="flex flex-col gap-5 mt-5">
+            <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Collateral documents</p>
-              <p className="text-gray-700 -mt-3">
+              <p className="text-gray-700">
                 Document types uploaded should be JPEGS, PNG or PDF and should
                 not exceed 4mb
               </p>
-              <button className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                <AiOutlinePaperClip size={20} />
-                <p className="font-semibold">Select files</p>
-              </button>
-              <div className="w-full">
-                <InputField
-                  required={true}
-                  name="collateral_value"
-                  label={"Collateral value"}
-                  inputType="number"
-                  activeBorderColor="border-swBlue"
-                  endIcon={<p className="text-swGray">NGN &#8358;</p>}
-                  placeholder="Enter amount"
-                  onChange={(e) => {
-                    setInputState(e);
-                  }}
+              <div className="relative">
+                <input
+                  type="file"
+                  id="fileInput"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange}
                 />
+                <label
+                  htmlFor="fileInput"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {selectedFile ? "Change file" : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {selectedFile ? (
+                  <div
+                    id="fileLabel"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">
+                      {selectedFile.name}
+                    </div>
+                    <div>
+                      <AiOutlineDelete color="red" size={20} />
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
-            <div className="flex flex-col gap-5 mt-5">
+            <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Hard copy of filled form</p>
-              <p className="text-gray-700 -mt-3">
+              <p className="text-gray-700 ">
                 Document types uploaded should be JPEGS, PNG or PDF and should
                 not exceed 4mb
               </p>
-              <button className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                <AiOutlinePaperClip size={20} />
-                <p className="font-semibold">Select files</p>
-              </button>
-              <div className="w-full">
-                <InputField
-                  required={false}
-                  name="loan_purpose"
-                  label={"Loan purpose"}
-                  inputType="text"
-                  activeBorderColor="border-swBlue"
-                  placeholder="Start typing"
-                  onChange={(e) => {
-                    setInputState(e);
-                  }}
+              <div className="relative">
+                <input
+                  type="file"
+                  id="fileInput1"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange1}
                 />
+                <label
+                  htmlFor="fileInput1"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {" "}
+                      {selectedFileForm ? "Change file" : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {selectedFileForm ? (
+                  <div
+                    id="fileLabel"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">
+                      {selectedFileForm.name}
+                    </div>
+                    <div>
+                      <AiOutlineDelete color="red" size={20} />
+                    </div>
+                  </div>
+                ) : null}
+             
               </div>
             </div>
-            <Button
-              disabled={true}
-              variant={"secondary"}
-              className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10"
-            >
-              Create loan
-            </Button>
           </div>
-
           <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
             <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
             {selectedCustomer != null ? (
