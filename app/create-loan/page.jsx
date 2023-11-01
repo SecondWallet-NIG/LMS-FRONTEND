@@ -7,7 +7,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
-import { AiOutlinePaperClip } from "react-icons/ai";
+import { AiOutlinePaperClip, AiOutlinePlus } from "react-icons/ai";
 import Button from "../components/shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "@/redux/slices/customerSlice";
@@ -19,6 +19,7 @@ import EditableButton from "../components/shared/editableBuutonComponent/Editabl
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PreviewInterest from "../components/modals/PreviewInterest";
+import { FiUser } from "react-icons/fi";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
