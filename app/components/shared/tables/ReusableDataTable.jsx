@@ -11,9 +11,10 @@ import { IoIosClose } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from "axios";
 import CenterModal from "../../modals/CenterModal";
-import { CirclesWithBar } from "react-loader-spinner";
+
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../Loader";
 
 function ReusableDataTable({
   apiEndpoint,
@@ -72,24 +73,49 @@ function ReusableDataTable({
   };
 
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log({ user });
 
   const fetchData = (page, perPage, field, direction) => {
-    setIsLoading(true);
+  
     let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=${field}`;
     console.log({ apiUrl });
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
-    }
-
-    axios
+      axios
       .get(apiUrl, {
         headers: {
           Authorization: `Bearer ${user?.data?.token}`,
         },
       })
       .then((data) => {
-        console.log("hello", data?.data?.data);
+        if (typeof dataTransformer === "function") {
+          const transformedData = dataTransformer(
+            data?.data.results || data?.data?.data
+          );
+          setData(transformedData);
+          setPaginationLinks(data?.data.links);
+        } else {
+          setData(data?.data?.results || data?.data?.data);
+          setPaginationLinks(data?.data?.links);
+        }
+        // setTimeout(() => {
+        //   setIsLoading(false);
+        // }, 2000);
+      })
+      .catch(() => {
+        // setTimeout(() => {
+        //   toast.error("An error occured, Couldn't load table");
+        //   setIsLoading(false);
+        // }, 2000);
+      });
+    } else {
+      setIsLoading(true);
+      axios
+      .get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      })
+      .then((data) => {
         if (typeof dataTransformer === "function") {
           const transformedData = dataTransformer(
             data?.data.results || data?.data?.data
@@ -110,6 +136,8 @@ function ReusableDataTable({
           setIsLoading(false);
         }, 2000);
       });
+    }
+   
   };
 
   const handlePageChange = (page, perPage) => {
@@ -136,7 +164,6 @@ function ReusableDataTable({
 
   useEffect(() => {
     fetchData(currentPage, perPage, sortField, sortDirection);
-    console.log();
   }, [apiEndpoint, currentPage, perPage, sortField, sortDirection, searchTerm]);
 
   const getPageNumbers = () => {
@@ -371,17 +398,7 @@ function ReusableDataTable({
       //   </div>
       // )} */}
 
-      <CenterModal isOpen={isLoading}>
-        <CirclesWithBar
-          height="100"
-          width="100"
-          color="#2769B3"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-          ariaLabel="circles-with-bar-loading"
-        />
-      </CenterModal>
+      <Loader isOpen={isLoading} />
     </div>
   );
 }

@@ -30,7 +30,7 @@ const AllLoans = () => {
       loanPackageId: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
-          <div className="text-xs text-gray-500">Loan ID</div>
+          <div className="text-xs text-gray-500">SWL-{`${item?.loanID}`}</div>
         </div>
       ),
       loanAmount: (
@@ -58,7 +58,7 @@ const AllLoans = () => {
         onClickRow="/loan-applications/view-loan"
         headers={headers}
         initialData={[]}
-        apiEndpoint="http://localhost:8000/api/loan-application/all"
+        apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
         btnText={
           <div className="flex gap-1 items-center p-1">
             <p className="hidden lg:block">create customer</p>

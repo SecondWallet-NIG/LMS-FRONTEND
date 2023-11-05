@@ -265,7 +265,7 @@ const CustomerProfile = () => {
                       <p className="pt-3 ">Address: </p>
 
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.address}
+                        {data?.profileInfo?.address}
                       </p>
                     </div>
                   </div>
@@ -358,8 +358,7 @@ const CustomerProfile = () => {
                             <p className="pt-3">Employer Name: </p>
                             <p className="pt-3 font-semibold">
                               {
-                                data?.employmentInformation?.employerInformation
-                                  .name
+                                data?.employmentInformation?.employerInformation?.name
                               }
                             </p>
                           </div>
@@ -367,8 +366,7 @@ const CustomerProfile = () => {
                             <p className="pt-3">Employer Phone: </p>
                             <p className="pt-3 font-semibold">
                               {
-                                data?.employmentInformation?.employerInformation
-                                  .contact
+                                data?.employmentInformation?.employerInformation?.contact
                               }
                             </p>
                           </div>

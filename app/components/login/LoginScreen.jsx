@@ -51,7 +51,7 @@ const LoginScreen = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+        "https://secondwallet-stag.onrender.com/api/auth/login",
         loginData
       );
       setLoading(false);
