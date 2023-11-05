@@ -11,8 +11,6 @@ import { AiOutlineMail, AiOutlinePlus } from "react-icons/ai";
 import { FiDatabase, FiEdit2, FiPhone, FiSearch } from "react-icons/fi";
 import { LuCalendar } from "react-icons/lu";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import ActivityLogs from "@/app/components/customers/CustomerActivityLogs";
-import Summary from "@/app/components/customers/CustomerSummary";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
@@ -54,16 +52,6 @@ const CustomerProfile = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  function calculateLoanInterest(principal, monthlyInterestRate, months) {
-    if (principal <= 0 || monthlyInterestRate <= 0 || months <= 0) {
-      throw new Error(
-        "Principal, monthly interest rate, and months must be greater than zero."
-      );
-    }
-
-    const interest = principal * monthlyInterestRate * months;
-    return interest;
-  }
 
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
@@ -207,31 +195,31 @@ const CustomerProfile = () => {
                     <div className="flex justify-between">
                       <p className="pt-3">D.O.B: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.dateOfBirth}
+                        {data?.profileInfo?.dateOfBirth}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Gender: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.gender}
+                        {data?.profileInfo?.gender}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">NIN/SSN: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.nin}
+                        {data?.profileInfo?.nin}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Phone: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.phoneNumber}
+                        {data?.profileInfo?.phoneNumber}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Email: </p>
                       <p className="pt-3 font-semibold cursor-copy">
-                        {data?.profileInfo.email}
+                        {data?.profileInfo?.email}
                       </p>
                     </div>
 
@@ -300,25 +288,25 @@ const CustomerProfile = () => {
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Bank Name: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.bankAccount?.bankName}
+                        {data?.profileInfo?.bankAccount?.bankName}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Account Number: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.bankAccount?.accountNumber}
+                        {data?.profileInfo?.bankAccount?.accountNumber}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Account Name: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.bankAccount?.accountName}
+                        {data?.profileInfo?.bankAccount?.accountName}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Bvn: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo.bvn}
+                        {data?.profileInfo?.bvn}
                       </p>
                     </div>
                   </div>
@@ -418,21 +406,21 @@ const CustomerProfile = () => {
                             <p className="pt-3">Amount Earned: </p>
                             <p className="pt-3 font-semibold">
                               {" "}
-                              {data?.employmentInformation.monthlyIncome}
+                              {data?.employmentInformation?.monthlyIncome}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Annual Income: </p>
                             <p className="pt-3 font-semibold">
                               {" "}
-                              {data?.employmentInformation.monthlyIncome}
+                              {data?.employmentInformation?.monthlyIncome}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3 ">Income Source: </p>
 
                             <p className="pt-3 font-semibold">
-                              {data?.employmentInformation.incomeSource}
+                              {data?.employmentInformation?.incomeSource}
                             </p>
                           </div>
                         </div>

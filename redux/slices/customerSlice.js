@@ -3,9 +3,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
 
+const user = JSON.parse(localStorage.getItem("user"));
+console.log({user});
+
 export const createCustomer = createAsyncThunk('customer/create', async (payload) => {
   try {
-    const response = await axios.post(API_URL +'/customer/profile-information/create', payload);
+    const response = await axios.post(API_URL +'/customer/profile-information/create' , payload , {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
     return response.data;
   } catch (error) {
     if (error.response.data.error === "Incorrect email or password") {
@@ -20,7 +27,12 @@ export const createCustomer = createAsyncThunk('customer/create', async (payload
 
 export const createEmployment = createAsyncThunk('employment/create', async (payload) => {
   try {
-    const response = await axios.post(API_URL +'/employment/create', payload);
+    console.log(".....", user?.data?.token);
+    const response = await axios.post(API_URL +'/employment/create', payload, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
     return response.data;
   } catch (error) {
 
@@ -33,7 +45,13 @@ export const createEmployment = createAsyncThunk('employment/create', async (pay
 
 export const getCustomerById = createAsyncThunk('customer/getCustomerById', async (customerId) => {
   try {
-    const response = await axios.get(`${API_URL}/customer/profile-information/${customerId}`);
+ 
+    const response = await axios.get(`${API_URL}/customer/profile-information/${customerId}`, {
+   
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -45,7 +63,11 @@ export const getCustomerById = createAsyncThunk('customer/getCustomerById', asyn
 
 export const getCustomers = createAsyncThunk('customer/getCustomers', async () => {
   try {
-    const response = await axios.get(`${API_URL}/customer/profile-information/all`);
+    const response = await axios.get(`${API_URL}/customer/profile-information/all`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
     console.log({response});
     return response.data;
   } catch (error) {

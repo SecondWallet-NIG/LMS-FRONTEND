@@ -2,10 +2,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
 
+const user = localStorage.getItem("user");
 
 export const createUser = createAsyncThunk('user/createUser', async (userData) => {
   try {
-    const response = await axios.post(API_URL + '/user/create', userData);
+    const response = await axios.post(API_URL + '/user/create',  {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    }, userData);
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -29,7 +34,7 @@ export const loginUser = createAsyncThunk('user/loginUser', async (loginData) =>
 
 export const getVerifyToken = createAsyncThunk('auth/getToken', async (payload) => {
   try {
-    const response = await axios.post(API_URL + '/auth/reset-password/verify-email', payload);
+    const response = await axios.post(API_URL + '/auth/reset-password/verify-email',  payload);
     return response.data;
   } catch (error) {
     if (error.response.data.error === "User not found") {
@@ -70,7 +75,7 @@ export const getUserById = createAsyncThunk('user/getUser', async (userId) => {
 
 export const resetPassword = createAsyncThunk('auth/restPassword', async (payload) => {
   try {
-    const response = await axios.post(API_URL + '/auth/reset-password ', payload);
+    const response = await axios.post(API_URL + '/auth/reset-password ',  payload);
     return response.data;
   } catch (error) {
     if (error.response.data.error === "Invalid Token! Try again") {

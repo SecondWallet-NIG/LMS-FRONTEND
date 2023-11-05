@@ -10,6 +10,7 @@ import Button from "../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
+import { createEmployment } from "@/redux/slices/customerSlice";
 
 const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
   if (!isOpen) return null;
@@ -153,7 +154,7 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
         "createdBy": "650f659167a782d8868b76ee"
       }
       
-      dispatch(createUser(formData))
+      dispatch(createEmployment(payload))
         .unwrap()
         .then(() => {
           successPopup(selected);

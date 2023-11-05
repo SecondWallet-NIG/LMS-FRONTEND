@@ -3,9 +3,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
 
+const user = localStorage.getItem("user");
+
 export const createLoanPackage = createAsyncThunk('loanPackage/create', async (payload) => {
     try {
-      const response = await axios.post(API_URL +'/loan-package/create', payload);
+      const response = await axios.post(API_URL +'/loan-package/create', {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`
+        }
+      }, payload);
       return response.data;
     } catch (error) {
       if (error.response.data.error) {
@@ -16,7 +22,11 @@ export const createLoanPackage = createAsyncThunk('loanPackage/create', async (p
   });
 
 export const getLoanPackage = createAsyncThunk('LoanPackage/all', async () => {
-  const response = await axios.get(`${API_URL}/loan-package/all`);
+  const response = await axios.get(`${API_URL}/loan-package/all`, {
+    headers: {
+      Authorization: `Bearer ${user?.data?.token}`
+    }
+  });
   return response.data;
 });
 

@@ -3,20 +3,31 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
 
+const user = JSON.parse(localStorage.getItem("user"));
+console.log({ user });
+
 export const createInterestType = createAsyncThunk('interestType/create', async (payload) => {
-    try {
-      const response = await axios.post(API_URL +'/interest-type/create', payload);
-      return response.data;
-    } catch (error) {
-      if (error.response.data.error) {
-        throw new Error(error.response.data.error)
+  try {
+    const response = await axios.post(API_URL + '/interest-type/create', {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
       }
-   
+    }, payload);
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
     }
+
+  }
 });
 
 export const getInterestType = createAsyncThunk('interestType/all', async () => {
-  const response = await axios.get(`${API_URL}/interest-type/all`);
+  const response = await axios.get(`${API_URL}/interest-type/all`, {
+    headers: {
+      Authorization: `Bearer ${user?.data?.token}`
+    }
+  });
   return response.data;
 });
 
@@ -36,8 +47,8 @@ const interestTypeSlice = createSlice({
   reducers: {
     clearUserState: (state) => {
       state.data = null;
-      state.interestValue=  null,
-      state.loading = 'idle';
+      state.interestValue = null,
+        state.loading = 'idle';
       state.error = null;
     },
   },
@@ -57,12 +68,12 @@ const interestTypeSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(calculateInterest.pending, (state) => {
-       
+
         state.loading = 'pending';
         state.error = null;
       })
       .addCase(calculateInterest.fulfilled, (state, action) => {
-        console.log({state});
+        console.log({ state });
         state.loading = 'succeeded';
         state.interestValue = action.payload;
       })

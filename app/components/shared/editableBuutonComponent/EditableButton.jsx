@@ -1,6 +1,6 @@
-const EditableButton = ({ children, className, onClick }) => {
+const EditableButton = ({ children, disabled, className, onClick }) => {
   return (
-    <button className={className} onClick={onClick}>
+    <button className={className} disabled={disabled} onClick={onClick}>
       {children}
     </button>
   );

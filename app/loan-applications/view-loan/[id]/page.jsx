@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import LoanProcessCard from "@/app/components/cards/loanProcessCard/LoanProcessCard";
 import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
 import ActivityLogs from "@/app/components/customers/CustomerActivityLogs";
@@ -6,7 +7,7 @@ import Summary from "@/app/components/customers/CustomerSummary";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import EditableButton from "@/app/components/shared/editableBuutonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
-import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
+import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -17,9 +18,14 @@ import { FiDatabase, FiPhone, FiSearch } from "react-icons/fi";
 import { IoIosClose } from "react-icons/io";
 import { IoCopyOutline } from "react-icons/io5";
 import { LuCalendar } from "react-icons/lu";
+import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
 
 const ViewLoan = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const { loading, error, data } = useSelector(
+    (state) => state.loanApplication
+  );
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [logSearch, setLogSearch] = useState(false);
 
@@ -41,6 +47,50 @@ const ViewLoan = () => {
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
+
+  const loanApprovals = [
+    {
+      id: 1,
+      approval_type: "Loan Officer",
+      approval_status: "Approved",
+      action: "initiate Approval",
+    },
+    {
+      id: 2,
+      approval_type: "Credit Admin Officer",
+      approval_status: "Declined",
+      action: "Initiate Approval",
+    },
+    {
+      id: 3,
+      approval_type: "Internal Control",
+      approval_status: "Pending",
+      action: "Initiate Approval",
+    },
+    {
+      id: 4,
+      approval_type: "CFO",
+      approval_status: "Pending",
+      action: "Initiate Approval",
+    },
+    {
+      id: 5,
+      approval_type: "CEO",
+      approval_status: "Pending",
+      action: "Initiate Approval",
+    },
+    {
+      id: 6,
+      approval_type: "CFO",
+      approval_status: "Pending",
+      action: "Initiate Approval",
+    },
+  ];
+
+  useEffect(() => {
+    dispatch(getSingleLoan(id));
+    console.log("single-loan", data);
+  }, []);
 
   return (
     <DashboardLayout>
@@ -64,7 +114,9 @@ const ViewLoan = () => {
                 </div>
                 <div className="ml-4 h-fit">
                   <p className="text-xl font-semibold text-swBlue mb-1">
-                    Gerald Cole
+                    {console.log({ data })}
+                    {data?.data?.customerDetails?.firstName}{" "}
+                    {data?.data?.customerDetails?.lastName}
                   </p>
                   <p className="text-xs">SW-456789</p>
 
@@ -118,7 +170,7 @@ const ViewLoan = () => {
                   <p className="text-base font-medium">Loan ID:</p>
                   <div className="flex justify-between items-center">
                     <p className="text-xl text-swGray font-semibold mt-4">
-                      GCL389281
+                      SWL-{data?.data?.loanApplication.loanID}
                     </p>
                     <div className="p-2 rounded-md hover:bg-white hover:border-2 hover:border-gray-200 mt-2">
                       <IoCopyOutline size={20} />
@@ -128,7 +180,7 @@ const ViewLoan = () => {
                 <div className="w-full bg-gray-100 rounded-xl p-2">
                   <p className="text-base font-medium">Loan Amount:</p>
                   <p className="text-xl text-swGray font-semibold mt-4">
-                    300,000.00
+                    ₦ {data?.data?.loanApplication.loanAmount}
                   </p>
                 </div>
               </div>
@@ -143,9 +195,7 @@ const ViewLoan = () => {
                     <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                       Loan Type
                     </th>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      <h1>Purpose</h1>
-                    </th>
+
                     <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                       <h1>Maturity Amount</h1>
                     </th>
@@ -164,43 +214,44 @@ const ViewLoan = () => {
                   <tr className="text-start text-xs">
                     <td className="px-3 py-3">
                       <div>
-                        <p>Basic Loan</p>
+                        <p>{data?.data?.loanPackageDetails.name} </p>
+                      </div>
+                    </td>
+
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>₦ {data?.data?.interestCalculation.totalPayments}</p>
                       </div>
                     </td>
                     <td className="px-3 py-3">
                       <div>
-                        <p>Business</p>
+                        <p>
+                          {data?.data?.loanApplication.loanDurationMetrics ===
+                          "Yearly"
+                            ? `${data?.data?.loanApplication.loanDuration}` * 12
+                            : `${data?.data?.loanApplication.loanDuration}`}{" "}
+                          month(s)
+                        </p>
                       </div>
                     </td>
                     <td className="px-3 py-3">
                       <div>
-                        <p>3,000,000</p>
+                        <p>null</p>
                       </div>
                     </td>
                     <td className="px-3 py-3">
-                      <div>
-                        <p>4 months</p>
-                      </div>
+                      <EditableButton
+                        className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
+                      >
+                        {data?.data?.loanApplication.status}
+                      </EditableButton>
                     </td>
-                    <td className="px-3 py-3">
-                      <div>
-                        <p>Content</p>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                    <EditableButton
-                      className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
-                    >
-                      Badge
-                    </EditableButton>
-                    </td>
-                
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <div className="ml-5 mr-5 mt-5">
+          {/* <div className="ml-5 mr-5 mt-5">
             <h6 className="text-center font-semibold p-2">Loan Action</h6>
             <div className="border rounded-lg">
               <table className=" w-full ">
@@ -209,9 +260,7 @@ const ViewLoan = () => {
                     <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                       Loan Type
                     </th>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      <h1>Purpose</h1>
-                    </th>
+
                     <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                       <h1>Maturity Amount</h1>
                     </th>
@@ -227,41 +276,91 @@ const ViewLoan = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="text-start text-xs">
+                <tr className="text-start text-xs">
                     <td className="px-3 py-3">
                       <div>
-                        <p>Basic Loan</p>
+                        <p>{data?.data?.loanPackageDetails.name} </p>
+                      </div>
+                    </td>
+                   
+                    <td className="px-3 py-3">
+                      <div>
+                        <p>₦ {data?.data?.interestCalculation.totalPayments}</p>
                       </div>
                     </td>
                     <td className="px-3 py-3">
                       <div>
-                        <p>Business</p>
+                      <p>{data?.data?.loanApplication.loanDurationMetrics === "Yearly" ? `${data?.data?.loanApplication.loanDuration}` * 12 : `${data?.data?.loanApplication.loanDuration}` } month(s)</p>
                       </div>
                     </td>
                     <td className="px-3 py-3">
                       <div>
-                        <p>3,000,000</p>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div>
-                        <p>4 months</p>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div>
-                        <p>Content</p>
+                        <p>null</p>
                       </div>
                     </td>
                     <td className="px-3 py-3">
                     <EditableButton
                       className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
                     >
-                      Badge
+                    {data?.data?.loanApplication.status}
                     </EditableButton>
                     </td>
                 
                   </tr>
+                </tbody>
+              </table>
+            </div>
+          </div> */}
+          <div className="ml-5 mr-5 mt-5">
+            <h6 className="text-center font-semibold p-2">Loan Approvals</h6>
+            <div className="border rounded-lg">
+              <table className=" w-full ">
+                <thead className="bg-swLightGray ">
+                  <tr>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      Approval ID
+                    </th>
+
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Approval Type</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Approval Status</h1>
+                    </th>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <h1>Action</h1>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {console.log(loanApprovals)}
+                  {loanApprovals.map((item, index) => (
+                    <tr key={index} className="text-xs">
+                      <td className="p-2">{item.id}</td>
+                      <td className="p-2">{item.approval_type}</td>
+                      <td>
+                        <div
+                          className={`${
+                            item.approval_status === "Approved"
+                              ? "bg-green-100"
+                              : item.approval_status === "Pending"
+                              ? "bg-yellow-100"
+                              : "bg-red-100"
+                          } border py-1 px-2 w-fit rounded-xl`}
+                        >
+                          {item.approval_status}
+                        </div>
+                      </td>
+                      <td className="p-2">
+                        <EditableButton
+                          disabled={true}
+                          className={`py-1 px-2 border rounded-lg`}
+                        >
+                          {item.action}
+                        </EditableButton>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

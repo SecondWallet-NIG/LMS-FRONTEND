@@ -7,16 +7,12 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
-import {
-  AiFillDelete,
-  AiOutlineDelete,
-  AiOutlinePaperClip,
-  AiOutlinePlus,
-} from "react-icons/ai";
+import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
 import Button from "../components/shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "@/redux/slices/customerSlice";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
+import { createLoanApplication } from "@/redux/slices/loanApplicationSlice";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import { calculateInterest } from "@/redux/slices/interestTypeSlice";
 import CenterModal from "../components/modals/CenterModal";
@@ -25,9 +21,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PreviewInterest from "../components/modals/PreviewInterest";
 import { FiUser } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const loanPackage = useSelector((state) => state.loanPackage);
   const interestType = useSelector((state) => state.interestType);
   const customer = useSelector((state) => state.customer);
@@ -38,26 +36,13 @@ const CreateLoan = () => {
   const [isPreviewInterestOpen, setIsPreviewInterestOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [loanPackageText, setLoanPackageText] = useState(null);
+  const [loanPackageRate, setLoanPackageRate] = useState(0);
   const [loading, setLoading] = useState(false);
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileForm, setSelectedFileForm] = useState(null);
 
-  // const [formData, setFormData] = useState({
-  //   customerId: "",
-  //   loanAmount: 0,
-  //   loanDuration: 0,
-  //   loanPackage: null,
-  //   commitmentValue: 0,
-  //   commitmentTotal: 0,
-  //   numberOfRepayment: 0,
-  //   repaymentType: null,
-  //   assetType: null,
-  //   loanDurationMetrics: null,
-  //   interestType: null,
-  //   commitmentType: null,
-  // });
   const [formData, setFormData] = useState({
     loanAmount: 0,
     loanPackage: null,
@@ -68,6 +53,7 @@ const CreateLoan = () => {
     repaymentType: null,
     assetType: null || "null",
     loanDurationMetrics: null,
+    loanFrequencyType: null,
     interestType: null,
     commitmentType: null,
     applicationForm: "applicationForm.pdf",
@@ -82,6 +68,32 @@ const CreateLoan = () => {
   });
 
   const [currentStep, setCurrentStep] = useState(1);
+
+  const assetTypeData = [
+    { value: 100, label: "Investment" },
+    { value: 200, label: "Building" },
+    { value: 300, label: "Construction" },
+    { value: 400, label: "Vehicles" },
+    { value: 500, label: "Machineries" },
+  ];
+
+  const frequencyTypeData = [
+    { value: "Monthly", label: "Monthly" },
+    { value: "Quarterly", label: "Quarterly" },
+  ];
+
+  const repaymentTypeData = [
+    { value: "bulletRepayment", label: "Bullet Repayment" },
+    { value: "interestServicing", label: "Interest Servicing" },
+    { value: "installmentPayment", label: "Installment Payment" },
+  ];
+
+  const loanDurationMetricsData = [
+    { value: "Monthly", label: "Monthly" },
+    { value: "Yearly", label: "Yearly" },
+  ];
+
+  const commitmentType = [{ value: "Percentage", label: "Percentage" }];
 
   const validateFormData = (formData) => {
     for (const key in formData) {
@@ -103,7 +115,7 @@ const CreateLoan = () => {
         numberOfRepayment: loanDuration,
       }));
     }
-    if (repaymentType === "Quartely") {
+    if (repaymentType === "Quarterly") {
       setNoOfRepayment(loanDuration / 3);
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -112,30 +124,11 @@ const CreateLoan = () => {
     }
   };
 
-  const assetTypeData = [
-    { value: 100, label: "Investment" },
-    { value: 200, label: "Building" },
-    { value: 300, label: "Construction" },
-    { value: 400, label: "Vehicles" },
-    { value: 500, label: "Machineries" },
-  ];
-
-  const repaymentData = [
-    { value: "Monthly", label: "Monthly" },
-    { value: "Quartely", label: "Quartely" },
-  ];
-
-  const loanDurationMetricsData = [
-    { value: "Monthly", label: "Monthly" },
-    { value: "Yearly", label: "Yearly" },
-  ];
-
-  const commitmentType = [{ value: "Percentage", label: "Percentage" }];
-
   const modifyLoanPackageData = (arr) => {
     return arr?.map((item) => ({
       label: item.name,
       value: item._id,
+      interestRate: item?.interestRate?.rate
     }));
   };
 
@@ -144,6 +137,7 @@ const CreateLoan = () => {
       return arr.map((item) => ({
         label: item.name,
         value: item._id,
+
       }));
     } else {
       // Handle the case when 'arr' is not an array
@@ -193,32 +187,8 @@ const CreateLoan = () => {
       ...formData,
       [name]: selectedOption.value,
     });
-  };
 
-  const calculateReducingBalanceInstallments = (
-    principal,
-    annualInterestRate,
-    loanDuration,
-    numberOfRepayments
-  ) => {
-    const monthlyInterestRate = annualInterestRate / 100;
-    const installmentAmount =
-      principal / numberOfRepayments + monthlyInterestRate * principal;
-    const installmentPayments = [];
-
-    for (let i = 0; i < numberOfRepayments; i++) {
-      const interestPayment =
-        monthlyInterestRate *
-        (principal - i * (principal / numberOfRepayments));
-      const totalPayment = principal / numberOfRepayments + interestPayment;
-      installmentPayments.push(totalPayment);
-    }
-
-    installmentPayments.forEach((installment, index) => {
-      console.log(`Repayment ${index + 1}: $${installment.toFixed(2)}`);
-    });
-
-    return installmentPayments;
+    console.log({ formData });
   };
 
   const fetchInterest = (e) => {
@@ -232,6 +202,7 @@ const CreateLoan = () => {
         loanPackageId: formData.loanPackage,
         interestTypeId: formData.interestType,
         repaymentType: formData.repaymentType,
+        loanFrequencyType: formData.loanFrequencyType,
         startDate: "02-01-2023",
       };
       e.preventDefault();
@@ -261,7 +232,29 @@ const CreateLoan = () => {
     const file = e.target.files[0];
     setSelectedFileForm(file);
   };
+  const deleteFile = () => {
+    setSelectedFile(null);
+  };
+  const deleteFileForm = () => {
+    setSelectedFileForm(null);
+  };
 
+  const submitLoan = (e) => {
+    setLoading(true);
+    e.preventDefault();
+    dispatch(createLoanApplication(formData))
+      .unwrap()
+      .then(() => {
+        toast("Loan application successful");
+        router.push("/loan-applications/all");
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log({ error });
+        toast.error(`An error occured`);
+        setLoading(false);
+      });
+  };
   useEffect(() => {
     dispatch(getCustomers());
     dispatch(getLoanPackage());
@@ -323,6 +316,7 @@ const CreateLoan = () => {
                 onChange={(selectedOption) => {
                   handleSelectChange(selectedOption, "loanPackage");
                   setLoanPackageText(selectedOption.label);
+                  setLoanPackageRate(selectedOption.interestRate);
                 }}
               />
               {formData.loanPackage === "65390f290d0a83675c9517b3" ? (
@@ -438,13 +432,13 @@ const CreateLoan = () => {
                 <div className="w-1/3">
                   <SelectField
                     disabled={formData.commitmentValue === 0 ? true : false}
-                    optionValue={repaymentData}
-                    label={"Repayment Type"}
+                    optionValue={frequencyTypeData}
+                    label={"Loan Frequency Type"}
                     required={true}
-                    placeholder={"Select repayment type"}
+                    placeholder={"Select frequency type"}
                     isSearchable={false}
                     onChange={(selectedOption) => {
-                      handleSelectChange(selectedOption, "repaymentType");
+                      handleSelectChange(selectedOption, "loanFrequencyType");
                       calcRepaymentsNo(selectedOption.value);
                     }}
                   />
@@ -461,6 +455,20 @@ const CreateLoan = () => {
                     placeholder="Enter number of repayment"
                   />
                 </div>
+              </div>
+              <div className="w-full">
+                <SelectField
+                  name="repaymentType"
+                  disabled={formData.numberOfRepayment === 0 ? true : false}
+                  optionValue={repaymentTypeData}
+                  label={"Repayment Type"}
+                  required={true}
+                  placeholder={"Select repayment type"}
+                  isSearchable={false}
+                  onChange={(selectedOption) => {
+                    handleSelectChange(selectedOption, "repaymentType");
+                  }}
+                />
               </div>
               <div className="w-full">
                 <SelectField
@@ -540,11 +548,13 @@ const CreateLoan = () => {
                     id="fileLabel"
                     className="bg-swLightGray p-2 flex justify-between"
                   >
-                    <div className="text-xs">
-                      {selectedFile.name}
-                    </div>
+                    <div className="text-xs">{selectedFile.name}</div>
                     <div>
-                      <AiOutlineDelete color="red" size={20} />
+                      <AiOutlineDelete
+                        onClick={deleteFile}
+                        color="red"
+                        size={20}
+                      />
                     </div>
                   </div>
                 ) : null}
@@ -580,17 +590,195 @@ const CreateLoan = () => {
                     id="fileLabel"
                     className="bg-swLightGray p-2 flex justify-between"
                   >
-                    <div className="text-xs">
-                      {selectedFileForm.name}
-                    </div>
+                    <div className="text-xs">{selectedFileForm.name}</div>
                     <div>
-                      <AiOutlineDelete color="red" size={20} />
+                      <AiOutlineDelete
+                        onClick={deleteFileForm}
+                        color="red"
+                        size={20}
+                      />
                     </div>
                   </div>
                 ) : null}
-             
               </div>
             </div>
+          </div>
+          <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
+            <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
+            {selectedCustomer != null ? (
+              <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto flex gap-5">
+                {selectedCustomer.image ? (
+                  ""
+                ) : (
+                  <div className="p-3 rounded-full bg-white h-fit w-fit">
+                    <FiUser size={30} className="text-gray-400" />
+                  </div>
+                )}
+                <div>
+                  <p className="text-lg font-semibold">
+                    {selectedCustomer.firstName} {selectedCustomer.lastName}
+                  </p>
+
+                  <p className="text-sm mb-2">{selectedCustomer.email}</p>
+
+                  <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
+                    {selectedCustomer.nin}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
+                <div className="p-3 rounded-full bg-white">
+                  <FiUser size={35} className="text-gray-400" />
+                </div>
+                <p className="text-xl font-semibold">Select Borrower</p>
+              </div>
+            )}
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Loan Package
+              </div>
+              <div className="w-2/3">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                  {loanPackageText || "No package selected yet"}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Interest Rate (Monthly)
+              </div>
+              <div className="w-2/3">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                  {loanPackageRate || 0} %
+                </div>
+              </div>
+            </div>
+
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Loan Amount
+              </div>
+              <div className="w-2/3">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                  ₦
+                  {formData.loanAmount
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                </div>
+              </div>
+            </div>
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Loan Frequency Type
+              </div>
+              <div className="w-2/3">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                  {formData.repaymentType || "No Loan Frequency Type Yet"}
+                </div>
+              </div>
+            </div>
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Loan Duration
+              </div>
+              <div className="w-2/3">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                  {formData.loanDuration || 0}
+                </div>
+              </div>
+            </div>
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Numbers of Repayment
+              </div>
+              <div className="w-2/3">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                  {formData.numberOfRepayment || 0}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Commitment Fee
+              </div>
+              <div className="w-2/3 ">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
+                  <div>{formData.commitmentValue || 0.0}%</div>
+                  <div>
+                    ₦
+                    {formData.commitmentTotal
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          
+
+            <div className="flex pt-2">
+              <div className="w-full">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                  <div className="flex justify-between  text-xs font-semibold pt-2">
+                    <div className="text-swGray">Loan Principal :</div>{" "}
+                    <div className="text-swBlue">
+                      ₦{formData.loanAmount || 0}
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-xs font-semibold pt-2">
+                    <div className="text-swGray">Interest at maturity :</div>{" "}
+                    <div className="text-swBlue">₦{interest || 0}</div>
+                  </div>
+                  <div className="flex justify-between  text-xs font-semibold pt-2">
+                    <div className="text-swGray">Commitment Fee :</div>{" "}
+                    <div className="text-swBlue">
+                      ₦{formData.commitmentTotal || 0}
+                    </div>
+                  </div>
+                  <div className="flex justify-between  text-sm  font-semibold pt-2">
+                    <div className="text-swGray">
+                      Total payment at maturity :
+                    </div>{" "}
+                    <div className="text-swBlue">
+                      ₦
+                      {parseFloat(interest) +
+                        parseFloat(formData.loanAmount) +
+                        parseFloat(formData.commitmentTotal) || 0}
+                    </div>
+                  </div>
+                </div>
+                <div className="">
+                  <Button
+                    disabled={
+                      formData.interestType === null || loading === true
+                        ? true
+                        : false
+                    }
+                    onClick={fetchInterest}
+                    className="h-10 w-full mt-6 bg-swBlue text-white"
+                  >
+                    Compute Interest
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+          
+          </div>
+        </main>
+      ) : null}
+
+      {currentStep === 2 && (
+        <div className="flex">
+          <div className="w-2/3 p-2 ">
+            <PreviewInterest
+              formData={formData}
+              setCurrentStep={setCurrentStep}
+              data={interestValue?.data}
+            />
           </div>
           <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
             <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
@@ -649,11 +837,11 @@ const CreateLoan = () => {
             </div>
             <div className="flex pt-2">
               <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Repayment Type
+                Loan Frequency Type
               </div>
               <div className="w-2/3">
                 <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {formData.repaymentType || "No Repayment Type Yet"}
+                  {formData.repaymentType || "No Loan Frequency Type Yet"}
                 </div>
               </div>
             </div>
@@ -699,52 +887,44 @@ const CreateLoan = () => {
               <div className="w-full">
                 <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
                   <div className="flex justify-between  text-xs font-semibold pt-2">
-                    <div>Loan Principal :</div>{" "}
-                    <div>₦{formData.loanAmount || 0}</div>
+                    <div className="text-swGray">Loan Principal :</div>{" "}
+                    <div className="text-swBlue">
+                      ₦{formData.loanAmount || 0}
+                    </div>
                   </div>
                   <div className="flex justify-between text-xs font-semibold pt-2">
-                    <div>Interest at maturity :</div>{" "}
-                    <div>₦{interest || 0}</div>
+                    <div className="text-swGray">Interest at maturity :</div>{" "}
+                    <div className="text-swBlue">
+                      ₦{interestValue?.data?.totalInterestPayments}
+                    </div>
                   </div>
                   <div className="flex justify-between  text-xs font-semibold pt-2">
-                    <div>Commitment Fee :</div>{" "}
-                    <div>₦{formData.commitmentTotal || 0}</div>
+                    <div className="text-swGray">Commitment Fee :</div>{" "}
+                    <div className="text-swBlue">
+                      ₦{formData.commitmentTotal || 0}
+                    </div>
                   </div>
-                  <div className="flex justify-between  text-sm font-semibold pt-2">
-                    <div>Total Amount :</div>{" "}
-                    <div>
-                      ₦
-                      {parseFloat(interest) +
-                        parseFloat(formData.loanAmount) +
-                        parseFloat(formData.commitmentTotal) || 0}
+                  <div className="flex justify-between  text-sm  font-semibold pt-2">
+                    <div className="text-swGray">
+                      Total payment at maturity :
+                    </div>{" "}
+                    <div className="text-swBlue">
+                      ₦{parseFloat(interestValue?.data?.totalPayments)}
                     </div>
                   </div>
                 </div>
                 <div className="">
                   <Button
-                    disabled={
-                      formData.interestType === null || loading === true
-                        ? true
-                        : false
-                    }
-                    onClick={fetchInterest}
-                    className="h-10 w-full mt-6 bg-swBlue text-white"
+                    className="rounded rounded-md h-10 w-full mt-6 bg-swBlue text-white"
+                    onClick={submitLoan}
                   >
-                    Compute Interest
+                    Create Loan
                   </Button>
                 </div>
               </div>
             </div>
           </div>
-        </main>
-      ) : null}
-
-      {currentStep === 2 && (
-        <PreviewInterest
-          formData={formData}
-          setCurrentStep={setCurrentStep}
-          data={interestValue?.data}
-        />
+        </div>
       )}
 
       <CenterModal
@@ -789,6 +969,10 @@ const CreateLoan = () => {
               <div
                 key={item._id}
                 onClick={() => {
+                  setFormData({
+                    ...formData,
+                    customerId: item._id,
+                  });
                   setSelectedCustomer(item);
                   setIsOpen(false);
                 }}

@@ -9,6 +9,12 @@ import { useRouter } from "next/navigation";
 import InputField from "../input/InputField";
 import { IoIosClose } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import axios from "axios";
+import CenterModal from "../../modals/CenterModal";
+import { CirclesWithBar } from "react-loader-spinner";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function ReusableDataTable({
   apiEndpoint,
   initialData,
@@ -25,10 +31,11 @@ function ReusableDataTable({
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(5);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
+  const [isLoading, setIsLoading] = useState(false);
   const [sortDirection, setSortDirection] = useState(
     sortedBy?.direction || "asc"
   );
-  const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
+  const [searchTerm, setSearchTerm] = useState("");
   const [paginationLinks, setPaginationLinks] = useState(null);
   const [logSearch, setLogSearch] = useState(false);
   const router = useRouter();
@@ -39,6 +46,7 @@ function ReusableDataTable({
     { value: 50, label: "50" },
     { value: 100, label: "100" },
   ];
+
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
@@ -46,10 +54,10 @@ function ReusableDataTable({
 
       width: "100px",
       fontSize: "14px",
-      borderColor: "#ffffff", // Set border color to white or transparent
-      boxShadow: state.isFocused ? "none" : provided.boxShadow, // Remove box-shadow when focused
+      borderColor: "#ffffff",
+      boxShadow: state.isFocused ? "none" : provided.boxShadow,
       "&:hover": {
-        borderColor: "#ffffff", // Set border color to white or transparent on hover
+        borderColor: "#ffffff",
       },
     }),
 
@@ -63,24 +71,44 @@ function ReusableDataTable({
     }),
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log({ user });
+
   const fetchData = (page, perPage, field, direction) => {
+    setIsLoading(true);
     let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=${field}`;
+    console.log({ apiUrl });
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
     }
 
-    fetch(apiUrl)
-      .then((response) => response.json())
+    axios
+      .get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      })
       .then((data) => {
-        console.log({ data });
+        console.log("hello", data?.data?.data);
         if (typeof dataTransformer === "function") {
-          const transformedData = dataTransformer(data.results || data);
+          const transformedData = dataTransformer(
+            data?.data.results || data?.data?.data
+          );
           setData(transformedData);
-          setPaginationLinks(data?.links);
+          setPaginationLinks(data?.data.links);
         } else {
-          setData(data.results || data);
-          setPaginationLinks(data?.links);
+          setData(data?.data?.results || data?.data?.data);
+          setPaginationLinks(data?.data?.links);
         }
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+      })
+      .catch(() => {
+        setTimeout(() => {
+          toast.error("An error occured, Couldn't load table");
+          setIsLoading(false);
+        }, 2000);
       });
   };
 
@@ -108,6 +136,7 @@ function ReusableDataTable({
 
   useEffect(() => {
     fetchData(currentPage, perPage, sortField, sortDirection);
+    console.log();
   }, [apiEndpoint, currentPage, perPage, sortField, sortDirection, searchTerm]);
 
   const getPageNumbers = () => {
@@ -150,6 +179,7 @@ function ReusableDataTable({
 
   return (
     <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
+      <ToastContainer />
       {/* {data?.length > 0 ? ( */}
       <div className="">
         {filters && (
@@ -240,52 +270,62 @@ function ReusableDataTable({
             </div>
           </div>
         )}
-
-        <table className="table-auto w-full border-collapse border overflow-hidden">
-          <thead>
-            <tr>
-              {headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={`px-5 py-4 bg-swLightGray text-black border-0 cursor-pointer text-start ${
-                    header.id === sortField ? "font-semibold" : "font-semibold"
-                  }`}
-                  onClick={() => handleSort(header.id)}
-                >
-                  {header.label}
-                  {header.id === sortField && (
-                    <span className="ml-1">
-                      {sortDirection === "asc" ? "↑" : "↓"}
-                    </span>
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data?.map((item) => (
-              <tr
-                onClick={() => {
-                  if (onClickRow) {
-                    router.push(`${onClickRow}/${item.id || item._id}`);
-                  }
-                }}
-                key={item._id}
-                className="border pt-2 pb-2 hover:bg-swLightGray"
-                style={{ cursor: "pointer" }}
-              >
+        {data.length > 0 ? (
+          <table className="table-auto w-full border-collapse border overflow-hidden">
+            <thead>
+              <tr>
                 {headers.map((header) => (
-                  <td
+                  <th
                     key={header.id}
-                    className="px-5 py-4 border font-400 text-xs text-swGray border-none"
+                    className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
+                      header.id === sortField ? "" : ""
+                    }`}
+                    onClick={() => handleSort(header.id)}
                   >
-                    {item[header.id]}
-                  </td>
+                    {header.label}
+                    {header.id === sortField && (
+                      <span className="ml-1">
+                        {sortDirection === "asc" ? "↑" : "↓"}
+                      </span>
+                    )}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data?.map((item) => (
+                <tr
+                  onClick={() => {
+                    if (onClickRow) {
+                      setIsLoading(true);
+                      router.push(`${onClickRow}/${item.id || item._id}`);
+                    }
+                  }}
+                  key={item._id}
+                  className="border pt-2 pb-2 hover:bg-swLightGray"
+                  style={{ cursor: "pointer" }}
+                >
+                  {headers.map((header) => (
+                    <td
+                      key={header.id}
+                      className="px-5 py-4 border font-400 text-xs text-swGray border-none"
+                    >
+                      {item[header.id]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div class="min-h-500 flex items-center justify-center">
+            <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
+              <Image src={sketch} alt="company logo" />
+              <p class="text-center text-lg">This list is empty</p>
+            </div>
+          </div>
+        )}
+
         {pagination && (
           <div className="mt-4 flex items-center justify-between">
             <button
@@ -330,6 +370,18 @@ function ReusableDataTable({
       //     </div>
       //   </div>
       // )} */}
+
+      <CenterModal isOpen={isLoading}>
+        <CirclesWithBar
+          height="100"
+          width="100"
+          color="#2769B3"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          ariaLabel="circles-with-bar-loading"
+        />
+      </CenterModal>
     </div>
   );
 }

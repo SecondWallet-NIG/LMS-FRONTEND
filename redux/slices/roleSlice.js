@@ -3,6 +3,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
 
+const user = localStorage.getItem("user");
+
 export const loginUser = createAsyncThunk('user/loginUser', async (loginData) => {
     try {
       const response = await axios.post(API_URL +'/auth/login', loginData);
@@ -16,7 +18,11 @@ export const loginUser = createAsyncThunk('user/loginUser', async (loginData) =>
   });
 
 export const getRoles = createAsyncThunk('role/getRoles', async () => {
-  const response = await axios.get(`${API_URL}/role/all`);
+  const response = await axios.get(`${API_URL}/role/all`, {
+    headers: {
+      Authorization: `Bearer ${user?.data?.token}`
+    }
+  });
   return response.data;
 });
 

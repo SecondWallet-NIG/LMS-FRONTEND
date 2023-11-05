@@ -24,7 +24,7 @@ const Customers = () => {
           onClickRow="/customers/profile"
           headers={header}
           initialData={[]}
-          apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
+          apiEndpoint="http://localhost:8000/api/customer/profile-information"
           btnText={
             <div className="flex gap-1 items-center p-1">
               <AiOutlinePlus size={15} />

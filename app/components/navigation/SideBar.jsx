@@ -96,21 +96,42 @@ const Sidebar = () => {
             hasDropdown={true}
             dropdownContent={
               <div className="py-2 bg-white ">
-                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-                  All
-                </div>
-                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-                  New loans
-                </div>
-                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-                  Pending loans
-                </div>
-                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-                  Approved loans
-                </div>
-                <div className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-                  Rejected loans
-                </div>
+                <SidebarLink
+                  pathname={pathname}
+                  text="All Loans"
+                  link="/loan-applications/all"
+                  isActive={"All Loans"}
+                  onClick={() => {
+                    setActiveLink("All Loans");
+                  }}
+                />
+                 <SidebarLink
+                  pathname={pathname}
+                  text="New loans"
+                  link="/loan-applications/all"
+                  isActive={"New loans"}
+                  onClick={() => {
+                    setActiveLink("New loans");
+                  }}
+                />
+                 <SidebarLink
+                  pathname={pathname}
+                  text="Pending loans"
+                  link="/loan-applications/all"
+                  isActive={"Pending loans"}
+                  onClick={() => {
+                    setActiveLink("Pending loans");
+                  }}
+                />
+                 <SidebarLink
+                  pathname={pathname}
+                  text="Approved loans"
+                  link="/loan-applications/all"
+                  isActive={"Approved loans"}
+                  onClick={() => {
+                    setActiveLink("Approved loans");
+                  }}
+                />
               </div>
             }
           />
@@ -125,19 +146,6 @@ const Sidebar = () => {
             text="Customers"
             link="/customers"
             hasDropdown={true}
-            // dropdownContent={
-            //   <div>
-            //     <a href=""className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-            //       All
-            //     </a>
-            //     <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-            //       Approved customers
-            //     </p>
-            //     <p className="block px-4 py-2 text-[13px] rounded-lg hover:bg-swLightGray  font-medium">
-            //       Pending customers
-            //     </p>
-            //   </div>
-            // } // Customize the dropdown content
             onClick={() => {
               setActiveLink("customers");
             }}
@@ -159,12 +167,10 @@ const Sidebar = () => {
               setActiveLink("intrest-calculator");
             }}
           />
-               <SidebarLink
+          <SidebarLink
             icon={
               <BsCalculator
-                className={`${
-                  activeLink === "disbursement" && "text-swBlue"
-                }`}
+                className={`${activeLink === "disbursement" && "text-swBlue"}`}
                 size={20}
               />
             }
