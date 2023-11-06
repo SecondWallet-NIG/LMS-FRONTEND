@@ -230,7 +230,7 @@ const Sidebar = () => {
           <SidebarLink
             icon={<TbReportMoney size={20} />}
             text="Report"
-            link="/dashboard"
+            link="/report"
             sideBarOpen={sideBarOpen}
           />
           <SidebarLink

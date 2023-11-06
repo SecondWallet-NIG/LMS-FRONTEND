@@ -14,7 +14,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
-import EditableButton from "@/app/components/shared/editableBuutonComponent/EditableButton";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import { IoIosClose } from "react-icons/io";
 import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
@@ -322,7 +322,7 @@ const CustomerProfile = () => {
                       <Button
                         onClick={openModal}
                         variant="primary"
-                        className="py-1.5 px-3 rounded-md mx-auto flex gap-2 border w-fit mt-5 mx-3"
+                        className="py-1.5 px-3 rounded-md mx-auto flex gap-2 border w-fit mt-5"
                       >
                         update work details
                       </Button>
@@ -358,7 +358,8 @@ const CustomerProfile = () => {
                             <p className="pt-3">Employer Name: </p>
                             <p className="pt-3 font-semibold">
                               {
-                                data?.employmentInformation?.employerInformation?.name
+                                data?.employmentInformation?.employerInformation
+                                  ?.name
                               }
                             </p>
                           </div>
@@ -366,7 +367,8 @@ const CustomerProfile = () => {
                             <p className="pt-3">Employer Phone: </p>
                             <p className="pt-3 font-semibold">
                               {
-                                data?.employmentInformation?.employerInformation?.contact
+                                data?.employmentInformation?.employerInformation
+                                  ?.contact
                               }
                             </p>
                           </div>

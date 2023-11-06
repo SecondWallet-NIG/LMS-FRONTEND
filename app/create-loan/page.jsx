@@ -15,7 +15,7 @@ import { createLoanApplication } from "@/redux/slices/loanApplicationSlice";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import { calculateInterest } from "@/redux/slices/interestTypeSlice";
 import CenterModal from "../components/modals/CenterModal";
-import EditableButton from "../components/shared/editableBuutonComponent/EditableButton";
+import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PreviewInterest from "../components/modals/PreviewInterest";
@@ -128,7 +128,7 @@ const CreateLoan = () => {
     return arr?.map((item) => ({
       label: item.name,
       value: item._id,
-      interestRate: item?.interestRate?.rate
+      interestRate: item?.interestRate?.rate,
     }));
   };
 
@@ -137,7 +137,6 @@ const CreateLoan = () => {
       return arr.map((item) => ({
         label: item.name,
         value: item._id,
-
       }));
     } else {
       // Handle the case when 'arr' is not an array
@@ -717,8 +716,6 @@ const CreateLoan = () => {
               </div>
             </div>
 
-          
-
             <div className="flex pt-2">
               <div className="w-full">
                 <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
@@ -765,8 +762,6 @@ const CreateLoan = () => {
                 </div>
               </div>
             </div>
-
-          
           </div>
         </main>
       ) : null}
@@ -915,7 +910,7 @@ const CreateLoan = () => {
                 </div>
                 <div className="">
                   <Button
-                    className="rounded-md h-10 w-full mt-6 bg-swBlue text-white"
+                    className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
                     onClick={submitLoan}
                   >
                     Create Loan
