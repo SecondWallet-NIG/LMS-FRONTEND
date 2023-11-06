@@ -1,7 +1,7 @@
 "use client";
 import MyTasksCard from "../components/cards/MyTasksCard/MyTasksCard";
+import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
-import Dashboard from "../dashboard/page";
 
 const MyTasks = () => {
   const headers = [
@@ -12,7 +12,7 @@ const MyTasks = () => {
     { status: "Status" },
   ];
   return (
-    <Dashboard>
+    <DashboardLayout>
       <main>
         <div className="p-5 flex gap-5">
           <MyTasksCard header={"all tasks"} data={16} />
@@ -28,7 +28,7 @@ const MyTasks = () => {
           pagination={true}
         />
       </main>
-    </Dashboard>
+    </DashboardLayout>
   );
 };
 

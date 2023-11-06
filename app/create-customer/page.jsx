@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import Dashboard from "../dashboard/page";
 import { IoMdAdd } from "react-icons/io";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
@@ -16,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { createCustomer } from "@/redux/slices/customerSlice";
 import SuccessModal from "../components/modals/SuccessModal";
+import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 
 const customNoOptionsMessage = () => {
   return (
@@ -218,7 +218,7 @@ const CreateCustomer = () => {
   }, []);
 
   return (
-    <Dashboard>
+    <DashboardLayout>
       <ToastContainer />
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
         <div className="flex justify-between">
@@ -487,7 +487,7 @@ const CreateCustomer = () => {
           btnRightFunc={btnRightFunc}
         />
       </div>
-    </Dashboard>
+    </DashboardLayout>
   );
 };
 

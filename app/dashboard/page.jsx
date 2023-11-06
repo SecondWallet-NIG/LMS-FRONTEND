@@ -11,7 +11,7 @@ const Dashboard = ({ children }) => {
 
   return (
     <DashboardLayout>
-      <main>{children}</main>
+      <main className="w-full bg-green-500">Dashboard page</main>
     </DashboardLayout>
   );
 };
