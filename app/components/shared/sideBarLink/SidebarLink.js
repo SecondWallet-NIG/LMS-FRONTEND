@@ -11,12 +11,13 @@ const SidebarLink = ({
   dropdownContent,
   onClick,
   pathname,
+  sideBarOpen,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };  
+  };
 
   return (
     <Link
@@ -38,10 +39,10 @@ const SidebarLink = ({
         />
       )}
 
-      <div className="w-full relative">
+      <div className=" relative">
         <div
           onClick={hasDropdown ? toggleDropdown : null}
-          className={`py-2 px-2 lg:px-3 xl:px-5 w-full flex items-center gap-2 rounded-lg text-swBrown hover:text-swBlue hover:bg-swLightGray relative`}
+          className={`py-2 px-2 lg:px-3 xl:px-5 flex items-center gap-2 rounded-lg text-swBrown hover:text-swBlue hover:bg-swLightGray relative`}
           style={{
             fontFamily: "sans-serif inter",
             fontSize: "0.875rem",
@@ -58,9 +59,11 @@ const SidebarLink = ({
             {icon}
           </span>
           <span
-            className={`flex-grow transition-colors hover:text-swBlue ${
+            className={`flex-grow transition-all ease-in-out duration-1000 hover:text-swBlue ${
               pathname === `/${isActive}` && "text-swBlue"
-            } relative`}
+            } ${
+              sideBarOpen ? "opacity-100" : "opacity-0"
+            } whitespace-nowrap relative`}
           >
             {text}
           </span>
@@ -68,6 +71,8 @@ const SidebarLink = ({
             <button
               // onClick={toggleDropdown}
               className={`ml-auto focus:outline-none ${
+                sideBarOpen ? "opacity-100" : "opacity-0"
+              } ${
                 isDropdownOpen ? "rotate-0" : "rotate-90"
               } transform transition`}
             >

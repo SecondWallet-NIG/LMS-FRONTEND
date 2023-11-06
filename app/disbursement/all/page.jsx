@@ -1,7 +1,7 @@
 "use client";
-import Dashboard from "@/app/dashboard/page.jsx";
 import DisbursementCard from "@/app/components/cards/DisbursmentCard/DisbursementCard";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable.jsx";
+import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 
 const AllDisburments = () => {
   const headers = [
@@ -13,7 +13,7 @@ const AllDisburments = () => {
   ];
 
   return (
-    <Dashboard>
+    <DashboardLayout>
       <main>
         <div className="p-5">
           <DisbursementCard />
@@ -27,7 +27,7 @@ const AllDisburments = () => {
           pagination={true}
         />
       </main>
-    </Dashboard>
+    </DashboardLayout>
   );
 };
 

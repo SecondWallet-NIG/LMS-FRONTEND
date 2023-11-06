@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useEffect } from "react";
-import Dashboard from "../dashboard/page";
 import { IoMdAdd } from "react-icons/io";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
@@ -22,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PreviewInterest from "../components/modals/PreviewInterest";
 import { FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -266,7 +266,7 @@ const CreateLoan = () => {
   }, [customer?.data]);
 
   return (
-    <Dashboard>
+    <DashboardLayout>
       <ToastContainer />
 
       {currentStep === 1 ? (
@@ -915,7 +915,7 @@ const CreateLoan = () => {
                 </div>
                 <div className="">
                   <Button
-                    className="rounded rounded-md h-10 w-full mt-6 bg-swBlue text-white"
+                    className="rounded-md h-10 w-full mt-6 bg-swBlue text-white"
                     onClick={submitLoan}
                   >
                     Create Loan
@@ -1002,7 +1002,7 @@ const CreateLoan = () => {
             ))}
         </div>
       </CenterModal>
-    </Dashboard>
+    </DashboardLayout>
   );
 };
 
