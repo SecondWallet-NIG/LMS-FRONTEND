@@ -39,10 +39,10 @@ const SidebarLink = ({
         />
       )}
 
-      <div className=" relative">
+      <div className="w-full relative">
         <div
           onClick={hasDropdown ? toggleDropdown : null}
-          className={`py-2 px-2 lg:px-3 xl:px-5 flex items-center gap-2 rounded-lg text-swBrown hover:text-swBlue hover:bg-swLightGray relative`}
+          className={`py-2 px-2 lg:px-3 xl:px-5 w-full flex items-center gap-2 rounded-lg text-swBrown hover:text-swBlue hover:bg-swLightGray relative`}
           style={{
             fontFamily: "sans-serif inter",
             fontSize: "0.875rem",
@@ -63,7 +63,7 @@ const SidebarLink = ({
               pathname === `/${isActive}` && "text-swBlue"
             } ${
               sideBarOpen ? "opacity-100" : "opacity-0"
-            } whitespace-nowrap relative`}
+            } whitespace-nowrap  relative`}
           >
             {text}
           </span>
