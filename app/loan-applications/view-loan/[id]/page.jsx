@@ -5,7 +5,7 @@ import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLog
 import ActivityLogs from "@/app/components/customers/CustomerActivityLogs";
 import Summary from "@/app/components/customers/CustomerSummary";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import EditableButton from "@/app/components/shared/editableBuutonComponent/EditableButton";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
@@ -447,21 +447,17 @@ const ViewLoan = () => {
                   <div
                     className={`${
                       logSearch ? "opacity-0" : "opacity-1"
-                    } transition-all ease-in-out p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex`}
+                    } bg-white w-fit p-2 transition-all ease-in-out rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer`}
                   >
-                    <div className="bg-white w-fit p-2 rounded-md cursor-pointer">
-                      <FiSearch
-                        size={20}
-                        onClick={() => {
-                          handleLogSearch("open");
-                        }}
-                      />
-                    </div>
+                    <FiSearch
+                      size={20}
+                      onClick={() => {
+                        handleLogSearch("open");
+                      }}
+                    />
                   </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex cursor-pointer">
-                    <div className="bg-white w-fit p-2 rounded-md ">
-                      <BsThreeDotsVertical size={20} />
-                    </div>
+                  <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer">
+                    <BsThreeDotsVertical size={20} />
                   </div>
                 </div>
               </div>
