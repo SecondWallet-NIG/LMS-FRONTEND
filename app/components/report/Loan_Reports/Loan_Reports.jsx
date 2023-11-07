@@ -14,7 +14,7 @@ const LoanReports = () => {
     setLoanToggle(state);
   };
   return (
-    <main className="flex gap-5">
+    <main className="flex gap-5 text-swTextColor">
       <section className="w-[23rem] flex flex-col gap-2">
         <p
           className={`${
@@ -95,7 +95,7 @@ const LoanReports = () => {
           )}
         </p>
       </section>
-      <section className="w-full">  
+      <section className="w-full">
         {loanToggle === "borrowers" && <BorrowersReport />}
         {loanToggle === "loan" && <LoanReport />}
         {loanToggle === "loan arrears" && <LoanArrearsAgingReport />}

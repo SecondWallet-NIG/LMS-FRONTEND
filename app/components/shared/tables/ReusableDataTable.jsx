@@ -75,69 +75,67 @@ function ReusableDataTable({
   const user = JSON.parse(localStorage.getItem("user"));
 
   const fetchData = (page, perPage, field, direction) => {
-  
     let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=${field}`;
     console.log({ apiUrl });
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
       axios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
-        },
-      })
-      .then((data) => {
-        if (typeof dataTransformer === "function") {
-          const transformedData = dataTransformer(
-            data?.data.results || data?.data?.data
-          );
-          setData(transformedData);
-          setPaginationLinks(data?.data.links);
-        } else {
-          setData(data?.data?.results || data?.data?.data);
-          setPaginationLinks(data?.data?.links);
-        }
-        // setTimeout(() => {
-        //   setIsLoading(false);
-        // }, 2000);
-      })
-      .catch(() => {
-        // setTimeout(() => {
-        //   toast.error("An error occured, Couldn't load table");
-        //   setIsLoading(false);
-        // }, 2000);
-      });
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        })
+        .then((data) => {
+          if (typeof dataTransformer === "function") {
+            const transformedData = dataTransformer(
+              data?.data.results || data?.data?.data
+            );
+            setData(transformedData);
+            setPaginationLinks(data?.data.links);
+          } else {
+            setData(data?.data?.results || data?.data?.data);
+            setPaginationLinks(data?.data?.links);
+          }
+          // setTimeout(() => {
+          //   setIsLoading(false);
+          // }, 2000);
+        })
+        .catch(() => {
+          // setTimeout(() => {
+          //   toast.error("An error occured, Couldn't load table");
+          //   setIsLoading(false);
+          // }, 2000);
+        });
     } else {
       setIsLoading(true);
       axios
-      .get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
-        },
-      })
-      .then((data) => {
-        if (typeof dataTransformer === "function") {
-          const transformedData = dataTransformer(
-            data?.data.results || data?.data?.data
-          );
-          setData(transformedData);
-          setPaginationLinks(data?.data.links);
-        } else {
-          setData(data?.data?.results || data?.data?.data);
-          setPaginationLinks(data?.data?.links);
-        }
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 2000);
-      })
-      .catch(() => {
-        setTimeout(() => {
-          toast.error("An error occured, Couldn't load table");
-          setIsLoading(false);
-        }, 2000);
-      });
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        })
+        .then((data) => {
+          if (typeof dataTransformer === "function") {
+            const transformedData = dataTransformer(
+              data?.data.results || data?.data?.data
+            );
+            setData(transformedData);
+            setPaginationLinks(data?.data.links);
+          } else {
+            setData(data?.data?.results || data?.data?.data);
+            setPaginationLinks(data?.data?.links);
+          }
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 2000);
+        })
+        .catch(() => {
+          setTimeout(() => {
+            toast.error("An error occured, Couldn't load table");
+            setIsLoading(false);
+          }, 2000);
+        });
     }
-   
   };
 
   const handlePageChange = (page, perPage) => {
@@ -260,21 +258,18 @@ function ReusableDataTable({
                 <div
                   className={`${
                     logSearch ? "opacity-0" : "opacity-1"
-                  } transition-all ease-in-out p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex`}
+                  } bg-white w-fit p-2 rounded-md cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all ease-in-out`}
                 >
-                  <div className="bg-white w-fit p-2 rounded-md cursor-pointer">
-                    <FiSearch
-                      size={20}
-                      onClick={() => {
-                        handleLogSearch("open");
-                      }}
-                    />
-                  </div>
+                  <FiSearch
+                    size={20}
+                    onClick={() => {
+                      handleLogSearch("open");
+                    }}
+                  />
                 </div>
-                <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex cursor-pointer">
-                  <div className="bg-white w-fit p-2 rounded-md ">
-                    <BsThreeDotsVertical size={20} />
-                  </div>
+
+                <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer">
+                  <BsThreeDotsVertical size={20} />
                 </div>
               </div>
               {/* <input
