@@ -17,6 +17,7 @@ module.exports = {
         swBrown: "#545454",
         swGreen: "#17B26A",
         swYellow: "#F9C00F",
+        swTextColor: "#545454",
       },
     },
   },
