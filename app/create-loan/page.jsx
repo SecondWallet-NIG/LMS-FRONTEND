@@ -56,14 +56,12 @@ const CreateLoan = () => {
     loanFrequencyType: null,
     interestType: null,
     commitmentType: null,
-    applicationForm: "applicationForm.pdf",
-    preferredInterestRate: "Fixed",
-    collaterals: ["collateral1.pdf", "collateral2.pdf"],
-    guarantorForm: "guarantorForm.pdf",
-    loanAffidavit: "loanAffidavit.pdf",
-    offerLetter: "offerLetter.pdf",
-    status: "Pending",
-    createdBy: "60c1d48a90d7456b1b3c65e6",
+    applicationForm: null || "null",
+    assetImages: null || "null",
+    collaterals: "",
+    guarantorForm: null,
+    loanAffidavit: null,
+    offerLetter: null || "null",
     customerId: "",
   });
 
@@ -192,6 +190,7 @@ const CreateLoan = () => {
 
   const fetchInterest = (e) => {
     setLoading(true);
+    console.log({formData});
     const isFormDataValid = validateFormData(formData);
     if (isFormDataValid === true) {
       const payload = {
@@ -223,25 +222,53 @@ const CreateLoan = () => {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
+    let { name, files } = e.target;
+    console.log({ name, files });
+    const file = files[0];
+    console.log({ file });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: files[0],
+    }));
+    console.log(formData);
   };
 
-  const handleFileChange1 = (e) => {
-    const file = e.target.files[0];
-    setSelectedFileForm(file);
+  const deleteFile = (name) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: null,
+    }));
   };
-  const deleteFile = () => {
-    setSelectedFile(null);
-  };
-  const deleteFileForm = () => {
-    setSelectedFileForm(null);
-  };
+
 
   const submitLoan = (e) => {
+    const payload = new FormData();
+    payload.append('loanAmount', formData.loanAmount);
+    payload.append('loanPackage',  formData.loanPackage);
+    payload.append('loanDuration',  formData.loanDuration);
+    payload.append('commitmentValue',  formData.commitmentValue);
+    payload.append('commitmentTotal',  formData.commitmentTotal);
+    payload.append('numberOfRepayment',  formData.numberOfRepayment);
+    payload.append('repaymentType',  formData.repaymentType);
+    payload.append('assetType',  formData.assetType);
+    payload.append('loanDurationMetrics',  formData.loanDurationMetrics);
+    payload.append('loanFrequencyType',  formData.loanFrequencyType);
+    payload.append('interestType',  formData.interestType);
+    payload.append('commitmentType',  formData.commitmentType);
+    payload.append('applicationForm',  formData.applicationForm);
+    payload.append('assetImages',  formData.assetImages);
+    payload.append('collaterals',  formData.collaterals);
+    payload.append('guarantorForm',  formData.guarantorForm);
+    payload.append('loanAffidavit',  formData.loanAffidavit);
+    payload.append('offerLetter',  formData.offerLetter);
+    payload.append('customerId',  formData.customerId);
+    payload.append('createdBy',  "6514bd21b128a700f66d2f38");
+
+// Now, the 'formData' object contains the key-value pairs with the specified values.
+
     setLoading(true);
     e.preventDefault();
-    dispatch(createLoanApplication(formData))
+    dispatch(createLoanApplication(payload))
       .unwrap()
       .then(() => {
         toast("Loan application successful");
@@ -520,12 +547,10 @@ const CreateLoan = () => {
             </div>
             <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Collateral documents</p>
-              <p className="text-gray-700">
-                Document types uploaded should be JPEGS, PNG or PDF and should
-                not exceed 4mb
-              </p>
+
               <div className="relative">
                 <input
+                  name="collaterals"
                   type="file"
                   id="fileInput"
                   className="absolute w-0 h-0 opacity-0"
@@ -538,39 +563,37 @@ const CreateLoan = () => {
                   <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
                     <AiOutlinePaperClip color="black" size={20} />
                     <p className="font-semibold text-black">
-                      {selectedFile ? "Change file" : "Select file"}
+                      {formData?.collaterals.name ? "Change file" : "Select file"}
                     </p>
                   </span>
                 </label>
-                {selectedFile ? (
+                {formData?.collaterals?.name ? (
                   <div
                     id="fileLabel"
                     className="bg-swLightGray p-2 flex justify-between"
                   >
-                    <div className="text-xs">{selectedFile.name}</div>
-                    <div>
-                      <AiOutlineDelete
-                        onClick={deleteFile}
-                        color="red"
-                        size={20}
-                      />
+                    <div className="text-xs">{formData?.collaterals?.name}</div>
+                    <div
+                      onClick={() => {
+                        deleteFile("collaterals");
+                      }}
+                    >
+                      <AiOutlineDelete color="red" size={20} />
                     </div>
                   </div>
                 ) : null}
               </div>
             </div>
             <div className="flex flex-col gap-2 mt-5">
-              <p className="font-semibold">Upload Hard copy of filled form</p>
-              <p className="text-gray-700 ">
-                Document types uploaded should be JPEGS, PNG or PDF and should
-                not exceed 4mb
-              </p>
+              <p className="font-semibold">Upload Loan Application form</p>
+
               <div className="relative">
                 <input
+                  name="applicationForm"
                   type="file"
                   id="fileInput1"
                   className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange1}
+                  onChange={handleFileChange}
                 />
                 <label
                   htmlFor="fileInput1"
@@ -580,19 +603,112 @@ const CreateLoan = () => {
                     <AiOutlinePaperClip color="black" size={20} />
                     <p className="font-semibold text-black">
                       {" "}
-                      {selectedFileForm ? "Change file" : "Select file"}
+                      {formData?.applicationForm?.name
+                        ? "Change file"
+                        : "Select file"}
                     </p>
                   </span>
                 </label>
-                {selectedFileForm ? (
+                {formData?.applicationForm?.name ? (
+                  <div
+                    id="fileLabel1"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">
+                      {formData?.applicationForm?.name}
+                    </div>
+                    <div
+                      onClick={() => {
+                        deleteFile("applicationForm");
+                      }}
+                    >
+                      <AiOutlineDelete color="red" size={20} />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 mt-5">
+              <p className="font-semibold">Upload Loan Affidavit document</p>
+
+              <div className="relative">
+                <input
+                  name="loanAffidavit"
+                  type="file"
+                  id="fileInput2"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange}
+                />
+                <label
+                  htmlFor="fileInput2"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {formData?.loanAffidavit?.name
+                        ? "Change file"
+                        : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {formData?.loanAffidavit?.name ? (
+                  <div
+                    id="fileLabel3"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">
+                      {formData?.loanAffidavit?.name}
+                    </div>
+                    <div
+                      onClick={() => {
+                        deleteFile("loanAffidavit");
+                      }}
+                    >
+                      <AiOutlineDelete color="red" size={20} />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 mt-5">
+              <p className="font-semibold">Upload Guarantor Form</p>
+
+              <div className="relative">
+                <input
+                  name="guarantorForm"
+                  type="file"
+                  id="fileInput3"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange}
+                />
+                <label
+                  htmlFor="fileInput3"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {" "}
+                      {formData?.guarantorForm?.name
+                        ? "Change file"
+                        : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {formData?.guarantorForm?.name ? (
                   <div
                     id="fileLabel"
                     className="bg-swLightGray p-2 flex justify-between"
                   >
-                    <div className="text-xs">{selectedFileForm.name}</div>
+                    <div className="text-xs">
+                      {formData?.guarantorForm?.name}
+                    </div>
                     <div>
                       <AiOutlineDelete
-                        onClick={deleteFileForm}
+                        onClick={() => {
+                          deleteFile("guarantorForm");
+                        }}
                         color="red"
                         size={20}
                       />

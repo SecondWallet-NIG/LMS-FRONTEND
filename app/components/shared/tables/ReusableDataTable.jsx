@@ -15,6 +15,8 @@ import CenterModal from "../../modals/CenterModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Loader";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 function ReusableDataTable({
   apiEndpoint,
@@ -29,6 +31,8 @@ function ReusableDataTable({
   pagination,
 }) {
   const [data, setData] = useState(initialData || []);
+  const [downloadData, setDownloadData] = useState();
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(5);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
@@ -39,6 +43,69 @@ function ReusableDataTable({
   const [searchTerm, setSearchTerm] = useState("");
   const [paginationLinks, setPaginationLinks] = useState(null);
   const [logSearch, setLogSearch] = useState(false);
+
+
+  const handleDownload = () => {
+    setLoading(true);
+    axios
+      .get(`${apiEndpoint}?page=${1}&per_page=${downloadData}`, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      })
+      .then((data) => {
+        const allData = data?.data.results || data?.data?.data;
+
+        // Sample nested JSON data
+        const nestedJsonData = allData;
+
+        function flattenData(data, parentKey = "") {
+          let flattened = {};
+          for (const key in data) {
+            const newKey = parentKey ? `${parentKey}.${key}` : key;
+            if (typeof data[key] === "object") {
+              const nestedFlattened = flattenData(data[key], newKey);
+              flattened = { ...flattened, ...nestedFlattened };
+            } else {
+              flattened[newKey] = data[key];
+            }
+          }
+          return flattened;
+        }
+
+        // Flatten the nested JSON data
+        const flattenedData = nestedJsonData.map((item) => flattenData(item));
+
+        // Create a new worksheet and add the flattened data
+        const ws = XLSX.utils.json_to_sheet(flattenedData);
+
+        // Create a new workbook and add the worksheet
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+        // Generate an Excel blob
+        const excelBlob = XLSX.write(wb, {
+          bookType: "xlsx",
+          type: "array",
+          mimeType:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        // Create a Blob object
+        const blob = new Blob([excelBlob], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        // Trigger the download
+        saveAs(blob, "exported_data.xlsx");
+        setLoading(false);
+      })
+      .catch(() => {
+        toast.error("An error occurred while fetching data for download.");
+        setLoading(false);
+      });
+  };
+
   const router = useRouter();
   const options = [
     { value: 5, label: "5" },
@@ -92,8 +159,14 @@ function ReusableDataTable({
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
+            console.log(data?.data.results || data?.data?.data);
+            console.log(data?.data.links.totalDocuments);
+            setDownloadData(data?.data.links.totalDocuments);
           } else {
             setData(data?.data?.results || data?.data?.data);
+            console.log(data?.data.results || data?.data?.data);
+            console.log(data?.data.links.totalDocuments);
+            setDownloadData(data?.data.links.totalDocuments);
             setPaginationLinks(data?.data?.links);
           }
           // setTimeout(() => {
@@ -287,8 +360,19 @@ function ReusableDataTable({
                   >
                     {btnText}
                   </Button>
+
+               
                 </div>
               ) : null}
+                 <Button
+                    disabled={loading ? true : false}
+                    className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                    onClick={handleDownload}
+                  >
+                    <div className="flex gap-1 items-center p-1">
+                      <p className="hidden lg:block"> {loading ? "Exporting" : "Export"}</p>
+                    </div>
+                  </Button>
             </div>
           </div>
         )}

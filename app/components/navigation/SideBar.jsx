@@ -18,36 +18,39 @@ import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import SidebarLink from "../shared/sideBarLink/SidebarLink";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter()
   const [sideBarOpen, setSideBarOpen] = useState(true);
 
   const [activeLink, setActiveLink] = useState("");
 
-  const handleSidebarOpen = (state) => {
-    state === "open" ? setSideBarOpen(true) : setSideBarOpen(false);
+  const handleSidebarOpen = () => {
+    setSideBarOpen(!sideBarOpen);
+    sideBarOpen
+      ? localStorage.setItem("minimizeSidebar", false)
+      : localStorage.setItem("minimizeSidebar", true);
+
+     
   };
 
   useEffect(() => {
     setTimeout(() => {
       setSideBarOpen(false);
-    }, 2000);
+    }, 1000);
   }, []);
   return (
     <main
       className={`fixed h-full border-r bg-white border-r-gray-300 flex flex-col font-medium z-[102] transition-all ease-in-out duration-1000 ${
         sideBarOpen ? "w-1/5" : "w-[5%]"
       }`}
-      onMouseEnter={() => {
-        handleSidebarOpen("open");
-      }}
-      onMouseLeave={() => {
-        handleSidebarOpen("close");
-      }}
+     
+      // onMouseEnter={handleSidebarOpen}
+       onMouseLeave={handleSidebarOpen}
     >
-      <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300">
+      <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300"  onClick={handleSidebarOpen}>
         {sideBarOpen ? (
           <Image src={companyLogo} alt="company logo" priority={true} />
         ) : (
@@ -73,7 +76,7 @@ const Sidebar = () => {
               }
               pathname={pathname}
               text="Dashboard"
-              link="/dashboard"
+              link="/home"
               isActive={"dashboard"}
               sideBarOpen={sideBarOpen}
               onClick={() => {

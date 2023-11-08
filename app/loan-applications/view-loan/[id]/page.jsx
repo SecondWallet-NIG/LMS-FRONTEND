@@ -19,6 +19,8 @@ import { IoIosClose } from "react-icons/io";
 import { IoCopyOutline } from "react-icons/io5";
 import { LuCalendar } from "react-icons/lu";
 import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
+import RequestApproval from "@/app/components/modals/loans/RequestApproval";
+import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -28,17 +30,8 @@ const ViewLoan = () => {
   );
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [logSearch, setLogSearch] = useState(false);
+  const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
 
-  const loan_details_header = [
-    {
-      loan_type: "Loan_type",
-      loan_purpose: "Purpose",
-      maturity_amount: "Maturity amount",
-      loan_period: "Loan period",
-      maturity_date: "Maturity date",
-      status: "Status",
-    },
-  ];
 
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
@@ -170,7 +163,7 @@ const ViewLoan = () => {
                   <p className="text-base font-medium">Loan ID:</p>
                   <div className="flex justify-between items-center">
                     <p className="text-xl text-swGray font-semibold mt-4">
-                      SWL-{data?.data?.loanApplication.loanID}
+                      SWL-{data?.data?.loanApplication.loanId}
                     </p>
                     <div className="p-2 rounded-md hover:bg-white hover:border-2 hover:border-gray-200 mt-2">
                       <IoCopyOutline size={20} />
@@ -353,7 +346,10 @@ const ViewLoan = () => {
                       </td>
                       <td className="p-2">
                         <EditableButton
-                          disabled={true}
+                          onClick={() => {
+                            setIsRequestApprovalOpen(true)
+                          }}
+                          disabled={false}
                           className={`py-1 px-2 border rounded-lg`}
                         >
                           {item.action}
@@ -401,7 +397,7 @@ const ViewLoan = () => {
                       "font-semibold text-swBlue bg-blue-50"
                     } p-2 rounded-md cursor-pointer`}
                   >
-                    Loans
+                    Loan Docs
                   </EditableButton>
                   <EditableButton
                     onClick={() => handleActivityToggle("disbursement")}
@@ -464,6 +460,7 @@ const ViewLoan = () => {
               <div className="p-2">
                 {activityButton === "activity-logs" && <CustomerActivityLogs />}
                 {activityButton === "summary" && <Summary />}
+                {activityButton === "loans" && <CustomerLoanDoc data={data?.data} />}
               </div>
             </section>
           </div>
@@ -479,7 +476,11 @@ const ViewLoan = () => {
             <LoanProcessCard />
           </div>
         </section>
+      
       </main>
+      <RequestApproval isOpen={isRequestApprovalOpen} onClose={() => {
+          setIsRequestApprovalOpen(false)
+        }} />
     </DashboardLayout>
   );
 };
