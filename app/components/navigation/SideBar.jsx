@@ -18,6 +18,7 @@ import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import SidebarLink from "../shared/sideBarLink/SidebarLink";
+import Link from "next/link";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -25,8 +26,8 @@ const Sidebar = () => {
 
   const [activeLink, setActiveLink] = useState("");
 
-  const handleSidebarOpen = () => {
-    setSideBarOpen(!sideBarOpen);
+  const handleSidebarOpen = (state) => {
+    state === "open" ? setSideBarOpen(true) : setSideBarOpen(false);
   };
 
   useEffect(() => {
@@ -39,8 +40,12 @@ const Sidebar = () => {
       className={`fixed h-full border-r bg-white border-r-gray-300 flex flex-col font-medium z-[102] transition-all ease-in-out duration-1000 ${
         sideBarOpen ? "w-1/5" : "w-[5%]"
       }`}
-      onMouseEnter={handleSidebarOpen}
-      onMouseLeave={handleSidebarOpen}
+      onMouseEnter={() => {
+        handleSidebarOpen("open");
+      }}
+      onMouseLeave={() => {
+        handleSidebarOpen("close");
+      }}
     >
       <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300">
         {sideBarOpen ? (
@@ -113,7 +118,7 @@ const Sidebar = () => {
               <TbFileDollar
                 className={`${
                   activeLink === "loan-applications" && "text-swBlue"
-                }`}
+                } -ml-1`}
                 size={20}
               />
             }
@@ -126,12 +131,13 @@ const Sidebar = () => {
             }}
             hasDropdown={true}
             dropdownContent={
-              <div className="py-2 bg-white ">
+              <div className=" bg-white ">
                 <SidebarLink
                   pathname={pathname}
                   text="All Loans"
                   link="/loan-applications/all"
                   isActive={"All Loans"}
+                  sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("All Loans");
                   }}
@@ -141,6 +147,7 @@ const Sidebar = () => {
                   text="New loans"
                   link="/loan-applications/all"
                   isActive={"New loans"}
+                  sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("New loans");
                   }}
@@ -150,6 +157,7 @@ const Sidebar = () => {
                   text="Pending loans"
                   link="/loan-applications/all"
                   isActive={"Pending loans"}
+                  sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("Pending loans");
                   }}
@@ -159,6 +167,7 @@ const Sidebar = () => {
                   text="Approved loans"
                   link="/loan-applications/all"
                   isActive={"Approved loans"}
+                  sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("Approved loans");
                   }}

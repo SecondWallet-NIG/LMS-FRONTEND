@@ -24,12 +24,12 @@ const SidebarLink = ({
       href={link}
       onClick={onClick}
       className={`relative flex items-center cursor-pointer overflow-hidden z-50 bg-white`}
-      // onMouseEnter={() => {
-      //   hasDropdown && setIsDropdownOpen(true);
-      // }}
-      // onMouseLeave={() => {
-      //   hasDropdown && setIsDropdownOpen(false);
-      // }}
+      onMouseEnter={() => {
+        hasDropdown && setIsDropdownOpen(true);
+      }}
+      onMouseLeave={() => {
+        hasDropdown && setIsDropdownOpen(false);
+      }}
     >
       {!hasDropdown && (
         <div
@@ -88,9 +88,9 @@ const SidebarLink = ({
               } transform transition-all duration-500 ease-in-out -z-[1000]`}
             >
               <div
-                className={`${
-                  isDropdownOpen ? "transition-opacity" : "opacity-0"
-                } duration-[1000ms] delay-[500ms] ease-out`}
+                className={`
+                ${isDropdownOpen ? "opacity-100" : "opacity-0"} 
+                duration-[1000ms] transform transition-all delay-[500ms] ease-in-out`}
               >
                 {dropdownContent}
               </div>
