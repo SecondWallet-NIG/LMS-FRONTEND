@@ -2,7 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
 
-const user = localStorage.getItem("user");
+let user;
+if (typeof window !== 'undefined') {
+  user = JSON.parse(localStorage.getItem("user"));
+}
 
 export const createUser = createAsyncThunk('user/createUser', async (userData) => {
   try {

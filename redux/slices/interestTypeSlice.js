@@ -1,10 +1,13 @@
 // store/slices/userSlice.js
+"use client"
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
 
-const user = JSON.parse(localStorage.getItem("user"));
-console.log({ user });
+let user;
+if (typeof window !== 'undefined') {
+  user = JSON.parse(localStorage.getItem("user"));
+}
 
 export const createInterestType = createAsyncThunk('interestType/create', async (payload) => {
   try {

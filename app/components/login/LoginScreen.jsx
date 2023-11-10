@@ -1,4 +1,5 @@
 // LoginScreen.js
+"use client"
 import React, { useState, useEffect } from "react";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineEmail, MdKey } from "react-icons/md";

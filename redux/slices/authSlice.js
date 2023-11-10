@@ -1,4 +1,5 @@
 // authSlice.js
+"use client"
 import { createSlice } from '@reduxjs/toolkit';
 
 const authSlice = createSlice({

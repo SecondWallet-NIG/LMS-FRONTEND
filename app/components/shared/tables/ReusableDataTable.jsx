@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { FiFilter, FiSearch } from "react-icons/fi";
 import { MdOutlineSort } from "react-icons/md";
@@ -153,7 +154,10 @@ function ReusableDataTable({
     }),
   };
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  let user;
+  if (typeof window !== "undefined") {
+    user = JSON.parse(localStorage.getItem("user"));
+  }
 
   const fetchData = (page, perPage, field, direction) => {
     let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=${field}`;

@@ -39,7 +39,11 @@ const OnboardingScreen = () => {
   };
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
+    if (typeof window !== 'undefined') {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    }
+    
+   
   }, []);
 
   return (

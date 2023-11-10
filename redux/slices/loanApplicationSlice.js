@@ -1,4 +1,4 @@
-// store/slices/userSlice.js
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
@@ -8,7 +8,11 @@ import "react-date-range/dist/theme/default.css";
 import CenterModal from '@/app/components/modals/CenterModal';
 import Button from '@/app/components/shared/buttonComponent/Button';
 
-const user = localStorage.getItem("user");
+let user;
+if (typeof window !== 'undefined') {
+  user = JSON.parse(localStorage.getItem("user"));
+}
+
 
 export const createLoanApplication = createAsyncThunk('LoanApplication/create', async (payload) => {
   try {
