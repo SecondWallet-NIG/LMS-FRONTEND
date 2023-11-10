@@ -1,5 +1,5 @@
 import React from "react";
-import { CirclesWithBar } from "react-loader-spinner";
+import { Oval } from "react-loader-spinner";
 
 const Loader = ({ isOpen,bgColor, onClose, children, width}) => {
   if (!isOpen) return null;
@@ -13,10 +13,11 @@ const Loader = ({ isOpen,bgColor, onClose, children, width}) => {
       <div className={`${bgColor ? bgColor : "bg-white"} p-4 rounded-md shadow-md" style={modalStyles}`}>
     
         
-        <CirclesWithBar
+        <Oval
           height="100"
           width="100"
           color="#2769B3"
+          secondaryColor="#2769B3"
           wrapperStyle={{}}
           wrapperClass=""
           visible={true}

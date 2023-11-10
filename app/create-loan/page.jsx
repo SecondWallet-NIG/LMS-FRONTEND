@@ -1038,7 +1038,7 @@ const CreateLoan = () => {
       )}
 
       <CenterModal
-        width={"40%"}
+        width={"60%"}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       >
