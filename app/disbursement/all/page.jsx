@@ -20,7 +20,7 @@ const AllDisburments = () => {
         </div>
         <ReusableDataTable
           onClickRow={"/customers/profile"}
-          apiEndpoint="https://sw-staging.onrender.com/api/customer/profile-information"
+          apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
           initialData={[]}
           headers={headers}
           filters={true}

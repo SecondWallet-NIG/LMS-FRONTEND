@@ -1,4 +1,4 @@
-export const API_URL="https://sw-staging.onrender.com/api"
+export const API_URL="https://secondwallet-stag.onrender.com/api"
 
 
 export const bankArr = [

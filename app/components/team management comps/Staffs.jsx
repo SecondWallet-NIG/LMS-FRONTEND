@@ -77,7 +77,7 @@ const Staffs = () => {
         <div className="flex justify-between items-center">
           <ReusableDataTable
             dataTransformer={customDataTransformer}
-            apiEndpoint="https://sw-staging.onrender.com/api/user"
+            apiEndpoint="https://secondwallet-stag.onrender.com/api/user"
             initialData={[]}
             headers={headers}
             filters={true}

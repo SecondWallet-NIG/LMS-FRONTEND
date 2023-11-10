@@ -23,7 +23,7 @@ const CustomerLoan = () => {
           onClickRow="/customers/profile"
           headers={header}
           initialData={[]}
-          apiEndpoint="https://sw-staging.onrender.com/api/customer/profile-information"
+          apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
           btnText={
             <div className="flex gap-1 items-center p-1">
               <AiOutlinePlus size={15} />
