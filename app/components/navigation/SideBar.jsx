@@ -81,6 +81,7 @@ const Sidebar = () => {
               sideBarOpen={sideBarOpen}
               onClick={() => {
                 setActiveLink("dashboard");
+                handleSidebarOpen("close");
               }}
             />
           </div>
@@ -98,6 +99,7 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("my-tasks");
+              handleSidebarOpen("close");
             }}
           />
           <SidebarLink
@@ -114,6 +116,7 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("create-loan");
+              handleSidebarOpen("close");
             }}
           />
           <SidebarLink
@@ -143,6 +146,7 @@ const Sidebar = () => {
                   sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("All Loans");
+                    handleSidebarOpen("close");
                   }}
                 />
                 <SidebarLink
@@ -153,6 +157,7 @@ const Sidebar = () => {
                   sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("New loans");
+                    handleSidebarOpen("close");
                   }}
                 />
                 <SidebarLink
@@ -163,6 +168,7 @@ const Sidebar = () => {
                   sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("Pending loans");
+                    handleSidebarOpen("close");
                   }}
                 />
                 <SidebarLink
@@ -173,6 +179,7 @@ const Sidebar = () => {
                   sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("Approved loans");
+                    handleSidebarOpen("close");
                   }}
                 />
               </div>
@@ -210,6 +217,7 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("intrest-calculator");
+              handleSidebarOpen("close");
             }}
           />
           <SidebarLink
@@ -226,6 +234,7 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("disbursement");
+              handleSidebarOpen("close");
             }}
           />
         </div>
@@ -238,24 +247,36 @@ const Sidebar = () => {
             text="Plans"
             link="/dashboard"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen("close");
+            }}
           />
           <SidebarLink
             icon={<TbReportMoney size={20} />}
             text="Report"
             link="/report"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen("close");
+            }}
           />
           <SidebarLink
             icon={<AiFillCustomerService size={20} />}
             text="Team management"
             link="/team-management"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen("close");
+            }}
           />
           <SidebarLink
             icon={<AiOutlineSetting size={20} />}
             text="Settings"
             link="/dashboard"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen("close");
+            }}
           />
         </div>
       </div>
@@ -267,6 +288,9 @@ const Sidebar = () => {
             text="Sign Out"
             link="/sign-out"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen("close");
+            }}
           />
         </div>
       </div>
