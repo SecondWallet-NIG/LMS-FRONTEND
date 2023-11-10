@@ -2,22 +2,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '@/constant';
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import CenterModal from '@/app/components/modals/CenterModal';
+import Button from '@/app/components/shared/buttonComponent/Button';
 
 const user = localStorage.getItem("user");
 
 export const createLoanApplication = createAsyncThunk('LoanApplication/create', async (payload) => {
-    try {
-      const response = await axios.post(API_URL +'/loan-application/create', payload ,  {
-        headers: {
-          Authorization: `Bearer ${user?.data?.token}`
-        }
-      }, );
-      return response.data;
-    } catch (error) {
-      if (error.response.data.error) {
-        throw new Error(error.response.data.error)
+  try {
+    const response = await axios.post(API_URL + '/loan-application/create', payload, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
       }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
     }
+  }
 });
 
 export const getSingleLoan = createAsyncThunk('loanApplication/getSingleLoan', async (loanId) => {
@@ -27,7 +32,7 @@ export const getSingleLoan = createAsyncThunk('loanApplication/getSingleLoan', a
         Authorization: `Bearer ${user?.data?.token}`
       }
     });
-    console.log({response});
+    console.log({ response });
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -44,6 +49,28 @@ export const getLoanApplication = createAsyncThunk('loanApplication/all', async 
     }
   });
   return response.data;
+});
+
+export const  getLoanApplicationSummary = createAsyncThunk('loanApplication/summary', async (date) => {
+  if (date) {
+    console.log(".....",date);
+    const response = await axios.get(`${API_URL}/loan-application/summary?startDate=${date?.startDate}&endDate=${date?.endDate}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+
+    return response.data;
+  } else {
+    const response = await axios.get(`${API_URL}/loan-application/summary`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+
+    return response.data;
+  }
+
 });
 
 
@@ -84,6 +111,18 @@ const LoanApplicationSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getSingleLoan.rejected, (state, action,) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(getLoanApplicationSummary.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(getLoanApplicationSummary.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getLoanApplicationSummary.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })

@@ -40,8 +40,7 @@ const CreateLoan = () => {
   const [loading, setLoading] = useState(false);
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedFileForm, setSelectedFileForm] = useState(null);
+
 
   const [formData, setFormData] = useState({
     loanAmount: 0,

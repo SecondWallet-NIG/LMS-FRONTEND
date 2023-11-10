@@ -4,7 +4,6 @@ import axios from 'axios';
 import { API_URL } from '@/constant';
 
 const user = JSON.parse(localStorage.getItem("user"));
-console.log({user});
 
 export const createCustomer = createAsyncThunk('customer/create', async (payload) => {
   try {
@@ -18,9 +17,6 @@ export const createCustomer = createAsyncThunk('customer/create', async (payload
     if (error.response.data.error === "Incorrect email or password") {
       throw new Error("Incorrect email or password")
     }
-    // if (error.response.data.error) {
-    //   throw new Error(error.response.data.error)
-    // }
     else throw new Error("An error occured, please try again later")
   }
 });
@@ -69,6 +65,22 @@ export const getCustomers = createAsyncThunk('customer/getCustomers', async () =
       }
     });
     console.log({response});
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
+export const getCustomerSummary = createAsyncThunk('customer/getSummary', async () => {
+  try {
+    const response = await axios.get(`${API_URL}/customer/summary`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -141,6 +153,19 @@ const customerSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getCustomers.rejected, (state, action,) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(getCustomerSummary.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(getCustomerSummary.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getCustomerSummary.rejected, (state, action,) => {
         console.log("action.error.message", action.error.message);
         state.loading = 'failed';
         state.error = action.error.message;

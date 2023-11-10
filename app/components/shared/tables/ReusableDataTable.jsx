@@ -17,6 +17,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Loader";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 
 function ReusableDataTable({
   apiEndpoint,
@@ -43,7 +46,18 @@ function ReusableDataTable({
   const [searchTerm, setSearchTerm] = useState("");
   const [paginationLinks, setPaginationLinks] = useState(null);
   const [logSearch, setLogSearch] = useState(false);
+  const [dateFilterOpen, setDateFilterOpen] = useState(false);
 
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: null,
+      endDate: null,
+      key: "selection",
+    },
+  ]);
+  const toggleDateFilter = () => {
+    setDateFilterOpen(!dateFilterOpen);
+  };
 
   const handleDownload = () => {
     setLoading(true);
@@ -180,6 +194,16 @@ function ReusableDataTable({
           // }, 2000);
         });
     } else {
+      if (dateRange && dateRange.length > 0) {
+        if (
+          dateRange[0].startDate instanceof Date &&
+          dateRange[0].endDate instanceof Date
+        ) {
+          const startDate = dateRange[0].startDate.toISOString();
+          const endDate = dateRange[0].endDate.toISOString();
+          apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
+        }
+      }
       setIsLoading(true);
       axios
         .get(apiUrl, {
@@ -297,9 +321,12 @@ function ReusableDataTable({
                 />
               </div>
               <div className="flex gap-3 items-center">
-                <button className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4">
+                <button
+                  onClick={toggleDateFilter}
+                  className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4"
+                >
                   <FiFilter size={20} />
-                  <p>Filter</p>
+                  <p>Filter By Date</p>
                 </button>
               </div>
             </div>
@@ -360,19 +387,20 @@ function ReusableDataTable({
                   >
                     {btnText}
                   </Button>
-
-               
                 </div>
               ) : null}
-                 <Button
-                    disabled={loading ? true : false}
-                    className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
-                    onClick={handleDownload}
-                  >
-                    <div className="flex gap-1 items-center p-1">
-                      <p className="hidden lg:block"> {loading ? "Exporting" : "Export"}</p>
-                    </div>
-                  </Button>
+              <Button
+                disabled={loading ? true : false}
+                className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                onClick={handleDownload}
+              >
+                <div className="flex gap-1 items-center p-1">
+                  <p className="hidden lg:block">
+                    {" "}
+                    {loading ? "Exporting" : "Export"}
+                  </p>
+                </div>
+              </Button>
             </div>
           </div>
         )}
@@ -468,16 +496,41 @@ function ReusableDataTable({
           </div>
         )}
       </div>
-      {/* // ) : (
-      //   <div class="min-h-500 flex items-center justify-center">
-      //     <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
-      //       <Image src={sketch} alt="company logo" />
-      //       <p class="text-center text-lg">This list is empty</p>
-      //     </div>
-      //   </div>
-      // )} */}
 
       <Loader isOpen={isLoading} />
+      <CenterModal
+        isOpen={dateFilterOpen}
+        onClose={() => {
+          setDateFilterOpen(!dateFilterOpen);
+        }}
+      >
+        <div className="bg-white p-4 border shadow-lg">
+          <div className="text-swBlue text-sm font-semibold pb-4">
+            Filter By Date
+          </div>
+          <div className="flex gap-2 items-center">
+            <DateRange
+              editableDateInputs={true}
+              onChange={(item) => setDateRange([item.selection])}
+              moveRangeOnFirstSelection={false}
+              ranges={dateRange}
+            />
+          </div>
+          <div className="flex justify-between">
+            <Button variant="danger" onClick={() => setDateFilterOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                fetchData(currentPage, perPage, sortField, sortDirection);
+                setDateFilterOpen(false);
+              }}
+            >
+              Apply
+            </Button>
+          </div>
+        </div>
+      </CenterModal>
     </div>
   );
 }
