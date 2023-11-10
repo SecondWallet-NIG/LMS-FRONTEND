@@ -1,4 +1,4 @@
-export const API_URL="http://localhost:8000/api"
+export const API_URL="https://sw-staging.onrender.com/api"
 
 
 export const bankArr = [
