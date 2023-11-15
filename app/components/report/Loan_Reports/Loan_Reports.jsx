@@ -63,7 +63,7 @@ const LoanReports = () => {
             handleLoanToggle("repayment");
           }}
         >
-          Rpayment Report
+          Repayment Report
           {loanToggle === "repayment" && (
             <IoMdArrowDropright className="text-swGray" size={20} />
           )}
