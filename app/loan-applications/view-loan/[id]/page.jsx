@@ -21,6 +21,16 @@ import { LuCalendar } from "react-icons/lu";
 import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
 import RequestApproval from "@/app/components/modals/loans/RequestApproval";
 import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
+import { updateLoanApplication } from "@/redux/slices/loanApplicationSlice";
+import { getLoanApprovals } from "@/redux/slices/loanApprovalSlice";
+import {
+  MdEdit,
+  MdEditDocument,
+  MdOutlineEditAttributes,
+  MdUpdate,
+} from "react-icons/md";
+import CenterModal from "@/app/components/modals/CenterModal";
+import Button from "@/app/components/shared/buttonComponent/Button";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -28,10 +38,14 @@ const ViewLoan = () => {
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
+  const _loanApprovals = useSelector(
+    (state) => state.loanApprovals
+  );
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [logSearch, setLogSearch] = useState(false);
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
-
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [loanAmount, setLoanAmount] = useState(0);
 
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
@@ -40,6 +54,14 @@ const ViewLoan = () => {
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
+
+  const updateLoan = () => {
+    let updatedData = new FormData();
+    updatedData.append("loanAmount", loanAmount);
+    dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
+    dispatch(getSingleLoan(id));
+    setOpenUpdate(false)
+  }
 
   const loanApprovals = [
     {
@@ -82,7 +104,11 @@ const ViewLoan = () => {
 
   useEffect(() => {
     dispatch(getSingleLoan(id));
-    console.log("single-loan", data);
+    dispatch(getLoanApprovals(id));
+    console.log({_loanApprovals});
+    if (data) {
+      setLoanAmount(data?.data?.loanApplication?.loanAmount);
+    }
   }, []);
 
   return (
@@ -162,19 +188,29 @@ const ViewLoan = () => {
                 <div className="w-full bg-gray-100 rounded-xl p-2">
                   <p className="text-base font-medium">Loan ID:</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-xl text-swGray font-semibold mt-4">
-                      SWL-{data?.data?.loanApplication.loanId}
+                    <p className="text-md text-swGray font-semibold mt-4">
+                      SWL-{data?.data?.loanApplication?.loanId}
                     </p>
-                    <div className="p-2 rounded-md hover:bg-white hover:border-2 hover:border-gray-200 mt-2">
-                      <IoCopyOutline size={20} />
-                    </div>
+              
                   </div>
                 </div>
                 <div className="w-full bg-gray-100 rounded-xl p-2">
                   <p className="text-base font-medium">Loan Amount:</p>
-                  <p className="text-xl text-swGray font-semibold mt-4">
-                    ₦ {data?.data?.loanApplication.loanAmount}
-                  </p>
+               
+                  <div className="flex justify-between items-center">
+                    <p className="text-md text-swGray font-semibold mt-4">
+                    ₦ {data?.data?.loanApplication?.loanAmount}
+                    </p>
+                    <div
+                      className="p-2 rounded-md hover:bg-white hover:border-2 hover:border-gray-200 mt-2"
+                      onClick={() => {
+                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
+                        setOpenUpdate(true);
+                      }}
+                    >
+                      <MdEdit size={20} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -207,22 +243,22 @@ const ViewLoan = () => {
                   <tr className="text-start text-xs">
                     <td className="px-3 py-3">
                       <div>
-                        <p>{data?.data?.loanPackageDetails.name} </p>
+                        <p>{data?.data?.loanPackageDetails?.name} </p>
                       </div>
                     </td>
 
                     <td className="px-3 py-3">
                       <div>
-                        <p>₦ {data?.data?.interestCalculation.totalPayments}</p>
+                        <p>₦ {data?.data?.interestCalculation?.totalPayments}</p>
                       </div>
                     </td>
                     <td className="px-3 py-3">
                       <div>
                         <p>
-                          {data?.data?.loanApplication.loanDurationMetrics ===
+                          {data?.data?.loanApplication?.loanDurationMetrics ===
                           "Yearly"
-                            ? `${data?.data?.loanApplication.loanDuration}` * 12
-                            : `${data?.data?.loanApplication.loanDuration}`}{" "}
+                            ? `${data?.data?.loanApplication?.loanDuration}` * 12
+                            : `${data?.data?.loanApplication?.loanDuration}`}{" "}
                           month(s)
                         </p>
                       </div>
@@ -236,7 +272,7 @@ const ViewLoan = () => {
                       <EditableButton
                         className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
                       >
-                        {data?.data?.loanApplication.status}
+                        {data?.data?.loanApplication?.status}
                       </EditableButton>
                     </td>
                   </tr>
@@ -244,66 +280,6 @@ const ViewLoan = () => {
               </table>
             </div>
           </div>
-          {/* <div className="ml-5 mr-5 mt-5">
-            <h6 className="text-center font-semibold p-2">Loan Action</h6>
-            <div className="border rounded-lg">
-              <table className=" w-full ">
-                <thead className="bg-swLightGray ">
-                  <tr>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      Loan Type
-                    </th>
-
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      <h1>Maturity Amount</h1>
-                    </th>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      <h1>Loan Period</h1>
-                    </th>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      <h1>Maturity Date</h1>
-                    </th>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                <tr className="text-start text-xs">
-                    <td className="px-3 py-3">
-                      <div>
-                        <p>{data?.data?.loanPackageDetails.name} </p>
-                      </div>
-                    </td>
-                   
-                    <td className="px-3 py-3">
-                      <div>
-                        <p>₦ {data?.data?.interestCalculation.totalPayments}</p>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div>
-                      <p>{data?.data?.loanApplication.loanDurationMetrics === "Yearly" ? `${data?.data?.loanApplication.loanDuration}` * 12 : `${data?.data?.loanApplication.loanDuration}` } month(s)</p>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div>
-                        <p>null</p>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                    <EditableButton
-                      className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
-                    >
-                    {data?.data?.loanApplication.status}
-                    </EditableButton>
-                    </td>
-                
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div> */}
           <div className="ml-5 mr-5 mt-5">
             <h6 className="text-center font-semibold p-2">Loan Approvals</h6>
             <div className="border rounded-lg">
@@ -347,7 +323,7 @@ const ViewLoan = () => {
                       <td className="p-2">
                         <EditableButton
                           onClick={() => {
-                            setIsRequestApprovalOpen(true)
+                            setIsRequestApprovalOpen(true);
                           }}
                           disabled={false}
                           className={`py-1 px-2 border rounded-lg`}
@@ -460,7 +436,9 @@ const ViewLoan = () => {
               <div className="p-2">
                 {activityButton === "activity-logs" && <CustomerActivityLogs />}
                 {activityButton === "summary" && <Summary />}
-                {activityButton === "loans" && <CustomerLoanDoc data={data?.data} />}
+                {activityButton === "loans" && (
+                  <CustomerLoanDoc data={data?.data} />
+                )}
               </div>
             </section>
           </div>
@@ -476,11 +454,24 @@ const ViewLoan = () => {
             <LoanProcessCard />
           </div>
         </section>
-      
       </main>
-      <RequestApproval isOpen={isRequestApprovalOpen} onClose={() => {
-          setIsRequestApprovalOpen(false)
-        }} />
+      <RequestApproval
+        isOpen={isRequestApprovalOpen}
+        onClose={() => {
+          setIsRequestApprovalOpen(false);
+        }}
+      />
+
+      <CenterModal  isOpen={openUpdate} width={'25%'}>
+        <InputField
+          label={"Enter new loan amount"}
+          value={loanAmount}
+          onChange={(e) => setLoanAmount(e.target.value)}
+        />
+        <Button disabled={loanAmount == data?.data?.loanApplication?.loanAmount ? true : false} onClick={updateLoan} className="h-10 w-full mt-6 bg-swBlue text-white rounded-md">
+          Update Amount
+        </Button>
+      </CenterModal>
     </DashboardLayout>
   );
 };

@@ -8,6 +8,7 @@ import interestTypeReducer from './slices/interestTypeSlice';
 import LoanPackageReducer from './slices/loanPackageSlice';
 import roleReducer from './slices/roleSlice';
 import loanApplicationReducer from './slices/loanApplicationSlice';
+import loanApprovalReducer from './slices/loanApprovalSlice';
 
 
 export const store = configureStore({
@@ -19,7 +20,8 @@ export const store = configureStore({
     role: roleReducer,
     interestType: interestTypeReducer,
     loanPackage: LoanPackageReducer,
-    loanApplication: loanApplicationReducer
+    loanApplication: loanApplicationReducer,
+    loanApproval: loanApprovalReducer,
   },
   // Add middleware or other configuration options as needed
 });

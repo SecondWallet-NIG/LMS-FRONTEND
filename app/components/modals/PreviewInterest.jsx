@@ -15,13 +15,13 @@ const PreviewInterest = ({
   formData,
   setCurrentStep,
 }) => {
+  console.log({data});
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const formatNumberWithCommas = (number) => {
     const formattedNumber = number.toFixed(2);
     return formattedNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-
 
   return (
     <div className="">
@@ -33,11 +33,14 @@ const PreviewInterest = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-swGray tracking-wider">
                 Repayment ID
               </th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-swGray tracking-wider">
+                Principal
+              </th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-swGray tracking-wider">
-                Principal Breakdown
+                Interest
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-swGray uppercase tracking-wider text-end">
-                Interest Breakdown
+              <th className="px-6 py-3 text-left text-xs font-medium text-swGray tracking-wider text-end">
+                Principal Repayment
               </th>
             </tr>
           </thead>
@@ -45,17 +48,19 @@ const PreviewInterest = ({
             {data.installmentPayments.map((payment) => (
               <tr className="border-b border-gray-200 pt-2 pb-2" key={payment.id}>
                 <td className="px-6 py-6 text-xs">Repayment {payment.id}</td>
-                <td className="px-6 py-6 text-xs">
+                {/* <td className="px-6 py-6 text-xs">
                   ₦ {formatNumberWithCommas(payment.totalPayment)}
+                </td> */}
+                  <td className="px-6 py-6 text-xs">
+                  ₦ {formatNumberWithCommas(payment.interestPayment)}
                 </td>
                 <td className="px-6 py-6 text-xs text-end">
-                  ₦ {formatNumberWithCommas(payment.interestPayment)}
+                ₦ {formatNumberWithCommas(payment.totalPayment)}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-
       </div>
     </div>
   );
