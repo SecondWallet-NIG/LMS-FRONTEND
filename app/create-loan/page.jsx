@@ -41,12 +41,13 @@ const CreateLoan = () => {
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
 
-
   const [formData, setFormData] = useState({
     loanAmount: 0,
     loanPackage: null,
     loanDuration: 0,
     commitmentValue: 0,
+    managementTotal: 0,
+    managementValue: 0,
     commitmentTotal: 0,
     numberOfRepayment: 0,
     repaymentType: null,
@@ -55,6 +56,7 @@ const CreateLoan = () => {
     loanFrequencyType: null,
     interestType: null,
     commitmentType: null,
+    managementType: null,
     applicationForm: null || "null",
     assetImages: null || "null",
     collaterals: "",
@@ -82,6 +84,10 @@ const CreateLoan = () => {
   const repaymentTypeData = [
     { value: "bulletRepayment", label: "Bullet Repayment" },
     { value: "interestServicing", label: "Interest Servicing" },
+    { value: "installmentPayment", label: "Installment Payment" },
+  ];
+
+  const reducingBalrepaymentTypeData = [
     { value: "installmentPayment", label: "Installment Payment" },
   ];
 
@@ -136,8 +142,7 @@ const CreateLoan = () => {
         value: item._id,
       }));
     } else {
-      // Handle the case when 'arr' is not an array
-      return []; // or any other suitable value or action
+      return [];
     }
   };
 
@@ -147,8 +152,17 @@ const CreateLoan = () => {
       ...prevFormData,
       [name]: value,
     }));
+  };
 
-    console.log({ formData });
+  const formatNumber = (valu) => {
+    const value = valu ?? "";
+    const stringWithNoCommas = String(value);
+    const numberWithNoCommas = stringWithNoCommas.replace(/,/g, "");
+    const formattedNumber = numberWithNoCommas.replace(
+      /\B(?=(\d{3})+(?!\d))/g,
+      ","
+    );
+    return formattedNumber;
   };
 
   const search = (e) => {
@@ -161,14 +175,30 @@ const CreateLoan = () => {
     setFilteredData(filtered);
   };
 
+  const removeCommasFromNumber = (numberString) => {
+    return numberString.replace(/,/g, "");
+  };
+
   const calCommitmentTotal = (e) => {
     let { name, value } = e.target;
-    let total = (value * formData.loanAmount) / 100;
+    let num = removeCommasFromNumber(formData.loanAmount);
+    let total = (value * parseInt(num)) / 100;
     setFormData((prevFormData) => ({
       ...prevFormData,
       commitmentTotal: total,
     }));
   };
+
+  const calManagementTotal = (e) => {
+    let { name, value } = e.target;
+    let num = removeCommasFromNumber(formData.loanAmount);
+    let total = (value * parseInt(num)) / 100;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      managementTotal: total,
+    }));
+  };
+
   const updateCommitmentTotal = (e) => {
     let { name, value } = e.target;
     let total = (value * formData.commitmentValue) / 100;
@@ -183,19 +213,18 @@ const CreateLoan = () => {
       ...formData,
       [name]: selectedOption.value,
     });
-
-    console.log({ formData });
   };
 
   const fetchInterest = (e) => {
     setLoading(true);
-    console.log({formData});
     const isFormDataValid = validateFormData(formData);
     if (isFormDataValid === true) {
+      const num = parseInt(removeCommasFromNumber(formData.loanAmount));
+      console.log({ num });
       const payload = {
         loanDurationMetrics: formData.loanDurationMetrics,
         loanDuration: formData.loanDuration,
-        loanAmount: formData.loanAmount,
+        loanAmount: parseInt(removeCommasFromNumber(formData.loanAmount)),
         loanPackageId: formData.loanPackage,
         interestTypeId: formData.interestType,
         repaymentType: formData.repaymentType,
@@ -239,31 +268,33 @@ const CreateLoan = () => {
     }));
   };
 
-
   const submitLoan = (e) => {
     const payload = new FormData();
-    payload.append('loanAmount', formData.loanAmount);
-    payload.append('loanPackage',  formData.loanPackage);
-    payload.append('loanDuration',  formData.loanDuration);
-    payload.append('commitmentValue',  formData.commitmentValue);
-    payload.append('commitmentTotal',  formData.commitmentTotal);
-    payload.append('numberOfRepayment',  formData.numberOfRepayment);
-    payload.append('repaymentType',  formData.repaymentType);
-    payload.append('assetType',  formData.assetType);
-    payload.append('loanDurationMetrics',  formData.loanDurationMetrics);
-    payload.append('loanFrequencyType',  formData.loanFrequencyType);
-    payload.append('interestType',  formData.interestType);
-    payload.append('commitmentType',  formData.commitmentType);
-    payload.append('applicationForm',  formData.applicationForm);
-    payload.append('assetImages',  formData.assetImages);
-    payload.append('collaterals',  formData.collaterals);
-    payload.append('guarantorForm',  formData.guarantorForm);
-    payload.append('loanAffidavit',  formData.loanAffidavit);
-    payload.append('offerLetter',  formData.offerLetter);
-    payload.append('customerId',  formData.customerId);
-    payload.append('createdBy',  "6514bd21b128a700f66d2f38");
-
-// Now, the 'formData' object contains the key-value pairs with the specified values.
+    const num = parseInt(removeCommasFromNumber(formData.loanAmount));
+    payload.append("loanAmount", num);
+    payload.append("loanPackage", formData.loanPackage);
+    payload.append("loanDuration", formData.loanDuration);
+    payload.append("commitmentValue", formData.commitmentValue);
+    payload.append("commitmentTotal", formData.commitmentTotal);
+    payload.append("managementValue", formData.managementValue);
+    payload.append("managementTotal", formData.managementTotal);
+    payload.append("numberOfRepayment", formData.numberOfRepayment);
+    payload.append("repaymentType", formData.repaymentType);
+    payload.append("assetType", formData.assetType);
+    payload.append("loanDurationMetrics", formData.loanDurationMetrics);
+    payload.append("loanFrequencyType", formData.loanFrequencyType);
+    payload.append("interestType", formData.interestType);
+    payload.append("commitmentType", formData.commitmentType);
+    payload.append("managementType", formData.managementType);
+    payload.append("applicationForm", formData.applicationForm);
+    payload.append("assetImages", formData.assetImages);
+    payload.append("collaterals", formData.collaterals);
+    payload.append("guarantorForm", formData.guarantorForm);
+    payload.append("loanAffidavit", formData.loanAffidavit);
+    payload.append("offerLetter", formData.offerLetter);
+    payload.append("customerId", formData.customerId);
+    payload.append("createdBy", "6514bd21b128a700f66d2f38");
+    console.log({ payload });
 
     setLoading(true);
     e.preventDefault();
@@ -331,6 +362,9 @@ const CreateLoan = () => {
                 </div>
               </div>
               <SelectField
+                value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
+                  (option) => option.value === formData.loanPackage
+                )}
                 disabled={selectedCustomer === null ? true : false}
                 name="loanPackage"
                 optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
@@ -346,6 +380,9 @@ const CreateLoan = () => {
               />
               {formData.loanPackage === "65390f290d0a83675c9517b3" ? (
                 <SelectField
+                  value={assetTypeData?.find(
+                    (option) => option.value === formData.assetType
+                  )}
                   disabled={formData.loanPackage === null ? true : false}
                   name="assetType"
                   optionValue={assetTypeData}
@@ -359,11 +396,12 @@ const CreateLoan = () => {
                 />
               ) : null}
               <InputField
+                value={formatNumber(formData?.loanAmount)}
                 maxLength="1000000"
                 disabled={formData.loanPackage === null ? true : false}
                 name="loanAmount"
                 required={true}
-                inputType="number"
+                inputType="text"
                 activeBorderColor="border-swBlue"
                 endIcon={<p className="text-swGray">NGN &#8358;</p>}
                 label="Loan amount (Principal)"
@@ -392,6 +430,9 @@ const CreateLoan = () => {
               <div className="flex gap-2 items-end">
                 <div className="w-1/3">
                   <SelectField
+                    value={loanDurationMetricsData.find(
+                      (option) => option.value === formData.loanDurationMetrics
+                    )}
                     name="loanDurationMetrics"
                     disabled={formData.loanAmount === 0 ? true : false}
                     optionValue={loanDurationMetricsData}
@@ -409,6 +450,7 @@ const CreateLoan = () => {
                     disabled={
                       formData.loanDurationMetrics === null ? true : false
                     }
+                    value={formData?.loanDuration}
                     required={false}
                     name="loanDuration"
                     inputType="number"
@@ -424,10 +466,13 @@ const CreateLoan = () => {
               <div className="flex gap-2">
                 <div className="w-1/3">
                   <SelectField
+                    value={commitmentType.find(
+                      (option) => option.value === formData.commitmentType
+                    )}
                     name="commitmentType"
                     disabled={formData.loanAmount === 0 ? true : false}
                     optionValue={commitmentType}
-                    label={"Fees"}
+                    label={"Commitment Fees"}
                     required={true}
                     placeholder={"Percentage"}
                     isSearchable={false}
@@ -439,7 +484,7 @@ const CreateLoan = () => {
                 <div className="w-2/3">
                   <InputField
                     value={formData.commitmentValue}
-                    label="Percentage"
+                    label=" "
                     disabled={formData.commitmentType === null ? true : false}
                     required={true}
                     name="commitmentValue"
@@ -456,6 +501,45 @@ const CreateLoan = () => {
               <div className="flex gap-2">
                 <div className="w-1/3">
                   <SelectField
+                    value={commitmentType.find(
+                      (option) => option.value === formData.managementType
+                    )}
+                    name="managementType"
+                    disabled={formData.commitmentValue === 0 ? true : false}
+                    optionValue={commitmentType}
+                    label={"Management Fees"}
+                    required={true}
+                    placeholder={"Percentage"}
+                    isSearchable={false}
+                    onChange={(selectedOption) => {
+                      handleSelectChange(selectedOption, "managementType");
+                    }}
+                  />
+                </div>
+                <div className="w-2/3">
+                  <InputField
+                    value={formData.managementValue}
+                    label=" "
+                    disabled={formData.managementType === null ? true : false}
+                    required={true}
+                    name="managementValue"
+                    inputType="number"
+                    activeBorderColor="border-swBlue"
+                    placeholder="Enter Value"
+                    onChange={(e) => {
+                      setInputState(e);
+                      calManagementTotal(e);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <div className="w-1/3">
+                  <SelectField
+                    value={frequencyTypeData.find(
+                      (option) => option.value === formData.loanFrequencyType
+                    )}
+                    name="loanFrequencyType"
                     disabled={formData.commitmentValue === 0 ? true : false}
                     optionValue={frequencyTypeData}
                     label={"Loan Frequency Type"}
@@ -483,20 +567,9 @@ const CreateLoan = () => {
               </div>
               <div className="w-full">
                 <SelectField
-                  name="repaymentType"
-                  disabled={formData.numberOfRepayment === 0 ? true : false}
-                  optionValue={repaymentTypeData}
-                  label={"Repayment Type"}
-                  required={true}
-                  placeholder={"Select repayment type"}
-                  isSearchable={false}
-                  onChange={(selectedOption) => {
-                    handleSelectChange(selectedOption, "repaymentType");
-                  }}
-                />
-              </div>
-              <div className="w-full">
-                <SelectField
+                  value={modifyInterestTypeData(interestType?.data?.data)?.find(
+                    (option) => option.value === formData.interestType
+                  )}
                   name="interestType"
                   disabled={formData.numberOfRepayment === 0 ? true : false}
                   optionValue={modifyInterestTypeData(interestType?.data?.data)}
@@ -509,6 +582,28 @@ const CreateLoan = () => {
                   }}
                 />
               </div>
+              <div className="w-full">
+                <SelectField
+                  value={repaymentTypeData.find(
+                    (option) => option.value === formData.repaymentType
+                  )}
+                  name="repaymentType"
+                  disabled={formData.numberOfRepayment === 0 ? true : false}
+                  optionValue={
+                    formData.interestType === "65392ef8f3b65979e7047c44"
+                      ? reducingBalrepaymentTypeData
+                      : repaymentTypeData
+                  }
+                  label={"Repayment Type"}
+                  required={true}
+                  placeholder={"Select repayment type"}
+                  isSearchable={false}
+                  onChange={(selectedOption) => {
+                    handleSelectChange(selectedOption, "repaymentType");
+                  }}
+                />
+              </div>
+
               {/* <div className="flex gap-2 items-end">
                 <div className="w-1/3">
                   <SelectField
@@ -562,7 +657,9 @@ const CreateLoan = () => {
                   <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
                     <AiOutlinePaperClip color="black" size={20} />
                     <p className="font-semibold text-black">
-                      {formData?.collaterals.name ? "Change file" : "Select file"}
+                      {formData?.collaterals.name
+                        ? "Change file"
+                        : "Select file"}
                     </p>
                   </span>
                 </label>
@@ -776,10 +873,7 @@ const CreateLoan = () => {
               </div>
               <div className="w-2/3">
                 <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  ₦
-                  {formData.loanAmount
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                  ₦{formatNumber(formData.loanAmount) || 0.0}
                 </div>
               </div>
             </div>
@@ -789,7 +883,9 @@ const CreateLoan = () => {
               </div>
               <div className="w-2/3">
                 <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {formData.repaymentType || "No Loan Frequency Type Yet"}
+                  {repaymentTypeData.find(
+                    (option) => option.value === formData.repaymentType
+                  )?.label || "No Loan Frequency Type Yet"}
                 </div>
               </div>
             </div>
@@ -798,8 +894,9 @@ const CreateLoan = () => {
                 Loan Duration
               </div>
               <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {formData.loanDuration || 0}
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
+                  <div>{formData.loanDuration || 0}</div>
+                  <div>{formData.loanDurationMetrics}</div>
                 </div>
               </div>
             </div>
@@ -830,6 +927,22 @@ const CreateLoan = () => {
                 </div>
               </div>
             </div>
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Management Fee
+              </div>
+              <div className="w-2/3 ">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
+                  <div>{formData.commitmentValue || 0.0}%</div>
+                  <div>
+                    ₦
+                    {formData.managementTotal
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0}
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="flex pt-2">
               <div className="w-full">
@@ -837,20 +950,37 @@ const CreateLoan = () => {
                   <div className="flex justify-between  text-xs font-semibold pt-2">
                     <div className="text-swGray">Loan Principal :</div>{" "}
                     <div className="text-swBlue">
-                      ₦{formData.loanAmount || 0}
+                      ₦{formatNumber(formData?.loanAmount)}
                     </div>
                   </div>
                   <div className="flex justify-between text-xs font-semibold pt-2">
                     <div className="text-swGray">Interest at maturity :</div>{" "}
-                    <div className="text-swBlue">₦{interest || 0}</div>
+                    <div className="text-swBlue">
+                      ₦
+                      {interest
+                        ?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                    </div>
                   </div>
                   <div className="flex justify-between  text-xs font-semibold pt-2">
                     <div className="text-swGray">Commitment Fee :</div>{" "}
                     <div className="text-swBlue">
-                      ₦{formData.commitmentTotal || 0}
+                      ₦
+                      {formData.commitmentTotal
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
-                  <div className="flex justify-between  text-sm  font-semibold pt-2">
+                  <div className="flex justify-between  text-xs font-semibold pt-2">
+                    <div className="text-swGray">Management Fee :</div>{" "}
+                    <div className="text-swBlue">
+                      ₦
+                      {formData.managementTotal
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                    </div>
+                  </div>
+                  {/* <div className="flex justify-between  text-sm  font-semibold pt-2">
                     <div className="text-swGray">
                       Total payment at maturity :
                     </div>{" "}
@@ -860,7 +990,7 @@ const CreateLoan = () => {
                         parseFloat(formData.loanAmount) +
                         parseFloat(formData.commitmentTotal) || 0}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="">
                   <Button
@@ -889,6 +1019,16 @@ const CreateLoan = () => {
               setCurrentStep={setCurrentStep}
               data={interestValue?.data}
             />
+            <div className="text-end pt-4">
+              <Button
+                variant="danger"
+                onClick={() => {
+                  setCurrentStep(1);
+                }}
+              >
+                Edit Loan Details
+              </Button>
+            </div>
           </div>
           <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
             <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
@@ -938,10 +1078,7 @@ const CreateLoan = () => {
               </div>
               <div className="w-2/3">
                 <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  ₦
-                  {formData.loanAmount
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
+                  ₦{formatNumber(formData.loanAmount) || 0.0}
                 </div>
               </div>
             </div>
@@ -960,8 +1097,9 @@ const CreateLoan = () => {
                 Loan Duration
               </div>
               <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {formData.loanDuration || 0}
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
+                  <div> {formData.loanDuration || 0}</div>
+                  <div> {formData.loanDurationMetrics || 0}</div>
                 </div>
               </div>
             </div>
@@ -992,6 +1130,22 @@ const CreateLoan = () => {
                 </div>
               </div>
             </div>
+            <div className="flex pt-2">
+              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
+                Management Fee
+              </div>
+              <div className="w-2/3 ">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
+                  <div>{formData.managementValue || 0.0}%</div>
+                  <div>
+                    ₦
+                    {formData.managementTotal
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0}
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="flex pt-2">
               <div className="w-full">
@@ -999,19 +1153,25 @@ const CreateLoan = () => {
                   <div className="flex justify-between  text-xs font-semibold pt-2">
                     <div className="text-swGray">Loan Principal :</div>{" "}
                     <div className="text-swBlue">
-                      ₦{formData.loanAmount || 0}
+                      ₦{formatNumber(formData?.loanAmount)}
                     </div>
                   </div>
                   <div className="flex justify-between text-xs font-semibold pt-2">
                     <div className="text-swGray">Interest at maturity :</div>{" "}
                     <div className="text-swBlue">
-                      ₦{interestValue?.data?.totalInterestPayments}
+                      ₦
+                      {interestValue?.data?.totalInterestPayments
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
                   <div className="flex justify-between  text-xs font-semibold pt-2">
                     <div className="text-swGray">Commitment Fee :</div>{" "}
                     <div className="text-swBlue">
-                      ₦{formData.commitmentTotal || 0}
+                      ₦
+                      {formData.commitmentTotal
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
                   <div className="flex justify-between  text-sm  font-semibold pt-2">
@@ -1019,7 +1179,10 @@ const CreateLoan = () => {
                       Total payment at maturity :
                     </div>{" "}
                     <div className="text-swBlue">
-                      ₦{parseFloat(interestValue?.data?.totalPayments)}
+                      ₦
+                      {interestValue?.data?.totalPayments
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
                 </div>
@@ -1038,7 +1201,7 @@ const CreateLoan = () => {
       )}
 
       <CenterModal
-        width={"60%"}
+        width={"40%"}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       >

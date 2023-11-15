@@ -45,7 +45,8 @@ const SelectField = ({
   optionValue,
   onChange,
   value,
-  disabled
+  disabled,
+  setValue
 }) => {
   const handleSelectChange = (selectedOption) => {
     if (onChange) {
@@ -60,6 +61,7 @@ const SelectField = ({
         {required && <span className="text-red-600 ml-1">*</span>}
       </label>
       <Select
+        setValue={setValue}
         isDisabled={disabled}
         styles={customStyles}
         isSearchable={isSearchable}

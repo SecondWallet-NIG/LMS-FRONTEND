@@ -46,6 +46,22 @@ export const getSingleLoan = createAsyncThunk('loanApplication/getSingleLoan', a
   }
 });
 
+export const getLoanApprovals = createAsyncThunk('loanApplication/approval', async (loanId) => {
+  try {
+    const response = await axios.get(`${API_URL}/loan-application/${loanId}/approvals`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
 export const getLoanApplication = createAsyncThunk('loanApplication/all', async () => {
   const response = await axios.get(`${API_URL}/loan-application/all`, {
     headers: {
@@ -76,6 +92,28 @@ export const  getLoanApplicationSummary = createAsyncThunk('loanApplication/summ
   }
 
 });
+
+export const updateLoanApplication = createAsyncThunk(
+  'LoanApplication/update',
+  async ({ loanId, payload }) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/loan-application/${loanId}/update`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      }
+    }
+  }
+);
 
 
 const LoanApplicationSlice = createSlice({
@@ -127,6 +165,30 @@ const LoanApplicationSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getLoanApplicationSummary.rejected, (state, action,) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(updateLoanApplication.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(updateLoanApplication.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(updateLoanApplication.rejected, (state, action,) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(getLoanApprovals.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(getLoanApprovals.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getLoanApprovals.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })
