@@ -19,9 +19,6 @@ module.exports = {
         swYellow: "#F9C00F",
         swTextColor: "#545454",
       },
-      fontFamily: {
-        sans: ["Inter", "sans-serif"],
-      },
     },
   },
   plugins: [],
