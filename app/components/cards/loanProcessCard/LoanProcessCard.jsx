@@ -2,6 +2,8 @@ import Image from "next/image";
 import { LuMessageSquare } from "react-icons/lu";
 
 const LoanProcessCard = ({ data }) => {
+const _data = data?.data?.data;
+console.log({_data});
   data = [
     {
       loan_status: "loan created",
@@ -36,17 +38,17 @@ const LoanProcessCard = ({ data }) => {
   ];
   return (
     <main className="flex flex-col">
-      {data.map((item, index) => (
+      {_data && _data.map((item, index) => (
         <div key={index} className="border-b border-gray-100 p-2">
           <div className="flex justify-between items-center">
-            <p className="font-semibold capitalize text-xs">{item.loan_status}</p>
+            <p className="font-semibold capitalize text-xs">{item?.status}</p>
             <div className="p-2 border border-gray-300 rounded-lg">
               <LuMessageSquare size={20} />
             </div>
           </div>
           <div className="flex items-end gap-2">
-            <p className="font-medium text-xs ">{item.by.date}</p>
-            <p className="text-xs text-gray-200">{item.by.time}</p>
+            {/* <p className="font-medium text-xs ">{item?.createdAt}</p> */}
+            <p className="text-xs text-gray-200">{item?.updatedAt}</p>
           </div>
           <div className="flex items-center gap-2 mt-2">
             <Image
@@ -57,8 +59,8 @@ const LoanProcessCard = ({ data }) => {
               width={50}
             />
             <div>
-              <p className="font-medium text-xs text-swGray">{item.by.name}</p>
-              <p className="font-medium  text-xs text-swBlue">{item.by.position}</p>
+              <p className="font-medium text-xs text-swGray">{item?.assignee?.firstName} {item?.assignee?.lastName}</p>
+              <p className="font-medium  text-xs text-swBlue">{item?.assignee?.role?.name}</p>
             </div>
           </div>
         </div>

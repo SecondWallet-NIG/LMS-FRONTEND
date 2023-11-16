@@ -38,7 +38,7 @@ const ViewLoan = () => {
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
-  const _loanApprovals = useSelector(
+  const loanApprovals = useSelector(
     (state) => state.loanApprovals
   );
   const [activityButton, setActivityButton] = useState("activity-logs");
@@ -63,7 +63,7 @@ const ViewLoan = () => {
     setOpenUpdate(false)
   }
 
-  const loanApprovals = [
+  const _loanApprovals = [
     {
       id: 1,
       approval_type: "Loan Officer",
@@ -105,7 +105,7 @@ const ViewLoan = () => {
   useEffect(() => {
     dispatch(getSingleLoan(id));
     dispatch(getLoanApprovals(id));
-    console.log({_loanApprovals});
+
     if (data) {
       setLoanAmount(data?.data?.loanApplication?.loanAmount);
     }
@@ -302,8 +302,7 @@ const ViewLoan = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {console.log(loanApprovals)}
-                  {loanApprovals.map((item, index) => (
+                  {_loanApprovals.map((item, index) => (
                     <tr key={index} className="text-xs">
                       <td className="p-2">{item.id}</td>
                       <td className="p-2">{item.approval_type}</td>
@@ -451,7 +450,7 @@ const ViewLoan = () => {
             Loan Processes
           </p>
           <div className="p-2">
-            <LoanProcessCard />
+            <LoanProcessCard data={loanApprovals} />
           </div>
         </section>
       </main>

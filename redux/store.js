@@ -21,7 +21,7 @@ export const store = configureStore({
     interestType: interestTypeReducer,
     loanPackage: LoanPackageReducer,
     loanApplication: loanApplicationReducer,
-    loanApproval: loanApprovalReducer,
+    loanApprovals: loanApprovalReducer,
   },
   // Add middleware or other configuration options as needed
 });

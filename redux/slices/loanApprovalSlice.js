@@ -83,7 +83,7 @@ export const getLoanApprovals = createAsyncThunk('loanApproval/approval', async 
 
 
 const LoanApprovalSlice = createSlice({
-  name: 'LoanApproval',
+  name: 'LoanApprovals',
   initialState: {
     data: null,
     loading: 'idle',
