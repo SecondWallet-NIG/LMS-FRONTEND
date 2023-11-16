@@ -19,6 +19,7 @@ import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import SidebarLink from "../shared/sideBarLink/SidebarLink";
 import Link from "next/link";
+import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -27,7 +28,10 @@ const Sidebar = () => {
   const [activeLink, setActiveLink] = useState("");
 
   const handleSidebarOpen = (state) => {
-    state === "open" ? setSideBarOpen(true) : setSideBarOpen(false);
+    setSideBarOpen(state);
+    sideBarOpen
+      ? localStorage.setItem("minimizeSidebar", false)
+      : localStorage.setItem("minimizeSidebar", true);
   };
 
   useEffect(() => {
@@ -41,13 +45,16 @@ const Sidebar = () => {
         sideBarOpen ? "w-1/5" : "w-[5%]"
       }`}
       onMouseEnter={() => {
-        handleSidebarOpen("open");
+        handleSidebarOpen(true);
       }}
       onMouseLeave={() => {
-        handleSidebarOpen("close");
+        handleSidebarOpen(false);
       }}
     >
-      <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300">
+      <div
+        className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300"
+        // onClick={handleSidebarOpen}
+      >
         {sideBarOpen ? (
           <Image src={companyLogo} alt="company logo" priority={true} />
         ) : (
@@ -78,6 +85,7 @@ const Sidebar = () => {
               sideBarOpen={sideBarOpen}
               onClick={() => {
                 setActiveLink("dashboard");
+                handleSidebarOpen(false);
               }}
             />
           </div>
@@ -95,6 +103,7 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("my-tasks");
+              handleSidebarOpen(false);
             }}
           />
           <SidebarLink
@@ -111,6 +120,7 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("create-loan");
+              handleSidebarOpen(false);
             }}
           />
           <SidebarLink
@@ -140,6 +150,7 @@ const Sidebar = () => {
                   sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("All Loans");
+                    handleSidebarOpen(finalPropsSelectorFactory);
                   }}
                 />
                 <SidebarLink
@@ -150,6 +161,7 @@ const Sidebar = () => {
                   sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("New loans");
+                    handleSidebarOpen(false);
                   }}
                 />
                 <SidebarLink
@@ -160,6 +172,7 @@ const Sidebar = () => {
                   sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("Pending loans");
+                    handleSidebarOpen(false);
                   }}
                 />
                 <SidebarLink
@@ -170,6 +183,7 @@ const Sidebar = () => {
                   sideBarOpen={sideBarOpen}
                   onClick={() => {
                     setActiveLink("Approved loans");
+                    handleSidebarOpen(false);
                   }}
                 />
               </div>
@@ -207,6 +221,7 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("intrest-calculator");
+              handleSidebarOpen(false);
             }}
           />
           <SidebarLink
@@ -223,6 +238,7 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("disbursement");
+              handleSidebarOpen(false);
             }}
           />
         </div>
@@ -233,26 +249,37 @@ const Sidebar = () => {
           <SidebarLink
             icon={<BiMapAlt size={20} />}
             text="Plans"
-            link="/dashboard"
+            link="/plans"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen(false);
+            }}
           />
           <SidebarLink
             icon={<TbReportMoney size={20} />}
             text="Report"
             link="/report"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen(false);
+            }}
           />
           <SidebarLink
             icon={<AiFillCustomerService size={20} />}
             text="Team management"
             link="/team-management"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen(false);
+            }}
           />
           <SidebarLink
             icon={<AiOutlineSetting size={20} />}
             text="Settings"
             link="/dashboard"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen(false);            }}
           />
         </div>
       </div>
@@ -264,6 +291,8 @@ const Sidebar = () => {
             text="Sign Out"
             link="/sign-out"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen(false);            }}
           />
         </div>
       </div>
