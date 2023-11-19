@@ -11,7 +11,11 @@ import { useRouter } from "next/navigation";
 const MyTasks = () => {
   const dispatch = useDispatch();
   const loanToApprove = useSelector((state) => state.loanApprovals);
-  const user = JSON.parse(localStorage.getItem("user"));
+  let user;
+  if (typeof window !== 'undefined') {
+     user = JSON.parse(localStorage.getItem("user"));
+    // Rest of your client-side code using the 'user' object
+  }
   const router = useRouter()
  
 
