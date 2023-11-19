@@ -10,8 +10,6 @@ if (typeof window !== 'undefined') {
 }
 
 
-
-
 export const getLoanApprovals = createAsyncThunk('loanApproval/approval', async (loanId) => {
   try {
     const response = await axios.get(`${API_URL}/loan-application/${loanId}/approvals`, {
@@ -28,59 +26,39 @@ export const getLoanApprovals = createAsyncThunk('loanApproval/approval', async 
   }
 });
 
-// export const getLoanApproval = createAsyncThunk('LoanApproval/all', async () => {
-//   const response = await axios.get(`${API_URL}/loan-application/all`, {
-//     headers: {
-//       Authorization: `Bearer ${user?.data?.token}`
-//     }
-//   });
-//   return response.data;
-// });
+export const getApprovalAssignee = createAsyncThunk('loanApproval/assignee', async (assigneeId) => {
+  try {
+    const response = await axios.get(`${API_URL}/loan-application/task/${assigneeId}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    console.log("response");
+    console.log({response});
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
 
-// export const  getLoanApprovalSummary = createAsyncThunk('LoanApproval/summary', async (date) => {
-//   if (date) {
-//     console.log(".....",date);
-//     const response = await axios.get(`${API_URL}/loan-application/summary?startDate=${date?.startDate}&endDate=${date?.endDate}`, {
-//       headers: {
-//         Authorization: `Bearer ${user?.data?.token}`
-//       }
-//     });
-
-//     return response.data;
-//   } else {
-//     const response = await axios.get(`${API_URL}/loan-application/summary`, {
-//       headers: {
-//         Authorization: `Bearer ${user?.data?.token}`
-//       }
-//     });
-
-//     return response.data;
-//   }
-
-// });
-
-// export const updateLoanApproval = createAsyncThunk(
-//   'LoanApproval/update',
-//   async ({ loanId, payload }) => {
-//     try {
-//       const response = await axios.put(
-//         `${API_URL}/loan-application/${loanId}/update`,
-//         payload,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${user?.data?.token}`
-//           }
-//         }
-//       );
-//       return response.data;
-//     } catch (error) {
-//       if (error.response.data.error) {
-//         throw new Error(error.response.data.error);
-//       }
-//     }
-//   }
-// );
-
+export const requestLoanApproval = createAsyncThunk('loanApproval/request-approval', async (payload) => {
+  try {
+   console.log({payload});
+    const response = await axios.post(API_URL + `/loan-application/${payload.id}/approval/request-approval`, payload.formData, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+  }
+});
 
 const LoanApprovalSlice = createSlice({
   name: 'LoanApprovals',
@@ -107,6 +85,30 @@ const LoanApprovalSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getLoanApprovals.rejected, (state, action,) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(requestLoanApproval.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(requestLoanApproval.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(requestLoanApproval.rejected, (state, action,) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(getApprovalAssignee.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(getApprovalAssignee.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getApprovalAssignee.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })

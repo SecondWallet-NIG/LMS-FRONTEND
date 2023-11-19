@@ -220,7 +220,6 @@ const CreateLoan = () => {
     const isFormDataValid = validateFormData(formData);
     if (isFormDataValid === true) {
       const num = parseInt(removeCommasFromNumber(formData.loanAmount));
-      console.log({ num });
       const payload = {
         loanDurationMetrics: formData.loanDurationMetrics,
         loanDuration: formData.loanDuration,
@@ -1087,8 +1086,10 @@ const CreateLoan = () => {
                 Loan Frequency Type
               </div>
               <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {formData.repaymentType || "No Loan Frequency Type Yet"}
+              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                  {repaymentTypeData.find(
+                    (option) => option.value === formData.repaymentType
+                  )?.label || "No Loan Frequency Type Yet"}
                 </div>
               </div>
             </div>

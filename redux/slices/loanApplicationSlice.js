@@ -36,7 +36,7 @@ export const getSingleLoan = createAsyncThunk('loanApplication/getSingleLoan', a
         Authorization: `Bearer ${user?.data?.token}`
       }
     });
-    console.log({ response });
+  
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -73,7 +73,7 @@ export const getLoanApplication = createAsyncThunk('loanApplication/all', async 
 
 export const  getLoanApplicationSummary = createAsyncThunk('loanApplication/summary', async (date) => {
   if (date) {
-    console.log(".....",date);
+
     const response = await axios.get(`${API_URL}/loan-application/summary?startDate=${date?.startDate}&endDate=${date?.endDate}`, {
       headers: {
         Authorization: `Bearer ${user?.data?.token}`
@@ -114,6 +114,23 @@ export const updateLoanApplication = createAsyncThunk(
     }
   }
 );
+
+export const getCustomerLoans = createAsyncThunk('loanApplication/getSingleLoan', async (loanId) => {
+  try {
+    const response = await axios.get(`${API_URL}/loan-application/${loanId}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+  
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
 
 
 const LoanApplicationSlice = createSlice({

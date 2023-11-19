@@ -9,11 +9,11 @@ if (typeof window !== 'undefined') {
 
 export const createUser = createAsyncThunk('user/createUser', async (userData) => {
   try {
-    const response = await axios.post(API_URL + '/user/create',  {
+    const response = await axios.post(API_URL + '/user/create', userData,  {
       headers: {
         Authorization: `Bearer ${user?.data?.token}`
       }
-    }, userData);
+    });
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -67,6 +67,23 @@ export const updateUser = createAsyncThunk('user/updateUser', async ({ userId, u
 export const getUserById = createAsyncThunk('user/getUser', async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/api/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
+export const getAllUsers= createAsyncThunk('user/getAllUsers', async () => {
+  try {
+    const response = await axios.get(`${API_URL}/user?page=1&per_page=100&sortedBy=`,  {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    }) 
+    console.log({response});
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -152,6 +169,18 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(getVerifyToken.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(getAllUsers.pending, (state) => {
         state.loading = 'pending';
         state.error = null;
       })

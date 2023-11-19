@@ -177,13 +177,9 @@ function ReusableDataTable({
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
-            console.log(data?.data.results || data?.data?.data);
-            console.log(data?.data.links.totalDocuments);
             setDownloadData(data?.data.links.totalDocuments);
           } else {
             setData(data?.data?.results || data?.data?.data);
-            console.log(data?.data.results || data?.data?.data);
-            console.log(data?.data.links.totalDocuments);
             setDownloadData(data?.data.links.totalDocuments);
             setPaginationLinks(data?.data?.links);
           }
@@ -306,14 +302,12 @@ function ReusableDataTable({
   return (
     <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
       <ToastContainer />
-      {/* {data?.length > 0 ? ( */}
       <div className="">
         {filters && (
           <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
             <div className="flex gap-2 items-center justify-between w-full md:w-fit">
               <div
                 className="flex border border-1 items-center mb-4 pl-2"
-                // style={{ width: "max-content" }}
               >
                 <p className="mr-2 text-swGray">Items:</p>
                 <Select
@@ -376,13 +370,6 @@ function ReusableDataTable({
                   <BsThreeDotsVertical size={20} />
                 </div>
               </div>
-              {/* <input
-                type="search"
-                placeholder="search..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-                className="px-2 rounded outline-none border w-full border-gray-300 h-10"
-              /> */}
               {btnText ? (
                 <div>
                   <Button

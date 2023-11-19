@@ -22,31 +22,28 @@ import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
 import RequestApproval from "@/app/components/modals/loans/RequestApproval";
 import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
 import { updateLoanApplication } from "@/redux/slices/loanApplicationSlice";
+import { getAllUsers } from "@/redux/slices/userSlice";
 import { getLoanApprovals } from "@/redux/slices/loanApprovalSlice";
-import {
-  MdEdit,
-  MdEditDocument,
-  MdOutlineEditAttributes,
-  MdUpdate,
-} from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import CenterModal from "@/app/components/modals/CenterModal";
 import Button from "@/app/components/shared/buttonComponent/Button";
-
+import { useRouter } from "next/navigation";
 const ViewLoan = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
-  const loanApprovals = useSelector(
-    (state) => state.loanApprovals
-  );
+  console.log({data});
+  const loanApprovals = useSelector((state) => state.loanApprovals);
+  const user = useSelector((state) => state.user?.data?.results?.results);
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [logSearch, setLogSearch] = useState(false);
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [loanAmount, setLoanAmount] = useState(0);
-
+  const userToApprove = JSON.parse(localStorage.getItem("user"));
+const router = useRouter()
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
@@ -60,51 +57,13 @@ const ViewLoan = () => {
     updatedData.append("loanAmount", loanAmount);
     dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
     dispatch(getSingleLoan(id));
-    setOpenUpdate(false)
-  }
-
-  const _loanApprovals = [
-    {
-      id: 1,
-      approval_type: "Loan Officer",
-      approval_status: "Approved",
-      action: "initiate Approval",
-    },
-    {
-      id: 2,
-      approval_type: "Credit Admin Officer",
-      approval_status: "Declined",
-      action: "Initiate Approval",
-    },
-    {
-      id: 3,
-      approval_type: "Internal Control",
-      approval_status: "Pending",
-      action: "Initiate Approval",
-    },
-    {
-      id: 4,
-      approval_type: "CFO",
-      approval_status: "Pending",
-      action: "Initiate Approval",
-    },
-    {
-      id: 5,
-      approval_type: "CEO",
-      approval_status: "Pending",
-      action: "Initiate Approval",
-    },
-    {
-      id: 6,
-      approval_type: "CFO",
-      approval_status: "Pending",
-      action: "Initiate Approval",
-    },
-  ];
+    setOpenUpdate(false);
+  };
 
   useEffect(() => {
     dispatch(getSingleLoan(id));
     dispatch(getLoanApprovals(id));
+    dispatch(getAllUsers());
 
     if (data) {
       setLoanAmount(data?.data?.loanApplication?.loanAmount);
@@ -173,6 +132,9 @@ const ViewLoan = () => {
                       </Link>
                     </div>
                     <EditableButton
+                      onClick={() => {
+                        router.push(`/customers/profile/${data?.data?.customerDetails?._id}`)
+                      }}
                       className={
                         "text-white text-sm bg-swBlue px-5 py-2 ml-3 rounded-lg font-medium"
                       }
@@ -191,15 +153,14 @@ const ViewLoan = () => {
                     <p className="text-md text-swGray font-semibold mt-4">
                       SWL-{data?.data?.loanApplication?.loanId}
                     </p>
-              
                   </div>
                 </div>
                 <div className="w-full bg-gray-100 rounded-xl p-2">
                   <p className="text-base font-medium">Loan Amount:</p>
-               
+
                   <div className="flex justify-between items-center">
                     <p className="text-md text-swGray font-semibold mt-4">
-                    ₦ {data?.data?.loanApplication?.loanAmount}
+                      ₦ {data?.data?.loanApplication?.loanAmount}
                     </p>
                     <div
                       className="p-2 rounded-md hover:bg-white hover:border-2 hover:border-gray-200 mt-2"
@@ -249,7 +210,9 @@ const ViewLoan = () => {
 
                     <td className="px-3 py-3">
                       <div>
-                        <p>₦ {data?.data?.interestCalculation?.totalPayments}</p>
+                        <p>
+                          ₦ {data?.data?.interestCalculation?.totalPayments}
+                        </p>
                       </div>
                     </td>
                     <td className="px-3 py-3">
@@ -257,7 +220,8 @@ const ViewLoan = () => {
                         <p>
                           {data?.data?.loanApplication?.loanDurationMetrics ===
                           "Yearly"
-                            ? `${data?.data?.loanApplication?.loanDuration}` * 12
+                            ? `${data?.data?.loanApplication?.loanDuration}` *
+                              12
                             : `${data?.data?.loanApplication?.loanDuration}`}{" "}
                           month(s)
                         </p>
@@ -281,7 +245,9 @@ const ViewLoan = () => {
             </div>
           </div>
           <div className="ml-5 mr-5 mt-5">
-            <h6 className="text-center font-semibold p-2">Loan Approvals</h6>
+            <h6 className="text-center font-semibold p-2">
+              Loan Approval Needed
+            </h6>
             <div className="border rounded-lg">
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
@@ -293,49 +259,115 @@ const ViewLoan = () => {
                     <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                       <h1>Approval Type</h1>
                     </th>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      <h1>Approval Status</h1>
-                    </th>
+
                     <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                       <h1>Action</h1>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {_loanApprovals.map((item, index) => (
-                    <tr key={index} className="text-xs">
-                      <td className="p-2">{item.id}</td>
-                      <td className="p-2">{item.approval_type}</td>
-                      <td>
-                        <div
-                          className={`${
-                            item.approval_status === "Approved"
-                              ? "bg-green-100"
-                              : item.approval_status === "Pending"
-                              ? "bg-yellow-100"
-                              : "bg-red-100"
-                          } border py-1 px-2 w-fit rounded-xl`}
-                        >
-                          {item.approval_status}
-                        </div>
-                      </td>
-                      <td className="p-2">
-                        <EditableButton
-                          onClick={() => {
-                            setIsRequestApprovalOpen(true);
-                          }}
-                          disabled={false}
-                          className={`py-1 px-2 border rounded-lg`}
-                        >
-                          {item.action}
-                        </EditableButton>
-                      </td>
-                    </tr>
-                  ))}
+                  <tr className="text-xs">
+                    <td className="p-2">
+                      {data?.data?.approvalNeeded?.approvalLevel}
+                    </td>
+                    <td className="p-2">
+                      {" "}
+                      {data?.data?.approvalNeeded?.approvalTitle}{" "}
+                    </td>
+                    {/* <td>
+                      <div className="border py-1 px-2 w-fit rounded-xl">
+                        {data?.data?.approvalNeeded?.approvalTitle}
+                      </div>
+                    </td> */}
+                    <td className="p-2">
+                      <EditableButton
+                        onClick={() => {
+                          setIsRequestApprovalOpen(true);
+                        }}
+                        disabled={
+                          data?.data?.approvalNeeded?.status === "Pending"
+                            ? false
+                            : true
+                        }
+                        className={`py-1 px-2 border rounded-lg`}
+                      >
+                        {data?.data?.approvalNeeded?.status === "Pending"
+                          ? "Request for Approval"
+                          : data?.data?.approvalNeeded?.status}
+                      </EditableButton>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
+          {userToApprove?.data?.user?._id ==
+          data?.data?.approvalNeeded?.assignee?._id ? (
+            <div className="ml-5 mr-5 mt-5">
+              <h6 className="text-center font-semibold p-2">Loan Action</h6>
+              <div className="border rounded-lg">
+                <table className=" w-full ">
+                  <thead className="bg-swLightGray ">
+                    <tr>
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                        <h1>Action Task</h1>
+                      </th>
+
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                        <h1>Assigned To</h1>
+                      </th>
+
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                        <h1>Status</h1>
+                      </th>
+
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                        <h1>Approve/Decline</h1>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="text-xs">
+                      <td className="p-2">
+                        {data?.data?.approvalNeeded?.approvalTitle ===
+                        "Credit Admin Officer"
+                          ? "Approve Loan Credit"
+                          : data?.data?.approvalNeeded?.approvalTitle}
+                      </td>
+                      <td className="p-2">
+                        <p className="">
+                          {" "}
+                          {data?.data?.approvalNeeded?.assignee?.firstName}{" "}
+                          {data?.data?.approvalNeeded?.assignee?.lastName}
+                        </p>
+                        <p className="text-swGray">
+                          {" "}
+                          {data?.data?.approvalNeeded?.assignee?.role?.name}
+                        </p>
+                      </td>
+
+                      <td className="p-2 border font-400 text-xs text-swGray border-none">
+                        {" "}
+                        <EditableButton className="py-2 px-2 text-[#107E4B] text-xs bg-[#E8F7F0] rounded-full">
+                          Pending
+                        </EditableButton>
+                      </td>
+                      <td className="p-2 border font-400 text-xs text-swGray border-none">
+                        <div className="flex gap-2">
+                        <EditableButton className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md">
+                          Approve
+                        </EditableButton>
+                        <EditableButton className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md">
+                          Decline
+                        </EditableButton>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : null}
 
           <div className="p-5">
             <section id="loan-details">{/* <ReusableDataTables/> */}</section>
@@ -455,19 +487,28 @@ const ViewLoan = () => {
         </section>
       </main>
       <RequestApproval
+        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+        approvalId={data?.data?.approvalNeeded?.approvalLevel}
+        data={user}
         isOpen={isRequestApprovalOpen}
         onClose={() => {
           setIsRequestApprovalOpen(false);
         }}
       />
 
-      <CenterModal  isOpen={openUpdate} width={'25%'}>
+      <CenterModal isOpen={openUpdate} width={"25%"}>
         <InputField
           label={"Enter new loan amount"}
           value={loanAmount}
           onChange={(e) => setLoanAmount(e.target.value)}
         />
-        <Button disabled={loanAmount == data?.data?.loanApplication?.loanAmount ? true : false} onClick={updateLoan} className="h-10 w-full mt-6 bg-swBlue text-white rounded-md">
+        <Button
+          disabled={
+            loanAmount == data?.data?.loanApplication?.loanAmount ? true : false
+          }
+          onClick={updateLoan}
+          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+        >
           Update Amount
         </Button>
       </CenterModal>

@@ -19,13 +19,15 @@ import InputField from "@/app/components/shared/input/InputField";
 import { IoIosClose } from "react-icons/io";
 import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
 import CustomerSummary from "@/app/components/customers/CustomerSummary";
-
+import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
 const CustomerProfile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = useParams();
+ 
 
   const { loading, error, data } = useSelector((state) => state.customer);
+  console.log({data000 : data?.profileInfo?._id});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeButton, setActiveButton] = useState("bio-data");
   const [activityButton, setActivityButton] = useState("activity-logs");
@@ -541,6 +543,7 @@ const CustomerProfile = () => {
             <div className="p-2">
               {activityButton === "activity-logs" && <CustomerActivityLogs />}
               {activityButton === "summary" && <CustomerSummary />}
+              {activityButton === "loans" && <CustomerLoanTable id={data?.profileInfo?._id} />}
             </div>
           </div>
         </div>

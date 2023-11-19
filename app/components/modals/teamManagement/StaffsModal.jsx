@@ -38,12 +38,14 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     lastName: "",
     email: "",
   });
-
   const modifyObjects = (arr) => {
-    return arr?.map((item) => ({
-      label: item.name,
-      value: item._id,
-    }));
+    console.log({arr});
+    return Array.isArray(arr)
+      ? arr.map((item) => ({
+          label: item.name,
+          value: item._id,
+        }))
+      : [];
   };
  // const modifiedArray = ;
   const modalStyles = {
@@ -220,7 +222,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
                   label={"Select User Role"}
                   required={true}
                   isSearchable={false}
-                  optionValue={modifyObjects(data)}
+                  optionValue={modifyObjects(data?.data)}
                   onChange={(selectedOption) =>
                     handleSelectChange(selectedOption, "role")
                   }
