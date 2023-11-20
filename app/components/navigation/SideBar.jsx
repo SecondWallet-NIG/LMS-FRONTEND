@@ -341,6 +341,7 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
+    setSideBarOpen(true);
     setTimeout(() => {
       setSideBarOpen(false);
     }, 1000);
@@ -560,6 +561,9 @@ const Sidebar = () => {
             text="Settings"
             link="/dashboard"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen(false);
+            }}
           />
         </div>
       </div>
@@ -571,6 +575,9 @@ const Sidebar = () => {
             text="Sign Out"
             link="/sign-out"
             sideBarOpen={sideBarOpen}
+            onClick={() => {
+              handleSidebarOpen(false);
+            }}
           />
         </div>
       </div>

@@ -38,6 +38,7 @@ const customStyles = {
 
 const SelectField = ({
   label,
+  name,
   required,
   placeholder,
   isSearchable,
@@ -46,7 +47,7 @@ const SelectField = ({
   onChange,
   value,
   disabled,
-  setValue
+  setValue,
 }) => {
   const handleSelectChange = (selectedOption) => {
     if (onChange) {
@@ -56,12 +57,13 @@ const SelectField = ({
 
   return (
     <div>
-      <label className="block text-gray-700 text-xs mb-2">
+      <label className="block text-gray-700 text-sm mb-2">
         {label}
         {required && <span className="text-red-600 ml-1">*</span>}
       </label>
       <Select
         setValue={setValue}
+        name={name}
         isDisabled={disabled}
         styles={customStyles}
         isSearchable={isSearchable}

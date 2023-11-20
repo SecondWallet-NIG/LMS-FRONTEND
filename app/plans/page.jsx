@@ -7,10 +7,21 @@ import InputField from "../components/shared/input/InputField";
 import { FiEdit2, FiFilter, FiSearch } from "react-icons/fi";
 import { useState } from "react";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
+import { useDispatch, useSelector } from "react-redux";
+import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
+import { useEffect } from "react";
+import Loader from "../components/shared/Loader";
 
 const LoanPackages = () => {
+  const dispatch = useDispatch();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [data, setData] = useState([]);
+
+  const loanPackage =
+    useSelector((state) => {
+      return state?.loanPackage?.data?.data;
+    }) || [];
 
   const handleSearch = (state) => {
     setSearchOpen(state);
@@ -33,58 +44,17 @@ const LoanPackages = () => {
       maximum_loan: 500000,
       active_loan: 50,
     },
-    {
-      type: "Car Loan",
-      status: "active",
-      interest_rate: "20%",
-      repayment_type: "Bullet",
-      minimum_loan: 50000,
-      maximum_loan: 500000,
-      active_loan: 50,
-    },
-    {
-      type: "Salary Loan",
-      status: "active",
-      interest_rate: "20%",
-      repayment_type: "Bullet",
-      minimum_loan: 50000,
-      maximum_loan: 500000,
-      active_loan: 50,
-    },
-    {
-      type: "Student Loan",
-      status: "active",
-      interest_rate: "20%",
-      repayment_type: "Bullet",
-      minimum_loan: 50000,
-      maximum_loan: 500000,
-      active_loan: 50,
-    },
-    {
-      type: "Car Loan",
-      status: "inactive",
-      interest_rate: "20%",
-      repayment_type: "Bullet",
-      minimum_loan: 50000,
-      maximum_loan: 500000,
-      active_loan: 50,
-    },
-    {
-      type: "Salary Loan",
-      status: "under review",
-      interest_rate: "20%",
-      repayment_type: "Bullet",
-      minimum_loan: 50000,
-      maximum_loan: 500000,
-      active_loan: 50,
-    },
   ];
+
+  useEffect(() => {
+    dispatch(getLoanPackage());
+  }, []);
 
   return (
     <DashboardLayout>
       <main className="mx-auto max-w-7xl p-5 overflow-hidden">
         <Link
-          href=""
+          href="/plans/create-plan"
           className="bg-swBlue py-3 px-6 font-medium rounded-lg flex items-center gap-2 text-white w-fit ml-auto"
         >
           Create plan
@@ -137,65 +107,65 @@ const LoanPackages = () => {
         </div>
 
         <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mt-5">
-          {loanPlans
-            .filter((item) => {
-              if (
-                item.type
-                  .toLocaleLowerCase()
-                  .includes(searchTerm.toLocaleLowerCase())
-              ) {
-                return item;
-              }
-            })
-            .map((item, index) => (
+          {loanPackage.length > 0 ? (
+            loanPackage?.map((item, index) => (
               <div
                 key={index}
                 className="bg-swLightGray rounded-lg p-2 flex flex-col gap-1"
               >
-                <div className="flex justify-between mb-3">
-                  <p className="font-semibold text-lg">{item.type}</p>
+                <div className="flex justify-between items-center mb-3">
+                  <p className="font-semibold text-lg">{item.name}</p>
                   <p
                     className={`${
-                      item.status === "active"
+                      item.status.toLocaleLowerCase() === "active"
                         ? "border-green-500 bg-green-100 text-green-500"
-                        : item.status === "under review"
+                        : item.status.toLocaleLowerCase() === "under review"
                         ? "border-purple-500 bg-purple-100 text-purple-500"
                         : "border-orange-500 bg-orange-100 text-orange-500"
-                    } border px-3 rounded-full text-xs flex items-center capitalize`}
+                    } border py-1 px-3 rounded-full text-xs flex items-center capitalize whitespace-nowrap h-fit`}
                   >
                     {item.status}
                   </p>
                 </div>
                 <div className="flex justify-between">
                   <p>Interest rate</p>
-                  <p className="font-semibold">{item.interest_rate}</p>
+                  <p className="font-semibold">{item.interestRate.rate}%</p>
                 </div>
                 <div className="flex justify-between">
+                  <p>Interest type</p>
+                  <p className="font-semibold whitespace-nowrap">
+                    {item.interestRate.rateType}
+                  </p>
+                </div>
+                {/* <div className="flex justify-between">
                   <p>Repayment type</p>
                   <p className="font-semibold">{item.repayment_type}</p>
-                </div>
+                </div> */}
                 <div className="flex justify-between">
                   <p>Minimum loan</p>
-                  <p className="font-semibold">{item.minimum_loan}</p>
+                  <p className="font-semibold">{item.loanAmountRange.min}</p>
                 </div>
                 <div className="flex justify-between">
                   <p>Maximum loan</p>
-                  <p className="font-semibold">{item.maximum_loan}</p>
+                  <p className="font-semibold">{item.loanAmountRange.max}</p>
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <p>Active loans</p>
                   <p className="font-semibold">{item.active_loan}</p>
-                </div>
+                </div> */}
 
                 <Link
-                  href={`plans/view-plans-and-packages/${item.type}`}
+                  href={`plans/view-plan/${item._id}`}
                   className="active:bg-gray-300 mt-2 w-full p-3 font-semibold text-gray-600 border-2 border-transparent hover:border-gray-300 hover:bg-white rounded-lg flex gap-2 justify-center"
                 >
                   Edit plan
                   <FiEdit2 size={20} />
                 </Link>
               </div>
-            ))}
+            ))
+          ) : (
+            <Loader isOpen={loanPackage < 1} />
+          )}
         </div>
       </main>
     </DashboardLayout>
