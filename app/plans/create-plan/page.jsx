@@ -51,7 +51,6 @@ const CreatePlansAndPackages = () => {
     setCreatePlan((prev) => ({
       ...prev,
       [name]: value,
-      createdBy: user?.data?.user?._id,
     }));
   };
 
@@ -64,7 +63,7 @@ const CreatePlansAndPackages = () => {
       interestRate: "",
       repaymentInterval: "",
       status: "Active",
-      createdBy: "",
+      createdBy: user?.data?.user?._id,
     });
   };
 
@@ -104,6 +103,8 @@ const CreatePlansAndPackages = () => {
     return isValid;
   };
 
+  console.log(user?.data?.token);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validateForm();
@@ -120,7 +121,7 @@ const CreatePlansAndPackages = () => {
         },
         repaymentInterval: createPlan.repaymentInterval,
         status: "Active",
-        createdBy: createPlan.createdBy,
+        createdBy: user?.data?.user?._id,
       };
 
       dispatch(createLoanPackage(payload))
@@ -192,7 +193,7 @@ const CreatePlansAndPackages = () => {
           <InputField
             label={"Interest rate"}
             required={true}
-            placeholder={"30"}
+            placeholder={"5"}
             inputType={"number"}
             endIcon={<MdPercent size={20} className="text-swGray" />}
             name={"interestRate"}

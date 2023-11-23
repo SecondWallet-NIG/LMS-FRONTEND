@@ -1,5 +1,5 @@
 // LoginScreen.js
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineEmail, MdKey } from "react-icons/md";
@@ -77,7 +77,6 @@ const LoginScreen = () => {
     dispatch(loginUser(loginData))
       .unwrap()
       .then(() => {
-        
         toast.success("Login successful");
       })
       .catch((error) => {
@@ -88,12 +87,12 @@ const LoginScreen = () => {
   // Handle the response data when it changes
   useEffect(() => {
     if (userData) {
-      console.log({userData});
+      console.log({ userData });
       localStorage.setItem("user", JSON.stringify(userData));
       if (userData?.data?.user.firstLogin === true) {
         router.push("/onboarding");
       } else {
-        router.push("/home");
+        router.push("/dashboard");
       }
     }
   }, [userData]);
@@ -114,7 +113,7 @@ const LoginScreen = () => {
         </h2>
         <div className="mt-2">
           <InputField
-           css={"relative"}
+            css={"relative"}
             name="email"
             label="Email address"
             inputType="email"

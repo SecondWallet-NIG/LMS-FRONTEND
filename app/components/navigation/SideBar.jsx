@@ -323,21 +323,20 @@ import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import SidebarLink from "../shared/sideBarLink/SidebarLink";
 import { useRouter } from "next/navigation";
+import { FiSend } from "react-icons/fi";
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const router = useRouter()
+  const router = useRouter();
   const [sideBarOpen, setSideBarOpen] = useState(true);
 
   const [activeLink, setActiveLink] = useState("");
 
-  const handleSidebarOpen = () => {
-    setSideBarOpen(!sideBarOpen);
-    sideBarOpen
-      ? localStorage.setItem("minimizeSidebar", false)
-      : localStorage.setItem("minimizeSidebar", true);
-
-     
+  const handleSidebarOpen = (state) => {
+    setSideBarOpen(state);
+    // sideBarOpen
+    //   ? localStorage.setItem("minimizeSidebar", false)
+    //   : localStorage.setItem("minimizeSidebar", true);
   };
 
   useEffect(() => {
@@ -351,11 +350,10 @@ const Sidebar = () => {
       className={`fixed h-full border-r bg-white border-r-gray-300 flex flex-col font-medium z-[102] transition-all ease-in-out duration-1000 ${
         sideBarOpen ? "w-1/5" : "w-[5%]"
       }`}
-     
-      // onMouseEnter={handleSidebarOpen}
-       onMouseLeave={handleSidebarOpen}
+      onMouseEnter={() => handleSidebarOpen(true)}
+      onMouseLeave={() => handleSidebarOpen(false)}
     >
-      <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300"  onClick={handleSidebarOpen}>
+      <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300">
         {sideBarOpen ? (
           <Image src={companyLogo} alt="company logo" priority={true} />
         ) : (
@@ -381,7 +379,7 @@ const Sidebar = () => {
               }
               pathname={pathname}
               text="Dashboard"
-              link="/home"
+              link="/dashboard"
               isActive={"dashboard"}
               sideBarOpen={sideBarOpen}
               onClick={() => {
@@ -432,56 +430,11 @@ const Sidebar = () => {
             }
             pathname={pathname}
             text="Loan applications"
-            link=""
+            link="/loan-applications"
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("loan-applications");
             }}
-            hasDropdown={true}
-            dropdownContent={
-              <div className=" bg-white ">
-                <SidebarLink
-                  pathname={pathname}
-                  text="All Loans"
-                  link="/loan-applications/all"
-                  isActive={"All Loans"}
-                  sideBarOpen={sideBarOpen}
-                  onClick={() => {
-                    setActiveLink("All Loans");
-                  }}
-                />
-                <SidebarLink
-                  pathname={pathname}
-                  text="New loans"
-                  link="/loan-applications/all"
-                  isActive={"New loans"}
-                  sideBarOpen={sideBarOpen}
-                  onClick={() => {
-                    setActiveLink("New loans");
-                  }}
-                />
-                <SidebarLink
-                  pathname={pathname}
-                  text="Pending loans"
-                  link="/loan-applications/all"
-                  isActive={"Pending loans"}
-                  sideBarOpen={sideBarOpen}
-                  onClick={() => {
-                    setActiveLink("Pending loans");
-                  }}
-                />
-                <SidebarLink
-                  pathname={pathname}
-                  text="Approved loans"
-                  link="/loan-applications/all"
-                  isActive={"Approved loans"}
-                  sideBarOpen={sideBarOpen}
-                  onClick={() => {
-                    setActiveLink("Approved loans");
-                  }}
-                />
-              </div>
-            }
           />
           <SidebarLink
             icon={
@@ -519,7 +472,7 @@ const Sidebar = () => {
           />
           <SidebarLink
             icon={
-              <BsCalculator
+              <FiSend
                 className={`${activeLink === "disbursement" && "text-swBlue"}`}
                 size={20}
               />
@@ -541,7 +494,7 @@ const Sidebar = () => {
           <SidebarLink
             icon={<BiMapAlt size={20} />}
             text="Plans"
-            link="/dashboard"
+            link="/plans"
             sideBarOpen={sideBarOpen}
           />
           <SidebarLink

@@ -13,12 +13,12 @@ export const createLoanPackage = createAsyncThunk(
     try {
       const response = await axios.post(
         API_URL + "/loan-package/create",
+        payload,
         {
           headers: {
             Authorization: `Bearer ${user?.data?.token}`,
           },
-        },
-        payload
+        }
       );
       return response.data;
     } catch (error) {
