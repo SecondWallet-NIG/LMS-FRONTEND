@@ -6,7 +6,6 @@ import { IoIosClose } from "react-icons/io";
 import InputField from "../components/shared/input/InputField";
 import { FiEdit2, FiFilter, FiSearch } from "react-icons/fi";
 import { useState } from "react";
-import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { useEffect } from "react";

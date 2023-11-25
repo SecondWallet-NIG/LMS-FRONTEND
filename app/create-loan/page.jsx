@@ -15,7 +15,6 @@ import { createLoanApplication } from "@/redux/slices/loanApplicationSlice";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import { calculateInterest } from "@/redux/slices/interestTypeSlice";
 import CenterModal from "../components/modals/CenterModal";
-import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PreviewInterest from "../components/modals/PreviewInterest";
@@ -1265,11 +1264,11 @@ const CreateLoan = () => {
                     {item.phoneNumber}
                   </div>
                   <div>
-                    <EditableButton
+                    <button
                       className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
                     >
                       Badge
-                    </EditableButton>
+                    </button>
                   </div>
                 </div>
               </div>

@@ -2,11 +2,25 @@ import { CiSearch } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import PagePath from "./PagePath";
+import { IoIosArrowBack } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
-const NavBar = () => {
+const NavBar = ({ paths, isBackNav }) => {
+  const router = useRouter();
+
   return (
     <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-[95%] px-5 z-[100]">
-      <PagePath />
+      <div className="flex gap-5 items-center">
+        {isBackNav && (
+          <div
+            className="border-2 p-2 rounded-md border-transparent hover:border-swLightGray cursor-pointer"
+            onClick={() => router.back()}
+          >
+            <IoIosArrowBack size={20} />
+          </div>
+        )}
+        <PagePath paths={paths} />
+      </div>
       <div className=" flex gap-5 items-center">
         <div className="relative">
           <FaBell size={20} />

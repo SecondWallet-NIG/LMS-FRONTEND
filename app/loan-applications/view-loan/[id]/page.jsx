@@ -5,7 +5,6 @@ import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLog
 import ActivityLogs from "@/app/components/customers/CustomerActivityLogs";
 import Summary from "@/app/components/customers/CustomerSummary";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
@@ -34,7 +33,7 @@ const ViewLoan = () => {
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
-  console.log({data});
+  console.log({ data });
   const loanApprovals = useSelector((state) => state.loanApprovals);
   const user = useSelector((state) => state.user?.data?.results?.results);
   const [activityButton, setActivityButton] = useState("activity-logs");
@@ -43,7 +42,7 @@ const ViewLoan = () => {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [loanAmount, setLoanAmount] = useState(0);
   const userToApprove = JSON.parse(localStorage.getItem("user"));
-const router = useRouter()
+  const router = useRouter();
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
@@ -131,16 +130,18 @@ const router = useRouter()
                         <FiDatabase size={15} />
                       </Link>
                     </div>
-                    <EditableButton
+                    <button
                       onClick={() => {
-                        router.push(`/customers/profile/${data?.data?.customerDetails?._id}`)
+                        router.push(
+                          `/customers/profile/${data?.data?.customerDetails?._id}`
+                        );
                       }}
                       className={
                         "text-white text-sm bg-swBlue px-5 py-2 ml-3 rounded-lg font-medium"
                       }
                     >
                       View profile
-                    </EditableButton>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -233,11 +234,11 @@ const router = useRouter()
                       </div>
                     </td>
                     <td className="px-3 py-3">
-                      <EditableButton
+                      <button
                         className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
                       >
                         {data?.data?.loanApplication?.status}
-                      </EditableButton>
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -280,7 +281,7 @@ const router = useRouter()
                       </div>
                     </td> */}
                     <td className="p-2">
-                      <EditableButton
+                      <button
                         onClick={() => {
                           setIsRequestApprovalOpen(true);
                         }}
@@ -294,7 +295,7 @@ const router = useRouter()
                         {data?.data?.approvalNeeded?.status === "Pending"
                           ? "Request for Approval"
                           : data?.data?.approvalNeeded?.status}
-                      </EditableButton>
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -348,18 +349,18 @@ const router = useRouter()
 
                       <td className="p-2 border font-400 text-xs text-swGray border-none">
                         {" "}
-                        <EditableButton className="py-2 px-2 text-[#107E4B] text-xs bg-[#E8F7F0] rounded-full">
+                        <button className="py-2 px-2 text-[#107E4B] text-xs bg-[#E8F7F0] rounded-full">
                           Pending
-                        </EditableButton>
+                        </button>
                       </td>
                       <td className="p-2 border font-400 text-xs text-swGray border-none">
                         <div className="flex gap-2">
-                        <EditableButton className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md">
-                          Approve
-                        </EditableButton>
-                        <EditableButton className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md">
-                          Decline
-                        </EditableButton>
+                          <button className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md">
+                            Approve
+                          </button>
+                          <button className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md">
+                            Decline
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -379,7 +380,7 @@ const router = useRouter()
               {/* <div className="p-3 flex justify-between items-center"></div> */}
               <div className="flex items-center justify-between overflow-x-hidden border-b border-gray-300 py-2 px-4 flex-wrap">
                 <div className="flex gap-2 text-xs lg:text-sm">
-                  <EditableButton
+                  <button
                     onClick={() => handleActivityToggle("activity-logs")}
                     className={`${
                       activityButton === "activity-logs" &&
@@ -387,8 +388,8 @@ const router = useRouter()
                     } p-2 rounded-md whitespace-nowrap`}
                   >
                     Activity logs
-                  </EditableButton>
-                  <EditableButton
+                  </button>
+                  <button
                     onClick={() => handleActivityToggle("summary")}
                     className={`${
                       activityButton === "summary" &&
@@ -396,8 +397,8 @@ const router = useRouter()
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Summary
-                  </EditableButton>
-                  <EditableButton
+                  </button>
+                  <button
                     onClick={() => handleActivityToggle("loans")}
                     className={`${
                       activityButton === "loans" &&
@@ -405,8 +406,8 @@ const router = useRouter()
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Loan Docs
-                  </EditableButton>
-                  <EditableButton
+                  </button>
+                  <button
                     onClick={() => handleActivityToggle("disbursement")}
                     className={`${
                       activityButton === "disbursement" &&
@@ -414,8 +415,8 @@ const router = useRouter()
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Disbursment
-                  </EditableButton>
-                  <EditableButton
+                  </button>
+                  <button
                     onClick={() => handleActivityToggle("repayment")}
                     className={`${
                       activityButton === "repayment" &&
@@ -423,7 +424,7 @@ const router = useRouter()
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Repayments
-                  </EditableButton>
+                  </button>
                 </div>
 
                 <div className="flex justify-center items-center gap-2 ml-auto">

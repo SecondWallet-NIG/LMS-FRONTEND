@@ -1,6 +1,5 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { FiMinus } from "react-icons/fi";
@@ -293,28 +292,26 @@ const CreatePlansAndPackages = () => {
           </div>
 
           <div className="flex justify-between ">
-            <EditableButton
+            <button
               className="border py-2 px-4 rounded-lg"
-              children={
-                <div className="flex gap-1 items-center ">
-                  <MdArrowBackIos size={15} />
-                  Cancel
-                </div>
-              }
               onClick={() => {
                 setCancelModal(true);
               }}
-            />
-            <EditableButton
+            >
+              <div className="flex gap-1 items-center ">
+                <MdArrowBackIos size={15} />
+                Cancel
+              </div>
+            </button>
+            <button
               className="border bg-swBlue text-white py-2 px-4 rounded-lg"
-              onClick={handleSubmit}
-              children={
-                <div className="flex gap-2 items-center">
-                  Create plan/package
-                  <FaCheck size={15} />
-                </div>
-              }
-            />
+              onClick={() => handleSubmit}
+            >
+              <div className="flex gap-2 items-center">
+                Create plan/package
+                <FaCheck size={15} />
+              </div>
+            </button>
           </div>
         </div>
         <CenterModal width={"600px"} isOpen={cancelModal}>
@@ -334,8 +331,8 @@ const CreatePlansAndPackages = () => {
               <Image src={warningGif} height={50} width={50} alt="warning" />
             </div>
             <p className="text-center">
-              You're currently creatin a plan/package canceling will make you
-              loose your progress
+              You&apos;re currently creatin a plan/package canceling will make
+              you loose your progress
             </p>
             <p className="my-3 text-center">Are you sure you want to cancel?</p>
           </div>
@@ -346,17 +343,15 @@ const CreatePlansAndPackages = () => {
                 setCancelModal(false);
               }}
             >
-              <EditableButton className="w-full border rounded-lg p-3">
-                No
-              </EditableButton>
+              <button className="w-full border rounded-lg p-3">No</button>
             </div>
             <Link
               href="/plans"
               className="border-2 border-transparent w-full h-fit rounded-lg hover:border-blue-100 overflow-hidden text-white"
             >
-              <EditableButton className="w-full h-fpull bg-swBlue border rounded-lg  p-3">
+              <button className="w-full h-fpull bg-swBlue border rounded-lg  p-3">
                 Yes, Cancel
-              </EditableButton>
+              </button>
             </Link>
           </div>
         </CenterModal>
@@ -386,9 +381,9 @@ const CreatePlansAndPackages = () => {
                 setSuccessModal(false);
               }}
             >
-              <EditableButton className="w-full border rounded-lg p-3">
+              <button className="w-full border rounded-lg p-3">
                 View plan
-              </EditableButton>
+              </button>
             </div>
             <div
               className="border-2 border-transparent w-full rounded-lg hover:border-blue-200 text-white"
@@ -396,9 +391,9 @@ const CreatePlansAndPackages = () => {
                 setSuccessModal(false);
               }}
             >
-              <EditableButton className="w-full bg-swBlue border rounded-lg  p-3">
+              <button className="w-full bg-swBlue border rounded-lg  p-3">
                 Create a loan
-              </EditableButton>
+              </button>
             </div>
           </div>
         </CenterModal>
