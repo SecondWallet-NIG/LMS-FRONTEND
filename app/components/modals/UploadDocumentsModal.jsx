@@ -74,7 +74,6 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
 
   const handleProfileUpdate = (e) => {
     e.preventDefault();
-
     const payload = new FormData();
     payload.append("utilityBill", selectedFilesObj["Utility bill"]);
     payload.append(
@@ -82,21 +81,22 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
       selectedFilesObj["Statement of account"]
     );
     payload.append("idCard", selectedFilesObj["ID card"]);
-    payload.append("kyc", "");
+    payload.append("kyc", selectedFilesObj["ID card"]);
     payload.append("powerOfAttorney", selectedFilesObj["Power of attorney"]);
-    payload.append("transferOfOwnership", "");
+    payload.append("transferOfOwnership", selectedFilesObj["ID card"]);
     payload.append("customerProfileInformation", customerID);
 
     dispatch(identityVerification(payload))
       .unwrap()
       .then(() => {
+        console.log("Profile successfully updated");
+        toast.success("Profile successfully updated");
         resetUploadModal();
         successModal(true);
       })
       .catch((error) => {
         toast.error(`An error occured`);
       });
-    // console.log(payload);
   };
 
   return (
