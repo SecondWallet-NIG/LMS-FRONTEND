@@ -60,6 +60,37 @@ export const requestLoanApproval = createAsyncThunk('loanApproval/request-approv
   }
 });
 
+export const approveLoanRequest = createAsyncThunk('loanApproval/approve', async (payload) => {
+  try {
+   console.log({payload});
+    const response = await axios.post(API_URL + `/loan-application/${payload.id}/approval/approve`, payload.formData, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+  }
+});
+
+export const declineLoanRequest = createAsyncThunk('loanApproval/decline',                                                                                                                                        async (payload) => {
+  try {
+    const response = await axios.post(API_URL + `/loan-application/${payload.id}/approval/request-approval`, payload.formData, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+  }
+});
+
 const LoanApprovalSlice = createSlice({
   name: 'LoanApprovals',
   initialState: {
@@ -109,6 +140,18 @@ const LoanApprovalSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getApprovalAssignee.rejected, (state, action,) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(approveLoanRequest.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(approveLoanRequest.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(approveLoanRequest.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })

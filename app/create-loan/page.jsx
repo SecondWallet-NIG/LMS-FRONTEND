@@ -300,7 +300,7 @@ const CreateLoan = () => {
       .unwrap()
       .then(() => {
         toast("Loan application successful");
-        router.push("/loan-applications/all");
+        router.push("/loan-applications");
         setLoading(false);
       })
       .catch((error) => {

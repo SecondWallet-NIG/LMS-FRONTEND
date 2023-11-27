@@ -78,7 +78,7 @@ export const getUserById = createAsyncThunk('user/getUser', async (userId) => {
 
 export const getAllUsers= createAsyncThunk('user/getAllUsers', async () => {
   try {
-    const response = await axios.get(`${API_URL}/user?page=1&per_page=100&sortedBy=`,  {
+    const response = await axios.get(`${API_URL}/user?page=1&per_page=100&sortedBy=-createdAt`,  {
       headers: {
         Authorization: `Bearer ${user?.data?.token}`
       }
