@@ -18,6 +18,7 @@ module.exports = {
         swGreen: "#17B26A",
         swYellow: "#F9C00F",
         swTextColor: "#545454",
+        swBlack: "#333333",
       },
     },
   },

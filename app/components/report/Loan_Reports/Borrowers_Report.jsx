@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { PiCalendarBlankLight } from "react-icons/pi";
-import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 import { FiUser } from "react-icons/fi";
 import { BsGraphDownArrow } from "react-icons/bs";
 import CustomerLoan from "../../customers/CustomerLoan";
@@ -35,42 +34,42 @@ const BorrowersReport = () => {
     <main className="w-full rounded-lg bg-swLightGray p-5 shadow-xl">
       <div className="flex justify-between">
         <p className="text-lg font-semibold text-black">Borrowers Report</p>
-        <EditableButton
+        <button
           className={
             "py-2 px-4 text-white text-sm bg-swBlue font-semibold rounded-md"
           }
         >
           Export report
-        </EditableButton>
+        </button>
       </div>
 
       <div className="flex justify-between items-center mt-5">
         <p className="font-semibold text-black">Filter report</p>
         <div className="flex gap-3">
-          <EditableButton
+          <button
             className={
               "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
             }
           >
             <PiCalendarBlankLight size={20} />
             Select date range
-          </EditableButton>
-          <EditableButton
+          </button>
+          <button
             className={
               "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
             }
           >
             <FiUser size={20} />
             Borrower status
-          </EditableButton>
-          <EditableButton
+          </button>
+          <button
             className={
               "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
             }
           >
             <BsGraphDownArrow size={20} />
             Debt status
-          </EditableButton>
+          </button>
         </div>
       </div>
 

@@ -29,6 +29,6 @@ const AllDisburments = () => {
       </main>
     </DashboardLayout>
   );
-};
+};  
 
 export default AllDisburments;

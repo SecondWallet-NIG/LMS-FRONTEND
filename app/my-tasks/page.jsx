@@ -5,7 +5,6 @@ import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/loanApprovalSlice";
-import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Button from "../components/shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 const MyTasks = () => {
@@ -56,8 +55,8 @@ const MyTasks = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {loanToApprove?.data?.data?.map((item) => (
-                    <tr className="border pt-2 pb-2 hover:bg-swLightGray" onClick={() => {
+                  {loanToApprove?.data?.data?.map((item, index) => (
+                    <tr className="border pt-2 pb-2 hover:bg-swLightGray" key={index} onClick={() => {
                      router.push(`/loan-applications/view-loan/${item?.loanApplication?._id}`)
                     }}>
                        <td className="px-5 py-4 border font-400 text-xs text-swGray border-none">
@@ -72,9 +71,9 @@ const MyTasks = () => {
                       </td>
                       <td className="px-5 py-4 border font-400 text-xs text-swGray border-none">
                         {" "}
-                        <EditableButton className="py-2 px-2 text-[#107E4B] text-xs bg-[#E8F7F0] rounded-full">
+                        <button className="py-2 px-2 text-[#107E4B] text-xs bg-[#E8F7F0] rounded-full">
                           Pending
-                        </EditableButton>
+                        </button>
                       </td>
                     </tr>
                   ))}

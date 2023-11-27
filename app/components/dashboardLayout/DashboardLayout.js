@@ -7,7 +7,7 @@ import ProtectedRoute from "../protected-route/ProtectedRoute";
 import NavBar from "../navigation/NavBar";
 import Sidebar from "../navigation/SideBar";
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ children, paths, isBackNav }) => {
   const [minimizeSidebar, setMinimizeSidebar] = useState("false");
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("minimizeSidebar"));
@@ -17,8 +17,8 @@ const DashboardLayout = ({ children }) => {
     <div className="h-screen">
       <div className="flex h-full w-full">
         <Sidebar />
-        <NavBar />
-        <div className="h-full w-[95%] ml-auto mt-[4.5rem] text-swTextColor">
+        <NavBar paths={paths} isBackNav={isBackNav} />
+        <div className="h-full w-[95%] ml-auto mt-[4.5rem] text-swGray">
           {children}
         </div>
       </div>

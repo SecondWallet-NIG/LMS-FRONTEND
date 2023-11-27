@@ -14,21 +14,24 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import { IoIosClose } from "react-icons/io";
 import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
 import CustomerSummary from "@/app/components/customers/CustomerSummary";
 import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
+import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
 const CustomerProfile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = useParams();
- 
+  const paths = ["Borrowers", "Borrowers Profile"];
 
   const { loading, error, data } = useSelector((state) => state.customer);
-  console.log({data000 : data?.profileInfo?._id});
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // console.log({ data000: data?.profileInfo?._id });
+  const [isEmploymentDetailsModalOpen, setIsEmploymentDetailsModalOpen] =
+    useState(false);
+  const [isUploadDocumentsModalOpen, setIsUploadDocumentsModalOpen] =
+    useState(false);
   const [activeButton, setActiveButton] = useState("bio-data");
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [infoHover, setInfoHover] = useState("");
@@ -47,12 +50,14 @@ const CustomerProfile = () => {
     setInfoHover(infoId);
   };
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openModal = (id) => {
+    id === "employmentDetails" && setIsEmploymentDetailsModalOpen(true);
+    id === "uploadDocuments" && setIsUploadDocumentsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeModal = (id) => {
+    id === "employmentDetails" && setIsEmploymentDetailsModalOpen(false);
+    id === "uploadDocuments" && setIsUploadDocumentsModalOpen(false);
   };
 
   const handleLogSearch = (state) => {
@@ -64,7 +69,7 @@ const CustomerProfile = () => {
     dispatch(getCustomerById(id));
   }, []);
   return (
-    <DashboardLayout>
+    <DashboardLayout isBackNav={true} paths={paths}>
       <div className="overflow-x-hidden">
         <div className="flex gap-2 border-b border-gray-300 items-end py-4 px-8">
           <div className="w-1/2">
@@ -148,7 +153,7 @@ const CustomerProfile = () => {
         <div className="flex">
           <div className="w-[30%] h-full p-2 md:p-4">
             <div className="flex gap-2 text-xs lg:text-sm  items-center flex-wrap">
-              <EditableButton
+              <button
                 onClick={() => handleInfoToggle("bio-data")}
                 className={`${
                   activeButton === "bio-data" &&
@@ -156,8 +161,8 @@ const CustomerProfile = () => {
                 } p-2 rounded-md cursor-pointer whitespace-nowrap`}
               >
                 Personal Info
-              </EditableButton>
-              <EditableButton
+              </button>
+              <button
                 onClick={() => handleInfoToggle("work")}
                 className={`${
                   activeButton === "work" &&
@@ -165,8 +170,8 @@ const CustomerProfile = () => {
                 } p-2 rounded-md cursor-pointer`}
               >
                 Work
-              </EditableButton>
-              <EditableButton
+              </button>
+              <button
                 onClick={() => handleInfoToggle("document")}
                 className={`${
                   activeButton === "document" &&
@@ -174,7 +179,7 @@ const CustomerProfile = () => {
                 } p-2 rounded-md cursor-pointer`}
               >
                 Documents
-              </EditableButton>
+              </button>
             </div>
             {activeButton == "bio-data" && (
               <div>
@@ -226,12 +231,15 @@ const CustomerProfile = () => {
                     </div>
 
                     <Button
-                      onClick={() => handleActivityToggle("activity-log")}
+                      onClick={() => {
+                        handleActivityToggle("activity-log");
+                        
+                      }}
                       variant={"secondary"}
                       size={"normal"}
                       className="py-1.5 text-sm rounded-md items-center flex gap-1 justify-between border mt-2"
                     >
-                      <AiOutlinePlus size={20} />{" "}
+                      <AiOutlinePlus size={20} />
                       <p className="whitespace-nowrap">Add details</p>
                     </Button>
                   </div>
@@ -322,7 +330,7 @@ const CustomerProfile = () => {
                     <div className="pt-20 pb-24">
                       <p> No work experience provided</p>
                       <Button
-                        onClick={openModal}
+                        onClick={() => openModal("employmentDetails")}
                         variant="primary"
                         className="py-1.5 px-3 rounded-md mx-auto flex gap-2 border w-fit mt-5"
                       >
@@ -438,7 +446,7 @@ const CustomerProfile = () => {
                   <p> No document uploaded yet</p>
                   <div className="flex justify-center">
                     <Button
-                      onClick={openModal}
+                      onClick={() => openModal("uploadDocuments")}
                       variant="primary"
                       className="py-1.5 px-3 rounded-md flex gap-2 border w-fit mt-5"
                     >
@@ -452,7 +460,7 @@ const CustomerProfile = () => {
           <div className="w-[70%] border-l h-screen border-gray-300">
             <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap">
               <div className="flex gap-2 text-xs lg:text-sm">
-                <EditableButton
+                <button
                   onClick={() => handleActivityToggle("activity-logs")}
                   className={`${
                     activityButton === "activity-logs" &&
@@ -460,8 +468,8 @@ const CustomerProfile = () => {
                   } p-2 rounded-md cursor-pointer whitespace-nowrap`}
                 >
                   Activity logs
-                </EditableButton>
-                <EditableButton
+                </button>
+                <button
                   onClick={() => handleActivityToggle("summary")}
                   className={`${
                     activityButton === "summary" &&
@@ -469,8 +477,8 @@ const CustomerProfile = () => {
                   } p-2 rounded-md cursor-pointer`}
                 >
                   Summary
-                </EditableButton>
-                <EditableButton
+                </button>
+                <button
                   onClick={() => handleActivityToggle("loans")}
                   className={`${
                     activityButton === "loans" &&
@@ -478,8 +486,8 @@ const CustomerProfile = () => {
                   } p-2 rounded-md cursor-pointer`}
                 >
                   Loans
-                </EditableButton>
-                <EditableButton
+                </button>
+                <button
                   onClick={() => handleActivityToggle("disbursement")}
                   className={`${
                     activityButton === "disbursement" &&
@@ -487,8 +495,8 @@ const CustomerProfile = () => {
                   } p-2 rounded-md cursor-pointer`}
                 >
                   Disbursment
-                </EditableButton>
-                <EditableButton
+                </button>
+                <button
                   onClick={() => handleActivityToggle("repayment")}
                   className={`${
                     activityButton === "repayment" &&
@@ -496,7 +504,7 @@ const CustomerProfile = () => {
                   } p-2 rounded-md cursor-pointer`}
                 >
                   Repayments
-                </EditableButton>
+                </button>
               </div>
 
               <div className="flex justify-center items-center gap-2 relative ml-auto">
@@ -543,14 +551,24 @@ const CustomerProfile = () => {
             <div className="p-2">
               {activityButton === "activity-logs" && <CustomerActivityLogs />}
               {activityButton === "summary" && <CustomerSummary />}
-              {activityButton === "loans" && <CustomerLoanTable id={data?.profileInfo?._id} />}
+              {activityButton === "loans" && (
+                <CustomerLoanTable id={data?.profileInfo?._id} />
+              )}
             </div>
           </div>
         </div>
         {/*  */}
       </div>
       <div>
-        <EmploymentDetailsModal isOpen={isModalOpen} onClose={closeModal} />
+        <EmploymentDetailsModal
+          isOpen={isEmploymentDetailsModalOpen}
+          onClose={closeModal}
+        />
+        <UploadDocumentsModal
+          isOpen={isUploadDocumentsModalOpen}
+          onClose={closeModal}
+          customerID={id}
+        />
       </div>
     </DashboardLayout>
   );

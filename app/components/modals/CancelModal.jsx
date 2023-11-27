@@ -1,15 +1,8 @@
-import React from "react";
-import { BiCheckCircle } from "react-icons/bi";
-import {
-  BsCheck,
-  BsCheckCircle,
-  BsCheckCircleFill,
-  BsMarkdown,
-  BsXLg,
-} from "react-icons/bs";
+import { BsXLg } from "react-icons/bs";
+import { ImWarning } from "react-icons/im";
 import Button from "../shared/buttonComponent/Button";
 
-const SuccessModal = ({
+const CancelModal = ({
   isOpen,
   onClose,
   children,
@@ -27,7 +20,6 @@ const SuccessModal = ({
     width: width || "90%", // Use full width on mobile
     maxWidth: "500px", // Set a maximum width for larger screens
   };
-
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[150]">
       <div className="bg-white p-4 rounded-md shadow-md" style={modalStyles}>
@@ -41,7 +33,9 @@ const SuccessModal = ({
 
         <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
           <div className="flex justify-center">
-            <BsCheckCircleFill color="#2769B3" size="60" />
+            <div className="p-4 bg-orange-400 rounded-full text-white">
+              <ImWarning size={40} />
+            </div>
           </div>
           <div className="flex  text-center flex-col gap-5 mt-5">
             {description}
@@ -73,4 +67,4 @@ const SuccessModal = ({
   );
 };
 
-export default SuccessModal;
+export default CancelModal;

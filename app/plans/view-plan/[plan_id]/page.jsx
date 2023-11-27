@@ -1,6 +1,5 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FiEdit2, FiTrash } from "react-icons/fi";
@@ -14,10 +13,10 @@ const ViewPlan = () => {
     <DashboardLayout>
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">
-          <EditableButton className="border py-2 px-3 flex gap-2 items-center rounded-lg">
+          <button className="border py-2 px-3 flex gap-2 items-center rounded-lg">
             <FiTrash size={20} color={"red"} />
             Delete loan plan
-          </EditableButton>
+          </button>
           <Link
             href=""
             className="border py-2 px-3 flex gap-2 items-center rounded-lg"

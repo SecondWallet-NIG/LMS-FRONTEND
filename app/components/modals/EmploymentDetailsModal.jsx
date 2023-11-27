@@ -11,18 +11,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
 import { createEmployment } from "@/redux/slices/customerSlice";
+import EditableButton from "../shared/editableButtonComponent/EditableButton";
+import { Rings } from "react-loader-spinner";
+import { IoMdCheckmark } from "react-icons/io";
 
 const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
-  if (!isOpen) return null;
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const {id} = useParams();
-
   const { loading } = useSelector((state) => state.user);
-
-  const successPopup = (selected) => {
-    selected(true);
-  };
-
   const [formData, setFormData] = useState({
     employerName: "",
     employerPhone: "",
@@ -33,7 +29,6 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
     employerAddress: "",
     incomePeriod: "",
   });
-
   const [errors, setErrors] = useState({
     employerName: "",
     employerPhone: "",
@@ -44,6 +39,11 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
     employerAddress: "",
     incomePeriod: "",
   });
+  if (!isOpen) return null;
+
+  const successPopup = (selected) => {
+    selected(true);
+  };
 
   const modalStyles = {
     width: width || "90%",
@@ -60,8 +60,6 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
     { value: "Weekly", label: "Weekly" },
     { value: "Monthly", label: "Monthly" },
   ];
-
-  
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -140,20 +138,20 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
     const isValid = validateForm();
     if (isValid) {
       const payload = {
-        "currentEmploymentStatus": formData.currentEmploymentStatus,
-        "employerInformation": {
-          "name": formData.employerName,
-          "natureOfBusiness": formData.employerName,
-          "address": formData.employerAddress,
-          "contact": formData.employerPhone
+        currentEmploymentStatus: formData.currentEmploymentStatus,
+        employerInformation: {
+          name: formData.employerName,
+          natureOfBusiness: formData.employerName,
+          address: formData.employerAddress,
+          contact: formData.employerPhone,
         },
-        "jobTitle": formData.jobTitle,
-        "monthlyIncome": formData.monthlyIncome,
-        "incomeSource": formData.incomeSource,
-        "customerProfileInformation": id,
-        "createdBy": "650f659167a782d8868b76ee"
-      }
-      
+        jobTitle: formData.jobTitle,
+        monthlyIncome: formData.monthlyIncome,
+        incomeSource: formData.incomeSource,
+        customerProfileInformation: id,
+        createdBy: "650f659167a782d8868b76ee",
+      };
+
       dispatch(createEmployment(payload))
         .unwrap()
         .then(() => {
@@ -181,7 +179,7 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
             </div>
             <AiOutlineClose
               size={20}
-              onClick={onClose}
+              onClick={() => onClose("employmentDetails")}
               className="cursor-pointer"
             />
           </div>
@@ -324,20 +322,34 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
           </div>
 
           <div className="p-3 border-t flex items-center justify-end gap-2 bg-white">
-            <button
-              type="button"
-              onClick={onClose}
-              className="border text-swGray font-semibold p-2 px-16 rounded-md"
-            >
-              Cancel
-            </button>
-            <Button
+            <EditableButton
+              whiteBtn={true}
+              label={"Cancel"}
+              className="px-20"
+              onClick={() => onClose("employmentDetails")}
+            />
+
+            <EditableButton
+              blueBtn={true}
               disabled={loading === "pending" ? true : false}
+              startIcon={
+                loading === "pending" && (
+                  <Rings
+                    height="20"
+                    width="20"
+                    color="#ffffff"
+                    radius="2"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                    ariaLabel="rings-loading"
+                  />
+                )
+              }
+              label={"Save & Update profile"}
+              endIcon={<IoMdCheckmark size={20} />}
               onClick={handleSubmit}
-              className="block  rounded-full"
-            >
-              {loading === "pending" ? "Processing" : " Submit"}
-            </Button>
+            />
           </div>
         </div>
       </form>

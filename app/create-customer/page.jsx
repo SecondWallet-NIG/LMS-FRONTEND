@@ -218,11 +218,11 @@ const CreateCustomer = () => {
   }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout isBackNav={true} paths={["Borrowers","Create borrower"]}>
       <ToastContainer />
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
         <div className="flex justify-between">
-          <p className="text-lg font-semibold">Create customer profile</p>
+          <p className="text-lg font-semibold">Create borrower profile</p>
         </div>
 
         <form id="add-customer-form">
@@ -469,7 +469,8 @@ const CreateCustomer = () => {
             >
               {loading === "pending"
                 ? "Processing..."
-                : "Create customer profile"}
+                : "Create borrower profile"}
+
             </Button>
           </div>
         </form>

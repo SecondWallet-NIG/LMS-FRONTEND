@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import CenterModal from "../modals/CenterModal";
-import Button from "../shared/buttonComponent/Button";
-import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import PreviewLoanDocs from "./PreviewLoanDocs";
 
 const CustomerLoanDoc = (data) => {
@@ -10,7 +8,6 @@ const CustomerLoanDoc = (data) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSetUrl = (content) => {
- 
     setUrl(content);
     setIsOpen(true);
   };
@@ -25,11 +22,14 @@ const CustomerLoanDoc = (data) => {
         </div>
         {/* {data?.data?.loanApplication?.applicationForm} */}
         <div>
-          <EditableButton
-            onClick={() =>{handleSetUrl(data?.data?.loanApplication?.applicationForm)}}
+          <button
+            onClick={() => {
+              handleSetUrl(data?.data?.loanApplication?.applicationForm);
+            }}
             className="text-sm text-swGray underline"
-            children={"View Docs"}
-          />
+          >
+            View Docs
+          </button>
         </div>
       </div>
       <div className="flex justify-between pl-4">
@@ -38,24 +38,30 @@ const CustomerLoanDoc = (data) => {
         </div>
         {/* {data?.data?.loanApplication?.applicationForm} */}
         <div>
-          <EditableButton
-          onClick={() =>{handleSetUrl(data?.data?.loanApplication?.loanAffidavit)}}
+          <button
+            onClick={() => {
+              handleSetUrl(data?.data?.loanApplication?.loanAffidavit);
+            }}
             className="text-sm text-swGray underline"
-            children={"View Docs"}
-          />
+          >
+            View Docs
+          </button>
         </div>
       </div>
       <div className="flex justify-between pl-4">
         <div className="pt-4 font-semibold text-xs text-swGray">
-          Guarantor's Form
+          Guarantor&apos;s Form
         </div>
         {/* {data?.data?.loanApplication?.applicationForm} */}
         <div>
-          <EditableButton
-           onClick={() =>{handleSetUrl(data?.data?.loanApplication?.guarantorForm)}}
+          <button
+            onClick={() => {
+              handleSetUrl(data?.data?.loanApplication?.guarantorForm);
+            }}
             className="text-sm text-swGray underline"
-            children={"View Docs"}
-          />
+          >
+            View Docs
+          </button>
         </div>
       </div>
       <div className="flex justify-between pl-4">
@@ -64,32 +70,42 @@ const CustomerLoanDoc = (data) => {
         </div>
         {/* {data?.data?.loanApplication?.applicationForm} */}
         <div>
-          <EditableButton
-            onClick={() =>{handleSetUrl(data?.data?.loanApplication?.collaterals)}}
+          <button
+            onClick={() => {
+              handleSetUrl(data?.data?.loanApplication?.collaterals);
+            }}
             className="text-sm text-swGray underline"
-            children={"View Docs"}
-          />
+          >
+            View Docs
+          </button>
         </div>
       </div>
-      <CenterModal width={"70%"} isOpen={isOpen} onClose={() => {
-        setIsOpen(!isOpen)
-      }}>
-      <div className="overflow-y-scroll">
-      <button  onClick={() => {
-        setIsOpen(!isOpen)
-      }}>X</button>
-      <div>
-      {url ? (
-        <iframe
-          src={url}
-          height="600"
-          width="600"
-          title="Iframe Example"
-        ></iframe>
-      ) : null}
-    </div>
-      </div>
-       
+      <CenterModal
+        width={"70%"}
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(!isOpen);
+        }}
+      >
+        <div className="overflow-y-scroll">
+          <button
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+          >
+            X
+          </button>
+          <div>
+            {url ? (
+              <iframe
+                src={url}
+                height="600"
+                width="600"
+                title="Iframe Example"
+              ></iframe>
+            ) : null}
+          </div>
+        </div>
       </CenterModal>
     </main>
   );

@@ -18,25 +18,25 @@ const header = [
 const CustomerLoan = () => {
   const router = useRouter();
   return (
-      <div className="w-full">
-        <ReusableDataTable
-          onClickRow="/customers/profile"
-          headers={header}
-          initialData={[]}
-          apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
-          btnText={
-            <div className="flex gap-1 items-center p-1">
-              <AiOutlinePlus size={15} />
-              <p className="hidden lg:block">create customer</p>
-            </div>
-          }
-          btnTextClick={() => {
-            router.push("/create-customer");
-          }}
-          filters={true}
-          pagination={true}
-        />
-      </div>
+    <div className="w-full">
+      <ReusableDataTable
+        onClickRow="/borrowers/profile"
+        headers={header}
+        initialData={[]}
+        apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
+        btnText={
+          <div className="flex gap-1 items-center p-1">
+            <AiOutlinePlus size={15} />
+            <p className="hidden lg:block">create customer</p>
+          </div>
+        }
+        btnTextClick={() => {
+          router.push("/create-customer");
+        }}
+        filters={true}
+        pagination={true}
+      />
+    </div>
   );
 };
 

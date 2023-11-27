@@ -367,7 +367,7 @@ const Sidebar = () => {
         )}
       </div>
 
-      <div className="py-5 border-b border-b-gray-300 text-sm xl:text-base">
+      <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
         <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
           <div>
             <SidebarLink
@@ -444,12 +444,12 @@ const Sidebar = () => {
               />
             }
             pathname={pathname}
-            text="Customers"
-            link="/customers"
-            hasDropdown={true}
+            text="Borrowers"
+            link="/borrowers"
+            // hasDropdown={true}
             sideBarOpen={sideBarOpen}
             onClick={() => {
-              setActiveLink("customers");
+              setActiveLink("borrowers");
             }}
           />
           <SidebarLink
@@ -478,7 +478,7 @@ const Sidebar = () => {
               />
             }
             pathname={pathname}
-            text="disbursement"
+            text="Disbursement"
             link="/disbursement/all"
             isActive={"disbursement"}
             sideBarOpen={sideBarOpen}
@@ -489,7 +489,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="py-5 border-b border-b-gray-300 text-sm xl:text-base">
+      <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
         <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""} `}>
           <SidebarLink
             icon={<BiMapAlt size={20} />}
@@ -521,7 +521,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="py-1 border-t border-t-swGray text-sm xl:text-base mt-auto">
+      <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
         <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
           <SidebarLink
             icon={<GoSignOut size={20} />}
