@@ -29,16 +29,15 @@ import Button from "@/app/components/shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
 import DeclineModal from "@/app/components/modals/loans/DeclineModal";
+import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
+import DeclineModal from "@/app/components/modals/loans/DeclineModal";
 const ViewLoan = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
-<<<<<<< Updated upstream
-  console.log({ data });
-=======
->>>>>>> Stashed changes
+
   const loanApprovals = useSelector((state) => state.loanApprovals);
   const user = useSelector((state) => state.user?.data?.data?.results);
   console.log({ user });
@@ -50,7 +49,7 @@ const ViewLoan = () => {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [loanAmount, setLoanAmount] = useState(0);
   const userToApprove = JSON.parse(localStorage.getItem("user"));
-  const router = useRouter();
+    const router = useRouter();;
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
@@ -363,14 +362,13 @@ const ViewLoan = () => {
                       </td>
                       <td className="p-2 border font-400 text-xs text-swGray border-none">
                         <div className="flex gap-2">
-<<<<<<< Updated upstream
+
                           <button className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md">
                             Approve
                           </button>
                           <button className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md">
                             Decline
                           </button>
-=======
                           <EditableButton
                             onClick={() => {
                               setApprovalOpen(true);
@@ -387,7 +385,6 @@ const ViewLoan = () => {
                           >
                             Decline
                           </EditableButton>
->>>>>>> Stashed changes
                         </div>
                       </td>
                     </tr>
@@ -521,6 +518,22 @@ const ViewLoan = () => {
         isOpen={isRequestApprovalOpen}
         onClose={() => {
           setIsRequestApprovalOpen(false);
+        }}
+      />
+      <ApprovalModal
+        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+        approvalId={data?.data?.approvalNeeded?.approvalLevel}
+        isOpen={isApprovalOpen}
+        onClose={() => {
+          setApprovalOpen(false);
+        }}
+      />
+      <DeclineModal
+        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+        approvalId={data?.data?.approvalNeeded?.approvalLevel}
+        isOpen={isDeclineOpen}
+        onClose={() => {
+          setDeclineOpen(false);
         }}
       />
       <ApprovalModal
