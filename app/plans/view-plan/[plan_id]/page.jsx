@@ -7,7 +7,6 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 const ViewPlan = () => {
   const { plan_id } = useParams();
-  console.log(plan_id);
 
   return (
     <DashboardLayout>

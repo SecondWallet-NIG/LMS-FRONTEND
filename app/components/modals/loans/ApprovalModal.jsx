@@ -10,9 +10,13 @@ import { useParams } from "next/navigation";
 import InputField from "../../shared/input/InputField--";
 import Button from "../../shared/buttonComponent/Button";
 import SelectField from "../../shared/input/SelectField";
-import { requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
+import {
+  approveLoanRequest,
+  requestLoanApproval,
+} from "@/redux/slices/loanApprovalSlice";
+import { login } from "@/redux/slices/authSlice";
 
-const RequestApproval = ({
+const ApprovalModal = ({
   isOpen,
   onClose,
   width,
@@ -21,6 +25,7 @@ const RequestApproval = ({
   approvalId,
   approvalLevel,
 }) => {
+  console.log({ approvalId });
   if (!isOpen) return null;
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
@@ -28,20 +33,17 @@ const RequestApproval = ({
 
   const [formData, setFormData] = useState({
     approvalLevel: approvalId,
-    requestNote: "",
-    assignee: "",
+    approvalNote: "",
   });
 
   const modalStyles = {
     width: width || "90%",
-    maxWidth: "800px",
+    maxWidth: "500px",
   };
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
-      console.log({approvalLevel});
       const users = user.filter((item) => item?.role?.name === approvalLevel);
-      console.log({users});
       setUsersToApprove(
         users.map((item) => ({
           label: item.firstName + " " + item.lastName,
@@ -59,13 +61,6 @@ const RequestApproval = ({
     }));
   };
 
-  const handleSelectChange = async (selectedOption, name) => {
-    setFormData({
-      ...formData,
-      [name]: selectedOption.value,
-    });
-  };
-
   const resetForm = () => {
     setFormData({
       employerName: "",
@@ -74,14 +69,17 @@ const RequestApproval = ({
     setBankNameVal("");
   };
   const submitLoan = (e) => {
-  const payload = {id, formData}
+    const payload = { id, formData };
+    console.log({ payload });
     e.preventDefault();
-    dispatch(requestLoanApproval(payload))
+    dispatch(approveLoanRequest(payload))
       .unwrap()
       .then(() => {
-        toast("Loan approval request successful");
-      //  router.push(`/loan-applications/view-loan/${id}`);
-        window.location.reload();
+        toast("Loan approved for this level");
+        useEffect(() => {
+          router.push(`/loan-applications/view-loan/${id}`);
+        }, 2000)
+     
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -94,14 +92,15 @@ const RequestApproval = ({
 
   return (
     <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">
-      <ToastContainer />
+        <ToastContainer />
       <form style={modalStyles} id="add-user-form">
-        <div className="border bg-white border-swLightGray rounded rounded-lg">
+        <div className="border bg-white border-swLightGray rounded-lg">
           <div className="flex justify-between items-center p-3 text-white">
             <div>
               <p className="text-base font-semibold text-swGray">
-                Request Approval
+                Approve Loan
               </p>
+              <p className="text-xs  text-swGray">Provide a comment</p>
             </div>
             <AiOutlineClose
               color="red"
@@ -111,33 +110,30 @@ const RequestApproval = ({
             />
           </div>
           <div className="p-4">
-            <div className="w-full pb-4">
-              <SelectField
-                name="assignee"
-                disabled={false}
-                optionValue={usersToApprove}
-                label={"Assignee"}
-                required={true}
-                placeholder={"Click to search"}
-                isSearchable={true}
-                onChange={(selectedOption) => {
-                  handleSelectChange(selectedOption, "assignee");
-                }}
-              />
-            </div>
-            <p className="text-xs pb-3 text-gray-700">
-              You can add an approval message
-            </p>
             <textarea
-              name="requestNote"
-              id="requestNote"
+              name="approvalNote"
+              id="approvalNote"
               className="w-full border border-1"
-              rows="4"
+              rows="5"
               onChange={(e) => {
                 handleInputChange(e);
               }}
             ></textarea>
-            <Button onClick={submitLoan} className="mt-4 block w-full">Submit</Button>
+            <div className="flex justify-between gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => {}}
+                className="mt-4 block w-full rounded-lg"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={submitLoan}
+                className="mt-4 block w-full rounded-lg"
+              >
+                Approve Loan
+              </Button>
+            </div>
           </div>
         </div>
       </form>
@@ -145,4 +141,4 @@ const RequestApproval = ({
   );
 };
 
-export default RequestApproval;
+export default ApprovalModal;

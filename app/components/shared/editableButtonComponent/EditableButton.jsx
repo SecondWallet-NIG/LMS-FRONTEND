@@ -7,6 +7,7 @@ const EditableButton = ({
   endIcon,
   whiteBtn,
   blueBtn,
+  
 }) => {
   return (
     <button

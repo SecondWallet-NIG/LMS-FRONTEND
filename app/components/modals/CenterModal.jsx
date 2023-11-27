@@ -16,8 +16,11 @@ const CenterModal = ({ isOpen, bgColor, onClose, children, width }) => {
         } rounded-md shadow-md"  m-5 overflow-x-hidden overflow-y-auto scrollbar-hide`}
         style={modalStyles}
       >
+     
+      <div className={`${bgColor ? bgColor : "bg-white"} p-4 rounded-md shadow-md" style={modalStyles} m-8`} style={modalStyles}>
         {children}
       </div>
+    </div>
     </div>
   );
 };

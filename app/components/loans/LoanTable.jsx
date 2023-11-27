@@ -51,23 +51,25 @@ const LoanTable = () => {
     }));
   };
   return (
-    <ReusableDataTable
-      dataTransformer={customDataTransformer}
-      onClickRow="/loan-applications/view-loan"
-      headers={headers}
-      initialData={[]}
-      apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
-      btnText={
-        <div className="flex gap-1 items-center p-1">
-          <p className="hidden lg:block">create customer</p>
-        </div>
-      }
-      btnTextClick={() => {
-        router.push("/create-customer");
-      }}
-      filters={true}
-      pagination={false}
-    />
+ 
+      <ReusableDataTable
+        dataTransformer={customDataTransformer}
+        onClickRow="/loan-applications/view-loan"
+        headers={headers}
+        initialData={[]}
+        apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
+        btnText={
+          <div className="flex gap-1 items-center p-1">
+            <p className="hidden lg:block">create customer</p>
+          </div>
+        }
+        btnTextClick={() => {
+          router.push("/create-customer");
+        }}
+        filters={true}
+        pagination={true}
+      />
+ 
   );
 };
 

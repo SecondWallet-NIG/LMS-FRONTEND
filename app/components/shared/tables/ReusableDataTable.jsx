@@ -160,8 +160,7 @@ function ReusableDataTable({
   }
 
   const fetchData = (page, perPage, field, direction) => {
-    let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=${field}`;
-    console.log({ apiUrl });
+    let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=-createdAt`;
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
       axios

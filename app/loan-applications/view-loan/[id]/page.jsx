@@ -27,18 +27,24 @@ import { MdEdit } from "react-icons/md";
 import CenterModal from "@/app/components/modals/CenterModal";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
+import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
+import DeclineModal from "@/app/components/modals/loans/DeclineModal";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 const ViewLoan = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
-  console.log({ data });
+
   const loanApprovals = useSelector((state) => state.loanApprovals);
-  const user = useSelector((state) => state.user?.data?.results?.results);
+  const user = useSelector((state) => state.user?.data?.data?.results);
+  console.log({ user });
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [logSearch, setLogSearch] = useState(false);
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
+  const [isApprovalOpen, setApprovalOpen] = useState(false);
+  const [isDeclineOpen, setDeclineOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [loanAmount, setLoanAmount] = useState(0);
   const userToApprove = JSON.parse(localStorage.getItem("user"));
@@ -355,12 +361,38 @@ const ViewLoan = () => {
                       </td>
                       <td className="p-2 border font-400 text-xs text-swGray border-none">
                         <div className="flex gap-2">
-                          <button className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md">
+                          <button
+                            className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md"
+                            onClick={() => {
+                              setApprovalOpen(true);
+                            }}
+                          >
                             Approve
                           </button>
-                          <button className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md">
+                          <button
+                            className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md"
+                            onClick={() => {
+                              setDeclineOpen(true);
+                            }}
+                          >
                             Decline
                           </button>
+                          {/* <EditableButton
+                            onClick={() => {
+                              setApprovalOpen(true);
+                            }}
+                            className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md"
+                          >
+                            Approve
+                          </EditableButton>
+                          <EditableButton
+                            onClick={() => {
+                              setDeclineOpen(true);
+                            }}
+                            className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md"
+                          >
+                            Decline
+                          </EditableButton> */}
                         </div>
                       </td>
                     </tr>
@@ -494,6 +526,38 @@ const ViewLoan = () => {
         isOpen={isRequestApprovalOpen}
         onClose={() => {
           setIsRequestApprovalOpen(false);
+        }}
+      />
+      <ApprovalModal
+        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+        approvalId={data?.data?.approvalNeeded?.approvalLevel}
+        isOpen={isApprovalOpen}
+        onClose={() => {
+          setApprovalOpen(false);
+        }}
+      />
+      <DeclineModal
+        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+        approvalId={data?.data?.approvalNeeded?.approvalLevel}
+        isOpen={isDeclineOpen}
+        onClose={() => {
+          setDeclineOpen(false);
+        }}
+      />
+      <ApprovalModal
+        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+        approvalId={data?.data?.approvalNeeded?.approvalLevel}
+        isOpen={isApprovalOpen}
+        onClose={() => {
+          setApprovalOpen(false);
+        }}
+      />
+      <DeclineModal
+        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+        approvalId={data?.data?.approvalNeeded?.approvalLevel}
+        isOpen={isDeclineOpen}
+        onClose={() => {
+          setDeclineOpen(false);
         }}
       />
 
