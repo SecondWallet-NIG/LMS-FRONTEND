@@ -29,8 +29,7 @@ import Button from "@/app/components/shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
 import DeclineModal from "@/app/components/modals/loans/DeclineModal";
-import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
-import DeclineModal from "@/app/components/modals/loans/DeclineModal";
+
 const ViewLoan = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
