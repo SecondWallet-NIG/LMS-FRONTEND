@@ -5,6 +5,7 @@ import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
 import InputField from "../../shared/input/InputField--";
 import Button from "../../shared/buttonComponent/Button";
@@ -76,8 +77,11 @@ const DeclineModal = ({
     dispatch(requestLoanApproval(payload))
       .unwrap()
       .then(() => {
-        toast("Loan approval request successful");
-        router.push(`/loan-applications/view-loan/${id}`);
+        toast("Loan disapproved successfully");
+        toast("Loan approved for this level");
+        useEffect(() => {
+          router.push(`/loan-applications/view-loan/${id}`);
+        }, 2000)
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -96,7 +100,7 @@ const DeclineModal = ({
           <div className="flex justify-between items-center p-3 text-white">
             <div>
               <p className="text-base font-semibold text-swGray">
-                Disapprove Credit
+                DisApprove Loan
               </p>
               <p className="text-xs  text-swGray">Provide a comment</p>
             </div>
@@ -122,7 +126,7 @@ const DeclineModal = ({
                 Cancel
               </Button>
               <Button onClick={submitLoan} className="mt-4 block w-full rounded-lg">
-                Disapprove Credit
+                DisApprove Loan
               </Button>
             </div>
           </div>

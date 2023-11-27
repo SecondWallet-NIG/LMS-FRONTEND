@@ -48,7 +48,7 @@ const ViewLoan = () => {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [loanAmount, setLoanAmount] = useState(0);
   const userToApprove = JSON.parse(localStorage.getItem("user"));
-    const router = useRouter();;
+  const router = useRouter();
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
@@ -361,14 +361,23 @@ const ViewLoan = () => {
                       </td>
                       <td className="p-2 border font-400 text-xs text-swGray border-none">
                         <div className="flex gap-2">
-
-                          <button className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md">
+                          <button
+                            className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md"
+                            onClick={() => {
+                              setApprovalOpen(true);
+                            }}
+                          >
                             Approve
                           </button>
-                          <button className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md">
+                          <button
+                            className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md"
+                            onClick={() => {
+                              setDeclineOpen(true);
+                            }}
+                          >
                             Decline
                           </button>
-                          <EditableButton
+                          {/* <EditableButton
                             onClick={() => {
                               setApprovalOpen(true);
                             }}
@@ -383,7 +392,7 @@ const ViewLoan = () => {
                             className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md"
                           >
                             Decline
-                          </EditableButton>
+                          </EditableButton> */}
                         </div>
                       </td>
                     </tr>

@@ -6,7 +6,7 @@ const _data = data?.data?.data;
 console.log({data});
   return (
     <main className="flex flex-col">
-      {_data && _data?.map((item, index) => (
+      {Array.isArray(_data) && _data?.map((item, index) => (
         <div key={index} className="border-b border-gray-100 p-2">
           <div className="flex justify-between items-center">
             <p className="font-semibold capitalize text-xs">{item?.approvalTitle}</p>
@@ -30,8 +30,6 @@ console.log({data});
               {
                 item?.assignee?.firstName ? <p className="font-medium text-xs text-swGray">{item?.assignee?.firstName} {item?.assignee?.lastName}</p> : <p className="text-xs">Yet to be assigned</p>
               }
-              
-          
             </div>
           </div>
         </div>

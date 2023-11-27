@@ -5,6 +5,7 @@ import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
 import InputField from "../../shared/input/InputField--";
 import Button from "../../shared/buttonComponent/Button";
@@ -38,6 +39,7 @@ const RequestApproval = ({
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
+      console.log({approvalLevel});
       const users = user.filter((item) => item?.role?.name === approvalLevel);
       console.log({users});
       setUsersToApprove(
