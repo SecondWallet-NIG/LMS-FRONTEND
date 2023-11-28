@@ -29,6 +29,7 @@ const ApprovalModal = ({
   if (!isOpen) return null;
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
@@ -69,21 +70,25 @@ const ApprovalModal = ({
     setBankNameVal("");
   };
   const submitLoan = (e) => {
+    setLoading(true);
     const payload = { id, formData };
-    console.log({ payload });
     e.preventDefault();
     dispatch(approveLoanRequest(payload))
       .unwrap()
       .then(() => {
         toast("Loan approved for this level");
+        setLoading(false);
         useEffect(() => {
           router.push(`/loan-applications/view-loan/${id}`);
         }, 2000)
      
       })
       .catch((error) => {
-        toast.error(`An error occured`);
+        console.log({error});
+        toast.error(`${error?.message}`);
+        setLoading(false);
       });
+
   };
 
   useEffect(() => {
@@ -128,6 +133,7 @@ const ApprovalModal = ({
                 Cancel
               </Button>
               <Button
+                disabled={loading ? true : false} 
                 onClick={submitLoan}
                 className="mt-4 block w-full rounded-lg"
               >

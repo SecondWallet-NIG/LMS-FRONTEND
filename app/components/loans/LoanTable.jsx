@@ -42,7 +42,7 @@ const LoanTable = () => {
           className={`${
             item.status === "Pending"
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : "bg-[#F8A9A3] "
+              : "bg-[#F8A9A3] text-white text-xs font-normal px-2 py-1 rounded-full"
           } px-2 py-1 rounded`}
         >
           {item.status}
@@ -54,6 +54,12 @@ const LoanTable = () => {
 <<<<<<< Updated upstream
  
       <ReusableDataTable
+        filterParams={[
+          {name: "Pending"},
+          {name: "Approved"},
+          {name: "Declined"}
+
+        ]}
         dataTransformer={customDataTransformer}
         onClickRow="/loan-applications/view-loan"
         headers={headers}

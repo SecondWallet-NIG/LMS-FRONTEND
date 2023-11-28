@@ -10,7 +10,7 @@ const DisbursementReport = () => {
   ];
   return (
     <main className="w-full rounded-lg bg-swLightGray p-5 shadow-xl">
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between">
         <p className="text-lg font-semibold text-black">Borrowers Report</p>
         <button
           className={
@@ -19,9 +19,9 @@ const DisbursementReport = () => {
         >
           Export report
         </button>
-      </div>
+      </div> */}
 
-      <div className="flex justify-between items-center mt-5">
+      {/* <div className="flex justify-between items-center mt-5">
         <p className="font-semibold text-black">Filter report</p>
         <div className="flex gap-3">
           <button
@@ -47,7 +47,7 @@ const DisbursementReport = () => {
             Loan type
           </button>
         </div>
-      </div>
+      </div> */}
 
       <div className="flex gap-5 mt-5">
         <div className="bg-white border rounded-xl p-3 w-full">

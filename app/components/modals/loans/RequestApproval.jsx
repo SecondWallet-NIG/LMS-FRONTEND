@@ -24,6 +24,7 @@ const RequestApproval = ({
   if (!isOpen) return null;
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
@@ -34,14 +35,14 @@ const RequestApproval = ({
 
   const modalStyles = {
     width: width || "90%",
-    maxWidth: "800px",
+    maxWidth: "500px",
   };
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
-      console.log({approvalLevel});
+
       const users = user.filter((item) => item?.role?.name === approvalLevel);
-      console.log({users});
+
       setUsersToApprove(
         users.map((item) => ({
           label: item.firstName + " " + item.lastName,
@@ -66,25 +67,24 @@ const RequestApproval = ({
     });
   };
 
-  const resetForm = () => {
-    setFormData({
-      employerName: "",
-    });
-    setVerificationResponse(null);
-    setBankNameVal("");
-  };
+
   const submitLoan = (e) => {
-  const payload = {id, formData}
+    setLoading(true);
+    const payload = { id, formData };
     e.preventDefault();
     dispatch(requestLoanApproval(payload))
       .unwrap()
       .then(() => {
         toast("Loan approval request successful");
-      //  router.push(`/loan-applications/view-loan/${id}`);
-        window.location.reload();
+        setLoading(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((error) => {
-        toast.error(`An error occured`);
+        console.log({error});
+        toast.error(`${error?.message}`);
+        setLoading(false);
       });
   };
 
@@ -131,13 +131,15 @@ const RequestApproval = ({
             <textarea
               name="requestNote"
               id="requestNote"
-              className="w-full border border-1"
+              className="w-full text-sm border border-1 p-3"
               rows="4"
               onChange={(e) => {
                 handleInputChange(e);
               }}
             ></textarea>
-            <Button onClick={submitLoan} className="mt-4 block w-full">Submit</Button>
+            <Button disabled={loading ? true : false} onClick={submitLoan} className="mt-4 block w-full">
+              Submit
+            </Button>
           </div>
         </div>
       </form>
