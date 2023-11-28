@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 
 const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
-  if (!isOpen) return null;
+
   const dispatch = useDispatch();
 
   const { loading } = useSelector((state) => state.user);
@@ -137,7 +137,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
         });
     }
   };
-
+  if (!isOpen) return null;
   return (
     <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-10">
       <form style={modalStyles} id="add-user-form">

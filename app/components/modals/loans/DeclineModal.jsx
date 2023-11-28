@@ -21,7 +21,7 @@ const DeclineModal = ({
   approvalId,
   approvalLevel,
 }) => {
-  if (!isOpen) return null;
+
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -95,6 +95,8 @@ const DeclineModal = ({
   useEffect(() => {
     modifyUsersToApprove(data);
   }, []);
+
+  if (!isOpen) return null;
 
   return (
     <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">

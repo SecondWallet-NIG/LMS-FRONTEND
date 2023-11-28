@@ -5,7 +5,7 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 const RolesModal = ({ isOpen, onClose, children, width }) => {
   const [selectedStaffRole, setSelectedStaffRole] = useState("");
-  if (!isOpen) return null;
+
   const modalStyles = {
     width: width || "90%", // Use full width on mobile
     maxWidth: "800px", // Set a maximum width for larger screens
@@ -28,6 +28,7 @@ const RolesModal = ({ isOpen, onClose, children, width }) => {
   const handleRoleSelection = (e) => {
     setSelectedStaffRole(e.value);
   };
+  if (!isOpen) return null;
   return (
     <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-10">
       <div
