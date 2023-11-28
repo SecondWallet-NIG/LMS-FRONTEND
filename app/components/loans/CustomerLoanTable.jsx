@@ -57,7 +57,7 @@ const CustomerLoanTable = ({id}) => {
         onClickRow="/loan-applications/view-loan"
         headers={headers}
         initialData={[]}
-        apiEndpoint={`http://localhost:8000/api/loan-application/customer/${id}`}
+        apiEndpoint={`https://secondwallet-stag.onrender.com/api/loan-application/customer/${id}`}
         // btnText={
         //   <div className="flex gap-1 items-center p-1">
         //     <p className="hidden lg:block">create customer</p>
