@@ -26,6 +26,7 @@ const ApprovalModal = ({
   approvalLevel,
 }) => {
 
+
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +36,8 @@ const ApprovalModal = ({
     approvalLevel: approvalId,
     approvalNote: "",
   });
+
+
 
   const modalStyles = {
     width: width || "90%",
@@ -70,7 +73,12 @@ const ApprovalModal = ({
   };
   const submitLoan = (e) => {
     setLoading(true);
-    const payload = { id, formData };
+    let _formData = {
+      'approvalLevel': approvalId,
+      "approvalNote": formData?.approvalNote,
+    }
+    const payload = { id, _formData };
+    console.log({payload});
     e.preventDefault();
     dispatch(approveLoanRequest(payload))
       .unwrap()
@@ -78,26 +86,29 @@ const ApprovalModal = ({
         toast("Loan approved for this level");
         setLoading(false);
         setTimeout(() => {
-          router.push(`/loan-applications/view-loan/${id}`);
+         window.location.reload();
         }, 2000)
      
       })
       .catch((error) => {
         console.log({error});
-        toast.error(`${error?.message}`);
+       toast.error(`${error?.message}`);
         setLoading(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000)
       });
 
   };
 
   useEffect(() => {
     modifyUsersToApprove(data);
-  }, []);
+  }, [data]);
 
-  if (!isOpen) return null;
+
 
   return (
-    <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">
+    <main>
         <ToastContainer />
       <form style={modalStyles} id="add-user-form">
         <div className="border bg-white border-swLightGray rounded-lg">
@@ -108,12 +119,7 @@ const ApprovalModal = ({
               </p>
               <p className="text-xs  text-swGray">Provide a comment</p>
             </div>
-            <AiOutlineClose
-              color="red"
-              size={20}
-              onClick={onClose}
-              className="cursor-pointer"
-            />
+      
           </div>
           <div className="p-4">
             <textarea

@@ -96,10 +96,10 @@ const DeclineModal = ({
     modifyUsersToApprove(data);
   }, []);
 
-  if (!isOpen) return null;
+
 
   return (
-    <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">
+    <main>
         <ToastContainer />
       <form style={modalStyles} id="add-user-form">
         <div className="border bg-white border-swLightGray rounded-lg">
@@ -110,12 +110,7 @@ const DeclineModal = ({
               </p>
               <p className="text-xs  text-swGray">Provide a comment</p>
             </div>
-            <AiOutlineClose
-              color="red"
-              size={20}
-              onClick={onClose}
-              className="cursor-pointer"
-            />
+        
           </div>
           <div className="p-4">
             <textarea

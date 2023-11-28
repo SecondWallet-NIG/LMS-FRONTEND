@@ -4,7 +4,7 @@ const CenterModal = ({ isOpen,bgColor, onClose, children, width}) => {
   if (!isOpen) return null;
   const modalStyles = {
     width: width || "90%",
-    maxWidth: "1000px",
+ //   maxWidth: "1000px",
     minWidth: "300px",
   };
   return (
