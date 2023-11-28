@@ -25,8 +25,7 @@ const ApprovalModal = ({
   approvalId,
   approvalLevel,
 }) => {
-  console.log({ approvalId });
-  if (!isOpen) return null;
+
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -94,7 +93,8 @@ const ApprovalModal = ({
   useEffect(() => {
     modifyUsersToApprove(data);
   }, []);
-
+  console.log({ approvalId });
+  if (!isOpen) return null;
   return (
     <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">
         <ToastContainer />
