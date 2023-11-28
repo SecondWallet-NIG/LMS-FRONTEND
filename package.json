@@ -18,7 +18,7 @@
     "flat": "^6.0.1",
     "next": "^14.0.3",
     "pdf-viewer-reactjs": "^2.2.3",
-    "postcss": "8.4.29",
+    "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-date-input": "^0.0.2",
     "react-date-range": "^1.4.0",
