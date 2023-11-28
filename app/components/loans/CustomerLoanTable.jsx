@@ -23,7 +23,7 @@ const CustomerLoanTable = ({id}) => {
       name: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.customerId?.firstName} ${item?.customerId?.lastName}`}</div>
-          <div className="text-xs text-gray-500">Borrower's ID</div>
+          <div className="text-xs text-gray-500">Borrower&apos;s ID</div>
         </div>
       ),
       loanPackageId: (
@@ -64,7 +64,7 @@ const CustomerLoanTable = ({id}) => {
         //   </div>
         // }
         // btnTextClick={() => {
-        //   router.push("/create-customer");
+        //   router.push("/create-borrower");
         // }}
         filters={true}
         pagination={false}

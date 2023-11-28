@@ -96,7 +96,7 @@ const DashboardCard = (data) => {
             <Link
               href={
                 item.name === "Borrowers"
-                  ? "/create-customer"
+                  ? "/create-borrower"
                   : item.name === "Disbursements"
                   ? "/disbursement"
                   : item.name === "Repayments"

@@ -76,7 +76,10 @@ const ViewLoan = () => {
   }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Loan applications", "View loan"]}
+    >
       <main className="flex h-full">
         <section className="w-full">
           <section
@@ -167,7 +170,8 @@ const ViewLoan = () => {
 
                   <div className="flex justify-between items-center">
                     <p className="text-md text-swGray font-semibold mt-4">
-                      ₦ {data?.data?.loanApplication?.loanAmount}
+                      ₦{" "}
+                      {data?.data?.loanApplication?.loanAmount.toLocaleString()}
                     </p>
                     <div
                       className="p-2 rounded-md hover:bg-white hover:border-2 hover:border-gray-200 mt-2"
@@ -218,7 +222,8 @@ const ViewLoan = () => {
                     <td className="px-3 py-3">
                       <div>
                         <p>
-                          ₦ {data?.data?.interestCalculation?.totalPayments}
+                          ₦{" "}
+                          {data?.data?.interestCalculation?.totalPayments.toLocaleString()}
                         </p>
                       </div>
                     </td>

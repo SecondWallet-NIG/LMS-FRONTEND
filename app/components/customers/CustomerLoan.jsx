@@ -27,11 +27,11 @@ const CustomerLoan = () => {
         btnText={
           <div className="flex gap-1 items-center p-1">
             <AiOutlinePlus size={15} />
-            <p className="hidden lg:block">create customer</p>
+            <p className="hidden lg:block">create borrower</p>
           </div>
         }
         btnTextClick={() => {
-          router.push("/create-customer");
+          router.push("/create-borrower");
         }}
         filters={true}
         pagination={true}

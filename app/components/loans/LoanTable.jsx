@@ -33,7 +33,7 @@ const LoanTable = () => {
       loanAmount: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            ₦ {`${item?.loanAmount}`}
+            ₦ {`${item?.loanAmount.toLocaleString()}`}
           </div>
         </div>
       ),
@@ -51,6 +51,7 @@ const LoanTable = () => {
     }));
   };
   return (
+<<<<<<< Updated upstream
  
       <ReusableDataTable
         dataTransformer={customDataTransformer}
@@ -70,6 +71,25 @@ const LoanTable = () => {
         pagination={true}
       />
  
+=======
+    <ReusableDataTable
+      dataTransformer={customDataTransformer}
+      onClickRow="/loan-applications/view-loan"
+      headers={headers}
+      initialData={[]}
+      apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
+      btnText={
+        <div className="flex gap-1 items-center p-1">
+          <p className="hidden lg:block">create customer</p>
+        </div>
+      }
+      btnTextClick={() => {
+        router.push("/create-borrower");
+      }}
+      filters={true}
+      pagination={false}
+    />
+>>>>>>> Stashed changes
   );
 };
 
