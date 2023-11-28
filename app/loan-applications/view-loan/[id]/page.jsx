@@ -139,7 +139,7 @@ const ViewLoan = () => {
                     <button
                       onClick={() => {
                         router.push(
-                          `/customers/profile/${data?.data?.customerDetails?._id}`
+                          `/borrowers/profile/${data?.data?.customerDetails?._id}`
                         );
                       }}
                       className={
@@ -251,63 +251,66 @@ const ViewLoan = () => {
               </table>
             </div>
           </div>
-          <div className="ml-5 mr-5 mt-5">
-            <h6 className="text-center font-semibold p-2">
-              Loan Approval Needed
-            </h6>
-            <div className="border rounded-lg">
-              <table className=" w-full ">
-                <thead className="bg-swLightGray ">
-                  <tr>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      Approval ID
-                    </th>
+          {data?.data?.approvalNeeded?.approvalLevel ? (
+            <div className="ml-5 mr-5 mt-5">
+              <h6 className="text-center font-semibold p-2">
+                Loan Approval Needed
+              </h6>
+              <div className="border rounded-lg">
+                <table className=" w-full ">
+                  <thead className="bg-swLightGray ">
+                    <tr>
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                        Approval ID
+                      </th>
 
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      <h1>Approval Type</h1>
-                    </th>
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                        <h1>Approval Type</h1>
+                      </th>
 
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      <h1>Action</h1>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-xs">
-                    <td className="p-2">
-                      {data?.data?.approvalNeeded?.approvalLevel}
-                    </td>
-                    <td className="p-2">
-                      {" "}
-                      {data?.data?.approvalNeeded?.approvalTitle}{" "}
-                    </td>
-                    {/* <td>
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                        <h1>Action</h1>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="text-xs">
+                      <td className="p-2">
+                        {data?.data?.approvalNeeded?.approvalLevel}
+                      </td>
+                      <td className="p-2">
+                        {" "}
+                        {data?.data?.approvalNeeded?.approvalTitle}{" "}
+                      </td>
+                      {/* <td>
                       <div className="border py-1 px-2 w-fit rounded-xl">
                         {data?.data?.approvalNeeded?.approvalTitle}
                       </div>
                     </td> */}
-                    <td className="p-2">
-                      <button
-                        onClick={() => {
-                          setIsRequestApprovalOpen(true);
-                        }}
-                        disabled={
-                          data?.data?.approvalNeeded?.status === "Pending"
-                            ? false
-                            : true
-                        }
-                        className={`py-1 px-2 border rounded-lg`}
-                      >
-                        {data?.data?.approvalNeeded?.status === "Pending"
-                          ? "Request for Approval"
-                          : data?.data?.approvalNeeded?.status}
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      <td className="p-2">
+                        <Button
+                          onClick={() => {
+                            setIsRequestApprovalOpen(true);
+                          }}
+                          disabled={
+                            data?.data?.approvalNeeded?.status === "Pending"
+                              ? false
+                              : true
+                          }
+                          className="rounded-lg"
+                        >
+                          {data?.data?.approvalNeeded?.status === "Pending"
+                            ? "Request for Approval"
+                            : data?.data?.approvalNeeded?.status}
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          ) : null}
+
           {userToApprove?.data?.user?._id ==
           data?.data?.approvalNeeded?.assignee?._id ? (
             <div className="ml-5 mr-5 mt-5">

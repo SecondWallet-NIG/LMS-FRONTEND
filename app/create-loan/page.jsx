@@ -300,7 +300,7 @@ const CreateLoan = () => {
       .unwrap()
       .then(() => {
         toast("Loan application successful");
-        router.push("/loan-applications/all");
+        router.push("/loan-applications");
         setLoading(false);
       })
       .catch((error) => {
@@ -655,7 +655,7 @@ const CreateLoan = () => {
                   <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
                     <AiOutlinePaperClip color="black" size={20} />
                     <p className="font-semibold text-black">
-                      {formData?.collaterals.name
+                      {formData?.collaterals?.name
                         ? "Change file"
                         : "Select file"}
                     </p>

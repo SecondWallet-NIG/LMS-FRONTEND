@@ -24,6 +24,7 @@ const DeclineModal = ({
   if (!isOpen) return null;
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
@@ -72,20 +73,23 @@ const DeclineModal = ({
     setBankNameVal("");
   };
   const submitLoan = (e) => {
+    setLoading(true);
   const payload = {id, formData}
     e.preventDefault();
-    dispatch(requestLoanApproval(payload))
-      .unwrap()
-      .then(() => {
-        toast("Loan disapproved successfully");
-        toast("Loan approved for this level");
-        useEffect(() => {
-          router.push(`/loan-applications/view-loan/${id}`);
-        }, 2000)
-      })
-      .catch((error) => {
-        toast.error(`An error occured`);
-      });
+    // dispatch(requestLoanApproval(payload))
+    //   .unwrap()
+    //   .then(() => {
+    //     toast("Loan approved for this level");
+    //     setLoading(false);
+    //     useEffect(() => {
+    //       router.push(`/loan-applications/view-loan/${id}`);
+    //     }, 2000)
+    //   })
+    //   .catch((error) => {
+    //     console.log({error});
+    //     toast.error(`${error?.message}`);
+    //     setLoading(true);
+    //   });
   };
 
   useEffect(() => {
@@ -122,10 +126,10 @@ const DeclineModal = ({
               }}
             ></textarea>
             <div className="flex justify-between gap-3">
-              <Button variant="secondary" onClick={submitLoan} className="mt-4 block w-full rounded-lg">
+              <Button  variant="secondary" onClick={submitLoan} className="mt-4 block w-full rounded-lg">
                 Cancel
               </Button>
-              <Button onClick={submitLoan} className="mt-4 block w-full rounded-lg">
+              <Button disabled={loading ? true : false}  onClick={submitLoan} className="mt-4 block w-full rounded-lg">
                 DisApprove Loan
               </Button>
             </div>
