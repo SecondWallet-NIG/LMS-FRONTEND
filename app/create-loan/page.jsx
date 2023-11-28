@@ -647,6 +647,7 @@ const CreateLoan = () => {
                   id="fileInput"
                   className="absolute w-0 h-0 opacity-0"
                   onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
                 />
                 <label
                   htmlFor="fileInput"
@@ -688,6 +689,7 @@ const CreateLoan = () => {
                   id="fileInput1"
                   className="absolute w-0 h-0 opacity-0"
                   onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
                 />
                 <label
                   htmlFor="fileInput1"
@@ -732,6 +734,7 @@ const CreateLoan = () => {
                   id="fileInput2"
                   className="absolute w-0 h-0 opacity-0"
                   onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
                 />
                 <label
                   htmlFor="fileInput2"
@@ -775,6 +778,7 @@ const CreateLoan = () => {
                   id="fileInput3"
                   className="absolute w-0 h-0 opacity-0"
                   onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
                 />
                 <label
                   htmlFor="fileInput3"
@@ -1085,7 +1089,7 @@ const CreateLoan = () => {
                 Loan Frequency Type
               </div>
               <div className="w-2/3">
-              <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
+                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
                   {repaymentTypeData.find(
                     (option) => option.value === formData.repaymentType
                   )?.label || "No Loan Frequency Type Yet"}

@@ -21,7 +21,6 @@ const DeclineModal = ({
   approvalId,
   approvalLevel,
 }) => {
-
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -33,10 +32,10 @@ const DeclineModal = ({
     assignee: "",
   });
 
-  const modalStyles = {
-    width: width || "90%",
-    maxWidth: "500px",
-  };
+  // const modalStyles = {
+  //   width: width || "90%",
+  //   maxWidth: "500px",
+  // };
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
@@ -74,7 +73,7 @@ const DeclineModal = ({
   };
   const submitLoan = (e) => {
     setLoading(true);
-  const payload = {id, formData}
+    const payload = { id, formData };
     e.preventDefault();
     // dispatch(requestLoanApproval(payload))
     //   .unwrap()
@@ -96,21 +95,22 @@ const DeclineModal = ({
     modifyUsersToApprove(data);
   }, []);
 
-
-
   return (
     <main>
-        <ToastContainer />
-      <form style={modalStyles} id="add-user-form">
+      <ToastContainer />
+      <form
+        // style={modalStyles}
+        className="w-full"
+        id="add-user-form"
+      >
         <div className="border bg-white border-swLightGray rounded-lg">
           <div className="flex justify-between items-center p-3 text-white">
             <div>
               <p className="text-base font-semibold text-swGray">
-                DisApprove Loan
+                Disapprove Loan
               </p>
               <p className="text-xs  text-swGray">Provide a comment</p>
             </div>
-        
           </div>
           <div className="p-4">
             <textarea
@@ -123,11 +123,19 @@ const DeclineModal = ({
               }}
             ></textarea>
             <div className="flex justify-between gap-3">
-              <Button  variant="secondary" onClick={submitLoan} className="mt-4 block w-full rounded-lg">
+              <Button
+                variant="secondary"
+                onClick={onClose}
+                className="mt-4 block w-full rounded-lg"
+              >
                 Cancel
               </Button>
-              <Button disabled={loading ? true : false}  onClick={submitLoan} className="mt-4 block w-full rounded-lg">
-                DisApprove Loan
+              <Button
+                disabled={loading ? true : false}
+                onClick={submitLoan}
+                className="mt-4 block w-full rounded-lg"
+              >
+                Disapprove Loan
               </Button>
             </div>
           </div>

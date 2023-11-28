@@ -15,7 +15,6 @@ import {
   requestLoanApproval,
 } from "@/redux/slices/loanApprovalSlice";
 
-
 const ApprovalModal = ({
   isOpen,
   onClose,
@@ -25,8 +24,6 @@ const ApprovalModal = ({
   approvalId,
   approvalLevel,
 }) => {
-
-
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -37,12 +34,10 @@ const ApprovalModal = ({
     approvalNote: "",
   });
 
-
-
-  const modalStyles = {
-    width: width || "90%",
-    maxWidth: "500px",
-  };
+  // const modalStyles = {
+  //   width: width || "90%",
+  //   maxWidth: "500px",
+  // };
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
@@ -74,11 +69,11 @@ const ApprovalModal = ({
   const submitLoan = (e) => {
     setLoading(true);
     let _formData = {
-      'approvalLevel': approvalId,
-      "approvalNote": formData?.approvalNote,
-    }
+      approvalLevel: approvalId,
+      approvalNote: formData?.approvalNote,
+    };
     const payload = { id, _formData };
-    console.log({payload});
+    console.log({ payload });
     e.preventDefault();
     dispatch(approveLoanRequest(payload))
       .unwrap()
@@ -86,31 +81,31 @@ const ApprovalModal = ({
         toast("Loan approved for this level");
         setLoading(false);
         setTimeout(() => {
-         window.location.reload();
-        }, 2000)
-     
+          window.location.reload();
+        }, 2000);
       })
       .catch((error) => {
-        console.log({error});
-       toast.error(`${error?.message}`);
+        console.log({ error });
+        toast.error(`${error?.message}`);
         setLoading(false);
         setTimeout(() => {
           window.location.reload();
-        }, 2000)
+        }, 2000);
       });
-
   };
 
   useEffect(() => {
     modifyUsersToApprove(data);
   }, [data]);
 
-
-
   return (
     <main>
-        <ToastContainer />
-      <form style={modalStyles} id="add-user-form">
+      <ToastContainer />
+      <form
+        //  style={modalStyles}
+        className="w-full"
+        id="add-user-form"
+      >
         <div className="border bg-white border-swLightGray rounded-lg">
           <div className="flex justify-between items-center p-3 text-white">
             <div>
@@ -119,7 +114,6 @@ const ApprovalModal = ({
               </p>
               <p className="text-xs  text-swGray">Provide a comment</p>
             </div>
-      
           </div>
           <div className="p-4">
             <textarea
@@ -134,13 +128,13 @@ const ApprovalModal = ({
             <div className="flex justify-between gap-3">
               <Button
                 variant="secondary"
-                onClick={() => {}}
+                onClick={onClose}
                 className="mt-4 block w-full rounded-lg"
               >
                 Cancel
               </Button>
               <Button
-                disabled={loading ? true : false} 
+                disabled={loading ? true : false}
                 onClick={submitLoan}
                 className="mt-4 block w-full rounded-lg"
               >

@@ -33,10 +33,10 @@ const RequestApproval = ({
     assignee: "",
   });
 
-  const modalStyles = {
-    width: width || "90%",
-    maxWidth: "500px",
-  };
+  // const modalStyles = {
+  //   width: width || "90%",
+  //   maxWidth: "500px",
+  // };
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
@@ -94,8 +94,11 @@ const RequestApproval = ({
   return (
     <main className="w-full">
       <ToastContainer />
-      <form style={modalStyles} id="add-user-form ">
-        <div className="border bg-white border-swLightGray rounded rounded-lg">
+      <form 
+      // style={modalStyles} 
+      
+      id="add-user-form ">
+        <div className="border bg-white border-swLightGray rounded-lg">
           <div className="flex justify-between items-center p-3 text-white">
             <div>
               <p className="text-base font-semibold text-swGray">

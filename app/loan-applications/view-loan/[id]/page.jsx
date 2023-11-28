@@ -77,10 +77,7 @@ const ViewLoan = () => {
 
   console.log({ data });
   return (
-    <DashboardLayout
-      isBackNav={true}
-      paths={["Loan applications", "View loan"]}
-    >
+    <DashboardLayout>
       <main className="flex h-full">
         <section className="w-full">
           <section
@@ -171,8 +168,7 @@ const ViewLoan = () => {
 
                   <div className="flex justify-between items-center">
                     <p className="text-md text-swGray font-semibold mt-4">
-                      ₦{" "}
-                      {data?.data?.loanApplication?.loanAmount.toLocaleString()}
+                      ₦ {data?.data?.loanApplication?.loanAmount}
                     </p>
                     <div
                       className="p-2 rounded-md hover:bg-white hover:border-2 hover:border-gray-200 mt-2"
@@ -223,8 +219,7 @@ const ViewLoan = () => {
                     <td className="px-3 py-3">
                       <div>
                         <p>
-                          ₦{" "}
-                          {data?.data?.interestCalculation?.totalPayments.toLocaleString()}
+                          ₦ {data?.data?.interestCalculation?.totalPayments}
                         </p>
                       </div>
                     </td>
@@ -528,7 +523,7 @@ const ViewLoan = () => {
           </div>
         </section>
       </main>
-    
+
       {/* <ApprovalModal
         approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
         approvalId={data?.data?.approvalNeeded?.approvalLevel}
@@ -537,27 +532,29 @@ const ViewLoan = () => {
           setApprovalOpen(false);
         }}
       /> */}
-      <CenterModal width={"30%"} isOpen={isRequestApprovalOpen} >
-      <RequestApproval
-        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
-        approvalId={data?.data?.approvalNeeded?.approvalLevel}
-        data={user}
-       
-      />
+      <CenterModal width={"30%"} isOpen={isRequestApprovalOpen}>
+        <RequestApproval
+          approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+          approvalId={data?.data?.approvalNeeded?.approvalLevel}
+          data={user}
+        />
       </CenterModal>
       <CenterModal isOpen={isApprovalOpen} >
         <ApprovalModal
+          width={"100%"}
           approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
           approvalId={data?.data?.approvalNeeded?.approvalLevel}
           isOpen={isApprovalOpen}
           data={data?.data}
+          onClose={() => setApprovalOpen(false)}
         />{" "}
       </CenterModal>
-      <CenterModal isOpen={isDeclineOpen} >
+      <CenterModal isOpen={isDeclineOpen}>
         <DeclineModal
           approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
           approvalId={data?.data?.approvalNeeded?.approvalLevel}
           isOpen={isDeclineOpen}
+          onClose={() => setDeclineOpen(false)}
         />
       </CenterModal>
 
