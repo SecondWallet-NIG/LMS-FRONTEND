@@ -5,7 +5,7 @@ const CustomerLoanTable = ({id}) => {
   const headers = [
  
     { id: "createdAt", label: "Date Created" },
-    { id: "name", label: "Borrower's Name & ID" },
+    { id: "name", label: "Name & ID" },
     { id: "loanPackageId", label: "Loan ID & package"},
     { id: "loanAmount", label: "Loan Amount"},
     { id: "status", label: "Loan Status" },
@@ -23,7 +23,7 @@ const CustomerLoanTable = ({id}) => {
       name: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.customerId?.firstName} ${item?.customerId?.lastName}`}</div>
-          <div className="text-xs text-gray-500">Borrower's ID</div>
+          <div className="text-xs text-gray-500">Borrower ID</div>
         </div>
       ),
       loanPackageId: (
@@ -42,7 +42,7 @@ const CustomerLoanTable = ({id}) => {
           className={`${
             item.status === "Pending"
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : "bg-[#F8A9A3] "
+              : "bg-[#F8A9A3]"
           } px-2 py-1 rounded`}
         >
           {item.status}
