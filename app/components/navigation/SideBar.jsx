@@ -316,14 +316,18 @@ import {
   TbFileDollar,
   TbReportMoney,
 } from "react-icons/tb";
-import { AiFillCustomerService, AiOutlineSetting } from "react-icons/ai";
+import {AiOutlineSetting } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import SidebarLink from "../shared/sideBarLink/SidebarLink";
 import { useRouter } from "next/navigation";
-import { FiSend } from "react-icons/fi";
+import { FiArrowDownLeft, FiArrowUpRight, FiSend } from "react-icons/fi";
+import { IoMdCard } from "react-icons/io";
+import { FaRegStar } from "react-icons/fa";
+import { FaPeopleGroup } from "react-icons/fa6";
+
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -405,6 +409,22 @@ const Sidebar = () => {
           />
           <SidebarLink
             icon={
+              <BsPeopleFill
+                className={`${activeLink === "customers" && "text-swBlue"}`}
+                size={20}
+              />
+            }
+            pathname={pathname}
+            text="Borrowers"
+            link="/borrowers"
+            // hasDropdown={true}
+            sideBarOpen={sideBarOpen}
+            onClick={() => {
+              setActiveLink("borrowers");
+            }}
+          />
+          <SidebarLink
+            icon={
               <TbNewSection
                 className={`${activeLink === "create-loan" && "text-swBlue"}`}
                 size={20}
@@ -438,40 +458,6 @@ const Sidebar = () => {
           />
           <SidebarLink
             icon={
-              <BsPeopleFill
-                className={`${activeLink === "customers" && "text-swBlue"}`}
-                size={20}
-              />
-            }
-            pathname={pathname}
-            text="Borrowers"
-            link="/borrowers"
-            // hasDropdown={true}
-            sideBarOpen={sideBarOpen}
-            onClick={() => {
-              setActiveLink("borrowers");
-            }}
-          />
-          <SidebarLink
-            icon={
-              <BsCalculator
-                className={`${
-                  activeLink === "intrest-calculator" && "text-swBlue"
-                }`}
-                size={20}
-              />
-            }
-            pathname={pathname}
-            text="Interest calculator"
-            link="/interest-calculator"
-            isActive={"interest-calculator"}
-            sideBarOpen={sideBarOpen}
-            onClick={() => {
-              setActiveLink("intrest-calculator");
-            }}
-          />
-          <SidebarLink
-            icon={
               <FiSend
                 className={`${activeLink === "disbursement" && "text-swBlue"}`}
                 size={20}
@@ -484,6 +470,23 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("disbursement");
+            }}
+          />
+        
+          <SidebarLink
+            icon={
+              <FiArrowDownLeft
+                className={`${activeLink === "repayment" && "text-swBlue"}`}
+                size={20}
+              />
+            }
+            pathname={pathname}
+            text="Repayment"
+            link="/repayment"
+            isActive={"repayment"}
+            sideBarOpen={sideBarOpen}
+            onClick={() => {
+              setActiveLink("repayment");
             }}
           />
         </div>
@@ -504,9 +507,27 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
           />
           <SidebarLink
-            icon={<AiFillCustomerService size={20} />}
+            icon={<FaPeopleGroup size={20} />}
             text="Team management"
             link="/team-management"
+            sideBarOpen={sideBarOpen}
+          />
+          <SidebarLink
+            icon={<FiArrowUpRight size={20} />}
+            text="Expenses"
+            link="/expenses"
+            sideBarOpen={sideBarOpen}
+          />
+          <SidebarLink
+            icon={<IoMdCard size={20} />}
+            text="Payroll"
+            link="/payroll"
+            sideBarOpen={sideBarOpen}
+          />
+          <SidebarLink
+            icon={<FaRegStar size={20} />}
+            text="Investors"
+            link="/investors"
             sideBarOpen={sideBarOpen}
           />
           <SidebarLink

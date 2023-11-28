@@ -96,7 +96,7 @@ const DashboardCard = (data) => {
             <Link
               href={
                 item.name === "Borrowers"
-                  ? "/create-customer"
+                  ? "/create-borrower"
                   : item.name === "Disbursements"
                   ? "/disbursement"
                   : item.name === "Repayments"
@@ -141,7 +141,7 @@ const DashboardCard = (data) => {
                       item.stat.includes("-")
                         ? "bg-red-100 text-red-500"
                         : "bg-green-100 text-green-500"
-                    } inline-block py-1 px-2 text-xs rounded-full`}
+                    } inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
                   >
                     {item.stat}
                   </div>
@@ -149,11 +149,11 @@ const DashboardCard = (data) => {
               </div>
             ) : (
               <div className="flex justify-center">
-                <div className="pr-10 text-center">
+                <div className="w-full text-center">
                   <p className="text-sm ">Total paid</p>
                   <p className="font-semibold mt-1">{item.total} m</p>
                 </div>
-                <div className="px-10 border-x text-center">
+                <div className="w-full border-x text-center">
                   <p className="text-sm">This month</p>
                   <p className="font-semibold mt-1">{item.total} m</p>
                   <p
@@ -161,12 +161,12 @@ const DashboardCard = (data) => {
                       item.stat.thisMonth.stat.includes("-")
                         ? "bg-red-100 text-red-500"
                         : "bg-green-100 text-green-500"
-                    } inline-block py-1 px-2 text-xs mx-auto rounded-full`}
+                    } inline-block py-1 px-2 text-xs mx-auto rounded-full whitespace-nowrap`}
                   >
                     {item.stat.thisMonth.stat}
                   </p>
                 </div>
-                <div className="pl-10 text-center">
+                <div className="w-full text-center">
                   <p className="text-sm">Today</p>
                   <p className="font-semibold mt-1">{item.total} m</p>
                   <p
@@ -174,7 +174,7 @@ const DashboardCard = (data) => {
                       item.stat.today.stat.includes("-")
                         ? "bg-red-100 text-red-500"
                         : "bg-green-100 text-green-500"
-                    } inline-block py-1 px-2 text-xs mx-auto rounded-full`}
+                    } inline-block py-1 px-2 text-xs mx-auto rounded-full whitespace-nowrap`}
                   >
                     {item.stat.today.stat}
                   </p>

@@ -102,10 +102,10 @@ const CreatePlansAndPackages = () => {
     return isValid;
   };
 
-  console.log(user?.data?.token);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("submit pressed")
     const isValid = validateForm();
     if (isValid) {
       const payload = {
@@ -137,7 +137,7 @@ const CreatePlansAndPackages = () => {
   };
 
   const interestTypeOptions = [
-    { value: "Fixed Rate", label: "Fixed Rate", name: "interestRateType" },
+    { value: "Flat Rate", label: "Flat Rate", name: "interestRateType" },
     {
       value: "Reducing Balance",
       label: "Reducing balance",
@@ -307,10 +307,10 @@ const CreatePlansAndPackages = () => {
               className="border bg-swBlue text-white py-2 px-4 rounded-lg"
               onClick={() => handleSubmit}
             >
-              <div className="flex gap-2 items-center">
+              <p className="flex gap-2 items-center">
                 Create plan/package
                 <FaCheck size={15} />
-              </div>
+              </p>
             </button>
           </div>
         </div>
