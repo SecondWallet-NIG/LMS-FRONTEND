@@ -75,6 +75,7 @@ const ViewLoan = () => {
     }
   }, []);
 
+  console.log({ data });
   return (
     <DashboardLayout
       isBackNav={true}
@@ -527,47 +528,38 @@ const ViewLoan = () => {
           </div>
         </section>
       </main>
+    
+      {/* <ApprovalModal
+        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+        approvalId={data?.data?.approvalNeeded?.approvalLevel}
+        isOpen={isApprovalOpen}
+        onClose={() => {
+          setApprovalOpen(false);
+        }}
+      /> */}
+      <CenterModal width={"30%"} isOpen={isRequestApprovalOpen} >
       <RequestApproval
         approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
         approvalId={data?.data?.approvalNeeded?.approvalLevel}
         data={user}
-        isOpen={isRequestApprovalOpen}
-        onClose={() => {
-          setIsRequestApprovalOpen(false);
-        }}
+       
       />
-      <ApprovalModal
-        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
-        approvalId={data?.data?.approvalNeeded?.approvalLevel}
-        isOpen={isApprovalOpen}
-        onClose={() => {
-          setApprovalOpen(false);
-        }}
-      />
-      <DeclineModal
-        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
-        approvalId={data?.data?.approvalNeeded?.approvalLevel}
-        isOpen={isDeclineOpen}
-        onClose={() => {
-          setDeclineOpen(false);
-        }}
-      />
-      <ApprovalModal
-        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
-        approvalId={data?.data?.approvalNeeded?.approvalLevel}
-        isOpen={isApprovalOpen}
-        onClose={() => {
-          setApprovalOpen(false);
-        }}
-      />
-      <DeclineModal
-        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
-        approvalId={data?.data?.approvalNeeded?.approvalLevel}
-        isOpen={isDeclineOpen}
-        onClose={() => {
-          setDeclineOpen(false);
-        }}
-      />
+      </CenterModal>
+      <CenterModal isOpen={isApprovalOpen} >
+        <ApprovalModal
+          approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+          approvalId={data?.data?.approvalNeeded?.approvalLevel}
+          isOpen={isApprovalOpen}
+          data={data?.data}
+        />{" "}
+      </CenterModal>
+      <CenterModal isOpen={isDeclineOpen} >
+        <DeclineModal
+          approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
+          approvalId={data?.data?.approvalNeeded?.approvalLevel}
+          isOpen={isDeclineOpen}
+        />
+      </CenterModal>
 
       <CenterModal isOpen={openUpdate} width={"25%"}>
         <InputField

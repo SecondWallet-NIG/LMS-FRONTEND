@@ -40,7 +40,7 @@ const RequestApproval = ({
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
-
+      console.log({approvalLevel});
       const users = user.filter((item) => item?.role?.name === approvalLevel);
 
       setUsersToApprove(
@@ -91,11 +91,10 @@ const RequestApproval = ({
   useEffect(() => {
     modifyUsersToApprove(data);
   }, []);
-  if (!isOpen) return null;
   return (
-    <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">
+    <main className="w-full">
       <ToastContainer />
-      <form style={modalStyles} id="add-user-form">
+      <form style={modalStyles} id="add-user-form ">
         <div className="border bg-white border-swLightGray rounded rounded-lg">
           <div className="flex justify-between items-center p-3 text-white">
             <div>
@@ -103,12 +102,7 @@ const RequestApproval = ({
                 Request Approval
               </p>
             </div>
-            <AiOutlineClose
-              color="red"
-              size={20}
-              onClick={onClose}
-              className="cursor-pointer"
-            />
+        
           </div>
           <div className="p-4">
             <div className="w-full pb-4">
