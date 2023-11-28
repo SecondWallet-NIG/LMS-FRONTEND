@@ -39,7 +39,6 @@ function ReusableDataTable({
   const [downloadData, setDownloadData] = useState();
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-
   const [perPage, setPerPage] = useState(5);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
   const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +75,6 @@ function ReusableDataTable({
 
         // Sample nested JSON data
         const nestedJsonData = allData;
-        comsole.log("hello", nestedJsonData);
 
         function flattenData(data, parentKey = "") {
           let flattened = {};
@@ -155,7 +153,6 @@ function ReusableDataTable({
       "&:hover": {
         backgroundColor: "#f5f5f5",
       },
-      backgroundColor: state.isSelected ? "#2769B3" : null,
     }),
   };
 
@@ -307,38 +304,32 @@ function ReusableDataTable({
     <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
       <ToastContainer />
       <div className="">
-        {filters && (
-          <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
-            <div className="flex gap-2 items-center justify-between w-full md:w-fit">
-              <div className="flex border border-1 items-center mb-4 pl-2">
-                <p className="mr-2 text-swGray">Items:</p>
-                <Select
-                  styles={customStyles}
-                  options={options}
-                  value={{ value: perPage, label: perPage }}
-                  onChange={handleSelectChange}
-                  isSearchable={false}
-                />
-              </div>
-              <div className="flex gap-3 items-center">
-                <button
-                  onClick={toggleDateFilter}
-                  className=" flex gap-2 items-center border border-swLightGray bg-white py-1.5 px-3 mb-4"
-                >
-                  <FiFilter size={20} />
-                  <p>Filter By Date</p>
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-4 flex items-center justify-between w-full md:w-fit">
-              <div className="flex justify-center items-center gap-2 ml-auto">
-                <InputField
-                  startIcon={<FiSearch size={20} />}
-                  endIcon={
-                    <IoIosClose
-                      size={20}
-                      className="cursor-pointer"
+        {data.length > 0 ? (
+          <div>
+            {filters && (
+              <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
+                <div className="flex gap-2 items-center justify-between w-full md:w-fit">
+                  <div className="flex border border-1 items-center mb-4 pl-2 ">
+                    <p className="mr-2 text-swGray">Items:</p>
+                    <Select
+                      styles={customStyles}
+                      options={options}
+                      value={{ value: perPage, label: perPage }}
+                      onChange={handleSelectChange}
+                      isSearchable={false}
+                    />
+                  </div>
+                  <div className="flex gap-3 items-center">
+                    <button
+                      onClick={toggleDateFilter}
+                      className=" flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg"
+                    >
+                      <FiFilter size={20} />
+                      <p>Filter By Date</p>
+                    </button>
+                  </div>
+                  <div className="flex gap-3 items-center">
+                    <button
                       onClick={() => {
                         setFilterOptions(true);
                       }}
@@ -463,10 +454,10 @@ function ReusableDataTable({
             </table>
           </div>
         ) : (
-          <div className="min-h-500 flex items-center justify-center">
-            <div className="rounded-lg p-8 w-[400px] flex flex-col items-center">
+          <div class="min-h-500 flex items-center justify-center">
+            <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
               <Image src={sketch} alt="company logo" />
-              <p className="text-center text-lg">This list is empty</p>
+              <p class="text-center text-lg">This list is empty</p>
             </div>
           </div>
         )}
@@ -515,7 +506,6 @@ function ReusableDataTable({
         onClose={() => {
           setDateFilterOpen(!dateFilterOpen);
         }}
-        width={"fit-content"}
       >
         <div className="bg-white p-4 border shadow-lg">
           <div className="text-swBlue text-sm font-semibold pb-4">
@@ -535,7 +525,6 @@ function ReusableDataTable({
             </Button>
             <Button
               onClick={() => {
-                console.log(dateRange);
                 fetchData(currentPage, perPage, sortField, sortDirection);
                 setDateFilterOpen(false);
               }}
