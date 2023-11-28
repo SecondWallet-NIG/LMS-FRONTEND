@@ -16,7 +16,7 @@ const Staffs = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { loading, error, data } = useSelector((state) => state.role);
+  const { loading, error, data } = useSelector((state) => state?.role);
 
   const headers = [
     { id: "name", label: "Name and Staff ID" },
