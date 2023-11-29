@@ -233,7 +233,7 @@
 //             }
 //             pathname={pathname}
 //             text="disbursement"
-//             link="/disbursement/all"
+//             link="/disbursement"
 //             isActive={"disbursement"}
 //             sideBarOpen={sideBarOpen}
 //             onClick={() => {
@@ -465,7 +465,7 @@ const Sidebar = () => {
             }
             pathname={pathname}
             text="Disbursement"
-            link="/disbursement/all"
+            link="/disbursement"
             isActive={"disbursement"}
             sideBarOpen={sideBarOpen}
             onClick={() => {

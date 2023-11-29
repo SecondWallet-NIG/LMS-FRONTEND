@@ -22,7 +22,7 @@ const LoanPackages = () => {
       return state?.loanPackage?.data?.data;
     }) || [];
 
-  console.log(loanPackage);
+  console.log(data);
   const handleSearch = (state) => {
     setSearchOpen(state);
   };

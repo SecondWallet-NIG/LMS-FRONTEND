@@ -10,10 +10,12 @@ const CenterModal = ({ isOpen, bgColor, onClose, children, width }) => {
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">
       <div
+        style={width && modalStyles}
         className={`${
           bgColor ? bgColor : "bg-white"
-        } p-4 rounded-md shadow-md" style={modalStyles} m-8 max-w-xl w-full px-5`}
-        style={width && modalStyles}
+        } p-4 rounded-md shadow-md" style={modalStyles} m-8 ${
+          !width ? "max-w-xl w-full" : ""
+        }  px-5`}
       >
         {children}
       </div>

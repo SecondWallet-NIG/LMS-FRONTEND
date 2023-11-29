@@ -6,22 +6,25 @@ import { FiMinus } from "react-icons/fi";
 import { MdArrowBackIos, MdPercent } from "react-icons/md";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { useEffect } from "react";
 import CenterModal from "@/app/components/modals/CenterModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaCheck } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
+import { IoMdCheckmark, IoMdClose } from "react-icons/io";
 import Link from "next/link";
 import checkGif from "../../../public/images/check.gif";
 import warningGif from "../../../public/images/warning.gif";
 import { staticGenerationAsyncStorage } from "next/dist/client/components/static-generation-async-storage.external";
 import Image from "next/image";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
+import { Rings } from "react-loader-spinner";
 
 const CreatePlansAndPackages = () => {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
   const [cancelModal, setCancelModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [user, setUser] = useState({});
@@ -303,7 +306,7 @@ const CreatePlansAndPackages = () => {
                 Cancel
               </div>
             </button>
-            <button
+            {/* <button
               className="border bg-swBlue text-white py-2 px-4 rounded-lg"
               onClick={() => handleSubmit}
             >
@@ -311,7 +314,28 @@ const CreatePlansAndPackages = () => {
                 Create plan/package
                 <FaCheck size={15} />
               </p>
-            </button>
+            </button> */}
+            <EditableButton
+              blueBtn={true}
+              disabled={loading === "pending" ? true : false}
+              startIcon={
+                loading === "pending" && (
+                  <Rings
+                    height="20"
+                    width="20"
+                    color="#ffffff"
+                    radius="2"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                    ariaLabel="rings-loading"
+                  />
+                )
+              }
+              label={"Create plan/package"}
+              endIcon={<IoMdCheckmark size={20} />}
+              onClick={handleSubmit}
+            />
           </div>
         </div>
         <CenterModal width={"600px"} isOpen={cancelModal}>

@@ -33,7 +33,7 @@ const LoanTable = () => {
       loanAmount: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            ₦ {`${item?.loanAmount.toLocaleString()}`}
+            ₦ {`${item?.loanAmount}`}
           </div>
         </div>
       ),
