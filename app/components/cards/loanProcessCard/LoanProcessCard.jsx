@@ -22,7 +22,7 @@ const LoanProcessCard = ({ data }) => {
                     ? "bg-[#E8F7F0] text-[#107E4B] text-xs font-normal px-2 py-1 rounded-full"
                     : item.status === "Pending"
                     ? "bg-swGray text-white text-xs font-normal px-2 py-1 rounded-full"
-                    : item.status === "Approval request initiated"
+                    : item.status === "Approval Initiated"
                     ? "bg-red-400 text-white text-xs font-normal px-2 py-1 rounded-full"
                     : item.status === "Declined"
                     ? "bg-[#F8A9A3] text-white text-xs font-normal px-2 py-1 rounded-full"

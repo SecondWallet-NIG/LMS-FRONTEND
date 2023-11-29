@@ -86,8 +86,8 @@ const LoginScreen = () => {
 
   // Handle the response data when it changes
   useEffect(() => {
+  
     if (userData) {
-      console.log({ userData });
       localStorage.setItem("user", JSON.stringify(userData));
       if (userData?.data?.user.firstLogin === true) {
         router.push("/onboarding");

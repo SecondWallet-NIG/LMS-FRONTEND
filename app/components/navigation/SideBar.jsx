@@ -547,10 +547,12 @@ const Sidebar = () => {
           <SidebarLink
             icon={<GoSignOut size={20} />}
             text="Sign Out"
-            link="/sign-out"
+            link="/dashboard"
             sideBarOpen={sideBarOpen}
             onClick={() => {
               handleSidebarOpen(false);
+              localStorage.removeItem("user");
+              window.location.reload();
             }}
           />
         </div>
