@@ -40,6 +40,8 @@ const CreateLoan = () => {
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
 
+  // console.log(filteredData);
+
   const [formData, setFormData] = useState({
     loanAmount: 0,
     loanPackage: null,
@@ -249,14 +251,14 @@ const CreateLoan = () => {
 
   const handleFileChange = (e) => {
     let { name, files } = e.target;
-    console.log({ name, files });
+    // console.log({ name, files });
     const file = files[0];
-    console.log({ file });
+    // console.log({ file });
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: files[0],
     }));
-    console.log(formData);
+    // console.log(formData);
   };
 
   const deleteFile = (name) => {
@@ -292,7 +294,7 @@ const CreateLoan = () => {
     payload.append("offerLetter", formData.offerLetter);
     payload.append("customerId", formData.customerId);
     payload.append("createdBy", "6514bd21b128a700f66d2f38");
-    console.log({ payload });
+    // console.log({ payload });
 
     setLoading(true);
     e.preventDefault();
@@ -1223,6 +1225,7 @@ const CreateLoan = () => {
               className="p-2"
               onClick={() => {
                 setIsOpen(false);
+                setFilteredData(customer?.data);
               }}
             >
               <svg
@@ -1252,6 +1255,7 @@ const CreateLoan = () => {
                   });
                   setSelectedCustomer(item);
                   setIsOpen(false);
+                  setFilteredData(customer?.data);
                 }}
                 className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
               >

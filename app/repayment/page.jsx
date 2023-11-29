@@ -1,7 +1,7 @@
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 
 const Repayment = () => {
-  return <DashboardLayout>Payroll Page</DashboardLayout>;
+  return <DashboardLayout>Repayment Page</DashboardLayout>;
 };
 
 export default Repayment;

@@ -23,7 +23,7 @@ const PagePath = ({ paths }) => {
         <p className="text-swBlue text-lg">Borrowers</p>
       ) : pathname === "/repayment" ? (
         <p className="text-swBlue text-lg">Repayment</p>
-      ) : pathname === "/disbursement/all" ? (
+      ) : pathname === "/disbursement" ? (
         <p className="text-swBlue text-lg">Disbursements</p>
       ) : pathname === "/expenses" ? (
         <p className="text-swBlue text-lg">Expenses</p>

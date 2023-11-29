@@ -501,7 +501,7 @@ function ReusableDataTable({
 
       <Loader isOpen={isLoading} />
       <CenterModal
-        width={"30%"}
+        width={"fit-content"}
         isOpen={dateFilterOpen}
         onClose={() => {
           setDateFilterOpen(!dateFilterOpen);
