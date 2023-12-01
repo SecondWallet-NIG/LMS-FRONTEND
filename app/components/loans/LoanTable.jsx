@@ -1,7 +1,12 @@
 "use client";
 
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 const LoanTable = () => {
+  const [userId, setUserId] = useState("");
+  const [role, setRole] = useState("");
+  const router = useRouter();
   const headers = [
     { id: "createdAt", label: "Date Created" },
     { id: "name", label: "Borrower's Name & ID" },
@@ -50,29 +55,54 @@ const LoanTable = () => {
       ),
     }));
   };
-  return (
-    <ReusableDataTable
-      filterParams={[
-        { name: "Pending" },
-        { name: "Approved" },
-        { name: "Declined" },
-      ]}
-      dataTransformer={customDataTransformer}
-      onClickRow="/loan-applications/view-loan"
-      headers={headers}
-      initialData={[]}
-      apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
-      btnText={
-        <div className="flex gap-1 items-center p-1">
-          <p className="hidden lg:block">create customer</p>
-        </div>
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Check if localStorage is available
+        if (typeof window !== "undefined") {
+          const storedUser = JSON.parse(localStorage.getItem("user"));
+          console.log("Stored User:", storedUser); // Add this line
+          setUserId(storedUser?.data?.user?._id || "");
+          setRole(storedUser?.data?.user?.role?.name || "");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-      btnTextClick={() => {
-        router.push("/create-borrower");
-      }}
-      filters={true}
-      pagination={false}
-    />
+    };
+
+    // Call the async function
+    fetchUserData();
+  }, [router.pathname]);
+
+  return (
+    <div>
+      {userId && (
+        <ReusableDataTable
+          filterParams={[
+            { name: "Pending" },
+            { name: "Approved" },
+            { name: "Declined" },
+          ]}
+          dataTransformer={customDataTransformer}
+          onClickRow="/loan-applications/view-loan"
+          headers={headers}
+          initialData={[]}
+          apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
+          btnText={
+            <div className="flex gap-1 items-center p-1">
+              <p className="hidden lg:block">create customer</p>
+            </div>
+          }
+          btnTextClick={() => {
+            router.push("/create-borrower");
+          }}
+          filters={true}
+          pagination={true}
+          userId={userId}
+          role={role}
+        />
+      )}
+    </div>
   );
 };
 

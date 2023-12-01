@@ -5,12 +5,13 @@ import { HiMiniUserCircle } from "react-icons/hi2";
 import PagePath from "./PagePath";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 
 const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");
 
   const openNotifications = (state) => {
@@ -50,6 +51,16 @@ const NavBar = ({ paths, isBackNav }) => {
     },
   ];
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      console.log({storedUser});
+ 
+      setUser(storedUser?.data?.user?.email);
+    }
+  }, []);
+
   return (
     <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-[95%] px-5 z-[100]">
       <div className="flex gap-5 items-center">
@@ -64,10 +75,12 @@ const NavBar = ({ paths, isBackNav }) => {
         <PagePath paths={paths} />
       </div>
       <div className=" flex gap-5 items-center relative">
+      <p className="text-sm">LoggedIn User : {user}</p>
         <div
           className="relative cursor-pointer"
           onClick={() => openNotifications(!isNotificationsOpen)}
         >
+          
           <FaBell size={20} />
           <div className="bg-swGreen h-2 w-2 rounded-full top-0 right-0 absolute" />
         </div>
@@ -140,6 +153,7 @@ const NavBar = ({ paths, isBackNav }) => {
           </div>
         )}
         <div className="relative">
+ 
           <HiMiniUserCircle size={50} />
           <div className="bg-swYellow h-3 w-3 rounded-full bottom-1 right-1 absolute" />
         </div>

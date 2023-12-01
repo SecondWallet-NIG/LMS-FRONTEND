@@ -13,10 +13,8 @@ import SelectField from "../../shared/input/SelectField";
 import { requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
 
 const RequestApproval = ({
-  isOpen,
-  onClose,
-  width,
   data,
+  approvals,
   selected,
   approvalId,
   approvalLevel,
@@ -26,7 +24,7 @@ const RequestApproval = ({
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
-
+  console.log({approvals});
   const [formData, setFormData] = useState({
     approvalLevel: approvalId,
     requestNote: "",
@@ -77,9 +75,9 @@ const RequestApproval = ({
       .then(() => {
         toast("Loan approval request successful");
         setLoading(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 2000);
       })
       .catch((error) => {
         console.log({error});
@@ -104,7 +102,9 @@ const RequestApproval = ({
               <p className="text-base font-semibold text-swGray">
                 Request Approval
               </p>
+            
             </div>
+            <button className="text-black" >x</button> 
         
           </div>
           <div className="p-4">

@@ -33,6 +33,8 @@ const ApprovalModal = ({
     approvalLevel: approvalId,
     approvalNote: "",
   });
+  console.log("here",{  approvalId,
+    approvalLevel,});
 
   // const modalStyles = {
   //   width: width || "90%",
@@ -88,9 +90,9 @@ const ApprovalModal = ({
         console.log({ error });
         toast.error(`${error?.message}`);
         setLoading(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 2000);
       });
   };
 

@@ -89,7 +89,7 @@ const LoginScreen = () => {
   
     if (userData) {
       localStorage.setItem("user", JSON.stringify(userData));
-      if (userData?.data?.user.firstLogin === true) {
+      if (userData?.data?.user?.firstLogin === true) {
         router.push("/onboarding");
       } else {
         router.push("/dashboard");

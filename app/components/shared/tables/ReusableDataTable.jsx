@@ -34,6 +34,8 @@ function ReusableDataTable({
   filters,
   pagination,
   filterParams,
+  userId,
+  role
 }) {
   const [data, setData] = useState(initialData || []);
   const [downloadData, setDownloadData] = useState();
@@ -50,6 +52,9 @@ function ReusableDataTable({
   const [logSearch, setLogSearch] = useState(false);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [filterOptions, setFilterOptions] = useState(false);
+
+  console.log({userId});
+  console.log({role});
 
   const [dateRange, setDateRange] = useState([
     {
@@ -165,6 +170,10 @@ function ReusableDataTable({
     let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=-createdAt`;
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
+      if(userId && role === "Loan Officer"){
+        console.log("true oooo");
+        apiUrl += `&userId=${userId}`;
+      }
       axios
         .get(apiUrl, {
           headers: {
@@ -204,6 +213,12 @@ function ReusableDataTable({
           const endDate = dateRange[0].endDate.toISOString();
           apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
         }
+      }
+
+      if(userId && role === "Loan Officer"){
+    
+        
+        apiUrl += `&userId=${userId}`;
       }
       setIsLoading(true);
       axios
@@ -304,7 +319,7 @@ function ReusableDataTable({
     <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
       <ToastContainer />
       <div className="">
-        {data.length > 0 ? (
+        {data?.length > 0 ? (
           <div>
             {filters && (
               <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
