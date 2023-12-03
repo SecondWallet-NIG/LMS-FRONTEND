@@ -10,7 +10,7 @@ import { useParams } from "next/navigation";
 import InputField from "../../shared/input/InputField--";
 import Button from "../../shared/buttonComponent/Button";
 import SelectField from "../../shared/input/SelectField";
-import { requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
+import { declineLoanRequest, requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
 
 const DeclineModal = ({
   isOpen,
@@ -28,14 +28,10 @@ const DeclineModal = ({
 
   const [formData, setFormData] = useState({
     approvalLevel: approvalId,
-    requestNote: "",
-    assignee: "",
+    declineNote: "",
   });
 
-  // const modalStyles = {
-  //   width: width || "90%",
-  //   maxWidth: "500px",
-  // };
+
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
@@ -75,20 +71,17 @@ const DeclineModal = ({
     setLoading(true);
     const payload = { id, formData };
     e.preventDefault();
-    // dispatch(requestLoanApproval(payload))
-    //   .unwrap()
-    //   .then(() => {
-    //     toast("Loan approved for this level");
-    //     setLoading(false);
-    //     useEffect(() => {
-    //       router.push(`/loan-applications/view-loan/${id}`);
-    //     }, 2000)
-    //   })
-    //   .catch((error) => {
-    //     console.log({error});
-    //     toast.error(`${error?.message}`);
-    //     setLoading(true);
-    //   });
+    dispatch(declineLoanRequest(payload))
+      .unwrap()
+      .then(() => {
+        toast("Loan declined for this level");
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log({error});
+        toast.error(`${error?.message}`);
+        setLoading(true);
+      });
   };
 
   useEffect(() => {
@@ -114,8 +107,8 @@ const DeclineModal = ({
           </div>
           <div className="p-4">
             <textarea
-              name="requestNote"
-              id="requestNote"
+              name="declineNote"
+              id="declineNote"
               className="w-full border border-1"
               rows="5"
               onChange={(e) => {

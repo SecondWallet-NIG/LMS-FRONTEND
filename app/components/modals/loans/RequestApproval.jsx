@@ -75,9 +75,9 @@ const RequestApproval = ({
       .then(() => {
         toast("Loan approval request successful");
         setLoading(false);
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 2000);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       })
       .catch((error) => {
         console.log({error});
@@ -92,7 +92,7 @@ const RequestApproval = ({
   return (
     <main className="w-full">
       <ToastContainer />
-      <form 
+      <div 
       // style={modalStyles} 
       
       id="add-user-form ">
@@ -139,7 +139,7 @@ const RequestApproval = ({
             </Button>
           </div>
         </div>
-      </form>
+      </div>
     </main>
   );
 };

@@ -426,13 +426,12 @@ const ViewLoan = () => {
                                 setCurrentApprovalLevel(item?.approvalTitle);
                                 setIsRequestApprovalOpen(true);
                               }}
-                              disabled={
-                                item?.status === "Pending" ? false : true
-                              }
+                              disabled={item?.status === "Approval request initiated" || item?.status === "Approved"}
+
                               variant="secondary"
                               className="text-xs rounded-lg"
                             >
-                              {item?.status === "Pending"
+                              {item?.status === "Pending" || "Declined"
                                 ? "Request for Approval"
                                 : item?.status}
                             </Button>
@@ -450,7 +449,7 @@ const ViewLoan = () => {
               Array.isArray(loanApprovals?.data?.data) &&
               loanApprovals?.data?.data.filter(
                 (item) =>
-                  item?.assignee?._id === useriD && item?.status !== "Approved"
+                  item?.assignee?._id === useriD && item?.status === "Approval request initiated"
               ).length > 0 ? (
                 <div>
                   <h6 className="text-center font-semibold p-2">Loan Action</h6>
@@ -479,12 +478,11 @@ const ViewLoan = () => {
                         {loanApprovals &&
                           Array.isArray(loanApprovals?.data?.data) &&
                           loanApprovals?.data?.data
-                            .filter(
-                              (item) =>
-                                item?.assignee?._id === useriD &&
-                                item?.status !== "Approved"
-                            )
-                            .map((item, index) => (
+                          .filter(
+                            (item) =>
+                              item?.assignee?._id === useriD &&
+                              (item?.status === "Approval request initiated")
+                          ).map((item, index) => (
                               <tr className="text-xs" key={index}>
                                 <td className="p-2">{item?.approvalTitle}</td>
                                 <td className="p-2">

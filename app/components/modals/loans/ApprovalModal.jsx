@@ -73,6 +73,7 @@ const ApprovalModal = ({
     let _formData = {
       approvalLevel: approvalId,
       approvalNote: formData?.approvalNote,
+      taskId : localStorage.getItem("taskId")
     };
     const payload = { id, _formData };
     console.log({ payload });
@@ -95,9 +96,11 @@ const ApprovalModal = ({
         // }, 2000);
       });
   };
-
+  //let taskId;
   useEffect(() => {
     modifyUsersToApprove(data);
+
+   
   }, [data]);
 
   return (
