@@ -3,7 +3,7 @@
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-const LoanTable = () => {
+const  LoanTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
   const router = useRouter();
@@ -90,11 +90,11 @@ const LoanTable = () => {
           apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
           btnText={
             <div className="flex gap-1 items-center p-1">
-              <p className="hidden lg:block">create customer</p>
+              <p className="hidden lg:block">create loan</p>
             </div>
           }
           btnTextClick={() => {
-            router.push("/create-borrower");
+            router.push("/create-loan");
           }}
           filters={true}
           pagination={true}

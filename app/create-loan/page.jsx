@@ -21,6 +21,7 @@ import PreviewInterest from "../components/modals/PreviewInterest";
 import { FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
+import Link from "next/link";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const CreateLoan = () => {
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
 
-  // console.log(filteredData);
+  // console.log(loanPackage?.data?.data);
 
   const [formData, setFormData] = useState({
     loanAmount: 0,
@@ -271,7 +272,6 @@ const CreateLoan = () => {
   const submitLoan = (e) => {
     let userId;
     if (typeof window !== "undefined") {
-      
       const storedUser = JSON.parse(localStorage.getItem("user"));
       userId = storedUser?.data?.user?._id;
     }
@@ -300,7 +300,7 @@ const CreateLoan = () => {
     payload.append("offerLetter", formData.offerLetter);
     payload.append("customerId", formData.customerId);
     payload.append("createdBy", userId);
-    // console.log({ payload });
+    console.log([...payload]);
 
     setLoading(true);
     e.preventDefault();
@@ -337,13 +337,13 @@ const CreateLoan = () => {
             <div className="flex justify-between">
               <p className="text-lg font-semibold">Initiate loan application</p>
 
-              <Button
-                href=""
+              <Link
+                href="/create-borrower"
                 className="flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
-                <p>Add new customer</p>
-              </Button>
+                <p>Add new borrower</p>
+              </Link>
             </div>
 
             <div className="flex flex-col gap-5 mt-5">
