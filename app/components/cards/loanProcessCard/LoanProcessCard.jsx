@@ -5,7 +5,7 @@ import EditableButton from "../../shared/editableButtonComponent/EditableButton"
 
 const LoanProcessCard = ({ data }) => {
   const _data = data?.data?.data;
-  console.log({ data });
+  // console.log({ data });
   return (
     <main className="flex flex-col">
       {Array.isArray(_data) &&

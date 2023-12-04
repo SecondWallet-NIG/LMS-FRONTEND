@@ -10,6 +10,10 @@ const inter = Inter({ subsets: ["latin"] });
 const metadata = {
   title: "Second Wallet",
   description: "Second Wallet",
+  icons: {
+    icon: "./favicon.ico",
+    apple: "./favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {

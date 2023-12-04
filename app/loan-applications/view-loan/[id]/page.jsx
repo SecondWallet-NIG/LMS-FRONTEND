@@ -15,6 +15,7 @@ import { AiOutlineMail } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiDatabase, FiPhone, FiSearch } from "react-icons/fi";
 import { IoIosClose } from "react-icons/io";
+import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import { IoCopyOutline } from "react-icons/io5";
 import { LuCalendar } from "react-icons/lu";
 import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
@@ -31,6 +32,8 @@ import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
 import DeclineModal from "@/app/components/modals/loans/DeclineModal";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { setUseProxies } from "immer";
+import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
+import SelectField from "@/app/components/shared/input/SelectField";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -38,6 +41,8 @@ const ViewLoan = () => {
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
+  const loanPackage = useSelector((state) => state.loanPackage);
+  const interestType = useSelector((state) => state.interestType);
 
   const loanApprovals = useSelector((state) => state.loanApprovals);
   const user = useSelector((state) => state.user?.data?.data?.results);
@@ -46,11 +51,15 @@ const ViewLoan = () => {
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
   const [isApprovalOpen, setApprovalOpen] = useState(false);
   const [isDeclineOpen, setDeclineOpen] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
+  const [openLoanAmount, setOpenLoanAmount] = useState(false);
   const [loanAmount, setLoanAmount] = useState(0);
   const [currentApprovalLevel, setCurrentApprovalLevel] = useState(null);
   const [currentApprovalId, setCurrentApprovalId] = useState(null);
   const [useriD, setUser] = useState(null);
+  const [openLoanPackage, setOpenLoanPackage] = useState(false);
+  const [openInterestType, setOpenInterestType] = useState(false);
+  const [openRepaymentType, setOpenRepaymentType] = useState(false);
+  const [formData, setFormData] = useState({});
   const userToApprove = JSON.parse(localStorage.getItem("user"));
   const router = useRouter();
   const handleActivityToggle = (buttonId) => {
@@ -61,19 +70,69 @@ const ViewLoan = () => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
 
-  const updateLoan = () => {
-    let updatedData = new FormData();
-    updatedData.append("loanAmount", loanAmount);
-    dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
-    dispatch(getSingleLoan(id));
-    setOpenUpdate(false);
+  // console.log(loanPackage?.data?.data);
+  // console.log(formData.loanPackage);
+
+  const updateLoan = (update) => {
+    if (update === "loanAmount") {
+      let updatedData = new FormData();
+      updatedData.append("loanAmount", loanAmount);
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
+      dispatch(getSingleLoan(id));
+      setOpenLoanAmount(false);
+      setFormData({});
+    } else {
+      let updatedData = new FormData();
+      updatedData.append(update, formData[update]);
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
+      dispatch(getSingleLoan(id));
+      setOpenLoanPackage(false);
+      setOpenInterestType(false);
+      // console.log([...updatedData]);
+      setFormData({});
+    }
+    // if (update === "interestType") {
+    //   let updatedData = new FormData();
+    //   updatedData.append("interestType", formData.interestType);
+    //   dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
+    //   dispatch(getSingleLoan(id));
+    //   setOpenInterestType(false);
+    //   // console.log([...updatedData][0]);
+    //   setFormData({});
+    // }
+  };
+
+  const modifyLoanPackageData = (arr) => {
+    return arr?.map((item) => ({
+      label: item.name,
+      value: item._id,
+      interestRate: item?.interestRate?.rate,
+    }));
+  };
+
+  const modifyInterestTypeData = (arr) => {
+    if (Array.isArray(arr)) {
+      return arr.map((item) => ({
+        label: item.name,
+        value: item._id,
+      }));
+    } else {
+      return [];
+    }
+  };
+
+  const handleSelectChange = async (selectedOption, name) => {
+    setFormData({
+      [name]: selectedOption.value,
+    });
   };
 
   useEffect(() => {
     dispatch(getSingleLoan(id));
     dispatch(getLoanApprovals(id));
-
+    dispatch(getLoanPackage());
     dispatch(getAllUsers());
+    dispatch(getInterestType());
 
     const _user = JSON.parse(localStorage.getItem("user"));
 
@@ -111,7 +170,7 @@ const ViewLoan = () => {
                 </div>
                 <div className="ml-4 h-fit">
                   <p className="text-md font-semibold text-swBlue mb-1">
-                    {console.log({ data })}
+                    {/* {console.log({ data })} */}
                     {data?.data?.customerDetails?.firstName}{" "}
                     {data?.data?.customerDetails?.lastName}
                   </p>
@@ -192,10 +251,10 @@ const ViewLoan = () => {
                       {data?.data?.loanApplication?.loanAmount.toLocaleString()}
                     </p>
                     <div
-                      className="p-2 rounded-md hover:bg-white   mt-2"
+                      className="p-2 rounded-md hover:bg-white cursor-pointer mt-2"
                       onClick={() => {
                         setLoanAmount(data?.data?.loanApplication?.loanAmount);
-                        setOpenUpdate(true);
+                        setOpenLoanAmount(true);
                       }}
                     >
                       <MdEdit size={15} />
@@ -229,19 +288,19 @@ const ViewLoan = () => {
                 <tbody>
                   <tr className="text-start text-xs">
                     <td className="w-1/4 px-3 py-3">
-                      <div>
+                      <div className="flex gap-2 items-center">
+                        <p>{data?.data?.loanPackageDetails?.name} </p>
                         <div
-                          className="p-2 rounded-md hover:bg-white   mt-2"
+                          className="p-2 rounded-md hover:bg-white cursor-pointer"
                           onClick={() => {
                             setLoanAmount(
                               data?.data?.loanApplication?.loanAmount
                             );
-                            setOpenUpdate(true);
+                            setOpenLoanPackage(true);
                           }}
                         >
                           <MdEdit size={15} />
                         </div>
-                        <p>{data?.data?.loanPackageDetails?.name} </p>
                       </div>
                     </td>
 
@@ -254,18 +313,7 @@ const ViewLoan = () => {
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">
-                      <div>
-                        <div
-                          className="p-2 rounded-md hover:bg-white   mt-2"
-                          onClick={() => {
-                            setLoanAmount(
-                              data?.data?.loanApplication?.loanAmount
-                            );
-                            setOpenUpdate(true);
-                          }}
-                        >
-                          <MdEdit size={15} />
-                        </div>
+                      <div className="flex gap-2 items-center">
                         <p>
                           {data?.data?.loanApplication?.loanDurationMetrics ===
                           "Yearly"
@@ -274,6 +322,17 @@ const ViewLoan = () => {
                             : `${data?.data?.loanApplication?.loanDuration}`}{" "}
                           month(s)
                         </p>
+                        <div
+                          className="p-2 rounded-md hover:bg-white cursor-pointer"
+                          onClick={() => {
+                            setLoanAmount(
+                              data?.data?.loanApplication?.loanAmount
+                            );
+                            setOpenLoanAmount(true);
+                          }}
+                        >
+                          <MdEdit size={15} />
+                        </div>
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">
@@ -311,57 +370,57 @@ const ViewLoan = () => {
                 <tbody>
                   <tr className="text-start text-xs">
                     <td className="w-1/4 px-3 py-3">
-                      <div>
-                        <div
-                          className="p-2 rounded-md hover:bg-white   mt-2"
-                          onClick={() => {
-                            setLoanAmount(
-                              data?.data?.loanApplication?.loanAmount
-                            );
-                            setOpenUpdate(true);
-                          }}
-                        >
-                          <MdEdit size={15} />
-                        </div>
+                      <div className="flex gap-2 items-center">
                         <p>
                           {
                             data?.data?.loanPackageDetails?.interestRate
                               ?.rateType
-                          }{" "}
+                          }
                         </p>
+                        <div
+                          className="p-2 rounded-md hover:bg-white cursor-pointer"
+                          onClick={() => {
+                            setLoanAmount(
+                              data?.data?.loanApplication?.loanAmount
+                            );
+                            setOpenInterestType(true);
+                          }}
+                        >
+                          <MdEdit size={15} />
+                        </div>
                       </div>
                     </td>
 
                     <td className="w-1/4 px-3 py-3">
-                      <div>
+                      <div className="flex gap-2 items-center">
+                        <p>{data?.data?.loanApplication?.repaymentType} </p>
                         <div
-                          className="p-2 rounded-md hover:bg-white   mt-2"
+                          className="p-2 rounded-md hover:bg-white cursor-pointer"
                           onClick={() => {
                             setLoanAmount(
                               data?.data?.loanApplication?.loanAmount
                             );
-                            setOpenUpdate(true);
+                            setOpenLoanAmount(true);
                           }}
                         >
                           <MdEdit size={15} />
                         </div>
-                        <p>{data?.data?.loanApplication?.repaymentType} </p>
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">
-                      <div>
+                      <div className="flex gap-2 items-center">
+                        <p>{data?.data?.loanApplication?.loanFrequencyType} </p>
                         <div
-                          className="p-2 rounded-md hover:bg-white   mt-2"
+                          className="p-2 rounded-md hover:bg-white cursor-pointer"
                           onClick={() => {
                             setLoanAmount(
                               data?.data?.loanApplication?.loanAmount
                             );
-                            setOpenUpdate(true);
+                            setOpenLoanAmount(true);
                           }}
                         >
                           <MdEdit size={15} />
                         </div>
-                        <p>{data?.data?.loanApplication?.loanFrequencyType} </p>
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">
@@ -681,23 +740,23 @@ const ViewLoan = () => {
           setApprovalOpen(false);
         }}
       /> */}
-    <CenterModal
-  width={"30%"}
-  isOpen={isRequestApprovalOpen}
-  onClose={() => {
-    setIsRequestApprovalOpen(!isRequestApprovalOpen);
-  }}
->
-  <RequestApproval
-    approvalLevel={currentApprovalLevel}
-    approvalId={currentApprovalId}
-    data={user}
-    approvals={loanApprovals?.data?.data}
-    onClose={() => {
-      setIsRequestApprovalOpen(false);
-    }}
-  />
-</CenterModal>
+      <CenterModal
+        width={"30%"}
+        isOpen={isRequestApprovalOpen}
+        onClose={() => {
+          setIsRequestApprovalOpen(!isRequestApprovalOpen);
+        }}
+      >
+        <RequestApproval
+          approvalLevel={currentApprovalLevel}
+          approvalId={currentApprovalId}
+          data={user}
+          approvals={loanApprovals?.data?.data}
+          onClose={() => {
+            setIsRequestApprovalOpen(false);
+          }}
+        />
+      </CenterModal>
       <CenterModal isOpen={isApprovalOpen}>
         <ApprovalModal
           width={"100%"}
@@ -717,12 +776,13 @@ const ViewLoan = () => {
         />
       </CenterModal>
 
-      <CenterModal isOpen={openUpdate} width={"25%"}>
-        <div className="flex justify-end">
+      {/* Loan amount update modal */}
+      <CenterModal isOpen={openLoanAmount} width={"25%"}>
+        <div className="flex justify-end cursor-pointer">
           <MdClose
             size={20}
             onClick={() => {
-              setOpenUpdate(!openUpdate);
+              setOpenLoanAmount(!openLoanAmount);
             }}
           />
         </div>
@@ -736,12 +796,115 @@ const ViewLoan = () => {
           disabled={
             loanAmount == data?.data?.loanApplication?.loanAmount ? true : false
           }
-          onClick={updateLoan}
+          onClick={() => updateLoan("loanAmount")}
           className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
         >
           Update Amount
         </Button>
       </CenterModal>
+
+      {/* Loan package update modal */}
+      <CenterModal isOpen={openLoanPackage} width={"25%"}>
+        <div className="flex justify-end cursor-pointer">
+          <MdClose
+            size={20}
+            onClick={() => {
+              setOpenLoanPackage(!openLoanPackage);
+            }}
+          />
+        </div>
+        <SelectField
+          value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
+            (option) => option.value === formData.loanPackage
+          )}
+          // disabled={selectedCustomer === null ? true : false}
+          name="loanPackage"
+          optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
+          label={"Loan Package "}
+          required={true}
+          placeholder={"Select loan package"}
+          isSearchable={false}
+          onChange={(selectedOption) => {
+            handleSelectChange(selectedOption, "loanPackage");
+          }}
+        />
+        <Button
+          onClick={() => updateLoan("loanPackage")}
+          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+        >
+          Update Loan Package
+        </Button>
+      </CenterModal>
+
+      {/* interest rate type update modal */}
+      <CenterModal isOpen={openInterestType} width={"25%"}>
+        <div className="flex justify-end cursor-pointer">
+          <MdClose
+            size={20}
+            onClick={() => {
+              setOpenInterestType(!openInterestType);
+            }}
+          />
+        </div>
+        <SelectField
+          value={modifyInterestTypeData(interestType?.data?.data)?.find(
+            (option) => option.value === formData.interestType
+          )}
+          name="interestType"
+          // disabled={formData.numberOfRepayment === 0 ? true : false}
+          optionValue={modifyInterestTypeData(interestType?.data?.data)}
+          label={"Interest Type"}
+          required={true}
+          placeholder={"Select interest type"}
+          isSearchable={false}
+          onChange={(selectedOption) => {
+            handleSelectChange(selectedOption, "interestType");
+          }}
+        />
+        <Button
+          onClick={() => updateLoan("interestType")}
+          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+        >
+          Update intrest rate type
+        </Button>
+      </CenterModal>
+
+      {/* repayment type update modal */}
+      {/* <CenterModal isOpen={openRepaymentType} width={"25%"}>
+        <div className="flex justify-end cursor-pointer">
+          <MdClose
+            size={20}
+            onClick={() => {
+              setOpenRepaymentType(!openRepaymentType);
+            }}
+          />
+        </div>
+        <SelectField
+          value={repaymentTypeData.find(
+            (option) => option.value === formData.repaymentType
+          )}
+          name="repaymentType"
+          disabled={formData.numberOfRepayment === 0 ? true : false}
+          optionValue={
+            formData.interestType === "65392ef8f3b65979e7047c44"
+              ? reducingBalrepaymentTypeData
+              : repaymentTypeData
+          }
+          label={"Repayment Type"}
+          required={true}
+          placeholder={"Select repayment type"}
+          isSearchable={false}
+          onChange={(selectedOption) => {
+            handleSelectChange(selectedOption, "repaymentType");
+          }}
+        />
+        <Button
+          onClick={() => updateLoan("interestType")}
+          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+        >
+          Update intrest rate type
+        </Button>
+      </CenterModal> */}
     </DashboardLayout>
   );
 };

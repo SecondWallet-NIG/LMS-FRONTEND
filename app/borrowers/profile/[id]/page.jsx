@@ -62,7 +62,7 @@ const CustomerProfile = () => {
 
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
-    console.log(state);
+    // console.log(state);
   };
   console.log(data);
   useEffect(() => {
@@ -441,18 +441,31 @@ const CustomerProfile = () => {
             )}
             {activeButton == "document" && (
               <div className="pt-20 pb-24">
-                <div className="pt-8 text-center mr-auto ml-auto mt-4">
-                  <p> No document uploaded yet</p>
-                  <div className="flex justify-center">
-                    <Button
-                      onClick={() => openModal("uploadDocuments")}
-                      variant="primary"
-                      className="py-1.5 px-3 rounded-md flex gap-2 border w-fit mt-5"
-                    >
-                      Upload documents
-                    </Button>
+                {data.identityVerification === null ? (
+                  <div className="pt-8 text-center mr-auto ml-auto mt-4">
+                    <p> No document uploaded yet</p>
+                    <div className="flex justify-center">
+                      <Button
+                        onClick={() => openModal("uploadDocuments")}
+                        variant="primary"
+                        className="py-1.5 px-3 rounded-md flex gap-2 border w-fit mt-5"
+                      >
+                        Upload documents
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="-mt-20">
+                    <p className="font-semibold tex-lg">
+                      Identification verification/Document
+                    </p>
+                    <p>Application form</p>
+                    <p>Guarantors form</p>
+                    <p>Loan addidafit</p>
+                    <p>Utility bill</p>
+                    <p>Application form</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
