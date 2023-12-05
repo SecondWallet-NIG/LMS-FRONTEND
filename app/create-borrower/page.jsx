@@ -35,6 +35,7 @@ const CreateCustomer = () => {
   const [bankNameVal, setBankNameVal] = useState("");
   const [verificationResponse, setVerificationResponse] = useState(null);
   const [lga, setLga] = useState([]);
+  const [newUserId, setNewUserId] = useState("");
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -154,7 +155,7 @@ const CreateCustomer = () => {
     router.push("/create-borrower");
   };
   const btnRightFunc = () => {
-    router.push("/borrowers/profile");
+    router.push(`/borrowers/profile/${newUserId}`);
   };
 
   const states = statesAndLgas.map((item, index) => ({
@@ -200,10 +201,11 @@ const CreateCustomer = () => {
     e.preventDefault();
     dispatch(createCustomer(payload))
       .unwrap()
-      .then(() => {
+      .then((response) => {
         document.getElementById("add-customer-form").reset();
         resetForm();
         openModal();
+        setNewUserId(response._id);
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -307,8 +309,8 @@ const CreateCustomer = () => {
               required={true}
               name="nin"
               activeBorderColor="border-swBlue"
-              label="Social security number or NIN"
-              placeholder="Social security number or NIN"
+              label="NIN"
+              placeholder="NIN"
               isActive="loan-amount"
               onclick={() => {
                 isInputOpen === "loan-amount"
