@@ -70,8 +70,9 @@ const ViewLoan = () => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
 
-  // console.log(loanPackage?.data?.data);
-  // console.log(formData.loanPackage);
+  // console.log(interestType);
+  // console.log(data?.data?.loanPackageDetails?.interestRate?.rateType);
+  console.log(formData);
 
   const updateLoan = (update) => {
     if (update === "loanAmount") {
@@ -88,6 +89,7 @@ const ViewLoan = () => {
       dispatch(getSingleLoan(id));
       setOpenLoanPackage(false);
       setOpenInterestType(false);
+      setOpenRepaymentType(false);
       // console.log([...updatedData]);
       setFormData({});
     }
@@ -99,6 +101,15 @@ const ViewLoan = () => {
     //   setOpenInterestType(false);
     //   // console.log([...updatedData][0]);
     //   setFormData({});
+    // }
+    // if (update === "repaymentType") {
+    //   let updatedData = new FormData();
+    //   updatedData.append("repaymentType", formData.repaymentType);
+    //   // dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
+    //   // dispatch(getSingleLoan(id));
+    //   // setOpenRepaymentType(false);
+    //   console.log([...updatedData]);
+    //   // setFormData({});
     // }
   };
 
@@ -120,6 +131,16 @@ const ViewLoan = () => {
       return [];
     }
   };
+
+  const repaymentTypeData = [
+    { value: "bulletRepayment", label: "Bullet Repayment" },
+    { value: "interestServicing", label: "Interest Servicing" },
+    { value: "installmentPayment", label: "Installment Payment" },
+  ];
+
+  const reducingBalrepaymentTypeData = [
+    { value: "installmentPayment", label: "Installment Payment" },
+  ];
 
   const handleSelectChange = async (selectedOption, name) => {
     setFormData({
@@ -400,7 +421,7 @@ const ViewLoan = () => {
                             setLoanAmount(
                               data?.data?.loanApplication?.loanAmount
                             );
-                            setOpenLoanAmount(true);
+                            setOpenRepaymentType(true);
                           }}
                         >
                           <MdEdit size={15} />
@@ -485,8 +506,10 @@ const ViewLoan = () => {
                                 setCurrentApprovalLevel(item?.approvalTitle);
                                 setIsRequestApprovalOpen(true);
                               }}
-                              disabled={item?.status === "Approval request initiated" || item?.status === "Approved"}
-
+                              disabled={
+                                item?.status === "Approval request initiated" ||
+                                item?.status === "Approved"
+                              }
                               variant="secondary"
                               className="text-xs rounded-lg"
                             >
@@ -508,7 +531,8 @@ const ViewLoan = () => {
               Array.isArray(loanApprovals?.data?.data) &&
               loanApprovals?.data?.data.filter(
                 (item) =>
-                  item?.assignee?._id === useriD && item?.status === "Approval request initiated"
+                  item?.assignee?._id === useriD &&
+                  item?.status === "Approval request initiated"
               ).length > 0 ? (
                 <div>
                   <h6 className="text-center font-semibold p-2">Loan Action</h6>
@@ -537,11 +561,12 @@ const ViewLoan = () => {
                         {loanApprovals &&
                           Array.isArray(loanApprovals?.data?.data) &&
                           loanApprovals?.data?.data
-                          .filter(
-                            (item) =>
-                              item?.assignee?._id === useriD &&
-                              (item?.status === "Approval request initiated")
-                          ).map((item, index) => (
+                            .filter(
+                              (item) =>
+                                item?.assignee?._id === useriD &&
+                                item?.status === "Approval request initiated"
+                            )
+                            .map((item, index) => (
                               <tr className="text-xs" key={index}>
                                 <td className="p-2">{item?.approvalTitle}</td>
                                 <td className="p-2">
@@ -870,7 +895,7 @@ const ViewLoan = () => {
       </CenterModal>
 
       {/* repayment type update modal */}
-      {/* <CenterModal isOpen={openRepaymentType} width={"25%"}>
+      <CenterModal isOpen={openRepaymentType} width={"25%"}>
         <div className="flex justify-end cursor-pointer">
           <MdClose
             size={20}
@@ -884,9 +909,10 @@ const ViewLoan = () => {
             (option) => option.value === formData.repaymentType
           )}
           name="repaymentType"
-          disabled={formData.numberOfRepayment === 0 ? true : false}
+          // disabled={formData.numberOfRepayment === 0 ? true : false}
           optionValue={
-            formData.interestType === "65392ef8f3b65979e7047c44"
+            data?.data?.loanPackageDetails?.interestRate?.rateType ===
+            "Reducing Balance"
               ? reducingBalrepaymentTypeData
               : repaymentTypeData
           }
@@ -899,12 +925,12 @@ const ViewLoan = () => {
           }}
         />
         <Button
-          onClick={() => updateLoan("interestType")}
+          onClick={() => updateLoan("repaymentType")}
           className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
         >
-          Update intrest rate type
+          Update repayment type
         </Button>
-      </CenterModal> */}
+      </CenterModal>
     </DashboardLayout>
   );
 };

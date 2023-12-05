@@ -47,10 +47,11 @@ const LoanReport = () => {
         const startDate = dateRange[0].startDate.toISOString();
         const endDate = dateRange[0].endDate.toISOString();
         const data = {
-          startDate, endDate
-        }
+          startDate,
+          endDate,
+        };
         dispatch(getLoanApplicationSummary(data));
-        setDateFilterOpen(false)
+        setDateFilterOpen(false);
       }
     }
   };
@@ -116,8 +117,8 @@ const LoanReport = () => {
           <p className="font-semibold">Total Loan Amount</p>
           <div className="flex justify-between items-end">
             <p className="text-2xl font-bold mt-3">
-              {" "}
-              ₦ {loanApplication?.data?.data.totalLoanAmount} .00K
+              ₦ {loanApplication?.data?.data.totalLoanAmount.toLocaleString()}
+              .00K
             </p>
           </div>
         </div>
@@ -125,8 +126,9 @@ const LoanReport = () => {
           <p className="font-semibold">Total Commitment Fee</p>
           <div className="flex justify-between items-end">
             <p className="text-2xl font-bold mt-3">
-              {" "}
-              ₦ {loanApplication?.data?.data.totalCommitmentTotal} .00K
+              ₦{" "}
+              {loanApplication?.data?.data.totalCommitmentTotal.toLocaleString()}
+              .00K
             </p>
           </div>
         </div>

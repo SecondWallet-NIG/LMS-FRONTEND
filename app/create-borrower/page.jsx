@@ -154,7 +154,7 @@ const CreateCustomer = () => {
     router.push("/create-borrower");
   };
   const btnRightFunc = () => {
-    router.push("/customers/profile");
+    router.push("/borrowers/profile");
   };
 
   const states = statesAndLgas.map((item, index) => ({

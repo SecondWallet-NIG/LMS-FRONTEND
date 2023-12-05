@@ -12,16 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 
 const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
-
   const dispatch = useDispatch();
 
   const { loading } = useSelector((state) => state.user);
 
-
   const successPopup = (selected) => {
     selected(true);
   };
-
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -38,8 +35,11 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     lastName: "",
     email: "",
   });
+
+  console.log(formData);
+
   const modifyObjects = (arr) => {
-    console.log({arr});
+    // console.log({arr});
     return Array.isArray(arr)
       ? arr.map((item) => ({
           label: item.name,
@@ -47,7 +47,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
         }))
       : [];
   };
- // const modifiedArray = ;
+  // const modifiedArray = ;
   const modalStyles = {
     width: width || "90%",
     maxWidth: "800px",
@@ -123,7 +123,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
-      console.log("Form data:", formData);
+      // console.log("Form data:", formData);
       dispatch(createUser(formData))
         .unwrap()
         .then(() => {
@@ -133,14 +133,14 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
           onClose(); // Close the modal here
         })
         .catch((error) => {
-          toast.error(error?.message)
+          toast.error(error?.message);
         });
     }
   };
   if (!isOpen) return null;
   return (
-    <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-10">
-      <form style={modalStyles} id="add-user-form">
+    <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-10 z-[120]">
+      <form style={modalStyles} id="add-user-form" className="bg-white rounded-2xl">
         <div className="rounded-2xl overflow-auto border border-swGray h-[80%] scrollbar-hide">
           <div className="bg-swBlue flex justify-between items-center p-3 text-white">
             <div>
@@ -153,7 +153,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
               className="cursor-pointer"
             />
           </div>
-          <div className="pt-8 px-5 pb-16 bg-white">
+          <div className="pt-8 px-5 pb-16 bg-white relative">
             <div className="flex justify-between">
               <p className="w-1/4 font-semibold mr-2">Upload an image</p>
               <div className="w-3/4 flex items-center text-xs gap-3">
@@ -227,7 +227,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
                     handleSelectChange(selectedOption, "role")
                   }
                 />
-                
 
                 {formData?.role === "650f61f89e06e619920a7f4e" && (
                   <SelectField

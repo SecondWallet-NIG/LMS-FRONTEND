@@ -102,7 +102,22 @@ const CreateLoan = () => {
 
   const validateFormData = (formData) => {
     for (const key in formData) {
+      // applicationForm: null || "null",
+      // assetImages: null || "null",
+      // : "",
+      // guarantorForm: null,
+      // loanAffidavit: null,
+      // offerLetter: null || "null",
       if (formData[key] === null || formData[key] === 0) {
+        if (
+          key === "applicationForm" ||
+          key === "assetImages" ||
+          key === "collaterals" ||
+          key === "guarantorForm" ||
+          key === "loanAffidavit" ||
+          key === "offerLetter"
+        )
+          return true;
         return false; // Return false if any field is null or 0
       }
     }
@@ -339,7 +354,7 @@ const CreateLoan = () => {
 
               <Link
                 href="/create-borrower"
-                className="flex gap-1 py-2 px-3 border-2 bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
+                className="flex gap-1 py-2 px-3 border-2 text-white bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
                 <p>Add new borrower</p>
