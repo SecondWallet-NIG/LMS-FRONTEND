@@ -62,7 +62,7 @@ const LoanPackages = () => {
         </Link>
         <div className="flex items-center justify-between">
           <p className="font-semibold text-3xl">Available loan plans</p>
-          <div className="flex gap-2 mt-5">
+          {/* <div className="flex gap-2 mt-5">
             <div className="flex items-center">
               <InputField
                 startIcon={<FiSearch size={20} />}
@@ -103,7 +103,7 @@ const LoanPackages = () => {
               <FiFilter size={20} />
               Filter
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mt-5">
