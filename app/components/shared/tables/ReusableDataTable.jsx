@@ -35,7 +35,7 @@ function ReusableDataTable({
   pagination,
   filterParams,
   userId,
-  role
+  role,
 }) {
   const [data, setData] = useState(initialData || []);
   const [downloadData, setDownloadData] = useState();
@@ -53,8 +53,8 @@ function ReusableDataTable({
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [filterOptions, setFilterOptions] = useState(false);
 
-  console.log({userId});
-  console.log({role});
+  console.log({ userId });
+  console.log({ role });
 
   const [dateRange, setDateRange] = useState([
     {
@@ -170,7 +170,7 @@ function ReusableDataTable({
     let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=-createdAt`;
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
-      if(userId && role === "Loan Officer"){
+      if (userId && role === "Loan Officer") {
         console.log("true oooo");
         apiUrl += `&userId=${userId}`;
       }
@@ -215,9 +215,7 @@ function ReusableDataTable({
         }
       }
 
-      if(userId && role === "Loan Officer"){
-    
-        
+      if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
       setIsLoading(true);
@@ -319,155 +317,153 @@ function ReusableDataTable({
     <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
       <ToastContainer />
       <div className="">
-        {data?.length > 0 ? (
-          <div>
-            {filters && (
-              <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
-                <div className="flex gap-2 items-center justify-between w-full md:w-fit">
-                  <div className="flex border border-1 items-center mb-4 pl-2 ">
-                    <p className="mr-2 text-swGray">Items:</p>
-                    <Select
-                      styles={customStyles}
-                      options={options}
-                      value={{ value: perPage, label: perPage }}
-                      onChange={handleSelectChange}
-                      isSearchable={false}
-                    />
-                  </div>
-                  <div className="flex gap-3 items-center">
-                    <button
-                      onClick={toggleDateFilter}
-                      className=" flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg"
-                    >
-                      <FiFilter size={20} />
-                      <p>Filter By Date</p>
-                    </button>
-                  </div>
-                  <div className="flex gap-3 items-center">
-                    <button
+        {filters && (
+          <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
+            <div className="flex gap-2 items-center justify-between w-full md:w-fit">
+              <div className="flex border border-1 items-center mb-4 pl-2 ">
+                <p className="mr-2 text-swGray">Items:</p>
+                <Select
+                  styles={customStyles}
+                  options={options}
+                  value={{ value: perPage, label: perPage }}
+                  onChange={handleSelectChange}
+                  isSearchable={false}
+                />
+              </div>
+              <div className="flex gap-3 items-center">
+                <button
+                  onClick={toggleDateFilter}
+                  className=" flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg"
+                >
+                  <FiFilter size={20} />
+                  <p>Filter By Date</p>
+                </button>
+              </div>
+              <div className="flex gap-3 items-center">
+                <button
+                  onClick={() => {
+                    setFilterOptions(true);
+                  }}
+                  className=" flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg"
+                >
+                  <p>Filter by Status</p>
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-4 flex items-center justify-between w-full md:w-fit">
+              <div className="flex justify-center items-center gap-2 ml-auto">
+                <InputField
+                  startIcon={<FiSearch size={20} />}
+                  endIcon={
+                    <IoIosClose
+                      size={20}
+                      className="cursor-pointer"
                       onClick={() => {
-                        setFilterOptions(true);
+                        handleLogSearch("close");
                       }}
-                      className=" flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg"
-                    >
-                      <p>Filter by Status</p>
-                    </button>
-                  </div>
+                    />
+                  }
+                  placeholder={"Search..."}
+                  css={`
+                    ${logSearch
+                      ? "translate-x-[3rem] opacity-1 z-10"
+                      : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
+                  `}
+                  borderColor="bg-gray-200 "
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+
+                <div
+                  className={`${
+                    logSearch ? "opacity-0" : "opacity-1"
+                  } bg-white w-fit p-2 rounded-md cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all ease-in-out`}
+                >
+                  <FiSearch
+                    size={20}
+                    onClick={() => {
+                      handleLogSearch("open");
+                    }}
+                  />
                 </div>
 
-                <div className="mb-4 flex items-center justify-between w-full md:w-fit">
-                  <div className="flex justify-center items-center gap-2 ml-auto">
-                    <InputField
-                      startIcon={<FiSearch size={20} />}
-                      endIcon={
-                        <IoIosClose
-                          size={20}
-                          className="cursor-pointer"
-                          onClick={() => {
-                            handleLogSearch("close");
-                          }}
-                        />
-                      }
-                      placeholder={"Search..."}
-                      css={`
-                        ${logSearch
-                          ? "translate-x-[3rem] opacity-1 z-10"
-                          : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
-                      `}
-                      borderColor="bg-gray-200 "
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                    />
-
-                    <div
-                      className={`${
-                        logSearch ? "opacity-0" : "opacity-1"
-                      } bg-white w-fit p-2 rounded-md cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all ease-in-out`}
-                    >
-                      <FiSearch
-                        size={20}
-                        onClick={() => {
-                          handleLogSearch("open");
-                        }}
-                      />
-                    </div>
-
-                    <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer">
-                      <BsThreeDotsVertical size={20} />
-                    </div>
-                  </div>
-                  {btnText ? (
-                    <div>
-                      <Button
-                        className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
-                        onClick={btnTextClick}
-                      >
-                        {btnText}
-                      </Button>
-                    </div>
-                  ) : null}
-                  <Button
-                    disabled={loading ? true : false}
-                    className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
-                    onClick={handleDownload}
-                  >
-                    <div className="flex gap-1 items-center p-1">
-                      <p className="hidden lg:block">
-                        {" "}
-                        {loading ? "Exporting" : "Export"}
-                      </p>
-                    </div>
-                  </Button>
+                <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer">
+                  <BsThreeDotsVertical size={20} />
                 </div>
               </div>
-            )}
-            <table className="table-auto w-full border-collapse border overflow-hidden">
-              <thead>
-                <tr>
+              {btnText ? (
+                <div>
+                  <Button
+                    className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                    onClick={btnTextClick}
+                  >
+                    {btnText}
+                  </Button>
+                </div>
+              ) : null}
+              <Button
+                disabled={loading ? true : false}
+                className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                onClick={handleDownload}
+              >
+                <div className="flex gap-1 items-center p-1">
+                  <p className="hidden lg:block">
+                    {" "}
+                    {loading ? "Exporting" : "Export"}
+                  </p>
+                </div>
+              </Button>
+            </div>
+          </div>
+        )}
+        {data?.length > 0 ? (
+          <table className="table-auto w-full border-collapse border overflow-hidden">
+            <thead>
+              <tr>
+                {headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
+                      header.id === sortField ? "" : ""
+                    }`}
+                    onClick={() => handleSort(header.id)}
+                  >
+                    {header.label}
+                    {header.id === sortField && (
+                      <span className="ml-1">
+                        {sortDirection === "asc" ? "↑" : "↓"}
+                      </span>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data?.map((item) => (
+                <tr
+                  onClick={() => {
+                    if (onClickRow) {
+                      setIsLoading(true);
+                      router.push(`${onClickRow}/${item.id || item._id}`);
+                    }
+                  }}
+                  key={item._id}
+                  className="border pt-2 pb-2 hover:bg-swLightGray"
+                  style={{ cursor: "pointer" }}
+                >
                   {headers.map((header) => (
-                    <th
+                    <td
                       key={header.id}
-                      className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
-                        header.id === sortField ? "" : ""
-                      }`}
-                      onClick={() => handleSort(header.id)}
+                      className="px-5 py-4 border font-400 text-xs text-swGray border-none"
                     >
-                      {header.label}
-                      {header.id === sortField && (
-                        <span className="ml-1">
-                          {sortDirection === "asc" ? "↑" : "↓"}
-                        </span>
-                      )}
-                    </th>
+                      {item[header.id]}
+                    </td>
                   ))}
                 </tr>
-              </thead>
-              <tbody>
-                {data?.map((item) => (
-                  <tr
-                    onClick={() => {
-                      if (onClickRow) {
-                        setIsLoading(true);
-                        router.push(`${onClickRow}/${item.id || item._id}`);
-                      }
-                    }}
-                    key={item._id}
-                    className="border pt-2 pb-2 hover:bg-swLightGray"
-                    style={{ cursor: "pointer" }}
-                  >
-                    {headers.map((header) => (
-                      <td
-                        key={header.id}
-                        className="px-5 py-4 border font-400 text-xs text-swGray border-none"
-                      >
-                        {item[header.id]}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         ) : (
           <div class="min-h-500 flex items-center justify-center">
             <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">

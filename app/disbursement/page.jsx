@@ -19,7 +19,7 @@ const AllDisburments = () => {
           <DisbursementCard />
         </div>
         <ReusableDataTable
-          onClickRow={"/customers/profile"}
+          onClickRow={"/borrowers/profile"}
           apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
           initialData={[]}
           headers={headers}
@@ -29,6 +29,6 @@ const AllDisburments = () => {
       </main>
     </DashboardLayout>
   );
-};  
+};
 
 export default AllDisburments;
