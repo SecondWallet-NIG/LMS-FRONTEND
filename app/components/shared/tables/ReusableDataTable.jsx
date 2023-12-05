@@ -43,7 +43,7 @@ function ReusableDataTable({
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(5);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [sortDirection, setSortDirection] = useState(
     sortedBy?.direction || "asc"
   );
@@ -218,7 +218,7 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-      setIsLoading(true);
+      // setIsLoading(true);
       axios
         .get(apiUrl, {
           headers: {
