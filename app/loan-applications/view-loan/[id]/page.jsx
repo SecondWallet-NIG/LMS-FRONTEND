@@ -59,6 +59,8 @@ const ViewLoan = () => {
   const [openLoanPackage, setOpenLoanPackage] = useState(false);
   const [openInterestType, setOpenInterestType] = useState(false);
   const [openRepaymentType, setOpenRepaymentType] = useState(false);
+  const [openLoanPeriod, setOpenLoanPeriod] = useState(false);
+  const [loanDurationVal, setLoanDurationVal] = useState(0);
   const [formData, setFormData] = useState({});
   const userToApprove = JSON.parse(localStorage.getItem("user"));
   const router = useRouter();
@@ -71,8 +73,8 @@ const ViewLoan = () => {
   };
 
   // console.log(interestType);
-  // console.log(data?.data?.loanPackageDetails?.interestRate?.rateType);
-  console.log(formData);
+  console.log(data?.data?.loanApplication?.loanDurationMetrics);
+  // console.log(formData);
 
   const updateLoan = (update) => {
     if (update === "loanAmount") {
@@ -90,6 +92,7 @@ const ViewLoan = () => {
       setOpenLoanPackage(false);
       setOpenInterestType(false);
       setOpenRepaymentType(false);
+      setOpenLoanPeriod(false);
       // console.log([...updatedData]);
       setFormData({});
     }
@@ -132,6 +135,15 @@ const ViewLoan = () => {
     }
   };
 
+  const setInputState = async (e) => {
+    let { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+    console.log(value);
+  };
+
   const repaymentTypeData = [
     { value: "bulletRepayment", label: "Bullet Repayment" },
     { value: "interestServicing", label: "Interest Servicing" },
@@ -142,10 +154,16 @@ const ViewLoan = () => {
     { value: "installmentPayment", label: "Installment Payment" },
   ];
 
+  const loanDurationMetricsData = [
+    { value: "Monthly", label: "Monthly" },
+    { value: "Yearly", label: "Yearly" },
+  ];
+
   const handleSelectChange = async (selectedOption, name) => {
-    setFormData({
+    setFormData((prev) => ({
+      ...prev,
       [name]: selectedOption.value,
-    });
+    }));
   };
 
   useEffect(() => {
@@ -349,7 +367,7 @@ const ViewLoan = () => {
                             setLoanAmount(
                               data?.data?.loanApplication?.loanAmount
                             );
-                            setOpenLoanAmount(true);
+                            setOpenLoanPeriod(true);
                           }}
                         >
                           <MdEdit size={15} />
@@ -929,6 +947,57 @@ const ViewLoan = () => {
           className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
         >
           Update repayment type
+        </Button>
+      </CenterModal>
+
+      {/* repayment type update modal */}
+      <CenterModal isOpen={openLoanPeriod} width={"25%"}>
+        <div className="flex justify-end cursor-pointer">
+          <MdClose
+            size={20}
+            onClick={() => {
+              setOpenLoanPeriod(!openLoanPeriod);
+            }}
+          />
+        </div>
+
+        <div className="flex gap-2 items-end">
+          <div className="w-1/3">
+            <SelectField
+              value={loanDurationMetricsData.find(
+                (option) => option.value === formData.loanDurationMetrics
+              )}
+              name="loanDurationMetrics"
+              optionValue={loanDurationMetricsData}
+              label={"Duration"}
+              required={true}
+              placeholder={"duration metics"}
+              isSearchable={false}
+              onChange={(selectedOption) => {
+                handleSelectChange(selectedOption, "loanDurationMetrics");
+              }}
+            />
+          </div>
+          <div className="w-2/3">
+            <InputField
+              value={formData.loanDuration}
+              required={false}
+              name="loanDuration"
+              inputType="number"
+              activeBorderColor="border-swBlue"
+              placeholder="Enter number"
+              onChange={(e) => {
+                setInputState(e);
+              }}
+            />
+          </div>
+        </div>
+
+        <Button
+          onClick={() => updateLoan("loanDuration")}
+          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+        >
+          Update loan period
         </Button>
       </CenterModal>
     </DashboardLayout>
