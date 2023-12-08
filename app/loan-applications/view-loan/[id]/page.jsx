@@ -988,6 +988,8 @@ const ViewLoan = () => {
               required={false}
               name="loanDuration"
               inputType="number"
+              min="0"
+              onKeyPress={preventMinus}
               activeBorderColor="border-swBlue"
               placeholder="Enter number"
               onChange={(e) => {

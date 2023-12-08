@@ -13,9 +13,9 @@ const CenterModal = ({ isOpen, bgColor, onClose, children, width }) => {
         style={width && modalStyles}
         className={`${
           bgColor ? bgColor : "bg-white"
-        } p-4 rounded-md shadow-md" style={modalStyles} m-8 ${
+        } overflow-hidden rounded-md shadow-md" style={modalStyles} m-8 ${
           !width ? "max-w-xl w-full" : ""
-        }  px-5`}
+        } `}
       >
         {children}
       </div>

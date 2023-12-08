@@ -138,6 +138,12 @@ const CreateLoan = () => {
     }
   };
 
+  const preventMinus = (e) => {
+    if (e.code === "Minus") {
+      e.preventDefault();
+    }
+  };
+
   const modifyLoanPackageData = (arr) => {
     return arr?.map((item) => ({
       label: item.name,
@@ -466,6 +472,8 @@ const CreateLoan = () => {
                     required={false}
                     name="loanDuration"
                     inputType="number"
+                    min="0"
+                    onKeyPress={preventMinus}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter number"
                     onChange={(e) => {
@@ -485,6 +493,8 @@ const CreateLoan = () => {
                     required={true}
                     name="commitmentValue"
                     inputType="number"
+                    min="0"
+                    onKeyPress={preventMinus}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter Value"
                     onChange={(e) => {
@@ -504,6 +514,8 @@ const CreateLoan = () => {
                     required={true}
                     name="managementValue"
                     inputType="number"
+                    min="0"
+                    onKeyPress={preventMinus}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter Value"
                     onChange={(e) => {
@@ -539,6 +551,8 @@ const CreateLoan = () => {
                     required={true}
                     name="numberOfRepayment"
                     inputType="number"
+                    min="0"
+                    onKeyPress={preventMinus}
                     value={formData.numberOfRepayment}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter number of repayment"
@@ -583,6 +597,43 @@ const CreateLoan = () => {
                   }}
                 />
               </div>
+
+              {/* <div className="flex gap-2 items-end">
+                <div className="w-1/3">
+                  <SelectField
+                    name="commitmentType"
+                    disabled={formData.loanAmount === 0 ? true : false}
+                    optionValue={commitmentType}
+                    label={"Fees"}
+                    required={true}
+                    placeholder={"Percentage"}
+                    isSearchable={false}
+                    onChange={(selectedOption) => {
+                      handleSelectChange(selectedOption, "commitmentType");
+                    }}
+                  />
+                </div>
+                <div className="w-2/3">
+                  <InputField
+                    disabled={formData.commitmentType === null ? true : false}
+                    required={false}
+                    name="commitmentValue"
+                    inputType="number"
+                    min="0"
+ onKeyPress={preventMinus}
+                    activeBorderColor="border-swBlue"
+                    placeholder="Enter Value"
+                    endIcon={<p className="text-swGray">%</p>}
+                    onChange={(e) => {
+                      setInputState(e);
+                      calCommitmentTotal(e);
+                    }}
+                  />
+                </div>
+                <div className="p-2 rounded-lg border-2 border-white hover:border-gray-300 cursor-pointer">
+                  <AiOutlinePlus size={20} />
+                </div>
+              </div> */}
             </div>
             <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Collateral documents</p>

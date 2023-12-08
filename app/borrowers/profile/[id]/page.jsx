@@ -37,6 +37,7 @@ const CustomerProfile = () => {
   const [infoHover, setInfoHover] = useState("");
   const [logSearch, setLogSearch] = useState(false);
 
+  // console.log(id);
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
   };
@@ -64,7 +65,7 @@ const CustomerProfile = () => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
     // console.log(state);
   };
-  console.log(data);
+  // console.log(data);
   useEffect(() => {
     dispatch(getCustomerById(id));
   }, []);
@@ -441,7 +442,7 @@ const CustomerProfile = () => {
             )}
             {activeButton == "document" && (
               <div className="pt-20 pb-24">
-                {data.identityVerification === null ? (
+                {data?.identityVerification === null ? (
                   <div className="pt-8 text-center mr-auto ml-auto mt-4">
                     <p> No document uploaded yet</p>
                     <div className="flex justify-center">
@@ -575,6 +576,7 @@ const CustomerProfile = () => {
         <EmploymentDetailsModal
           isOpen={isEmploymentDetailsModalOpen}
           onClose={closeModal}
+          getCustomer={getCustomerById}
         />
         <UploadDocumentsModal
           isOpen={isUploadDocumentsModalOpen}

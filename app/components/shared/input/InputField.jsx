@@ -14,7 +14,8 @@ const InputField = ({
   endIcon,
   startIcon,
   disabled,
-  maxLength, // Add maxLength prop
+  maxLength,
+  onKeyPress, // Add maxLength prop
 }) => {
   return (
     <div className="">
@@ -37,7 +38,7 @@ const InputField = ({
         )}
 
         <input
-          type={inputType}
+          type={inputType ? inputType : "text"}
           id={name}
           name={name}
           placeholder={placeholder}
@@ -49,6 +50,7 @@ const InputField = ({
           value={value}
           disabled={disabled}
           max={maxLength} // Pass maxLength prop
+          onKeyPress={onKeyPress}
         />
 
         {endIcon && (

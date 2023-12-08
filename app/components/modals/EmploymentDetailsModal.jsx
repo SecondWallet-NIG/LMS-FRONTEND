@@ -15,10 +15,27 @@ import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { Rings } from "react-loader-spinner";
 import { IoMdCheckmark } from "react-icons/io";
 
-const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
+const EmploymentDetailsModal = ({
+  isOpen,
+  onClose,
+  width,
+  data,
+  selected,
+  getCustomer,
+}) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.user);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    }
+  }, []);
+
+  console.log(user);
+
   const [formData, setFormData] = useState({
     employerName: "",
     employerPhone: "",
@@ -29,6 +46,8 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
     employerAddress: "",
     incomePeriod: "",
   });
+
+  console.log(id);
   const [errors, setErrors] = useState({
     employerName: "",
     employerPhone: "",
@@ -153,11 +172,14 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
 
       dispatch(createEmployment(payload))
         .unwrap()
-        .then(() => {
+        .then((res) => {
+          dispatch(getCustomer(id));
+          toast.success(res?.message);
+          onClose("employmentDetails");
           successPopup(selected);
-          document.getElementById("add-user-form").reset();
           resetForm();
-          onClose(); // Close the modal here
+          document.getElementById("add-user-form").reset();
+          // Close the modal here
         })
         .catch((error) => {
           console.log({error});
@@ -167,9 +189,9 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
   };
 
   return (
-    <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-10">
+    <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-10 z-[110]">
       <form style={modalStyles} id="add-user-form">
-        <div className="rounded-2xl overflow-auto border bg-white border-swLightGray h-[80%] scrollbar-hide">
+        <div className="rounded-2xl border bg-white overflow-hidden border-swLightGray">
           <div className="bg-swBlue flex justify-between items-center p-3 text-white">
             <div>
               <p className="text-base font-semibold">Employment Details</p>
@@ -183,7 +205,7 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
               className="cursor-pointer"
             />
           </div>
-          <div className="p-4 bg-white">
+          <div className="p-4 bg-white h-[22rem] overflow-auto custom-scrollbar">
             <div className="">
               <p className="font-semibold mr-2">
                 Employment and income history
@@ -321,7 +343,7 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
             </div>
           </div>
 
-          <div className="p-3 border-t flex items-center justify-end gap-2 bg-white">
+          <div className="p-3 border-t flex items-center justify-end gap-2 bg-white z-[100] relative">
             <EditableButton
               whiteBtn={true}
               label={"Cancel"}
