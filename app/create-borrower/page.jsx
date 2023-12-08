@@ -163,6 +163,12 @@ const CreateCustomer = () => {
     label: item.state,
   }));
 
+  const preventMinus = (e) => {
+    if (e.code === "Minus") {
+      e.preventDefault();
+    }
+  };
+
   const handleStateChange = (selectedOption) => {
     const selectedState = selectedOption.value;
     const selectedLgas =
@@ -309,6 +315,9 @@ const CreateCustomer = () => {
               required={true}
               name="nin"
               activeBorderColor="border-swBlue"
+              inputType="number"
+              min="0"
+              onKeyPress={preventMinus}
               label="NIN"
               placeholder="NIN"
               isActive="loan-amount"
@@ -323,6 +332,9 @@ const CreateCustomer = () => {
             <InputField
               required={true}
               name="bvn"
+              inputType="number"
+              min="0"
+              onKeyPress={preventMinus}
               activeBorderColor="border-swBlue"
               label="Bank Verification Number"
               placeholder="Bank Verification Number"
@@ -397,7 +409,9 @@ const CreateCustomer = () => {
                 <InputField
                   name="phoneNumber"
                   placeholder="Phone Number"
-                  inputType={"text"}
+                  inputType="number"
+                  min="0"
+                  onKeyPress={preventMinus}
                   required={true}
                   activeBorderColor="border-swBlue"
                   label="Phone number"
@@ -478,10 +492,10 @@ const CreateCustomer = () => {
         <SuccessModal
           isOpen={isModalOpen}
           onClose={closeModal}
-          btnLeft="Add Customer"
-          btnRight="View Customer"
-          description="Customers profile has been successfully created. You can update the
-            profile or create a new customer"
+          btnLeft="Add Borrower"
+          btnRight="View Borrower"
+          description="Borrower's profile has been successfully created. You can update the
+            profile or create a new borrower"
           title="Successfully created"
           btnLeftFunc={btnLeftFunc}
           btnRightFunc={btnRightFunc}

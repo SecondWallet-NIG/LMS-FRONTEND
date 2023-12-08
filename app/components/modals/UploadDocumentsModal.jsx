@@ -23,6 +23,8 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
   const { loading, error, data } = useSelector((state) => state.customer);
 
   if (!isOpen) return null;
+  console.log(selectedFilesArr);
+  console.log(selectedFilesObj);
 
   // This puts the names of  all the selected forms in an array
   const keysArray = Object.keys(selectedFilesObj);
@@ -41,9 +43,19 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
         setSelectedFilesArr((prev) => [...prev, { [formName]: files[0] }]);
       } else {
         if (Object.keys(selectedFilesObj).includes(formName)) {
-          // setFileUploadedError(`You've uploaded a file for ${formName} previously`)
-          alert(`You've uploaded a file for ${formName} previously`);
-          return null;
+          const updatedArr = [...selectedFilesArr];
+          const index = updatedArr.indexOf(formName);
+          updatedArr.splice(index, 1);
+          setSelectedFilesArr(updatedArr);
+          setSelectedFilesArr((prev) => [...prev, { [formName]: files[0] }]);
+          console.log(selectedFilesArr, "new arr");
+
+          const updatedObj = { ...selectedFilesObj };
+          delete updatedObj[formName];
+          setSelectedFilesObj(updatedObj);
+          setSelectedFilesObj((prev) => ({ ...prev, [formName]: files[0] }));
+          console.log(selectedFilesObj, "new obj");
+          // console.log(index);
         }
         if (files[0].size > 4 * 1024 * 1024) {
           alert("file size is greater than 4mb");
@@ -57,12 +69,14 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
 
   const handleFileDelete = (fileName, fileIndex) => {
     const updatedArr = [...selectedFilesArr];
-    updatedArr.splice(fileIndex, 1);
+    const index = updatedArr.indexOf(fileIndex);
+    updatedArr.splice(index, 1);
     setSelectedFilesArr(updatedArr);
 
     const updatedObj = { ...selectedFilesObj };
     delete updatedObj[fileName];
     setSelectedFilesObj(updatedObj);
+    console.log(index);
   };
 
   function resetUploadModal() {
@@ -114,7 +128,7 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
             className="cursor-pointer"
           />
         </div>
-        <div className="p-5 pb-0 my-2">
+        <div className="p-5 pb-0 my-2  h-[22rem] overflow-auto custom-scrollbar">
           <p className="text-lg font-semibold text-swBlack">
             Identity verification/ Document
           </p>
@@ -125,50 +139,107 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
           <div className="flex flex-col gap-5">
             <p className="text-sm font- mt-5">Upload Application Form</p>
 
-            {selectedFilesArr.length > 0 &&
-              selectedFilesArr.map((item, index) => (
-                <div className="flex flex-col gap-2 text-sm" key={index}>
-                  <div className="w-full border rounded-md flex justify-between">
-                    <div className="flex gap-1">
-                      <p className="p-1 pl-2">{keysArray?.[index]}:</p>
-                      <p className="py-1">{item?.[keysArray?.[index]]?.name}</p>
-                    </div>
-                    <div className="flex gap-1">
-                      <p className="py-1">
-                        {item?.[keysArray?.[index]]?.size < 1024
-                          ? `${item?.[keysArray?.[index]]?.size} bytes`
-                          : item?.[keysArray?.[index]]?.size < 1024 * 1024
-                          ? `${(
-                              item?.[keysArray?.[index]]?.size / 1024
-                            ).toFixed(2)} kb`
-                          : item?.[keysArray?.[index]]?.size < 4 * 1024 * 1024
-                          ? `${(
-                              item?.[keysArray?.[index]]?.size /
-                              (1024 * 1024)
-                            ).toFixed(2)} mb`
-                          : item?.[keysArray?.[index]]?.size}
-                      </p>
-                      <p
-                        className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
-                        onClick={() =>
-                          handleFileDelete(keysArray[index], index)
-                        }
-                      >
-                        <FiTrash size={15} className="-mb-2" />
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-            <div className="flex justify-around text-center">
+            {/* <div className="flex justify-around text-center"> */}
+            <div className="flex flex-col gap-5">
               <div>
+                <div>
+                  {selectedFilesArr.length > 0 &&
+                    selectedFilesArr
+                      ?.filter((item) => item?.["Application form"])
+                      .map((item, index) => (
+                        <div
+                          className="flex flex-col gap-2 text-sm"
+                          key={index}
+                        >
+                          <div className="w-full border rounded-md flex justify-between">
+                            <div className="flex gap-1">
+                              <p className="p-1 pl-2">
+                                {
+                                  keysArray?.[
+                                    keysArray.indexOf("Application form")
+                                  ]
+                                }
+                                :
+                              </p>
+                              <p className="py-1">
+                                {
+                                  item?.[
+                                    keysArray?.[
+                                      keysArray.indexOf("Application form")
+                                    ]
+                                  ]?.name
+                                }
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              <p className="py-1">
+                                {item?.[
+                                  keysArray?.[
+                                    keysArray.indexOf("Application form")
+                                  ]
+                                ]?.size < 1024
+                                  ? `${
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Application form")
+                                        ]
+                                      ]?.size
+                                    } bytes`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Application form")
+                                      ]
+                                    ]?.size <
+                                    1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Application form")
+                                        ]
+                                      ]?.size / 1024
+                                    ).toFixed(2)} kb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Application form")
+                                      ]
+                                    ]?.size <
+                                    4 * 1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Application form")
+                                        ]
+                                      ]?.size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)} mb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Application form")
+                                      ]
+                                    ]?.size}
+                              </p>
+                              <p
+                                className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
+                                onClick={() =>
+                                  handleFileDelete("Application form", item)
+                                }
+                              >
+                                <FiTrash size={15} className="-mb-2" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                </div>
+
                 <label
                   htmlFor="fileInput"
-                  className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit"
+                  className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit mt-2"
                 >
                   <FaPaperclip size={20} />
-                  Select files
+                  {keysArray.includes("Application form")
+                    ? "Change file"
+                    : "Select file"}
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -182,10 +253,102 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                 </label>
                 <p className="text-sm">Upload Application Form</p>
               </div>
+
               <div>
-                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit">
+                <div>
+                  {selectedFilesArr.length > 0 &&
+                    selectedFilesArr
+                      ?.filter((item) => item?.["Guarantor form"])
+                      .map((item, index) => (
+                        <div
+                          className="flex flex-col gap-2 text-sm"
+                          key={index}
+                        >
+                          <div className="w-full border rounded-md flex justify-between">
+                            <div className="flex gap-1">
+                              <p className="p-1 pl-2">
+                                {
+                                  keysArray?.[
+                                    keysArray.indexOf("Guarantor form")
+                                  ]
+                                }
+                                :
+                              </p>
+                              <p className="py-1">
+                                {
+                                  item?.[
+                                    keysArray?.[
+                                      keysArray.indexOf("Guarantor form")
+                                    ]
+                                  ]?.name
+                                }
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              <p className="py-1">
+                                {item?.[
+                                  keysArray?.[
+                                    keysArray.indexOf("Guarantor form")
+                                  ]
+                                ]?.size < 1024
+                                  ? `${
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Guarantor form")
+                                        ]
+                                      ]?.size
+                                    } bytes`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Guarantor form")
+                                      ]
+                                    ]?.size <
+                                    1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Guarantor form")
+                                        ]
+                                      ]?.size / 1024
+                                    ).toFixed(2)} kb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Guarantor form")
+                                      ]
+                                    ]?.size <
+                                    4 * 1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Guarantor form")
+                                        ]
+                                      ]?.size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)} mb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Guarantor form")
+                                      ]
+                                    ]?.size}
+                              </p>
+                              <p
+                                className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
+                                onClick={() =>
+                                  handleFileDelete("Guarantor form", item)
+                                }
+                              >
+                                <FiTrash size={15} className="-mb-2" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                </div>
+                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit mt-2">
                   <FaPaperclip size={20} />
-                  Select files
+                  {keysArray.includes("Guarantor form")
+                    ? "Change file"
+                    : "Select file"}
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -197,13 +360,105 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                 </label>
                 <p className="text-sm">Upload Guarantor&apos;s Form</p>
               </div>
-            </div>
+              {/* </div> */}
 
-            <div className="flex justify-around text-center">
+              {/* <div className="flex justify-around text-center"> */}
               <div>
-                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit">
+                <div>
+                  {selectedFilesArr.length > 0 &&
+                    selectedFilesArr
+                      ?.filter((item) => item?.["Loan affidafit"])
+                      .map((item, index) => (
+                        <div
+                          className="flex flex-col gap-2 text-sm"
+                          key={index}
+                        >
+                          <div className="w-full border rounded-md flex justify-between">
+                            <div className="flex gap-1">
+                              <p className="p-1 pl-2">
+                                {
+                                  keysArray?.[
+                                    keysArray.indexOf("Loan affidafit")
+                                  ]
+                                }
+                                :
+                              </p>
+                              <p className="py-1">
+                                {
+                                  item?.[
+                                    keysArray?.[
+                                      keysArray.indexOf("Loan affidafit")
+                                    ]
+                                  ]?.name
+                                }
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              <p className="py-1">
+                                {item?.[
+                                  keysArray?.[
+                                    keysArray.indexOf("Loan affidafit")
+                                  ]
+                                ]?.size < 1024
+                                  ? `${
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Loan affidafit")
+                                        ]
+                                      ]?.size
+                                    } bytes`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Loan affidafit")
+                                      ]
+                                    ]?.size <
+                                    1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Loan affidafit")
+                                        ]
+                                      ]?.size / 1024
+                                    ).toFixed(2)} kb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Loan affidafit")
+                                      ]
+                                    ]?.size <
+                                    4 * 1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Loan affidafit")
+                                        ]
+                                      ]?.size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)} mb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Loan affidafit")
+                                      ]
+                                    ]?.size}
+                              </p>
+                              <p
+                                className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
+                                onClick={() =>
+                                  handleFileDelete("Loan affidafit", item)
+                                }
+                              >
+                                <FiTrash size={15} className="-mb-2" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                </div>
+
+                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit mt-2">
                   <FaPaperclip size={20} />
-                  Select files
+                  {keysArray.includes("Loan affidafit")
+                    ? "Change file"
+                    : "Select file"}
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -215,10 +470,97 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                 </label>
                 <p className="text-sm">Loan Affidafit</p>
               </div>
+
               <div>
-                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit">
+                <div>
+                  {selectedFilesArr.length > 0 &&
+                    selectedFilesArr
+                      ?.filter((item) => item?.["Utility bill"])
+                      .map((item, index) => (
+                        <div
+                          className="flex flex-col gap-2 text-sm"
+                          key={index}
+                        >
+                          <div className="w-full border rounded-md flex justify-between">
+                            <div className="flex gap-1">
+                              <p className="p-1 pl-2">
+                                {keysArray?.[keysArray.indexOf("Utility bill")]}
+                                :
+                              </p>
+                              <p className="py-1">
+                                {
+                                  item?.[
+                                    keysArray?.[
+                                      keysArray.indexOf("Utility bill")
+                                    ]
+                                  ]?.name
+                                }
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              <p className="py-1">
+                                {item?.[
+                                  keysArray?.[keysArray.indexOf("Utility bill")]
+                                ]?.size < 1024
+                                  ? `${
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Utility bill")
+                                        ]
+                                      ]?.size
+                                    } bytes`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Utility bill")
+                                      ]
+                                    ]?.size <
+                                    1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Utility bill")
+                                        ]
+                                      ]?.size / 1024
+                                    ).toFixed(2)} kb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Utility bill")
+                                      ]
+                                    ]?.size <
+                                    4 * 1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Utility bill")
+                                        ]
+                                      ]?.size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)} mb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Utility bill")
+                                      ]
+                                    ]?.size}
+                              </p>
+                              <p
+                                className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
+                                onClick={() =>
+                                  handleFileDelete("Utility bill", item)
+                                }
+                              >
+                                <FiTrash size={15} className="-mb-2" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                </div>
+
+                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit mt-2">
                   <FaPaperclip size={20} />
-                  Select files
+                  {keysArray.includes("Utility bill")
+                    ? "Change file"
+                    : "Select file"}
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -230,13 +572,117 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                 </label>
                 <p className="text-sm">Utility Bill</p>
               </div>
-            </div>
+              {/* </div> */}
 
-            <div className="flex justify-around text-center">
+              {/* <div className="flex justify-around text-center"> */}
               <div>
-                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit">
+                <div>
+                  {selectedFilesArr.length > 0 &&
+                    selectedFilesArr
+                      ?.filter((item) => item?.["Statement of account"])
+                      .map((item, index) => (
+                        <div
+                          className="flex flex-col gap-2 text-sm"
+                          key={index}
+                        >
+                          <div className="w-full border rounded-md flex justify-between">
+                            <div className="flex gap-1">
+                              <p className="p-1 pl-2">
+                                {
+                                  keysArray?.[
+                                    keysArray.indexOf("Statement of account")
+                                  ]
+                                }
+                                :
+                              </p>
+                              <p className="py-1">
+                                {
+                                  item?.[
+                                    keysArray?.[
+                                      keysArray.indexOf("Statement of account")
+                                    ]
+                                  ]?.name
+                                }
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              <p className="py-1">
+                                {item?.[
+                                  keysArray?.[
+                                    keysArray.indexOf("Statement of account")
+                                  ]
+                                ]?.size < 1024
+                                  ? `${
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf(
+                                            "Statement of account"
+                                          )
+                                        ]
+                                      ]?.size
+                                    } bytes`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf(
+                                          "Statement of account"
+                                        )
+                                      ]
+                                    ]?.size <
+                                    1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf(
+                                            "Statement of account"
+                                          )
+                                        ]
+                                      ]?.size / 1024
+                                    ).toFixed(2)} kb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf(
+                                          "Statement of account"
+                                        )
+                                      ]
+                                    ]?.size <
+                                    4 * 1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf(
+                                            "Statement of account"
+                                          )
+                                        ]
+                                      ]?.size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)} mb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf(
+                                          "Statement of account"
+                                        )
+                                      ]
+                                    ]?.size}
+                              </p>
+                              <p
+                                className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
+                                onClick={() =>
+                                  handleFileDelete("Statement of account", item)
+                                }
+                              >
+                                <FiTrash size={15} className="-mb-2" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                </div>
+
+                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit mt-2">
                   <FaPaperclip size={20} />
-                  Select files
+                  {keysArray.includes("Statement of account")
+                    ? "Change file"
+                    : "Select file"}
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -254,10 +700,88 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                   (6 Months)
                 </p>
               </div>
+
               <div>
-                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit">
+                <div>
+                  {selectedFilesArr.length > 0 &&
+                    selectedFilesArr
+                      ?.filter((item) => item?.["ID card"])
+                      .map((item, index) => (
+                        <div
+                          className="flex flex-col gap-2 text-sm"
+                          key={index}
+                        >
+                          <div className="w-full border rounded-md flex justify-between">
+                            <div className="flex gap-1">
+                              <p className="p-1 pl-2">
+                                {keysArray?.[keysArray.indexOf("ID card")]}:
+                              </p>
+                              <p className="py-1">
+                                {
+                                  item?.[
+                                    keysArray?.[keysArray.indexOf("ID card")]
+                                  ]?.name
+                                }
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              <p className="py-1">
+                                {item?.[
+                                  keysArray?.[keysArray.indexOf("ID card")]
+                                ]?.size < 1024
+                                  ? `${
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("ID card")
+                                        ]
+                                      ]?.size
+                                    } bytes`
+                                  : item?.[
+                                      keysArray?.[keysArray.indexOf("ID card")]
+                                    ]?.size <
+                                    1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("ID card")
+                                        ]
+                                      ]?.size / 1024
+                                    ).toFixed(2)} kb`
+                                  : item?.[
+                                      keysArray?.[keysArray.indexOf("ID card")]
+                                    ]?.size <
+                                    4 * 1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("ID card")
+                                        ]
+                                      ]?.size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)} mb`
+                                  : item?.[
+                                      keysArray?.[keysArray.indexOf("ID card")]
+                                    ]?.size}
+                              </p>
+                              <p
+                                className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
+                                onClick={() =>
+                                  handleFileDelete("ID card", item)
+                                }
+                              >
+                                <FiTrash size={15} className="-mb-2" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                </div>
+
+                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit mt-2">
                   <FaPaperclip size={20} />
-                  Select files
+                  {keysArray.includes("ID card")
+                    ? "Change file"
+                    : "Select file"}
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -269,13 +793,105 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                 </label>
                 <p className="text-sm">ID card</p>
               </div>
-            </div>
+              {/* </div> */}
 
-            <div className="flex justify-around text-center">
+              {/* <div className="flex justify-around text-center"> */}
               <div>
-                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit">
+                <div>
+                  {selectedFilesArr.length > 0 &&
+                    selectedFilesArr
+                      ?.filter((item) => item?.["Power of attorney"])
+                      .map((item, index) => (
+                        <div
+                          className="flex flex-col gap-2 text-sm"
+                          key={index}
+                        >
+                          <div className="w-full border rounded-md flex justify-between">
+                            <div className="flex gap-1">
+                              <p className="p-1 pl-2">
+                                {
+                                  keysArray?.[
+                                    keysArray.indexOf("Power of attorney")
+                                  ]
+                                }
+                                :
+                              </p>
+                              <p className="py-1">
+                                {
+                                  item?.[
+                                    keysArray?.[
+                                      keysArray.indexOf("Power of attorney")
+                                    ]
+                                  ]?.name
+                                }
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              <p className="py-1">
+                                {item?.[
+                                  keysArray?.[
+                                    keysArray.indexOf("Power of attorney")
+                                  ]
+                                ]?.size < 1024
+                                  ? `${
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Power of attorney")
+                                        ]
+                                      ]?.size
+                                    } bytes`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Power of attorney")
+                                      ]
+                                    ]?.size <
+                                    1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Power of attorney")
+                                        ]
+                                      ]?.size / 1024
+                                    ).toFixed(2)} kb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Power of attorney")
+                                      ]
+                                    ]?.size <
+                                    4 * 1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Power of attorney")
+                                        ]
+                                      ]?.size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)} mb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Power of attorney")
+                                      ]
+                                    ]?.size}
+                              </p>
+                              <p
+                                className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
+                                onClick={() =>
+                                  handleFileDelete("Power of attorney", item)
+                                }
+                              >
+                                <FiTrash size={15} className="-mb-2" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                </div>
+
+                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit mt-2">
                   <FaPaperclip size={20} />
-                  Select files
+                  {keysArray.includes("Power of attorney")
+                    ? "Change file"
+                    : "Select file"}
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -289,10 +905,97 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                 </label>
                 <p className="text-sm">Power of Attorney</p>
               </div>
+
               <div>
-                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit">
+                <div>
+                  {selectedFilesArr.length > 0 &&
+                    selectedFilesArr
+                      ?.filter((item) => item?.["Offer letter"])
+                      .map((item, index) => (
+                        <div
+                          className="flex flex-col gap-2 text-sm"
+                          key={index}
+                        >
+                          <div className="w-full border rounded-md flex justify-between">
+                            <div className="flex gap-1">
+                              <p className="p-1 pl-2">
+                                {keysArray?.[keysArray.indexOf("Offer letter")]}
+                                :
+                              </p>
+                              <p className="py-1">
+                                {
+                                  item?.[
+                                    keysArray?.[
+                                      keysArray.indexOf("Offer letter")
+                                    ]
+                                  ]?.name
+                                }
+                              </p>
+                            </div>
+                            <div className="flex gap-1">
+                              <p className="py-1">
+                                {item?.[
+                                  keysArray?.[keysArray.indexOf("Offer letter")]
+                                ]?.size < 1024
+                                  ? `${
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Offer letter")
+                                        ]
+                                      ]?.size
+                                    } bytes`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Offer letter")
+                                      ]
+                                    ]?.size <
+                                    1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Offer letter")
+                                        ]
+                                      ]?.size / 1024
+                                    ).toFixed(2)} kb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Offer letter")
+                                      ]
+                                    ]?.size <
+                                    4 * 1024 * 1024
+                                  ? `${(
+                                      item?.[
+                                        keysArray?.[
+                                          keysArray.indexOf("Offer letter")
+                                        ]
+                                      ]?.size /
+                                      (1024 * 1024)
+                                    ).toFixed(2)} mb`
+                                  : item?.[
+                                      keysArray?.[
+                                        keysArray.indexOf("Offer letter")
+                                      ]
+                                    ]?.size}
+                              </p>
+                              <p
+                                className="p-1 text-red-500 border-l cursor-pointer flex-center items-center"
+                                onClick={() =>
+                                  handleFileDelete("Offer letter", item)
+                                }
+                              >
+                                <FiTrash size={15} className="-mb-2" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                </div>
+
+                <label className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit mt-2">
                   <FaPaperclip size={20} />
-                  Select files
+                  {keysArray.includes("Offer letter")
+                    ? "Change file"
+                    : "Select file"}
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -304,6 +1007,7 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                 </label>
                 <p className="text-sm">Offer Letter</p>
               </div>
+              {/* </div> */}
             </div>
           </div>
         </div>

@@ -53,9 +53,6 @@ function ReusableDataTable({
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [filterOptions, setFilterOptions] = useState(false);
 
-  console.log({ userId });
-  console.log({ role });
-
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -171,7 +168,7 @@ function ReusableDataTable({
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
       if (userId && role === "Loan Officer") {
-        console.log("true oooo");
+        // console.log("true oooo");
         apiUrl += `&userId=${userId}`;
       }
       axios
