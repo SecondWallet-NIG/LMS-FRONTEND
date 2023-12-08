@@ -6,35 +6,35 @@ const PagePath = ({ paths }) => {
   return (
     <main className="font-medium text-swGray">
       {pathname === "/dashboard" ? (
-        <p className="text-swBlue text-lg">Dashboard</p>
+        <p className="text-swBlue text-sm pb-1.5">Dashboard</p>
       ) : pathname === "/my-tasks" ? (
-        <p className="text-swBlue text-lg">My tasks</p>
+        <p className="text-swBlue text-sm pb-1.5">My tasks</p>
       ) : pathname === "/loan-applications" ? (
-        <p className="text-swBlue text-lg">Loan applications</p>
+        <p className="text-swBlue text-sm pb-1.5">Loan applications</p>
       ) : pathname === "/create-loan" ? (
-        <p className="text-swBlue text-lg">Create loan</p>
+        <p className="text-swBlue text-sm pb-1.5">Create loan</p>
       ) : pathname === "/report" ? (
-        <p className="text-swBlue text-lg">Report</p>
+        <p className="text-swBlue text-sm pb-1.5">Report</p>
       ) : pathname === "/team-management" ? (
-        <p className="text-swBlue text-lg">Team management</p>
+        <p className="text-swBlue text-sm pb-1.5">Team management</p>
       ) : pathname === "/settings" ? (
-        <p className="text-swBlue text-lg">Settings</p>
+        <p className="text-swBlue text-sm pb-1.5">Settings</p>
       ) : pathname === "/borrowers" ? (
-        <p className="text-swBlue text-lg">Borrowers</p>
+        <p className="text-swBlue text-sm pb-1.5">Borrowers</p>
       ) : pathname === "/repayment" ? (
-        <p className="text-swBlue text-lg">Repayment</p>
+        <p className="text-swBlue text-sm pb-1.5">Repayment</p>
       ) : pathname === "/disbursement" ? (
-        <p className="text-swBlue text-lg">Disbursements</p>
+        <p className="text-swBlue text-sm pb-1.5">Disbursements</p>
       ) : pathname === "/expenses" ? (
-        <p className="text-swBlue text-lg">Expenses</p>
+        <p className="text-swBlue text-sm pb-1.5">Expenses</p>
       ) : pathname === "/payroll" ? (
-        <p className="text-swBlue text-lg">Payroll</p>
+        <p className="text-swBlue text-sm pb-1.5">Payroll</p>
       ) : pathname === "/investors" ? (
-        <p className="text-swBlue text-lg">Investors</p>
+        <p className="text-swBlue text-sm pb-1.5">Investors</p>
       ) : pathname === "/intrest-calculator" ? (
-        <p className="text-swBlue text-lg">Interest calculator</p>
+        <p className="text-swBlue text-sm pb-1.5">Interest calculator</p>
       ) : pathname === "/plans" ? (
-        <p className="text-swBlue text-lg">Loan Plans and Packages</p>
+        <p className="text-swBlue text-sm pb-1.5">Loan Plans and Packages</p>
       ) : (
         <div className="flex gap-1 items-end">
           {paths?.map((item, index) => (
@@ -42,7 +42,7 @@ const PagePath = ({ paths }) => {
               <p
                 className={
                   index === paths?.length - 1
-                    ? "text-swBlue flex text-lg -mb-1"
+                    ? "text-swBlue flex text-sm pb-1.5 -mb-1"
                     : ""
                 }
               >
@@ -50,7 +50,7 @@ const PagePath = ({ paths }) => {
               </p>
 
               {index !== paths?.length - 1 && (
-                <div className="flex">/</div>
+                <div className="flex"> / </div>
               )}
             </div>
           ))}

@@ -116,8 +116,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
       tag: null,
       isRoleAdmin: false,
     });
-    setVerificationResponse(null);
-    setBankNameVal("");
   };
   const handleSubmit = (e) => {
     e.preventDefault();

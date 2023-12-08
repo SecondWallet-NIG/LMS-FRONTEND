@@ -19,17 +19,18 @@ const MyTasks = () => {
 
   useEffect(() => {
     dispatch(getApprovalAssignee(user?.data?.user?._id));
+    console.log("oanToApprove?.data?.tasks", loanToApprove);
   }, []);
   return (
     <DashboardLayout>
       <main className="p-8">
         <div className="flex gap-5">
-          <MyTasksCard header={"all tasks"} data={16} />
-          <MyTasksCard header={"completed tasks"} data={11} />
-          <MyTasksCard header={"pending tasks"} data={5} />
+          <MyTasksCard header={"all tasks"} data={loanToApprove?.data?.data?.totalCount} />
+          <MyTasksCard header={"completed tasks"} data={loanToApprove?.data?.data?.doneCount} />
+          <MyTasksCard header={"pending tasks"} data={loanToApprove?.data?.data?.pendingCount} />
         </div>
         <p className="font-semibold mt-10 mb-4">Active Tasks</p>
-        {loanToApprove?.data?.data?.length === 0 ? (
+        {loanToApprove?.data?.data?.tasks?.length === 0 ? (
           "No task assigned yet"
         ) : (
           <div>
@@ -54,7 +55,7 @@ const MyTasks = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {loanToApprove?.data?.data?.map((item, index) => (
+                  {loanToApprove?.data?.data?.tasks?.map((item, index) => (
                     <tr
                       className={`border pt-2 pb-2 hover:bg-swLightGray ${
                         item?.actionStatus === "Done"

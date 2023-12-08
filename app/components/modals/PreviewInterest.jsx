@@ -19,8 +19,8 @@ const PreviewInterest = ({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const formatNumberWithCommas = (number) => {
-    const formattedNumber = number.toFixed(2);
-    return formattedNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const formattedNumber = number?.toFixed(2);
+    return formattedNumber?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return (
@@ -40,7 +40,10 @@ const PreviewInterest = ({
                 Interest
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-swGray tracking-wider text-end">
-                Principal Repayment
+                Principal
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-swGray tracking-wider text-end">
+                Total Repayment
               </th>
             </tr>
           </thead>
@@ -53,6 +56,9 @@ const PreviewInterest = ({
                 </td> */}
                   <td className="px-6 py-6 text-xs">
                   ₦ {formatNumberWithCommas(payment.interestPayment)}
+                </td>
+                <td className="px-6 py-6 text-xs text-end">
+                ₦ {formatNumberWithCommas(payment?.principl)}
                 </td>
                 <td className="px-6 py-6 text-xs text-end">
                 ₦ {formatNumberWithCommas(payment.totalPayment)}

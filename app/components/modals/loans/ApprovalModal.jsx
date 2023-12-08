@@ -61,13 +61,7 @@ const ApprovalModal = ({
     }));
   };
 
-  const resetForm = () => {
-    setFormData({
-      employerName: "",
-    });
-    setVerificationResponse(null);
-    setBankNameVal("");
-  };
+
   const submitLoan = (e) => {
     setLoading(true);
     let _formData = {

@@ -130,7 +130,6 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
       employerAddress: "",
       incomePeriod: "",
     });
-    setVerificationResponse(null);
     setBankNameVal("");
   };
   const handleSubmit = (e) => {
@@ -161,6 +160,7 @@ const EmploymentDetailsModal = ({ isOpen, onClose, width, data, selected }) => {
           onClose(); // Close the modal here
         })
         .catch((error) => {
+          console.log({error});
           toast.error(error?.message);
         });
     }

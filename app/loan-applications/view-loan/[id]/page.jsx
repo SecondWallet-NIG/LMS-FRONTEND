@@ -72,9 +72,7 @@ const ViewLoan = () => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
 
-  // console.log(interestType);
-  console.log(data?.data?.loanApplication?.loanDurationMetrics);
-  // console.log(formData);
+
 
   const updateLoan = (update) => {
     if (update === "loanAmount") {
@@ -84,6 +82,10 @@ const ViewLoan = () => {
       dispatch(getSingleLoan(id));
       setOpenLoanAmount(false);
       setFormData({});
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+     
     } else {
       let updatedData = new FormData();
       updatedData.append(update, formData[update]);
@@ -95,6 +97,9 @@ const ViewLoan = () => {
       setOpenLoanPeriod(false);
       // console.log([...updatedData]);
       setFormData({});
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     }
     // if (update === "interestType") {
     //   let updatedData = new FormData();
@@ -393,7 +398,7 @@ const ViewLoan = () => {
                 <thead className="bg-swLightGray ">
                   <tr>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                      Interest Rate Type
+                      Monthly Interest Rate
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                       <h1>Repayment Type</h1>
@@ -412,9 +417,8 @@ const ViewLoan = () => {
                       <div className="flex gap-2 items-center">
                         <p>
                           {
-                            data?.data?.loanPackageDetails?.interestRate
-                              ?.rateType
-                          }
+                            data?.data?.loanApplication?.interestRate * 100
+                          } %
                         </p>
                         <div
                           className="p-2 rounded-md hover:bg-white cursor-pointer"
@@ -503,7 +507,7 @@ const ViewLoan = () => {
                             <button
                               className={`cursor-none ${
                                 item.status === "Approved"
-                                  ? "bg-swGreen text-white text-xs font-normal px-2 py-1 rounded-full"
+                                  ? "bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
                                   : item.status === "Pending"
                                   ? "bg-swLightGray text-swGray text-xs font-normal px-2 py-1 rounded-full"
                                   : item.status === "Approval request initiated"

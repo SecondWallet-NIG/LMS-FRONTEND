@@ -60,13 +60,7 @@ const DeclineModal = ({
     });
   };
 
-  const resetForm = () => {
-    setFormData({
-      employerName: "",
-    });
-    setVerificationResponse(null);
-    setBankNameVal("");
-  };
+
   const submitLoan = (e) => {
     setLoading(true);
     const payload = { id, formData };

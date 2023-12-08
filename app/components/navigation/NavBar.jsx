@@ -6,7 +6,7 @@ import PagePath from "./PagePath";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { IoCloseSharp } from "react-icons/io5";
+import { IoArrowBackSharp, IoArrowForward, IoCloseSharp } from "react-icons/io5";
 
 const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
@@ -57,7 +57,7 @@ const NavBar = ({ paths, isBackNav }) => {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       console.log({storedUser});
  
-      setUser(storedUser?.data?.user?.email);
+      setUser(storedUser?.data?.user?.firstName) ;
     }
   }, []);
 
@@ -69,13 +69,13 @@ const NavBar = ({ paths, isBackNav }) => {
             className="border-2 p-2 rounded-md border-transparent hover:border-swLightGray cursor-pointer"
             onClick={() => router.back()}
           >
-            <IoIosArrowBack size={20} />
+            <IoArrowBackSharp size={20} />
           </div>
         )}
         <PagePath paths={paths} />
       </div>
       <div className=" flex gap-5 items-center relative">
-      <p className="text-sm">LoggedIn User : {user}</p>
+      <p className="text-sm">Welcome {user} 👋 </p>
         <div
           className="relative cursor-pointer"
           onClick={() => openNotifications(!isNotificationsOpen)}

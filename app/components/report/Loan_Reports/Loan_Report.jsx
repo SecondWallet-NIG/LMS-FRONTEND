@@ -117,7 +117,7 @@ const LoanReport = () => {
           <p className="font-semibold">Total Loan Amount</p>
           <div className="flex justify-between items-end">
             <p className="text-2xl font-bold mt-3">
-              ₦ {loanApplication?.data?.data.totalLoanAmount.toLocaleString()}
+              ₦ {loanApplication?.data?.data?.totalLoanAmount.toLocaleString()}
               .00K
             </p>
           </div>

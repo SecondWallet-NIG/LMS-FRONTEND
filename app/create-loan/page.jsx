@@ -44,21 +44,19 @@ const CreateLoan = () => {
   // console.log(loanPackage?.data?.data);
 
   const [formData, setFormData] = useState({
-    loanAmount: 0,
+    loanAmount: "",
     loanPackage: null,
-    loanDuration: 0,
-    commitmentValue: 0,
-    managementTotal: 0,
-    managementValue: 0,
-    commitmentTotal: 0,
-    numberOfRepayment: 0,
+    loanDuration: "",
+    commitmentValue: "",
+    managementTotal: "",
+    managementValue: "",
+    commitmentTotal: "",
+    numberOfRepayment: "",
     repaymentType: null,
     assetType: null || "null",
     loanDurationMetrics: null,
     loanFrequencyType: null,
     interestType: null,
-    commitmentType: null,
-    managementType: null,
     applicationForm: null || "null",
     assetImages: null || "null",
     collaterals: "",
@@ -98,16 +96,12 @@ const CreateLoan = () => {
     { value: "Yearly", label: "Yearly" },
   ];
 
-  const commitmentType = [{ value: "Percentage", label: "Percentage" }];
+
 
   const validateFormData = (formData) => {
+    console.log({formData});
     for (const key in formData) {
-      // applicationForm: null || "null",
-      // assetImages: null || "null",
-      // : "",
-      // guarantorForm: null,
-      // loanAffidavit: null,
-      // offerLetter: null || "null",
+
       if (formData[key] === null || formData[key] === 0) {
         if (
           key === "applicationForm" ||
@@ -236,7 +230,6 @@ const CreateLoan = () => {
     setLoading(true);
     const isFormDataValid = validateFormData(formData);
     if (isFormDataValid === true) {
-      const num = parseInt(removeCommasFromNumber(formData.loanAmount));
       const payload = {
         loanDurationMetrics: formData.loanDurationMetrics,
         loanDuration: formData.loanDuration,
@@ -245,7 +238,7 @@ const CreateLoan = () => {
         interestTypeId: formData.interestType,
         repaymentType: formData.repaymentType,
         loanFrequencyType: formData.loanFrequencyType,
-        startDate: "02-01-2023",
+        startDate: "",
       };
       e.preventDefault();
       dispatch(calculateInterest(payload))
@@ -305,8 +298,6 @@ const CreateLoan = () => {
     payload.append("loanDurationMetrics", formData.loanDurationMetrics);
     payload.append("loanFrequencyType", formData.loanFrequencyType);
     payload.append("interestType", formData.interestType);
-    payload.append("commitmentType", formData.commitmentType);
-    payload.append("managementType", formData.managementType);
     payload.append("applicationForm", formData.applicationForm);
     payload.append("assetImages", formData.assetImages);
     payload.append("collaterals", formData.collaterals);
@@ -315,7 +306,7 @@ const CreateLoan = () => {
     payload.append("offerLetter", formData.offerLetter);
     payload.append("customerId", formData.customerId);
     payload.append("createdBy", userId);
-    console.log([...payload]);
+   
 
     setLoading(true);
     e.preventDefault();
@@ -327,8 +318,8 @@ const CreateLoan = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log({ error });
-        toast.error(`An error occured`);
+        console.log(error );
+        toast.error(`${error?.message}`);
         setLoading(false);
       });
   };
@@ -485,28 +476,12 @@ const CreateLoan = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <div className="w-1/3">
-                  <SelectField
-                    value={commitmentType.find(
-                      (option) => option.value === formData.commitmentType
-                    )}
-                    name="commitmentType"
-                    disabled={formData.loanAmount === 0 ? true : false}
-                    optionValue={commitmentType}
-                    label={"Commitment Fees"}
-                    required={true}
-                    placeholder={"Percentage"}
-                    isSearchable={false}
-                    onChange={(selectedOption) => {
-                      handleSelectChange(selectedOption, "commitmentType");
-                    }}
-                  />
-                </div>
-                <div className="w-2/3">
+               
+                <div className="w-full">
                   <InputField
                     value={formData.commitmentValue}
-                    label=" "
-                    disabled={formData.commitmentType === null ? true : false}
+                    label="Commitment Fees"
+                    disabled={formData.loanDuration === "" ? true : false}
                     required={true}
                     name="commitmentValue"
                     inputType="number"
@@ -520,28 +495,12 @@ const CreateLoan = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <div className="w-1/3">
-                  <SelectField
-                    value={commitmentType.find(
-                      (option) => option.value === formData.managementType
-                    )}
-                    name="managementType"
-                    disabled={formData.commitmentValue === 0 ? true : false}
-                    optionValue={commitmentType}
-                    label={"Management Fees"}
-                    required={true}
-                    placeholder={"Percentage"}
-                    isSearchable={false}
-                    onChange={(selectedOption) => {
-                      handleSelectChange(selectedOption, "managementType");
-                    }}
-                  />
-                </div>
-                <div className="w-2/3">
+           
+                <div className="w-full">
                   <InputField
                     value={formData.managementValue}
-                    label=" "
-                    disabled={formData.managementType === null ? true : false}
+                    label="Management Fees"
+                    disabled={formData.commitmentValue === "" ? true : false}
                     required={true}
                     name="managementValue"
                     inputType="number"
@@ -561,7 +520,7 @@ const CreateLoan = () => {
                       (option) => option.value === formData.loanFrequencyType
                     )}
                     name="loanFrequencyType"
-                    disabled={formData.commitmentValue === 0 ? true : false}
+                    disabled={formData.commitmentValue === "" ? true : false}
                     optionValue={frequencyTypeData}
                     label={"Loan Frequency Type"}
                     required={true}
@@ -592,7 +551,7 @@ const CreateLoan = () => {
                     (option) => option.value === formData.interestType
                   )}
                   name="interestType"
-                  disabled={formData.numberOfRepayment === 0 ? true : false}
+                  disabled={formData.numberOfRepayment === "" ? true : false}
                   optionValue={modifyInterestTypeData(interestType?.data?.data)}
                   label={"Interest Type"}
                   required={true}
@@ -609,7 +568,7 @@ const CreateLoan = () => {
                     (option) => option.value === formData.repaymentType
                   )}
                   name="repaymentType"
-                  disabled={formData.numberOfRepayment === 0 ? true : false}
+                  disabled={formData.numberOfRepayment === "" ? true : false}
                   optionValue={
                     formData.interestType === "65392ef8f3b65979e7047c44"
                       ? reducingBalrepaymentTypeData
@@ -624,41 +583,6 @@ const CreateLoan = () => {
                   }}
                 />
               </div>
-
-              {/* <div className="flex gap-2 items-end">
-                <div className="w-1/3">
-                  <SelectField
-                    name="commitmentType"
-                    disabled={formData.loanAmount === 0 ? true : false}
-                    optionValue={commitmentType}
-                    label={"Fees"}
-                    required={true}
-                    placeholder={"Percentage"}
-                    isSearchable={false}
-                    onChange={(selectedOption) => {
-                      handleSelectChange(selectedOption, "commitmentType");
-                    }}
-                  />
-                </div>
-                <div className="w-2/3">
-                  <InputField
-                    disabled={formData.commitmentType === null ? true : false}
-                    required={false}
-                    name="commitmentValue"
-                    inputType="number"
-                    activeBorderColor="border-swBlue"
-                    placeholder="Enter Value"
-                    endIcon={<p className="text-swGray">%</p>}
-                    onChange={(e) => {
-                      setInputState(e);
-                      calCommitmentTotal(e);
-                    }}
-                  />
-                </div>
-                <div className="p-2 rounded-lg border-2 border-white hover:border-gray-300 cursor-pointer">
-                  <AiOutlinePlus size={20} />
-                </div>
-              </div> */}
             </div>
             <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Collateral documents</p>
@@ -1028,6 +952,12 @@ const CreateLoan = () => {
                     className="h-10 w-full mt-6 bg-swBlue text-white"
                   >
                     Compute Interest
+                  </Button>
+                  <Button
+                    className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+                    onClick={submitLoan}
+                  >
+                    Create Loan
                   </Button>
                 </div>
               </div>
