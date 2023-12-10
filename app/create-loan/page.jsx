@@ -96,12 +96,9 @@ const CreateLoan = () => {
     { value: "Yearly", label: "Yearly" },
   ];
 
-
-
   const validateFormData = (formData) => {
-    console.log({formData});
+    console.log({ formData });
     for (const key in formData) {
-
       if (formData[key] === null || formData[key] === 0) {
         if (
           key === "applicationForm" ||
@@ -312,7 +309,6 @@ const CreateLoan = () => {
     payload.append("offerLetter", formData.offerLetter);
     payload.append("customerId", formData.customerId);
     payload.append("createdBy", userId);
-   
 
     setLoading(true);
     e.preventDefault();
@@ -324,7 +320,7 @@ const CreateLoan = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error );
+        console.log(error);
         toast.error(`${error?.message}`);
         setLoading(false);
       });
@@ -419,7 +415,9 @@ const CreateLoan = () => {
                 disabled={formData.loanPackage === null ? true : false}
                 name="loanAmount"
                 required={true}
-                inputType="text"
+                inputType="number"
+                min="0"
+                onKeyPress={preventMinus}
                 activeBorderColor="border-swBlue"
                 endIcon={<p className="text-swGray">NGN &#8358;</p>}
                 label="Loan amount (Principal)"
@@ -484,7 +482,6 @@ const CreateLoan = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-               
                 <div className="w-full">
                   <InputField
                     value={formData.commitmentValue}
@@ -505,7 +502,6 @@ const CreateLoan = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-           
                 <div className="w-full">
                   <InputField
                     value={formData.managementValue}

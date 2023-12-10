@@ -1,15 +1,15 @@
 // store/configureStore.js
-import { configureStore } from '@reduxjs/toolkit';
-import postReducer from './slices/postSlice';
-import userReducer from './slices/userSlice';
-import authReducer from './slices/authSlice'
-import customerReducer from './slices/customerSlice';
-import interestTypeReducer from './slices/interestTypeSlice';
-import LoanPackageReducer from './slices/loanPackageSlice';
-import roleReducer from './slices/roleSlice';
-import loanApplicationReducer from './slices/loanApplicationSlice';
-import loanApprovalReducer from './slices/loanApprovalSlice';
-
+import { configureStore } from "@reduxjs/toolkit";
+import postReducer from "./slices/postSlice";
+import userReducer from "./slices/userSlice";
+import authReducer from "./slices/authSlice";
+import customerReducer from "./slices/customerSlice";
+import interestTypeReducer from "./slices/interestTypeSlice";
+import LoanPackageReducer from "./slices/loanPackageSlice";
+import roleReducer from "./slices/roleSlice";
+import loanApplicationReducer from "./slices/loanApplicationSlice";
+import loanApprovalReducer from "./slices/loanApprovalSlice";
+import loanRepaymentReducer from "./slices/loanRepaymentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,7 +22,7 @@ export const store = configureStore({
     loanPackage: LoanPackageReducer,
     loanApplication: loanApplicationReducer,
     loanApprovals: loanApprovalReducer,
+    loanRepayment: loanRepaymentReducer,
   },
   // Add middleware or other configuration options as needed
 });
-

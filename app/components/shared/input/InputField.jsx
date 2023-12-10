@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
 const InputField = ({
   css,
@@ -15,8 +16,21 @@ const InputField = ({
   startIcon,
   disabled,
   maxLength,
+  includeComma,
   onKeyPress, // Add maxLength prop
 }) => {
+  const [newValue, setNewValue] = useState("");
+
+  // useEffect(() => {
+  //   if (includeComma && inputType === "number" && typeof value === "number") {
+  //     setNewValue(value.toLocaleString());
+  //   } else {
+  //     setNewValue(value);
+  //   }
+  // }, [value, inputType, includeComma]);
+
+  // console.log(value, typeof value)
+
   return (
     <div className="">
       {label && (
@@ -51,6 +65,7 @@ const InputField = ({
           disabled={disabled}
           max={maxLength} // Pass maxLength prop
           onKeyPress={onKeyPress}
+          data-includecomma={includeComma}
         />
 
         {endIcon && (

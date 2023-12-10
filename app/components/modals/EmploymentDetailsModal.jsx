@@ -28,6 +28,7 @@ const EmploymentDetailsModal = ({
   const { loading } = useSelector((state) => state.user);
   const [user, setUser] = useState({});
 
+  console.log(loading);
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
@@ -82,6 +83,28 @@ const EmploymentDetailsModal = ({
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
+    // const includeComma = e.target.getAttribute("data-includecomma");
+
+    // // Remove existing commas and non-digit characters
+    // const cleanedValue = value.replace(/[^0-9]/g, "");
+
+    // // Convert the cleaned string to a number
+    // let numberValue = Number(cleanedValue);
+
+    // // Check if the conversion resulted in a valid number
+    // if (!isNaN(numberValue)) {
+    //   // Apply comma formatting if includeComma is true
+    //   const formattedValue = includeComma
+    //     ? numberValue.toLocaleString("en-US")
+    //     : cleanedValue;
+
+    //   setErrors({ ...errors, [name]: "" });
+    //   setFormData((prevFormData) => ({
+    //     ...prevFormData,
+    //     [name]: formattedValue,
+    //   }));
+    // }
+
     setErrors({ ...errors, [name]: "" });
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -151,6 +174,7 @@ const EmploymentDetailsModal = ({
     });
     setBankNameVal("");
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validateForm();
@@ -182,9 +206,15 @@ const EmploymentDetailsModal = ({
           // Close the modal here
         })
         .catch((error) => {
-          console.log({error});
+          console.log({ error });
           toast.error(error?.message);
         });
+    }
+  };
+
+  const preventMinus = (e) => {
+    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+      e.preventDefault();
     }
   };
 
@@ -267,6 +297,9 @@ const EmploymentDetailsModal = ({
                 <InputField
                   name="employerPhone"
                   label="Employer Contact"
+                  inputType={"number"}
+                  min="0"
+                  // onKeyPress={preventMinus}
                   required={true}
                   placeholder="Employer phone number"
                   onChange={handleInputChange}
@@ -329,7 +362,12 @@ const EmploymentDetailsModal = ({
               <div className="w-1/2">
                 <InputField
                   name="monthlyIncome"
+                  value={formData.monthlyIncome}
                   label="Income Per Period"
+                  inputType={"number"}
+                  min="0"
+                  onKeyPress={preventMinus}
+                  includeComma={true}
                   required={true}
                   placeholder="Income per period"
                   onChange={handleInputChange}

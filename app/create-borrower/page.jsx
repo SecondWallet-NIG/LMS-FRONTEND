@@ -164,7 +164,7 @@ const CreateCustomer = () => {
   }));
 
   const preventMinus = (e) => {
-    if (e.code === "Minus") {
+    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
       e.preventDefault();
     }
   };
