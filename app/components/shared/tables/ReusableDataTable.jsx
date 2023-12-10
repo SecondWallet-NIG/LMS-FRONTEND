@@ -252,7 +252,7 @@ function ReusableDataTable({
         })
         .catch(() => {
           setTimeout(() => {
-            toast.error("An error occured, Couldn't load table");
+        //    toast.error("An error occured, Couldn't load table");
             setIsLoading(false);
             setLoading(false);
           }, 2000);

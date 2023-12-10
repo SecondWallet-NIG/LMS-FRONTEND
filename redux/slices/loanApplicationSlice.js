@@ -17,6 +17,7 @@ if (typeof window !== 'undefined') {
 export const createLoanApplication = createAsyncThunk('LoanApplication/create', async (payload) => {
 
   console.log({user: user?.data?.token});
+  
   try {
     const response = await axios.post(API_URL + '/loan-application/create', payload, {
       headers: {

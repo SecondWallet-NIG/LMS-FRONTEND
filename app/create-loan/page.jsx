@@ -410,14 +410,14 @@ const CreateLoan = () => {
                 />
               ) : null}
               <InputField
-                value={formatNumber(formData?.loanAmount)}
-                maxLength="1000000"
+                value={formData?.loanAmount}
+              //  maxLength="1000000"
                 disabled={formData.loanPackage === null ? true : false}
                 name="loanAmount"
                 required={true}
                 inputType="number"
-                min="0"
-                onKeyPress={preventMinus}
+             //   min="0"
+               // onKeyPress={preventMinus}
                 activeBorderColor="border-swBlue"
                 endIcon={<p className="text-swGray">NGN &#8358;</p>}
                 label="Loan amount (Principal)"
@@ -1164,8 +1164,7 @@ const CreateLoan = () => {
                     <div className="text-swGray">Interest at maturity :</div>{" "}
                     <div className="text-swBlue">
                       ₦
-                      {interestValue?.data?.totalInterestPayments
-                        .toString()
+                      {interestValue?.data?.totalInterestPayments?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
@@ -1184,8 +1183,7 @@ const CreateLoan = () => {
                     </div>{" "}
                     <div className="text-swBlue">
                       ₦
-                      {interestValue?.data?.totalPayments
-                        .toString()
+                      {interestValue?.data?.totalPayments?.toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
