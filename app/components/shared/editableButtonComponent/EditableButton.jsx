@@ -7,11 +7,12 @@ const EditableButton = ({
   endIcon,
   whiteBtn,
   blueBtn,
-  
 }) => {
   return (
     <button
-      className={`flex text-sm font-semibold border-2 border-white rounded-lg overflow-hidden cursor-pointer ${
+      className={`flex text-sm font-semibold border-2 rounded-lg overflow-hidden h-fit ${
+        disabled ? "cursor-not-allowed" : "cursor-pointer"
+      } ${
         whiteBtn
           ? "hover:border-gray-300"
           : blueBtn
@@ -28,7 +29,7 @@ const EditableButton = ({
             : blueBtn
             ? `bg-swBlue border-2 text-white`
             : ""
-        } ${className} flex text-sm semi-bold py-2 px-5 rounded-lg gap-1`}
+        } ${className} flex items-center text-sm semi-bold py-2 px-5 rounded-lg gap-1`}
       >
         {startIcon && <span>{startIcon}</span>}
         <p>{label}</p>

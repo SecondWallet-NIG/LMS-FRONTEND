@@ -53,6 +53,8 @@ function ReusableDataTable({
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [filterOptions, setFilterOptions] = useState(false);
 
+  console.log(data);
+
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -180,13 +182,19 @@ function ReusableDataTable({
         .then((data) => {
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
-              data?.data.results || data?.data?.data
+              data?.data?.data?.repayments ||
+                data?.data.results ||
+                data?.data?.data
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
             setDownloadData(data?.data.links.totalDocuments);
           } else {
-            setData(data?.data?.results || data?.data?.data);
+            setData(
+              data?.data?.data?.repayments ||
+                data?.data?.results ||
+                data?.data?.data
+            );
             setDownloadData(data?.data.links.totalDocuments);
             setPaginationLinks(data?.data?.links);
           }
@@ -225,12 +233,18 @@ function ReusableDataTable({
         .then((data) => {
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
-              data?.data.results || data?.data?.data
+              data?.data?.data?.repayments ||
+                data?.data.results ||
+                data?.data?.data
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
           } else {
-            setData(data?.data?.results || data?.data?.data);
+            setData(
+              data?.data?.data?.repayments ||
+                data?.data?.results ||
+                data?.data?.data
+            );
             setPaginationLinks(data?.data?.links);
           }
           setTimeout(() => {

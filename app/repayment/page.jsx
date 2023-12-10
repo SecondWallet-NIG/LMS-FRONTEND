@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
+import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 
 const Repayment = () => {
   const [currentPage, setCurrentPage] = useState("all-repayment");
@@ -10,6 +11,46 @@ const Repayment = () => {
     { repaymentType: "Upcoming repayments", total: 51, amount: 46093090303 },
     { repaymentType: "Overdue repayments", total: 53, amount: 46093090303 },
   ];
+
+  const header = [
+    { id: "dueDate", label: "Due Date" },
+    { id: "amountDue", label: "Due Amount" },
+    { id: "amountPaid", label: "Amount Paid" },
+    { id: "balanceToPay", label: "Balance To Pay" },
+    { id: "status", label: "Status" },
+    //   { id: "nin", label: "NIN" },
+    //   { id: "status", label: "Status" },
+  ];
+
+  const customDataTransformer = (apiData) => {
+    return apiData?.map((item) => ({
+      id: item._id,
+      dueDate: (
+        <div className="text-md font-[500] text-gray-700">
+          {item.dueDate?.slice(0, 10)}
+        </div>
+      ),
+      amountDue: (
+        <div className="text-md font-[500] text-gray-700">
+          {item?.amountDue}
+        </div>
+      ),
+      amountPaid: (
+        <div className="text-md font-[500] text-gray-700">
+          {item?.amountPaid}
+        </div>
+      ),
+      balanceToPay: (
+        <div className="text-md font-[500] text-gray-700">
+          {item?.balanceToPay}
+        </div>
+      ),
+      status: (
+        <div className="text-md font-[500] text-gray-700">{item?.status}</div>
+      ),
+    }));
+  };
+
   return (
     <DashboardLayout>
       <main>
@@ -65,6 +106,27 @@ const Repayment = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="w-full">
+          <ReusableDataTable
+            onClickRow="/loan-application/view-loan"
+            headers={header}
+            dataTransformer={customDataTransformer}
+            initialData={[]}
+            apiEndpoint="https://secondwallet-stag.onrender.com/api/repayment"
+            // btnText={
+            //   <div className="flex gap-1 items-center p-1">
+            //     <AiOutlinePlus size={15} />
+            //     <p className="hidden lg:block">create borrower</p>
+            //   </div>
+            // }
+            btnTextClick={() => {
+              router.push("/create-borrower");
+            }}
+            filters={true}
+            pagination={true}
+          />
         </div>
       </main>
     </DashboardLayout>
