@@ -56,11 +56,14 @@ const ResetPasswordScreen = ({
   };
 
   const handleResetPassword = async () => {
+    const email = JSON.parse(
+      localStorage.getItem("email")
+     );
     const verificationToken = JSON.parse(
-     localStorage.getItem("user")
+     localStorage.getItem("verificationCode")
     );
-    console.log({verificationToken});
-    const payload = { ...resetData, email: verificationToken?.data?.user?.email };
+    console.log({verificationToken, email});
+    const payload = { ...resetData, email: email, verificationToken: verificationToken };
     dispatch(resetPassword(payload))
       .unwrap()
       .then(() => {

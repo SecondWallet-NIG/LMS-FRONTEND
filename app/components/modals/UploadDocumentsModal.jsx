@@ -34,8 +34,7 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
   const { loading, error, data } = useSelector((state) => state.customer);
 
   if (!isOpen) return null;
-  console.log(selectedFilesArr);
-  console.log(selectedFilesObj);
+  
 
   // This puts the names of  all the selected forms in an array
   const keysArray = Object.keys(selectedFilesObj);
@@ -125,7 +124,7 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
   };
 
   return (
-    <CenterModal isOpen={isOpen}>
+    <CenterModal isOpen={isOpen} width={'50%'}>
       <ToastContainer />
       <div>
         <div className="bg-swBlue flex justify-between items-center p-3 text-white">

@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
 import CenterModal from "../modals/CenterModal";
+import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
 import PreviewLoanDocs from "./PreviewLoanDocs";
 
 const CustomerLoanDoc = (data) => {
   const [url, setUrl] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [fieldType, setFieldType] = useState("");
 
   const handleSetUrl = (content) => {
     setUrl(content);
@@ -22,14 +25,26 @@ const CustomerLoanDoc = (data) => {
         </div>
         {/* {data?.data?.loanApplication?.applicationForm} */}
         <div>
-          <button
-            onClick={() => {
-              handleSetUrl(data?.data?.loanApplication?.applicationForm);
-            }}
-            className="text-sm text-swGray underline"
-          >
-            View Docs
-          </button>
+          {data?.data?.loanApplication?.applicationForm != null ? (
+            <button
+              onClick={() => {
+                handleSetUrl(data?.data?.loanApplication?.applicationForm);
+              }}
+              className="text-sm text-swGray underline"
+            >
+              View Docs
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setFieldType("applicationForm");
+                setUploadModalOpen(!uploadModalOpen);
+              }}
+              className="text-sm text-swBlue underline"
+            >
+              Upload File
+            </button>
+          )}
         </div>
       </div>
       <div className="flex justify-between pl-4">
@@ -38,46 +53,80 @@ const CustomerLoanDoc = (data) => {
         </div>
         {/* {data?.data?.loanApplication?.applicationForm} */}
         <div>
-          <button
-            onClick={() => {
-              handleSetUrl(data?.data?.loanApplication?.loanAffidavit);
-            }}
-            className="text-sm text-swGray underline"
-          >
-            View Docs
-          </button>
+          {data?.data?.loanApplication?.loanAffidavit != null ? (
+            <button
+              onClick={() => {
+                handleSetUrl(data?.data?.loanApplication?.loanAffidavit);
+              }}
+              className="text-sm text-swGray underline"
+            >
+              View Docs
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setFieldType("loanAffidavit");
+                setUploadModalOpen(!uploadModalOpen);
+              }}
+              className="text-sm text-swBlue underline"
+            >
+              Upload File
+            </button>
+          )}
         </div>
       </div>
       <div className="flex justify-between pl-4">
         <div className="pt-4 font-semibold text-xs text-swGray">
           Guarantor&apos;s Form
         </div>
-        {/* {data?.data?.loanApplication?.applicationForm} */}
         <div>
-          <button
-            onClick={() => {
-              handleSetUrl(data?.data?.loanApplication?.guarantorForm);
-            }}
-            className="text-sm text-swGray underline"
-          >
-            View Docs
-          </button>
+          {data?.data?.loanApplication?.guarantorForm != null ? (
+            <button
+              onClick={() => {
+                handleSetUrl(data?.data?.loanApplication?.guarantorForm);
+              }}
+              className="text-sm text-swGray underline"
+            >
+              View Docs
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setFieldType("guarantorForm");
+                setUploadModalOpen(!uploadModalOpen);
+              }}
+              className="text-sm text-swBlue underline"
+            >
+              Upload File
+            </button>
+          )}
         </div>
       </div>
       <div className="flex justify-between pl-4">
         <div className="pt-4 font-semibold text-xs text-swGray">
           Collateral Form
         </div>
-        {/* {data?.data?.loanApplication?.applicationForm} */}
         <div>
-          <button
-            onClick={() => {
-              handleSetUrl(data?.data?.loanApplication?.collaterals);
-            }}
-            className="text-sm text-swGray underline"
-          >
-            View Docs
-          </button>
+          {data?.data?.loanApplication?.collaterals.length != 0 ? (
+            <button
+              onClick={() => {
+                handleSetUrl(data?.data?.loanApplication?.collaterals);
+              }}
+              className="text-sm text-swGray underline"
+            >
+              View Docs
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setFieldType("collaterals");
+                setUploadModalOpen(!uploadModalOpen);
+              }}
+              className="text-sm text-swBlue underline"
+            >
+              Upload File
+            </button>
+          )}
         </div>
       </div>
       <CenterModal
@@ -106,6 +155,21 @@ const CustomerLoanDoc = (data) => {
             ) : null}
           </div>
         </div>
+      </CenterModal>
+      <CenterModal
+        width={"35%"}
+        isOpen={uploadModalOpen}
+        onClose={() => {
+          setUploadModalOpen(!uploadModalOpen);
+        }}
+      >
+        <UploadLoanDocs
+          isOpen={uploadModalOpen}
+          onClose={() => {
+            setUploadModalOpen(!uploadModalOpen);
+          }}
+          fieldType={fieldType}
+        />
       </CenterModal>
     </main>
   );

@@ -21,6 +21,7 @@ import { saveAs } from "file-saver";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { Oval } from "react-loader-spinner";
 
 function ReusableDataTable({
   apiEndpoint,
@@ -189,6 +190,7 @@ function ReusableDataTable({
             setData(transformedData);
             setPaginationLinks(data?.data.links);
             setDownloadData(data?.data.links.totalDocuments);
+            setLoading(false);
           } else {
             setData(
               data?.data?.data?.repayments ||
@@ -197,16 +199,12 @@ function ReusableDataTable({
             );
             setDownloadData(data?.data.links.totalDocuments);
             setPaginationLinks(data?.data?.links);
+            setLoading(false);
           }
-          // setTimeout(() => {
-          //   setIsLoading(false);
-          // }, 2000);
+     
         })
         .catch(() => {
-          // setTimeout(() => {
-          //   toast.error("An error occured, Couldn't load table");
-          //   setIsLoading(false);
-          // }, 2000);
+   
         });
     } else {
       if (dateRange && dateRange.length > 0) {
@@ -239,6 +237,7 @@ function ReusableDataTable({
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
+            setLoading(false);
           } else {
             setData(
               data?.data?.data?.repayments ||
@@ -246,15 +245,16 @@ function ReusableDataTable({
                 data?.data?.data
             );
             setPaginationLinks(data?.data?.links);
+            setLoading(false);
           }
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 2000);
+          setLoading(false);
+          setIsLoading(false);
         })
         .catch(() => {
           setTimeout(() => {
             toast.error("An error occured, Couldn't load table");
             setIsLoading(false);
+            setLoading(false);
           }, 2000);
         });
     }
@@ -328,7 +328,7 @@ function ReusableDataTable({
     <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
       <ToastContainer />
       <div className="">
-        {filters && (
+        {filters && data?.length > 0 && (
           <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
             <div className="flex gap-2 items-center justify-between w-full md:w-fit">
               <div className="flex border border-1 items-center mb-4 pl-2 ">
@@ -428,8 +428,67 @@ function ReusableDataTable({
             </div>
           </div>
         )}
-        {data?.length > 0 ? (
+        {data?.length > 0 && loading == false ? (
           <table className="table-auto w-full border-collapse border overflow-hidden">
+            <thead>
+              <tr>
+                {headers.map((header) => (
+                  <th
+                    key={header.id}
+                    className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
+                      header.id === sortField ? "" : ""
+                    }`}
+                    onClick={() => handleSort(header.id)}
+                  >
+                    {header.label}
+                    {header.id === sortField && (
+                      <span className="ml-1">
+                        {sortDirection === "asc" ? "↑" : "↓"}
+                      </span>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data?.map((item) => (
+                <tr
+                  onClick={() => {
+                    if (onClickRow) {
+                    //  setIsLoading(true);
+                      router.push(`${onClickRow}/${item.id || item._id}`);
+                    }
+                  }}
+                  key={item._id}
+                  className="border pt-2 pb-2 hover:bg-swLightGray"
+                  style={{ cursor: "pointer" }}
+                >
+                  {headers.map((header) => (
+                    <td
+                      key={header.id}
+                      className="px-5 py-4 border font-400 text-xs text-swGray border-none"
+                    >
+                      {item[header.id]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : data?.length == 0 && !isLoading  ? (
+          <div class="min-h-500 flex items-center justify-center">
+            <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
+              <Image src={sketch} alt="company logo" />
+              <p class="text-center text-lg">This list is empty</p>
+            </div>
+          </div>
+        ) : null}
+            {/* <>
+      {loading == true ? (
+     <Loader isOpen={isLoading} />
+      ) : data?.length > 0 ? (
+        // Render your table here
+        <table className="table-auto w-full border-collapse border overflow-hidden">
             <thead>
               <tr>
                 {headers.map((header) => (
@@ -475,16 +534,17 @@ function ReusableDataTable({
               ))}
             </tbody>
           </table>
-        ) : (
-          <div class="min-h-500 flex items-center justify-center">
-            <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
-              <Image src={sketch} alt="company logo" />
-              <p class="text-center text-lg">This list is empty</p>
-            </div>
+      ) : (
+        // Render the empty list message here
+        <div className="min-h-500 flex items-center justify-center">
+          <div className="rounded-lg p-8 w-[400px] flex flex-col items-center">
+            <Image src={sketch} alt="company logo" />
+            <p className="text-center text-lg">This list is empty</p>
           </div>
-        )}
-
-        {pagination && (
+        </div>
+      )}
+    </> */}
+        {pagination && data?.length > 0 && (
           <div className="mt-4 flex items-center justify-between">
             <button
               onClick={() => handlePageChange(currentPage - 1, perPage)}
@@ -569,14 +629,7 @@ function ReusableDataTable({
               filterParams?.map((item) => (
                 <div
                   key={item._id}
-                  // onClick={() => {
-                  //   setFormData({
-                  //     ...formData,
-                  //     customerId: item._id,
-                  //   });
-                  //   setSelectedCustomer(item);
-                  //   setIsOpen(false);
-                  // }}
+        
                   className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
                 >
                   <div className="flex justify-between items-center mb-2">

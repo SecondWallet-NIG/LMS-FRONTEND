@@ -18,27 +18,22 @@ const RequestApproval = ({
   selected,
   approvalId,
   approvalLevel,
+  onClose,
 }) => {
-
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  console.log({approvals});
+  console.log({ approvals });
   const [formData, setFormData] = useState({
     approvalLevel: approvalId,
     requestNote: "",
     assignee: "",
   });
 
-  // const modalStyles = {
-  //   width: width || "90%",
-  //   maxWidth: "500px",
-  // };
-
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
-      console.log({approvalLevel});
+      console.log({ approvalLevel });
       const users = user.filter((item) => item?.role?.name === approvalLevel);
 
       setUsersToApprove(
@@ -65,7 +60,6 @@ const RequestApproval = ({
     });
   };
 
-
   const submitLoan = (e) => {
     setLoading(true);
     const payload = { id, formData };
@@ -73,16 +67,19 @@ const RequestApproval = ({
     dispatch(requestLoanApproval(payload))
       .unwrap()
       .then(() => {
-        toast("Loan approval request successful");
         setLoading(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+        onClose();
+        toast.success("Loan approval request successful");
       })
       .catch((error) => {
-        console.log({error});
-        toast.error(`${error?.message}`);
-        setLoading(false);
+        console.log({ error });
+        if (error?.message == '"assignee" is not allowed to be empty') {
+          toast.error("Please select an assignee");
+          setLoading(false);
+        } else {
+          toast.error(`${error?.message}`);
+          setLoading(false);
+        }
       });
   };
 
@@ -92,20 +89,19 @@ const RequestApproval = ({
   return (
     <main className="w-full">
       <ToastContainer />
-      <div 
-      // style={modalStyles} 
-      
-      id="add-user-form ">
+      <div
+        // style={modalStyles}
+
+        id="add-user-form "
+      >
         <div className="border bg-white border-swLightGray rounded-lg">
           <div className="flex justify-between items-center p-3 text-white">
             <div>
               <p className="text-base font-semibold text-swGray">
                 Request Approval
               </p>
-            
             </div>
-            <button className="text-black" >x</button> 
-        
+            <button className="text-black" onClick={onClose}>x</button>
           </div>
           <div className="p-4">
             <div className="w-full pb-4">
@@ -134,7 +130,11 @@ const RequestApproval = ({
                 handleInputChange(e);
               }}
             ></textarea>
-            <Button disabled={loading ? true : false} onClick={submitLoan} className="mt-4 block w-full">
+            <Button
+              disabled={loading ? true : false}
+              onClick={submitLoan}
+              className="mt-4 block w-full"
+            >
               Submit
             </Button>
           </div>

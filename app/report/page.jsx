@@ -64,43 +64,6 @@ const Report = () => {
             </div>
           </div>
 
-          <div className="flex justify-center items-center gap-2 ml-auto">
-            <InputField
-              startIcon={<FiSearch size={20} />}
-              endIcon={
-                <IoIosClose
-                  size={20}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    handleSearch("close");
-                  }}
-                />
-              }
-              placeholder={"Search..."}
-              css={`
-                ${searchBtn
-                  ? "translate-x-[3rem] opacity-1 z-10"
-                  : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
-              `}
-              borderColor="bg-gray-200 "
-            />
-
-            <div
-              className={`${
-                searchBtn ? "opacity-0" : "opacity-1"
-              } bg-white w-fit p-2 transition-all ease-in-out rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer`}
-            >
-              <FiSearch
-                size={20}
-                onClick={() => {
-                  handleSearch("open");
-                }}
-              />
-            </div>
-            <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer">
-              <BsThreeDotsVertical size={20} />
-            </div>
-          </div>
         </section>
 
         <section className="my-8">

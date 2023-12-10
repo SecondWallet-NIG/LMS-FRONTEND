@@ -70,7 +70,7 @@ const CreateCustomer = () => {
     accountNumber: "",
     accountName: "",
     bankName: "",
-    createdBy: "5f7c335b7f6c9a1234567890",
+    createdBy: "",
   });
 
   const payload = {
@@ -153,8 +153,10 @@ const CreateCustomer = () => {
 
   const btnLeftFunc = () => {
     router.push("/create-borrower");
+    closeModal();
   };
   const btnRightFunc = () => {
+    closeModal();
     router.push(`/borrowers/profile/${newUserId}`);
   };
 
@@ -197,7 +199,7 @@ const CreateCustomer = () => {
       accountNumber: "",
       accountName: "",
       bankName: "",
-      createdBy: "5f7c335b7f6c9a1234567890",
+      createdBy: "",
     });
     setVerificationResponse(null);
     setBankNameVal("");

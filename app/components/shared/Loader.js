@@ -9,8 +9,8 @@ const Loader = ({ isOpen,bgColor, onClose, children, width}) => {
     minWidth: "300px",
   };
   return (
-    <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-white z-[110]">
-      <div className={`${bgColor ? bgColor : "bg-white"} p-4 rounded-md shadow-md" style={modalStyles}`}>
+    <div className="flex items-center justify-center w-full h-[400px] bg-white">
+      <div className={`${bgColor ? bgColor : "bg-white"} p-4 rounded-md shadow-md"`}>
     
         
         <Oval

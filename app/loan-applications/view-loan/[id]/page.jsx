@@ -34,6 +34,7 @@ import EditableButton from "@/app/components/shared/editableButtonComponent/Edit
 import { setUseProxies } from "immer";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import SelectField from "@/app/components/shared/input/SelectField";
+import CustomerRepayment from "@/app/components/customers/CustomerRepayment";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -71,8 +72,11 @@ const ViewLoan = () => {
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
-
-
+  const preventMinus = (e) => {
+    if (e.code === "Minus") {
+      e.preventDefault();
+    }
+  };
 
   const updateLoan = (update) => {
     if (update === "loanAmount") {
@@ -85,7 +89,6 @@ const ViewLoan = () => {
       setTimeout(() => {
         window.location.reload();
       }, 1500);
-     
     } else {
       let updatedData = new FormData();
       updatedData.append(update, formData[update]);
@@ -416,9 +419,7 @@ const ViewLoan = () => {
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>
-                          {
-                            data?.data?.loanApplication?.interestRate * 100
-                          } %
+                          {data?.data?.loanApplication?.interestRate * 100} %
                         </p>
                         <div
                           className="p-2 rounded-md hover:bg-white cursor-pointer"
@@ -510,7 +511,7 @@ const ViewLoan = () => {
                                   ? "bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
                                   : item.status === "Pending"
                                   ? "bg-swLightGray text-swGray text-xs font-normal px-2 py-1 rounded-full"
-                                  : item.status === "Approval request initiated"
+                                  : item.status === "Approval Requested"
                                   ? "bg-red-400 text-white text-xs font-normal px-2 py-1 rounded-full"
                                   : item.status === "Declined"
                                   ? "bg-red-500 text-white text-xs font-normal px-2 py-1 rounded-full"
@@ -529,7 +530,7 @@ const ViewLoan = () => {
                                 setIsRequestApprovalOpen(true);
                               }}
                               disabled={
-                                item?.status === "Approval request initiated" ||
+                                item?.status === "Approval Requested" ||
                                 item?.status === "Approved"
                               }
                               variant="secondary"
@@ -554,7 +555,7 @@ const ViewLoan = () => {
               loanApprovals?.data?.data.filter(
                 (item) =>
                   item?.assignee?._id === useriD &&
-                  item?.status === "Approval request initiated"
+                  item?.status === "Approval Requested"
               ).length > 0 ? (
                 <div>
                   <h6 className="text-center font-semibold p-2">Loan Action</h6>
@@ -586,7 +587,7 @@ const ViewLoan = () => {
                             .filter(
                               (item) =>
                                 item?.assignee?._id === useriD &&
-                                item?.status === "Approval request initiated"
+                                item?.status === "Approval Requested"
                             )
                             .map((item, index) => (
                               <tr className="text-xs" key={index}>
@@ -668,7 +669,7 @@ const ViewLoan = () => {
               id="activities"
               className="border border-gray-300 rounded-2xl"
             >
-              {/* <div className="p-3 flex justify-between items-center"></div> */}
+              {/* <div className="p-4 flex justify-between items-center"></div> */}
               <div className="flex items-center justify-between overflow-x-hidden border-b border-gray-300 py-2 px-4 flex-wrap">
                 <div className="flex gap-2 text-xs lg:text-sm">
                   <button
@@ -762,6 +763,9 @@ const ViewLoan = () => {
                 {activityButton === "loans" && (
                   <CustomerLoanDoc data={data?.data} />
                 )}
+                 {activityButton === "repayment" && (
+                  <CustomerRepayment data={data?.data} loanId={id} />
+                )}
               </div>
             </section>
           </div>
@@ -824,187 +828,199 @@ const ViewLoan = () => {
       </CenterModal>
 
       {/* Loan amount update modal */}
-      <CenterModal isOpen={openLoanAmount} width={"25%"}>
-        <div className="flex justify-end cursor-pointer">
-          <MdClose
-            size={20}
-            onClick={() => {
-              setOpenLoanAmount(!openLoanAmount);
-            }}
-          />
-        </div>
+      <CenterModal isOpen={openLoanAmount} width={"35%"}>
+        <div className="p-4 overflow-x-auto">
+          <div className="flex justify-end cursor-pointer">
+            <MdClose
+              size={20}
+              onClick={() => {
+                setOpenLoanAmount(!openLoanAmount);
+              }}
+            />
+          </div>
 
-        <InputField
-          label={"Enter new loan amount"}
-          value={loanAmount}
-          onChange={(e) => setLoanAmount(e.target.value)}
-        />
-        <Button
-          disabled={
-            loanAmount == data?.data?.loanApplication?.loanAmount ? true : false
-          }
-          onClick={() => updateLoan("loanAmount")}
-          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-        >
-          Update Amount
-        </Button>
+          <InputField
+            label={"Enter new loan amount"}
+            value={loanAmount}
+            onChange={(e) => setLoanAmount(e.target.value)}
+          />
+          <Button
+            disabled={
+              loanAmount == data?.data?.loanApplication?.loanAmount
+                ? true
+                : false
+            }
+            onClick={() => updateLoan("loanAmount")}
+            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+          >
+            Update Amount
+          </Button>
+        </div>
       </CenterModal>
 
       {/* Loan package update modal */}
-      <CenterModal isOpen={openLoanPackage} width={"25%"}>
-        <div className="flex justify-end cursor-pointer">
-          <MdClose
-            size={20}
-            onClick={() => {
-              setOpenLoanPackage(!openLoanPackage);
+      <CenterModal isOpen={openLoanPackage} width={"35%"}>
+        <div className="p-4 overflow-x-auto">
+          <div className="flex justify-end cursor-pointer">
+            <MdClose
+              size={20}
+              onClick={() => {
+                setOpenLoanPackage(!openLoanPackage);
+              }}
+            />
+          </div>
+          <SelectField
+            value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
+              (option) => option.value === formData.loanPackage
+            )}
+            // disabled={selectedCustomer === null ? true : false}
+            name="loanPackage"
+            optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
+            label={"Loan Package "}
+            required={true}
+            placeholder={"Select loan package"}
+            isSearchable={false}
+            onChange={(selectedOption) => {
+              handleSelectChange(selectedOption, "loanPackage");
             }}
           />
+          <Button
+            onClick={() => updateLoan("loanPackage")}
+            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+          >
+            Update Loan Package
+          </Button>
         </div>
-        <SelectField
-          value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
-            (option) => option.value === formData.loanPackage
-          )}
-          // disabled={selectedCustomer === null ? true : false}
-          name="loanPackage"
-          optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
-          label={"Loan Package "}
-          required={true}
-          placeholder={"Select loan package"}
-          isSearchable={false}
-          onChange={(selectedOption) => {
-            handleSelectChange(selectedOption, "loanPackage");
-          }}
-        />
-        <Button
-          onClick={() => updateLoan("loanPackage")}
-          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-        >
-          Update Loan Package
-        </Button>
       </CenterModal>
 
       {/* interest rate type update modal */}
-      <CenterModal isOpen={openInterestType} width={"25%"}>
-        <div className="flex justify-end cursor-pointer">
-          <MdClose
-            size={20}
-            onClick={() => {
-              setOpenInterestType(!openInterestType);
-            }}
-          />
-        </div>
-        <SelectField
-          value={modifyInterestTypeData(interestType?.data?.data)?.find(
-            (option) => option.value === formData.interestType
-          )}
-          name="interestType"
-          // disabled={formData.numberOfRepayment === 0 ? true : false}
-          optionValue={modifyInterestTypeData(interestType?.data?.data)}
-          label={"Interest Type"}
-          required={true}
-          placeholder={"Select interest type"}
-          isSearchable={false}
-          onChange={(selectedOption) => {
-            handleSelectChange(selectedOption, "interestType");
-          }}
-        />
-        <Button
-          onClick={() => updateLoan("interestType")}
-          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-        >
-          Update intrest rate type
-        </Button>
-      </CenterModal>
-
-      {/* repayment type update modal */}
-      <CenterModal isOpen={openRepaymentType} width={"25%"}>
-        <div className="flex justify-end cursor-pointer">
-          <MdClose
-            size={20}
-            onClick={() => {
-              setOpenRepaymentType(!openRepaymentType);
-            }}
-          />
-        </div>
-        <SelectField
-          value={repaymentTypeData.find(
-            (option) => option.value === formData.repaymentType
-          )}
-          name="repaymentType"
-          // disabled={formData.numberOfRepayment === 0 ? true : false}
-          optionValue={
-            data?.data?.loanPackageDetails?.interestRate?.rateType ===
-            "Reducing Balance"
-              ? reducingBalrepaymentTypeData
-              : repaymentTypeData
-          }
-          label={"Repayment Type"}
-          required={true}
-          placeholder={"Select repayment type"}
-          isSearchable={false}
-          onChange={(selectedOption) => {
-            handleSelectChange(selectedOption, "repaymentType");
-          }}
-        />
-        <Button
-          onClick={() => updateLoan("repaymentType")}
-          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-        >
-          Update repayment type
-        </Button>
-      </CenterModal>
-
-      {/* repayment type update modal */}
-      <CenterModal isOpen={openLoanPeriod} width={"25%"}>
-        <div className="flex justify-end cursor-pointer">
-          <MdClose
-            size={20}
-            onClick={() => {
-              setOpenLoanPeriod(!openLoanPeriod);
-            }}
-          />
-        </div>
-
-        <div className="flex gap-2 items-end">
-          <div className="w-1/3">
-            <SelectField
-              value={loanDurationMetricsData.find(
-                (option) => option.value === formData.loanDurationMetrics
-              )}
-              name="loanDurationMetrics"
-              optionValue={loanDurationMetricsData}
-              label={"Duration"}
-              required={true}
-              placeholder={"duration metics"}
-              isSearchable={false}
-              onChange={(selectedOption) => {
-                handleSelectChange(selectedOption, "loanDurationMetrics");
+      <CenterModal isOpen={openInterestType} width={"35%"}>
+        <div className="p-4 overflow-x-auto">
+          <div className="flex justify-end cursor-pointer">
+            <MdClose
+              size={20}
+              onClick={() => {
+                setOpenInterestType(!openInterestType);
               }}
             />
           </div>
-          <div className="w-2/3">
-            <InputField
-              value={formData.loanDuration}
-              required={false}
-              name="loanDuration"
-              inputType="number"
-              min="0"
-              onKeyPress={preventMinus}
-              activeBorderColor="border-swBlue"
-              placeholder="Enter number"
-              onChange={(e) => {
-                setInputState(e);
+          <SelectField
+            value={modifyInterestTypeData(interestType?.data?.data)?.find(
+              (option) => option.value === formData.interestType
+            )}
+            name="interestType"
+            // disabled={formData.numberOfRepayment === 0 ? true : false}
+            optionValue={modifyInterestTypeData(interestType?.data?.data)}
+            label={"Interest Type"}
+            required={true}
+            placeholder={"Select interest type"}
+            isSearchable={false}
+            onChange={(selectedOption) => {
+              handleSelectChange(selectedOption, "interestType");
+            }}
+          />
+          <Button
+            onClick={() => updateLoan("interestType")}
+            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+          >
+            Update intrest rate type
+          </Button>
+        </div>
+      </CenterModal>
+
+      {/* repayment type update modal */}
+      <CenterModal isOpen={openRepaymentType} width={"35%"}>
+        <div className="p-4 overflow-x-auto">
+          <div className="flex justify-end cursor-pointer">
+            <MdClose
+              size={20}
+              onClick={() => {
+                setOpenRepaymentType(!openRepaymentType);
               }}
             />
           </div>
+          <SelectField
+            value={repaymentTypeData.find(
+              (option) => option.value === formData.repaymentType
+            )}
+            name="repaymentType"
+            // disabled={formData.numberOfRepayment === 0 ? true : false}
+            optionValue={
+              data?.data?.loanPackageDetails?.interestRate?.rateType ===
+              "Reducing Balance"
+                ? reducingBalrepaymentTypeData
+                : repaymentTypeData
+            }
+            label={"Repayment Type"}
+            required={true}
+            placeholder={"Select repayment type"}
+            isSearchable={false}
+            onChange={(selectedOption) => {
+              handleSelectChange(selectedOption, "repaymentType");
+            }}
+          />
+          <Button
+            onClick={() => updateLoan("repaymentType")}
+            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+          >
+            Update repayment type
+          </Button>
         </div>
+      </CenterModal>
 
-        <Button
-          onClick={() => updateLoan("loanDuration")}
-          className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-        >
-          Update loan period
-        </Button>
+      {/* repayment type update modal */}
+      <CenterModal isOpen={openLoanPeriod} width={"35%"}>
+        <div className="p-4 overflow-x-auto">
+          <div className="flex justify-end cursor-pointer">
+            <MdClose
+              size={20}
+              onClick={() => {
+                setOpenLoanPeriod(!openLoanPeriod);
+              }}
+            />
+          </div>
+
+          <div className="flex gap-2 items-end">
+            <div className="w-1/3">
+              <SelectField
+                value={loanDurationMetricsData.find(
+                  (option) => option.value === formData.loanDurationMetrics
+                )}
+                name="loanDurationMetrics"
+                optionValue={loanDurationMetricsData}
+                label={"Duration"}
+                required={true}
+                placeholder={"metics"}
+                isSearchable={false}
+                onChange={(selectedOption) => {
+                  handleSelectChange(selectedOption, "loanDurationMetrics");
+                }}
+              />
+            </div>
+            <div className="w-2/3">
+              <InputField
+                value={formData.loanDuration}
+                required={false}
+                name="loanDuration"
+                inputType="number"
+                min="0"
+                onKeyPress={preventMinus}
+                activeBorderColor="border-swBlue"
+                placeholder="Enter number"
+                onChange={(e) => {
+                  setInputState(e);
+                }}
+              />
+            </div>
+          </div>
+
+          <Button
+            onClick={() => updateLoan("loanDuration")}
+            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+          >
+            Update loan period
+          </Button>
+        </div>
       </CenterModal>
     </DashboardLayout>
   );
