@@ -387,13 +387,6 @@ const ViewLoan = () => {
                         <p>null</p>
                       </div>
                     </td>
-                    {/* <td className="px-3 py-3">
-                      <button
-                        className={`${"font-semibold text-swBlue bg-blue-50"} p-1 text-xs rounded-full border cursor-pointer`}
-                      >
-                        {data?.data?.loanApplication?.status}
-                      </button>
-                    </td> */}
                   </tr>
                 </tbody>
               </table>
@@ -783,14 +776,6 @@ const ViewLoan = () => {
         </section>
       </main>
 
-      {/* <ApprovalModal
-        approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
-        approvalId={data?.data?.approvalNeeded?.approvalLevel}
-        isOpen={isApprovalOpen}
-        onClose={() => {
-          setApprovalOpen(false);
-        }}
-      /> */}
       <CenterModal
         width={"30%"}
         isOpen={isRequestApprovalOpen}
@@ -1022,6 +1007,8 @@ const ViewLoan = () => {
           </Button>
         </div>
       </CenterModal>
+
+ 
     </DashboardLayout>
   );
 };

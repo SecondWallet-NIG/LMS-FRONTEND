@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
 import Button from "../shared/buttonComponent/Button";
+import CenterModal from "../modals/CenterModal";
 
 const headers = [
   { id: "createdAt", label: "Date Created" },
@@ -64,6 +65,7 @@ const customDataTransformer = (apiData) => {
 
 const CustomerRepayment = ({ loanId }) => {
   const router = useRouter();
+  const [logRepayment, setLogRepayment] = useState(false);
   return (
     <div className="w-full">
       <ReusableDataTable
@@ -75,8 +77,31 @@ const CustomerRepayment = ({ loanId }) => {
         pagination={false}
       />
       <div className="mt-5 flex items-center justify-center">
-        <Button variant="secondary">Log Repayment</Button>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            setLogRepayment(!logRepayment);
+          }}
+        >
+          Log Repayment
+        </Button>
       </div>
+      <CenterModal isOpen={logRepayment} width={"50%"}>
+        <div className="flex justify-between items-center text-white">
+          <div>
+            <p className="text-base font-semibold text-black">Log Repayment</p>
+          </div>
+          <button
+            className="text-black"
+            onClick={() => {
+              setLogRepayment(!logRepayment);
+            }}
+          >
+            x
+          </button>
+        </div>
+        <div className="text-sm text-swGray pt-4">Provide payment information</div>
+      </CenterModal>
     </div>
   );
 };
