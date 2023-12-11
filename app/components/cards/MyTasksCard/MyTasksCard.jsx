@@ -5,7 +5,7 @@ const MyTasksCard = ({ header, data }) => {
         header === "all tasks"
           ? "bg-swBlue text-white"
           : header === "completed tasks"
-          ? "bg-swYellow"
+          ? "bg-swIndicatorYellow"
           : "bg-gray-200"
       }`}
     >

@@ -25,9 +25,18 @@ const MyTasks = () => {
     <DashboardLayout>
       <main className="p-8">
         <div className="flex gap-5">
-          <MyTasksCard header={"all tasks"} data={loanToApprove?.data?.data?.totalCount} />
-          <MyTasksCard header={"completed tasks"} data={loanToApprove?.data?.data?.doneCount} />
-          <MyTasksCard header={"pending tasks"} data={loanToApprove?.data?.data?.pendingCount} />
+          <MyTasksCard
+            header={"all tasks"}
+            data={loanToApprove?.data?.data?.totalCount}
+          />
+          <MyTasksCard
+            header={"completed tasks"}
+            data={loanToApprove?.data?.data?.doneCount}
+          />
+          <MyTasksCard
+            header={"pending tasks"}
+            data={loanToApprove?.data?.data?.pendingCount}
+          />
         </div>
         <p className="font-semibold mt-10 mb-4">Active Tasks</p>
         {loanToApprove?.data?.data?.tasks?.length === 0 ? (
@@ -83,7 +92,7 @@ const MyTasks = () => {
                       </td>
                       <td className="px-5 py-4 border font-400 text-xs text-swGray border-none">
                         <button
-                          className={`py-2 px-2  text-xs  rounded-full cursor-none ${
+                          className={`py-1 px-2 text-xs font-normal rounded-full cursor-none ${
                             item?.actionStatus === "Done"
                               ? "bg-[#E8F7F0] text-[#107E4B]"
                               : "bg-red-400 text-white"
