@@ -3,7 +3,7 @@
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-const  LoanTable = () => {
+const LoanTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
   const router = useRouter();
@@ -46,9 +46,15 @@ const  LoanTable = () => {
         <button
           className={`${
             item.status === "Pending"
-              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : "bg-[#F8A9A3] text-white text-xs font-normal px-2 py-1 rounded-full"
-          } px-2 py-1 rounded`}
+              ? "bg-swIndicatorLightRed"
+              : item.status === "In Progress"
+              ? "bg-swIndicatorYellow"
+              : item.status === "Ready for Disbursal"
+              ? "bg-swIndicatorPurple"
+              : item.status === "Disbursed"
+              ? "bg-swBlue"
+              : "bg-swIndicatorDarkRed"
+          } px-2 py-1 rounded-full text-xs font-normal text-white`}
         >
           {item.status}
         </button>

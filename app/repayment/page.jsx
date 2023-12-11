@@ -85,7 +85,7 @@ const Repayment = () => {
                   ? "border-blue-200 text-swBlue"
                   : item.repaymentType === "Upcoming repayments"
                   ? "border-green-200 text-swGreen"
-                  : "border-red-100 text-swRed"
+                  : "border-red-100 text-swIndicatorLightRed"
               }`}
               key={index}
             >

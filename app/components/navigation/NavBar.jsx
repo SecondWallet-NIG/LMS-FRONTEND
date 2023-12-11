@@ -127,7 +127,7 @@ const NavBar = ({ paths, isBackNav }) => {
                   .filter((item) => item.status === "unread")
                   .map((item, index) => (
                     <div key={index} className="py-3 mx-1 flex gap-5 border-b">
-                      <div className={`w-1 rounded-full bg-swYellow`} />
+                      <div className={`w-1 rounded-full bg-swIndicatorYellow`} />
                       <div>
                         <p>{item.message}</p>
                         <p className="text-sm">{item.time}</p>
@@ -140,7 +140,7 @@ const NavBar = ({ paths, isBackNav }) => {
                   <div key={index} className="py-3 mx-1 flex gap-5 border-b">
                     <div
                       className={`w-1 rounded-full ${
-                        item.status === "unread" ? "bg-swYellow" : "bg-swGray"
+                        item.status === "unread" ? "bg-swIndicatorYellow" : "bg-swGray"
                       }`}
                     />
                     <div>
@@ -155,7 +155,7 @@ const NavBar = ({ paths, isBackNav }) => {
         <div className="relative">
  
           <HiMiniUserCircle size={50} />
-          <div className="bg-swYellow h-3 w-3 rounded-full bottom-1 right-1 absolute" />
+          <div className="bg-swIndicatorYellow h-3 w-3 rounded-full bottom-1 right-1 absolute" />
         </div>
       </div>
     </nav>
