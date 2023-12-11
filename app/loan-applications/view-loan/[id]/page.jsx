@@ -18,7 +18,7 @@ import { IoIosClose } from "react-icons/io";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import { IoCopyOutline } from "react-icons/io5";
 import { LuCalendar } from "react-icons/lu";
-import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
+import { disburseLoan, getSingleLoan } from "@/redux/slices/loanApplicationSlice";
 import RequestApproval from "@/app/components/modals/loans/RequestApproval";
 import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
 import { updateLoanApplication } from "@/redux/slices/loanApplicationSlice";
@@ -30,16 +30,18 @@ import Button from "@/app/components/shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
 import DeclineModal from "@/app/components/modals/loans/DeclineModal";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
-import { setUseProxies } from "immer";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import SelectField from "@/app/components/shared/input/SelectField";
 import CustomerRepayment from "@/app/components/customers/CustomerRepayment";
+import { AiOutlinePaperClip } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const ViewLoan = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { loading, error, data } = useSelector(
+  const { error, data } = useSelector(
     (state) => state.loanApplication
   );
   const loanPackage = useSelector((state) => state.loanPackage);
@@ -62,9 +64,53 @@ const ViewLoan = () => {
   const [openRepaymentType, setOpenRepaymentType] = useState(false);
   const [openLoanPeriod, setOpenLoanPeriod] = useState(false);
   const [loanDurationVal, setLoanDurationVal] = useState(0);
-  const [formData, setFormData] = useState({});
-  const userToApprove = JSON.parse(localStorage.getItem("user"));
+
+
   const router = useRouter();
+  const [logRepayment, setLogRepayment] = useState(false);
+  const [loading , setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    amount: "",
+    paymentMehod: "",
+    docs: null,
+  });
+
+  const handleFileChange = (e) => {
+    let { name, files } = e.target;
+    const file = files[0];
+    console.log({ file });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: file,
+    }));
+  };
+
+  const deleteFile = (name) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: null,
+    }));
+  };
+
+  const setDisbursementInputState = async (e) => {
+    let { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleDisbursementSelectChange = async (selectedOption, name) => {
+    setFormData({
+      ...formData,
+      [name]: selectedOption.value,
+    });
+  };
+
+  const paymentMethodTypes = [
+    { value: "cash", label: "Cash" },
+    { value: "bankTransfer", label: "Bank Transfer" },
+  ];
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
@@ -174,6 +220,24 @@ const ViewLoan = () => {
     }));
   };
 
+  const submitLoanUpdate = (e) => {
+    setLoading(true);
+    e.preventDefault();
+    dispatch(disburseLoan(id))
+      .unwrap()
+      .then(() => {
+        toast("Loan status Updated to disbursed");
+        setLoading(false);
+        setLogRepayment(!logRepayment)
+        dispatch(getSingleLoan(id));
+      })
+      .catch((error) => {
+        toast.error(`${error?.message}`);
+        setLoading(false);
+        setLogRepayment(!logRepayment)
+      });
+  };
+
   useEffect(() => {
     dispatch(getSingleLoan(id));
     dispatch(getLoanApprovals(id));
@@ -197,6 +261,7 @@ const ViewLoan = () => {
       isBackNav={true}
       paths={["Loan Applications", "View loan"]}
     >
+      <ToastContainer />
       <main className="flex h-full">
         <section className="w-full">
           <section
@@ -220,6 +285,13 @@ const ViewLoan = () => {
                     {/* {console.log({ data })} */}
                     {data?.data?.customerDetails?.firstName}{" "}
                     {data?.data?.customerDetails?.lastName}
+                    <button
+                      className={
+                        "ml-4 text-white text-xs bg-[#2769b3d9] px-2 py-1.5 rounded-full font-medium"
+                      }
+                    >
+                      <p>{data?.data?.loanApplication?.status} </p>
+                    </button>
                   </p>
                   <p className="text-xs">SW-456789</p>
 
@@ -256,13 +328,24 @@ const ViewLoan = () => {
                         <FiDatabase size={15} />
                       </Link>
                     </div> */}
-                    <button
+                    {/* <button
                       className={
                         "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
                       }
                     >
                       <p>{data?.data?.loanApplication?.status} </p>
-                    </button>
+                    </button> */}
+                    <Button
+                      className={
+                        "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
+                      }
+                      disabled={data?.data?.loanApplication?.status == "Disbursed" ? true : false}
+                      onClick={() => {
+                        setLogRepayment(!logRepayment);
+                      }}
+                    >
+                      <p>Disburse Loan</p>
+                    </Button>
                     <button
                       onClick={() => {
                         router.push(
@@ -627,22 +710,7 @@ const ViewLoan = () => {
                                     >
                                       Decline
                                     </button>
-                                    {/* <EditableButton
-                    onClick={() => {
-                      setApprovalOpen(true);
-                    }}
-                    className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md"
-                  >
-                    Approve
-                  </EditableButton>
-                  <EditableButton
-                    onClick={() => {
-                      setDeclineOpen(true);
-                    }}
-                    className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md"
-                  >
-                    Decline
-                  </EditableButton> */}
+                
                                   </div>
                                 </td>
                               </tr>
@@ -756,7 +824,7 @@ const ViewLoan = () => {
                 {activityButton === "loans" && (
                   <CustomerLoanDoc data={data?.data} />
                 )}
-                 {activityButton === "repayment" && (
+                {activityButton === "repayment" && (
                   <CustomerRepayment data={data?.data} loanId={id} />
                 )}
               </div>
@@ -1008,7 +1076,132 @@ const ViewLoan = () => {
         </div>
       </CenterModal>
 
- 
+      <CenterModal isOpen={logRepayment} width={"40%"}>
+        <div className="p-4">
+          <div className="flex justify-between items-center text-white">
+            <div>
+              <p className="text-base font-semibold text-black">
+                Register disbursement
+              </p>
+            </div>
+            <button
+              className="text-black"
+              onClick={() => {
+                setLogRepayment(!logRepayment);
+              }}
+            >
+              x
+            </button>
+          </div>
+          <div className="text-sm text-swGray pt-4">
+            Provide payment information
+          </div>
+          <div className="pt-4">
+            <div className="pt-4 ">
+              <div className="text-black block text-gray-700 text-sm mb-2">Bank Details</div>
+
+              <div className="text-xs text-swGray">
+                <div className="flex gap-2 ">
+                  <p className="pt-3">Bank Name: </p>
+                  <p className="pt-3 font-semibold">
+                    {data?.data?.customerDetails?.bankAccount?.bankName}
+                  </p>
+                </div>
+                <div className="flex gap-2 ">
+                  <p className="pt-3">Account Number: </p>
+                  <p className="pt-3 font-semibold">
+                    {data?.data?.customerDetails?.bankAccount?.accountNumber}
+                  </p>
+                </div>
+                <div className="flex gap-2 ">
+                  <p className="pt-3">Account Name: </p>
+                  <p className="pt-3 font-semibold">
+                    {data?.data?.customerDetails?.bankAccount?.accountName}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="pt-4">
+              <InputField
+                name="amount"
+                label="Amount paid"
+                required={true}
+                placeholder="Enter amount"
+                onChange={(e) => {
+                  setDisbursementInputState(e);
+                  //  calCommitmentTotal(e);
+                }}
+                value={data?.data?.loanApplication?.loanAmount}
+                //   hintText="Amount paid that received the current repayment amount will spill into the next repayment cycle"
+              />
+            </div>
+            <div className="pt-4">
+              <SelectField
+                optionValue={paymentMethodTypes}
+                name="paymentMehod"
+                label="Payment Method"
+                required={true}
+                placeholder="Select payment method"
+                onChange={(selectedOption) => {
+                  handleDisbursementSelectChange(
+                    selectedOption,
+                    "paymentMehod"
+                  );
+                }}
+              />
+            </div>
+            <div className="pt-4">
+              <p className="font-semibold pt-2 text-sm">
+                Upload payment receipt
+              </p>
+              <p className="text-xs pt-2">
+                Document types uploaded should be JPEGS, PNG or PDF and should
+                not exceed 4mb
+              </p>
+              <div className="relative">
+                <input
+                  name="docs"
+                  type="file"
+                  id="fileInput"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
+                />
+                <label
+                  htmlFor="fileInput"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {formData?.docs ? "Change file" : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {formData?.docs ? (
+                  <div
+                    id="fileLabel"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">{formData?.docs?.name}</div>
+                    <div
+                      onClick={() => {
+                        deleteFile("docs");
+                      }}
+                    >
+                      <AiOutlineDelete color="red" size={20} />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+            <div className="flex pt-4 mb-4 items-end gap-2 justify-end">
+              <Button variant="secondary">Cancel</Button>
+              <Button variant="secondary" onClick={submitLoanUpdate}>Confirm</Button>
+            </div>
+          </div>
+        </div>
+      </CenterModal>
     </DashboardLayout>
   );
 };
