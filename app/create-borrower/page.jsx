@@ -230,7 +230,7 @@ const CreateCustomer = () => {
       <ToastContainer />
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
         <div className="flex justify-between">
-          <p className="text-lg font-semibold">Create borrower profile</p>
+          <p className="text-lg font-semibold text-swBlue">Create borrower profile</p>
         </div>
 
         <form id="add-customer-form">
@@ -360,7 +360,7 @@ const CreateCustomer = () => {
                   optionValue={countryOptions}
                   required={true}
                   placeholder={"Select country"}
-                  isSearchable={false}
+                  isSearchable={true}
                   onChange={(selectedOption) =>
                     handleSelectChange(selectedOption, "country")
                   }
@@ -373,7 +373,7 @@ const CreateCustomer = () => {
                   optionValue={states}
                   required={true}
                   placeholder={"Select state"}
-                  isSearchable={false}
+                  isSearchable={true}
                   onChange={(selectedOption) => {
                     handleStateChange(selectedOption);
                     handleSelectChange(selectedOption, "state");
@@ -387,7 +387,7 @@ const CreateCustomer = () => {
                   required={true}
                   optionValue={lga}
                   placeholder={"Select lga"}
-                  isSearchable={false}
+                  isSearchable={true}
                   onChange={(selectedOption) =>
                     handleSelectChange(selectedOption, "lga")
                   }

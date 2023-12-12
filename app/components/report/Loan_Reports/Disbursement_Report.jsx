@@ -1,4 +1,5 @@
 import { PiCalendarBlankLight } from "react-icons/pi";
+import DisbursedLoans from "../../loans/DisbursedLoans";
 import ReusableDataTable from "../../shared/tables/ReusableDataTable";
 
 const DisbursementReport = () => {
@@ -51,7 +52,7 @@ const DisbursementReport = () => {
 
       <div className="flex gap-5 mt-5">
         <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Total borrowers</p>
+          <p className="font-semibold">Total Disbursement</p>
           <div className="flex justify-between item-end">
             <p className="text-2xl font-bold mt-3">5,340</p>
             <p className="font-semibold">976,582,287.25</p>
@@ -67,7 +68,7 @@ const DisbursementReport = () => {
       </div>
 
       <div className="rounded-xl overflow-hidden bg-white border mt-5">
-        <ReusableDataTable headers={header} filters={true} />
+        <DisbursedLoans />
       </div>
     </main>
   );

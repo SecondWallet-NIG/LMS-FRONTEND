@@ -3,7 +3,7 @@
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-const LoanTable = () => {
+const DisbursedLoans = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
   const router = useRouter();
@@ -82,16 +82,11 @@ const LoanTable = () => {
     <div>
       {userId && (
         <ReusableDataTable
-          filterParams={[
-            { name: "Pending" },
-            { name: "Approved" },
-            { name: "Declined" },
-          ]}
           dataTransformer={customDataTransformer}
           onClickRow="/loan-applications/view-loan"
           headers={headers}
           initialData={[]}
-          apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
+          apiEndpoint="https://secondwallet-stag.onrender.com/api/disbursement"
           btnText={
             <div className="flex gap-1 items-center p-1">
               <p className="hidden lg:block">create loan</p>
@@ -102,12 +97,12 @@ const LoanTable = () => {
           }}
           filters={true}
           pagination={true}
-          userId={userId}
-          role={role}
+        //  userId={userId}
+          role="report"
         />
       )}
     </div>
   );
 };
 
-export default LoanTable;
+export default DisbursedLoans;

@@ -14,6 +14,7 @@ import { createEmployment } from "@/redux/slices/customerSlice";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { Rings } from "react-loader-spinner";
 import { IoMdCheckmark } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 const EmploymentDetailsModal = ({
   isOpen,
@@ -25,17 +26,18 @@ const EmploymentDetailsModal = ({
 }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const router = useRouter();
+  
   const { loading } = useSelector((state) => state.user);
   const [user, setUser] = useState({});
 
-  console.log(loading);
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
     }
   }, []);
 
-  console.log(user);
 
   const [formData, setFormData] = useState({
     employerName: "",
@@ -48,7 +50,6 @@ const EmploymentDetailsModal = ({
     incomePeriod: "",
   });
 
-  console.log(id);
   const [errors, setErrors] = useState({
     employerName: "",
     employerPhone: "",
@@ -150,7 +151,7 @@ const EmploymentDetailsModal = ({
       employerAddress: "",
       incomePeriod: "",
     });
-    setBankNameVal("");
+
   };
 
   const handleSubmit = (e) => {
@@ -176,15 +177,12 @@ const EmploymentDetailsModal = ({
         .unwrap()
         .then((res) => {
           dispatch(getCustomer(id));
-          toast.success(res?.message);
           onClose("employmentDetails");
-          successPopup(selected);
           resetForm();
           document.getElementById("add-user-form").reset();
           // Close the modal here
         })
         .catch((error) => {
-          console.log({ error });
           toast.error(error?.message);
         });
     }

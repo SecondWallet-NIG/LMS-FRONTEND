@@ -40,14 +40,20 @@ const CustomerLoanTable = ({id}) => {
       ),
       status: (
         <button
-          className={`${
-            item.status === "Pending"
-              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : "bg-[#F8A9A3]"
-          } px-2 py-1 rounded`}
-        >
-          {item.status}
-        </button>
+        className={`${
+          item.status === "Pending"
+            ? "bg-swIndicatorLightRed"
+            : item.status === "In Progress"
+            ? "bg-swIndicatorYellow"
+            : item.status === "Ready for Disbursal"
+            ? "bg-swIndicatorPurple"
+            : item.status === "Disbursed"
+            ? "bg-swBlue"
+            : "bg-swIndicatorDarkRed"
+        } px-2 py-1 rounded-full text-xs font-normal text-white`}
+      >
+        {item.status}
+      </button>
       ),  
     }));
   };

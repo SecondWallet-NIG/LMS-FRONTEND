@@ -20,6 +20,7 @@ import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLog
 import CustomerSummary from "@/app/components/customers/CustomerSummary";
 import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
 import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
+import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs";
 const CustomerProfile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const CustomerProfile = () => {
   const paths = ["Borrowers", "Borrowers Profile"];
 
   const { loading, error, data } = useSelector((state) => state.customer);
-  // console.log({ data000: data?.profileInfo?._id });
+
   const [isEmploymentDetailsModalOpen, setIsEmploymentDetailsModalOpen] =
     useState(false);
   const [isUploadDocumentsModalOpen, setIsUploadDocumentsModalOpen] =
@@ -37,7 +38,6 @@ const CustomerProfile = () => {
   const [infoHover, setInfoHover] = useState("");
   const [logSearch, setLogSearch] = useState(false);
 
-  // console.log(id);
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
   };
@@ -63,12 +63,12 @@ const CustomerProfile = () => {
 
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
-    // console.log(state);
   };
-  // console.log(data);
+
   useEffect(() => {
     dispatch(getCustomerById(id));
   }, []);
+
   return (
     <DashboardLayout isBackNav={true} paths={paths}>
       <div className="overflow-x-hidden">
@@ -231,7 +231,7 @@ const CustomerProfile = () => {
                       </p>
                     </div>
 
-                    <Button
+                    {/* <Button
                       onClick={() => {
                         handleActivityToggle("activity-log");
                       }}
@@ -241,7 +241,7 @@ const CustomerProfile = () => {
                     >
                       <AiOutlinePlus size={20} />
                       <p className="whitespace-nowrap">Add details</p>
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
                 <div className="p-2 border-t border-text-300">
@@ -457,14 +457,10 @@ const CustomerProfile = () => {
                   </div>
                 ) : (
                   <div className="-mt-20">
-                    <p className="font-semibold tex-lg">
+                    <div className="pt-4 font-semibold text-md text-swBlue pl-4">
                       Identification verification/Document
-                    </p>
-                    <p>Application form</p>
-                    <p>Guarantors form</p>
-                    <p>Loan addidafit</p>
-                    <p>Utility bill</p>
-                    <p>Application form</p>
+                    </div>
+                    <CustomerProfileDocs data={data} />
                   </div>
                 )}
               </div>
@@ -473,7 +469,7 @@ const CustomerProfile = () => {
           <div className="w-[70%] border-l h-screen border-gray-300">
             <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap">
               <div className="flex gap-2 text-xs lg:text-sm">
-                <button
+                {/* <button
                   onClick={() => handleActivityToggle("activity-logs")}
                   className={`${
                     activityButton === "activity-logs" &&
@@ -481,7 +477,7 @@ const CustomerProfile = () => {
                   } p-2 rounded-md cursor-pointer whitespace-nowrap`}
                 >
                   Activity logs
-                </button>
+                </button> */}
                 <button
                   onClick={() => handleActivityToggle("summary")}
                   className={`${
@@ -500,7 +496,7 @@ const CustomerProfile = () => {
                 >
                   Loans
                 </button>
-                <button
+                {/* <button
                   onClick={() => handleActivityToggle("disbursement")}
                   className={`${
                     activityButton === "disbursement" &&
@@ -517,7 +513,7 @@ const CustomerProfile = () => {
                   } p-2 rounded-md cursor-pointer`}
                 >
                   Repayments
-                </button>
+                </button> */}
               </div>
 
               <div className="flex justify-center items-center gap-2 relative ml-auto">

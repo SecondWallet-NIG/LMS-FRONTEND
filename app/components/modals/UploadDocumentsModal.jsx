@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Rings } from "react-loader-spinner";
 import CancelModal from "./CancelModal";
+import { getCustomerById } from "@/redux/slices/customerSlice";
 
 const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
   const dispatch = useDispatch();
@@ -21,20 +22,17 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
   const [cancelModal, setCancelModal] = useState(false);
 
   const documents = [
-    "Application form",
-    "Guarantor form",
-    "Loan affidafit",
     "Utility bill",
     "Statement of account",
     "ID card",
     "Power of attorney",
-    "Offer letter",
+    "KYC",
+    "Transfer of Ownership"
   ];
 
   const { loading, error, data } = useSelector((state) => state.customer);
 
   if (!isOpen) return null;
-  
 
   // This puts the names of  all the selected forms in an array
   const keysArray = Object.keys(selectedFilesObj);
@@ -58,14 +56,11 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
           updatedArr.splice(index, 1);
           setSelectedFilesArr(updatedArr);
           setSelectedFilesArr((prev) => [...prev, { [formName]: files[0] }]);
-          console.log(selectedFilesArr, "new arr");
 
           const updatedObj = { ...selectedFilesObj };
           delete updatedObj[formName];
           setSelectedFilesObj(updatedObj);
           setSelectedFilesObj((prev) => ({ ...prev, [formName]: files[0] }));
-          console.log(selectedFilesObj, "new obj");
-          // console.log(index);
         }
         if (files[0].size > 4 * 1024 * 1024) {
           alert("file size is greater than 4mb");
@@ -86,7 +81,6 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
     const updatedObj = { ...selectedFilesObj };
     delete updatedObj[fileName];
     setSelectedFilesObj(updatedObj);
-    console.log(index);
   };
 
   function resetUploadModal() {
@@ -97,26 +91,30 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
   }
 
   const handleProfileUpdate = (e) => {
+    let userId;
+    if (typeof window !== "undefined") {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      userId = storedUser?.data?.user?._id;
+    }
     e.preventDefault();
     const payload = new FormData();
     payload.append("utilityBill", selectedFilesObj["Utility bill"]);
-    payload.append(
-      "statementOfAccount",
-      selectedFilesObj["Statement of account"]
-    );
+    payload.append("statementOfAccount", selectedFilesObj["Statement of account"]);
     payload.append("idCard", selectedFilesObj["ID card"]);
-    // payload.append("kyc", selectedFilesObj["ID card"]);
+    payload.append("kyc", selectedFilesObj["KYC"]);
     payload.append("powerOfAttorney", selectedFilesObj["Power of attorney"]);
-    // payload.append("transferOfOwnership", selectedFilesObj["ID card"]);
+    payload.append("transferOfOwnership", selectedFilesObj["Transfer of Ownership"]);
     payload.append("customerProfileInformation", customerID);
+    payload.append("createdBy", userId);
 
     dispatch(identityVerification(payload))
       .unwrap()
       .then(() => {
-        console.log("Profile successfully updated");
         toast.success("Profile successfully updated");
         resetUploadModal();
-        successModal(true);
+        window.location.reload();
+        dispatch(getCustomerById(customerID))
+   
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -124,13 +122,13 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
   };
 
   return (
-    <CenterModal isOpen={isOpen} width={'50%'}>
+    <CenterModal isOpen={isOpen} width={"50%"}>
       <ToastContainer />
       <div>
         <div className="bg-swBlue flex justify-between items-center p-3 text-white">
           <div>
-            <p className="text-lg font-semibold">Work details</p>
-            <p className="text-xs">Update work details and information </p>
+            <p className="text-lg font-semibold">  Identity verification / Document</p>
+ 
           </div>
           <AiOutlineClose
             size={20}
@@ -139,28 +137,27 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
           />
         </div>
         <div className="p-5 pb-0 my-2  h-[22rem] overflow-auto custom-scrollbar">
-          <p className="text-lg font-semibold text-swBlack">
-            Identity verification/ Document
-          </p>
+      
           <p className="text-xs">
             Document types uploaded should be JPEGS, PNG or PDF and should not
             exceed 4mb
           </p>
           <div className="">
-            <p className="text-sm font- mt-5">Upload Application Form</p>
-
+      
             <div className="flex flex-col">
               <div>
                 {documents.map((item, docIndex) => (
                   <div key={docIndex}>
                     <div className="flex justify-start flex-col md:flex-row-reverse md:items-center gap-2  mt-5">
-                      <div className="w-full md:-mt-5">
+                    
+                   
+                      <div className="w-full">
                         {selectedFilesArr.length > 0 &&
                           selectedFilesArr
                             ?.filter((item) => item?.[documents[docIndex]])
                             .map((item, index) => (
                               <div
-                                className="flex flex-col gap-2 text-sm"
+                                className="flex flex-col gap-2 text-xs mt-5"
                                 key={index}
                               >
                                 <div className="w-full border rounded-md flex justify-between">
@@ -249,11 +246,12 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                             ))}
                       </div>
                       <div>
+                      <p className="text-sm pb-2">{item}</p>
                         <label
                           htmlFor={`fileInput${docIndex + 1}`}
-                          className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit whitespace-nowrap"
+                          className="border rounded-md py-2 px-8 cursor-pointer flex gap-2 fony-medium w-fit whitespace-nowrap text-sm"
                         >
-                          <FaPaperclip size={20} />
+                          <FaPaperclip size={16} />
                           {keysArray.includes(item)
                             ? "Change file"
                             : "Select file"}
@@ -265,8 +263,10 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                             onChange={(e) => handleFileInputChange(e, item)}
                             onClick={(e) => (e.target.value = null)}
                           />
+
                         </label>
-                        <p className="text-sm">{item}</p>
+                      
+                       
                       </div>
                     </div>
                   </div>

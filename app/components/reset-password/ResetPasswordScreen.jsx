@@ -62,7 +62,7 @@ const ResetPasswordScreen = ({
     const verificationToken = JSON.parse(
      localStorage.getItem("verificationCode")
     );
-    console.log({verificationToken, email});
+   
     const payload = { ...resetData, email: email, verificationToken: verificationToken };
     dispatch(resetPassword(payload))
       .unwrap()

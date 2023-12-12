@@ -54,7 +54,6 @@ function ReusableDataTable({
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [filterOptions, setFilterOptions] = useState(false);
 
-  console.log(data);
 
   const [dateRange, setDateRange] = useState([
     {
@@ -171,8 +170,10 @@ function ReusableDataTable({
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
       if (userId && role === "Loan Officer") {
-        // console.log("true oooo");
         apiUrl += `&userId=${userId}`;
+      }
+      if (role === "report") {
+        apiUrl += `&status=${"Disbursed"}`;
       }
       axios
         .get(apiUrl, {
@@ -221,7 +222,9 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-      // setIsLoading(true);
+      if (role === "report") {
+        apiUrl += `&status=${"Disbursed"}`;
+      }
       axios
         .get(apiUrl, {
           headers: {
@@ -328,7 +331,7 @@ function ReusableDataTable({
     <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
       <ToastContainer />
       <div className="">
-        {filters && data?.length > 0 && (
+        {filters &&  (
           <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
             <div className="flex gap-2 items-center justify-between w-full md:w-fit">
               <div className="flex border border-1 items-center mb-4 pl-2 ">
@@ -350,16 +353,21 @@ function ReusableDataTable({
                   <p>Filter By Date</p>
                 </button>
               </div>
-              <div className="flex gap-3 items-center">
-                <button
-                  onClick={() => {
-                    setFilterOptions(true);
-                  }}
-                  className=" flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg"
-                >
-                  <p>Filter by Status</p>
-                </button>
-              </div>
+              {
+                filterParams && (
+                  <div className="flex gap-3 items-center">
+                  <button
+                    onClick={() => {
+                      setFilterOptions(true);
+                    }}
+                    className=" flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg"
+                  >
+                    <p>Filter by Status</p>
+                  </button>
+                </div>
+                )
+              }
+          
             </div>
 
             <div className="mb-4 flex items-center justify-between w-full md:w-fit">
@@ -616,47 +624,53 @@ function ReusableDataTable({
           </div>
         </div>
       </CenterModal>
-      <CenterModal
-        width={"30%"}
-        isOpen={filterOptions}
-        onClose={() => {
-          setFilterOptions(!filterOptions);
-        }}
-      >
-        <div className="bg-white p-4 border shadow-lg">
-          <div className="w-full items-center">
-            {Array.isArray(filterParams) &&
-              filterParams?.map((item) => (
-                <div
-                  key={item._id}
-        
-                  className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
-                >
-                  <div className="flex justify-between items-center mb-2">
-                    <div>
-                      <div className="text-xs text-gray-600 font-semibold">
-                        {item.name}
+      {
+        filterParams && (
+          <CenterModal
+          width={"30%"}
+          isOpen={filterOptions}
+          onClose={() => {
+            setFilterOptions(!filterOptions);
+          }}
+        >
+    
+          <div className="bg-white p-4 border shadow-lg">
+            <div className="w-full items-center">
+              {Array.isArray(filterParams) &&
+                filterParams?.map((item) => (
+                  <div
+                    key={item._id}
+          
+                    className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <div>
+                        <div className="text-xs text-gray-600 font-semibold">
+                          {item.name}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+            </div>
+            <div className="flex justify-between">
+              <Button variant="danger" onClick={() => setFilterOptions(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  fetchData(currentPage, perPage, sortField, sortDirection);
+                  setFilterOptions(false);
+                }}
+              >
+                Apply
+              </Button>
+            </div>
           </div>
-          <div className="flex justify-between">
-            <Button variant="danger" onClick={() => setFilterOptions(false)}>
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                fetchData(currentPage, perPage, sortField, sortDirection);
-                setFilterOptions(false);
-              }}
-            >
-              Apply
-            </Button>
-          </div>
-        </div>
-      </CenterModal>
+        </CenterModal>
+        )
+      }
+    
     </div>
   );
 }

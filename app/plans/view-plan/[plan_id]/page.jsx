@@ -46,7 +46,7 @@ const ViewPlan = () => {
         <div className="p-5 flex flex-col gap-5 font-500">
           <p className="text-lg font-semibold">Loan details</p>
           <div className="flex">
-            <p className="min-w-[15rem]">Intrest type</p>
+            <p className="min-w-[15rem]">Interest type</p>
             <p>Flat intrest</p>
           </div>
           <div className="flex">

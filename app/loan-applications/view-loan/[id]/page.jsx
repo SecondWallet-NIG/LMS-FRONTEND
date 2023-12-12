@@ -18,7 +18,10 @@ import { IoIosClose } from "react-icons/io";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import { IoCopyOutline } from "react-icons/io5";
 import { LuCalendar } from "react-icons/lu";
-import { disburseLoan, getSingleLoan } from "@/redux/slices/loanApplicationSlice";
+import {
+  disburseLoan,
+  getSingleLoan,
+} from "@/redux/slices/loanApplicationSlice";
 import RequestApproval from "@/app/components/modals/loans/RequestApproval";
 import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
 import { updateLoanApplication } from "@/redux/slices/loanApplicationSlice";
@@ -41,9 +44,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 const ViewLoan = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { error, data } = useSelector(
-    (state) => state.loanApplication
-  );
+  const { error, data } = useSelector((state) => state.loanApplication);
   const loanPackage = useSelector((state) => state.loanPackage);
   const interestType = useSelector((state) => state.interestType);
 
@@ -65,10 +66,9 @@ const ViewLoan = () => {
   const [openLoanPeriod, setOpenLoanPeriod] = useState(false);
   const [loanDurationVal, setLoanDurationVal] = useState(0);
 
-
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     amount: "",
     paymentMehod: "",
@@ -132,9 +132,6 @@ const ViewLoan = () => {
       dispatch(getSingleLoan(id));
       setOpenLoanAmount(false);
       setFormData({});
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
     } else {
       let updatedData = new FormData();
       updatedData.append(update, formData[update]);
@@ -144,30 +141,8 @@ const ViewLoan = () => {
       setOpenInterestType(false);
       setOpenRepaymentType(false);
       setOpenLoanPeriod(false);
-      // console.log([...updatedData]);
       setFormData({});
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
     }
-    // if (update === "interestType") {
-    //   let updatedData = new FormData();
-    //   updatedData.append("interestType", formData.interestType);
-    //   dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
-    //   dispatch(getSingleLoan(id));
-    //   setOpenInterestType(false);
-    //   // console.log([...updatedData][0]);
-    //   setFormData({});
-    // }
-    // if (update === "repaymentType") {
-    //   let updatedData = new FormData();
-    //   updatedData.append("repaymentType", formData.repaymentType);
-    //   // dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
-    //   // dispatch(getSingleLoan(id));
-    //   // setOpenRepaymentType(false);
-    //   console.log([...updatedData]);
-    //   // setFormData({});
-    // }
   };
 
   const modifyLoanPackageData = (arr) => {
@@ -228,13 +203,13 @@ const ViewLoan = () => {
       .then(() => {
         toast("Loan status Updated to disbursed");
         setLoading(false);
-        setLogRepayment(!logRepayment)
+        setLogRepayment(!logRepayment);
         dispatch(getSingleLoan(id));
       })
       .catch((error) => {
         toast.error(`${error?.message}`);
         setLoading(false);
-        setLogRepayment(!logRepayment)
+        setLogRepayment(!logRepayment);
       });
   };
 
@@ -286,11 +261,21 @@ const ViewLoan = () => {
                     {data?.data?.customerDetails?.firstName}{" "}
                     {data?.data?.customerDetails?.lastName}
                     <button
-                      className={
-                        "ml-4 text-white text-xs bg-[#2769b3d9] px-2 py-1.5 rounded-full font-medium"
-                      }
+                      className={`${
+                        data?.data?.loanApplication?.status === "Pending"
+                          ? "bg-swIndicatorLightRed"
+                          : data?.data?.loanApplication?.status ===
+                            "In Progress"
+                          ? "bg-swIndicatorYellow"
+                          : data?.data?.loanApplication?.status ===
+                            "Ready for Disbursal"
+                          ? "bg-swIndicatorPurple"
+                          : data?.data?.loanApplication?.status === "Disbursed"
+                          ? "bg-swBlue"
+                          : "bg-swIndicatorDarkRed"
+                      } px-2 py-1 rounded-full ml-4 text-xs font-normal text-white`}
                     >
-                      <p>{data?.data?.loanApplication?.status} </p>
+                      {data?.data?.loanApplication?.status}
                     </button>
                   </p>
                   <p className="text-xs">SW-456789</p>
@@ -339,7 +324,11 @@ const ViewLoan = () => {
                       className={
                         "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
                       }
-                      disabled={data?.data?.loanApplication?.status == "Disbursed" ? true : false}
+                      disabled={
+                        data?.data?.loanApplication?.status == "Disbursed"
+                          ? true
+                          : false
+                      }
                       onClick={() => {
                         setLogRepayment(!logRepayment);
                       }}
@@ -555,19 +544,22 @@ const ViewLoan = () => {
           </div>
           {data?.data?.loanApplication?.createdBy === useriD ? (
             <div className="ml-5 mr-5 mt-5">
-              <h6 className="text-center font-semibold p-2">
+              <h6 className="text-center font-semibold p-2 ">
                 Loan Approval Needed
               </h6>
               <div className="border rounded-lg">
                 <table className=" w-full ">
                   <thead className="bg-swLightGray ">
                     <tr>
+                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                        ID
+                      </th>
                       <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                        Approval ID
+                        Action
                       </th>
 
                       <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
-                        <h1>Approval Type</h1>
+                        <h1>Approval Status</h1>
                       </th>
 
                       <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
@@ -579,7 +571,20 @@ const ViewLoan = () => {
                     {Array.isArray(loanApprovals?.data?.data) &&
                       loanApprovals?.data?.data?.map((item, index) => (
                         <tr className="text-xs" key={index}>
-                          <td className="p-2">{item?.approvalTitle}</td>
+                             <td className="p-2  text-black">{item?.approvalLevel}</td>
+                          <td className="p-2 text-black">
+                            {item?.approvalLevel == 1
+                              ? "Approve borrowers Credit"
+                              : item?.approvalLevel == 2
+                              ? "Vett Loan"
+                              : item?.approvalLevel == 3
+                              ? "Request payout authorization"
+                              : item?.approvalLevel == 4
+                              ? "MD/CEO Approval"
+                              : item?.approvalLevel == 5
+                              ? "Payout Approval"
+                              : null}
+                          </td>
                           <td className="p-2">
                             <button
                               className={`cursor-none ${
@@ -710,7 +715,6 @@ const ViewLoan = () => {
                                     >
                                       Decline
                                     </button>
-                
                                   </div>
                                 </td>
                               </tr>
@@ -1098,7 +1102,9 @@ const ViewLoan = () => {
           </div>
           <div className="pt-4">
             <div className="pt-4 ">
-              <div className="text-black block text-gray-700 text-sm mb-2">Bank Details</div>
+              <div className="text-black block text-gray-700 text-sm mb-2">
+                Bank Details
+              </div>
 
               <div className="text-xs text-swGray">
                 <div className="flex gap-2 ">
@@ -1197,7 +1203,9 @@ const ViewLoan = () => {
             </div>
             <div className="flex pt-4 mb-4 items-end gap-2 justify-end">
               <Button variant="secondary">Cancel</Button>
-              <Button variant="secondary" onClick={submitLoanUpdate}>Confirm</Button>
+              <Button variant="secondary" onClick={submitLoanUpdate}>
+                Confirm
+              </Button>
             </div>
           </div>
         </div>

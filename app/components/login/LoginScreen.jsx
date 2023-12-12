@@ -48,54 +48,42 @@ const LoginScreen = () => {
     }
   };
 
-  const _handleLogin = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        "https://secondwallet-stag.onrender.com/api/auth/login",
-        loginData
-      );
-      setLoading(false);
-      toast.success(response.data.message);
 
-      const user = response.data.data.user;
-      ///    localStorage.setItem("user", JSON.stringify(user));
-
-      if (user.firstLogin) {
-        router.push("/onboarding");
-      } else {
-        router.push("/onboarding");
-      }
-    } catch (error) {
-      toast.error(error?.response?.data?.error);
-      setLoading(false);
-    }
-  };
 
   const handleLogin = () => {
     // Dispatch the loginUser async thunk with the loginData
     dispatch(loginUser(loginData))
       .unwrap()
-      .then(() => {
+      .then((res) => {
+        localStorage.setItem("user", JSON.stringify(res));
+        localStorage.setItem("email", JSON.stringify(res?.data?.user?.email));
         toast.success("Login successful");
+        if (res?.data?.user?.firstLogin === true) {
+          router.push("/onboarding");
+        } else {
+          router.push("/dashboard");
+        }
       })
       .catch((error) => {
         toast.error(error.message);
       });
   };
 
-  // Handle the response data when it changes
-  useEffect(() => {
+  // // Handle the response data when it changes
+  // useEffect(() => {
+  //  let x = JSON.parse(localStorage.getItem("user"))
   
-    if (userData) {
-      localStorage.setItem("user", JSON.stringify(userData));
-      if (userData?.data?.user?.firstLogin === true) {
-        router.push("/onboarding");
-      } else {
-        router.push("/dashboard");
-      }
-    }
-  }, [userData]);
+  //   if (x) {
+  //   //  localStorage.setItem("user", JSON.stringify(userData));
+  //     if (userData?.data?.user?.firstLogin === true) {
+  //       router.push("/onboarding");
+  //     } else {
+  //       router.push("/dashboard");
+  //     }
+  //   } else {
+  //     router.push("/");
+  //   }
+  // }, [userData]);
 
   const handleSeePassWord = () => {
     setSeePassword(!seePassword);

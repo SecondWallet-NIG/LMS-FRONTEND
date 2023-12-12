@@ -7,34 +7,34 @@ import NavBar from "../navigation/NavBar";
 import Sidebar from "../navigation/SideBar";
 
 const DashboardLayout = ({ children, paths, isBackNav }) => {
-  const [minimizeSidebar, setMinimizeSidebar] = useState("false");
+  const [minimizeSidebar, setMinimizeSidebar] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("minimizeSidebar"));
-    setMinimizeSidebar(data);
+    setMinimizeSidebar(data === true); // Use strict equality
 
-    // Check if the code is running in the browser environment
     if (typeof window !== 'undefined') {
-      // Parse the stored user information from localStorage
       const storedUser = localStorage.getItem('user');
+      
+      setIsAuthenticated(!!storedUser); // Check if storedUser is not null or undefined
 
-      // Update isAuthenticated state based on the stored user information
-      setIsAuthenticated(JSON.parse(storedUser));
-
-      // Redirect to the home page if not authenticated
-      if (!JSON.parse(storedUser)) {
+      if (!storedUser) {
         router.push('/');
       }
     }
-  }, []);
+  }, [router]);
 
   return (
     <div className="h-screen">
       <div className="flex h-full w-full">
-        <Sidebar />
-        <NavBar paths={paths} isBackNav={isBackNav} />
+        {isAuthenticated && (
+          <div>
+            <Sidebar />
+            <NavBar paths={paths} isBackNav={isBackNav} />
+          </div>
+        )}
         <div className="h-full w-[95%] ml-auto mt-[4.5rem] text-swGray">
           {isAuthenticated && children}
         </div>
