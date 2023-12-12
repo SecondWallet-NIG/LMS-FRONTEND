@@ -141,12 +141,13 @@ const CustomerProfile = () => {
                     <BsThreeDotsVertical size={20} />
                   </div>
                 </div>
-                <Button
+                <Link
+                  href={"/create-loan"}
                   variant={"primary"}
                   className="text-center rounded-md  gap-2 border w-[180px] mt-2"
                 >
                   Create loan
-                </Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -244,112 +244,38 @@ const ViewLoan = () => {
             className="flex gap-2 border-b border-gray-300 items-end py-4 px-8"
           >
             <div className="w-1/2">
-              <div className="flex ">
-                <div>
-                  <Image
-                    src={
-                      "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
-                    }
-                    alt="user image"
-                    width={60}
-                    height={60}
-                  />
-                </div>
-                <div className="ml-4 h-fit">
-                  <p className="text-md font-semibold text-swBlue mb-1">
-                    {/* {console.log({ data })} */}
-                    {data?.data?.customerDetails?.firstName}{" "}
-                    {data?.data?.customerDetails?.lastName}
-                    <button
-                      className={`${
-                        data?.data?.loanApplication?.status === "Pending"
-                          ? "bg-swIndicatorLightRed"
-                          : data?.data?.loanApplication?.status ===
-                            "In Progress"
-                          ? "bg-swIndicatorYellow"
-                          : data?.data?.loanApplication?.status ===
-                            "Ready for Disbursal"
-                          ? "bg-swIndicatorPurple"
-                          : data?.data?.loanApplication?.status === "Disbursed"
-                          ? "bg-swBlue"
-                          : "bg-swIndicatorDarkRed"
-                      } px-2 py-1 rounded-full ml-4 text-xs font-normal text-white`}
-                    >
-                      {data?.data?.loanApplication?.status}
-                    </button>
-                  </p>
-                  <p className="text-xs">SW-456789</p>
-
-                  <div className="flex gap-2 items-center h-fit w-fit mt-4">
-                    {/* <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                      <Link
-                        href="mailto: helloyt@gmail.com"
-                        className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                      >
-                        <AiOutlineMail size={15} />
-                      </Link>
-                    </div>
-                    <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                      <Link
-                        href="mailto: helloyt@gmail.com"
-                        className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                      >
-                        <FiPhone size={15} />
-                      </Link>
-                    </div>
-                    <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                      <Link
-                        href="mailto: helloyt@gmail.com"
-                        className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                      >
-                        <LuCalendar size={15} />
-                      </Link>
-                    </div>
-                    <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                      <Link
-                        href="mailto: helloyt@gmail.com"
-                        className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                      >
-                        <FiDatabase size={15} />
-                      </Link>
-                    </div> */}
-                    {/* <button
-                      className={
-                        "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
+              <Link
+                href={`/borrowers/profile/${data?.data?.customerDetails?._id}`}
+                className=""
+              >
+                <div className="flex w-fit hover:bg-swLightGray p-2 rounded-lg">
+                  <div>
+                    <Image
+                      src={
+                        "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                       }
-                    >
-                      <p>{data?.data?.loanApplication?.status} </p>
-                    </button> */}
-                    <Button
-                      className={
-                        "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
-                      }
-                      disabled={
-                        data?.data?.loanApplication?.status == "Disbursed"
-                          ? true
-                          : false
-                      }
-                      onClick={() => {
-                        setLogRepayment(!logRepayment);
-                      }}
-                    >
-                      <p>Disburse Loan</p>
-                    </Button>
-                    <button
-                      onClick={() => {
-                        router.push(
-                          `/borrowers/profile/${data?.data?.customerDetails?._id}`
-                        );
-                      }}
-                      className={
-                        "text-swBlue text-sm bg-white px-5 py-2 ml-3 rounded-lg font-medium"
-                      }
-                    >
-                      View profile
-                    </button>
+                      alt="user image"
+                      width={60}
+                      height={60}
+                    />
+                  </div>
+                  <div className="ml-4 h-fit">
+                    <p className="text-md font-semibold text-swBlue mb-1">
+                      {/* {console.log({ data })} */}
+                      {data?.data?.customerDetails?.firstName}{" "}
+                      {data?.data?.customerDetails?.lastName}
+                    </p>
+                    <p className="text-xs">SW-456789</p>
                   </div>
                 </div>
-              </div>
+              </Link>
+              <button
+                className={
+                  "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium mt-2"
+                }
+              >
+                <p>{data?.data?.loanApplication?.status} </p>
+              </button>
             </div>
             <div className="w-1/2">
               <div className="flex justify-between items-center gap-5">
@@ -551,7 +477,7 @@ const ViewLoan = () => {
                 <table className=" w-full ">
                   <thead className="bg-swLightGray ">
                     <tr>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                         ID
                       </th>
                       <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
@@ -571,7 +497,9 @@ const ViewLoan = () => {
                     {Array.isArray(loanApprovals?.data?.data) &&
                       loanApprovals?.data?.data?.map((item, index) => (
                         <tr className="text-xs" key={index}>
-                             <td className="p-2  text-black">{item?.approvalLevel}</td>
+                          <td className="p-2  text-black">
+                            {item?.approvalLevel}
+                          </td>
                           <td className="p-2 text-black">
                             {item?.approvalLevel == 1
                               ? "Approve borrowers Credit"
@@ -746,7 +674,7 @@ const ViewLoan = () => {
                   >
                     Activity logs
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => handleActivityToggle("summary")}
                     className={`${
                       activityButton === "summary" &&
@@ -754,7 +682,7 @@ const ViewLoan = () => {
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Summary
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleActivityToggle("loans")}
                     className={`${
@@ -762,9 +690,9 @@ const ViewLoan = () => {
                       "font-semibold text-swBlue bg-blue-50"
                     } p-2 rounded-md cursor-pointer`}
                   >
-                    Loan Docs
+                    Loan docs
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => handleActivityToggle("disbursement")}
                     className={`${
                       activityButton === "disbursement" &&
@@ -772,7 +700,7 @@ const ViewLoan = () => {
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Disbursment
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleActivityToggle("repayment")}
                     className={`${
@@ -824,7 +752,6 @@ const ViewLoan = () => {
               </div>
               <div className="p-2">
                 {activityButton === "activity-logs" && <CustomerActivityLogs />}
-                {activityButton === "summary" && <Summary />}
                 {activityButton === "loans" && (
                   <CustomerLoanDoc data={data?.data} />
                 )}
@@ -1077,137 +1004,6 @@ const ViewLoan = () => {
           >
             Update loan period
           </Button>
-        </div>
-      </CenterModal>
-
-      <CenterModal isOpen={logRepayment} width={"40%"}>
-        <div className="p-4">
-          <div className="flex justify-between items-center text-white">
-            <div>
-              <p className="text-base font-semibold text-black">
-                Register disbursement
-              </p>
-            </div>
-            <button
-              className="text-black"
-              onClick={() => {
-                setLogRepayment(!logRepayment);
-              }}
-            >
-              x
-            </button>
-          </div>
-          <div className="text-sm text-swGray pt-4">
-            Provide payment information
-          </div>
-          <div className="pt-4">
-            <div className="pt-4 ">
-              <div className="text-black block text-gray-700 text-sm mb-2">
-                Bank Details
-              </div>
-
-              <div className="text-xs text-swGray">
-                <div className="flex gap-2 ">
-                  <p className="pt-3">Bank Name: </p>
-                  <p className="pt-3 font-semibold">
-                    {data?.data?.customerDetails?.bankAccount?.bankName}
-                  </p>
-                </div>
-                <div className="flex gap-2 ">
-                  <p className="pt-3">Account Number: </p>
-                  <p className="pt-3 font-semibold">
-                    {data?.data?.customerDetails?.bankAccount?.accountNumber}
-                  </p>
-                </div>
-                <div className="flex gap-2 ">
-                  <p className="pt-3">Account Name: </p>
-                  <p className="pt-3 font-semibold">
-                    {data?.data?.customerDetails?.bankAccount?.accountName}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="pt-4">
-              <InputField
-                name="amount"
-                label="Amount paid"
-                required={true}
-                placeholder="Enter amount"
-                onChange={(e) => {
-                  setDisbursementInputState(e);
-                  //  calCommitmentTotal(e);
-                }}
-                value={data?.data?.loanApplication?.loanAmount}
-                //   hintText="Amount paid that received the current repayment amount will spill into the next repayment cycle"
-              />
-            </div>
-            <div className="pt-4">
-              <SelectField
-                optionValue={paymentMethodTypes}
-                name="paymentMehod"
-                label="Payment Method"
-                required={true}
-                placeholder="Select payment method"
-                onChange={(selectedOption) => {
-                  handleDisbursementSelectChange(
-                    selectedOption,
-                    "paymentMehod"
-                  );
-                }}
-              />
-            </div>
-            <div className="pt-4">
-              <p className="font-semibold pt-2 text-sm">
-                Upload payment receipt
-              </p>
-              <p className="text-xs pt-2">
-                Document types uploaded should be JPEGS, PNG or PDF and should
-                not exceed 4mb
-              </p>
-              <div className="relative">
-                <input
-                  name="docs"
-                  type="file"
-                  id="fileInput"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {formData?.docs ? "Change file" : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.docs ? (
-                  <div
-                    id="fileLabel"
-                    className="bg-swLightGray p-2 flex justify-between"
-                  >
-                    <div className="text-xs">{formData?.docs?.name}</div>
-                    <div
-                      onClick={() => {
-                        deleteFile("docs");
-                      }}
-                    >
-                      <AiOutlineDelete color="red" size={20} />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-            <div className="flex pt-4 mb-4 items-end gap-2 justify-end">
-              <Button variant="secondary">Cancel</Button>
-              <Button variant="secondary" onClick={submitLoanUpdate}>
-                Confirm
-              </Button>
-            </div>
-          </div>
         </div>
       </CenterModal>
     </DashboardLayout>

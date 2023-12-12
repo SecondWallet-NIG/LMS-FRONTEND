@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CenterModal from "../modals/CenterModal";
 import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
 import PreviewLoanDocs from "./PreviewLoanDocs";
@@ -14,6 +14,8 @@ const CustomerLoanDoc = (data) => {
     setUrl(content);
     setIsOpen(true);
   };
+  // console.log(data?.data?.customerDetails?._id);
+
   return (
     <main>
       <div className="pt-4 font-semibold text-md text-swBlue pl-4">
@@ -168,7 +170,9 @@ const CustomerLoanDoc = (data) => {
           onClose={() => {
             setUploadModalOpen(!uploadModalOpen);
           }}
+          customerId={data?.data?.customerDetails?._id}
           fieldType={fieldType}
+          loanId={data?.data?.loanApplication?._id}
         />
       </CenterModal>
     </main>

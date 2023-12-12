@@ -8,19 +8,11 @@ import { useParams } from "next/navigation";
 import Button from "../../shared/buttonComponent/Button";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
 import { approveLoanRequest } from "@/redux/slices/loanApprovalSlice";
+import { updateLoanApplication } from "@/redux/slices/loanApplicationSlice";
+import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
 
-const UploadLoanDocs = ({
-  isOpen,
-  onClose,
-  width,
-  data,
-  fieldType,
-  selected,
-  approvalId,
-  approvalLevel,
-}) => {
+const UploadLoanDocs = ({ onClose, customerId, fieldType, loanId }) => {
   const dispatch = useDispatch();
-  const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
@@ -29,20 +21,8 @@ const UploadLoanDocs = ({
     collaterals: "",
     guarantorForm: null,
     loanAffidavit: null,
+    customerId: customerId,
   });
-  console.log({ fieldType });
-
-  const modifyUsersToApprove = (user) => {
-    if (Array.isArray(user)) {
-      const users = user.filter((item) => item?.role?.name === approvalLevel);
-      setUsersToApprove(
-        users.map((item) => ({
-          label: item.firstName + " " + item.lastName,
-          value: item._id,
-        }))
-      );
-    }
-  };
 
   const handleFileChange = (e) => {
     let { name, files } = e.target;
@@ -54,32 +34,36 @@ const UploadLoanDocs = ({
     }));
   };
 
-  const submitLoan = (e) => {
-    setLoading(true);
-    let _formData = {
-      approvalLevel: approvalId,
-      approvalNote: formData?.approvalNote,
-      taskId: localStorage.getItem("taskId"),
-    };
-    const payload = { id, _formData };
+  const uploadLoanDoc = (e) => {
+    let userId;
 
+    setLoading(true);
+    if (typeof window !== "undefined") {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      userId = storedUser?.data?.user?._id;
+    }
     e.preventDefault();
-    dispatch(approveLoanRequest(payload))
+
+    const payload = new FormData();
+    payload.append("customer", formData.customerId);
+    fieldType === "applicationForm" &&
+      payload.append("applicationForm", formData.applicationForm);
+    fieldType == "loanAffidavit" &&
+      payload.append("loanAffidavit", formData.loanAffidavit);
+    fieldType == "guarantorForm" &&
+      payload.append("guarantorForm", formData.guarantorForm);
+    fieldType == "collaterals" &&
+      payload.append("collaterals", formData.collaterals);
+
+    dispatch(updateLoanApplication({ loanId: id, payload }))
       .unwrap()
       .then(() => {
-        toast("Loan approved for this level");
+        toast("Document uploaded");
         setLoading(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       })
       .catch((error) => {
-        console.log({ error });
         toast.error(`${error?.message}`);
         setLoading(false);
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 2000);
       });
   };
 
@@ -89,10 +73,6 @@ const UploadLoanDocs = ({
       [name]: null,
     }));
   };
-  //let taskId;
-  useEffect(() => {
-    modifyUsersToApprove(data);
-  }, [data]);
 
   return (
     <main>
@@ -302,10 +282,10 @@ const UploadLoanDocs = ({
               </Button>
               <Button
                 disabled={loading ? true : false}
-                onClick={submitLoan}
+                onClick={uploadLoanDoc}
                 className="mt-4 block w-full rounded-lg"
               >
-                Upload 
+                Upload
               </Button>
             </div>
           </div>
