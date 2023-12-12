@@ -25,7 +25,6 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
     loanAffidavit: null,
     customerId: customerId,
   });
-  console.log(formData);
   const handleFileChange = (e) => {
     let { name, files } = e.target;
     const file = files[0];
