@@ -635,7 +635,7 @@ const ViewLoan = () => {
               Array.isArray(loanApprovals?.data?.data) &&
               loanApprovals?.data?.data.filter(
                 (item) =>
-                  item?.assignee?._id === useriD &&
+                  item?.assignee?._id != useriD &&
                   item?.status === "Approval Requested"
               ).length > 0 ? (
                 <div>
@@ -667,7 +667,7 @@ const ViewLoan = () => {
                           loanApprovals?.data?.data
                             .filter(
                               (item) =>
-                                item?.assignee?._id === useriD &&
+                                item?.assignee?._id === "6564b8607e41dc6aa2b5304b" &&
                                 item?.status === "Approval Requested"
                             )
                             .map((item, index) => (
