@@ -14,6 +14,7 @@ const CustomerLoanDoc = (data) => {
     setUrl(content);
     setIsOpen(true);
   };
+  console.log(data?.data?.customerDetails?._id);
   return (
     <main>
       <div className="pt-4 font-semibold text-md text-swBlue pl-4">
@@ -169,6 +170,7 @@ const CustomerLoanDoc = (data) => {
             setUploadModalOpen(!uploadModalOpen);
           }}
           fieldType={fieldType}
+          customerId={data?.data?.customerDetails?._id}
         />
       </CenterModal>
     </main>
