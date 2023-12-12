@@ -78,7 +78,6 @@ const ViewLoan = () => {
   const handleFileChange = (e) => {
     let { name, files } = e.target;
     const file = files[0];
-    console.log({ file });
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: file,
@@ -170,7 +169,6 @@ const ViewLoan = () => {
       ...prevFormData,
       [name]: value,
     }));
-    console.log(value);
   };
 
   const repaymentTypeData = [
