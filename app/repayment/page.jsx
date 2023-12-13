@@ -13,7 +13,9 @@ const Repayment = () => {
   ];
 
   const header = [
+    { id: "loanId", label: "Loan ID" },
     { id: "dueDate", label: "Due Date" },
+    { id: "repaymentNumber", label: "Loan Repayment No" },
     { id: "amountDue", label: "Due Amount" },
     { id: "amountPaid", label: "Amount Paid" },
     { id: "balanceToPay", label: "Balance To Pay" },
@@ -25,6 +27,16 @@ const Repayment = () => {
   const customDataTransformer = (apiData) => {
     return apiData?.map((item) => ({
       id: item._id,
+      loanId: (
+        <div className="text-md font-[500] text-gray-700">
+          SWL-{item?.loanApplication?.loanId}
+        </div>
+      ),
+      repaymentNumber: (
+        <div className="text-md font-[500] text-gray-700">
+          {item?.repaymentNumber}
+        </div>
+      ),
       dueDate: (
         <div className="text-md font-[500] text-gray-700">
           {item.dueDate?.slice(0, 10)}
@@ -46,7 +58,15 @@ const Repayment = () => {
         </div>
       ),
       status: (
-        <div className="text-md font-[500] text-gray-700">{item?.status}</div>
+        <button
+        className={`${
+          item.status === "Unpaid"
+            ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+            : "bg-[#F8A9A3]"
+        } px-2 py-1 rounded-full`}
+      >
+        {item.status}
+      </button>
       ),
     }));
   };
