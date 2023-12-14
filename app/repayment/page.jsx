@@ -44,17 +44,17 @@ const Repayment = () => {
       ),
       amountDue: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.amountDue}
+          {item?.amountDue.toLocaleString()}
         </div>
       ),
       amountPaid: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.amountPaid}
+          {item?.amountPaid.toLocaleString()}
         </div>
       ),
       balanceToPay: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.balanceToPay}
+          {item?.balanceToPay.toLocaleString()}
         </div>
       ),
       status: (
