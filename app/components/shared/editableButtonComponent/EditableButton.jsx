@@ -10,7 +10,7 @@ const EditableButton = ({
 }) => {
   return (
     <button
-      className={`flex text-sm font-semibold border-2 rounded-lg overflow-hidden h-fit ${
+      className={`flex text-sm font-semibold border-2 rounded-lg overflow-hidden h-fit relative ${
         disabled ? "cursor-not-allowed" : "cursor-pointer"
       } ${
         whiteBtn
@@ -22,12 +22,15 @@ const EditableButton = ({
       disabled={disabled}
       onClick={onClick}
     >
+      {disabled && (
+        <div className="absolute top-0 left-0 w-full h-full bg-white opacity-70"></div>
+      )}
       <div
         className={` ${
           whiteBtn
-            ? `bg-white border-2`
+            ? `bg-white border border-white`
             : blueBtn
-            ? `bg-swBlue border-2 text-white`
+            ? `bg-swBlue border text-white border-white`
             : ""
         } ${className} flex items-center text-sm semi-bold py-2 px-5 rounded-lg gap-1`}
       >

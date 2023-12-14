@@ -12,7 +12,7 @@ import {
   TbFileDollar,
   TbReportMoney,
 } from "react-icons/tb";
-import {AiOutlineSetting } from "react-icons/ai";
+import { AiOutlineSetting } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
@@ -23,7 +23,6 @@ import { FiArrowDownLeft, FiArrowUpRight, FiSend } from "react-icons/fi";
 import { IoMdCard } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
-
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -48,7 +47,7 @@ const Sidebar = () => {
   return (
     <main
       className={`fixed h-full border-r bg-white border-r-gray-300 flex flex-col font-medium z-[102] transition-all ease-in-out duration-1000 ${
-        sideBarOpen ? "w-1/5" : "w-[5%]"
+        sideBarOpen ? "w-1/5" : "w-[10%] md:w-[5%]"
       }`}
       onMouseEnter={() => handleSidebarOpen(true)}
       onMouseLeave={() => handleSidebarOpen(false)}
@@ -57,13 +56,14 @@ const Sidebar = () => {
         {sideBarOpen ? (
           <Image src={companyLogo} alt="company logo" priority={true} />
         ) : (
-          <Image
-            src={companyLogoIcon}
-            alt="company logo"
-            priority={true}
-            height={45}
-            width={45}
-          />
+          <div className="relative min-h-[2.5rem] min-w-[2.5rem]">
+            <Image
+              src={companyLogoIcon}
+              alt="company logo"
+              priority={true}
+              layout="fill"
+            />
+          </div>
         )}
       </div>
 
@@ -168,7 +168,7 @@ const Sidebar = () => {
               setActiveLink("disbursement");
             }}
           />
-        
+
           <SidebarLink
             icon={
               <FiArrowDownLeft
@@ -229,7 +229,7 @@ const Sidebar = () => {
           <SidebarLink
             icon={<AiOutlineSetting size={20} />}
             text="Settings"
-            link="/dashboard"
+            link="/settings"
             sideBarOpen={sideBarOpen}
             onClick={() => {
               handleSidebarOpen(false);
@@ -240,7 +240,7 @@ const Sidebar = () => {
 
       <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
         <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
-      {/* <Button variant="secondary" onClick={() => {
+          {/* <Button variant="secondary" onClick={() => {
          localStorage.removeItem("user");
          router.push("/")
       }}>

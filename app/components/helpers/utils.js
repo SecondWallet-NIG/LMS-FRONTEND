@@ -13,7 +13,9 @@ export const genderOptions = [
   { value: "Female", label: "Female" },
 ];
 
-export const countryOptions = [
-  { value: "nigeria", label: "Nigeria" },
-];
+export const countryOptions = [{ value: "nigeria", label: "Nigeria" }];
 
+export const createBorrowerType = [
+  { value: "Single borrower", label: "Single borrower" },
+  { value: "Bulk borrowers", label: "Bulk borrowers" },
+];

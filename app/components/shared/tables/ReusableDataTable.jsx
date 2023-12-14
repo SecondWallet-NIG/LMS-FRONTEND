@@ -586,7 +586,7 @@ function ReusableDataTable({
               Next
             </button>
           </div>
-        )}
+        )} 
       </div>
 
       <Loader isOpen={isLoading} />

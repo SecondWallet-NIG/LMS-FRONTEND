@@ -37,6 +37,7 @@ const CustomerProfile = () => {
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [infoHover, setInfoHover] = useState("");
   const [logSearch, setLogSearch] = useState(false);
+  const [borrowerOptions, setBorrowerOptions] = useState(false);
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -136,17 +137,45 @@ const CustomerProfile = () => {
                 <span className="font-semibold"> John Deo</span>
               </p>
               <div className="flex gap-2 items-center">
-                <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex -mb-[0.05rem]">
-                  <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
-                    <BsThreeDotsVertical size={20} />
+                <div className="relative">
+                  <div
+                    className="border-2 border-transparent hover:border-swLightGray w-fit h-fit rounded-md cursor-pointer"
+                    onClick={() => setBorrowerOptions(!borrowerOptions)}
+                  >
+                    <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
+                      <BsThreeDotsVertical size={20} />
+                    </div>
                   </div>
+                  {borrowerOptions && (
+                    <div className="absolute right-0 border text-swBrown rounded-lg mt-2 p-2 w-60 bg-white z-30">
+                      <p
+                        className="hover:bg-swLightGray rounded-lg p-2 text-left cursor-pointer"
+                        onClick={() => setBorrowerOptions(false)}
+                      >
+                        Blacklist borrower
+                      </p>
+                      <p
+                        className="hover:bg-swLightGray rounded-lg p-2 text-left cursor-pointer"
+                        onClick={() => setBorrowerOptions(false)}
+                      >
+                        Restrict borrower
+                      </p>
+                      <p
+                        className="hover:bg-swLightGray rounded-lg p-2 text-left cursor-pointer"
+                        onClick={() => setBorrowerOptions(false)}
+                      >
+                        Reassign borrower
+                      </p>
+                    </div>
+                  )}
                 </div>
-                <Button
-                  variant={"primary"}
-                  className="text-center rounded-md  gap-2 border w-[180px] mt-2"
+                <Link
+                  href={"/create-loan"}
+                  // variant={"primary"}
+                  className="text-center rounded-md py-[0.4rem] px-3 bg-swBlue text-white border-2 border-white hover:border-blue-100"
                 >
                   Create loan
-                </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -466,8 +495,8 @@ const CustomerProfile = () => {
               </div>
             )}
           </div>
-          <div className="w-[70%] border-l h-screen border-gray-300">
-            <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap">
+          <div className="w-[70%] border-l h-screen border-gray-300 relative">
+            <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap bg-white">
               <div className="flex gap-2 text-xs lg:text-sm">
                 {/* <button
                   onClick={() => handleActivityToggle("activity-logs")}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import "../../globals.css";
 import { Inter } from "next/font/google";
@@ -15,13 +15,13 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
     const data = JSON.parse(localStorage.getItem("minimizeSidebar"));
     setMinimizeSidebar(data === true); // Use strict equality
 
-    if (typeof window !== 'undefined') {
-      const storedUser = localStorage.getItem('user');
-      
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+
       setIsAuthenticated(!!storedUser); // Check if storedUser is not null or undefined
 
       if (!storedUser) {
-        router.push('/');
+        router.push("/");
       }
     }
   }, [router]);
@@ -35,7 +35,8 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
             <NavBar paths={paths} isBackNav={isBackNav} />
           </div>
         )}
-        <div className="h-full w-[95%] ml-auto mt-[4.5rem] text-swGray">
+        {/* w-[10%] lg:w-[5%] */}
+        <div className="h-full w-[90%] md:w-[95%] ml-auto mt-[4.5rem] text-swGray">
           {isAuthenticated && children}
         </div>
       </div>
@@ -44,4 +45,3 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
 };
 
 export default DashboardLayout;
-
