@@ -6,7 +6,11 @@ import PagePath from "./PagePath";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { IoArrowBackSharp, IoArrowForward, IoCloseSharp } from "react-icons/io5";
+import {
+  IoArrowBackSharp,
+  IoArrowForward,
+  IoCloseSharp,
+} from "react-icons/io5";
 
 const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
@@ -53,16 +57,15 @@ const NavBar = ({ paths, isBackNav }) => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      console.log({storedUser});
- 
-      setUser(storedUser?.data?.user?.firstName) ;
+      console.log({ storedUser });
+
+      setUser(storedUser?.data?.user?.firstName);
     }
   }, []);
 
   return (
-    <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-[95%] px-5 z-[100]">
+    <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-[90%] md:w-[95%] px-5 z-[100]">
       <div className="flex gap-5 items-center">
         {isBackNav && (
           <div
@@ -75,12 +78,11 @@ const NavBar = ({ paths, isBackNav }) => {
         <PagePath paths={paths} />
       </div>
       <div className=" flex gap-5 items-center relative">
-      <p className="text-sm">Welcome {user} 👋 </p>
+        <p className="text-sm">Welcome {user} 👋 </p>
         <div
           className="relative cursor-pointer"
           onClick={() => openNotifications(!isNotificationsOpen)}
         >
-          
           <FaBell size={20} />
           <div className="bg-swGreen h-2 w-2 rounded-full top-0 right-0 absolute" />
         </div>
@@ -127,7 +129,9 @@ const NavBar = ({ paths, isBackNav }) => {
                   .filter((item) => item.status === "unread")
                   .map((item, index) => (
                     <div key={index} className="py-3 mx-1 flex gap-5 border-b">
-                      <div className={`w-1 rounded-full bg-swIndicatorYellow`} />
+                      <div
+                        className={`w-1 rounded-full bg-swIndicatorYellow`}
+                      />
                       <div>
                         <p>{item.message}</p>
                         <p className="text-sm">{item.time}</p>
@@ -140,7 +144,9 @@ const NavBar = ({ paths, isBackNav }) => {
                   <div key={index} className="py-3 mx-1 flex gap-5 border-b">
                     <div
                       className={`w-1 rounded-full ${
-                        item.status === "unread" ? "bg-swIndicatorYellow" : "bg-swGray"
+                        item.status === "unread"
+                          ? "bg-swIndicatorYellow"
+                          : "bg-swGray"
                       }`}
                     />
                     <div>
@@ -153,7 +159,6 @@ const NavBar = ({ paths, isBackNav }) => {
           </div>
         )}
         <div className="relative">
- 
           <HiMiniUserCircle size={50} />
           <div className="bg-swIndicatorYellow h-3 w-3 rounded-full bottom-1 right-1 absolute" />
         </div>

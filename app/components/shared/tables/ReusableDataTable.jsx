@@ -39,6 +39,7 @@ function ReusableDataTable({
   role,
 }) {
   const [data, setData] = useState(initialData || []);
+  const [dataCheck, setDataCheck] = useState(null);
   const [downloadData, setDownloadData] = useState();
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -182,12 +183,14 @@ function ReusableDataTable({
           },
         })
         .then((data) => {
+          setDataCheck(data);
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
               data?.data?.data?.repayments ||
                 data?.data.results ||
                 data?.data?.data
             );
+
             setData(transformedData);
             setPaginationLinks(data?.data.links);
             setDownloadData(data?.data.links.totalDocuments);
@@ -202,11 +205,8 @@ function ReusableDataTable({
             setPaginationLinks(data?.data?.links);
             setLoading(false);
           }
-     
         })
-        .catch(() => {
-   
-        });
+        .catch(() => {});
     } else {
       if (dateRange && dateRange.length > 0) {
         if (
@@ -232,6 +232,7 @@ function ReusableDataTable({
           },
         })
         .then((data) => {
+          setDataCheck(data);
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
               data?.data?.data?.repayments ||
@@ -239,7 +240,7 @@ function ReusableDataTable({
                 data?.data?.data
             );
             setData(transformedData);
-            setPaginationLinks(data?.data.links);
+            setPaginationLinks(data?.data.links || data?.data?.data?.links);
             setLoading(false);
           } else {
             setData(
@@ -247,7 +248,7 @@ function ReusableDataTable({
                 data?.data?.results ||
                 data?.data?.data
             );
-            setPaginationLinks(data?.data?.links);
+            setPaginationLinks(data?.data?.links || data?.data?.data?.links);
             setLoading(false);
           }
           setLoading(false);
@@ -255,7 +256,7 @@ function ReusableDataTable({
         })
         .catch(() => {
           setTimeout(() => {
-        //    toast.error("An error occured, Couldn't load table");
+            //    toast.error("An error occured, Couldn't load table");
             setIsLoading(false);
             setLoading(false);
           }, 2000);
@@ -331,7 +332,7 @@ function ReusableDataTable({
     <div className="w-full mx-auto text-xs md:text-sm overflow-x-hidden">
       <ToastContainer />
       <div className="">
-        {filters &&  (
+        {filters && (
           <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
             <div className="flex gap-2 items-center justify-between w-full md:w-fit">
               <div className="flex border border-1 items-center mb-4 pl-2 ">
@@ -353,9 +354,8 @@ function ReusableDataTable({
                   <p>Filter By Date</p>
                 </button>
               </div>
-              {
-                filterParams && (
-                  <div className="flex gap-3 items-center">
+              {filterParams && (
+                <div className="flex gap-3 items-center">
                   <button
                     onClick={() => {
                       setFilterOptions(true);
@@ -365,9 +365,7 @@ function ReusableDataTable({
                     <p>Filter by Status</p>
                   </button>
                 </div>
-                )
-              }
-          
+              )}
             </div>
 
             <div className="mb-4 flex items-center justify-between w-full md:w-fit">
@@ -463,7 +461,7 @@ function ReusableDataTable({
                 <tr
                   onClick={() => {
                     if (onClickRow) {
-                    //  setIsLoading(true);
+                      //  setIsLoading(true);
                       router.push(`${onClickRow}/${item.id || item._id}`);
                     }
                   }}
@@ -483,7 +481,7 @@ function ReusableDataTable({
               ))}
             </tbody>
           </table>
-        ) : data?.length == 0 && !isLoading  ? (
+        ) : data?.length == 0 && !isLoading ? (
           <div class="min-h-500 flex items-center justify-center">
             <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
               <Image src={sketch} alt="company logo" />
@@ -491,7 +489,7 @@ function ReusableDataTable({
             </div>
           </div>
         ) : null}
-            {/* <>
+        {/* <>
       {loading == true ? (
      <Loader isOpen={isLoading} />
       ) : data?.length > 0 ? (
@@ -624,23 +622,20 @@ function ReusableDataTable({
           </div>
         </div>
       </CenterModal>
-      {
-        filterParams && (
-          <CenterModal
+      {filterParams && (
+        <CenterModal
           width={"30%"}
           isOpen={filterOptions}
           onClose={() => {
             setFilterOptions(!filterOptions);
           }}
         >
-    
           <div className="bg-white p-4 border shadow-lg">
             <div className="w-full items-center">
               {Array.isArray(filterParams) &&
                 filterParams?.map((item) => (
                   <div
                     key={item._id}
-          
                     className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
                   >
                     <div className="flex justify-between items-center mb-2">
@@ -668,9 +663,7 @@ function ReusableDataTable({
             </div>
           </div>
         </CenterModal>
-        )
-      }
-    
+      )}
     </div>
   );
 }

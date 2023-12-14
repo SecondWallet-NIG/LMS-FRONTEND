@@ -744,7 +744,7 @@ const ViewLoan = () => {
                   >
                     Activity logs
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => handleActivityToggle("summary")}
                     className={`${
                       activityButton === "summary" &&
@@ -752,7 +752,7 @@ const ViewLoan = () => {
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Summary
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleActivityToggle("loans")}
                     className={`${
@@ -762,7 +762,7 @@ const ViewLoan = () => {
                   >
                     Loan Docs
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => handleActivityToggle("disbursement")}
                     className={`${
                       activityButton === "disbursement" &&
@@ -770,7 +770,7 @@ const ViewLoan = () => {
                     } p-2 rounded-md cursor-pointer`}
                   >
                     Disbursment
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleActivityToggle("repayment")}
                     className={`${
@@ -822,7 +822,7 @@ const ViewLoan = () => {
               </div>
               <div className="p-2">
                 {activityButton === "activity-logs" && <CustomerActivityLogs />}
-                {activityButton === "summary" && <Summary />}
+                {/* {activityButton === "summary" && <Summary />} */}
                 {activityButton === "loans" && (
                   <CustomerLoanDoc data={data?.data} />
                 )}
@@ -1100,7 +1100,7 @@ const ViewLoan = () => {
           </div>
           <div className="pt-4">
             <div className="pt-4 ">
-              <div className="text-black block text-gray-700 text-sm mb-2">
+              <div className="text-swBlack block text-sm mb-2">
                 Bank Details
               </div>
 

@@ -5,7 +5,11 @@ import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState, useEffect } from "react";
 import Button from "../components/shared/buttonComponent/Button";
-import { genderOptions, countryOptions } from "../components/helpers/utils";
+import {
+  genderOptions,
+  countryOptions,
+  createBorrowerType,
+} from "../components/helpers/utils";
 import { bankArr, statesAndLgas } from "@/constant";
 
 import { toast, ToastContainer } from "react-toastify";
@@ -16,6 +20,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { createCustomer } from "@/redux/slices/customerSlice";
 import SuccessModal from "../components/modals/SuccessModal";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
+import { LuPaperclip } from "react-icons/lu";
+import { AiOutlineClose } from "react-icons/ai";
+import { FiTrash } from "react-icons/fi";
+import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 
 const customNoOptionsMessage = () => {
   return (
@@ -36,6 +44,11 @@ const CreateCustomer = () => {
   const [verificationResponse, setVerificationResponse] = useState(null);
   const [lga, setLga] = useState([]);
   const [newUserId, setNewUserId] = useState("");
+  const [borrowerType, setBorrowerType] = useState({
+    value: "Single borrower",
+    label: "Single borrower",
+  });
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -123,10 +136,38 @@ const CreateCustomer = () => {
   };
 
   const handleSelectChange = async (selectedOption, name) => {
-    setFormData({
-      ...formData,
-      [name]: selectedOption.value,
-    });
+    if (name === "borrower") {
+      setBorrowerType(selectedOption);
+    } else {
+      setFormData({
+        ...formData,
+        [name]: selectedOption.value,
+      });
+    }
+  };
+
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length <= 2) {
+      setSelectedFiles(files);
+    } else {
+      alert("You can only upload a maximum of 2 files.");
+    }
+  };
+
+  const handleFileInputChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles(files);
+  };
+
+  const resetFiles = () => {
+    setSelectedFiles([]);
+  };
+
+  const handleFileDelete = (index) => {
+    selectedFiles.splice(index, 1);
+    setSelectedFiles([...selectedFiles]);
   };
 
   const verifyBankDetails = async (accountNumber, bankCode) => {
@@ -229,266 +270,349 @@ const CreateCustomer = () => {
     <DashboardLayout isBackNav={true} paths={["Borrowers", "Create borrower"]}>
       <ToastContainer />
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
-        <div className="flex justify-between">
-          <p className="text-lg font-semibold text-swBlue">Create borrower profile</p>
+        <div className="flex justify-between items-center">
+          <p className="text-lg font-semibold text-swBlue">
+            Create borrower profile
+          </p>
+          <SelectField
+            name="borrower"
+            optionValue={createBorrowerType}
+            value={borrowerType}
+            isSearchable={false}
+            onChange={(selectedOption) =>
+              handleSelectChange(selectedOption, "borrower")
+            }
+          />
         </div>
 
-        <form id="add-customer-form">
-          <div className="flex flex-col gap-5 mt-5">
-            <p className="font-semibold">Personal information</p>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="w-full md:w-1/3">
-                <InputField
-                  required={true}
-                  name="firstName"
-                  hintText={""}
-                  activeBorderColor="border-swBlue"
-                  label="First Name"
-                  placeholder="Enter first name"
-                  isActive="loan-amount"
-                  onclick={() => {
-                    isInputOpen === "loan-amount"
-                      ? setIsInputOpen(null)
-                      : setIsInputOpen("loan-amount");
-                  }}
-                  inputOpen={isInputOpen}
-                  onChange={handleInputChange}
-                />
+        {borrowerType.value === "Single borrower" && (
+          <form id="add-customer-form">
+            <div className="flex flex-col gap-5 mt-5">
+              <p className="font-semibold">Personal information</p>
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="w-full md:w-1/3">
+                  <InputField
+                    required={true}
+                    name="firstName"
+                    hintText={""}
+                    activeBorderColor="border-swBlue"
+                    label="First Name"
+                    placeholder="Enter first name"
+                    isActive="loan-amount"
+                    onclick={() => {
+                      isInputOpen === "loan-amount"
+                        ? setIsInputOpen(null)
+                        : setIsInputOpen("loan-amount");
+                    }}
+                    inputOpen={isInputOpen}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="w-full md:w-1/3">
+                  <InputField
+                    name="middleName"
+                    required={true}
+                    hintText={""}
+                    activeBorderColor="border-swBlue"
+                    label="Middle Name"
+                    placeholder="Enter middle name"
+                    isActive="loan-amount"
+                    onclick={() => {
+                      isInputOpen === "loan-amount"
+                        ? setIsInputOpen(null)
+                        : setIsInputOpen("loan-amount");
+                    }}
+                    inputOpen={isInputOpen}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="w-full md:w-1/3">
+                  <InputField
+                    name="lastName"
+                    placeholder="Enter last name"
+                    required={true}
+                    activeBorderColor="border-swBlue"
+                    label="Last Name"
+                    isActive="loan-amount"
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-              <div className="w-full md:w-1/3">
-                <InputField
-                  name="middleName"
-                  required={true}
-                  hintText={""}
-                  activeBorderColor="border-swBlue"
-                  label="Middle Name"
-                  placeholder="Enter middle name"
-                  isActive="loan-amount"
-                  onclick={() => {
-                    isInputOpen === "loan-amount"
-                      ? setIsInputOpen(null)
-                      : setIsInputOpen("loan-amount");
-                  }}
-                  inputOpen={isInputOpen}
-                  onChange={handleInputChange}
-                />
+              <div className="flex space-x-4">
+                <div className="w-1/2">
+                  <InputField
+                    name="dateOfBirth"
+                    placeholder="Date of Birth"
+                    inputType={"date"}
+                    required={true}
+                    activeBorderColor="border-swBlue"
+                    label="Date of Birth"
+                    isActive="loan-amount"
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="w-1/2">
+                  <SelectField
+                    name="gender"
+                    optionValue={genderOptions}
+                    label={"Gender"}
+                    required={true}
+                    placeholder={"Select gender"}
+                    isSearchable={false}
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "gender")
+                    }
+                  />
+                </div>
               </div>
-              <div className="w-full md:w-1/3">
-                <InputField
-                  name="lastName"
-                  placeholder="Enter last name"
-                  required={true}
-                  activeBorderColor="border-swBlue"
-                  label="Last Name"
-                  isActive="loan-amount"
-                  onChange={handleInputChange}
-                />
+
+              <InputField
+                required={true}
+                name="nin"
+                activeBorderColor="border-swBlue"
+                inputType="number"
+                min="0"
+                onKeyPress={preventMinus}
+                label="NIN"
+                placeholder="NIN"
+                isActive="loan-amount"
+                onclick={() => {
+                  isInputOpen === "loan-amount"
+                    ? setIsInputOpen(null)
+                    : setIsInputOpen("loan-amount");
+                }}
+                inputOpen={isInputOpen}
+                onChange={handleInputChange}
+              />
+              <InputField
+                required={true}
+                name="bvn"
+                inputType="number"
+                min="0"
+                onKeyPress={preventMinus}
+                activeBorderColor="border-swBlue"
+                label="Bank Verification Number"
+                placeholder="Bank Verification Number"
+                isActive="loan-amount"
+                onclick={() => {
+                  isInputOpen === "loan-amount"
+                    ? setIsInputOpen(null)
+                    : setIsInputOpen("loan-amount");
+                }}
+                inputOpen={isInputOpen}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex flex-col gap-5 mt-5">
+              <p className="font-semibold">Contact information</p>
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="w-full md:w-1/3">
+                  <SelectField
+                    name="country"
+                    label={"Country"}
+                    optionValue={countryOptions}
+                    required={true}
+                    placeholder={"Select country"}
+                    isSearchable={true}
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "country")
+                    }
+                  />
+                </div>
+                <div className="w-full md:w-1/3">
+                  <SelectField
+                    name="state"
+                    label={"State"}
+                    optionValue={states}
+                    required={true}
+                    placeholder={"Select state"}
+                    isSearchable={true}
+                    onChange={(selectedOption) => {
+                      handleStateChange(selectedOption);
+                      handleSelectChange(selectedOption, "state");
+                    }}
+                  />
+                </div>
+                <div className="w-full md:w-1/3">
+                  <SelectField
+                    name="dateOfBirth"
+                    label={"LGA"}
+                    required={true}
+                    optionValue={lga}
+                    placeholder={"Select lga"}
+                    isSearchable={true}
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "lga")
+                    }
+                  />
+                </div>
+              </div>
+
+              <InputField
+                name="address"
+                placeholder="Address"
+                inputType={"text"}
+                required={true}
+                activeBorderColor="border-swBlue"
+                label="Address"
+                isActive="loan-amount"
+                onChange={handleInputChange}
+              />
+
+              <div className="flex space-x-4">
+                <div className="w-1/2">
+                  <InputField
+                    name="phoneNumber"
+                    placeholder="Phone Number"
+                    inputType="number"
+                    min="0"
+                    onKeyPress={preventMinus}
+                    required={true}
+                    activeBorderColor="border-swBlue"
+                    label="Phone number"
+                    isActive="loan-amount"
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="w-1/2">
+                  <InputField
+                    name="email"
+                    placeholder="Email Address"
+                    inputType={"text"}
+                    required={true}
+                    activeBorderColor="border-swBlue"
+                    label="Email address"
+                    isActive="loan-amount"
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex space-x-4">
-              <div className="w-1/2">
-                <InputField
-                  name="dateOfBirth"
-                  placeholder="Date of Birth"
-                  inputType={"date"}
-                  required={true}
-                  activeBorderColor="border-swBlue"
-                  label="Date of Birth"
-                  isActive="loan-amount"
-                  onChange={handleInputChange}
-                />
+            <div className="flex flex-col gap-5 mt-5">
+              <p className="font-semibold">Bank Account Information</p>
+              <div className="flex space-x-4">
+                <div className="w-1/2">
+                  <SelectField
+                    name="bankName"
+                    optionValue={bankArr}
+                    required={true}
+                    placeholder={"Select bank"}
+                    isSearchable={true}
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "bankName")
+                    }
+                  />
+                </div>
+                <div className="w-1/2">
+                  <InputField
+                    maxLength={10}
+                    name="accountNumber"
+                    placeholder="Account number"
+                    inputType="text"
+                    required={true}
+                    activeBorderColor="border-swBlue"
+                    label="Account Number"
+                    onChange={handleInputChange}
+                    disabled={!formData.bankName} // Disable if bankName is not selected
+                  />
+                </div>
               </div>
-              <div className="w-1/2">
-                <SelectField
-                  name="gender"
-                  optionValue={genderOptions}
-                  label={"Gender"}
-                  required={true}
-                  placeholder={"Select gender"}
-                  isSearchable={false}
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "gender")
-                  }
-                />
-              </div>
+              <InputField
+                name="accountName"
+                disabled={true}
+                required={true}
+                activeBorderColor="border-swBlue"
+                label="Name on Account"
+                placeholder="Name on account"
+                isActive="loan-amount"
+                onChange={handleInputChange}
+                value={bankNameVal}
+              />
             </div>
 
-            <InputField
-              required={true}
-              name="nin"
-              activeBorderColor="border-swBlue"
-              inputType="number"
-              min="0"
-              onKeyPress={preventMinus}
-              label="NIN"
-              placeholder="NIN"
-              isActive="loan-amount"
-              onclick={() => {
-                isInputOpen === "loan-amount"
-                  ? setIsInputOpen(null)
-                  : setIsInputOpen("loan-amount");
-              }}
-              inputOpen={isInputOpen}
-              onChange={handleInputChange}
-            />
-            <InputField
-              required={true}
-              name="bvn"
-              inputType="number"
-              min="0"
-              onKeyPress={preventMinus}
-              activeBorderColor="border-swBlue"
-              label="Bank Verification Number"
-              placeholder="Bank Verification Number"
-              isActive="loan-amount"
-              onclick={() => {
-                isInputOpen === "loan-amount"
-                  ? setIsInputOpen(null)
-                  : setIsInputOpen("loan-amount");
-              }}
-              inputOpen={isInputOpen}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="flex flex-col gap-5 mt-5">
-            <p className="font-semibold">Contact information</p>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="w-full md:w-1/3">
-                <SelectField
-                  name="country"
-                  label={"Country"}
-                  optionValue={countryOptions}
-                  required={true}
-                  placeholder={"Select country"}
-                  isSearchable={true}
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "country")
-                  }
-                />
-              </div>
-              <div className="w-full md:w-1/3">
-                <SelectField
-                  name="state"
-                  label={"State"}
-                  optionValue={states}
-                  required={true}
-                  placeholder={"Select state"}
-                  isSearchable={true}
-                  onChange={(selectedOption) => {
-                    handleStateChange(selectedOption);
-                    handleSelectChange(selectedOption, "state");
-                  }}
-                />
-              </div>
-              <div className="w-full md:w-1/3">
-                <SelectField
-                  name="dateOfBirth"
-                  label={"LGA"}
-                  required={true}
-                  optionValue={lga}
-                  placeholder={"Select lga"}
-                  isSearchable={true}
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "lga")
-                  }
-                />
-              </div>
+            <div className="flex justify-center">
+              <Button
+                disabled={loading === "pending" ? true : false}
+                onClick={handleSubmit}
+                className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10 bg-swBlue"
+              >
+                {loading === "pending"
+                  ? "Processing..."
+                  : "Create borrower profile"}
+              </Button>
             </div>
+          </form>
+        )}
 
-            <InputField
-              name="address"
-              placeholder="Address"
-              inputType={"text"}
-              required={true}
-              activeBorderColor="border-swBlue"
-              label="Address"
-              isActive="loan-amount"
-              onChange={handleInputChange}
-            />
-
-            <div className="flex space-x-4">
-              <div className="w-1/2">
-                <InputField
-                  name="phoneNumber"
-                  placeholder="Phone Number"
-                  inputType="number"
-                  min="0"
-                  onKeyPress={preventMinus}
-                  required={true}
-                  activeBorderColor="border-swBlue"
-                  label="Phone number"
-                  isActive="loan-amount"
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="w-1/2">
-                <InputField
-                  name="email"
-                  placeholder="Email Address"
-                  inputType={"text"}
-                  required={true}
-                  activeBorderColor="border-swBlue"
-                  label="Email address"
-                  isActive="loan-amount"
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-5 mt-5">
-            <p className="font-semibold">Bank Account Information</p>
-            <div className="flex space-x-4">
-              <div className="w-1/2">
-                <SelectField
-                  name="bankName"
-                  optionValue={bankArr}
-                  required={true}
-                  placeholder={"Select bank"}
-                  isSearchable={true}
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "bankName")
-                  }
-                />
-              </div>
-              <div className="w-1/2">
-                <InputField
-                  maxLength={10}
-                  name="accountNumber"
-                  placeholder="Account number"
-                  inputType="text"
-                  required={true}
-                  activeBorderColor="border-swBlue"
-                  label="Account Number"
-                  onChange={handleInputChange}
-                  disabled={!formData.bankName} // Disable if bankName is not selected
-                />
-              </div>
-            </div>
-            <InputField
-              name="accountName"
-              disabled={true}
-              required={true}
-              activeBorderColor="border-swBlue"
-              label="Name on Account"
-              placeholder="Name on account"
-              isActive="loan-amount"
-              onChange={handleInputChange}
-              value={bankNameVal}
-            />
-          </div>
-
-          <div className="flex justify-center">
-            <Button
-              disabled={loading === "pending" ? true : false}
-              onClick={handleSubmit}
-              className="py-2 px-9 rounded-md flex gap-2 border w-fit mt-10 bg-swBlue"
+        {borrowerType.value === "Bulk borrowers" && (
+          <div className="">
+            <p className="font-semibold text-lg my-5 text-swBlack">
+              Upload a file
+            </p>
+            <div
+              className="text-center w-full"
+              onDrop={handleFileDrop}
+              onDragOver={(e) => e.preventDefault()}
             >
-              {loading === "pending"
-                ? "Processing..."
-                : "Create borrower profile"}
-            </Button>
+              <div className="w-full border-dotted border-[5px] rounded-3xl bg-pharmaGray pt-4 pb-4 text-swBlack">
+                <input
+                  type="file"
+                  id="fileInput"
+                  className="hidden"
+                  accept=".csv,.xlsx"
+                  onChange={handleFileInputChange}
+                />
+
+                <p className="mt-10 text-lg font-medium">
+                  Drag and drop a file to upload
+                </p>
+                <p className="textxs">File types: .xlsx, .csv</p>
+                <p className="textxs">Max file size: 3mb</p>
+
+                <label
+                  htmlFor="fileInput"
+                  className="cursor-pointer flex gap-2 itwms-center p-2 rounded-md bg-swBlue text-white font-medium w-fit mx-auto mt-5 mb-3"
+                >
+                  <LuPaperclip size={20} /> Upload file
+                </label>
+              </div>
+            </div>
+
+            {selectedFiles.length > 0 && (
+              <div className="mt-5">
+                <ul className="">
+                  {selectedFiles.map((file, index) => (
+                    <li
+                      key={index}
+                      className="my-2 bg-white flex rounded-md border"
+                    >
+                      <div className="flex gap-3 items-center p-1 pl-2 font-medium ">
+                        {/* <FiFileText size={20} /> */}
+                        {file.name}
+                      </div>
+                      <div className="flex gap-4 items-center ml-auto p-1 border-l">
+                        <FiTrash
+                          className="cursor-pointer text-swIndicatorLightRed"
+                          size={15}
+                          onClick={() => {
+                            handleFileDelete(index);
+                          }}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="flex justify-center mt-5">
+              <EditableButton
+                disabled={selectedFiles.length > 0 ? false : true}
+                label={"Create borrower profiles"}
+                blueBtn={true}
+              />
+            </div>
           </div>
-        </form>
+        )}
       </main>
       <div className="">
         <SuccessModal
