@@ -25,8 +25,8 @@ const DisbursedLoans = () => {
       ),
       name: (
         <div>
-          <div className="text-md font-[500] text-gray-700">{`${item?.customer?.firstName} ${item?.customer?.lastName}`}</div>
-          <div className="text-xs text-gray-500">Borrower&apos;s ID</div>
+          <div className="text-md font-[500] text-gray-700">{`${item?.customerId?.firstName} ${item?.customerId?.lastName}`}</div>
+          <div className="text-xs text-gray-500">{item?.customerId?.customerId}</div>
         </div>
       ),
       loanPackageId: (
@@ -87,14 +87,6 @@ const DisbursedLoans = () => {
           headers={headers}
           initialData={[]}
           apiEndpoint="https://secondwallet-stag.onrender.com/api/disbursement"
-          btnText={
-            <div className="flex gap-1 items-center p-1">
-              <p className="hidden lg:block">create loan</p>
-            </div>
-          }
-          btnTextClick={() => {
-            router.push("/create-loan");
-          }}
           filters={true}
           pagination={true}
         //  userId={userId}

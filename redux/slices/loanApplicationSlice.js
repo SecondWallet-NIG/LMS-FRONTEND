@@ -113,6 +113,27 @@ export const  getLoanApplicationSummary = createAsyncThunk('loanApplication/summ
 
 });
 
+export const  getCustomerLoanApplicationSummary = createAsyncThunk('loanApplication/summary/customer', async (data) => {
+  if (data) {
+
+    const response = await axios.get(`${API_URL}/loan-application/summary?customerId=${data?.customerId}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+
+    return response.data;
+  } else {
+    const response = await axios.get(`${API_URL}/loan-application/summary`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+
+    return response.data;
+  }
+
+});
 export const updateLoanApplication = createAsyncThunk(
   'LoanApplication/update',
   async ({ loanId, payload }) => {
@@ -238,6 +259,18 @@ const LoanApplicationSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(disburseLoan.rejected, (state, action,) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(getCustomerLoanApplicationSummary.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(getCustomerLoanApplicationSummary.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getCustomerLoanApplicationSummary.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })

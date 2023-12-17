@@ -196,36 +196,42 @@ const Sidebar = () => {
             link="/plans"
             sideBarOpen={sideBarOpen}
           />
-          <SidebarLink
-            icon={<TbReportMoney size={20} />}
-            text="Report"
-            link="/report"
-            sideBarOpen={sideBarOpen}
-          />
-          <SidebarLink
-            icon={<FaPeopleGroup size={20} />}
-            text="Team management"
-            link="/team-management"
-            sideBarOpen={sideBarOpen}
-          />
-          <SidebarLink
-            icon={<FiArrowUpRight size={20} />}
-            text="Expenses"
-            link="/expenses"
-            sideBarOpen={sideBarOpen}
-          />
-          <SidebarLink
-            icon={<IoMdCard size={20} />}
-            text="Payroll"
-            link="/payroll"
-            sideBarOpen={sideBarOpen}
-          />
-          <SidebarLink
-            icon={<FaRegStar size={20} />}
-            text="Investors"
-            link="/investors"
-            sideBarOpen={sideBarOpen}
-          />
+          {JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag !=
+          "LO" ? (
+            <>
+              <SidebarLink
+                icon={<TbReportMoney size={20} />}
+                text="Report"
+                link="/report"
+                sideBarOpen={sideBarOpen}
+              />
+
+              <SidebarLink
+                icon={<FaPeopleGroup size={20} />}
+                text="Team management"
+                link="/team-management"
+                sideBarOpen={sideBarOpen}
+              />
+              <SidebarLink
+                icon={<FiArrowUpRight size={20} />}
+                text="Expenses"
+                link="/expenses"
+                sideBarOpen={sideBarOpen}
+              />
+              <SidebarLink
+                icon={<IoMdCard size={20} />}
+                text="Payroll"
+                link="/payroll"
+                sideBarOpen={sideBarOpen}
+              />
+              <SidebarLink
+                icon={<FaRegStar size={20} />}
+                text="Investors"
+                link="/investors"
+                sideBarOpen={sideBarOpen}
+              />
+            </>
+          ) : null}
           <SidebarLink
             icon={<AiOutlineSetting size={20} />}
             text="Settings"

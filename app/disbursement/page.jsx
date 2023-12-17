@@ -5,10 +5,10 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import DisbursedLoans from "../components/loans/DisbursedLoans";
 
 const AllDisburments = () => {
-
   return (
     <DashboardLayout>
-    <DisbursedLoans />
+      <DisbursementCard />
+      <DisbursedLoans />
     </DashboardLayout>
   );
 };

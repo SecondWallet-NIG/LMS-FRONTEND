@@ -1,7 +1,7 @@
 import React from "react";
 import { Oval } from "react-loader-spinner";
 
-const Loader = ({ isOpen,bgColor, onClose, children, width}) => {
+const Loader = ({ isOpen, bgColor, onClose, children, width }) => {
   if (!isOpen) return null;
   const modalStyles = {
     width: width || "90%",
@@ -9,10 +9,8 @@ const Loader = ({ isOpen,bgColor, onClose, children, width}) => {
     minWidth: "300px",
   };
   return (
-    <div className="flex items-center justify-center w-full h-[400px] bg-white">
-      <div className={`${bgColor ? bgColor : "bg-white"} p-4 rounded-md shadow-md"`}>
-    
-        
+    <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">
+      <div className={`${bgColor ? bgColor : "bg-white"} p-2 rounded-md shadow-md"`}>
         <Oval
           height="100"
           width="100"
@@ -23,7 +21,7 @@ const Loader = ({ isOpen,bgColor, onClose, children, width}) => {
           visible={true}
           ariaLabel="circles-with-bar-loading"
         />
-  
+
       </div>
     </div>
   );

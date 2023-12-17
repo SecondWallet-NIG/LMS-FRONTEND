@@ -34,8 +34,8 @@ export const getApprovalAssignee = createAsyncThunk('loanApproval/assignee', asy
       }
     });
     console.log("response");
-    console.log({response});
-    return response.data;
+    console.log(response.data?.data?.data);
+    return response.data?.data?.data;
   } catch (error) {
     if (error.response.data.error) {
       throw new Error(error.response.data.error)

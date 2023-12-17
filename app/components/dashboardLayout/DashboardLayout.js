@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
 import NavBar from "../navigation/NavBar";
 import Sidebar from "../navigation/SideBar";
+import RealTimeComponent from "../RealTimeComponent";
 
 const DashboardLayout = ({ children, paths, isBackNav }) => {
   const [minimizeSidebar, setMinimizeSidebar] = useState(false);
@@ -39,6 +40,7 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
         <div className="h-full w-[90%] md:w-[95%] ml-auto mt-[4.5rem] text-swGray">
           {isAuthenticated && children}
         </div>
+        <RealTimeComponent />
       </div>
     </div>
   );

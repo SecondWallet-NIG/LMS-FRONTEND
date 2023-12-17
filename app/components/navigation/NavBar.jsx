@@ -11,6 +11,7 @@ import {
   IoArrowForward,
   IoCloseSharp,
 } from "react-icons/io5";
+import RealTimeComponent from "../RealTimeComponent";
 
 const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
@@ -138,6 +139,7 @@ const NavBar = ({ paths, isBackNav }) => {
                       </div>
                     </div>
                   ))}
+
 
               {openedMessages === "all" &&
                 data.map((item, index) => (

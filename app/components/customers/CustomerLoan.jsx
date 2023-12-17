@@ -6,11 +6,9 @@ import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
 
 const header = [
-  { id: "firstName", label: "First Name" },
-  { id: "lastName", label: "Last Name" },
-  { id: "middleName", label: "Middle Name" },
-  { id: "dateOfBirth", label: "Date of Birth" },
-  { id: "gender", label: "Gender" },
+  { id: "firstName", label: "Borrower Name & ID" },
+  { id: "numberOfLoans", label: " Number of Loans" },
+  { id: "totalLoanAmount", label: "Total Loan Amount" },
   { id: "status", label: "Status" },
 ];
 
@@ -18,33 +16,23 @@ const customDataTransformer = (apiData) => {
   return apiData?.map((item) => ({
     id: item._id,
     firstName: (
-      <div className="text-md font-[500] text-gray-700">
-        {item.firstName}
+   <div>
+       <div className="text-md font-[500] text-gray-700">
+        {item.firstName} {item.lastName}
       </div>
-    ),
-    lastName: (
-      <div className="text-md font-[500] text-gray-700">
-        {item.lastName}
+        <div className="text-sm font-[400] text-gray-400">
+        {item?.customerId} 
       </div>
+   </div>
     ),
-    middleName: (
-      <div className="text-md font-[500] text-gray-700">
-        {item.middleName}
-      </div>
-    ),
-    dateOfBirth: (
+    numberOfLoans: (
       <div>
-        <div className="text-md font-[500] text-gray-700">{item.dateOfBirth}</div>
+        <div className="text-md font-[500] text-gray-700">{item.numberOfLoans}</div>
       </div>
     ),
-    dateOfBirth: (
+    totalLoanAmount: (
       <div>
-        <div className="text-md font-[500] text-gray-700">{item.dateOfBirth}</div>
-      </div>
-    ),
-    gender: (
-      <div>
-        <div className="text-md font-[500] text-gray-700">{`${item?.gender}`}</div>
+        <div className="text-md font-[500] text-gray-700">₦ {`${item?.totalLoanAmount}`}</div>
       </div>
     ),
     status: (

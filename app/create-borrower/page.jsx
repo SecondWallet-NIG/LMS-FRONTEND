@@ -17,20 +17,24 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
 import { useDispatch, useSelector } from "react-redux";
-import { createCustomer } from "@/redux/slices/customerSlice";
+import {
+  createBulkCustomer,
+  createCustomer,
+} from "@/redux/slices/customerSlice";
 import SuccessModal from "../components/modals/SuccessModal";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import { LuPaperclip } from "react-icons/lu";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { FiTrash } from "react-icons/fi";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
-
+import { AiOutlinePaperClip } from "react-icons/ai";
+import RealTimeComponent from "../components/RealTimeComponent";
 const customNoOptionsMessage = () => {
   return (
     <div>
       {/* Custom message with a link */}
       <p>
-        Not found. <Link href="/create">Create new customer</Link>
+        Not found. <Link hreimportf="/create">Create new customer</Link>
       </p>
     </div>
   );
@@ -161,8 +165,10 @@ const CreateCustomer = () => {
     setSelectedFiles(files);
   };
 
-  const resetFiles = () => {
-    setSelectedFiles([]);
+  const handleFileChange = (e) => {
+    let { name, files } = e.target;
+    setSelectedFiles(files[0])
+    // console.log(formData);
   };
 
   const handleFileDelete = (index) => {
@@ -261,6 +267,22 @@ const CreateCustomer = () => {
       });
   };
 
+  const handleBulkCustomerSubmit = (e) => {
+    const payload = new FormData();
+    payload.append("bulkCustomerCsv", selectedFiles[0]);
+    payload.append("createdBy", userId?.data?.user?._id)
+    e.preventDefault();
+    dispatch(createBulkCustomer(payload))
+      .unwrap()
+      .then((response) => {
+        toast.success(
+          "Upload in progress, you will be notified when this is complete"
+        );
+      })
+      .catch((error) => {
+        toast.error(`An error occured`);
+      });
+  };
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUserId(user);
@@ -289,6 +311,51 @@ const CreateCustomer = () => {
           <form id="add-customer-form">
             <div className="flex flex-col gap-5 mt-5">
               <p className="font-semibold">Personal information</p>
+
+              <div className="relative">
+                <input
+                  name="guarantorForm"
+                  type="file"
+                  id="fileInput3"
+                  className="absolute w-0 h-0 opacity-0"
+                  // onChange={}
+                  onClick={(e) => (e.target.value = null)}
+                />
+                <label
+                  htmlFor="fileInput3"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {" "}
+                      {formData?.guarantorForm?.name
+                        ? "Change file"
+                        : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {formData?.guarantorForm?.name ? (
+                  <div
+                    id="fileLabel"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">
+                      {formData?.guarantorForm?.name}
+                    </div>
+                    <div>
+                      <AiOutlineDelete
+                        onClick={() => {
+                          // deleteFile("guarantorForm");
+                        }}
+                        color="red"
+                        size={20}
+                      />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-full md:w-1/3">
                   <InputField
@@ -606,6 +673,7 @@ const CreateCustomer = () => {
             )}
             <div className="flex justify-center mt-5">
               <EditableButton
+                onClick={handleBulkCustomerSubmit}
                 disabled={selectedFiles.length > 0 ? false : true}
                 label={"Create borrower profiles"}
                 blueBtn={true}
@@ -627,6 +695,7 @@ const CreateCustomer = () => {
           btnRightFunc={btnRightFunc}
         />
       </div>
+
     </DashboardLayout>
   );
 };

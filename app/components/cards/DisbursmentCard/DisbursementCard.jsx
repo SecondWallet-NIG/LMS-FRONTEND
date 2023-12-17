@@ -1,7 +1,11 @@
 import { FiArrowUpRight } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { getDisbursementSummary } from "@/redux/slices/loanRepaymentSlice";
+import { useEffect } from "react";
 
-const DisbursementCard = ({ data }) => {
-  data = [
+const DisbursementCard = ({ _data }) => {
+  const dispatch = useDispatch();
+  _data = [
     {
       disbursement_type: "Approved for disbursement",
       disbursement_no: 54,
@@ -13,7 +17,7 @@ const DisbursementCard = ({ data }) => {
       disbursement_amount: 460930903.03,
     },
     {
-      disbursement_type: "Pending payouts",
+      disbursement_type: "Disbursed",
       disbursement_no: 3,
       disbursement_amount: 23000383.93,
     },
@@ -24,9 +28,15 @@ const DisbursementCard = ({ data }) => {
     },
   ];
 
+  const { loading, error, data } = useSelector((state) => state.loanRepayment);
+  useEffect(() => {
+    dispatch(getDisbursementSummary());
+    console.log({data});
+  }, []);
+  console.log({data});
   return (
-    <main className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-2 text-sm">
-      {data.map((item, index) => (
+    <main className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-2 text-sm mt-12 mr-4 ml-4">
+      {data?.data.map((item, index) => (
         <div
           key={index}
           className={`${
@@ -34,17 +44,17 @@ const DisbursementCard = ({ data }) => {
               ? "border-swBlue text-swBlue"
               : item.disbursement_type.includes("Total")
               ? "border-green-600 text-green-600"
-              : item.disbursement_type.includes("Pending")
-              ? "border-red-500 text-red-500"
-              : "border-swGray text-black"
+              : item.disbursement_type.includes("Disbursed")
+              ? "border-swGray text-black "
+              : "border-red-500 text-red-500"
           } border rounded-lg p-2 w-full`}
         >
           <p className="font-semibold">{item.disbursement_type}</p>
           <div className="flex justify-between items-center my-5">
-            <p className="text-2xl font-semibold">{item.disbursement_no}</p>
+            <p className="text-2xl font-semibold">{item.count}</p>
             <p className="font-semibold">
               &#8358;{" "}
-              {item.disbursement_amount.toFixed(2).toLocaleString("en-US")}
+              {item.amount.toFixed(2).toLocaleString("en-US")}
             </p>
           </div>
           <p

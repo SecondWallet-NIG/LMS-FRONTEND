@@ -29,6 +29,28 @@ export const createCustomer = createAsyncThunk(
   }
 );
 
+export const createBulkCustomer = createAsyncThunk(
+  "customer-bulk/create",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        API_URL + "/customer/profile-information/bulk-create",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error)
+      }
+      else throw new Error("An error occured, please try again later")
+    }
+  }
+);
 export const createEmployment = createAsyncThunk(
   "employment/create",
   async (payload) => {
@@ -224,6 +246,19 @@ const customerSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(identityVerification.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(createBulkCustomer.pending, (state, action) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(createBulkCustomer.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(createBulkCustomer.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

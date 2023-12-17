@@ -25,6 +25,7 @@ const Repayment = () => {
   ];
 
   const customDataTransformer = (apiData) => {
+    console.log({apiData});
     return apiData?.map((item) => ({
       id: item._id,
       loanId: (
@@ -44,17 +45,17 @@ const Repayment = () => {
       ),
       amountDue: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.amountDue.toLocaleString()}
+          {item?.amountDue}
         </div>
       ),
       amountPaid: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.amountPaid.toLocaleString()}
+          {item?.amountPaid}
         </div>
       ),
       balanceToPay: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.balanceToPay.toLocaleString()}
+          {item?.balanceToPay}
         </div>
       ),
       status: (
@@ -130,17 +131,10 @@ const Repayment = () => {
 
         <div className="w-full">
           <ReusableDataTable
-            onClickRow="/loan-application/view-loan"
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}
             apiEndpoint="https://secondwallet-stag.onrender.com/api/repayment"
-            // btnText={
-            //   <div className="flex gap-1 items-center p-1">
-            //     <AiOutlinePlus size={15} />
-            //     <p className="hidden lg:block">create borrower</p>
-            //   </div>
-            // }
             btnTextClick={() => {
               router.push("/create-borrower");
             }}

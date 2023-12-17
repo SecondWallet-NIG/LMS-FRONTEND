@@ -59,15 +59,15 @@ const Roles = () => {
           headers={headers}
           filters={true}
           pagination={true}
-          btnText={
-            <div
-              className="flex gap-1 items-center p-1"
-              onClick={handleOpenModal}
-            >
-              <AiOutlinePlus size={15} />
-              <p className="hidden lg:block">New role</p>
-            </div>
-          }
+          // btnText={
+          //   <div
+          //     className="flex gap-1 items-center p-1"
+          //     onClick={handleOpenModal}
+          //   >
+          //     <AiOutlinePlus size={15} />
+          //     <p className="hidden lg:block">New role</p>
+          //   </div>
+          // }
         />
         <RolesModal isOpen={isModal} onClose={handleCloseModal} />
       </div>

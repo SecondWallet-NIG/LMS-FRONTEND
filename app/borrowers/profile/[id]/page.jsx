@@ -173,6 +173,10 @@ const CustomerProfile = () => {
                   href={"/create-loan"}
                   // variant={"primary"}
                   className="text-center rounded-md py-[0.4rem] px-3 bg-swBlue text-white border-2 border-white hover:border-blue-100"
+                  onClick={() => {
+                    localStorage.setItem("borrower", JSON.stringify(data))
+                    router.push('/create-loan')
+                  }}
                 >
                   Create loan
                 </Link>

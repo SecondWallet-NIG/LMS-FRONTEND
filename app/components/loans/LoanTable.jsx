@@ -84,8 +84,11 @@ const LoanTable = () => {
         <ReusableDataTable
           filterParams={[
             { name: "Pending" },
-            { name: "Approved" },
+            { name: "Ready for Disbursal" },
+            { name: "In Progress" },
             { name: "Declined" },
+            { name: "Disbursed" },
+            { name: "Cancelled Disbursement" },
           ]}
           dataTransformer={customDataTransformer}
           onClickRow="/loan-applications/view-loan"

@@ -65,6 +65,42 @@ export const getRepaymentSummary = createAsyncThunk(
   }
 );
 
+export const logRepaymentFunc = createAsyncThunk('loanApplication/repayment', async ({loanId, payload}) => {
+  console.log({payload});
+  try {
+    const response = await axios.post(`${API_URL}/repayment/log/loan-application/${loanId}`, payload, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
+
+export const getDisbursementSummary = createAsyncThunk(
+  "disbursement/summary",
+  async () => {
+    try {
+      const response = await axios.get(`${API_URL}/disbursement/summary`, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      });console.log("disbursement", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const LoanRepaymentSlice = createSlice({
   name: "LoanRepayment",
   initialState: {
@@ -114,6 +150,30 @@ const LoanRepaymentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getRepaymentSummary.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(logRepaymentFunc.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(logRepaymentFunc.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(logRepaymentFunc.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getDisbursementSummary.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getDisbursementSummary.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getDisbursementSummary.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

@@ -21,7 +21,7 @@ const LoginScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { loading, error, data: userData } = useSelector((state) => state.user);
+ const { loading, error, data: userData } = useSelector((state) => state.user); 
   // const [loading, setLoading] = useState(false);
   const [loginData, setLoginData] = useState({
     email: "",

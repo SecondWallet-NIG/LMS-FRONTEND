@@ -2,73 +2,56 @@ import { BsFillStarFill, BsPentagonFill, BsTriangleFill } from "react-icons/bs";
 import { FaCircle, FaSquareFull } from "react-icons/fa";
 import { PiDiamondFill } from "react-icons/pi";
 
-const CustomerSummaryCard = ({ data }) => {
+const Card = ({ value, title }) => {
   return (
-    <main className="grid grid-cols-3 gap-4">
-      {data.map((item, index) => (
-        <div key={index} className="p-3 bg-gray-100 text-base rounded-xl">
-          <div className="flex gap-2 text-red items-center">
-            <div className="">
-              {item.loan_type === "total_loan_applications" ||
-              item.loan_type === "amount_borrowed" ? (
-                <FaCircle
-                  size={15}
-                  className={`${
-                    item.loan_type === "total_loan_applications"
-                      ? "text-blue-600"
-                      : "text-gray-300"
-                  } `}
-                />
-              ) : (
-                ""
-              )}
-
-              {item.loan_type === "approved" ||
-              item.loan_type === "proposed_interest" ? (
-                <FaSquareFull
-                  size={15}
-                  className={`${
-                    item.loan_type === "approved"
-                      ? "text-purple-600"
-                      : "text-gray-300"
-                  } `}
-                />
-              ) : (
-                ""
-              )}
-              {item.loan_type === "disbursed" ||
-              item.loan_type === "interest_paid" ? (
-                <PiDiamondFill
-                  size={15}
-                  className={`${
-                    item.loan_type === "disbursed"
-                      ? "text-yellow-400"
-                      : "text-gray-300"
-                  } `}
-                />
-              ) : (
-                ""
-              )}
-              {item.loan_type === "complete_repayments" && (
-                <BsFillStarFill size={15} className="text-green-500" />
-              )}
-              {item.loan_type === "debts" && (
-                <BsTriangleFill size={15} className="text-red-500" />
-              )}
-              {item.loan_type === "rejected/cancelled" && (
-                <BsPentagonFill size={15} className="text-orange-400" />
-              )}
-            </div>
-            <p className="capitalize font-medium text-sm  text-swGray">
-              {item.loan_type.replace(/_/g, " ")}
-            </p>
-          </div>
-          <div className="flex items-center justify-between font-semibold mt-5">
-            <p className="text-xl text-swBlue">{item.number}</p>
-            <p className="text-sm text-swGray font-light">{item.amount} NGN</p>
+    <div>
+      <div className="p-3 bg-gray-100 text-base rounded-xl">
+        <div className="flex gap-2 text-red items-center">
+          <div className="text-sm text-swGray font-semibold">
+            {title}
           </div>
         </div>
-      ))}
+        <div className="flex items-center justify-between font-semibold mt-5">
+          <p className="text-xl text-swBlue"><span>{title === "Total Loan Amount"  || title === "Total Commitment Fee"  ? '₦ ' : null}</span>{value}</p>
+          {/* <p className="text-sm text-swGray font-light">500 NGN</p> */}
+        </div>
+      </div>
+    </div>
+  );
+};
+// {
+//   "totalLoanAmount": 0,
+//   "totalCommitmentTotal": 0,
+//   "count": 0,
+//   "pendingLoanCount": 0,
+//   "ApprovedLoanCount": 0,
+//   "DeclinedLoanCount": 0,
+//   "repaymentTypes": [],
+//   "interestRates": [],
+//   "loanDurationMetrics": [],
+//   "noOfInstallmentRepayment": 0,
+//   "noOfBulletRepayment": 0,
+//   "noOfInterestServicingRepayment": 0
+// }
+const CustomerSummaryCard = ({ data }) => {
+  console.log({ data });
+  return (
+    <main className="grid grid-cols-3 gap-4">
+      <Card title="Total Loan Amount" value={data?.totalLoanAmount} />
+      <Card title="Total Loan Count" value={data?.count} />
+      <Card title="Total Commitment Fee" value={data?.totalCommitmentTotal} />
+      <Card title="Total Approved Loans" value={data?.ApprovedLoanCount} />
+      <Card title="Total Declined Loans" value={data?.DeclinedLoanCount} />
+      <Card title="Total Pending Loans" value={data?.pendingLoanCount} />
+      <Card
+        title="No of Installment Repayments"
+        value={data?.noOfInstallmentRepayment}
+      />
+      <Card title="No of Bullet Repayments" value={data?.noOfBulletRepayment} />
+      <Card
+        title="No of Interest Servicing Repayments"
+        value={data?.noOfInterestServicingRepayment}
+      />
     </main>
   );
 };

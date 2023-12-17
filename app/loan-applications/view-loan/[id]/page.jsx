@@ -126,21 +126,61 @@ const ViewLoan = () => {
   const updateLoan = (update) => {
     if (update === "loanAmount") {
       let updatedData = new FormData();
+
       updatedData.append("loanAmount", loanAmount);
-      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
-      dispatch(getSingleLoan(id));
-      setOpenLoanAmount(false);
-      setFormData({});
+
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+        .unwrap()
+        .then(() => {
+          dispatch(getSingleLoan(id));
+          setOpenLoanAmount(false);
+          setFormData({});
+        })
+        .catch((error) => {
+          console.log({ error });
+          setOpenLoanAmount(false);
+          setFormData({});
+          toast.error(error?.message, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
     } else {
       let updatedData = new FormData();
       updatedData.append(update, formData[update]);
-      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }));
-      dispatch(getSingleLoan(id));
-      setOpenLoanPackage(false);
-      setOpenInterestType(false);
-      setOpenRepaymentType(false);
-      setOpenLoanPeriod(false);
-      setFormData({});
+
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+        .unwrap()
+        .then(() => {
+          dispatch(getSingleLoan(id));
+          setOpenLoanPackage(false);
+          setOpenInterestType(false);
+          setOpenRepaymentType(false);
+          setOpenLoanPeriod(false);
+          setFormData({});
+        })
+        .catch((error) => {
+          dispatch(getSingleLoan(id));
+          setOpenLoanPackage(false);
+          setOpenInterestType(false);
+          setOpenRepaymentType(false);
+          setOpenLoanPeriod(false);
+          setFormData({});
+          toast.error(error?.message, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
     }
   };
 
@@ -221,7 +261,7 @@ const ViewLoan = () => {
     const _user = JSON.parse(localStorage.getItem("user"));
 
     if (_user) {
-      setUser(_user?.data?.user?._id);
+      setUser(_user?.data?.user);
     }
 
     if (data) {
@@ -318,21 +358,24 @@ const ViewLoan = () => {
                     >
                       <p>{data?.data?.loanApplication?.status} </p>
                     </button> */}
-                    <Button
-                      className={
-                        "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
-                      }
-                      disabled={
-                        data?.data?.loanApplication?.status == "Disbursed"
-                          ? true
-                          : false
-                      }
-                      onClick={() => {
-                        setLogRepayment(!logRepayment);
-                      }}
-                    >
-                      <p>Disburse Loan</p>
-                    </Button>
+                    {useriD?.role?.tag === "CFO" ? (
+                      <Button
+                        className={
+                          "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
+                        }
+                        disabled={
+                          data?.data?.loanApplication?.status == "Disbursed"
+                            ? true
+                            : false
+                        }
+                        onClick={() => {
+                          setLogRepayment(!logRepayment);
+                        }}
+                      >
+                        <p>Disburse Loan</p>
+                      </Button>
+                    ) : null}
+
                     <button
                       onClick={() => {
                         router.push(
@@ -540,7 +583,7 @@ const ViewLoan = () => {
               </table>
             </div>
           </div>
-          {data?.data?.loanApplication?.createdBy === useriD ? (
+          {data?.data?.loanApplication?.createdBy === useriD?._id ? (
             <div className="ml-5 mr-5 mt-5">
               <h6 className="text-center font-semibold p-2 ">
                 Loan Approval Needed
@@ -549,7 +592,7 @@ const ViewLoan = () => {
                 <table className=" w-full ">
                   <thead className="bg-swLightGray ">
                     <tr>
-                    <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
                         ID
                       </th>
                       <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
@@ -569,7 +612,9 @@ const ViewLoan = () => {
                     {Array.isArray(loanApprovals?.data?.data) &&
                       loanApprovals?.data?.data?.map((item, index) => (
                         <tr className="text-xs" key={index}>
-                             <td className="p-2  text-black">{item?.approvalLevel}</td>
+                          <td className="p-2  text-black">
+                            {item?.approvalLevel}
+                          </td>
                           <td className="p-2 text-black">
                             {item?.approvalLevel == 1
                               ? "Approve borrowers Credit"
@@ -627,13 +672,13 @@ const ViewLoan = () => {
               </div>
             </div>
           ) : null}
-          {data?.data?.loanApplication?.createdBy === useriD ? null : (
+          {data?.data?.loanApplication?.createdBy === useriD?._id ? null : (
             <div className="ml-5 mr-5 mt-5">
               {loanApprovals &&
               Array.isArray(loanApprovals?.data?.data) &&
               loanApprovals?.data?.data.filter(
                 (item) =>
-                  item?.assignee?._id === useriD &&
+                  item?.assignee?._id === useriD?._id &&
                   item?.status === "Approval Requested"
               ).length > 0 ? (
                 <div>
@@ -665,7 +710,7 @@ const ViewLoan = () => {
                           loanApprovals?.data?.data
                             .filter(
                               (item) =>
-                                item?.assignee?._id === useriD &&
+                                item?.assignee?._id === useriD?._id &&
                                 item?.status === "Approval Requested"
                             )
                             .map((item, index) => (
@@ -744,15 +789,6 @@ const ViewLoan = () => {
                   >
                     Activity logs
                   </button>
-                  {/* <button
-                    onClick={() => handleActivityToggle("summary")}
-                    className={`${
-                      activityButton === "summary" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
-                  >
-                    Summary
-                  </button> */}
                   <button
                     onClick={() => handleActivityToggle("loans")}
                     className={`${
@@ -760,17 +796,8 @@ const ViewLoan = () => {
                       "font-semibold text-swBlue bg-blue-50"
                     } p-2 rounded-md cursor-pointer`}
                   >
-                    Loan Docs
+                    Loan Documents
                   </button>
-                  {/* <button
-                    onClick={() => handleActivityToggle("disbursement")}
-                    className={`${
-                      activityButton === "disbursement" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
-                  >
-                    Disbursment
-                  </button> */}
                   <button
                     onClick={() => handleActivityToggle("repayment")}
                     className={`${

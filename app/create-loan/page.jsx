@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
@@ -41,7 +40,6 @@ const CreateLoan = () => {
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
 
-  // console.log(loanPackage?.data?.data);
 
   const [formData, setFormData] = useState({
     loanAmount: "",
@@ -281,6 +279,7 @@ const CreateLoan = () => {
   };
 
   const submitLoan = (e) => {
+    localStorage.removeItem("borrower");
     let userId;
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -331,6 +330,12 @@ const CreateLoan = () => {
   }, []);
 
   useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("borrower"))
+    setFormData({
+      ...formData,
+      customerId: data?.profileInfo?._id,
+    });
+    setSelectedCustomer(data?.profileInfo);
     setFilteredData(customer?.data);
   }, [customer?.data]);
 
@@ -975,17 +980,7 @@ const CreateLoan = () => {
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
-                  {/* <div className="flex justify-between  text-sm  font-semibold pt-2">
-                    <div className="text-swGray">
-                      Total payment at maturity :
-                    </div>{" "}
-                    <div className="text-swBlue">
-                      ₦
-                      {parseFloat(interest) +
-                        parseFloat(formData.loanAmount) +
-                        parseFloat(formData.commitmentTotal) || 0}
-                    </div>
-                  </div> */}
+               
                 </div>
                 <div className="">
                   <Button
