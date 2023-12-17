@@ -37,7 +37,7 @@ const CustomerSummaryCard = ({ data }) => {
   console.log({ data });
   return (
     <main className="grid grid-cols-3 gap-4">
-      <Card title="Total Loan Amount" value={data?.totalLoanAmount} />
+      <Card title="Total Loan Amount" value={data?.totalLoanAmount?.toLocaleString()} />
       <Card title="Total Loan Count" value={data?.count} />
       <Card title="Total Commitment Fee" value={data?.totalCommitmentTotal} />
       <Card title="Total Approved Loans" value={data?.ApprovedLoanCount} />

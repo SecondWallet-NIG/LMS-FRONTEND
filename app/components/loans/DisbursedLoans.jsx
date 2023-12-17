@@ -32,13 +32,13 @@ const DisbursedLoans = () => {
       loanPackageId: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
-          <div className="text-xs text-gray-500">SWL-{`${item?.loanId}`}</div>
+          <div className="text-xs text-gray-500">{`${item?.loanId}`}</div>
         </div>
       ),
       loanAmount: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            ₦ {`${item?.loanAmount}`}
+            ₦ {item?.loanAmount.toLocaleString()}
           </div>
         </div>
       ),
@@ -86,7 +86,7 @@ const DisbursedLoans = () => {
           onClickRow="/loan-applications/view-loan"
           headers={headers}
           initialData={[]}
-          apiEndpoint="http://localhost:8000/api/disbursement"
+          apiEndpoint="https://secondwallet-stag.onrender.com/api/disbursement"
           filters={true}
           pagination={true}
         //  userId={userId}

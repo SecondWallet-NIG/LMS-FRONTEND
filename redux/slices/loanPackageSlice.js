@@ -38,6 +38,15 @@ export const getLoanPackage = createAsyncThunk("LoanPackage/all", async () => {
   return response.data;
 });
 
+export const getSingleLoanPackage = createAsyncThunk("LoanPackage/single", async (id) => {
+  const response = await axios.get(`${API_URL}/loan-package/${id}`, {
+    headers: {
+      Authorization: `Bearer ${user?.data?.token}`,
+    },
+  });
+  return response.data;
+});
+
 const LoanPackageSlice = createSlice({
   name: "LoanPackage",
   initialState: {
@@ -64,6 +73,19 @@ const LoanPackageSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getLoanPackage.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getSingleLoanPackage.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getSingleLoanPackage.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getSingleLoanPackage.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

@@ -44,7 +44,7 @@ const Repayment = () => {
       id: item._id,
       loanId: (
         <div className="text-md font-[500] text-gray-700">
-          SWL-{item?.loanApplication?.loanId}
+          {item?.loanApplication?.loanId}
         </div>
       ),
       repaymentNumber: (
@@ -54,22 +54,22 @@ const Repayment = () => {
       ),
       dueDate: (
         <div className="text-md font-[500] text-gray-700">
-          {item.dueDate?.slice(0, 10)}
+          {item.dueDate?.slice(0, 15)}
         </div>
       ),
       amountDue: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.amountDue || 0} 
+         ₦ {item?.amountDue.toLocaleString()|| 0} 
         </div>
       ),
       amountPaid: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.amountPaid || 0} 
+         ₦ {item?.amountPaid?.toLocaleString() || 0} 
         </div>
       ),
       balanceToPay: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.balanceToPay || 0} 
+         ₦ {item?.balanceToPay?.toLocaleString() || 0} 
         </div>
       ),
       status: (
@@ -77,7 +77,7 @@ const Repayment = () => {
           className={`${
             item.status === "Unpaid"
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : "bg-[#F8A9A3]"
+              : "bg-[#F8A9A3] text-white"
           } px-2 py-1 rounded-full`}
         >
           {item.status}
@@ -117,12 +117,12 @@ const Repayment = () => {
         </div>
 
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-          {data?.data.map((item, index) => (
+          {data && data?.data?.map((item, index) => (
             <div
               className={`rounded-lg border p-2 ${
-                item.loanTypeTitle === "Total Repayments"
+                item?.loanTypeTitle === "Total Repayments"
                   ? "border-blue-200 text-swBlue"
-                  : item.loanTypeTitle === "Upcoming Repayments"
+                  : item?.loanTypeTitle === "Upcoming Repayments"
                   ? "border-green-200 text-swGreen"
                   : "border-red-100 text-swIndicatorLightRed"
               }`}
@@ -131,16 +131,16 @@ const Repayment = () => {
               <p>{item.loanTypeTitle}</p>
               <div
                 className={`flex justify-between items-center font-medium mt-5 ${
-                  item.loanTypeTitle === "Total Repayments"
+                  item?.loanTypeTitle === "Total Repayments"
                     ? "text-swDarkBlue"
-                    : item.loanTypeTitle === "Upcoming Repayments"
+                    : item?.loanTypeTitle === "Upcoming Repayments"
                     ? "text-swDarkGreen"
                     : "text-swDarkRed"
                 }`}
               >
                 <p className="text-3xl font-semibold">{item?.countLast24hr}</p>
                 <p className="font-medium">
-                  &#8358; {item?.amount.toLocaleString()}
+                  &#8358; {item?.amount?.toLocaleString()}
                 </p>
               </div>
             </div>
@@ -152,7 +152,7 @@ const Repayment = () => {
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}
-            apiEndpoint="http://localhost:8000/api/repayment"
+            apiEndpoint="https://secondwallet-stag.onrender.com/api/repayment"
             btnTextClick={() => {
               router.push("/create-borrower");
             }}

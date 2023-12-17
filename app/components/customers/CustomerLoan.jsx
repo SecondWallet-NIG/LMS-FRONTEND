@@ -32,7 +32,7 @@ const customDataTransformer = (apiData) => {
     ),
     totalLoanAmount: (
       <div>
-        <div className="text-md font-[500] text-gray-700">₦ {`${item?.totalLoanAmount}`}</div>
+        <div className="text-md font-[500] text-gray-700">₦ {item?.totalLoanAmount?.toLocaleString()}</div>
       </div>
     ),
     status: (
@@ -58,7 +58,7 @@ const CustomerLoan = () => {
         onClickRow="/borrowers/profile"
         headers={header}
         initialData={[]}
-        apiEndpoint="http://localhost:8000/api/customer/profile-information"
+        apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
         btnText={
           <div className="flex gap-1 items-center p-1">
             <AiOutlinePlus size={15} />

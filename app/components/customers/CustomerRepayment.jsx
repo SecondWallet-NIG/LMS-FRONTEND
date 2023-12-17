@@ -63,7 +63,7 @@ const CustomerRepayment = ({ loanId }) => {
   ];
 
   const headers = [
-    { id: "createdAt", label: "Date Created" },
+    { id: "createdAt", label: "Due Date" },
     { id: "amountDue", label: "Amount Due" },
     { id: "loggedBy", label: "Collected By" },
     { id: "repaymentMethod", label: "Payment Method" },
@@ -79,13 +79,13 @@ const CustomerRepayment = ({ loanId }) => {
     return apiData?.map((item) => ({
       id: item._id,
       createdAt: (
-        <div className="text-md font-[500] text-gray-700">11th Aug, 2023</div>
+        <div className="text-md font-[500] text-gray-700">{item?.dueDate.slice(0, 15)}</div>
       ),
 
       amountDue: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            ₦ {item?.amountDue}
+            ₦ {item?.amountDue.toLocaleString()}
           </div>
         </div>
       ),
@@ -106,14 +106,14 @@ const CustomerRepayment = ({ loanId }) => {
       amountPaid: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            {item?.amountPaid === null ? "0" : item?.amountPaid}
+          ₦ {item?.amountPaid === null ? "0" : item?.amountPaid.toLocaleString()}
           </div>
         </div>
       ),
       balanceToPay: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            {item?.balanceToPay === null ? "0" : item?.balanceToPay}
+          ₦ {item?.balanceToPay === null ? "0" : item?.balanceToPay.toLocaleString()}
           </div>
         </div>
       ),
@@ -175,7 +175,7 @@ const CustomerRepayment = ({ loanId }) => {
             dataTransformer={customDataTransformer}
             headers={headers}
             initialData={[]}
-            apiEndpoint={`http://localhost:8000/api/repayment/loan-application/${loanId}`}
+            apiEndpoint={`https://secondwallet-stag.onrender.com/api/repayment/loan-application/${loanId}`}
             filters={false}
             pagination={false}
           /> : null

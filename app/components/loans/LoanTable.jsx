@@ -26,19 +26,19 @@ const LoanTable = () => {
       name: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.customer?.firstName} ${item?.customer?.lastName}`}</div>
-          <div className="text-xs text-gray-500">Borrower&apos;s ID</div>
+          <div className="text-xs text-gray-500">{item?.customer?.customerId}</div>
         </div>
       ),
       loanPackageId: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
-          <div className="text-xs text-gray-500">SWL-{`${item?.loanId}`}</div>
+          <div className="text-xs text-gray-500">{`${item?.loanId}`}</div>
         </div>
       ),
       loanAmount: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            ₦ {`${item?.loanAmount}`}
+            ₦ {item?.loanAmount.toLocaleString()}
           </div>
         </div>
       ),
@@ -94,7 +94,7 @@ const LoanTable = () => {
           onClickRow="/loan-applications/view-loan"
           headers={headers}
           initialData={[]}
-          apiEndpoint="http://localhost:8000/api/loan-application/all"
+          apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
           btnText={
             <div className="flex gap-1 items-center p-1">
               <p className="hidden lg:block">create loan</p>

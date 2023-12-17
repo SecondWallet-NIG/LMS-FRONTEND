@@ -96,10 +96,10 @@ const CreatePlansAndPackages = () => {
       newErrors.interestRate = "Interest rate is required";
       isValid = false;
     }
-    if (createPlan.repaymentInterval.trim() === "") {
-      newErrors.repaymentInterval = "Duration is required";
-      isValid = false;
-    }
+    // if (createPlan.repaymentInterval.trim() === "") {
+    //   newErrors.repaymentInterval = "Duration is required";
+    //   isValid = false;
+    // }
 
     setErrors(newErrors);
     return isValid;
@@ -239,7 +239,7 @@ const CreatePlansAndPackages = () => {
             )}
           </div>
 
-          <div>
+          {/* <div>
             <p className="mb-2 text-sm">
               Eligibility criteria <span className="text-red-500">*</span>
             </p>
@@ -257,9 +257,9 @@ const CreatePlansAndPackages = () => {
                 Earns at least 1,000,000 per annum
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <InputField
+          {/* <InputField
             required={true}
             label={"Minimum collateral amount"}
             placeholder={"500,000"}
@@ -280,8 +280,8 @@ const CreatePlansAndPackages = () => {
                 {errors.repaymentInterval}
               </span>
             )}
-          </div>
-
+          </div> */}
+{/* 
           <div>
             <p className="mb-2 text-sm">
               Loan Description <span className="text-red-500">*</span>
@@ -292,7 +292,7 @@ const CreatePlansAndPackages = () => {
               className="w-full border hover:border-swBlue p-2 focus:outline-none rounded-md"
               rows="8"
             ></textarea>
-          </div>
+          </div> */}
 
           <div className="flex justify-between ">
             <button

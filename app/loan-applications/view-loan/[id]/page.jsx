@@ -395,18 +395,18 @@ const ViewLoan = () => {
             <div className="w-1/2">
               <div className="flex justify-between items-center gap-5">
                 <div className="w-full bg-gray-100 rounded-xl p-2">
-                  <p className="text-base font-medium">Loan ID:</p>
+                  <p className="text-sm font-medium">Loan ID:</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swGray font-semibold mt-4">
-                      SWL-{data?.data?.loanApplication?.loanId}
+                    <p className="text-md text-swBlue font-semibold mt-4">
+                      {data?.data?.loanApplication?.loanId}
                     </p>
                   </div>
                 </div>
                 <div className="w-full bg-gray-100 rounded-xl p-2">
-                  <p className="text-base font-medium">Loan Amount:</p>
+                  <p className="text-sm font-medium">Loan Amount:</p>
 
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swGray font-semibold mt-4">
+                    <p className="text-md text-swBlue font-semibold mt-4">
                       ₦{" "}
                       {data?.data?.loanApplication?.loanAmount.toLocaleString()}
                     </p>
@@ -419,6 +419,14 @@ const ViewLoan = () => {
                     >
                       <MdEdit size={15} />
                     </div>
+                  </div>
+                </div>
+                <div className="w-full bg-gray-100 rounded-xl p-2">
+                  <p className="text-sm font-medium">Outstanding Balance</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-md text-red-500 font-semibold mt-4">
+                    ₦{" "} {data?.data?.loanApplication?.outstandingBalance || 0}
+                    </p>
                   </div>
                 </div>
               </div>

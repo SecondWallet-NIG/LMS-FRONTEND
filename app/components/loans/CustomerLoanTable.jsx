@@ -30,12 +30,12 @@ const CustomerLoanTable = ({id}) => {
       loanPackageId: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
-          <div className="text-xs text-gray-500">SWL-{`${item?.loanId}`}</div>
+          <div className="text-xs text-gray-500">{`${item?.loanId}`}</div>
         </div>
       ),
       loanAmount: (
         <div>
-          <div className="text-md font-[500] text-gray-700">₦ {`${item?.loanAmount}`}</div>
+          <div className="text-md font-[500] text-gray-700">₦ {item?.loanAmount.toLocaleString()}</div>
         </div>
       ),
       status: (
@@ -64,7 +64,7 @@ const CustomerLoanTable = ({id}) => {
         onClickRow="/loan-applications/view-loan"
         headers={headers}
         initialData={[]}
-        apiEndpoint={`http://localhost:8000/api/loan-application/customer/${id}`}
+        apiEndpoint={`https://secondwallet-stag.onrender.com/api/loan-application/customer/${id}`}
         // btnText={
         //   <div className="flex gap-1 items-center p-1">
         //     <p className="hidden lg:block">create customer</p>

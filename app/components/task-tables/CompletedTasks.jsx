@@ -27,7 +27,7 @@ const CompletedTasks = () => {
         <div>
           <div className="text-md font-[500] text-gray-700">
             {" "}
-            SWL-{item?.loanApplication?.loanId}
+            {item?.loanApplication?.loanId}
           </div>
         </div>
       ),
@@ -80,7 +80,7 @@ const CompletedTasks = () => {
         dataTransformer={customDataTransformer}
         headers={headers}
         initialData={[]}
-        apiEndpoint={`http://localhost:8000/api/loan-application/task/${user?.data?.user?._id}`}
+        apiEndpoint={`https://secondwallet-stag.onrender.com/api/loan-application/task/${user?.data?.user?._id}`}
         filters={false}
         pagination={true}
       />

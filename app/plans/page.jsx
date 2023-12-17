@@ -32,19 +32,9 @@ const LoanPackages = () => {
     setSearchTerm(e.target.value);
   };
 
-  console.log(searchTerm);
 
-  const loanPlans = [
-    {
-      type: "Student Loan",
-      status: "active",
-      interest_rate: "20%",
-      repayment_type: "Bullet",
-      minimum_loan: 50000,
-      maximum_loan: 500000,
-      active_loan: 50,
-    },
-  ];
+
+
 
   useEffect(() => {
     dispatch(getLoanPackage());
