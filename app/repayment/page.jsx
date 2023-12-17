@@ -1,16 +1,32 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
+import { getRepaymentSummary } from "@/redux/slices/loanRepaymentSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Repayment = () => {
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("all-repayment");
-
+  const { loading, error, data } = useSelector((state) => state.loanRepayment);
+  console.log({data});
   const cardData = [
-    { repaymentType: "Total repayments", total: 54, amount: 46093090303 },
-    { repaymentType: "Upcoming repayments", total: 51, amount: 46093090303 },
-    { repaymentType: "Overdue repayments", total: 53, amount: 46093090303 },
+    { loanTypeTitle: "Total repayments", total: 54, amount: 46093090303 },
+    { loanTypeTitle: "Upcoming repayments", total: 51, amount: 46093090303 },
+    { loanTypeTitle: "Overdue repayments", total: 53, amount: 46093090303 },
   ];
+
+   
+// {unpaidRepayment: 4, amount: 2400000, countLast24hr: 4}
+// 2
+// : 
+// {fullyPaidRepayment: 0, amount: 0, countLast24hr: 0}
+// 3
+// : 
+// {installmentRepayment: 0, amount: 0, countLast24hr: 0}
+// 4
+// : 
+// {overdueRepayment: 0, amount: 0, countLast24hr: 0}
 
   const header = [
     { id: "loanId", label: "Loan ID" },
@@ -20,12 +36,10 @@ const Repayment = () => {
     { id: "amountPaid", label: "Amount Paid" },
     { id: "balanceToPay", label: "Balance To Pay" },
     { id: "status", label: "Status" },
-    //   { id: "nin", label: "NIN" },
-    //   { id: "status", label: "Status" },
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({apiData});
+    console.log({ apiData });
     return apiData?.map((item) => ({
       id: item._id,
       loanId: (
@@ -45,32 +59,36 @@ const Repayment = () => {
       ),
       amountDue: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.amountDue}
+          {item?.amountDue || 0} 
         </div>
       ),
       amountPaid: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.amountPaid}
+          {item?.amountPaid || 0} 
         </div>
       ),
       balanceToPay: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.balanceToPay}
+          {item?.balanceToPay || 0} 
         </div>
       ),
       status: (
         <button
-        className={`${
-          item.status === "Unpaid"
-            ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-            : "bg-[#F8A9A3]"
-        } px-2 py-1 rounded-full`}
-      >
-        {item.status}
-      </button>
+          className={`${
+            item.status === "Unpaid"
+              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              : "bg-[#F8A9A3]"
+          } px-2 py-1 rounded-full`}
+        >
+          {item.status}
+        </button>
       ),
     }));
   };
+  useEffect(() => {
+    dispatch(getRepaymentSummary());
+
+  }, []);
 
   return (
     <DashboardLayout>
@@ -98,31 +116,31 @@ const Repayment = () => {
           </p>
         </div>
 
-        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          {cardData.map((item, index) => (
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+          {data?.data.map((item, index) => (
             <div
               className={`rounded-lg border p-2 ${
-                item.repaymentType === "Total repayments"
+                item.loanTypeTitle === "Total Repayments"
                   ? "border-blue-200 text-swBlue"
-                  : item.repaymentType === "Upcoming repayments"
+                  : item.loanTypeTitle === "Upcoming Repayments"
                   ? "border-green-200 text-swGreen"
                   : "border-red-100 text-swIndicatorLightRed"
               }`}
               key={index}
             >
-              <p>{item.repaymentType}</p>
+              <p>{item.loanTypeTitle}</p>
               <div
                 className={`flex justify-between items-center font-medium mt-5 ${
-                  item.repaymentType === "Total repayments"
+                  item.loanTypeTitle === "Total Repayments"
                     ? "text-swDarkBlue"
-                    : item.repaymentType === "Upcoming repayments"
+                    : item.loanTypeTitle === "Upcoming Repayments"
                     ? "text-swDarkGreen"
                     : "text-swDarkRed"
                 }`}
               >
-                <p className="text-3xl font-semibold">{item.total}</p>
+                <p className="text-3xl font-semibold">{item?.countLast24hr}</p>
                 <p className="font-medium">
-                  &#8358; {item.amount.toLocaleString()}
+                  &#8358; {item?.amount.toLocaleString()}
                 </p>
               </div>
             </div>
@@ -134,7 +152,7 @@ const Repayment = () => {
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}
-            apiEndpoint="https://secondwallet-stag.onrender.com/api/repayment"
+            apiEndpoint="http://localhost:8000/api/repayment"
             btnTextClick={() => {
               router.push("/create-borrower");
             }}

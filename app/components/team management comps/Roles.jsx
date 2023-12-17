@@ -54,7 +54,7 @@ const Roles = () => {
 
         <ReusableDataTable
           dataTransformer={customDataTransformer}
-          apiEndpoint="https://secondwallet-stag.onrender.com/api/role/all"
+          apiEndpoint="http://localhost:8000/api/role/all"
           initialData={[]}
           headers={headers}
           filters={true}
