@@ -3,25 +3,144 @@ import InputField from "../shared/input/InputField";
 import { FiUser } from "react-icons/fi";
 import { FaCircleUser } from "react-icons/fa6";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserById, updateUser } from "@/redux/slices/userSlice";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AccountPage = () => {
+  const dispatch = useDispatch();
+  const [userDetails, setUserDetails] = useState("");
+  const [firstName, setFirstName] = useState(userDetails?.firstName);
+  const [lastName, setLastName] = useState(userDetails?.lastName);
+  const [email, setEmail] = useState(userDetails?.email);
+  const [profileImg, setProfileImg] = useState(null);
+  const [loading, setLoading] = useState(false);
+  console.log(userDetails);
+  const [formData, setFormData] = useState({
+    profilePicture: null,
+    firstName: "",
+    lastName: "",
+    email: "",
+    role: "",
+  });
+
+  const handleFileInputChange = (e) => {
+    // console.log(e.target.id);
+    const files = Array.from(e.target.files);
+    if (e.target.id === "profilePicture" && e.target.files.length > 0) {
+      // console.log(files[0])
+      setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
+    } else {
+      setSelectedFiles(files);
+    }
+  };
+  // console.log(userDetails);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const payload = new FormData();
+    payload.append("profilePicture", formData.profilePicture);
+    payload.append("firstName", formData.firstName);
+    payload.append("lastName", formData.lastName);
+    payload.append("email", formData.email);
+    console.log(...payload);
+    dispatch(updateUser({ userId: userDetails?._id, payload }))
+      .unwrap()
+      .then((res) => {
+        toast.success("Profile updated successfully");
+        getUserById(userDetails?._id)
+        setLoading(false);
+        console.log(res)
+      })
+      .catch((error) => {
+        toast.error("An error occured");
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUserDetails(user?.data?.user);
+    console.log(user)
+  }, []);
+
+  useEffect(() => {
+    setFirstName(userDetails?.firstName);
+    setLastName(userDetails?.lastName);
+    setEmail(userDetails?.email);
+    setFormData({
+      profilePicture: userDetails?.profilePicture,
+      firstName: userDetails?.firstName,
+      lastName: userDetails?.lastName,
+      email: userDetails?.email,
+      role: userDetails?.role?.name,
+    });
+  }, [userDetails]);
+
+  useEffect(() => {
+    if (
+      formData?.profilePicture !== null &&
+      formData?.profilePicture &&
+      (formData?.profilePicture instanceof Blob ||
+        formData?.profilePicture instanceof File)
+    ) {
+      try {
+        setProfileImg(URL.createObjectURL(formData.profilePicture));
+      } catch (error) {
+        console.error("Error creating object URL:", error);
+      }
+    } else {
+      // Handle cases where the selected file is not a Blob or File
+      console.error("Invalid file type selected.");
+    }
+  }, [formData?.profilePicture]);
   return (
     <div className="max-w-3xl mx-auto p-5 my-10">
-      <div className="flex justify-between items-center">
-        <div className="flex gap-3 items-center">
-          <FaCircleUser size={80} />
-          <div className="font-medium text-lg">
-            <p className="text-swBlack">Profile picture</p>
-            <p>PNG,JPEG under 15mb</p>
+      <ToastContainer />
+      <div className="flex gap-5 items-center">
+        {profileImg !== null ? (
+          <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+            <Image
+              src={profileImg !== null && profileImg}
+              alt="profile"
+              fill
+              sizes="100%"
+            />
           </div>
-        </div>
+        ) : (
+          <div>
+            {userDetails?.profilePicture ? (
+              <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                <Image
+                  src={userDetails?.profilePicture}
+                  alt="profile"
+                  fill
+                  sizes="100%"
+                />
+              </div>
+            ) : (
+              <div className="border-2 p-4 rounded-full">
+                <FiUser size={40} />
+              </div>
+            )}
+          </div>
+        )}
 
         <label
-          htmlFor="uploadProfilePic"
-          className="border py-2 px-3 text-swBlack rounded-md font-semibold cursor-pointer"
+          htmlFor="profilePicture"
+          className="border-2 rounded-lg p-1 px-2 font-semibold cursor-pointer"
         >
-          <input type="file" id="uploadProfilePic" className="hidden" />
-          Update profile picture
+          <input
+            type="file"
+            id="profilePicture"
+            className="hidden"
+            onChange={handleFileInputChange}
+          />
+          {profileImg !== null ? "Change file" : "Select a file"}
         </label>
       </div>
       <div className="my-10">
@@ -33,6 +152,10 @@ const AccountPage = () => {
               required={true}
               startIcon={<FiUser size={20} />}
               placeholder={"John"}
+              value={formData?.firstName}
+              onChange={(e) => {
+                setFormData((prev) => ({ ...prev, firstName: e.target.value }));
+              }}
             />
           </div>
           <div className="w-full">
@@ -41,13 +164,17 @@ const AccountPage = () => {
               required={true}
               startIcon={<FiUser size={20} />}
               placeholder={"Doe"}
+              value={formData?.lastName}
+              onChange={(e) => {
+                setFormData((prev) => ({ ...prev, lastName: e.target.value }));
+              }}
             />
           </div>
         </div>
       </div>
 
       <div className="mb-10">
-        <p className="font-semibold text-lg">Full Name</p>
+        <p className="font-semibold text-lg">Email</p>
         <p>Manage your account email for correspondence and login purpose</p>
 
         <div className="mt-5">
@@ -56,6 +183,10 @@ const AccountPage = () => {
             required={true}
             startIcon={<MdOutlineEmail size={20} />}
             placeholder={"Johndoe@gmail.com"}
+            value={formData?.email}
+            onChange={(e) => {
+              setFormData((prev) => ({ ...prev, email: e.target.value }));
+            }}
           />
         </div>
       </div>
@@ -65,9 +196,9 @@ const AccountPage = () => {
         <p className="my-3">View your account role and access</p>
         <div className="flex ">
           <p className="w-60 font-medium">Role</p>
-          <p>Role name to show here</p>
+          <p>{formData?.role}</p>
         </div>
-        <div className="flex my-3 w-full">
+        {/* <div className="flex my-3 w-full">
           <p className="w-60 font-medium">Permissions</p>
           <div className="p-5 flex flex-col gap-3">
             <div className="w-full flex">
@@ -104,12 +235,17 @@ const AccountPage = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex justify-end gap-3 mt-5 p-3 border-t">
         <EditableButton whiteBtn={true} label={"Cancel"} />
-        <EditableButton blueBtn={true} label={"Save changes"} />
+        <EditableButton
+          blueBtn={true}
+          label={"Save changes"}
+          onClick={handleSubmit}
+          disabled={loading ? true : false}
+        />
       </div>
     </div>
   );

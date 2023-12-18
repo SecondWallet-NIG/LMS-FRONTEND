@@ -76,13 +76,16 @@ const CustomerProfile = () => {
         <div className="flex gap-2 border-b border-gray-300 items-end py-4 px-8">
           <div className="w-1/2">
             <div className="flex ">
-              <div>
-                <img
-                  className="rounded-full"
-                  src={data?.profileInfo?.profilePicture}
-                  alt="user image"
-                  width="60px"
-                  height="60px"
+              <div className="rounded-full border-2 border-swBlue overflow-hidden h-[4.7rem] w-[4.7rem] relative">
+                <Image
+                  src={
+                    data?.profileInfo?.profilePicture
+                      ? data?.profileInfo?.profilePicture
+                      : "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
+                  }
+                  alt="user"
+                  fill
+                  sizes="100%"
                 />
               </div>
               <div className="ml-4 h-fit">

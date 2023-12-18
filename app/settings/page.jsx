@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import Image from "next/image";
 import { FaCircleUser } from "react-icons/fa6";
@@ -8,9 +8,12 @@ import InputField from "../components/shared/input/InputField";
 import { MdOutlineEmail } from "react-icons/md";
 import AccountPage from "../components/settings/AccountPage";
 import SecurityPage from "../components/settings/SecurityPage";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserById } from "@/redux/slices/userSlice";
 
 const Settings = () => {
   const [pageState, setPageState] = useState("Account");
+
   return (
     <DashboardLayout>
       <main className="p-5 text-swTextColor">
