@@ -51,7 +51,7 @@ const LoanPackages = () => {
           <RiArrowRightSLine size={20} />
         </Link>
         <div className="flex items-center justify-between">
-          <p className="font-semibold text-3xl">Available loan plans</p>
+          <p className="font-semibold text-swGray text-xl">Available loan plans</p>
           {/* <div className="flex gap-2 mt-5">
             <div className="flex items-center">
               <InputField
@@ -104,7 +104,7 @@ const LoanPackages = () => {
                 className="bg-swLightGray rounded-xl p-4 flex flex-col gap-1"
               >
                 <div className="flex justify-between items-center mb-3">
-                  <p className="font-semibold text-xl">{item?.name}</p>
+                  <p className="font-semibold text-swGray text-sm">{item?.name}</p>
                   <p
                     className={`${
                       item?.status?.toLocaleLowerCase() === "active"
@@ -117,15 +117,15 @@ const LoanPackages = () => {
                     {item?.status}
                   </p>
                 </div>
-                <div className="flex justify-between">
-                  <p className="text-lg">Interest rate</p>
-                  <p className="text-lg font-bold">
+                <div className="flex justify-between mb-2">
+                  <p className="text-sm">Interest rate</p>
+                  <p className="text-sm font-bold">
                     {item?.interestRate?.rate}%
                   </p>
                 </div>
-                <div className="flex justify-between">
-                  <p>Interest type</p>
-                  <p className="text-lg font-bold whitespace-nowrap">
+                <div className="flex justify-between mb-2">
+                  <p className="text-sm">Interest type</p>
+                  <p className="text-sm font-bold">
                     {item?.interestRate?.rateType}
                   </p>
                 </div>
@@ -133,13 +133,13 @@ const LoanPackages = () => {
                   <p>Repayment type</p>
                   <p className="font-semibold">{item.repayment_type}</p>
                 </div> */}
-                <div className="flex justify-between">
-                  <p>Minimum loan</p>
-                  <p className="font-bold">{item?.loanAmountRange?.min}</p>
+                <div className="flex justify-between mb-2">
+                  <p className="text-sm">Minimum loan</p>
+                  <p className="font-semibold text-sm">{item?.loanAmountRange?.min}</p>
                 </div>
-                <div className="flex justify-between">
-                  <p>Maximum loan</p>
-                  <p className="font-bold">{item?.loanAmountRange?.max}</p>
+                <div className="flex justify-between mb-2">
+                  <p className="text-sm">Maximum loan</p>
+                  <p className="font-semibold text-sm">{item?.loanAmountRange?.max}</p>
                 </div>
                 {/* <div className="flex justify-between">
                   <p>Active loans</p>
@@ -150,7 +150,7 @@ const LoanPackages = () => {
                   href={`plans/view-plan/${item?._id}`}
                   className="active:bg-gray-300 mt-2 w-full p-3 font-semibold text-gray-600 border-2 border-transparent hover:border-gray-300 hover:bg-white rounded-lg flex gap-2 justify-center"
                 >
-                  Edit plan
+                  View Plan
                   <FiEdit2 size={20} />
                 </Link>
               </div>
