@@ -61,7 +61,8 @@ const Sidebar = () => {
               src={companyLogoIcon}
               alt="company logo"
               priority={true}
-              layout="fill"
+              fill
+              sizes="100%"
             />
           </div>
         )}

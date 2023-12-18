@@ -10,17 +10,20 @@ import { createUser } from "@/redux/slices/userSlice";
 import Button from "../../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
+import Image from "next/image";
 
 const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   const dispatch = useDispatch();
 
   const { loading } = useSelector((state) => state.user);
-
+  const [profileImg, setProfileImg] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const successPopup = (selected) => {
     selected(true);
   };
 
   const [formData, setFormData] = useState({
+    profilePicture: null,
     firstName: "",
     lastName: "",
     email: "",
@@ -35,6 +38,16 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     lastName: "",
     email: "",
   });
+  const handleFileInputChange = (e) => {
+    // console.log(e.target.id);
+    const files = Array.from(e.target.files);
+    if (e.target.id === "profilePicture" && e.target.files.length > 0) {
+      // console.log(files[0])
+      setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
+    } else {
+      setSelectedFiles(files);
+    }
+  };
 
   console.log(formData);
 
@@ -108,6 +121,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   };
   const resetForm = () => {
     setFormData({
+      profilePicture: null,
       firstName: "",
       lastName: "",
       email: "",
@@ -121,6 +135,15 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
+      const payload = new FormData();
+      payload.append("profilePicture", formData.profilePicture);
+      payload.append("firstName", formData.firstName);
+      payload.append("lastName", formData.lastName);
+      payload.append("email", formData.email);
+      payload.append("phoneNumber", formData.phoneNumber);
+      payload.append("role", formData.role);
+      payload.append("tag", formData.tag);
+      payload.append("isRoleAdmin", formData.isRoleAdmin);
       // console.log("Form data:", formData);
       dispatch(createUser(formData))
         .unwrap()
@@ -129,16 +152,40 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
           document.getElementById("add-user-form").reset();
           resetForm();
           onClose(); // Close the modal here
+          setProfileImg(null);
         })
         .catch((error) => {
           toast.error(error?.message);
         });
     }
   };
+
+  useEffect(() => {
+    if (
+      formData?.profilePicture !== null &&
+      formData?.profilePicture &&
+      (formData?.profilePicture instanceof Blob ||
+        formData?.profilePicture instanceof File)
+    ) {
+      try {
+        setProfileImg(URL.createObjectURL(formData.profilePicture));
+      } catch (error) {
+        console.error("Error creating object URL:", error);
+      }
+    } else {
+      // Handle cases where the selected file is not a Blob or File
+      console.error("Invalid file type selected.");
+    }
+  }, [formData?.profilePicture]);
+
   if (!isOpen) return null;
   return (
     <main className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-10 z-[120]">
-      <form style={modalStyles} id="add-user-form" className="bg-white rounded-2xl">
+      <form
+        style={modalStyles}
+        id="add-user-form"
+        className="bg-white rounded-2xl"
+      >
         <div className="rounded-2xl overflow-auto border border-swGray h-[80%] scrollbar-hide">
           <div className="bg-swBlue flex justify-between items-center p-3 text-white">
             <div>
@@ -152,15 +199,36 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
             />
           </div>
           <div className="pt-8 px-5 pb-16 bg-white relative">
-            <div className="flex justify-between">
+            <div className="flex ">
               <p className="w-1/4 font-semibold mr-2">Upload an image</p>
-              <div className="w-3/4 flex items-center text-xs gap-3">
-                <div className="p-3 border-2 rounded-full w-fit text-[#B0B0B0]">
-                  <FiUser size={50} />
-                </div>
-                <button className="border font-semibold w-fit p-2 rounded-md">
-                  Select a file
-                </button>
+              <div className="flex gap-5 items-center">
+                {profileImg !== null ? (
+                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                    <Image
+                      src={profileImg !== null && profileImg}
+                      alt="profile"
+                      fill
+                      sizes="100%"
+                    />
+                  </div>
+                ) : (
+                  <div className="border-2 p-4 rounded-full">
+                    <FiUser size={40} />
+                  </div>
+                )}
+
+                <label
+                  htmlFor="profilePicture"
+                  className="border-2 rounded-lg p-1 px-2 font-semibold cursor-pointer"
+                >
+                  <input
+                    type="file"
+                    id="profilePicture"
+                    className="hidden"
+                    onChange={handleFileInputChange}
+                  />
+                  {profileImg !== null ? "Change file" : "Select a file"}
+                </label>
               </div>
             </div>
             <div className="flex justify-between mt-5">

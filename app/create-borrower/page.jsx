@@ -269,10 +269,12 @@ const CreateCustomer = () => {
     dispatch(createCustomer(payload))
       .unwrap()
       .then((response) => {
+        console.log(response);
         document.getElementById("add-customer-form").reset();
         resetForm();
         openModal();
-        setNewUserId(response._id);
+        setNewUserId(response?.data?._id);
+        setProfileImg(null)
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -289,7 +291,7 @@ const CreateCustomer = () => {
       try {
         setProfileImg(URL.createObjectURL(formData.profilePicture));
       } catch (error) {
-        // console.error("Error creating object URL:", error);
+        console.error("Error creating object URL:", error);
       }
     } else {
       // Handle cases where the selected file is not a Blob or File
@@ -352,7 +354,7 @@ const CreateCustomer = () => {
                         src={profileImg !== null && profileImg}
                         alt="profile"
                         fill
-                        className="h-full w-full"
+                        sizes="100%"
                       />
                     </div>
                   ) : (
