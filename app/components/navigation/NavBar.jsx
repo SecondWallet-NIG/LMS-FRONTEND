@@ -162,7 +162,7 @@ const NavBar = ({ paths, isBackNav }) => {
         )}
         <div className="relative">
           <HiMiniUserCircle size={50} />
-          <div className="bg-swIndicatorYellow h-3 w-3 rounded-full bottom-1 right-1 absolute" />
+          {/* <div className="bg-swIndicatorYellow h-3 w-3 rounded-full bottom-1 right-1 absolute" /> */}
         </div>
       </div>
     </nav>

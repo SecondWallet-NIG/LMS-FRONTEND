@@ -24,9 +24,12 @@ import {
 import SuccessModal from "../components/modals/SuccessModal";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import { LuPaperclip } from "react-icons/lu";
+import { AiOutlineClose } from "react-icons/ai";
+import { FiTrash, FiUser } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
-import { FiTrash } from "react-icons/fi";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
+import Image from "next/image";
+
 import { AiOutlinePaperClip } from "react-icons/ai";
 import RealTimeComponent from "../components/RealTimeComponent";
 const customNoOptionsMessage = () => {
@@ -53,7 +56,7 @@ const CreateCustomer = () => {
     label: "Single borrower",
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
-
+  const [profileImg, setProfileImg] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -71,6 +74,7 @@ const CreateCustomer = () => {
   };
 
   const [formData, setFormData] = useState({
+    profilePicture: null,
     firstName: "",
     lastName: "",
     middleName: "",
@@ -89,29 +93,8 @@ const CreateCustomer = () => {
     bankName: "",
     createdBy: "",
   });
-
-  const payload = {
-    firstName: formData.firstName,
-    lastName: formData.lastName,
-    middleName: formData.middleName,
-    dateOfBirth: formData.dateOfBirth,
-    gender: formData.gender,
-    nin: formData.nin,
-    bvn: formData.bvn,
-    country: formData.country,
-    state: formData.state,
-    lga: formData.lga,
-    address: formData.address,
-    phoneNumber: formData.phoneNumber,
-    email: formData.email,
-    bankAccount: {
-      accountNumber: formData.accountNumber,
-      accountName: formData.accountName,
-      bankName: formData.bankName,
-    },
-    createdBy: userId?.data?.user?._id,
-  };
-
+  // console.log(formData);
+  // console.log(URL?.createObjectURL(formData?.profilePicture));
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
 
@@ -133,7 +116,7 @@ const CreateCustomer = () => {
           }));
           setBankNameVal(response.data.account_name);
         } catch (error) {
-          console.error("Error verifying bank details:", error);
+          // console.error("Error verifying bank details:", error);
         }
       }
     }
@@ -161,13 +144,19 @@ const CreateCustomer = () => {
   };
 
   const handleFileInputChange = (e) => {
+    // console.log(e.target.id);
     const files = Array.from(e.target.files);
-    setSelectedFiles(files);
+    if (e.target.id === "profilePicture" && e.target.files.length > 0) {
+      // console.log(files[0])
+      setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
+    } else {
+      setSelectedFiles(files);
+    }
   };
 
   const handleFileChange = (e) => {
     let { name, files } = e.target;
-    setSelectedFiles(files[0])
+    setSelectedFiles(files[0]);
     // console.log(formData);
   };
 
@@ -230,6 +219,7 @@ const CreateCustomer = () => {
   };
   const resetForm = () => {
     setFormData({
+      profilePicture: null,
       firstName: "",
       lastName: "",
       middleName: "",
@@ -254,6 +244,28 @@ const CreateCustomer = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    let payload = new FormData();
+    payload.append("profilePicture", formData.profilePicture);
+    payload.append("firstName", formData.firstName);
+    payload.append("lastName", formData.lastName);
+    payload.append("middleName", formData.middleName);
+    payload.append("dateOfBirth", formData.dateOfBirth);
+    payload.append("gender", formData.gender);
+    payload.append("nin", formData.nin);
+    payload.append("bvn", formData.bvn);
+    payload.append("country", formData.country);
+    payload.append("state", formData.state);
+    payload.append("lga", formData.lga);
+    payload.append("address", formData.address);
+    payload.append("phoneNumber", formData.phoneNumber);
+    payload.append("email", formData.email);
+    payload.append("bankAccount[accountNumber]", formData.accountNumber);
+    payload.append("bankAccount[accountName]", formData.accountName);
+    payload.append("bankAccount[bankName]", formData.bankName);
+    payload.append("createdBy", userId?.data?.user?._id);
+
+    console.log(...payload);
     dispatch(createCustomer(payload))
       .unwrap()
       .then((response) => {
@@ -267,10 +279,28 @@ const CreateCustomer = () => {
       });
   };
 
+  useEffect(() => {
+    if (
+      formData?.profilePicture !== null &&
+      formData?.profilePicture &&
+      (formData?.profilePicture instanceof Blob ||
+        formData?.profilePicture instanceof File)
+    ) {
+      try {
+        setProfileImg(URL.createObjectURL(formData.profilePicture));
+      } catch (error) {
+        // console.error("Error creating object URL:", error);
+      }
+    } else {
+      // Handle cases where the selected file is not a Blob or File
+      console.error("Invalid file type selected.");
+    }
+  }, [formData?.profilePicture]);
+
   const handleBulkCustomerSubmit = (e) => {
     const payload = new FormData();
     payload.append("bulkCustomerCsv", selectedFiles[0]);
-    payload.append("createdBy", userId?.data?.user?._id)
+    payload.append("createdBy", userId?.data?.user?._id);
     e.preventDefault();
     dispatch(createBulkCustomer(payload))
       .unwrap()
@@ -309,52 +339,43 @@ const CreateCustomer = () => {
 
         {borrowerType.value === "Single borrower" && (
           <form id="add-customer-form">
-            <div className="flex flex-col gap-5 mt-5">
-              <p className="font-semibold">Personal information</p>
-
-              <div className="relative">
-                <input
-                  name="guarantorForm"
-                  type="file"
-                  id="fileInput3"
-                  className="absolute w-0 h-0 opacity-0"
-                  // onChange={}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput3"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {" "}
-                      {formData?.guarantorForm?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.guarantorForm?.name ? (
-                  <div
-                    id="fileLabel"
-                    className="bg-swLightGray p-2 flex justify-between"
-                  >
-                    <div className="text-xs">
-                      {formData?.guarantorForm?.name}
-                    </div>
-                    <div>
-                      <AiOutlineDelete
-                        onClick={() => {
-                          // deleteFile("guarantorForm");
-                        }}
-                        color="red"
-                        size={20}
+            <div className="flex flex-col gap-5 my-10">
+              <p className="font-semibold text-lg text-swBlack">
+                Personal information
+              </p>
+              <div>
+                <p className="font-semibold my-5">Profile picture</p>
+                <div className="flex gap-5 items-center">
+                  {profileImg !== null ? (
+                    <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                      <Image
+                        src={profileImg !== null && profileImg}
+                        alt="profile"
+                        fill
+                        className="h-full w-full"
                       />
                     </div>
-                  </div>
-                ) : null}
+                  ) : (
+                    <div className="border-2 p-4 rounded-full">
+                      <FiUser size={40} />
+                    </div>
+                  )}
+
+                  <label
+                    htmlFor="profilePicture"
+                    className="border-2 rounded-lg p-2 px-4 font-semibold cursor-pointer"
+                  >
+                    <input
+                      type="file"
+                      id="profilePicture"
+                      className="hidden"
+                      onChange={handleFileInputChange}
+                    />
+                    {profileImg !== null ? "Change file" : "Select a file"}
+                  </label>
+                </div>
               </div>
+              <p className="font-semibold my-3">Borrower information</p>
 
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-full md:w-1/3">
@@ -561,6 +582,7 @@ const CreateCustomer = () => {
                 <div className="w-1/2">
                   <SelectField
                     name="bankName"
+                    label="Bank name"
                     optionValue={bankArr}
                     required={true}
                     placeholder={"Select bank"}
@@ -640,7 +662,8 @@ const CreateCustomer = () => {
                   htmlFor="fileInput"
                   className="cursor-pointer flex gap-2 itwms-center p-2 rounded-md bg-swBlue text-white font-medium w-fit mx-auto mt-5 mb-3"
                 >
-                  <LuPaperclip size={20} /> Upload file
+                  <LuPaperclip size={20} />{" "}
+                  {selectedFiles.length > 0 ? "Change file" : "Upload file"}
                 </label>
               </div>
             </div>
@@ -653,17 +676,19 @@ const CreateCustomer = () => {
                       key={index}
                       className="my-2 bg-white flex rounded-md border"
                     >
-                      <div className="flex gap-3 items-center p-1 pl-2 font-medium ">
+                      <div className="flex gap-3 items-center p-2 pl-2 font-medium ">
                         {/* <FiFileText size={20} /> */}
                         {file.name}
                       </div>
-                      <div className="flex gap-4 items-center ml-auto p-1 border-l">
+                      <div
+                        className="flex gap-4 items-center ml-auto p-2 border-l cursor-pointer"
+                        onClick={() => {
+                          handleFileDelete(index);
+                        }}
+                      >
                         <FiTrash
-                          className="cursor-pointer text-swIndicatorLightRed"
+                          className=" text-swIndicatorLightRed"
                           size={15}
-                          onClick={() => {
-                            handleFileDelete(index);
-                          }}
                         />
                       </div>
                     </li>
@@ -695,7 +720,6 @@ const CreateCustomer = () => {
           btnRightFunc={btnRightFunc}
         />
       </div>
-
     </DashboardLayout>
   );
 };
