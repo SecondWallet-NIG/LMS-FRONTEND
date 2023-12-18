@@ -77,13 +77,12 @@ const CustomerProfile = () => {
           <div className="w-1/2">
             <div className="flex ">
               <div>
-                <Image
-                  src={
-                    "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
-                  }
+                <img
+                  className="rounded-full"
+                  src={data?.profileInfo?.profilePicture}
                   alt="user image"
-                  width={60}
-                  height={60}
+                  width="60px"
+                  height="60px"
                 />
               </div>
               <div className="ml-4 h-fit">
@@ -91,7 +90,7 @@ const CustomerProfile = () => {
                   {data?.profileInfo?.firstName} {data?.profileInfo?.middleName}{" "}
                   {data?.profileInfo?.lastName}
                 </p>
-                <p className="text-xs">SW-456789</p>
+                <p className="text-xs"> {data?.profileInfo?.customerId}</p>
 
                 <div className="flex gap-2 items-center h-fit w-fit mt-4">
                   <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
@@ -174,8 +173,8 @@ const CustomerProfile = () => {
                   // variant={"primary"}
                   className="text-center rounded-md py-[0.4rem] px-3 bg-swBlue text-white border-2 border-white hover:border-blue-100"
                   onClick={() => {
-                    localStorage.setItem("borrower", JSON.stringify(data))
-                    router.push('/create-loan')
+                    localStorage.setItem("borrower", JSON.stringify(data));
+                    router.push("/create-loan");
                   }}
                 >
                   Create loan
