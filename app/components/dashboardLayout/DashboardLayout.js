@@ -38,7 +38,7 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
         )}
         {/* w-[10%] lg:w-[5%] */}
         <div className="h-full w-[90%] md:w-[95%] ml-auto mt-[4.5rem] text-swGray">
-          {isAuthenticated && children}
+          <div className="overflow-y-auto">{isAuthenticated && children}</div>
         </div>
         <RealTimeComponent />
       </div>
