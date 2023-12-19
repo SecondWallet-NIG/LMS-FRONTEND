@@ -11,7 +11,9 @@ import {
   IoArrowForward,
   IoCloseSharp,
 } from "react-icons/io5";
+import navPatternBg from "../../../public/images/navPatterns.png";
 import RealTimeComponent from "../RealTimeComponent";
+import Image from "next/image";
 
 const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
@@ -140,7 +142,6 @@ const NavBar = ({ paths, isBackNav }) => {
                     </div>
                   ))}
 
-
               {openedMessages === "all" &&
                 data.map((item, index) => (
                   <div key={index} className="py-3 mx-1 flex gap-5 border-b">
@@ -165,6 +166,16 @@ const NavBar = ({ paths, isBackNav }) => {
           {/* <div className="bg-swIndicatorYellow h-3 w-3 rounded-full bottom-1 right-1 absolute" /> */}
         </div>
       </div>
+
+      <Image
+        src={navPatternBg}
+        alt="nav pattern"
+        fill
+        // width={"50%"}
+        // height={"100%"}
+        sizes="50%"
+        className="absolute w-1/2 ml-auto"
+      />
     </nav>
   );
 };

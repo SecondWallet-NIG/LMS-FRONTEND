@@ -52,9 +52,9 @@ const AccountPage = () => {
       .unwrap()
       .then((res) => {
         toast.success("Profile updated successfully");
-        getUserById(userDetails?._id)
+        getUserById(userDetails?._id);
         setLoading(false);
-        console.log(res)
+        console.log(res);
       })
       .catch((error) => {
         toast.error("An error occured");
@@ -65,7 +65,7 @@ const AccountPage = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUserDetails(user?.data?.user);
-    console.log(user)
+    console.log(user);
   }, []);
 
   useEffect(() => {
@@ -182,6 +182,7 @@ const AccountPage = () => {
             label={"Email address"}
             required={true}
             startIcon={<MdOutlineEmail size={20} />}
+            disabled={true}
             placeholder={"Johndoe@gmail.com"}
             value={formData?.email}
             onChange={(e) => {
