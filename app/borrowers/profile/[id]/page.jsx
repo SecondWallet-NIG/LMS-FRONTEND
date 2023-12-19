@@ -106,13 +106,14 @@ const CustomerProfile = () => {
                   </div>
                   <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
                     <Link
-                      href="mailto: helloyt@gmail.com"
+                      href={`/borrowers/profile/${id}/edit-borrower-profile`}
                       className="bg-white border border-gray-300 w-fit p-2 rounded-md"
                     >
-                      <FiPhone size={15} />
+                      <FiEdit2 size={15} />
+                      {/* <FiPhone size={15} /> */}
                     </Link>
                   </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
+                  {/* <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
                     <Link
                       href="mailto: helloyt@gmail.com"
                       className="bg-white border border-gray-300 w-fit p-2 rounded-md"
@@ -127,7 +128,7 @@ const CustomerProfile = () => {
                     >
                       <FiDatabase size={15} />
                     </Link>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

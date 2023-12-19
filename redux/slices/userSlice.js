@@ -97,7 +97,11 @@ export const updateUser = createAsyncThunk(
 
 export const getUserById = createAsyncThunk("user/getUser", async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/user/id/${userId}`);
+    const response = await axios.get(`${API_URL}/user/id/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
