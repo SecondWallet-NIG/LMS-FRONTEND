@@ -82,6 +82,22 @@ export const disburseLoan = createAsyncThunk('loanApplication/disburse', async (
   }
 });
 
+export const diosbursementSummary = createAsyncThunk('loanApplication/disburse/summary', async (loanId) => {
+  try {
+    const response = await axios.get(`${API_URL}/disbursement/summary`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
 export const getLoanApplication = createAsyncThunk('loanApplication/all', async () => {
   const response = await axios.get(`${API_URL}/loan-application/all`, {
     headers: {
@@ -271,6 +287,18 @@ const LoanApplicationSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getCustomerLoanApplicationSummary.rejected, (state, action,) => {
+        state.loading = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(diosbursementSummary.pending, (state) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(diosbursementSummary.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(diosbursementSummary.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })

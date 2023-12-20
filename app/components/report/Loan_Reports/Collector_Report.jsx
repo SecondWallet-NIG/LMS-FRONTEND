@@ -1,5 +1,80 @@
 import { PiCalendarBlankLight } from "react-icons/pi";
 import ReusableDataTable from "../../shared/tables/ReusableDataTable";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { formatDate } from "@/helpers";
+
+const Staffs = () => {
+  const headers = [
+    { id: "name", label: "Name and Staff ID" },
+    { id: "role", label: "Staff Role" },
+    { id: "status", label: "Status" },
+    { id: "createdAt", label: "Date Added" },
+    { id: "loanCount", label: "Loans Originated" },
+    { id: "loanAmount", label: "Loan Volume" },
+  ];
+
+  const customDataTransformer = (apiData) => {
+    return apiData?.results.map((item) => ({
+      id: item._id,
+      name: (
+        <div>
+          <div className="text-md font-semibold text-gray-700">{`${item.firstName} ${item.lastName}`}</div>
+          <div className="text-xs text-gray-500">{`SWS-${item.staffId}`}</div>
+        </div>
+      ),
+      status: (
+        <button
+          className={`${
+            item.status === "Active"
+              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              : "bg-[#F8A9A3] "
+          } px-2 py-1 rounded`}
+        >
+          {item.status}
+        </button>
+      ),
+      role: (
+        <div className="text-md font-semibold text-gray-700">
+          {item?.role?.name}
+        </div>
+      ),
+      createdAt: (
+        <div className="text-md font-semibold text-gray-700">
+          {formatDate(item.createdAt?.slice(0, 10))}
+        </div>
+      ),
+      loanCount: (
+        <div className="text-md font-semibold text-gray-700">
+          {item.loanCount}
+        </div>
+      ),
+      loanAmount: (
+        <div className="text-md font-semibold text-gray-700">
+          ₦ {item.loanAmount.toLocaleString()}
+        </div>
+      ),
+    }));
+  };
+
+  return (
+    <div>
+      <ToastContainer />
+      <div className="py-2">
+        <div className="flex justify-between items-center">
+          <ReusableDataTable
+            role="collectorsReport"
+            dataTransformer={customDataTransformer}
+            apiEndpoint="https://secondwallet-stag.onrender.com/api/user"
+            headers={headers}
+            filters={true}
+            pagination={true}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const CollectorReport = () => {
   const header = [
@@ -66,7 +141,7 @@ const CollectorReport = () => {
       </div>
 
       <div className="rounded-xl overflow-hidden border mt-5 bg-white">
-        <ReusableDataTable headers={header} filters={true} />
+        <Staffs />
       </div>
     </main>
   );

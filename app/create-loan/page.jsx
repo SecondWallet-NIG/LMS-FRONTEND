@@ -821,8 +821,14 @@ const CreateLoan = () => {
                 {selectedCustomer.image ? (
                   ""
                 ) : (
-                  <div className="p-3 rounded-full bg-white h-fit w-fit">
-                    <FiUser size={30} className="text-gray-400" />
+                  <div className="rounded-full bg-white h-fit w-fit">
+                        <img
+                  className="rounded-full"
+                  src={selectedCustomer?.profilePicture}
+                  alt="user image"
+                  width="60px"
+                  height="60px"
+                />
                   </div>
                 )}
                 <div>
@@ -839,8 +845,14 @@ const CreateLoan = () => {
               </div>
             ) : (
               <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
-                <div className="p-3 rounded-full bg-white">
-                  <FiUser size={35} className="text-gray-400" />
+                <div className="rounded-full bg-white">
+                <img
+                  className="rounded-full"
+                  src={selectedCustomer?.profilePicture}
+                  alt="user image"
+                  width="60px"
+                  height="60px"
+                />
                 </div>
                 <p className="text-xl font-semibold">Select Borrower</p>
               </div>
@@ -1034,7 +1046,13 @@ const CreateLoan = () => {
                   ""
                 ) : (
                   <div className="p-3 rounded-full bg-white h-fit w-fit">
-                    <FiUser size={30} className="text-gray-400" />
+                         <img
+                  className="rounded-full"
+                  src={selectedCustomer?.profilePicture}
+                  alt="user image"
+                  width="60px"
+                  height="60px"
+                />
                   </div>
                 )}
                 <div>
@@ -1052,7 +1070,13 @@ const CreateLoan = () => {
             ) : (
               <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
                 <div className="p-3 rounded-full bg-white">
-                  <FiUser size={35} className="text-gray-400" />
+                <img
+                  className="rounded-full"
+                  src={selectedCustomer?.profilePicture}
+                  alt="user image"
+                  width="60px"
+                  height="60px"
+                />
                 </div>
                 <p className="text-xl font-semibold">Select Borrower</p>
               </div>

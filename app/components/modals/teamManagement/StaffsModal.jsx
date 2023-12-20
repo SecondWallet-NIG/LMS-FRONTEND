@@ -2,28 +2,26 @@
 
 import { useState, useEffect } from "react";
 import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
-import { FiUser } from "react-icons/fi";
 import InputField from "../../shared/input/InputField";
 import SelectField from "../../shared/input/SelectField";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { createUser } from "@/redux/slices/userSlice";
 import Button from "../../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
-import Image from "next/image";
+import { toast } from "react-toastify";
+
 
 const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   const dispatch = useDispatch();
 
   const { loading } = useSelector((state) => state.user);
-  const [profileImg, setProfileImg] = useState(null);
+ // const [profileImg, setProfileImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const successPopup = (selected) => {
     selected(true);
   };
 
   const [formData, setFormData] = useState({
-    profilePicture: null,
+  //  profilePicture: null,
     firstName: "",
     lastName: "",
     email: "",
@@ -39,10 +37,8 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     email: "",
   });
   const handleFileInputChange = (e) => {
-    // console.log(e.target.id);
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
-      // console.log(files[0])
       setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
     } else {
       setSelectedFiles(files);
@@ -52,7 +48,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   console.log(formData);
 
   const modifyObjects = (arr) => {
-    // console.log({arr});
     return Array.isArray(arr)
       ? arr.map((item) => ({
           label: item.name,
@@ -60,7 +55,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
         }))
       : [];
   };
-  // const modifiedArray = ;
+
   const modalStyles = {
     width: width || "90%",
     maxWidth: "800px",
@@ -87,12 +82,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
       ...formData,
       [name]: selectedOption.value,
     });
-    // if (selectedOption.value === "650f61f89e06e619920a7f4e") {
-    //   setFormData({
-    //     ...formData,
-    //     isRoleAdmin: true,
-    //   });
-    // }
   };
   const validateForm = () => {
     const newErrors = {};
@@ -108,20 +97,16 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
       isValid = false;
     }
 
-    // You can add more complex email validation here
     if (formData.email.trim() === "") {
       newErrors.email = "Email address is required";
       isValid = false;
     }
-
-    // Update the state with the new errors
     setErrors(newErrors);
 
     return isValid;
   };
   const resetForm = () => {
     setFormData({
-      profilePicture: null,
       firstName: "",
       lastName: "",
       email: "",
@@ -136,7 +121,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     const isValid = validateForm();
     if (isValid) {
       const payload = new FormData();
-      payload.append("profilePicture", formData.profilePicture);
       payload.append("firstName", formData.firstName);
       payload.append("lastName", formData.lastName);
       payload.append("email", formData.email);
@@ -144,15 +128,14 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
       payload.append("role", formData.role);
       payload.append("tag", formData.tag);
       payload.append("isRoleAdmin", formData.isRoleAdmin);
-      // console.log("Form data:", formData);
       dispatch(createUser(formData))
         .unwrap()
         .then(() => {
           successPopup(selected);
           document.getElementById("add-user-form").reset();
           resetForm();
-          onClose(); // Close the modal here
-          setProfileImg(null);
+          onClose(); 
+         // setProfileImg(null);
         })
         .catch((error) => {
           toast.error(error?.message);
@@ -160,23 +143,23 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     }
   };
 
-  useEffect(() => {
-    if (
-      formData?.profilePicture !== null &&
-      formData?.profilePicture &&
-      (formData?.profilePicture instanceof Blob ||
-        formData?.profilePicture instanceof File)
-    ) {
-      try {
-        setProfileImg(URL.createObjectURL(formData.profilePicture));
-      } catch (error) {
-        console.error("Error creating object URL:", error);
-      }
-    } else {
-      // Handle cases where the selected file is not a Blob or File
-      console.error("Invalid file type selected.");
-    }
-  }, [formData?.profilePicture]);
+  // useEffect(() => {
+  //   if (
+  //     formData?.profilePicture !== null &&
+  //     formData?.profilePicture &&
+  //     (formData?.profilePicture instanceof Blob ||
+  //       formData?.profilePicture instanceof File)
+  //   ) {
+  //     try {
+  //       setProfileImg(URL.createObjectURL(formData.profilePicture));
+  //     } catch (error) {
+  //       console.error("Error creating object URL:", error);
+  //     }
+  //   } else {
+  //     // Handle cases where the selected file is not a Blob or File
+  //     console.error("Invalid file type selected.");
+  //   }
+  // }, [formData?.profilePicture]);
 
   if (!isOpen) return null;
   return (
@@ -199,38 +182,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
             />
           </div>
           <div className="pt-8 px-5 pb-16 bg-white relative">
-            <div className="flex ">
-              <p className="w-1/4 font-semibold mr-2">Upload an image</p>
-              <div className="flex gap-5 items-center">
-                {profileImg !== null ? (
-                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                    <Image
-                      src={profileImg !== null && profileImg}
-                      alt="profile"
-                      fill
-                      sizes="100%"
-                    />
-                  </div>
-                ) : (
-                  <div className="border-2 p-4 rounded-full">
-                    <FiUser size={40} />
-                  </div>
-                )}
-
-                <label
-                  htmlFor="profilePicture"
-                  className="border-2 rounded-lg p-1 px-2 font-semibold cursor-pointer"
-                >
-                  <input
-                    type="file"
-                    id="profilePicture"
-                    className="hidden"
-                    onChange={handleFileInputChange}
-                  />
-                  {profileImg !== null ? "Change file" : "Select a file"}
-                </label>
-              </div>
-            </div>
             <div className="flex justify-between mt-5">
               <p className="w-1/4 font-semibold mr-2">Personal information</p>
               <div className="w-3/4 flex flex-col gap-2">
@@ -308,14 +259,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
                 )}
               </div>
             </div>
-            {/* <div className="flex justify-between mt-5 mb-20">
-            <p className="w-1/4 font-semibold mr-2">Permissions and access</p>
-            <div className="w-3/4">
-              <p>
-                {selectedStaffRole ? selectedStaffRole : "Select role first"}
-              </p>
-            </div>
-          </div> */}
           </div>
 
           <div className="p-3 border-t flex items-center justify-end gap-2 bg-white">

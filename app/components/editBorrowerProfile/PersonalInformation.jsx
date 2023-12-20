@@ -25,10 +25,7 @@ const PersonalInformation = ({userData,loading}) => {
   const [verificationResponse, setVerificationResponse] = useState(null);
   const [lga, setLga] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [profileImg, setProfileImg] = useState(null);
 
-  
-  console.log(userData);
 
   const [formData, setFormData] = useState({
     profilePicture: null,

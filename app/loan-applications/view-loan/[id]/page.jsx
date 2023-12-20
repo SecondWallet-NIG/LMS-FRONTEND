@@ -310,7 +310,10 @@ const ViewLoan = () => {
                           ? "bg-swIndicatorPurple"
                           : data?.data?.loanApplication?.status === "Disbursed"
                           ? "bg-swBlue"
+                          : data?.data?.loanApplication?.status === "Fully Paid"
+                          ? "bg-swGreen"
                           : "bg-swIndicatorDarkRed"
+
                       } px-2 py-1 rounded-full ml-4 text-xs font-normal text-white`}
                     >
                       {data?.data?.loanApplication?.status}
@@ -383,7 +386,7 @@ const ViewLoan = () => {
                         );
                       }}
                       className={
-                        "text-swBlue text-sm bg-white px-5 py-2 ml-3 rounded-lg font-medium"
+                        "text-swBlue text-sm bg-white py-2 rounded-lg font-medium"
                       }
                     >
                       View profile
@@ -425,7 +428,7 @@ const ViewLoan = () => {
                   <p className="text-sm font-medium">Outstanding Balance</p>
                   <div className="flex justify-between items-center">
                     <p className="text-md text-red-500 font-semibold mt-4">
-                    ₦{" "} {data?.data?.loanApplication?.outstandingBalance || 0}
+                    ₦{" "} {data?.data?.loanApplication?.outstandingBalance?.toLocaleString() || 0}
                     </p>
                   </div>
                 </div>

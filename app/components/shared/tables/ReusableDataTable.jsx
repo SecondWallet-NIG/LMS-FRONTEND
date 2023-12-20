@@ -58,6 +58,7 @@ function ReusableDataTable({
     {
       startDate: null,
       endDate: null,
+      minDate : new Date(),
       key: "selection",
     },
   ]);
@@ -76,8 +77,6 @@ function ReusableDataTable({
       })
       .then((data) => {
         const allData = data?.data.results || data?.data?.data;
-
-        // Sample nested JSON data
         const nestedJsonData = allData;
 
         function flattenData(data, parentKey = "") {
@@ -175,6 +174,13 @@ function ReusableDataTable({
       if (role === "report") {
         apiUrl += `&status=${"Disbursed"}`;
       }
+      if (role === "pendingTask") {
+        apiUrl += `&status=${"Pending"}`;
+      }
+
+      if (role === "completedTask") {
+        apiUrl += `&status=${"Done"}`;
+      }
       axios
         .get(apiUrl, {
           headers: {
@@ -209,6 +215,7 @@ function ReusableDataTable({
         })
         .catch(() => {});
     } else {
+      console.log({ dateRange});
       setIsLoading(true);
       if (dateRange && dateRange.length > 0) {
         if (
@@ -227,7 +234,19 @@ function ReusableDataTable({
       if (role === "report") {
         apiUrl += `&status=${"Disbursed"}`;
       }
+      if (role === "pendingTask") {
+        apiUrl += `&status=${"Pending"}`;
+      }
 
+      if (role === "completedTask") {
+        apiUrl += `&status=${"Done"}`;
+      }
+
+      if (role === "collectorsReport") {
+        apiUrl += `&roleId=${"6550dd44c892d5d8bbda3621"}`;
+      }
+
+      
       if (status != " ") {
         console.log({ status });
         apiUrl += `&status=${status}`;
@@ -557,7 +576,9 @@ function ReusableDataTable({
                     if (onClickRow) {
                       setIsLoading(true);
                       router.push(`${onClickRow}/${item.id || item._id}`);
-                      item?.taskId ? localStorage.setItem("taskId", item?.taskId ) : null
+                      item?.taskId
+                        ? localStorage.setItem("taskId", item?.taskId)
+                        : null;
                     }
                   }}
                   key={item._id}
@@ -637,9 +658,25 @@ function ReusableDataTable({
           <div className="w-full items-center">
             <DateRange
               editableDateInputs={true}
-              onChange={(item) => setDateRange([item.selection])}
+             // onChange={(item) => setDateRange([item.selection])}
               moveRangeOnFirstSelection={false}
               ranges={dateRange}
+              onChange={(item) => {
+                // Adjust the time to the start and end of the selected day
+                const startDate = new Date(item.selection.startDate);
+                startDate.setHours(1, 0, 0, 0);
+        
+                const endDate = new Date(item.selection.endDate);
+                endDate.setHours(24, 59, 59, 999);
+        
+                setDateRange([
+                  {
+                    startDate,
+                    endDate,
+                    key: 'selection'
+                  }
+                ]);
+              }}
             />
           </div>
           <div className="flex justify-between">

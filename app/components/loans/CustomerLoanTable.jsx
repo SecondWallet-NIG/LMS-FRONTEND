@@ -1,5 +1,5 @@
 "use client";
-
+import { formatDate } from "@/helpers";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 const CustomerLoanTable = ({id}) => {
   const headers = [
@@ -17,7 +17,7 @@ const CustomerLoanTable = ({id}) => {
       id: item._id,
       createdAt: (
         <div className="text-md font-[500] text-gray-700">
-          {item.createdAt?.slice(0, 10)}
+     {formatDate(item.createdAt?.slice(0, 10))}
         </div>
       ),
       name: (
@@ -49,6 +49,8 @@ const CustomerLoanTable = ({id}) => {
             ? "bg-swIndicatorPurple"
             : item.status === "Disbursed"
             ? "bg-swBlue"
+            : item.status === "Fully Paid"
+            ? "bg-swGreen"
             : "bg-swIndicatorDarkRed"
         } px-2 py-1 rounded-full text-xs font-normal text-white`}
       >

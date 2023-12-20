@@ -3,6 +3,7 @@
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { formatDate } from "@/helpers";
 const DisbursedLoans = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
@@ -20,7 +21,7 @@ const DisbursedLoans = () => {
       id: item._id,
       createdAt: (
         <div className="text-md font-[500] text-gray-700">
-          {item.createdAt?.slice(0, 10)}
+         {formatDate(item.createdAt?.slice(0, 10))}
         </div>
       ),
       name: (

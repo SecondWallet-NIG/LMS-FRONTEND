@@ -79,7 +79,7 @@ const CustomerRepayment = ({ loanId }) => {
     return apiData?.map((item) => ({
       id: item._id,
       createdAt: (
-        <div className="text-md font-[500] text-gray-700">{item?.dueDate.slice(0, 15)}</div>
+        <div className="text-md font-[500] text-gray-700">{item?.dueDate.slice(0, 10)}</div>
       ),
 
       amountDue: (

@@ -101,6 +101,28 @@ export const getDisbursementSummary = createAsyncThunk(
   }
 );
 
+export const  getRepaymentReport = createAsyncThunk('loanApplication/repayment-summary', async (date) => {
+  if (date) {
+
+    const response = await axios.get(`${API_URL}/repayment/report?startDate=${date?.startDate}&endDate=${date?.endDate}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    console.log({response});
+    return response.data;
+  } else {
+    const response = await axios.get(`${API_URL}/repayment/report`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+
+    return response.data;
+  }
+
+});
+
 const LoanRepaymentSlice = createSlice({
   name: "LoanRepayment",
   initialState: {
@@ -174,6 +196,18 @@ const LoanRepaymentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getDisbursementSummary.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getRepaymentReport.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getRepaymentReport.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getRepaymentReport.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

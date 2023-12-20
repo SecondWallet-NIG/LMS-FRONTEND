@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import { PiCalendarBlankLight } from "react-icons/pi";
 import { FiUser } from "react-icons/fi";
 import { BsGraphDownArrow } from "react-icons/bs";
-import ReusableDataTable from "../../shared/tables/ReusableDataTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoanApplicationSummary } from "@/redux/slices/loanApplicationSlice";
-import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
 import LoanTable from "../../loans/LoanTable";
 import CenterModal from "../../modals/CenterModal";
@@ -30,15 +28,9 @@ const LoanReport = () => {
   const toggleDateFilter = () => {
     setDateFilterOpen(!dateFilterOpen);
   };
-  const header = [
-    { id: "s/n", label: "S/n" },
-    { id: "borrower", label: "Borrower Name" },
-    { id: "loan_type", label: "Loan type" },
-    { id: "loan_amount", label: "Loan amount" },
-  ];
 
   const fetchSummaryByDate = () => {
-    // console.log(startDate, endDate);
+
     if (dateRange && dateRange.length > 0) {
       if (
         dateRange[0].startDate instanceof Date &&
