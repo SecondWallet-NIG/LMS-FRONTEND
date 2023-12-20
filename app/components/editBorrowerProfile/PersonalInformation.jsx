@@ -184,7 +184,7 @@ const PersonalInformation = ({userData,loading}) => {
         console.log(response);
         document.getElementById("add-customer-form").reset();
         resetForm();
-        setProfileImg(null);
+      //  setProfileImg(null);
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -198,23 +198,23 @@ const PersonalInformation = ({userData,loading}) => {
     });
   };
 
-  useEffect(() => {
-    if (
-      formData?.profilePicture !== null &&
-      formData?.profilePicture &&
-      (formData?.profilePicture instanceof Blob ||
-        formData?.profilePicture instanceof File)
-    ) {
-      try {
-        setProfileImg(URL.createObjectURL(formData.profilePicture));
-      } catch (error) {
-        console.error("Error creating object URL:", error);
-      }
-    } else {
-      // Handle cases where the selected file is not a Blob or File
-      console.error("Invalid file type selected.");
-    }
-  }, [formData?.profilePicture]);
+  // useEffect(() => {
+  //   if (
+  //     formData?.profilePicture !== null &&
+  //     formData?.profilePicture &&
+  //     (formData?.profilePicture instanceof Blob ||
+  //       formData?.profilePicture instanceof File)
+  //   ) {
+  //     try {
+  //       setProfileImg(URL.createObjectURL(formData.profilePicture));
+  //     } catch (error) {
+  //       console.error("Error creating object URL:", error);
+  //     }
+  //   } else {
+  //     // Handle cases where the selected file is not a Blob or File
+  //     console.error("Invalid file type selected.");
+  //   }
+  // }, [formData?.profilePicture]);
 
  
 
@@ -249,7 +249,7 @@ const PersonalInformation = ({userData,loading}) => {
         </p>
         <div>
           <p className="font-semibold my-5">Profile picture</p>
-          <div className="flex gap-5 items-center">
+          {/* <div className="flex gap-5 items-center">
             {profileImg !== null ? (
               <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
                 <Image
@@ -277,7 +277,7 @@ const PersonalInformation = ({userData,loading}) => {
               />
               {profileImg !== null ? "Change file" : "Select a file"}
             </label>
-          </div>
+          </div> */}
         </div>
         <p className="font-semibold my-3">Borrower information</p>
 
