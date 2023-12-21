@@ -115,7 +115,7 @@ const DashboardPage = ({ children }) => {
     <DashboardLayout>
       <main className="text-swGray p-5 sm:p-10 bg-gray-50 h-full">
         {/* <DashboardPageCard /> */}
-        <div className="flex gap-8 flex-wrap justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <DashboardCard
             blueBg={true}
             cardIcon={<LuUsers size={20} />}

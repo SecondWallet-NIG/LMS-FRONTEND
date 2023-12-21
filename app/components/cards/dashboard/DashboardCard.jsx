@@ -14,7 +14,7 @@ const DashboardCard = ({
     <div
       className={`rounded-2xl p-5  ${
         blueBg ? "bg-swBlue text-white" : "bg-white border"
-      } w-full sm:max-w-[20rem]  lg:max-w-[26rem]`}
+      } w-full`}
     >
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
@@ -45,7 +45,9 @@ const DashboardCard = ({
         )}
         {secondStat && (
           <div
-            className={`flex flex-col border-l pl-5 lg:pl-10 ${thirdStat && "pr-5 lg:pr-10"}`}
+            className={`flex flex-col border-l pl-5 lg:pl-10 ${
+              thirdStat && "pr-5 lg:pr-10"
+            }`}
           >
             <p className="text-sm">{secondStat[0]}</p>
             <p className="font-semibold mt-1 text-lg">{secondStat[1]}</p>
