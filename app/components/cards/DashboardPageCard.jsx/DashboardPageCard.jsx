@@ -4,7 +4,7 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { IoMdArrowDown, IoMdArrowUp } from "react-icons/io";
 import { LuUsers } from "react-icons/lu";
 
-const DashboardCard = (data) => {
+const DashboardPageCard = (data) => {
   data = [
     {
       name: "Borrowers",
@@ -99,7 +99,7 @@ const DashboardCard = (data) => {
                   ? "/create-borrower"
                   : item.name === "Disbursements"
                   ? "/disbursement"
-                  : item.name === "Repayments"
+                    : item.name === "Repayments"
                   ? ""
                   : ""
               }
@@ -188,4 +188,4 @@ const DashboardCard = (data) => {
   );
 };
 
-export default DashboardCard;
+export default DashboardPageCard;

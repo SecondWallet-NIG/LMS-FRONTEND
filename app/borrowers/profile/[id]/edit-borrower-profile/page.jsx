@@ -24,7 +24,7 @@ const EditProfile = () => {
     dispatch(getCustomerById(id));
   }, []);
   return (
-    <DashboardLayout>
+    <DashboardLayout isBackNav={true} paths={["Borrowers", "Edit Profile"]}>
       <main className="p-5 text-swTextColor">
         <div className="flex">
           <p
