@@ -162,6 +162,7 @@ const DashboardPage = ({ children }) => {
           <DashboardCard
             cardName={"Pending repayments"}
             firstStat={["Total", "5,703"]}
+            cardLink={""}
             secondStat={["This month", "200", "+ 8%"]}
           />
           <DashboardCard
