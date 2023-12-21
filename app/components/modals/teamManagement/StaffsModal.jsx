@@ -8,20 +8,21 @@ import { createUser } from "@/redux/slices/userSlice";
 import Button from "../../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-
+import Image from "next/image";
+import { FiUser } from "react-icons/fi";
 
 const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   const dispatch = useDispatch();
 
   const { loading } = useSelector((state) => state.user);
- // const [profileImg, setProfileImg] = useState(null);
+  const [profileImg, setProfileImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const successPopup = (selected) => {
     selected(true);
   };
 
   const [formData, setFormData] = useState({
-  //  profilePicture: null,
+    // profilePicture: null,
     firstName: "",
     lastName: "",
     email: "",
@@ -134,32 +135,34 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
           successPopup(selected);
           document.getElementById("add-user-form").reset();
           resetForm();
-          onClose(); 
-         // setProfileImg(null);
+          onClose();
+          // setProfileImg(null);
         })
         .catch((error) => {
           toast.error(error?.message);
+          setProfileImg(null);
         });
+      // console.log(...payload);
     }
   };
 
-  // useEffect(() => {
-  //   if (
-  //     formData?.profilePicture !== null &&
-  //     formData?.profilePicture &&
-  //     (formData?.profilePicture instanceof Blob ||
-  //       formData?.profilePicture instanceof File)
-  //   ) {
-  //     try {
-  //       setProfileImg(URL.createObjectURL(formData.profilePicture));
-  //     } catch (error) {
-  //       console.error("Error creating object URL:", error);
-  //     }
-  //   } else {
-  //     // Handle cases where the selected file is not a Blob or File
-  //     console.error("Invalid file type selected.");
-  //   }
-  // }, [formData?.profilePicture]);
+  useEffect(() => {
+    if (
+      formData?.profilePicture !== null &&
+      formData?.profilePicture &&
+      (formData?.profilePicture instanceof Blob ||
+        formData?.profilePicture instanceof File)
+    ) {
+      try {
+        setProfileImg(URL.createObjectURL(formData.profilePicture));
+      } catch (error) {
+        console.error("Error creating object URL:", error);
+      }
+    } else {
+      // Handle cases where the selected file is not a Blob or File
+      console.error("Invalid file type selected.");
+    }
+  }, [formData?.profilePicture]);
 
   if (!isOpen) return null;
   return (
@@ -181,7 +184,39 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
               className="cursor-pointer"
             />
           </div>
-          <div className="pt-8 px-5 pb-16 bg-white relative">
+          <div className="pt-8 px-5 pb-16 h-[20rem] overflow-y-auto bg-white relative custom-scrollbar">
+            <div className="flex">
+              <p className="font-semibold my-5 w-1/4">Profile picture</p>
+              <div className="flex gap-5 items-center">
+                {profileImg !== null ? (
+                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                    <Image
+                      src={profileImg !== null && profileImg}
+                      alt="profile"
+                      fill
+                      sizes="100%"
+                    />
+                  </div>
+                ) : (
+                  <div className="border-2 p-4 rounded-full">
+                    <FiUser size={40} />
+                  </div>
+                )}
+
+                <label
+                  htmlFor="profilePicture"
+                  className="border-2 rounded-lg p-2 px-4 font-semibold cursor-pointer"
+                >
+                  <input
+                    type="file"
+                    id="profilePicture"
+                    className="hidden"
+                    onChange={handleFileInputChange}
+                  />
+                  {profileImg !== null ? "Change file" : "Select a file"}
+                </label>
+              </div>
+            </div>
             <div className="flex justify-between mt-5">
               <p className="w-1/4 font-semibold mr-2">Personal information</p>
               <div className="w-3/4 flex flex-col gap-2">

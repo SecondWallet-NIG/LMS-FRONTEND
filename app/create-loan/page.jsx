@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
@@ -21,6 +21,9 @@ import { FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import Link from "next/link";
+import Image from "next/image";
+import { Rings } from "react-loader-spinner";
+import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -39,7 +42,6 @@ const CreateLoan = () => {
   const [loading, setLoading] = useState(false);
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
-
 
   const [formData, setFormData] = useState({
     loanAmount: "",
@@ -66,6 +68,7 @@ const CreateLoan = () => {
 
   const [currentStep, setCurrentStep] = useState(1);
 
+  console.log(selectedCustomer);
   const assetTypeData = [
     { value: 100, label: "Investment" },
     { value: 200, label: "Building" },
@@ -330,7 +333,7 @@ const CreateLoan = () => {
   }, []);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("borrower"))
+    const data = JSON.parse(localStorage.getItem("borrower"));
     setFormData({
       ...formData,
       customerId: data?.profileInfo?._id,
@@ -817,18 +820,26 @@ const CreateLoan = () => {
           <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
             <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
             {selectedCustomer != null ? (
-              <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto flex gap-5">
+              <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto items-start flex gap-5">
                 {selectedCustomer.image ? (
                   ""
                 ) : (
-                  <div className="rounded-full bg-white h-fit w-fit">
-                        <img
-                  className="rounded-full"
-                  src={selectedCustomer?.profilePicture}
-                  alt="user image"
-                  width="60px"
-                  height="60px"
-                />
+                  // <div className="rounded-full bg-white h-fit w-fit">
+                  //   <img
+                  //     className="rounded-full"
+                  //     src={selectedCustomer?.profilePicture}
+                  //     alt="user image"
+                  //     width="60px"
+                  //     height="60px"
+                  //   />
+                  // </div>
+                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                    <Image
+                      src={selectedCustomer?.profilePicture}
+                      alt="borrower"
+                      fill
+                      sizes="100%"
+                    />
                   </div>
                 )}
                 <div>
@@ -845,14 +856,13 @@ const CreateLoan = () => {
               </div>
             ) : (
               <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
-                <div className="rounded-full bg-white">
-                <img
-                  className="rounded-full"
-                  src={selectedCustomer?.profilePicture}
-                  alt="user image"
-                  width="60px"
-                  height="60px"
-                />
+                <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                  <Image
+                    src={selectedCustomer?.profilePicture}
+                    alt="borrower"
+                    fill
+                    sizes="100%"
+                  />
                 </div>
                 <p className="text-xl font-semibold">Select Borrower</p>
               </div>
@@ -992,9 +1002,8 @@ const CreateLoan = () => {
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
-               
                 </div>
-                <div className="">
+                <div className="flex flex-col gap-5">
                   <Button
                     disabled={
                       formData.interestType === null || loading === true
@@ -1006,12 +1015,28 @@ const CreateLoan = () => {
                   >
                     Compute Interest
                   </Button>
-                  <Button
-                    className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+     
+                  <EditableButton
+                    blueBtn={true}
+                    disabled={loading ? true : false}
+                    startIcon={
+                      loading  && (
+                        <Rings
+                          height="20"
+                          width="20"
+                          color="#ffffff"
+                          radius="2"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                          ariaLabel="rings-loading"
+                        />
+                      )
+                    }
+                    className={"w-full "}
+                    label={"Create Loan"}
                     onClick={submitLoan}
-                  >
-                    Create Loan
-                  </Button>
+                  />
                 </div>
               </div>
             </div>
@@ -1045,14 +1070,13 @@ const CreateLoan = () => {
                 {selectedCustomer.image ? (
                   ""
                 ) : (
-                  <div className="p-3 rounded-full bg-white h-fit w-fit">
-                         <img
-                  className="rounded-full"
-                  src={selectedCustomer?.profilePicture}
-                  alt="user image"
-                  width="60px"
-                  height="60px"
-                />
+                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                    <Image
+                      src={selectedCustomer?.profilePicture}
+                      alt="borrower"
+                      fill
+                      sizes="100%"
+                    />
                   </div>
                 )}
                 <div>
@@ -1069,16 +1093,15 @@ const CreateLoan = () => {
               </div>
             ) : (
               <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
-                <div className="p-3 rounded-full bg-white">
-                <img
-                  className="rounded-full"
-                  src={selectedCustomer?.profilePicture}
-                  alt="user image"
-                  width="60px"
-                  height="60px"
-                />
+                <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                  <Image
+                    src={selectedCustomer?.profilePicture}
+                    alt="borrower"
+                    fill
+                    sizes="100%"
+                  />
                 </div>
-                <p className="text-xl font-semibold">Select Borrower</p>
+                S<p className="text-xl font-semibold">Select Borrower</p>
               </div>
             )}
             <div className="flex pt-2">
@@ -1215,6 +1238,7 @@ const CreateLoan = () => {
                   >
                     Create Loan
                   </Button>
+                  
                 </div>
               </div>
             </div>

@@ -24,6 +24,7 @@ const PersonalInformation = ({userData,loading}) => {
   const [bankNameVal, setBankNameVal] = useState("");
   const [verificationResponse, setVerificationResponse] = useState(null);
   const [lga, setLga] = useState([]);
+  const [profileImg,setProfileImg] = useState(null)
   const [selectedFiles, setSelectedFiles] = useState([]);
 
 
