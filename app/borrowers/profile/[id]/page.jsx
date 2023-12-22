@@ -34,7 +34,7 @@ const CustomerProfile = () => {
   const [isUploadDocumentsModalOpen, setIsUploadDocumentsModalOpen] =
     useState(false);
   const [activeButton, setActiveButton] = useState("bio-data");
-  const [activityButton, setActivityButton] = useState("activity-logs");
+  const [activityButton, setActivityButton] = useState("summary");
   const [infoHover, setInfoHover] = useState("");
   const [logSearch, setLogSearch] = useState(false);
   const [borrowerOptions, setBorrowerOptions] = useState(false);
@@ -597,7 +597,6 @@ const CustomerProfile = () => {
               </div>
             </div>
             <div className="p-2">
-              {activityButton === "activity-logs" && <CustomerActivityLogs />}
               {activityButton === "summary" && <CustomerSummary />}
               {activityButton === "loans" && (
                 <CustomerLoanTable id={data?.profileInfo?._id} />
