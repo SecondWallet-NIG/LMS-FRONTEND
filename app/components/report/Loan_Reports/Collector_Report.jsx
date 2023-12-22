@@ -65,7 +65,7 @@ const Staffs = () => {
           <ReusableDataTable
             role="collectorsReport"
             dataTransformer={customDataTransformer}
-            apiEndpoint="https://secondwallet-stag.onrender.com/api/user"
+            apiEndpoint="http://localhost:8000/api/user"
             headers={headers}
             filters={true}
             pagination={true}
