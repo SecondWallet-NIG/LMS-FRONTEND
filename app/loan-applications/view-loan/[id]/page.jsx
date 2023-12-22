@@ -274,14 +274,6 @@ const ViewLoan = () => {
   };
 
   useEffect(() => {
- 
-   
-    dispatch(getLoanPackage());
-    dispatch(getAllUsers());
-    dispatch(getInterestType());
-    dispatch(getSingleLoan(id));
-
-
     const _user = JSON.parse(localStorage.getItem("user"));
 
     if (_user) {
@@ -291,10 +283,18 @@ const ViewLoan = () => {
     if (data) {
       setLoanAmount(data?.data?.loanApplication?.loanAmount);
     }
+    dispatch(getSingleLoan(id));
+    dispatch(getLoanPackage());
+    dispatch(getInterestType());
+    dispatch(getLoanApprovals(id));
+ 
+
+
+
   }, []);
 
   useEffect(() => {
-    dispatch(getLoanApprovals(id));
+
   }, [])
 
   return (
