@@ -2,6 +2,7 @@ import Image from "next/image";
 
 const LoanProcessCard = ({ data }) => {
   const _data = data?.data?.data;
+  console.log({_data});
   return (
     <main className="flex flex-col">
       {Array.isArray(_data) &&
