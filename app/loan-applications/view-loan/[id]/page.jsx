@@ -274,11 +274,12 @@ const ViewLoan = () => {
   };
 
   useEffect(() => {
-    dispatch(getSingleLoan(id));
+ 
     dispatch(getLoanApprovals(id));
     dispatch(getLoanPackage());
     dispatch(getAllUsers());
     dispatch(getInterestType());
+    dispatch(getSingleLoan(id));
 
     const _user = JSON.parse(localStorage.getItem("user"));
 
