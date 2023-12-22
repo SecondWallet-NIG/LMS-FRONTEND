@@ -7,6 +7,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 const header = [
   { id: "firstName", label: "Borrower Name & ID" },
+  { id: "customerId", label: "SWID" },
   { id: "numberOfLoans", label: " Number of Loans" },
   { id: "totalLoanAmount", label: "Total Loan Amount" },
   { id: "status", label: "Status" },
@@ -16,23 +17,25 @@ const customDataTransformer = (apiData) => {
   return apiData?.map((item) => ({
     id: item._id,
     firstName: (
-   <div>
-       <div className="text-md font-[500] text-gray-700">
+      <div className="text-md font-[500] text-gray-700">
         {item.firstName} {item.lastName}
       </div>
-        <div className="text-sm font-[400] text-gray-400">
-        {item?.customerId} 
-      </div>
-   </div>
+    ),
+    customerId: (
+      <div className="text-sm font-[400] text-swGray">{item?.customerId}</div>
     ),
     numberOfLoans: (
       <div>
-        <div className="text-md font-[500] text-gray-700">{item.numberOfLoans}</div>
+        <div className="text-md font-[500] text-gray-700">
+          {item.numberOfLoans}
+        </div>
       </div>
     ),
     totalLoanAmount: (
       <div>
-        <div className="text-md font-[500] text-gray-700">₦ {item?.totalLoanAmount?.toLocaleString()}</div>
+        <div className="text-md font-[500] text-gray-700">
+          ₦ {item?.totalLoanAmount?.toLocaleString()}
+        </div>
       </div>
     ),
     status: (
@@ -45,7 +48,7 @@ const customDataTransformer = (apiData) => {
       >
         {item.status}
       </button>
-    ),  
+    ),
   }));
 };
 
@@ -58,7 +61,7 @@ const CustomerLoan = () => {
         onClickRow="/borrowers/profile"
         headers={header}
         initialData={[]}
-        apiEndpoint="http://localhost:8000/api/customer/profile-information"
+        apiEndpoint="https://secondwallet-stag.onrender.com/api/customer/profile-information"
         btnText={
           <div className="flex gap-1 items-center p-1">
             <AiOutlinePlus size={15} />

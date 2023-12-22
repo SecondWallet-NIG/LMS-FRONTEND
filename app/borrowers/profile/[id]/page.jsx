@@ -137,7 +137,10 @@ const CustomerProfile = () => {
             <div className="ml-4 flex flex-col justify-between items-end ">
               <p className="text-sm mb-2">
                 Customer onboarded by: <br />
-                <span className="font-semibold"> John Deo</span>
+                <span className="font-semibold">
+                  {" "}
+                  {data?.profileInfo?.firstName} {data?.profileInfo?.middleName}{" "}
+                </span>
               </p>
               <div className="flex gap-2 items-center">
                 <div className="relative">

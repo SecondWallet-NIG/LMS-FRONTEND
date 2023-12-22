@@ -95,7 +95,7 @@ const RepaymentTable = () => {
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}
-            apiEndpoint="http://localhost:8000/api/repayment"
+            apiEndpoint="https://secondwallet-stag.onrender.com/api/repayment"
             btnTextClick={() => {
               router.push("/create-borrower");
             }}

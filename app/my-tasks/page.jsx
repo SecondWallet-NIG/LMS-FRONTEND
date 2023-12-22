@@ -16,22 +16,16 @@ const MyTasks = () => {
   let user;
   if (typeof window !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
-    // Rest of your client-side code using the 'user' object
   }
-  const router = useRouter();
 
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
 
   useEffect(() => {
-    dispatch(getApprovalAssignee(user?.data?.user?._id));
-
-    setTimeout(() => {
-      console.log("loanToApprove?.data?.tasks", data);
-    }, 5000);
-  
+    dispatch(getApprovalAssignee(user?.data?.user?._id));  
   }, []);
+
   return (
     <DashboardLayout>
       <main className="p-8">

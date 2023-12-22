@@ -23,20 +23,23 @@ import { FiArrowDownLeft, FiArrowUpRight, FiSend } from "react-icons/fi";
 import { IoMdCard } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { getApprovalAssignee } from "@/redux/slices/loanApprovalSlice";
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const router = useRouter();
+  const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState(true);
+  const x = useSelector((state) => state.loanApprovals);
+  console.log("x?.data?.data", x?.data?.data);
 
   const [activeLink, setActiveLink] = useState("");
 
   const handleSidebarOpen = (state) => {
     setSideBarOpen(state);
-    // sideBarOpen
-    //   ? localStorage.setItem("minimizeSidebar", false)
-    //   : localStorage.setItem("minimizeSidebar", true);
   };
+
+  console.log({ x });
 
   useEffect(() => {
     setSideBarOpen(true);
@@ -44,6 +47,17 @@ const Sidebar = () => {
       setSideBarOpen(false);
     }, 1000);
   }, []);
+
+  let user;
+  if (typeof window !== "undefined") {
+    user = JSON.parse(localStorage.getItem("user"));
+  }
+
+  useEffect(() => {
+    dispatch(getApprovalAssignee(user?.data?.user?._id));
+    console.log({ x });
+  }, []);
+
   return (
     <main
       className={`fixed h-full border-r bg-white border-r-gray-300 flex flex-col font-medium z-[102] transition-all ease-in-out duration-1000 ${
@@ -96,7 +110,17 @@ const Sidebar = () => {
               />
             }
             pathname={pathname}
-            text="My tasks"
+            text={
+              <div className="flex">
+                <div> My tasks</div>
+
+                <div
+                  className={`ml-8 bg-blue-400 text-white inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
+                >
+                  {`${x?.data?.pendingCount}` || 0} 
+                </div>
+              </div>
+            }
             link="/my-tasks"
             isActive={"my-tasks"}
             sideBarOpen={sideBarOpen}

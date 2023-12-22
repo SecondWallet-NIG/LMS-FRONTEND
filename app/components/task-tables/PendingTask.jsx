@@ -81,7 +81,7 @@ const PendingTasks = () => {
         dataTransformer={customDataTransformer}
         headers={headers}
         initialData={[]}
-        apiEndpoint={`http://localhost:8000/api/loan-application/task/${user?.data?.user?._id}`}
+        apiEndpoint={`https://secondwallet-stag.onrender.com/api/loan-application/task/${user?.data?.user?._id}`}
         filters={false}
         pagination={true}
         role={"pendingTask"}

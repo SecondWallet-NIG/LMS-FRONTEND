@@ -175,7 +175,7 @@ const CustomerRepayment = ({ loanId }) => {
             dataTransformer={customDataTransformer}
             headers={headers}
             initialData={[]}
-            apiEndpoint={`http://localhost:8000/api/repayment/loan-application/${loanId}`}
+            apiEndpoint={`https://secondwallet-stag.onrender.com/api/repayment/loan-application/${loanId}`}
             filters={false}
             pagination={false}
           /> : null

@@ -40,6 +40,7 @@ import SelectField from "@/app/components/shared/input/SelectField";
 import CustomerRepayment from "@/app/components/customers/CustomerRepayment";
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
+import { FaDownload } from "react-icons/fa6";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -106,6 +107,27 @@ const ViewLoan = () => {
     });
   };
 
+  const handleDownload = async () => {
+    const downloadUrl = data?.data?.loanApplication?.offerLetter;
+
+    try {
+      const response = await fetch(downloadUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${data?.data?.customerDetails.firstName} ${data?.data?.customerDetails.lastName} - Offer Letter`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      toast.success("Download complete!");
+    } catch (error) {
+      toast.error(error);
+      console.error("Error downloading file:", error);
+    }
+  };
+
   const paymentMethodTypes = [
     { value: "cash", label: "Cash" },
     { value: "bankTransfer", label: "Bank Transfer" },
@@ -141,7 +163,7 @@ const ViewLoan = () => {
           setOpenLoanAmount(false);
           setFormData({});
           toast.error(error?.message, {
-            position: 'top-right',
+            position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -172,7 +194,7 @@ const ViewLoan = () => {
           setOpenLoanPeriod(false);
           setFormData({});
           toast.error(error?.message, {
-            position: 'top-right',
+            position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -313,7 +335,6 @@ const ViewLoan = () => {
                           : data?.data?.loanApplication?.status === "Fully Paid"
                           ? "bg-swGreen"
                           : "bg-swIndicatorDarkRed"
-
                       } px-2 py-1 rounded-full ml-4 text-xs font-normal text-white`}
                     >
                       {data?.data?.loanApplication?.status}
@@ -389,8 +410,19 @@ const ViewLoan = () => {
                         "text-swBlue text-sm bg-white py-2 rounded-lg font-medium"
                       }
                     >
-                      View profile
+                      View Profile
                     </button>
+                    {data?.data?.loanApplication?.offerLetter != null ? (
+                      <a
+                        download
+                        className={
+                          "text-swBlue text-sm bg-white py-2 rounded-lg font-medium "
+                        }
+                        onClick={handleDownload}
+                      >
+                        <FaDownload />
+                      </a>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -428,7 +460,9 @@ const ViewLoan = () => {
                   <p className="text-sm font-medium">Outstanding Balance</p>
                   <div className="flex justify-between items-center">
                     <p className="text-md text-red-500 font-semibold mt-4">
-                    ₦{" "} {data?.data?.loanApplication?.outstandingBalance?.toLocaleString() || 0}
+                      ₦{" "}
+                      {data?.data?.loanApplication?.outstandingBalance?.toLocaleString() ||
+                        0}
                     </p>
                   </div>
                 </div>
