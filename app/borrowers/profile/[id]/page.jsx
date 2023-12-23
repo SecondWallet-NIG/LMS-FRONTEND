@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Button from "@/app/components/shared/buttonComponent/Button";
@@ -38,6 +38,7 @@ const CustomerProfile = () => {
   const [infoHover, setInfoHover] = useState("");
   const [logSearch, setLogSearch] = useState(false);
   const [borrowerOptions, setBorrowerOptions] = useState(false);
+  const buttonRef = useRef(null);
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -69,6 +70,23 @@ const CustomerProfile = () => {
   useEffect(() => {
     dispatch(getCustomerById(id));
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (buttonRef.current && !buttonRef.current.contains(event.target)) {
+        // Click outside the button, close it
+        setBorrowerOptions(!borrowerOptions);
+      }
+    };
+
+    // Add event listener when component mounts
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup event listener when component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [borrowerOptions]);
 
   return (
     <DashboardLayout isBackNav={true} paths={paths}>
@@ -147,13 +165,17 @@ const CustomerProfile = () => {
                   <div
                     className="border-2 border-transparent hover:border-swLightGray w-fit h-fit rounded-md cursor-pointer"
                     onClick={() => setBorrowerOptions(!borrowerOptions)}
+                    // onClick={() => }
                   >
                     <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
                       <BsThreeDotsVertical size={20} />
                     </div>
                   </div>
                   {borrowerOptions && (
-                    <div className="absolute right-0 border text-swBrown rounded-lg mt-2 p-2 w-60 bg-white z-30">
+                    <div
+                      ref={buttonRef}
+                      className="absolute right-0 border text-swBrown rounded-lg mt-2 p-2 w-60 bg-white z-30"
+                    >
                       <p
                         className="hover:bg-swLightGray rounded-lg p-2 text-left cursor-pointer"
                         onClick={() => setBorrowerOptions(false)}
@@ -589,11 +611,11 @@ const CustomerProfile = () => {
                     <FiSearch size={20} />
                   </div>
                 </div>
-                <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex cursor-pointer">
+                {/* <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex cursor-pointer">
                   <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
                     <BsThreeDotsVertical size={20} />
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="p-2">

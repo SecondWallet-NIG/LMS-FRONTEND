@@ -11,7 +11,6 @@ const Repayment = () => {
   const [currentPage, setCurrentPage] = useState("all-repayment");
   const { loading, error, data } = useSelector((state) => state.loanRepayment);
 
-
   const header = [
     { id: "loanId", label: "Loan ID" },
     { id: "dueDate", label: "Due Date" },
@@ -42,17 +41,17 @@ const Repayment = () => {
       ),
       amountDue: (
         <div className="text-md font-[500] text-gray-700">
-         ₦ {item?.amountDue.toLocaleString()|| 0} 
+          ₦ {item?.amountDue.toLocaleString() || 0}
         </div>
       ),
       amountPaid: (
         <div className="text-md font-[500] text-gray-700">
-         ₦ {item?.amountPaid?.toLocaleString() || 0} 
+          ₦ {item?.amountPaid?.toLocaleString() || 0}
         </div>
       ),
       balanceToPay: (
         <div className="text-md font-[500] text-gray-700">
-         ₦ {item?.balanceToPay?.toLocaleString() || 0} 
+          ₦ {item?.balanceToPay?.toLocaleString() || 0}
         </div>
       ),
       status: (
@@ -99,34 +98,37 @@ const Repayment = () => {
         </div>
 
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-          {data && data?.data?.map((item, index) => (
-            <div
-              className={`rounded-lg border p-2 ${
-                item?.loanTypeTitle === "Total Repayments"
-                  ? "border-blue-200 text-swBlue"
-                  : item?.loanTypeTitle === "Upcoming Repayments"
-                  ? "border-green-200 text-swGreen"
-                  : "border-red-100 text-swIndicatorLightRed"
-              }`}
-              key={index}
-            >
-              <p>{item.loanTypeTitle}</p>
+          {data &&
+            data?.data?.map((item, index) => (
               <div
-                className={`flex justify-between items-center font-medium mt-5 ${
+                className={`rounded-lg border p-2 ${
                   item?.loanTypeTitle === "Total Repayments"
-                    ? "text-swDarkBlue"
+                    ? "border-blue-200 text-swBlue"
                     : item?.loanTypeTitle === "Upcoming Repayments"
-                    ? "text-swDarkGreen"
-                    : "text-swDarkRed"
+                    ? "border-green-200 text-swGreen"
+                    : "border-red-100 text-swIndicatorLightRed"
                 }`}
+                key={index}
               >
-                <p className="text-3xl font-semibold">{item?.countLast24hr}</p>
-                <p className="font-medium">
-                  &#8358; {item?.amount?.toLocaleString()}
-                </p>
+                <p>{item.loanTypeTitle}</p>
+                <div
+                  className={`flex justify-between items-center font-medium mt-5 ${
+                    item?.loanTypeTitle === "Total Repayments"
+                      ? "text-swDarkBlue"
+                      : item?.loanTypeTitle === "Upcoming Repayments"
+                      ? "text-swDarkGreen"
+                      : "text-swDarkRed"
+                  }`}
+                >
+                  <p className="text-3xl font-semibold">
+                    {item?.countLast24hr}
+                  </p>
+                  <p className="font-medium">
+                    &#8358; {item?.amount?.toLocaleString()}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className="w-full">
@@ -140,6 +142,7 @@ const Repayment = () => {
             }}
             filters={true}
             pagination={true}
+            onClickRow={"/loan-applications/view-loan"}
           />
         </div>
       </main>
