@@ -58,7 +58,7 @@ function ReusableDataTable({
     {
       startDate: null,
       endDate: null,
-      minDate : new Date(),
+      minDate: new Date(),
       key: "selection",
     },
   ]);
@@ -215,7 +215,7 @@ function ReusableDataTable({
         })
         .catch(() => {});
     } else {
-      console.log({ dateRange});
+      console.log({ dateRange });
       setIsLoading(true);
       if (dateRange && dateRange.length > 0) {
         if (
@@ -246,7 +246,6 @@ function ReusableDataTable({
         apiUrl += `&roleId=${"6550dd44c892d5d8bbda3621"}`;
       }
 
-      
       if (status != " ") {
         console.log({ status });
         apiUrl += `&status=${status}`;
@@ -585,6 +584,7 @@ function ReusableDataTable({
                   className="border pt-2 pb-2 hover:bg-swLightGray"
                   style={{ cursor: "pointer" }}
                 >
+                  {console.log(data)}
                   {headers.map((header) => (
                     <td
                       key={header.id}
@@ -658,23 +658,23 @@ function ReusableDataTable({
           <div className="w-full items-center">
             <DateRange
               editableDateInputs={true}
-             // onChange={(item) => setDateRange([item.selection])}
+              // onChange={(item) => setDateRange([item.selection])}
               moveRangeOnFirstSelection={false}
               ranges={dateRange}
               onChange={(item) => {
                 // Adjust the time to the start and end of the selected day
                 const startDate = new Date(item.selection.startDate);
                 startDate.setHours(1, 0, 0, 0);
-        
+
                 const endDate = new Date(item.selection.endDate);
                 endDate.setHours(24, 59, 59, 999);
-        
+
                 setDateRange([
                   {
                     startDate,
                     endDate,
-                    key: 'selection'
-                  }
+                    key: "selection",
+                  },
                 ]);
               }}
             />

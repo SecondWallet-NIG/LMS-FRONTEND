@@ -15,8 +15,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaCheck } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const EditPlansAndPackages = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const [cancelModal, setCancelModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
@@ -154,10 +156,13 @@ const EditPlansAndPackages = () => {
     }
   }, []);
   return (
-    <DashboardLayout>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Loan Plans and Packages", "View Plan", "Edit Plan"]}
+    >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <ToastContainer />
-        <p className="font-semibold text-lg">Create Loan plan and Packages</p>
+        <p className="font-semibold text-lg">Edit Loan plan and Packages</p>
         <p className="font-semibold my-5">Loan details</p>
         <div className="flex gap-5 flex-col">
           <InputField

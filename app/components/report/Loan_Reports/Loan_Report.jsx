@@ -30,7 +30,6 @@ const LoanReport = () => {
   };
 
   const fetchSummaryByDate = () => {
-
     if (dateRange && dateRange.length > 0) {
       if (
         dateRange[0].startDate instanceof Date &&
@@ -131,7 +130,7 @@ const LoanReport = () => {
           <div className="flex justify-between items-end">
             <p className="text-2xl font-bold mt-3">
               {" "}
-              {loanApplication?.data?.data?.ApprovedLoanCount}{" "}
+              {loanApplication?.data?.data?.ApprovedLoanCount}
             </p>
           </div>
         </div>
@@ -192,6 +191,7 @@ const LoanReport = () => {
         onClose={() => {
           setDateFilterOpen(!dateFilterOpen);
         }}
+        width={"fit-content"}
       >
         <div className="bg-white p-4 border shadow-lg">
           <div className="text-swBlue text-sm font-semibold pb-4">

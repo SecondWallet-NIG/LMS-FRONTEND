@@ -10,27 +10,29 @@ import { useEffect } from "react";
 
 const ViewPlan = () => {
   const { plan_id } = useParams();
-  console.log({plan_id});
+  console.log({ plan_id });
   const dispatch = useDispatch();
   const loanPackage =
-  useSelector((state) => {
-    return state?.loanPackage?.data?.data;
-  }) || [];
-  console.log({loanPackage});
+    useSelector((state) => {
+      return state?.loanPackage?.data?.data;
+    }) || [];
+  console.log({ loanPackage });
 
   useEffect(() => {
     dispatch(getSingleLoanPackage(plan_id));
   }, []);
   return (
-    <DashboardLayout>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Loan Plans and Packages", "View Plan"]}
+    >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">
           <button className="bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-6 py-1 rounded-md">
-          
             {loanPackage?.status}
           </button>
           <Link
-            href=""
+            href={`/plans/view-plan/${plan_id}/edit-plan/${plan_id}`}
             className="border py-2 px-3 flex gap-2 items-center rounded-lg"
           >
             <FiEdit2 size={20} />
@@ -68,7 +70,11 @@ const ViewPlan = () => {
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Loan amount</p>
-            <p> ₦ {loanPackage?.loanAmountRange?.min} -  ₦ {loanPackage?.loanAmountRange?.max}</p>
+            <p>
+              {" "}
+              ₦ {loanPackage?.loanAmountRange?.min} - ₦{" "}
+              {loanPackage?.loanAmountRange?.max}
+            </p>
           </div>
           {/* <div className="flex">
             <p className="min-w-[15rem]">Eligibility criteria</p>
