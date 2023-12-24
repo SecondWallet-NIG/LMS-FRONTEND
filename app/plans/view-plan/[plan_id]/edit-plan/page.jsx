@@ -13,9 +13,11 @@ import CenterModal from "@/app/components/modals/CenterModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaCheck } from "react-icons/fa";
-import { IoMdClose } from "react-icons/io";
+import { IoMdCheckmark, IoMdClose } from "react-icons/io";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Rings } from "react-loader-spinner";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 
 const EditPlansAndPackages = () => {
   const { id } = useParams();
@@ -23,7 +25,8 @@ const EditPlansAndPackages = () => {
   const [cancelModal, setCancelModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [user, setUser] = useState({});
-  const [editPlan, seteditPlan] = useState({
+  const [loading, setLoading] = useState(false);
+  const [editPlan, setEditPlan] = useState({
     name: "",
     minAmount: "",
     maxAmount: "",
@@ -46,7 +49,7 @@ const EditPlansAndPackages = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
-    seteditPlan((prev) => ({
+    setEditPlan((prev) => ({
       ...prev,
       [name]: value,
       createdBy: user?.data?.user?._id,
@@ -54,7 +57,7 @@ const EditPlansAndPackages = () => {
   };
 
   const resetForm = () => {
-    seteditPlan({
+    setEditPlan({
       name: "",
       minAmount: "",
       maxAmount: "",
@@ -193,7 +196,7 @@ const EditPlansAndPackages = () => {
           <InputField
             label={"Interest rate"}
             required={true}
-            placeholder={"30"}
+            placeholder={"5"}
             inputType={"number"}
             endIcon={<MdPercent size={20} className="text-swGray" />}
             name={"interestRate"}
@@ -237,7 +240,7 @@ const EditPlansAndPackages = () => {
             )}
           </div>
 
-          <div>
+          {/* <div>
             <p className="mb-2 text-sm">
               Eligibility criteria <span className="text-red-500">*</span>
             </p>
@@ -255,9 +258,9 @@ const EditPlansAndPackages = () => {
                 Earns at least 1,000,000 per annum
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <InputField
+          {/* <InputField
             required={true}
             label={"Minimum collateral amount"}
             placeholder={"500,000"}
@@ -278,8 +281,8 @@ const EditPlansAndPackages = () => {
                 {errors.repaymentInterval}
               </span>
             )}
-          </div>
-
+          </div> */}
+          {/* 
           <div>
             <p className="mb-2 text-sm">
               Loan Description <span className="text-red-500">*</span>
@@ -290,7 +293,7 @@ const EditPlansAndPackages = () => {
               className="w-full border hover:border-swBlue p-2 focus:outline-none rounded-md"
               rows="8"
             ></textarea>
-          </div>
+          </div> */}
 
           <div className="flex justify-between ">
             <button
@@ -304,17 +307,36 @@ const EditPlansAndPackages = () => {
                 Cancel
               </div>
             </button>
-            <button
+            {/* <button
               className="border bg-swBlue text-white py-2 px-4 rounded-lg"
-              onClick={() => {
-                setSuccessModal(true);
-              }}
+              onClick={() => handleSubmit}
             >
-              <div className="flex gap-2 items-center">
-                Update plan/package
+              <p className="flex gap-2 items-center">
+                Create plan/package
                 <FaCheck size={15} />
-              </div>
-            </button>
+              </p>
+            </button> */}
+            <EditableButton
+              blueBtn={true}
+              disabled={loading === "pending" ? true : false}
+              startIcon={
+                loading === "pending" && (
+                  <Rings
+                    height="20"
+                    width="20"
+                    color="#ffffff"
+                    radius="2"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                    ariaLabel="rings-loading"
+                  />
+                )
+              }
+              label={"Update plan/package"}
+              endIcon={<IoMdCheckmark size={20} />}
+              onClick={handleSubmit}
+            />
           </div>
         </div>
         <CenterModal width={"600px"} isOpen={cancelModal}>
