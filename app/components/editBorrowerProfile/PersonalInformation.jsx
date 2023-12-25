@@ -15,8 +15,7 @@ import { bankArr, statesAndLgas } from "@/constant";
 import InputField from "../shared/input/InputField";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 
-const PersonalInformation = ({userData,loading}) => {
-  
+const PersonalInformation = ({ userData, loading }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isInputOpen, setIsInputOpen] = useState(false);
@@ -24,9 +23,8 @@ const PersonalInformation = ({userData,loading}) => {
   const [bankNameVal, setBankNameVal] = useState("");
   const [verificationResponse, setVerificationResponse] = useState(null);
   const [lga, setLga] = useState([]);
-  const [profileImg,setProfileImg] = useState(null)
+  const [profileImg, setProfileImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
-
 
   const [formData, setFormData] = useState({
     profilePicture: null,
@@ -121,7 +119,7 @@ const PersonalInformation = ({userData,loading}) => {
   };
 
   const handleStateChange = (selectedOption) => {
-    const selectedState = selectedOption.value;
+    const selectedState = selectedOption?.value || selectedOption;
     const selectedLgas =
       statesAndLgas.find((item) => item.state === selectedState)?.lgas || [];
     const lgas = selectedLgas.map((item, index) => ({
@@ -185,7 +183,7 @@ const PersonalInformation = ({userData,loading}) => {
         console.log(response);
         document.getElementById("add-customer-form").reset();
         resetForm();
-      //  setProfileImg(null);
+        //  setProfileImg(null);
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -195,7 +193,7 @@ const PersonalInformation = ({userData,loading}) => {
   const handleSelectChange = async (selectedOption, name) => {
     setFormData({
       ...formData,
-      [name]: selectedOption.value,
+      [name]: selectedOption?.value,
     });
   };
 
@@ -217,9 +215,9 @@ const PersonalInformation = ({userData,loading}) => {
   //   }
   // }, [formData?.profilePicture]);
 
- 
-
   useEffect(() => {
+    handleStateChange(userData?.profileInfo?.state);
+    // handleSelectChange(userData?.profileInfo?.genderlga, "lga");
     setFormData({
       profilePicture: null,
       firstName: userData?.profileInfo?.firstName,
@@ -231,7 +229,7 @@ const PersonalInformation = ({userData,loading}) => {
       bvn: userData?.profileInfo?.bvn,
       country: userData?.profileInfo?.country,
       state: userData?.profileInfo?.state,
-      lga: userData?.profileInfo?.genderlga,
+      lga: userData?.profileInfo?.lga,
       address: userData?.profileInfo?.address,
       phoneNumber: userData?.profileInfo?.phoneNumber,
       email: userData?.profileInfo?.email,
@@ -351,6 +349,9 @@ const PersonalInformation = ({userData,loading}) => {
           <div className="w-1/2">
             <SelectField
               name="gender"
+              value={genderOptions.find(
+                (option) => option.value === formData.gender
+              )}
               optionValue={genderOptions}
               label={"Gender"}
               required={true}
@@ -409,6 +410,9 @@ const PersonalInformation = ({userData,loading}) => {
             <SelectField
               name="country"
               label={"Country"}
+              value={countryOptions.find(
+                (option) => option.value === formData.country
+              )}
               optionValue={countryOptions}
               required={true}
               placeholder={"Select country"}
@@ -422,6 +426,7 @@ const PersonalInformation = ({userData,loading}) => {
             <SelectField
               name="state"
               label={"State"}
+              value={states.find((option) => option.value === formData.state)}
               optionValue={states}
               required={true}
               placeholder={"Select state"}
@@ -434,9 +439,10 @@ const PersonalInformation = ({userData,loading}) => {
           </div>
           <div className="w-full md:w-1/3">
             <SelectField
-              name="dateOfBirth"
+              name="lga"
               label={"LGA"}
               required={true}
+              value={lga.find((option) => option.value === formData.lga)}
               optionValue={lga}
               placeholder={"Select lga"}
               isSearchable={true}
@@ -497,6 +503,9 @@ const PersonalInformation = ({userData,loading}) => {
             <SelectField
               name="bankName"
               label="Bank name"
+              value={bankArr.find(
+                (option) => option.value === formData.bankName
+              )}
               optionValue={bankArr}
               required={true}
               placeholder={"Select bank"}

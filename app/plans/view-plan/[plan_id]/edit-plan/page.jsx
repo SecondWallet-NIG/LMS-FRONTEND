@@ -6,26 +6,36 @@ import { FiMinus } from "react-icons/fi";
 import { MdArrowBackIos, MdPercent } from "react-icons/md";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { createLoanPackage } from "@/redux/slices/loanPackageSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createLoanPackage,
+  getSingleLoanPackage,
+  updateLoanPackage,
+} from "@/redux/slices/loanPackageSlice";
 import { useEffect } from "react";
 import CenterModal from "@/app/components/modals/CenterModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaCheck } from "react-icons/fa";
 import { IoMdCheckmark, IoMdClose } from "react-icons/io";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Rings } from "react-loader-spinner";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
-
+import check from "../../../../../public/images/check.svg";
+import Image from "next/image";
 const EditPlansAndPackages = () => {
-  const { id } = useParams();
+  const router = useRouter();
+  const { plan_id } = useParams();
   const dispatch = useDispatch();
   const [cancelModal, setCancelModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
+  const loanPackage =
+    useSelector((state) => {
+      return state?.loanPackage?.data?.data;
+    }) || [];
+  console.log({ loanPackage });
   const [editPlan, setEditPlan] = useState({
     name: "",
     minAmount: "",
@@ -37,15 +47,7 @@ const EditPlansAndPackages = () => {
     createdBy: "",
   });
 
-  const [errors, setErrors] = useState({
-    name: "",
-    minAmount: "",
-    maxAmount: "",
-    interestRateType: "",
-    interestRate: "",
-    repaymentInterval: "",
-  });
-  console.log(user?.data?.token);
+  // console.log(user?.data?.token);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
@@ -69,76 +71,39 @@ const EditPlansAndPackages = () => {
     });
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    let isValid = true;
-
-    if (editPlan.name.trim() === "") {
-      newErrors.name = "Package name is required";
-      isValid = false;
-    }
-
-    if (editPlan.minAmount.trim() === "") {
-      newErrors.minAmount = "Minimum loan range is required";
-      isValid = false;
-    }
-
-    if (editPlan.maxAmount.trim() === "") {
-      newErrors.maxAmount = "Maximum loan range is required";
-      isValid = false;
-    }
-    if (editPlan.interestRateType.trim() === "") {
-      newErrors.interestRateType = "Intrest type is required";
-      isValid = false;
-    }
-
-    if (editPlan.interestRate.trim() === "") {
-      newErrors.interestRate = "Interest rate is required";
-      isValid = false;
-    }
-    if (editPlan.repaymentInterval.trim() === "") {
-      newErrors.repaymentInterval = "Duration is required";
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isValid = validateForm();
-    if (isValid) {
-      const payload = {
-        name: editPlan.name,
-        loanAmountRange: {
-          min: editPlan.minAmount,
-          max: editPlan.maxAmount,
-        },
-        interestRate: {
-          rateType: editPlan.interestRateType,
-          rate: editPlan.interestRate,
-        },
-        repaymentInterval: editPlan.repaymentInterval,
-        status: "Active",
-        createdBy: editPlan.createdBy,
-      };
+    setLoading(true);
+    const payload = {
+      name: editPlan.name,
+      loanAmountRange: {
+        min: editPlan.minAmount,
+        max: editPlan.maxAmount,
+      },
+      interestRate: {
+        rateType: editPlan.interestRateType,
+        rate: editPlan.interestRate,
+      },
+    };
 
-      dispatch(createLoanPackage(payload))
-        .unwrap()
-        .then(() => {
-          setSuccessModal(true);
-          resetForm();
-        })
-        .catch((error) => {
-          toast.error(error?.message);
-          toast.error;
-        });
-    }
+    dispatch(updateLoanPackage({ loanPackageId: plan_id, payload }))
+      .unwrap()
+      .then((response) => {
+        setSuccessModal(true);
+        resetForm();
+        setLoading(false);
+        console.log({ response });
+      })
+      .catch((error) => {
+        toast.error(error?.message);
+        setLoading(false);
+        // toast.error;
+      });
+    // console.log(payload);
   };
 
   const interestTypeOptions = [
-    { value: "Fixed Rate", label: "Fixed Rate", name: "interestRateType" },
+    { value: "Flat Rate", label: "Flat Rate", name: "interestRateType" },
     {
       value: "Reducing Balance",
       label: "Reducing balance",
@@ -154,10 +119,33 @@ const EditPlansAndPackages = () => {
   ];
 
   useEffect(() => {
+    dispatch(getSingleLoanPackage(plan_id));
     if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
     }
   }, []);
+
+  // console.log(
+  //   "type",
+  //   // interestTypeOptions.find(
+  //   //   (option) => option?.value === editPlan?.interestRateType
+  //   // )
+  //   editPlan?.interestRateType
+  // );
+  console.log(editPlan);
+
+  useEffect(() => {
+    setEditPlan({
+      name: loanPackage?.name,
+      minAmount: loanPackage?.loanAmountRange?.min,
+      maxAmount: loanPackage?.loanAmountRange?.max,
+      interestRateType: loanPackage?.interestRate?.rateType,
+      interestRate: loanPackage?.interestRate?.rate,
+      repaymentInterval: loanPackage?.repaymentInterval,
+      status: loanPackage?.status,
+      createdBy: loanPackage?.createdBy,
+    });
+  }, [loanPackage]);
   return (
     <DashboardLayout
       isBackNav={true}
@@ -176,22 +164,17 @@ const EditPlansAndPackages = () => {
             value={editPlan.name}
             onChange={handleInputChange}
           />
-          {errors.name && (
-            <span className="text-red-500 text-xs">{errors.name}</span>
-          )}
 
           <SelectField
             required={true}
             name={"interestRateType"}
             label={"Interest type"}
+            value={interestTypeOptions.find(
+              (option) => option.value === editPlan.interestRateType
+            )}
             optionValue={interestTypeOptions}
             onChange={handleInputChange}
           />
-          {errors.interestRateType && (
-            <span className="text-red-500 text-xs">
-              {errors.interestRateType}
-            </span>
-          )}
 
           <InputField
             label={"Interest rate"}
@@ -203,9 +186,6 @@ const EditPlansAndPackages = () => {
             value={editPlan.interestRate}
             onChange={handleInputChange}
           />
-          {errors.interestRate && (
-            <span className="text-red-500 text-xs">{errors.interestRate}</span>
-          )}
 
           <div className="flex gap-5 items-end">
             <div className="w-full">
@@ -231,69 +211,6 @@ const EditPlansAndPackages = () => {
               />
             </div>
           </div>
-          <div className="flex gap-10">
-            {errors.minAmount && (
-              <span className="text-red-500 text-xs">{errors.minAmount}</span>
-            )}
-            {errors.maxAmount && (
-              <span className="text-red-500 text-xs">{errors.maxAmount}</span>
-            )}
-          </div>
-
-          {/* <div>
-            <p className="mb-2 text-sm">
-              Eligibility criteria <span className="text-red-500">*</span>
-            </p>
-            <div className="flex flex-col gap-2 text-sm text-swGray">
-              <div className="flex gap-2">
-                <input type="checkbox" name="above 18 years" />
-                Older than 18 years
-              </div>
-              <div className="flex gap-2">
-                <input type="checkbox" name="employed" />
-                Employed
-              </div>
-              <div className="flex gap-2">
-                <input type="checkbox" name="earn atleast 1m" />
-                Earns at least 1,000,000 per annum
-              </div>
-            </div>
-          </div> */}
-
-          {/* <InputField
-            required={true}
-            label={"Minimum collateral amount"}
-            placeholder={"500,000"}
-            inputType={"number"}
-            endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
-          />
-
-          <div>
-            <SelectField
-              label="Duration"
-              required={true}
-              name={"repaymentInterval"}
-              optionValue={durationOptions}
-              onChange={handleInputChange}
-            />
-            {errors.repaymentInterval && (
-              <span className="text-red-500 text-xs">
-                {errors.repaymentInterval}
-              </span>
-            )}
-          </div> */}
-          {/* 
-          <div>
-            <p className="mb-2 text-sm">
-              Loan Description <span className="text-red-500">*</span>
-            </p>
-            <textarea
-              name="loan description"
-              id=""
-              className="w-full border hover:border-swBlue p-2 focus:outline-none rounded-md"
-              rows="8"
-            ></textarea>
-          </div> */}
 
           <div className="flex justify-between ">
             <button
@@ -307,20 +224,12 @@ const EditPlansAndPackages = () => {
                 Cancel
               </div>
             </button>
-            {/* <button
-              className="border bg-swBlue text-white py-2 px-4 rounded-lg"
-              onClick={() => handleSubmit}
-            >
-              <p className="flex gap-2 items-center">
-                Create plan/package
-                <FaCheck size={15} />
-              </p>
-            </button> */}
+
             <EditableButton
               blueBtn={true}
-              disabled={loading === "pending" ? true : false}
+              disabled={loading ? true : false}
               startIcon={
-                loading === "pending" && (
+                loading && (
                   <Rings
                     height="20"
                     width="20"
@@ -383,7 +292,7 @@ const EditPlansAndPackages = () => {
         <CenterModal width={"600px"} isOpen={successModal}>
           <div className="flex justify-between items-center border-b p-3">
             <p className="font-semibold text-lg cursor-pointer">
-              Plan edited succeefully
+              Plan updated successfully
             </p>
             <IoMdClose
               size={20}
@@ -395,7 +304,7 @@ const EditPlansAndPackages = () => {
           </div>
           <div className="p-3">
             <div className="flex justify-center items-center py-5">
-              success sign
+              <Image src={check} alt="check" height={50} width={50} />
             </div>
             <p className="text-center">Loans can now be created under plan</p>
           </div>
@@ -403,7 +312,7 @@ const EditPlansAndPackages = () => {
             <div
               className="border-2 border-transparent w-full rounded-lg hover:border-gray-100"
               onClick={() => {
-                setSuccessModal(false);
+                router.push(`/plans/view-plan/${plan_id}`);
               }}
             >
               <button className="w-full border rounded-lg p-3">
