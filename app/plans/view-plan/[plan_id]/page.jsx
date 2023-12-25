@@ -32,7 +32,7 @@ const ViewPlan = () => {
             {loanPackage?.status}
           </button>
           <Link
-            href={`/plans/view-plan/${plan_id}/edit-plan/${plan_id}`}
+            href={`/plans/view-plan/${plan_id}/edit-plan`}
             className="border py-2 px-3 flex gap-2 items-center rounded-lg"
           >
             <FiEdit2 size={20} />

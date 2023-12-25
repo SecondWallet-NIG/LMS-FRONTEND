@@ -31,7 +31,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState(true);
   const x = useSelector((state) => state.loanApprovals);
-  console.log("x?.data?.data", x?.data?.data);
+  // console.log("x?.data?.data", x?.data?.data);
 
   const [activeLink, setActiveLink] = useState("");
 
@@ -39,7 +39,7 @@ const Sidebar = () => {
     setSideBarOpen(state);
   };
 
-  console.log({ x });
+  // console.log({ x });
 
   useEffect(() => {
     setSideBarOpen(true);
@@ -55,7 +55,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     dispatch(getApprovalAssignee(user?.data?.user?._id));
-    console.log({ x });
+    // console.log({ x });
   }, []);
 
   return (
