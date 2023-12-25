@@ -1,8 +1,5 @@
-"use client";
 import { useEffect, useState } from "react";
 import { PiCalendarBlankLight } from "react-icons/pi";
-import { FiUser } from "react-icons/fi";
-import { BsGraphDownArrow } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoanApplicationSummary } from "@/redux/slices/loanApplicationSlice";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,6 +9,7 @@ import Button from "../../shared/buttonComponent/Button";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { exportToPDF } from "@/helpers";
 
 const LoanReport = () => {
   const dispatch = useDispatch();
@@ -53,12 +51,16 @@ const LoanReport = () => {
 
   return (
     <main className="w-full rounded-lg bg-swLightGray p-5 shadow-xl">
-      <div className="flex justify-between">
+    <div id="loanId">
+    <div className="flex justify-between">
         <p className="text-lg font-semibold text-black">Loan Report</p>
         <button
           className={
             "py-2 px-4 text-white text-sm bg-swBlue font-semibold rounded-md"
           }
+          onClick={() => {
+            exportToPDF("loanId")
+          }}
         >
           Export report
         </button>
@@ -76,7 +78,7 @@ const LoanReport = () => {
             <PiCalendarBlankLight size={20} />
             Select date range
           </button>
-          <button
+          {/* <button
             className={
               "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
             }
@@ -91,11 +93,10 @@ const LoanReport = () => {
           >
             <BsGraphDownArrow size={20} />
             Debt status
-          </button>
+          </button> */}
         </div>
       </div>
-
-      <div className="flex gap-5 mt-5">
+    <div className="flex gap-5 mt-5">
         <div className="bg-white border rounded-xl p-3 w-full">
           <p className="font-semibold">Total Number of Loans</p>
           <div className="flex justify-between items-end">
@@ -182,6 +183,7 @@ const LoanReport = () => {
           </div>
         </div>
       </div>
+    </div>
 
       <div className="rounded-xl overflow-hidden border mt-5 bg-white">
         <LoanTable />

@@ -16,8 +16,6 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiDatabase, FiPhone, FiSearch } from "react-icons/fi";
 import { IoIosClose } from "react-icons/io";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
-import { IoCopyOutline } from "react-icons/io5";
-import { LuCalendar } from "react-icons/lu";
 import {
   disburseLoan,
   getSingleLoan,
@@ -41,16 +39,16 @@ import CustomerRepayment from "@/app/components/customers/CustomerRepayment";
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaDownload } from "react-icons/fa6";
+import CustomerPaymentHistory from "@/app/components/customers/CustomerHistoryPayment";
 
 const ViewLoan = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { error, data } = useSelector((state) => state.loanApplication);
   const loanPackage = useSelector((state) => state.loanPackage);
-  const interestType = useSelector((state) => state.interestType);
-
-  const loanApprovals = useSelector((state) => state.loanApprovals);
+  //const interestType = useSelector((state) => state.interestType);
   const user = useSelector((state) => state.user?.data?.data?.results);
+  const loanApprovals = useSelector((state) => state.loanApprovals);
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [logSearch, setLogSearch] = useState(false);
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
@@ -58,6 +56,7 @@ const ViewLoan = () => {
   const [isDeclineOpen, setDeclineOpen] = useState(false);
   const [openLoanAmount, setOpenLoanAmount] = useState(false);
   const [loanAmount, setLoanAmount] = useState(0);
+  const [interestRate, setInterestRate] = useState(0);
   const [currentApprovalLevel, setCurrentApprovalLevel] = useState(null);
   const [currentApprovalId, setCurrentApprovalId] = useState(null);
   const [useriD, setUser] = useState(null);
@@ -109,7 +108,6 @@ const ViewLoan = () => {
 
   const handleDownload = async () => {
     const downloadUrl = data?.data?.loanApplication?.offerLetter;
-
     try {
       const response = await fetch(downloadUrl);
       const blob = await response.blob();
@@ -150,6 +148,31 @@ const ViewLoan = () => {
       let updatedData = new FormData();
 
       updatedData.append("loanAmount", loanAmount);
+
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+        .unwrap()
+        .then(() => {
+          dispatch(getSingleLoan(id));
+          setOpenLoanAmount(false);
+          setFormData({});
+        })
+        .catch((error) => {
+          console.log({ error });
+          setOpenLoanAmount(false);
+          setFormData({});
+          toast.error(error?.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+    }  else if (update === "interestRate") {
+      let updatedData = new FormData();
+      updatedData.append("interestRate", interestRate / 100);
 
       dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
         .unwrap()
@@ -214,17 +237,6 @@ const ViewLoan = () => {
     }));
   };
 
-  const modifyInterestTypeData = (arr) => {
-    if (Array.isArray(arr)) {
-      return arr.map((item) => ({
-        label: item.name,
-        value: item._id,
-      }));
-    } else {
-      return [];
-    }
-  };
-
   const setInputState = async (e) => {
     let { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -275,27 +287,19 @@ const ViewLoan = () => {
 
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));
-
     if (_user) {
       setUser(_user?.data?.user);
     }
-
     if (data) {
       setLoanAmount(data?.data?.loanApplication?.loanAmount);
     }
+   dispatch(getLoanApprovals(id));
+    dispatch(getAllUsers());
     dispatch(getSingleLoan(id));
     dispatch(getLoanPackage());
     dispatch(getInterestType());
-    dispatch(getLoanApprovals(id));
- 
-
-
 
   }, []);
-
-  useEffect(() => {
-
-  }, [])
 
   return (
     <DashboardLayout
@@ -858,6 +862,15 @@ const ViewLoan = () => {
                   >
                     Repayments
                   </button>
+                  <button
+                    onClick={() => handleActivityToggle("paymentHistory")}
+                    className={`${
+                      activityButton === "paymentHistory" &&
+                      "font-semibold text-swBlue bg-blue-50"
+                    } p-2 rounded-md cursor-pointer`}
+                  >
+                    Payment History
+                  </button>
                 </div>
 
                 <div className="flex justify-center items-center gap-2 ml-auto">
@@ -906,6 +919,10 @@ const ViewLoan = () => {
                 )}
                 {activityButton === "repayment" && (
                   <CustomerRepayment data={data?.data} loanId={id} />
+                )}
+
+                {activityButton === "paymentHistory" && (
+                  <CustomerPaymentHistory data={data?.data} loanId={id} />
                 )}
               </div>
             </section>
@@ -1037,26 +1054,16 @@ const ViewLoan = () => {
               }}
             />
           </div>
-          <SelectField
-            value={modifyInterestTypeData(interestType?.data?.data)?.find(
-              (option) => option.value === formData.interestType
-            )}
-            name="interestType"
-            // disabled={formData.numberOfRepayment === 0 ? true : false}
-            optionValue={modifyInterestTypeData(interestType?.data?.data)}
-            label={"Interest Type"}
-            required={true}
-            placeholder={"Select interest type"}
-            isSearchable={false}
-            onChange={(selectedOption) => {
-              handleSelectChange(selectedOption, "interestType");
-            }}
+          <InputField
+            label={"Enter new interest rate"}
+            value={interestRate}
+            onChange={(e) => setInterestRate(e.target.value)}
           />
           <Button
-            onClick={() => updateLoan("interestType")}
+            onClick={() => updateLoan("interestRate")}
             className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
           >
-            Update intrest rate type
+            Update
           </Button>
         </div>
       </CenterModal>

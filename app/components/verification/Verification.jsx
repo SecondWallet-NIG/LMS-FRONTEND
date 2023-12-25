@@ -61,9 +61,7 @@ const Verification = ({ email, step, setStep, onEmailChange, onNextStep }) => {
 
   };
 
-  const handleReset = () => {
-    onNextStep();
-  };
+
 
   return (
     <div>

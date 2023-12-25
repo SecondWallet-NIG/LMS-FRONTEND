@@ -1,10 +1,6 @@
 "use client";
 import { useState } from "react";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
-import InputField from "../components/shared/input/InputField";
-import { FiSearch } from "react-icons/fi";
-import { IoIosClose } from "react-icons/io";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import LoanReports from "../components/report/Loan_Reports/Loan_Reports";
 import SummaryReport from "../components/report/Summary_Report/SummaryReport";
 import { Poppins } from "next/font/google";
@@ -19,9 +15,7 @@ const Report = () => {
   const [reportToggle, setReportToggle] = useState("loan");
   const [searchBtn, setSearchBtn] = useState(false);
 
-  const handleSearch = (state) => [
-    state === "open" ? setSearchBtn(true) : setSearchBtn(false),
-  ];
+
 
   const handleReports = (id) => {
     setReportToggle(id);

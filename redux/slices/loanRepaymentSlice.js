@@ -47,6 +47,28 @@ export const getLoanApplicationRepayments = createAsyncThunk(
   }
 );
 
+export const getLoanApplicationPaymentHistory = createAsyncThunk(
+  "repayment/payment-history",
+  async (loadApplicationId) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/repayment/payment-history/${loadApplicationId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getRepaymentSummary = createAsyncThunk(
   "repayment/summary",
   async () => {
@@ -200,7 +222,7 @@ const LoanRepaymentSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(getRepaymentReport.pending, (state) => {
-        state.loading = "pending";
+        state.loading = "pending"; 
         state.error = null;
       })
       .addCase(getRepaymentReport.fulfilled, (state, action) => {
@@ -208,6 +230,18 @@ const LoanRepaymentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getRepaymentReport.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getLoanApplicationPaymentHistory.pending, (state) => {
+        state.loading = "pending"; 
+        state.error = null;
+      })
+      .addCase(getLoanApplicationPaymentHistory.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getLoanApplicationPaymentHistory.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

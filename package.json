@@ -17,6 +17,7 @@
     "eslint-config-next": "^14.0.3",
     "file-saver": "^2.0.5",
     "flat": "^6.0.1",
+    "html2pdf.js": "^0.10.1",
     "next": "^14.0.3",
     "pdf-viewer-reactjs": "^2.2.3",
     "postcss": "^8.4.31",

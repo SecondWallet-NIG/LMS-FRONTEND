@@ -1,3 +1,5 @@
+"use client"
+
 import { MdOutlineEmail } from "react-icons/md";
 import InputField from "../shared/input/InputField";
 import { FiUser } from "react-icons/fi";
@@ -47,7 +49,7 @@ const AccountPage = () => {
     payload.append("firstName", formData.firstName);
     payload.append("lastName", formData.lastName);
     payload.append("email", formData.email);
-    console.log(...payload);
+ 
     dispatch(updateUser({ userId: userDetails?._id, payload }))
       .unwrap()
       .then((res) => {
@@ -63,9 +65,11 @@ const AccountPage = () => {
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setUserDetails(user?.data?.user);
-    console.log(user);
+    if (typeof window !== 'undefined') {
+      const user = JSON.parse(localStorage.getItem("user"));
+      setUserDetails(user?.data?.user);
+      console.log(user);
+    }
   }, []);
 
   useEffect(() => {

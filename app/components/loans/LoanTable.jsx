@@ -21,20 +21,6 @@ const LoanTable = () => {
     const timestamp = "2023-12-19T21:16:33.883Z";
     const date = new Date(timestamp);
 
-    const options = {
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: true,
-      timeZone: "UTC", // Assuming the input timestamp is in UTC
-    };
-
-    const formattedTime = new Intl.DateTimeFormat("en-US", options).format(
-      date
-    );
-
-    console.log(formattedTime);
-
     return apiData?.map((item) => ({
       id: item._id,
       createdAt: (
@@ -94,7 +80,6 @@ const LoanTable = () => {
       try {
         if (typeof window !== "undefined") {
           const storedUser = JSON.parse(localStorage.getItem("user"));
-          console.log("Stored User:", storedUser);
           setUserId(storedUser?.data?.user?._id || "");
           setRole(storedUser?.data?.user?.role?.name || "");
         }
@@ -116,6 +101,7 @@ const LoanTable = () => {
             { name: "In Progress" },
             { name: "Declined" },
             { name: "Disbursed" },
+            { name: "Fully Paid" },
             { name: "Cancelled Disbursement" },
           ]}
           dataTransformer={customDataTransformer}

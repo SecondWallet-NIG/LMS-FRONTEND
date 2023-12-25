@@ -24,7 +24,6 @@ const RequestApproval = ({
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  console.log({ approvals });
   const [formData, setFormData] = useState({
     approvalLevel: approvalId,
     requestNote: "",

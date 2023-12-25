@@ -1,3 +1,5 @@
+"use client"
+
 import { PiCalendarBlankLight } from "react-icons/pi";
 import ReusableDataTable from "../../shared/tables/ReusableDataTable";
 import { ToastContainer } from "react-toastify";

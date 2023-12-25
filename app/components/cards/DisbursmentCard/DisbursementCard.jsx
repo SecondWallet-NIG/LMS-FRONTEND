@@ -1,3 +1,4 @@
+"use client"
 import { FiArrowUpRight } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { getDisbursementSummary } from "@/redux/slices/loanRepaymentSlice";

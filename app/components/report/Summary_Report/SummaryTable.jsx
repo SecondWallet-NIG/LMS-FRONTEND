@@ -33,33 +33,36 @@ const SummaryTable = () => {
     fetchUserData();
   }, [router.pathname]);
   return (
-    <ReusableDataTable
-      // filterParams={[
-      //   { name: "Pending" },
-      //   { name: "Ready for Disbursal" },
-      //   { name: "In Progress" },
-      //   { name: "Declined" },
-      //   { name: "Disbursed" },
-      //   { name: "Cancelled Disbursement" },
-      // ]}
-      // dataTransformer={customDataTransformer}
-      onClickRow="/loan-applications/view-loan"
-      headers={headers}
-      initialData={[]}
-      // apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
-      // btnText={
-      //   <div className="flex gap-1 items-center p-1">
-      //     <p className="hidden lg:block">create loan</p>
-      //   </div>
-      // }
-      // btnTextClick={() => {
-      //   router.push("/create-loan");
-      // }}
-      filters={true}
-      pagination={true}
-      userId={userId}
-      role={role}
-    />
+    <div>
+      SUMMARY TABLE
+    </div>
+    // <ReusableDataTable
+    //   // filterParams={[
+    //   //   { name: "Pending" },
+    //   //   { name: "Ready for Disbursal" },
+    //   //   { name: "In Progress" },
+    //   //   { name: "Declined" },
+    //   //   { name: "Disbursed" },
+    //   //   { name: "Cancelled Disbursement" },
+    //   // ]}
+    //   // dataTransformer={customDataTransformer}
+    //   onClickRow="/loan-applications/view-loan"
+    //   headers={headers}
+    //   initialData={[]}
+    //   // apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
+    //   // btnText={
+    //   //   <div className="flex gap-1 items-center p-1">
+    //   //     <p className="hidden lg:block">create loan</p>
+    //   //   </div>
+    //   // }
+    //   // btnTextClick={() => {
+    //   //   router.push("/create-loan");
+    //   // }}
+    //   filters={true}
+    //   pagination={true}
+    //   userId={userId}
+    //   role={role}
+    // />
   );
 };
 

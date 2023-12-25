@@ -40,6 +40,7 @@ const CreateLoan = () => {
   const [loanPackageText, setLoanPackageText] = useState(null);
   const [loanPackageRate, setLoanPackageRate] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState()
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
 
@@ -231,7 +232,7 @@ const CreateLoan = () => {
   };
 
   const fetchInterest = (e) => {
-    setLoading(true);
+    setIsLoading(true);
     const isFormDataValid = validateFormData(formData);
     if (isFormDataValid === true) {
       const payload = {
@@ -250,15 +251,15 @@ const CreateLoan = () => {
         .then(() => {
           setIsPreviewInterestOpen(true);
           setCurrentStep(2);
-          setLoading(false);
+          setIsLoading(false);
         })
         .catch((error) => {
           toast.error(`An error occured`);
-          setLoading(false);
+          setIsLoading(false);
         });
     } else {
       toast.error("Some required fields are missing");
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -333,6 +334,7 @@ const CreateLoan = () => {
   }, []);
 
   useEffect(() => {
+    
     const data = JSON.parse(localStorage.getItem("borrower"));
     setFormData({
       ...formData,
@@ -857,11 +859,10 @@ const CreateLoan = () => {
             ) : (
               <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
                 <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                  <Image
-                    src={selectedCustomer?.profilePicture}
+                  <img
+                    src="https://png.pngtree.com/png-clipart/20200224/original/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_5247852.jpg"
                     alt="borrower"
-                    fill
-                    sizes="100%"
+
                   />
                 </div>
                 <p className="text-xl font-semibold">Select Borrower</p>
@@ -1006,7 +1007,7 @@ const CreateLoan = () => {
                 <div className="flex flex-col gap-5">
                   <Button
                     disabled={
-                      formData.interestType === null || loading === true
+                      formData.interestType === null || isLoading === true
                         ? true
                         : false
                     }

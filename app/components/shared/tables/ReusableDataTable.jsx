@@ -68,9 +68,29 @@ function ReusableDataTable({
   };
 
   const handleDownload = () => {
+    let x = `${apiEndpoint}?page=${1}&per_page=${downloadData}`;
+    if (dateRange && dateRange.length > 0) {
+      if (
+        dateRange[0].startDate instanceof Date &&
+        dateRange[0].endDate instanceof Date
+      ) {
+        const startDate = dateRange[0].startDate.toISOString();
+        const endDate = dateRange[0].endDate.toISOString();
+        x += `&startDate=${startDate}&endDate=${endDate}`;
+      }
+    }
+
+    if (status != " ") {
+      console.log({ status });
+      x += `&status=${status}`;
+    }
+
+    if (userId && role === "Loan Officer") {
+      x += `&userId=${userId}`;
+    }
     setLoading(true);
     axios
-      .get(`${apiEndpoint}?page=${1}&per_page=${downloadData}`, {
+      .get(x, {
         headers: {
           Authorization: `Bearer ${user?.data?.token}`,
         },
@@ -92,18 +112,12 @@ function ReusableDataTable({
           }
           return flattened;
         }
-
-        // Flatten the nested JSON data
         const flattenedData = nestedJsonData.map((item) => flattenData(item));
 
-        // Create a new worksheet and add the flattened data
         const ws = XLSX.utils.json_to_sheet(flattenedData);
 
-        // Create a new workbook and add the worksheet
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-        // Generate an Excel blob
         const excelBlob = XLSX.write(wb, {
           bookType: "xlsx",
           type: "array",
@@ -120,7 +134,8 @@ function ReusableDataTable({
         saveAs(blob, "exported_data.xlsx");
         setLoading(false);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log({error});
         toast.error("An error occurred while fetching data for download.");
         setLoading(false);
       });
@@ -199,7 +214,8 @@ function ReusableDataTable({
 
             setData(transformedData);
             setPaginationLinks(data?.data.links);
-            setDownloadData(data?.data.links.totalDocuments);
+            console.log(data?.data.links);
+            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
             setLoading(false);
           } else {
             setData(
@@ -208,7 +224,8 @@ function ReusableDataTable({
                 data?.data?.data ||
                 data.results
             );
-            setDownloadData(data?.data.links.totalDocuments);
+            console.log(data?.data.links.totalDocuments);
+            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
             setPaginationLinks(data?.data?.links);
             setLoading(false);
           }
@@ -247,7 +264,6 @@ function ReusableDataTable({
       }
 
       if (status != " ") {
-        console.log({ status });
         apiUrl += `&status=${status}`;
       }
       axios
@@ -274,7 +290,8 @@ function ReusableDataTable({
                 data?.data?.data?.links ||
                 data?.data?.data?.data?.links
             );
-            setDownloadData(data?.data.links.totalDocuments);
+            console.log(data?.data?.links.totalDocuments);
+            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
             setLoading(false);
           } else {
             setData(
@@ -290,7 +307,8 @@ function ReusableDataTable({
                 data?.data?.data?.links ||
                 data?.data?.data?.data?.links
             );
-            setDownloadData(data?.data.links.totalDocuments);
+            console.log(data?.data.links.totalDocuments);
+            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
             setLoading(false);
           }
           setLoading(false);
@@ -298,7 +316,6 @@ function ReusableDataTable({
         })
         .catch(() => {
           setTimeout(() => {
-            //    toast.error("An error occured, Couldn't load table");
             setIsLoading(false);
             setLoading(false);
           }, 2000);
@@ -319,7 +336,7 @@ function ReusableDataTable({
         key: "selection",
       },
     ]);
-    fetchData(currentPage, perPage, sortField, sortDirection);
+    window.location.reload();
   };
 
   const handlePageChange = (page, perPage) => {
@@ -584,7 +601,6 @@ function ReusableDataTable({
                   className="border pt-2 pb-2 hover:bg-swLightGray"
                   style={{ cursor: "pointer" }}
                 >
-                  {console.log(data)}
                   {headers.map((header) => (
                     <td
                       key={header.id}
@@ -658,25 +674,25 @@ function ReusableDataTable({
           <div className="w-full items-center">
             <DateRange
               editableDateInputs={true}
-              // onChange={(item) => setDateRange([item.selection])}
+              onChange={(item) => setDateRange([item.selection])}
               moveRangeOnFirstSelection={false}
               ranges={dateRange}
-              onChange={(item) => {
-                // Adjust the time to the start and end of the selected day
-                const startDate = new Date(item.selection.startDate);
-                startDate.setHours(1, 0, 0, 0);
+              // onChange={(item) => {
+              //   // Adjust the time to the start and end of the selected day
+              //   const startDate = new Date(item.selection.startDate);
+              //   startDate.setHours(1, 0, 0, 0);
 
-                const endDate = new Date(item.selection.endDate);
-                endDate.setHours(24, 59, 59, 999);
+              //   const endDate = new Date(item.selection.endDate);
+              //   endDate.setHours(24, 59, 59, 999);
 
-                setDateRange([
-                  {
-                    startDate,
-                    endDate,
-                    key: "selection",
-                  },
-                ]);
-              }}
+              //   setDateRange([
+              //     {
+              //       startDate,
+              //       endDate,
+              //       key: 'selection'
+              //     }
+              //   ]);
+              // }}
             />
           </div>
           <div className="flex justify-between">
@@ -703,6 +719,12 @@ function ReusableDataTable({
           }}
         >
           <div className="bg-white p-4 border shadow-lg">
+            <div
+              className="flex justify-end cursor-pointer text-red-500"
+              onClick={() => setFilterOptions(false)}
+            >
+              x
+            </div>
             <div className="w-full items-center">
               {Array.isArray(filterParams) &&
                 filterParams?.map((item) => (
@@ -723,11 +745,6 @@ function ReusableDataTable({
                     </div>
                   </div>
                 ))}
-            </div>
-            <div className="flex justify-between">
-              <Button variant="danger" onClick={() => setFilterOptions(false)}>
-                Cancel
-              </Button>
             </div>
           </div>
         </CenterModal>

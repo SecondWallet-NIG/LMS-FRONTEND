@@ -1,6 +1,5 @@
-"use client";
+"use client"
 import { useState, useEffect } from "react";
-import Repayment from "@/app/repayment/page";
 import { PiCalendarBlankLight } from "react-icons/pi";
 import RepaymentTable from "../../repayment/RepaymentTable";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,12 +10,12 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { FaWindowClose } from "react-icons/fa";
+import { exportToPDF } from "@/helpers";
 
 const RepaymentReport = () => {
   const dispatch = useDispatch();
   const loanRepayment = useSelector((state) => state.loanRepayment);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
-  console.log({ loanRepayment });
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -67,129 +66,134 @@ const RepaymentReport = () => {
           className={
             "py-2 px-4 text-white text-sm bg-swBlue font-semibold rounded-md"
           }
+          onClick={() => {
+          exportToPDF("repaymentId")
+          }}
         >
           Export report
         </button>
       </div>
 
-      <div className="flex justify-between items-center mt-5">
-        <p className="font-semibold text-black">Filter Report</p>
-        <div className="flex gap-3">
-        {dateRange && dateRange[0].startDate != null ? (
+      <div id="repaymentId">
+        <div className="flex justify-between items-center mt-5">
+          <p className="font-semibold text-black">Filter Report</p>
+          <div className="flex gap-3">
+            {dateRange && dateRange[0].startDate != null ? (
+              <div className="flex gap-3 items-center">
+                {" "}
                 <div className="flex gap-3 items-center">
-                  {" "}
-                  <div className="flex gap-3 items-center">
-                    <p className="text-xs font-semibold flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg">
-                      Date Range :{" "}
-                      {dateRange[0]?.startDate.toISOString().slice(0, 10)} to{" "}
-                      {dateRange[0]?.endDate.toISOString().slice(0, 10)}{" "}
-                      <span>
-                        {" "}
-                        <FaWindowClose
-                          color="red"
-                          size={15}
-                          cursor={"pointer"}
-                          onClick={clearDateFilter}
-                        />
-                      </span>
-                    </p>{" "}
-                  </div>
+                  <p className="text-xs font-semibold flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg">
+                    Date Range :{" "}
+                    {dateRange[0]?.startDate.toISOString().slice(0, 10)} to{" "}
+                    {dateRange[0]?.endDate.toISOString().slice(0, 10)}{" "}
+                    <span>
+                      {" "}
+                      <FaWindowClose
+                        color="red"
+                        size={15}
+                        cursor={"pointer"}
+                        onClick={clearDateFilter}
+                      />
+                    </span>
+                  </p>{" "}
                 </div>
-              ) : null}
-          <button
-            onClick={toggleDateFilter}
-            className={
-              "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
-            }
-          >
-            <PiCalendarBlankLight size={20} />
-            Select date range
-          </button>
-        </div>
-      </div>
-
-      <div className="flex gap-5 mt-5">
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Number of All Repayment</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {loanRepayment?.data?.data?.count}
-            </p>
+              </div>
+            ) : null}
+            <button
+              onClick={toggleDateFilter}
+              className={
+                "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
+              }
+            >
+              <PiCalendarBlankLight size={20} />
+              Select date range
+            </button>
           </div>
         </div>
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Number of Fully Paid Repayment</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {loanRepayment?.data?.data?.fullyPaidCount}
-            </p>
+        <div className="flex gap-5 mt-5">
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Number of All Repayment</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {loanRepayment?.data?.data?.count}
+              </p>
+            </div>
+          </div>
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Number of Fully Paid Repayment</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {loanRepayment?.data?.data?.fullyPaidCount}
+              </p>
+            </div>
+          </div>
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Number of Installment Repayment</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {loanRepayment?.data?.data?.installmentCount}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Number of Installment Repayment</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {loanRepayment?.data?.data?.installmentCount}
-            </p>
+        <div className="flex gap-5 mt-5">
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Number of Overdue Repayment</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {" "}
+                {loanRepayment?.data?.data?.overdueCount}
+              </p>
+            </div>
+          </div>
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Number of Unpaid Repayment</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {" "}
+                {loanRepayment?.data?.data?.unpaidCount}
+              </p>
+            </div>
+          </div>
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Total Repayment Amount</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {" "}
+                ₦ {loanRepayment?.data?.data?.totalAmountDue?.toLocaleString()}{" "}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="flex gap-5 mt-5">
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Number of Overdue Repayment</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {" "}
-              {loanRepayment?.data?.data?.overdueCount}
-            </p>
+        <div className="flex gap-5 mt-5">
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Total Repayment Paid</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {" "}
+                ₦ {loanRepayment?.data?.data?.totalAmountPaid?.toLocaleString()}{" "}
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Number of Unpaid Repayment</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {" "}
-              {loanRepayment?.data?.data?.unpaidCount}
-            </p>
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Total Balance to Pay</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {" "}
+                ₦{" "}
+                {loanRepayment?.data?.data?.totalBalanceToPay?.toLocaleString()}{" "}
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Total Repayment Amount</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {" "}
-              ₦ {loanRepayment?.data?.data?.totalAmountDue?.toLocaleString()}{" "}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="flex gap-5 mt-5">
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Total Repayment Paid</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {" "}
-              ₦ {loanRepayment?.data?.data?.totalAmountPaid?.toLocaleString()}{" "}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Total Balance to Pay</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {" "}
-              ₦ {loanRepayment?.data?.data?.totalBalanceToPay?.toLocaleString()}{" "}
-            </p>
-          </div>
-        </div>
-        <div className="bg-white border rounded-xl p-3 w-full">
-          <p className="font-semibold">Unpaid Repayemnt Amount</p>
-          <div className="flex justify-between items-end">
-            <p className="text-2xl font-bold mt-3">
-              {" "}
-              ₦{" "}
-              {loanRepayment?.data?.data?.unpaidRepaymentAmount?.toLocaleString()}{" "}
-            </p>
+          <div className="bg-white border rounded-xl p-3 w-full">
+            <p className="font-semibold">Unpaid Repayemnt Amount</p>
+            <div className="flex justify-between items-end">
+              <p className="text-2xl font-bold mt-3">
+                {" "}
+                ₦{" "}
+                {loanRepayment?.data?.data?.unpaidRepaymentAmount?.toLocaleString()}{" "}
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -13,10 +13,9 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("minimizeSidebar"));
-    setMinimizeSidebar(data === true); // Use strict equality
-
     if (typeof window !== "undefined") {
+      const data = JSON.parse(localStorage.getItem("minimizeSidebar"));
+      setMinimizeSidebar(data === true); // Use strict equality
       const storedUser = localStorage.getItem("user");
 
       setIsAuthenticated(!!storedUser); // Check if storedUser is not null or undefined

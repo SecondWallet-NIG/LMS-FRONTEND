@@ -5,8 +5,6 @@ import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
 import InputField from "../shared/input/InputField";
 import SelectField from "../shared/input/SelectField";
-import { createUser } from "@/redux/slices/userSlice";
-import Button from "../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
@@ -97,6 +95,7 @@ const EmploymentDetailsModal = ({
       [name]: selectedOption.value,
     });
   };
+
   const validateForm = () => {
     const newErrors = {};
     let isValid = true;
@@ -140,6 +139,7 @@ const EmploymentDetailsModal = ({
     setErrors(newErrors);
     return isValid;
   };
+   
   const resetForm = () => {
     setFormData({
       employerName: "",

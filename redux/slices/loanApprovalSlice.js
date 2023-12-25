@@ -26,7 +26,7 @@ export const getLoanApprovals = createAsyncThunk('loanApproval/approval', async 
   }
 });
 
-export const getApprovalAssignee = createAsyncThunk('loanApproval/assignee', async (assigneeId) => {
+export const getApprovalAssignee = createAsyncThunk('loan-Approval/assignee', async (assigneeId) => {
   try {
     const response = await axios.get(`${API_URL}/loan-application/task/${assigneeId}`, {
       headers: {

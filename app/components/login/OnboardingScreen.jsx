@@ -42,8 +42,6 @@ const OnboardingScreen = () => {
     if (typeof window !== 'undefined') {
       setUser(JSON.parse(localStorage.getItem("user")));
     }
-    
-   
   }, []);
 
   return (

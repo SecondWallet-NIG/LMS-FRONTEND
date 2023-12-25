@@ -6,7 +6,6 @@ const CompletedTasks = () => {
   let user;
   if (typeof window !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
-    // Rest of your client-side code using the 'user' object
   }
   const headers = [
     { id: "createdAt", label: "Date Created" },
@@ -35,7 +34,7 @@ const CompletedTasks = () => {
         <div>
           <div className="text-md font-[500] text-gray-700">
             {" "}
-            ₦ {item?.loanApplication?.loanAmount}
+            ₦ {item?.loanApplication?.loanAmount?.toLocaleString()}
           </div>
         </div>
       ),

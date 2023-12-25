@@ -8,17 +8,19 @@ const pusher = new Pusher("19b78da79fdeeb108f04", {
 
 const RealTimeComponent = () => {
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    let user;
+    if (typeof window !== 'undefined') {
+       user = JSON.parse(localStorage.getItem("user"));
+    }
+
 
     const channel = pusher.subscribe(`bulkCreation.${user?.data?.user?._id}`);
 
     channel.bind("bulkCreateCustomerProfile", (data) => {
-      console.log("Received a message:", data.message);
        alert(data.message)
     });
 
     return () => {
-      // Unsubscribe when the component is unmounted
       channel.unbind_all();
       pusher.unsubscribe(`bulkCreation.${user?.data?.user?._id}`);
     };

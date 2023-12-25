@@ -30,8 +30,8 @@ const Sidebar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState(true);
-  const x = useSelector((state) => state.loanApprovals);
-  // console.log("x?.data?.data", x?.data?.data);
+  //const x = useSelector((state) => state.loanApprovals);
+  // //console.log("x?.data?.data", x?.data?.data);
 
   const [activeLink, setActiveLink] = useState("");
 
@@ -39,7 +39,7 @@ const Sidebar = () => {
     setSideBarOpen(state);
   };
 
-  // console.log({ x });
+  //
 
   useEffect(() => {
     setSideBarOpen(true);
@@ -54,8 +54,8 @@ const Sidebar = () => {
   }
 
   useEffect(() => {
-    dispatch(getApprovalAssignee(user?.data?.user?._id));
-    // console.log({ x });
+    //dispatch(getApprovalAssignee(user?.data?.user?._id));
+   // // console.log({ x });
   }, []);
 
   return (
@@ -114,11 +114,11 @@ const Sidebar = () => {
               <div className="flex">
                 <div> My tasks</div>
 
-                <div
+                {/* <div
                   className={`ml-8 bg-blue-400 text-white inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
                 >
                   {`${x?.data?.pendingCount}` || 0} 
-                </div>
+                </div> */}
               </div>
             }
             link="/my-tasks"
