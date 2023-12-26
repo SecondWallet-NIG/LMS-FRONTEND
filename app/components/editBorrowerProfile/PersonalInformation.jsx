@@ -47,6 +47,8 @@ const PersonalInformation = ({ userData, loading }) => {
     createdBy: "",
   });
 
+  console.log(formData.bankName);
+
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
 
@@ -217,6 +219,7 @@ const PersonalInformation = ({ userData, loading }) => {
 
   useEffect(() => {
     handleStateChange(userData?.profileInfo?.state);
+
     // handleSelectChange(userData?.profileInfo?.genderlga, "lga");
     setFormData({
       profilePicture: null,
@@ -238,7 +241,23 @@ const PersonalInformation = ({ userData, loading }) => {
       bankName: userData?.profileInfo?.bankAccount?.bankName,
       createdBy: userData?.profileInfo?.bankAccount?.createdBy,
     });
-    // console.log(userData?.profileInfo?.firstName);
+
+    const getBankName = async () => {
+      if (userData?.profileInfo?.bankAccount?.accountNumber) {
+        try {
+          const response = await verifyBankDetails(
+            userData?.profileInfo?.bankAccount?.accountNumber,
+            userData?.profileInfo?.bankAccount?.bankName
+          );
+          setVerificationResponse(response);
+          console.log("useEffect resp", response);
+          setBankNameVal(response?.data?.account_name);
+        } catch (error) {
+          // console.error("Error verifying bank details:", error);
+        }
+      }
+    };
+    getBankName();
   }, [userData]);
   return (
     <form id="add-customer-form">
