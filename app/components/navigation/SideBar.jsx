@@ -24,7 +24,7 @@ import { IoMdCard } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { getApprovalAssignee } from "@/redux/slices/loanApprovalSlice";
+import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice"; 
 
 const Sidebar = () => {
   const pathname = usePathname();

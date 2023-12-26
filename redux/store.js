@@ -10,6 +10,7 @@ import roleReducer from "./slices/roleSlice";
 import loanApplicationReducer from "./slices/loanApplicationSlice";
 import loanApprovalReducer from "./slices/loanApprovalSlice";
 import loanRepaymentReducer from "./slices/loanRepaymentSlice";
+import approvalAssigneeReducer from "./slices/approvalAssigneeSlice";
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     loanApplication: loanApplicationReducer,
     loanApprovals: loanApprovalReducer,
     loanRepayment: loanRepaymentReducer,
+    approvalAssignee: approvalAssigneeReducer,
   },
   // Add middleware or other configuration options as needed
 });

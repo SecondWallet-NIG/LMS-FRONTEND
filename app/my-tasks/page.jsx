@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import MyTasksCard from "../components/cards/MyTasksCard/MyTasksCard";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import { useDispatch, useSelector } from "react-redux";
-import { getApprovalAssignee } from "@/redux/slices/loanApprovalSlice";
+import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import Button from "../components/shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 import AllTasks from "../components/task-tables/AllTask";
@@ -11,37 +11,29 @@ import PendingTasks from "../components/task-tables/PendingTask";
 import CompletedTasks from "../components/task-tables/CompletedTasks";
 const MyTasks = () => {
   const dispatch = useDispatch();
-  const { error, data }  = useSelector((state) => state.loanApprovals);
+  const { error, data } = useSelector((state) => state.approvalAssignee);
   const [activityButton, setActivityButton] = useState("allTasks");
   let user;
   if (typeof window !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
   }
+  console.log({ data });
 
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
 
   useEffect(() => {
-    dispatch(getApprovalAssignee(user?.data?.user?._id));  
+    dispatch(getApprovalAssignee(user?.data?.user?._id));
   }, []);
 
   return (
     <DashboardLayout>
       <main className="p-8">
         <div className="flex gap-5">
-          <MyTasksCard
-            header={"all tasks"}
-            data={data?.totalCount}
-          />
-          <MyTasksCard
-            header={"completed tasks"}
-            data={data?.doneCount}
-          />
-          <MyTasksCard
-            header={"pending tasks"}
-            data={data?.pendingCount}
-          />
+          <MyTasksCard header={"all tasks"} data={data?.totalCount} />
+          <MyTasksCard header={"completed tasks"} data={data?.doneCount} />
+          <MyTasksCard header={"pending tasks"} data={data?.pendingCount} />
         </div>
         <div className="flex gap-2 text-xs lg:text-sm mt-8">
           <button
