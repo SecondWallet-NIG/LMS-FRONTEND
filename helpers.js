@@ -1,4 +1,4 @@
-import * as html2pdf from 'html2pdf.js';
+//import * as html2pdf from 'html2pdf.js';
 export const formatDate = (inputDate) => {
     const months = [
       'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
