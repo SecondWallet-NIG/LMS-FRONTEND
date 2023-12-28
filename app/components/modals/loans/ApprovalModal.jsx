@@ -23,7 +23,9 @@ const ApprovalModal = ({
   selected,
   approvalId,
   approvalLevel,
+  currentTaskId
 }) => {
+  console.log({currentTaskId});
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -67,7 +69,7 @@ const ApprovalModal = ({
     let _formData = {
       approvalLevel: approvalId,
       approvalNote: formData?.approvalNote,
-      taskId : localStorage.getItem("taskId")
+      taskId : currentTaskId
     };
     const payload = { id, _formData };
     console.log({ payload });

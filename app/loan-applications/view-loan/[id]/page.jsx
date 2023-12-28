@@ -59,6 +59,7 @@ const ViewLoan = () => {
   const [interestRate, setInterestRate] = useState(0);
   const [currentApprovalLevel, setCurrentApprovalLevel] = useState(null);
   const [currentApprovalId, setCurrentApprovalId] = useState(null);
+  const [currentTaskId, setCurrentTaskId] = useState(null);
   const [useriD, setUser] = useState(null);
   const [openLoanPackage, setOpenLoanPackage] = useState(false);
   const [openInterestType, setOpenInterestType] = useState(false);
@@ -170,7 +171,7 @@ const ViewLoan = () => {
             progress: undefined,
           });
         });
-    }  else if (update === "interestRate") {
+    } else if (update === "interestRate") {
       let updatedData = new FormData();
       updatedData.append("interestRate", interestRate / 100);
 
@@ -293,12 +294,11 @@ const ViewLoan = () => {
     if (data) {
       setLoanAmount(data?.data?.loanApplication?.loanAmount);
     }
-   dispatch(getLoanApprovals(id));
+    dispatch(getLoanApprovals(id));
     dispatch(getAllUsers());
     dispatch(getSingleLoan(id));
     dispatch(getLoanPackage());
     dispatch(getInterestType());
-
   }, []);
 
   return (
@@ -398,7 +398,7 @@ const ViewLoan = () => {
                           "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
                         }
                         disabled={
-                          data?.data?.loanApplication?.status == "Disbursed"
+                          data?.data?.loanApplication?.status != "In Progress"  || data?.data?.loanApplication?.status != "Ready for Disbursal"
                             ? true
                             : false
                         }
@@ -794,6 +794,7 @@ const ViewLoan = () => {
                                     <button
                                       className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md"
                                       onClick={() => {
+                                        setCurrentTaskId(item?.currentTaskId);
                                         setCurrentApprovalId(
                                           item?.approvalLevel
                                         );
@@ -963,6 +964,7 @@ const ViewLoan = () => {
           width={"100%"}
           approvalLevel={currentApprovalLevel}
           approvalId={currentApprovalId}
+          currentTaskId={currentTaskId}
           isOpen={isApprovalOpen}
           data={data?.data}
           onClose={() => setApprovalOpen(false)}

@@ -186,6 +186,8 @@ export const getCustomerLoans = createAsyncThunk('loanApplication/getSingleLoan'
 });
 
 
+
+
 const LoanApplicationSlice = createSlice({
   name: 'LoanApplication',
   initialState: {
@@ -250,18 +252,6 @@ const LoanApplicationSlice = createSlice({
         state.loading = 'failed';
         state.error = action.error.message;
       })
-      // .addCase(getLoanApprovals.pending, (state) => {
-      //   state.loading = 'pending';
-      //   state.error = null;
-      // })
-      // .addCase(getLoanApprovals.fulfilled, (state, action) => {
-      //   state.loading = 'succeeded';
-      //   state.data = action.payload;
-      // })
-      // .addCase(getLoanApprovals.rejected, (state, action,) => {
-      //   state.loading = 'failed';
-      //   state.error = action.error.message;
-      // })
       .addCase(disburseLoan.pending, (state) => {
         state.loading = 'pending';
         state.error = null;
@@ -298,6 +288,7 @@ const LoanApplicationSlice = createSlice({
         state.loading = 'failed';
         state.error = action.error.message;
       })
+
   },
 });
 

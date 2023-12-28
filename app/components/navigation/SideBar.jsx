@@ -25,21 +25,17 @@ import { FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice"; 
-
 const Sidebar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState(true);
-  //const x = useSelector((state) => state.loanApprovals);
-  // //console.log("x?.data?.data", x?.data?.data);
-
   const [activeLink, setActiveLink] = useState("");
-
+ const x = useSelector((state) => state.approvalAssignee);
+ // console.log("x?.data?.data", x?.data);
   const handleSidebarOpen = (state) => {
     setSideBarOpen(state);
   };
 
-  //
 
   useEffect(() => {
     setSideBarOpen(true);
@@ -54,7 +50,8 @@ const Sidebar = () => {
   }
 
   useEffect(() => {
-    //dispatch(getApprovalAssignee(user?.data?.user?._id));
+    dispatch(getApprovalAssignee(user?.data?.user?._id));
+
    // // console.log({ x });
   }, []);
 
@@ -114,11 +111,11 @@ const Sidebar = () => {
               <div className="flex">
                 <div> My tasks</div>
 
-                {/* <div
+                <div
                   className={`ml-8 bg-blue-400 text-white inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
                 >
                   {`${x?.data?.pendingCount}` || 0} 
-                </div> */}
+                </div> 
               </div>
             }
             link="/my-tasks"
@@ -208,6 +205,23 @@ const Sidebar = () => {
             sideBarOpen={sideBarOpen}
             onClick={() => {
               setActiveLink("repayment");
+            }}
+          />
+
+          <SidebarLink
+            icon={
+              <FiArrowDownLeft
+                className={`${activeLink === "payment-history" && "text-swBlue"}`}
+                size={20}
+              />
+            }
+            pathname={pathname}
+            text="Payment History"
+            link="/payment-history"
+            isActive={"payment-history"}
+            sideBarOpen={sideBarOpen}
+            onClick={() => {
+              setActiveLink("payment-history");
             }}
           />
         </div>

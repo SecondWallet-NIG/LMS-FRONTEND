@@ -3,27 +3,23 @@ import { CiSearch } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import PagePath from "./PagePath";
-import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import {
-  IoArrowBackSharp,
-  IoArrowForward,
-  IoCloseSharp,
-} from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
+import { IoArrowBackSharp, IoCloseSharp } from "react-icons/io5";
 import navPatternBg from "../../../public/images/navPatterns.png";
-import RealTimeComponent from "../RealTimeComponent";
 import Image from "next/image";
+import { formatDate } from "@/helpers";
 
 const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const x = useSelector((state) => state.approvalAssignee);
+  console.log("x?.data?.data", x?.data?.results);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");
-
-  const openNotifications = (state) => {
-    setIsNotificationsOpen(state);
-  };
 
   const data = [
     {
@@ -64,8 +60,14 @@ const NavBar = ({ paths, isBackNav }) => {
       console.log({ storedUser });
 
       setUser(storedUser?.data?.user?.firstName);
+      dispatch(getApprovalAssignee(storedUser?.data?.user?._id));
     }
   }, []);
+
+  const openNotifications = (state) => {
+    console.log("peace");
+    setIsNotificationsOpen(state);
+  };
 
   return (
     <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-[90%] md:w-[95%] px-5 z-[100]">
@@ -81,7 +83,14 @@ const NavBar = ({ paths, isBackNav }) => {
         <PagePath paths={paths} />
       </div>
       <div className=" flex gap-5 items-center relative">
-        <p className="text-sm">Welcome {user} 👋 </p>
+        <p
+          className="text-sm"
+          onClick={() => {
+            alert("iiiiii");
+          }}
+        >
+          Welcome {user} 👋{" "}
+        </p>
         <div
           className="relative cursor-pointer"
           onClick={() => openNotifications(!isNotificationsOpen)}
@@ -94,7 +103,9 @@ const NavBar = ({ paths, isBackNav }) => {
             <div className="flex items-center justify-between p-5 fixed w-[25rem] min-w-[18rem]rounded-t-md bg-white">
               <div className="flex gap-2 items-center">
                 <p className="text-lg font-semibold">Notifications</p>
-                <div className="py-1 px-4 bg-swLightGray rounded-full">5</div>
+                <div className="py-1 px-4 bg-swLightGray rounded-full">
+                  {x?.data?.pendingCount}
+                </div>
               </div>
               <IoCloseSharp
                 size={20}
@@ -112,9 +123,9 @@ const NavBar = ({ paths, isBackNav }) => {
                   setOpenedMessages("unread");
                 }}
               >
-                Unread
+                Tasks
               </button>
-              <button
+              {/* <button
                 className={`py-2 px-4 rounded-md ${
                   openedMessages === "all" && "bg-swLightGray"
                 }`}
@@ -123,25 +134,40 @@ const NavBar = ({ paths, isBackNav }) => {
                 }}
               >
                 All
-              </button>
+              </button> */}
             </div>
 
             <div className="mt-[8.7rem]">
               {openedMessages === "unread" &&
-                data
-                  .filter((item) => item.status === "unread")
+                x?.data?.results
+                  .filter((item) => item.actionStatus == "Pending")
                   .map((item, index) => (
-                    <div key={index} className="py-3 mx-1 flex gap-5 border-b">
-                      <div
+                    <div key={index} className=" mx-1 border-b">
+                      {/* <div
                         className={`w-1 rounded-full bg-swIndicatorYellow`}
-                      />
-                      <div>
-                        <p>{item.message}</p>
-                        <p className="text-sm">{item.time}</p>
+                      /> */}
+                      <div className="cursor-pointer hover:bg-swLightGray p-4" onClick={() => {
+                      //  router.push(`${item.url}`)
+                      router.push(`http://localhost:3000/loan-applications/view-loan/${item?.loanApplication?._id}`)
+                      }}>
+                        <div className="flex justify-between gap-3">
+                          <div>
+                            <p className="text-sm">{item.approvalTitle}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-swBlue">
+                              SW-{item.loanApplication.loanId}
+                            </p>
+                          </div>
+                        </div>
+
+                        <p className="text-sm">
+                          {formatDate(item.createdAt.slice(0, 10))}
+                        </p>
                       </div>
                     </div>
                   ))}
-
+              {/* 
               {openedMessages === "all" &&
                 data.map((item, index) => (
                   <div key={index} className="py-3 mx-1 flex gap-5 border-b">
@@ -157,7 +183,7 @@ const NavBar = ({ paths, isBackNav }) => {
                       <p className="text-sm">{item.time}</p>
                     </div>
                   </div>
-                ))}
+                ))} */}
             </div>
           </div>
         )}
@@ -167,7 +193,7 @@ const NavBar = ({ paths, isBackNav }) => {
         </div>
       </div>
 
-      <Image
+      {/* <Image
         src={navPatternBg}
         alt="nav pattern"
         fill
@@ -175,7 +201,7 @@ const NavBar = ({ paths, isBackNav }) => {
         // height={"100%"}
         sizes="50%"
         className="absolute w-1/2 ml-auto"
-      />
+      /> */}
     </nav>
   );
 };

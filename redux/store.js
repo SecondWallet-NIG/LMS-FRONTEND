@@ -10,8 +10,9 @@ import roleReducer from "./slices/roleSlice";
 import loanApplicationReducer from "./slices/loanApplicationSlice";
 import loanApprovalReducer from "./slices/loanApprovalSlice";
 import loanRepaymentReducer from "./slices/loanRepaymentSlice";
+import dashboardReducer from "./slices/dashboardSlice";
 import approvalAssigneeReducer from "./slices/approvalAssigneeSlice";
-
+import loanApplicationLogReducer from "./slices/loanApplicationLogSlice";
 export const store = configureStore({
   reducer: {
     post: postReducer,
@@ -24,7 +25,9 @@ export const store = configureStore({
     loanApplication: loanApplicationReducer,
     loanApprovals: loanApprovalReducer,
     loanRepayment: loanRepaymentReducer,
+    dashboardData: dashboardReducer,
     approvalAssignee: approvalAssigneeReducer,
+    loanApplicationLogs : loanApplicationLogReducer
   },
   // Add middleware or other configuration options as needed
 });

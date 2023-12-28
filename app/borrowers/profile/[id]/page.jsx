@@ -95,15 +95,13 @@ const CustomerProfile = () => {
           <div className="w-1/2">
             <div className="flex ">
               <div className="rounded-full border-2 border-swBlue overflow-hidden h-[4.7rem] w-[4.7rem] relative">
-                <Image
+                <img
                   src={
                     data?.profileInfo?.profilePicture
                       ? data?.profileInfo?.profilePicture
                       : "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                   }
                   alt="user"
-                  fill
-                  sizes="100%"
                 />
               </div>
               <div className="ml-4 h-fit">

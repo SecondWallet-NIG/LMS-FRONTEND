@@ -35,6 +35,8 @@ const PagePath = ({ paths }) => {
         <p className="text-swBlue text-sm pb-1.5">Interest calculator</p>
       ) : pathname === "/plans" ? (
         <p className="text-swBlue text-sm pb-1.5">Loan Plans and Packages</p>
+      ) : pathname === "/payment-history" ? (
+        <p className="text-swBlue text-sm pb-1.5">Payment History</p>
       ) : (
         <div className="flex gap-1 items-end">
           {paths?.map((item, index) => (

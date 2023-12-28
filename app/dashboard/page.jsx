@@ -9,11 +9,13 @@ import BarChart from "../components/chart/BarChart";
 import DashboardCard from "../components/cards/dashboard/DashboardCard";
 import { LuUsers } from "react-icons/lu";
 import { IoMdArrowDown, IoMdArrowUp } from "react-icons/io";
+import { getDashboardCardData } from "@/redux/slices/dashboardSlice";
 
-const DashboardPage = ({ children }) => {
+const DashboardPage = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
+  const cardData = useSelector((state) => state.dashboardData);
+  console.log(cardData);
 
   const options = {
     responsive: true,
@@ -111,101 +113,202 @@ const DashboardPage = ({ children }) => {
     ],
   };
 
+  useEffect(() => {
+    dispatch(getDashboardCardData());
+  }, []);
+
   return (
     <DashboardLayout>
-      <main className="text-swGray p-5 sm:p-10 bg-gray-50 h-full">
-        {/* <DashboardPageCard /> */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <DashboardCard
-            blueBg={true}
-            cardIcon={<LuUsers size={20} />}
-            cardName={"Borrowers"}
-            cardLinkLabel={"New Borrower"}
-            cardLink={"/create-borrower"}
-            firstStat={["Total", "5,703"]}
-            secondStat={["This month", "200", "+ 8%"]}
-            thirdStat={["Today", 7, "- 20%"]}
-          />
-          <DashboardCard
-            blueBg={true}
-            cardIcon={<IoMdArrowUp size={20} />}
-            cardName={"Disbursements"}
-            cardLinkLabel={"View"}
-            cardLink={"/disbursement"}
-            firstStat={["Total", "5,703"]}
-            secondStat={["This month", "200", "+ 8%"]}
-            thirdStat={["Today", 7, "- 20%"]}
-          />
-          <DashboardCard
-            blueBg={true}
-            cardIcon={<IoMdArrowDown size={20} />}
-            cardName={"Repayments"}
-            cardLinkLabel={"Update"}
-            cardLink={"/repayments"}
-            firstStat={["Total", "5,703"]}
-            secondStat={["This month", "200", "+ 8%"]}
-            thirdStat={["Today", 7, "+ 20%"]}
-          />
-          <DashboardCard
-            cardName={"Open loans"}
-            cardLinkLabel={"View loans"}
-            cardLink={"/loan-applications"}
-            firstStat={["Total", "5,703"]}
-            secondStat={["This month", "200", "+ 8%"]}
-          />
-          <DashboardCard
-            cardName={"Denied loans"}
-            firstStat={["Total", "5,703"]}
-            secondStat={["This month", "200", "+ 8%"]}
-            thirdStat={["Today", 7, "+ 20%"]}
-          />
-          <DashboardCard
-            cardName={"Pending repayments"}
-            firstStat={["Total", "5,703"]}
-            cardLink={""}
-            secondStat={["This month", "200", "+ 8%"]}
-          />
-          <DashboardCard
-            cardName={"Fully paid loans"}
-            cardLinkLabel={"View"}
-            cardLink={""}
-            firstStat={["Total", "5,703"]}
-            secondStat={["This month", "200", "+ 8%"]}
-          />
-          <DashboardCard
-            cardName={"Fees"}
-            cardLinkLabel={"View"}
-            cardLink={""}
-            firstStat={["Total", "5,703"]}
-            secondStat={["This month", "200", "+ 8%"]}
-            thirdStat={["Today", 7, "+ 20%"]}
-          />
-          <DashboardCard
-            cardName={"Interests"}
-            cardLinkLabel={"View"}
-            cardLink={""}
-            firstStat={["Total", "5,703"]}
-            secondStat={["This month", "200", "+ 8%"]}
-            thirdStat={["Today", 7, "+ 20%"]}
-          />
-        </div>
+      {cardData && (
+        <main className="text-swGray p-5 sm:p-10 bg-gray-50 h-full">
+          {/* <DashboardPageCard /> */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <DashboardCard
+              blueBg={true}
+              cardIcon={<LuUsers size={20} />}
+              cardName={"Borrowers"}
+              cardLinkLabel={"New Borrower"}
+              cardLink={"/create-borrower"}
+              firstStat={[
+                "Total",
+                cardData?.data?.data.borrowersData?.totalBorrowersCount,
+              ]}
+              secondStat={[
+                "This month",
+                cardData?.data?.data.borrowersData
+                  ?.totalBorrowersCountThisMonth,
+                cardData?.data?.data?.borrowersData
+                  ?.percentageTotalBorrowersCountThisMonth.toLocaleString(),
+              ]}
+              thirdStat={[
+                "Today",
+                cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
+                cardData?.data?.data.borrowersData
+                  ?.percentageTotalBorrowerCountLast24.toLocaleString(),
+              ]}
+            />
+            <DashboardCard
+              blueBg={true}
+              cardIcon={<IoMdArrowUp size={20} />}
+              cardName={"Disbursements"}
+              cardLinkLabel={"View"}
+              cardLink={"/disbursement"}
+              firstStat={[
+                "Total",
+                cardData?.data?.data.disbursementData?.totalDisbursementsPaid.toLocaleString(),
+              ]}
+              secondStat={[
+                "This month",
+                cardData?.data?.data.disbursementData?.totalDisbursementsPaid.toLocaleString(),
+                cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth.toLocaleString(),
+              ]}
+              thirdStat={[
+                "Today",
+                cardData?.data?.data.disbursementData?.totalDisbursementsPaidLast24.toLocaleString(),
+                cardData?.data?.data.disbursementData?.percentageTotalDisbursementsPaidLast24.toLocaleString(),
+              ]}
+            />
+            <DashboardCard
+              blueBg={true}
+              cardIcon={<IoMdArrowDown size={20} />}
+              cardName={"Repayments"}
+              cardLinkLabel={"Repayments"}
+              cardLink={"/repayments"}
+              firstStat={[
+                "Total",
+                cardData?.data?.data.repaymentData?.totalRepaymentsPaid.toLocaleString(),
+              ]}
+              secondStat={[
+                "This month",
+                cardData?.data?.data.repaymentData?.totalRepaymentsPaid.toLocaleString(),
+                cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth.toLocaleString(),
+              ]}
+              thirdStat={[
+                "Today",
+                cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24.toLocaleString(),
+                cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24.toLocaleString(),
+              ]}
+            />
+            <DashboardCard
+              cardName={"Open loans"}
+              cardLinkLabel={"View loans"}
+              cardLink={"/loan-applications"}
+              firstStat={[
+                "Count",
+                cardData?.data?.data.openLoanData?.totalOpenLoansCount,
+              ]}
+              secondStat={[
+                "Total",
+                cardData?.data?.data.openLoanData?.totalOpenLoansAmount.toLocaleString(),
+              ]}
+            />
+            <DashboardCard
+              cardName={"Denied loans"}
+              firstStat={[
+                "Total",
+                cardData?.data?.data.declinedLoanData
+                  ?.totalDeclinedLoanApplicationsCount,
+              ]}
+              secondStat={[
+                "This month",
+                cardData?.data?.data?.declinedLoanData
+                  ?.totalDeclinedLoanApplicationsCountThisMonth,
+              ]}
+              thirdStat={["null"]}
+            />
+            <DashboardCard
+              cardName={"Pending repayments"}
+              firstStat={[
+                "Count",
+                cardData?.data?.data.unpaidRepaymentData
+                  ?.totalUnpaidRepaymentsCount,
+              ]}
+              secondStat={[
+                "Total",
+                cardData?.data?.data.unpaidRepaymentData
+                  ?.totalUnpaidRepaymentsAmount.toLocaleString(),
+              ]}
+              thirdStat={["null"]}
+            />
+            <DashboardCard
+              cardName={"Fully paid loans"}
+              cardLinkLabel={"View"}
+              cardLink={""}
+              firstStat={[
+                "Count",
+                cardData?.data?.data.fullyRepaidLoansData
+                  ?.totalFullyPaidLoansCount.toLocaleString(),
+              ]}
+              secondStat={[
+                "Total",
+                cardData?.data?.data.fullyRepaidLoansData
+                  ?.totalFullyPaidLoansAmount.toLocaleString(),
+              ]}
+              thirdStat={["null"]}
+            />
+            <DashboardCard
+              cardName={"Fees"}
+              cardLinkLabel={"View"}
+              cardLink={""}
+              firstStat={[
+                "Total",
+                cardData?.data?.data.feesData?.totalCommitmentFeePaid.toLocaleString(),
+              ]}
+              secondStat={[
+                "This month",
+                cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth.toLocaleString(),
+                cardData?.data?.data?.feesData
+                  ?.percentageTotalCommitmentFeePaidThisMonth.toLocaleString(),
+              ]}
+              thirdStat={[
+                "Today",
+                cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24.toLocaleString(),
+                cardData?.data?.data.feesData
+                  ?.percentageTotalCommitmentFeePaidLast24.toLocaleString(),
+              ]}
+            />
+            <DashboardCard
+              cardName={"Interests"}
+              cardLinkLabel={"View"}
+              cardLink={""}
+              firstStat={[
+                "Total",
+                cardData?.data?.data.borrowersData?.totalBorrowersCount,
+              ]}
+              secondStat={[
+                "This month",
+                cardData?.data?.data.borrowersData
+                  ?.totalBorrowersCountThisMonth,
+                cardData?.data?.data?.borrowersData
+                  ?.percentageTotalBorrowersCountThisMonth.toLocaleString(),
+              ]}
+              thirdStat={[
+                "Today",
+                cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
+                cardData?.data?.data.borrowersData
+                  ?.percentageTotalBorrowerCountLast24.toLocaleString()
+              ]}
+            />
+          </div>
 
-        <section className="mt-10">
-          <div className="flex justify-between">
-            <p className="text-xl font-semibold">Charts</p>
-            <div className="flex gap-3 items-center">
-              Select Timeframe
-              <div className="flex items-center gap-2 border rounded-lg text-sm font-semibold py-2 px-4">
-                Month <MdOutlineKeyboardArrowDown size={20} className="-mr-1" />
+          <section className="mt-10">
+            <div className="flex justify-between">
+              <p className="text-xl font-semibold">Charts</p>
+              <div className="flex gap-3 items-center">
+                Select Timeframe
+                <div className="flex items-center gap-2 border rounded-lg text-sm font-semibold py-2 px-4">
+                  Month{" "}
+                  <MdOutlineKeyboardArrowDown size={20} className="-mr-1" />
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-        <BarChart options={options} data={dataBorrower} />
-        <BarChart options={options} data={dataDisbursement} />
-        <BarChart options={options} data={dataFees} />
-        <BarChart options={options} data={dataRepayments} />
-      </main>
+          </section>
+          <BarChart options={options} data={dataBorrower} />
+          <BarChart options={options} data={dataDisbursement} />
+          <BarChart options={options} data={dataFees} />
+          <BarChart options={options} data={dataRepayments} />
+        </main>
+      )}
     </DashboardLayout>
   );
 };

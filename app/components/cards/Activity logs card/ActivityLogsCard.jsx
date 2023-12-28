@@ -1,6 +1,16 @@
+"use clients";
+import { useEffect } from "react";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { getLoanApplicationLogs } from "@/redux/slices/loanApplicationLogSlice";
+import { useParams } from "next/navigation";
+import { formatDate, formatTimeToAMPM } from "@/helpers";
 
 const CustomerActivityLogsCard = ({ data }) => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const logs = useSelector((state) => state.loanApplicationLogs);
+  console.log({ logs: logs?.data?.data });
   data = [
     {
       loan_state: "disbursed",
@@ -12,40 +22,14 @@ const CustomerActivityLogsCard = ({ data }) => {
       amount: 25000000,
       duration: "6 months",
     },
-    {
-      loan_state: "created",
-      by: {
-        id: "JDL-287301",
-        name: "Benjamin franklin",
-        profile_pic: "https://cdn-icons-png.flaticon.com/512/4128/4128349.png",
-      },
-      amount: 25000000,
-      duration: "6 months",
-    },
-    {
-      loan_state: "approved",
-      by: {
-        id: "JDL-287301",
-        name: "Benjamin franklin",
-        profile_pic: "https://cdn-icons-png.flaticon.com/512/4128/4128349.png",
-      },
-      amount: 25000000,
-      duration: "6 months",
-    },
-    {
-      loan_state: "disbursed",
-      by: {
-        id: "JDL-287301",
-        name: "Benjamin franklin",
-        profile_pic: "https://cdn-icons-png.flaticon.com/512/4128/4128349.png",
-      },
-      amount: 25000000,
-      duration: "6 months",
-    },
   ];
+
+  useEffect(() => {
+    dispatch(getLoanApplicationLogs(id));
+  }, []);
   return (
     <main>
-      {data.map((item, index) => (
+      {logs?.data?.data.map((item, index) => (
         <div className="flex" key={index}>
           <div className="flex gap-2 py-4 w-full">
             <div className="flex flex-col items-center">
@@ -55,25 +39,47 @@ const CustomerActivityLogsCard = ({ data }) => {
             <div className="w-full">
               <div className="flex gap-3 -mt-2">
                 <p className="pb-2 m-0 text-sm">
-                  {item.loan_state === "disbursed"
-                    ? "Loan disbursed by"
-                    : item.loan_state === "created"
+                  {item.action === "UPDATE"
+                    ? "Loan updated by "
+                    : item.action === "CREATE"
                     ? "Loan created by"
-                    : "Credit approved by"}
+                    : ""}  {item.updatedBy.firstName} {item.updatedBy.lastName} with email , {item.updatedBy.email}  on {formatDate(item?.createdAt.slice(0, 10))} 
                 </p>
-                <div className="flex gap-1 px-1 items-center rounded-md">
-                  <div className={`p-[0.15rem] rounded-full bg-purple-600`} />
-                  <Image
-                    src={item.by.profile_pic}
-                    alt="user image"
-                    width={20}
-                    height={20}
-                  />
-                  <p className="text-xs">{item.by.name}</p>
-                </div>
+            
               </div>
-              <div className="p-4 w-full border border-gray-300 bg-gray-100 mt-2 rounded-lg font-medium">
+              <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg font-medium">
                 <div className="flex justify-between mb-2 text-lg">
+                  {item?.newValue?.hasOwnProperty("loanAmount") ? (
+                    <p className="text-sm text-swBlue">
+                      Loan Amount updated from{" "}
+                      <span>
+                        ₦ {item?.oldValue?.loanAmount?.toLocaleString()} to ₦{" "}
+                        {parseInt(item?.newValue?.loanAmount)?.toLocaleString()}
+                      </span>
+                    </p>
+                  ) : null}
+                  {item?.newValue?.hasOwnProperty("loanPackage") ? (
+                    <p className="text-sm text-swBlue">
+                      Loan package updated to{" "}
+                      <span>{item?.newValue?.loanPackage?.name}</span>
+                    </p>
+                  ) : null}
+
+{item?.newValue?.hasOwnProperty("interestRate") ? (
+                    <p className="text-sm text-swBlue">
+                      Loan interest rate updated from {" "} {item?.oldValue?.interestRate * 100} %
+                  {" "}  to {" "}  <span>{item?.newValue?.interestRate * 100} %</span>
+                    </p>
+                  ) : null}
+
+                  {item?.newValue?.hasOwnProperty("repaymentType") ? (
+                    <p className="text-sm text-swBlue">
+                      Loan repayment type updated to{" "}
+                      <span>{item?.newValue?.repaymentType == "interestServicing" ? "Interest Servicing" : item?.newValue?.repaymentType == "installmentPayment" ? "Installment Payment" : "Bullet Repayment"}</span>
+                    </p>
+                  ) : null}
+                </div>
+                {/* <div className="flex justify-between mb-2 text-lg">
                   <p className="text-sm text-swBlue">{item.amount}</p>
                   <p className="text-sm">{item.disbursed_by?.id}</p>
                 </div>
@@ -81,12 +87,12 @@ const CustomerActivityLogsCard = ({ data }) => {
                   Basic loan
                   <span className="font-light"> for a duration of </span>
                   {item.duration}
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
-          <div className="ml-3 text-gray-300 whitespace-nowrap pt-3">
-            10:59 pm
+          <div className="ml-3 text-swGray whitespace-nowrap pt-3">
+          {formatTimeToAMPM(item.createdAt)}
           </div>
         </div>
       ))}

@@ -14,7 +14,7 @@ const LoanProcessCard = ({ data }) => {
   return (
     <main className="flex flex-col">
       {
-        _data?.map((item, index) => (
+        Array.isArray(_data) && _data?.map((item, index) => (
           <div key={index} className="border-b border-gray-100 p-2">
             <div className="flex justify-between items-center">
               <p className="font-semibold capitalize text-xs text-black">

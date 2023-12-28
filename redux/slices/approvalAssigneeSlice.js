@@ -19,7 +19,7 @@ export const getApprovalAssignee = createAsyncThunk(
           },
         }
       );
-      console.log(response.data?.data?.data);
+      console.log("",response.data?.data?.data);
       return response.data?.data?.data;
     } catch (error) {
       if (error.response.data.error) {

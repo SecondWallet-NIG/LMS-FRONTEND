@@ -10,6 +10,7 @@ const DashboardCard = ({
   secondStat,
   thirdStat,
 }) => {
+  console.log("thirdStat", thirdStat?.length);
   return (
     <div
       className={`rounded-2xl p-5  ${
@@ -40,7 +41,7 @@ const DashboardCard = ({
         {firstStat && (
           <div className="flex flex-col pr-5 lg:pr-10">
             <p className="text-sm">{firstStat[0]}</p>
-            <p className="font-semibold mt-1">{firstStat[1]}</p>
+            <p className="font-semibold mt-1 text-sm">{firstStat[1]}</p>
           </div>
         )}
         {secondStat && (
@@ -50,29 +51,27 @@ const DashboardCard = ({
             }`}
           >
             <p className="text-sm">{secondStat[0]}</p>
-            <p className="font-semibold mt-1 text-lg">{secondStat[1]}</p>
-            <p
-              className={`font-semibold mt-1 text-xs ${
-                secondStat[2].includes("-") ? "bg-[#FEECEB]" : "bg-[#E8F7F0]"
-              } p-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
-            >
-              {secondStat[2]}
-            </p>
+            <p className="font-semibold mt-1 text-sm">{secondStat[1]}</p>
+            {secondStat[2] && (
+              <p
+                className={`font-semibold mt-1 text-sm ${"bg-[#E8F7F0]"} p-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
+              >
+                {secondStat[2]} %
+              </p>
+            )}
           </div>
         )}
-        {thirdStat && (
+        {thirdStat && thirdStat.length > 1 ? (
           <div className="flex flex-col border-l pl-5 lg:pl-5">
             <p className="text-sm">{thirdStat[0]}</p>
-            <p className="font-semibold mt-1 text-lg">{thirdStat[1]}</p>
+            <p className="font-semibold mt-1 text-sm">{thirdStat[1]}</p>
             <p
-              className={`font-semibold mt-1 text-xs ${
-                secondStat[2].includes("-") ? "bg-[#FEECEB]" : "bg-[#E8F7F0]"
-              } py-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
+              className={`font-semibold mt-1 text-ss ${"bg-[#E8F7F0]"} py-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
             >
-              {thirdStat[2]}
+              {thirdStat[2]} %
             </p>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

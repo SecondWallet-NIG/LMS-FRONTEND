@@ -29,6 +29,29 @@ export const createCustomer = createAsyncThunk(
   }
 );
 
+export const updateCustomer = createAsyncThunk(
+  'customer-update',
+  async ({ customerId, payload }) => {
+    try {
+      // /profile-information/:id/update
+      const response = await axios.put(
+        `${API_URL}/customer/profile-information/${customerId}/update`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      }
+    }
+  }
+);
+
 export const createBulkCustomer = createAsyncThunk(
   "customer-bulk/create",
   async (payload) => {
@@ -183,6 +206,18 @@ const customerSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(createCustomer.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(updateCustomer.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(updateCustomer.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(updateCustomer.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       })

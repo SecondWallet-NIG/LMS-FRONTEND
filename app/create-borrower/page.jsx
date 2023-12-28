@@ -30,18 +30,6 @@ import { AiOutlineDelete } from "react-icons/ai";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Image from "next/image";
 
-import { AiOutlinePaperClip } from "react-icons/ai";
-import RealTimeComponent from "../components/RealTimeComponent";
-const customNoOptionsMessage = () => {
-  return (
-    <div>
-      {/* Custom message with a link */}
-      <p>
-        Not found. <Link hreimportf="/create">Create new customer</Link>
-      </p>
-    </div>
-  );
-};
 
 const CreateCustomer = () => {
   const [isInputOpen, setIsInputOpen] = useState(false);

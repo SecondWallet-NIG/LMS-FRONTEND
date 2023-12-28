@@ -273,7 +273,7 @@ function ReusableDataTable({
           },
         })
         .then((data) => {
-          console.log({ data: data?.data?.data?.repayments });
+          console.log({ data });
           setDataCheck(data);
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
@@ -284,6 +284,7 @@ function ReusableDataTable({
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results
             );
+            console.log({transformedData});
             setData(transformedData);
             setPaginationLinks(
               data?.data.links ||

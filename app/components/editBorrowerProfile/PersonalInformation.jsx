@@ -6,18 +6,18 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  genderOptions,
-  countryOptions,
-  createBorrowerType,
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import {genderOptions, countryOptions
 } from "../helpers/utils";
 import { bankArr, statesAndLgas } from "@/constant";
 import InputField from "../shared/input/InputField";
-import { getCustomerById } from "@/redux/slices/customerSlice";
-
+import { updateCustomer } from "@/redux/slices/customerSlice";
 const PersonalInformation = ({ userData, loading }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const {id} = useParams()
   const [isInputOpen, setIsInputOpen] = useState(false);
   const [userId, setUserId] = useState("");
   const [bankNameVal, setBankNameVal] = useState("");
@@ -25,6 +25,7 @@ const PersonalInformation = ({ userData, loading }) => {
   const [lga, setLga] = useState([]);
   const [profileImg, setProfileImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
+
 
   const [formData, setFormData] = useState({
     profilePicture: null,
@@ -176,16 +177,15 @@ const PersonalInformation = ({ userData, loading }) => {
     payload.append("bankAccount[accountNumber]", formData.accountNumber);
     payload.append("bankAccount[accountName]", formData.accountName);
     payload.append("bankAccount[bankName]", formData.bankName);
-    payload.append("createdBy", userId?.data?.user?._id);
+    payload.append("createdBy", userId?._id);
 
-    console.log(...payload);
-    dispatch(createCustomer(payload))
+ 
+    dispatch(updateCustomer({customerId: id, payload}))
       .unwrap()
       .then((response) => {
-        console.log(response);
         document.getElementById("add-customer-form").reset();
+        window.location.reload();
         resetForm();
-        //  setProfileImg(null);
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -258,9 +258,15 @@ const PersonalInformation = ({ userData, loading }) => {
       }
     };
     getBankName();
+    const _user = JSON.parse(localStorage.getItem("user"));
+    console.log({_user});
+    if (_user) {
+      setUserId(_user?.data?.user);
+    }
   }, [userData]);
   return (
     <form id="add-customer-form">
+       <ToastContainer />
       <div className="flex flex-col gap-5 mb-10">
         <p className="font-semibold text-lg text-swBlack">
           Personal information

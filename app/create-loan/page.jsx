@@ -287,7 +287,7 @@ const CreateLoan = () => {
     let userId;
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      userId = storedUser?.data?.user?._id;
+      userId = storedUser?.data?.user;
     }
     const payload = new FormData();
     const num = parseInt(removeCommasFromNumber(formData.loanAmount));
@@ -311,7 +311,8 @@ const CreateLoan = () => {
     payload.append("loanAffidavit", formData.loanAffidavit);
     payload.append("offerLetter", formData.offerLetter);
     payload.append("customerId", formData.customerId);
-    payload.append("createdBy", userId);
+    payload.append("createdBy", userId?._id);
+    payload.append("tag", userId?.role.tag);
 
     setLoading(true);
     e.preventDefault();
