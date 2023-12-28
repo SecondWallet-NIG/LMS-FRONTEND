@@ -19,8 +19,8 @@ import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import SidebarLink from "../shared/sideBarLink/SidebarLink";
 import { useRouter } from "next/navigation";
-import { FiArrowDownLeft, FiArrowUpRight, FiSend } from "react-icons/fi";
-import { IoMdCard } from "react-icons/io";
+import { FiArrowDownLeft, FiArrowUpRight, FiDollarSign, FiSend, FiUser } from "react-icons/fi";
+import { IoMdAdd, IoMdCard } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -130,7 +130,7 @@ const Sidebar = () => {
           />
           <SidebarLink
             icon={
-              <BsPeopleFill
+              <FiUser
                 className={`${activeLink === "customers" && "text-swBlue"}`}
                 size={20}
               />
@@ -146,7 +146,7 @@ const Sidebar = () => {
           />
           <SidebarLink
             icon={
-              <TbNewSection
+              <IoMdAdd
                 className={`${activeLink === "create-loan" && "text-swBlue"}`}
                 size={20}
               />
@@ -162,10 +162,10 @@ const Sidebar = () => {
           />
           <SidebarLink
             icon={
-              <TbFileDollar
+              <FiDollarSign
                 className={`${
                   activeLink === "loan-applications" && "text-swBlue"
-                } -ml-1`}
+                } `}
                 size={20}
               />
             }
@@ -217,7 +217,7 @@ const Sidebar = () => {
         <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""} `}>
           <SidebarLink
             icon={<BiMapAlt size={20} />}
-            text="Plans"
+            text="Loan packages"
             link="/plans"
             sideBarOpen={sideBarOpen}
           />

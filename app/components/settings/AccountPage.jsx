@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { MdOutlineEmail } from "react-icons/md";
 import InputField from "../shared/input/InputField";
@@ -49,7 +49,7 @@ const AccountPage = () => {
     payload.append("firstName", formData.firstName);
     payload.append("lastName", formData.lastName);
     payload.append("email", formData.email);
- 
+
     dispatch(updateUser({ userId: userDetails?._id, payload }))
       .unwrap()
       .then((res) => {
@@ -65,7 +65,7 @@ const AccountPage = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const user = JSON.parse(localStorage.getItem("user"));
       setUserDetails(user?.data?.user);
       console.log(user);
@@ -247,9 +247,9 @@ const AccountPage = () => {
         <EditableButton whiteBtn={true} label={"Cancel"} />
         <EditableButton
           blueBtn={true}
+          disabled={loading ? true : false}
           label={"Save changes"}
           onClick={handleSubmit}
-          disabled={loading ? true : false}
         />
       </div>
     </div>
