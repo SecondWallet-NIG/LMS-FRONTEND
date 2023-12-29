@@ -202,7 +202,7 @@ const CreateCustomer = () => {
   }));
 
   const preventMinus = (e) => {
-    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+    if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
     }
   };
@@ -464,8 +464,6 @@ const CreateCustomer = () => {
                 required={true}
                 name="nin"
                 activeBorderColor="border-swBlue"
-                inputType="number"
-                min="0"
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
                 label="NIN"
@@ -482,8 +480,6 @@ const CreateCustomer = () => {
               <InputField
                 required={true}
                 name="bvn"
-                inputType="number"
-                min="0"
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
                 activeBorderColor="border-swBlue"
@@ -560,8 +556,6 @@ const CreateCustomer = () => {
                   <InputField
                     name="phoneNumber"
                     placeholder="Phone Number"
-                    inputType="number"
-                    min="0"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     required={true}
@@ -606,8 +600,6 @@ const CreateCustomer = () => {
                     maxLength={10}
                     name="accountNumber"
                     placeholder="Account number"
-                    inputType="number"
-                    min="0"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     required={true}

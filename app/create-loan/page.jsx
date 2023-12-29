@@ -69,7 +69,7 @@ const CreateLoan = () => {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  console.log(selectedCustomer);
+  // console.log(selectedCustomer);
   const assetTypeData = [
     { value: 100, label: "Investment" },
     { value: 200, label: "Building" },
@@ -98,8 +98,8 @@ const CreateLoan = () => {
     { value: "Yearly", label: "Yearly" },
   ];
 
+  console.log({ formData });
   const validateFormData = (formData) => {
-    console.log({ formData });
     for (const key in formData) {
       if (formData[key] === null || formData[key] === 0) {
         if (
@@ -137,12 +137,6 @@ const CreateLoan = () => {
     }
   };
 
-  const preventMinus = (e) => {
-    if (e.code === "Minus" || e.key === "e") {
-      e.preventDefault();
-    }
-  };
-
   const modifyLoanPackageData = (arr) => {
     return arr?.map((item) => ({
       label: item.name,
@@ -162,12 +156,28 @@ const CreateLoan = () => {
     }
   };
 
+  const preventMinus = (e) => {
+    if (/[^0-9,]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const setInputState = async (e) => {
     let { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    const ariaLabel = e.target.getAttribute("aria-label");
+
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: num,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
   };
 
   const formatNumber = (valu) => {
@@ -418,18 +428,16 @@ const CreateLoan = () => {
                 />
               ) : null}
               <InputField
-                // value={formData?.loanAmount}
-                maxLength="1000000"
                 disabled={formData.loanPackage === null ? true : false}
                 name="loanAmount"
                 required={true}
-                inputType="number"
-                min="0"
+                ariaLabel={"Number input"}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
                 activeBorderColor="border-swBlue"
                 endIcon={<p className="text-swGray">NGN &#8358;</p>}
                 label="Loan amount (Principal)"
+                value={formData.loanAmount.toLocaleString()}
                 placeholder="Enter loan amount"
                 isActive="loan-amount"
                 onChange={(e) => {
@@ -478,8 +486,6 @@ const CreateLoan = () => {
                     value={formData?.loanDuration}
                     required={false}
                     name="loanDuration"
-                    inputType="number"
-                    min="0"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -499,8 +505,6 @@ const CreateLoan = () => {
                     disabled={formData.loanDuration === "" ? true : false}
                     required={true}
                     name="commitmentValue"
-                    inputType="number"
-                    min="0"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -520,8 +524,6 @@ const CreateLoan = () => {
                     disabled={formData.commitmentValue === "" ? true : false}
                     required={true}
                     name="managementValue"
-                    inputType="number"
-                    min="0"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -558,8 +560,6 @@ const CreateLoan = () => {
                     label="Number of Repayments"
                     required={true}
                     name="numberOfRepayment"
-                    inputType="number"
-                    min="0"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     value={formData.numberOfRepayment}
@@ -608,42 +608,42 @@ const CreateLoan = () => {
               </div>
 
               {/* <div className="flex gap-2 items-end">
-                <div className="w-1/3">
-                  <SelectField
-                    name="commitmentType"
-                    disabled={formData.loanAmount === 0 ? true : false}
-                    optionValue={commitmentType}
-                    label={"Fees"}
-                    required={true}
-                    placeholder={"Percentage"}
-                    isSearchable={false}
-                    onChange={(selectedOption) => {
-                      handleSelectChange(selectedOption, "commitmentType");
-                    }}
-                  />
-                </div>
-                <div className="w-2/3">
-                  <InputField
-                    disabled={formData.commitmentType === null ? true : false}
-                    required={false}
-                    name="commitmentValue"
-                    inputType="number"
-                    min="0"
-                    onKeyPress={preventMinus}
-                    onWheel={() => document.activeElement.blur()}
-                    activeBorderColor="border-swBlue"
-                    placeholder="Enter Value"
-                    endIcon={<p className="text-swGray">%</p>}
-                    onChange={(e) => {
-                      setInputState(e);
-                      calCommitmentTotal(e);
-                    }}
-                  />
-                </div>
-                <div className="p-2 rounded-lg border-2 border-white hover:border-gray-300 cursor-pointer">
-                  <AiOutlinePlus size={20} />
-                </div>
-              </div> */}
+                  <div className="w-1/3">
+                    <SelectField
+                      name="commitmentType"
+                      disabled={formData.loanAmount === 0 ? true : false}
+                      optionValue={commitmentType}
+                      label={"Fees"}
+                      required={true}
+                      placeholder={"Percentage"}
+                      isSearchable={false}
+                      onChange={(selectedOption) => {
+                        handleSelectChange(selectedOption, "commitmentType");
+                      }}
+                    />
+                  </div>
+                  <div className="w-2/3">
+                    <InputField
+                      disabled={formData.commitmentType === null ? true : false}
+                      required={false}
+                      name="commitmentValue"
+                       
+                       
+                      onKeyPress={preventMinus}
+                      onWheel={() => document.activeElement.blur()}
+                      activeBorderColor="border-swBlue"
+                      placeholder="Enter Value"
+                      endIcon={<p className="text-swGray">%</p>}
+                      onChange={(e) => {
+                        setInputState(e);
+                        calCommitmentTotal(e);
+                      }}
+                    />
+                  </div>
+                  <div className="p-2 rounded-lg border-2 border-white hover:border-gray-300 cursor-pointer">
+                    <AiOutlinePlus size={20} />
+                  </div>
+                </div> */}
             </div>
             <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Collateral documents</p>

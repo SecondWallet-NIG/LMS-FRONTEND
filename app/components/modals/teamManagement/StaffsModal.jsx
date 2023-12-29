@@ -150,7 +150,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   };
 
   const preventMinus = (e) => {
-    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+    if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
     }
   };
@@ -258,8 +258,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
                     <InputField
                       label="Phone number"
                       name="phoneNumber"
-                      inputType="number"
-                      min="0"
                       onKeyPress={preventMinus}
                       onWheel={() => document.activeElement.blur()}
                       placeholder="Phone number"

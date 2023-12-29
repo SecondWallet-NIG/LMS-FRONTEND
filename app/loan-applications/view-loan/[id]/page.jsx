@@ -93,10 +93,20 @@ const ViewLoan = () => {
 
   const setDisbursementInputState = async (e) => {
     let { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    const ariaLabel = e.target.getAttribute("aria-label");
+
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: num,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleDisbursementSelectChange = async (selectedOption, name) => {
@@ -138,7 +148,7 @@ const ViewLoan = () => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
   const preventMinus = (e) => {
-    if (e.code === "Minus") {
+    if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
     }
   };
@@ -239,10 +249,20 @@ const ViewLoan = () => {
 
   const setInputState = async (e) => {
     let { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    const ariaLabel = e.target.getAttribute("aria-label");
+
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: num,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
   };
 
   const repaymentTypeData = [
@@ -1056,8 +1076,6 @@ const ViewLoan = () => {
           <InputField
             label={"Enter new interest rate"}
             value={interestRate}
-            inputType="number"
-            min="0"
             onKeyPress={preventMinus}
             onWheel={() => document.activeElement.blur()}
             onChange={(e) => setInterestRate(e.target.value)}
@@ -1145,8 +1163,6 @@ const ViewLoan = () => {
                 value={formData.loanDuration}
                 required={false}
                 name="loanDuration"
-                inputType="number"
-                min="0"
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
                 activeBorderColor="border-swBlue"
@@ -1216,9 +1232,10 @@ const ViewLoan = () => {
             </div>
             <div className="pt-4">
               <InputField
-                name="amount"
+                name={formData.amount.toLocaleString()}
                 label="Amount paid"
                 required={true}
+                ariaLabel={"Number input"}
                 placeholder="Enter amount"
                 onChange={(e) => {
                   setDisbursementInputState(e);

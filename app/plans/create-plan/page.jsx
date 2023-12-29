@@ -50,10 +50,20 @@ const CreatePlansAndPackages = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
-    setCreatePlan((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const ariaLabel = e.target.getAttribute("aria-label");
+
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setCreatePlan((prev) => ({
+        ...prev,
+        [name]: num,
+      }));
+    } else {
+      setCreatePlan((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const resetForm = () => {
@@ -155,7 +165,7 @@ const CreatePlansAndPackages = () => {
   ];
 
   const preventMinus = (e) => {
-    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+    if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
     }
   };
@@ -201,8 +211,6 @@ const CreatePlansAndPackages = () => {
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
-            inputType="number"
-            min="0"
             onKeyPress={preventMinus}
             onWheel={() => document.activeElement.blur()}
             endIcon={<MdPercent size={20} className="text-swGray" />}
@@ -220,9 +228,11 @@ const CreatePlansAndPackages = () => {
                 label={"Loan amount range"}
                 required={true}
                 placeholder={"Minimum amount - 5000"}
+                onKeyPress={preventMinus}
+                ariaLabel={"Number input"}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"minAmount"}
-                value={createPlan.minAmount}
+                value={createPlan.minAmount.toLocaleString()}
                 onChange={handleInputChange}
               />
             </div>
@@ -230,13 +240,12 @@ const CreatePlansAndPackages = () => {
             <div className="w-full">
               <InputField
                 placeholder={"Maximum amount - 50000"}
-                inputType="number"
-                min="0"
                 onKeyPress={preventMinus}
+                ariaLabel={"Number input"}
                 onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"maxAmount"}
-                value={createPlan.maxAmount}
+                value={createPlan.maxAmount.toLocaleString()}
                 onChange={handleInputChange}
               />
             </div>
@@ -274,8 +283,8 @@ const CreatePlansAndPackages = () => {
             required={true}
             label={"Minimum collateral amount"}
             placeholder={"500,000"}
-            inputType="number"
-            min="0"
+             
+             
             onKeyPress={preventMinus}
             onWheel={() => document.activeElement.blur()}
             endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}

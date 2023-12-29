@@ -28,11 +28,20 @@ const WorkInformation = ({ userData, loading }) => {
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
+    const ariaLabel = e.target.getAttribute("aria-label");
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: num,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
   };
 
   const employmentStatus = [
@@ -47,7 +56,7 @@ const WorkInformation = ({ userData, loading }) => {
   ];
 
   const preventMinus = (e) => {
-    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+    if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
     }
   };
@@ -137,8 +146,6 @@ const WorkInformation = ({ userData, loading }) => {
             <InputField
               name="employerPhone"
               label="Employer Contact"
-              inputType="number"
-              min="0"
               onKeyPress={preventMinus}
               onWheel={() => document.activeElement.blur()}
               required={true}
@@ -183,11 +190,10 @@ const WorkInformation = ({ userData, loading }) => {
           <div className="w-1/2">
             <InputField
               name="monthlyIncome"
-              value={formData.monthlyIncome}
+              value={formData.monthlyIncome.toLocaleString()}
               label="Income Per Period"
-              inputType="number"
-              min="0"
               onKeyPress={preventMinus}
+              ariaLabel={"Number input"}
               onWheel={() => document.activeElement.blur()}
               includeComma={true}
               required={true}
