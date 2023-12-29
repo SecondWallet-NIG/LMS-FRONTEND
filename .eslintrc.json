@@ -1,6 +1,6 @@
 {
   "rules": {
-    "your-rule-name": "off"
+    "react/no-unescaped-entities": ["error", {"forbid": [">", "}"]}]
   },
   "extends": "next/core-web-vitals"
 }

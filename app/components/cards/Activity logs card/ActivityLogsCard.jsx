@@ -1,6 +1,6 @@
-"use clients";
+"use client";
+
 import { useEffect } from "react";
-import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoanApplicationLogs } from "@/redux/slices/loanApplicationLogSlice";
 import { useParams } from "next/navigation";
