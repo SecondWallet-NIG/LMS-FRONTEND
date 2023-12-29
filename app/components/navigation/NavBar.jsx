@@ -114,7 +114,7 @@ const NavBar = ({ paths, isBackNav }) => {
                       /> */}
                       <div className="cursor-pointer hover:bg-swLightGray p-4" onClick={() => {
                       //  router.push(`${item.url}`)
-                      router.push(`http://localhost:3000/loan-applications/view-loan/${item?.loanApplication?._id}`)
+                      router.push(`https://secondwallet-stag.netlify.app/loan-applications/view-loan/${item?.loanApplication?._id}`)
                       }}>
                         <div className="flex justify-between gap-3">
                           <div>
