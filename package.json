@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@netlify/plugin-lighthouse": "^5.0.0",
     "@reduxjs/toolkit": "^1.9.5",
     "autoprefixer": "10.4.15",
     "axios": "^1.5.0",
