@@ -186,9 +186,9 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-      if (role === "report") {
-        apiUrl += `&status=${"Disbursed"}`;
-      }
+      // if (role === "report") {
+      //   apiUrl += `&status=${"Disbursed"}`;
+      // }
       if (role === "pendingTask") {
         apiUrl += `&status=${"Pending"}`;
       }
@@ -248,9 +248,9 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-      if (role === "report") {
-        apiUrl += `&status=${"Disbursed"}`;
-      }
+      // if (role === "report") {
+      //   apiUrl += `&status=${"Disbursed"}`;
+      // }
       if (role === "pendingTask") {
         apiUrl += `&status=${"Pending"}`;
       }

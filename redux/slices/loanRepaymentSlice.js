@@ -87,10 +87,41 @@ export const getRepaymentSummary = createAsyncThunk(
   }
 );
 
-export const logRepaymentFunc = createAsyncThunk('loanApplication/repayment', async ({loanId, payload}) => {
-  console.log({payload});
+export const logRepaymentFunc = createAsyncThunk('loanApplication/repayment', async ({ loanId, payload }) => {
   try {
     const response = await axios.post(`${API_URL}/repayment/log/loan-application/${loanId}`, payload, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
+export const approveLoggedPayment = createAsyncThunk('loanApplication/repayment-approve', async ({ loanId, repaymentId }) => {
+  try {
+    const response = await axios.get(`${API_URL}/repayment/approve/${loanId}/${repaymentId}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error)
+    }
+    else throw new Error("An error occured, please try again later")
+  }
+});
+
+export const declineLoggedPayment = createAsyncThunk('loanApplication/repayment-decline', async ({ loanId, repaymentId }) => {
+  try {
+    const response = await axios.get(`${API_URL}/repayment/decline/${loanId}/${repaymentId}`, {
       headers: {
         Authorization: `Bearer ${user?.data?.token}`
       }
@@ -113,7 +144,7 @@ export const getDisbursementSummary = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${user?.data?.token}`,
         },
-      });console.log("disbursement", response.data);
+      }); console.log("disbursement", response.data);
       return response.data;
     } catch (error) {
       if (error.response.data.error) {
@@ -123,7 +154,7 @@ export const getDisbursementSummary = createAsyncThunk(
   }
 );
 
-export const  getRepaymentReport = createAsyncThunk('loanApplication/repayment-summary', async (date) => {
+export const getRepaymentReport = createAsyncThunk('loanApplication/repayment-summary', async (date) => {
   if (date) {
 
     const response = await axios.get(`${API_URL}/repayment/report?startDate=${date?.startDate}&endDate=${date?.endDate}`, {
@@ -131,7 +162,7 @@ export const  getRepaymentReport = createAsyncThunk('loanApplication/repayment-s
         Authorization: `Bearer ${user?.data?.token}`
       }
     });
-    console.log({response});
+    console.log({ response });
     return response.data;
   } else {
     const response = await axios.get(`${API_URL}/repayment/report`, {
@@ -222,7 +253,7 @@ const LoanRepaymentSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(getRepaymentReport.pending, (state) => {
-        state.loading = "pending"; 
+        state.loading = "pending";
         state.error = null;
       })
       .addCase(getRepaymentReport.fulfilled, (state, action) => {
@@ -234,7 +265,7 @@ const LoanRepaymentSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(getLoanApplicationPaymentHistory.pending, (state) => {
-        state.loading = "pending"; 
+        state.loading = "pending";
         state.error = null;
       })
       .addCase(getLoanApplicationPaymentHistory.fulfilled, (state, action) => {
@@ -242,6 +273,29 @@ const LoanRepaymentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getLoanApplicationPaymentHistory.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(approveLoggedPayment.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(approveLoggedPayment.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(approveLoggedPayment.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      }).addCase(declineLoggedPayment.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(declineLoggedPayment.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(declineLoggedPayment.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

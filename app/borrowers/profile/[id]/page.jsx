@@ -67,22 +67,32 @@ const CustomerProfile = () => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
 
+  const [user, setUser] = useState(null);
+  const [openedMessages, setOpenedMessages] = useState("unread");
+
+
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      console.log({ storedUser });
+
+      setUser(storedUser?.data?.user);
+    
+    }
     dispatch(getCustomerById(id));
   }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (buttonRef.current && !buttonRef.current.contains(event.target)) {
-        // Click outside the button, close it
         setBorrowerOptions(!borrowerOptions);
       }
     };
 
-    // Add event listener when component mounts
+
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Cleanup event listener when component unmounts
+  
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -153,9 +163,9 @@ const CustomerProfile = () => {
             <div className="ml-4 flex flex-col justify-between items-end ">
               <p className="text-sm mb-2">
                 Customer onboarded by: <br />
-                <span className="font-semibold">
+                <span className="font-semibold text-swGreen">
                   {" "}
-                  {data?.profileInfo?.firstName} {data?.profileInfo?.middleName}{" "}
+                  {user?.firstName} {user?.lastName}{" "}
                 </span>
               </p>
               <div className="flex gap-2 items-center">

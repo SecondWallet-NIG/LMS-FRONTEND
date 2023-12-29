@@ -71,6 +71,8 @@ const ApprovalModal = ({
       approvalNote: formData?.approvalNote,
       taskId : currentTaskId
     };
+
+   // console.log({taskId});
     const payload = { id, _formData };
     console.log({ payload });
     e.preventDefault();

@@ -21,38 +21,7 @@ const NavBar = ({ paths, isBackNav }) => {
   const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");
 
-  const data = [
-    {
-      message: "Approve credit on loan ID: 972023",
-      time: "3 hours ago",
-      status: "unread",
-    },
-    {
-      message: "Benjamin Franklin approved a loan for disbursement",
-      time: "3 hours ago",
-      status: "unread",
-    },
-    {
-      message: "Benjamin Franklin approved a loan for disbursement",
-      time: "3 hours ago",
-      status: "read",
-    },
-    {
-      message: "Approve credit on loan ID: 972023",
-      time: "3 hours ago",
-      status: "read",
-    },
-    {
-      message: "Benjamin Franklin approved a loan for disbursement",
-      time: "3 hours ago",
-      status: "unread",
-    },
-    {
-      message: "Benjamin Franklin approved a loan for disbursement",
-      time: "3 hours ago",
-      status: "read",
-    },
-  ];
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -85,9 +54,6 @@ const NavBar = ({ paths, isBackNav }) => {
       <div className=" flex gap-5 items-center relative">
         <p
           className="text-sm"
-          onClick={() => {
-            alert("iiiiii");
-          }}
         >
           Welcome {user} 👋{" "}
         </p>

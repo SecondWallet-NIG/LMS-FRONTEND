@@ -43,9 +43,11 @@ const CustomerActivityLogsCard = ({ data }) => {
                     ? "Loan updated by "
                     : item.action === "CREATE"
                     ? "Loan created by"
-                    : ""}  {item.updatedBy.firstName} {item.updatedBy.lastName} with email , {item.updatedBy.email}  on {formatDate(item?.createdAt.slice(0, 10))} 
+                    : ""}{" "}
+                  {item.updatedBy.firstName} {item.updatedBy.lastName} with
+                  email , {item.updatedBy.email} on{" "}
+                  {formatDate(item?.createdAt.slice(0, 10))}
                 </p>
-            
               </div>
               <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg font-medium">
                 <div className="flex justify-between mb-2 text-lg">
@@ -65,34 +67,55 @@ const CustomerActivityLogsCard = ({ data }) => {
                     </p>
                   ) : null}
 
-{item?.newValue?.hasOwnProperty("interestRate") ? (
+                  {item?.newValue?.hasOwnProperty("interestRate") ? (
                     <p className="text-sm text-swBlue">
-                      Loan interest rate updated from {" "} {item?.oldValue?.interestRate * 100} %
-                  {" "}  to {" "}  <span>{item?.newValue?.interestRate * 100} %</span>
+                      Loan interest rate updated from{" "}
+                      {item?.oldValue?.interestRate * 100} % to{" "}
+                      <span>{item?.newValue?.interestRate * 100} %</span>
                     </p>
                   ) : null}
 
                   {item?.newValue?.hasOwnProperty("repaymentType") ? (
                     <p className="text-sm text-swBlue">
                       Loan repayment type updated to{" "}
-                      <span>{item?.newValue?.repaymentType == "interestServicing" ? "Interest Servicing" : item?.newValue?.repaymentType == "installmentPayment" ? "Installment Payment" : "Bullet Repayment"}</span>
+                      <span>
+                        {item?.newValue?.repaymentType == "interestServicing"
+                          ? "Interest Servicing"
+                          : item?.newValue?.repaymentType ==
+                            "installmentPayment"
+                          ? "Installment Payment"
+                          : "Bullet Repayment"}
+                      </span>
                     </p>
                   ) : null}
+
+                  {item?.newValue?.hasOwnProperty("collaterals") ? (
+                    <p className="text-sm text-swBlue">
+                      Loan collateral document uploaded
+                    </p>
+                  ) : null}
+                     {item?.newValue?.hasOwnProperty("loanAffidavit") ? (
+                    <p className="text-sm text-swBlue">
+                      Loan affidavit document uploaded
+                    </p>
+                  ) : null}
+                     {item?.newValue?.hasOwnProperty("guarantorForm") ? (
+                    <p className="text-sm text-swBlue">
+                      Loan guarantor's form uploaded
+                    </p>
+                  ) : null}
+                     {item?.newValue?.hasOwnProperty("applicationForm") ? (
+                    <p className="text-sm text-swBlue">
+                      Loan application document uploaded
+                    </p>
+                  ) : null}
+
                 </div>
-                {/* <div className="flex justify-between mb-2 text-lg">
-                  <p className="text-sm text-swBlue">{item.amount}</p>
-                  <p className="text-sm">{item.disbursed_by?.id}</p>
-                </div>
-                <p className="text-sm text-swGray ">
-                  Basic loan
-                  <span className="font-light"> for a duration of </span>
-                  {item.duration}
-                </p> */}
               </div>
             </div>
           </div>
-          <div className="ml-3 text-swGray whitespace-nowrap pt-3">
-          {formatTimeToAMPM(item.createdAt)}
+          <div className="text-xs text-swGreen font-semibold whitespace-nowrap pt-3">
+            {formatTimeToAMPM(item.createdAt)}
           </div>
         </div>
       ))}

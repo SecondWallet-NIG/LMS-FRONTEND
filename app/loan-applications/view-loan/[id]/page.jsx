@@ -418,9 +418,9 @@ const ViewLoan = () => {
                           "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
                         }
                         disabled={
-                          data?.data?.loanApplication?.status != "In Progress"  || data?.data?.loanApplication?.status != "Ready for Disbursal"
-                            ? true
-                            : false
+                          data?.data?.loanApplication?.status === "Ready for Disbursal"
+                            ? false
+                            : true
                         }
                         onClick={() => {
                           setLogRepayment(!logRepayment);
@@ -1235,7 +1235,7 @@ const ViewLoan = () => {
             </div>
             <div className="pt-4">
               <InputField
-                name={formData.amount.toLocaleString()}
+                name={formData?.amount?.toLocaleString()}
                 label="Amount paid"
                 required={true}
                 ariaLabel={"Number input"}

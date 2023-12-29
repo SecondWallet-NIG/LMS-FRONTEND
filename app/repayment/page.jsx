@@ -37,12 +37,12 @@ const Repayment = () => {
       ),
       dueDate: (
         <div className="text-md font-[500] text-gray-700">
-          {formatDate(item.dueDate?.slice(0, 10))}
+          {formatDate(item?.dueDate?.slice(0, 10))}
         </div>
       ),
       amountDue: (
         <div className="text-md font-[500] text-gray-700">
-          ₦ {item?.amountDue.toLocaleString() || 0}
+          ₦ {item?.amountDue?.toLocaleString() || 0}
         </div>
       ),
       amountPaid: (
@@ -63,7 +63,7 @@ const Repayment = () => {
               : "bg-[#F8A9A3] text-white"
           } px-2 py-1 rounded-full`}
         >
-          {item.status}
+          {item?.status}
         </button>
       ),
     }));
@@ -71,6 +71,7 @@ const Repayment = () => {
   useEffect(() => {
     dispatch(getRepaymentSummary());
   }, []);
+  
 
   return (
     <DashboardLayout>

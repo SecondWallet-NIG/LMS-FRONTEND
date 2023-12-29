@@ -12,7 +12,7 @@ import {
   TbFileDollar,
   TbReportMoney,
 } from "react-icons/tb";
-import { AiOutlineSetting } from "react-icons/ai";
+import { AiFillMoneyCollect, AiOutlineSetting } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
@@ -210,7 +210,7 @@ const Sidebar = () => {
 
           <SidebarLink
             icon={
-              <FiArrowDownLeft
+              <AiFillMoneyCollect
                 className={`${activeLink === "payment-history" && "text-swBlue"}`}
                 size={20}
               />

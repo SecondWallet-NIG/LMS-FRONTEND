@@ -119,33 +119,33 @@ const EmploymentDetailsModal = ({
       isValid = false;
     }
 
-    if (formData.employerPhone.trim() === "") {
+    if (formData.employerPhone?.trim() === "") {
       newErrors.employerPhone = "Employer phone number is required";
       isValid = false;
     }
 
-    if (formData.incomeSource.trim() === "") {
+    if (formData.incomeSource?.trim() === "") {
       newErrors.incomeSource = "Income Source is required";
       isValid = false;
     }
-    if (formData.incomePeriod.trim() === "") {
+    if (formData.incomePeriod?.trim() === "") {
       newErrors.incomePeriod = "Income period is required";
       isValid = false;
     }
 
-    if (formData.monthlyIncome.trim() === "") {
-      newErrors.monthlyIncome = "Income per period is required";
-      isValid = false;
-    }
-    if (formData.employerAddress.trim() === "") {
+    // if (formData.monthlyIncome?.trim() === "") {
+    //   newErrors.monthlyIncome = "Income per period is required";
+    //   isValid = false;
+    // }
+    if (formData.employerAddress?.trim() === "") {
       newErrors.employerAddress = "Employer address is required";
       isValid = false;
     }
-    if (formData.currentEmploymentStatus.trim() === "") {
+    if (formData.currentEmploymentStatus?.trim() === "") {
       newErrors.currentEmploymentStatus = "Employment status is required";
       isValid = false;
     }
-    if (formData.jobTitle.trim() === "") {
+    if (formData.jobTitle?.trim() === "") {
       newErrors.jobTitle = "Job title is required";
       isValid = false;
     }

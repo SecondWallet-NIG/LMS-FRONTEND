@@ -44,7 +44,7 @@ const LoanTable = () => {
       loanPackageId: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
-          <div className="text-xs text-gray-500 pt-2">{`${item?.loanId}`}</div>
+          <div className="text-xs text-gray-500 pt-2">SWL-{`${item?.loanId}`}</div>
         </div>
       ),
       loanAmount: (

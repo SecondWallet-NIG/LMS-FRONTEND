@@ -138,13 +138,13 @@ const DashboardPage = () => {
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
                 cardData?.data?.data?.borrowersData
-                  ?.percentageTotalBorrowersCountThisMonth.toLocaleString(),
+                  ?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
                 cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
                 cardData?.data?.data.borrowersData
-                  ?.percentageTotalBorrowerCountLast24.toLocaleString(),
+                  ?.percentageTotalBorrowerCountLast24?.toLocaleString(),
               ]}
             />
             <DashboardCard
@@ -155,17 +155,17 @@ const DashboardPage = () => {
               cardLink={"/disbursement"}
               firstStat={[
                 "Total",
-                cardData?.data?.data.disbursementData?.totalDisbursementsPaid.toLocaleString(),
+                cardData?.data?.data.disbursementData?.totalDisbursementsPaid?.toLocaleString(),
               ]}
               secondStat={[
                 "This month",
-                cardData?.data?.data.disbursementData?.totalDisbursementsPaid.toLocaleString(),
-                cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth.toLocaleString(),
+                cardData?.data?.data.disbursementData?.totalDisbursementsPaid?.toLocaleString(),
+                cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
-                cardData?.data?.data.disbursementData?.totalDisbursementsPaidLast24.toLocaleString(),
-                cardData?.data?.data.disbursementData?.percentageTotalDisbursementsPaidLast24.toLocaleString(),
+                cardData?.data?.data.disbursementData?.totalDisbursementsPaidLast24?.toLocaleString(),
+                cardData?.data?.data.disbursementData?.percentageTotalDisbursementsPaidLast24?.toLocaleString(),
               ]}
             />
             <DashboardCard
@@ -176,17 +176,17 @@ const DashboardPage = () => {
               cardLink={"/repayments"}
               firstStat={[
                 "Total",
-                cardData?.data?.data.repaymentData?.totalRepaymentsPaid.toLocaleString(),
+                cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
               ]}
               secondStat={[
                 "This month",
-                cardData?.data?.data.repaymentData?.totalRepaymentsPaid.toLocaleString(),
-                cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth.toLocaleString(),
+                cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
+                cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
-                cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24.toLocaleString(),
-                cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24.toLocaleString(),
+                cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24?.toLocaleString(),
+                cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24?.toLocaleString(),
               ]}
             />
             <DashboardCard
@@ -199,7 +199,7 @@ const DashboardPage = () => {
               ]}
               secondStat={[
                 "Total",
-                cardData?.data?.data.openLoanData?.totalOpenLoansAmount.toLocaleString(),
+                cardData?.data?.data.openLoanData?.totalOpenLoansAmount?.toLocaleString(),
               ]}
             />
             <DashboardCard
@@ -226,7 +226,7 @@ const DashboardPage = () => {
               secondStat={[
                 "Total",
                 cardData?.data?.data.unpaidRepaymentData
-                  ?.totalUnpaidRepaymentsAmount.toLocaleString(),
+                  ?.totalUnpaidRepaymentsAmount?.toLocaleString(),
               ]}
               thirdStat={["null"]}
             />
@@ -237,12 +237,12 @@ const DashboardPage = () => {
               firstStat={[
                 "Count",
                 cardData?.data?.data.fullyRepaidLoansData
-                  ?.totalFullyPaidLoansCount.toLocaleString(),
+                  ?.totalFullyPaidLoansCount?.toLocaleString(),
               ]}
               secondStat={[
                 "Total",
                 cardData?.data?.data.fullyRepaidLoansData
-                  ?.totalFullyPaidLoansAmount.toLocaleString(),
+                  ?.totalFullyPaidLoansAmount?.toLocaleString(),
               ]}
               thirdStat={["null"]}
             />
@@ -252,19 +252,19 @@ const DashboardPage = () => {
               cardLink={""}
               firstStat={[
                 "Total",
-                cardData?.data?.data.feesData?.totalCommitmentFeePaid.toLocaleString(),
+                cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
               ]}
               secondStat={[
                 "This month",
-                cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth.toLocaleString(),
+                cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.feesData
-                  ?.percentageTotalCommitmentFeePaidThisMonth.toLocaleString(),
+                  ?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
-                cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24.toLocaleString(),
+                cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
                 cardData?.data?.data.feesData
-                  ?.percentageTotalCommitmentFeePaidLast24.toLocaleString(),
+                  ?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
               ]}
             />
             <DashboardCard
@@ -280,13 +280,13 @@ const DashboardPage = () => {
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
                 cardData?.data?.data?.borrowersData
-                  ?.percentageTotalBorrowersCountThisMonth.toLocaleString(),
+                  ?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
                 cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
-                cardData?.data?.data.borrowersData
-                  ?.percentageTotalBorrowerCountLast24.toLocaleString()
+                cardData?.data?.data?.borrowersData
+                  ?.percentageTotalBorrowerCountLast24?.toLocaleString()
               ]}
             />
           </div>

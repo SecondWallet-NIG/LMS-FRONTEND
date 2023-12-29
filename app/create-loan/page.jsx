@@ -202,8 +202,13 @@ const CreateLoan = () => {
   };
 
   const removeCommasFromNumber = (numberString) => {
+    if (typeof numberString !== 'string') {
+      // Convert to string or handle the case appropriately
+      numberString = String(numberString);
+    }
     return numberString.replace(/,/g, "");
   };
+  
 
   const calCommitmentTotal = (e) => {
     let { name, value } = e.target;
@@ -842,7 +847,7 @@ const CreateLoan = () => {
                   //   />
                   // </div>
                   <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                    <Image
+                    <img
                       src={selectedCustomer?.profilePicture}
                       alt="borrower"
                       fill
@@ -1077,7 +1082,7 @@ const CreateLoan = () => {
                   ""
                 ) : (
                   <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                    <Image
+                    <img
                       src={selectedCustomer?.profilePicture}
                       alt="borrower"
                       fill
@@ -1100,7 +1105,7 @@ const CreateLoan = () => {
             ) : (
               <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
                 <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                  <Image
+                  <img
                     src={selectedCustomer?.profilePicture}
                     alt="borrower"
                     fill
@@ -1294,6 +1299,7 @@ const CreateLoan = () => {
               <div
                 key={item._id}
                 onClick={() => {
+                  console.log({item});
                   setFormData({
                     ...formData,
                     customerId: item._id,
