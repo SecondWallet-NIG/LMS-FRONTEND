@@ -27,7 +27,7 @@ const EditableButton = ({
       )}
       <div
         className={` ${
-          whiteBtn ? `bg-white` : blueBtn ? `bg-swBlue text-white` : ""
+          whiteBtn ? `bg-white border` : blueBtn ? `bg-swBlue text-white` : ""
         }  flex items-center justify-center text-sm semi-bold w-full py-2 px-5 rounded-md gap-1`}
       >
         {startIcon && <span>{startIcon}</span>}

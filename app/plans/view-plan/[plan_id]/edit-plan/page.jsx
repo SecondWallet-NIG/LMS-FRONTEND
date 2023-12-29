@@ -51,11 +51,23 @@ const EditPlansAndPackages = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
-    setEditPlan((prev) => ({
-      ...prev,
-      [name]: value,
-      createdBy: user?.data?.user?._id,
-    }));
+
+    const ariaLabel = e.target.getAttribute("aria-label");
+
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setEditPlan((prevFormData) => ({
+        ...prevFormData,
+        [name]: num,
+        createdBy: user?.data?.user?._id,
+      }));
+    } else {
+      setEditPlan((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+        createdBy: user?.data?.user?._id,
+      }));
+    }
   };
 
   const resetForm = () => {
@@ -103,7 +115,7 @@ const EditPlansAndPackages = () => {
   };
 
   const interestTypeOptions = [
-    { value: "Flat Rate", label: "Flat Rate", name: "interestRateType" },
+    { value: "Fixed Rate", label: "Fixed Rate", name: "interestRateType" },
     {
       value: "Reducing Balance",
       label: "Reducing balance",
@@ -132,7 +144,13 @@ const EditPlansAndPackages = () => {
   //   // )
   //   editPlan?.interestRateType
   // );
-  console.log(editPlan);
+  // console.log(editPlan);
+  const preventMinus = (e) => {
+    if (/[^0-9,]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+  console.log(editPlan?.interestRateType);
 
   useEffect(() => {
     setEditPlan({
@@ -170,7 +188,7 @@ const EditPlansAndPackages = () => {
             name={"interestRateType"}
             label={"Interest type"}
             value={interestTypeOptions.find(
-              (option) => option.value === editPlan.interestRateType
+              (option) => option.value === editPlan?.interestRateType
             )}
             optionValue={interestTypeOptions}
             onChange={handleInputChange}
@@ -180,7 +198,8 @@ const EditPlansAndPackages = () => {
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
-            inputType={"number"}
+            onKeyPress={preventMinus}
+            onWheel={() => document.activeElement.blur()}
             endIcon={<MdPercent size={20} className="text-swGray" />}
             name={"interestRate"}
             value={editPlan.interestRate}
@@ -193,9 +212,12 @@ const EditPlansAndPackages = () => {
                 label={"Loan amount range"}
                 required={true}
                 placeholder={"Minimum amount - 5000"}
+                ariaLabel={"Number input"}
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"minAmount"}
-                value={editPlan.minAmount}
+                value={editPlan?.minAmount?.toLocaleString()}
                 onChange={handleInputChange}
               />
             </div>
@@ -203,10 +225,12 @@ const EditPlansAndPackages = () => {
             <div className="w-full">
               <InputField
                 placeholder={"Maximum amount - 50000"}
-                inputType={"number"}
+                ariaLabel={"Number input"}
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"maxAmount"}
-                value={editPlan.maxAmount}
+                value={editPlan?.maxAmount?.toLocaleString()}
                 onChange={handleInputChange}
               />
             </div>

@@ -44,10 +44,20 @@ const CustomerRepayment = ({ loanId }) => {
 
   const setInputState = async (e) => {
     let { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    const ariaLabel = e.target.getAttribute("aria-label");
+
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: num,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSelectChange = async (selectedOption, name) => {
@@ -79,7 +89,9 @@ const CustomerRepayment = ({ loanId }) => {
     return apiData?.map((item) => ({
       id: item._id,
       createdAt: (
-        <div className="text-md font-[500] text-gray-700">{item?.dueDate.slice(0, 10)}</div>
+        <div className="text-md font-[500] text-gray-700">
+          {item?.dueDate.slice(0, 10)}
+        </div>
       ),
 
       amountDue: (
@@ -106,14 +118,20 @@ const CustomerRepayment = ({ loanId }) => {
       amountPaid: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-          ₦ {item?.amountPaid === null ? "0" : item?.amountPaid.toLocaleString()}
+            ₦{" "}
+            {item?.amountPaid === null
+              ? "0"
+              : item?.amountPaid.toLocaleString()}
           </div>
         </div>
       ),
       balanceToPay: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-          ₦ {item?.balanceToPay === null ? "0" : item?.balanceToPay.toLocaleString()}
+            ₦{" "}
+            {item?.balanceToPay === null
+              ? "0"
+              : item?.balanceToPay.toLocaleString()}
           </div>
         </div>
       ),
@@ -139,9 +157,15 @@ const CustomerRepayment = ({ loanId }) => {
     });
   };
 
+  const preventMinus = (e) => {
+    if (/[^0-9,]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const logRepaymentFunction = (e) => {
     setLoading(true);
-    setEnableLogRepaymentBtn(false)
+    setEnableLogRepaymentBtn(false);
     const data = new FormData();
     data.append("repaymentMethod", formData?.repaymentMethod);
     data.append("repaymentAmount", formData?.repaymentAmount);
@@ -153,24 +177,22 @@ const CustomerRepayment = ({ loanId }) => {
         resetFormData();
         setLogRepayment(!logRepayment);
         toast("Payment logged successfully");
-        setEnableLogRepaymentBtn(true)
+        setEnableLogRepaymentBtn(true);
         setLoading(false);
       })
       .catch((error) => {
         toast.error(`${error?.message}`);
         setLogRepayment(!logRepayment);
-        setEnableLogRepaymentBtn(true)
+        setEnableLogRepaymentBtn(true);
         setLoading(false);
       });
   };
-  
 
- 
   return (
     <div className="w-full">
       <ToastContainer />
       <div>
-        {enableLogRepaymentBtn == true  ?
+        {enableLogRepaymentBtn == true ? (
           <ReusableDataTable
             dataTransformer={customDataTransformer}
             headers={headers}
@@ -178,8 +200,8 @@ const CustomerRepayment = ({ loanId }) => {
             apiEndpoint={`https://secondwallet-stag.onrender.com/api/repayment/loan-application/${loanId}`}
             filters={false}
             pagination={false}
-          /> : null
-        }
+          />
+        ) : null}
       </div>
       <div className="mt-5 flex items-center justify-center">
         <Button
@@ -219,6 +241,9 @@ const CustomerRepayment = ({ loanId }) => {
                 label="Amount received"
                 required={true}
                 placeholder="Enter amount"
+                ariaLabel={"Number input"}
+                value={formData?.repaymentAmount?.toLocaleString()}
+                onKeyPress={preventMinus}
                 onChange={(e) => {
                   setInputState(e);
                 }}
@@ -292,12 +317,15 @@ const CustomerRepayment = ({ loanId }) => {
                 onClick={() => {
                   resetFormData();
                   setLogRepayment(!logRepayment);
-               
                 }}
               >
                 Cancel
               </Button>
-              <Button disabled={loading ? true : false} variant="secondary" onClick={logRepaymentFunction}>
+              <Button
+                disabled={loading ? true : false}
+                variant="secondary"
+                onClick={logRepaymentFunction}
+              >
                 Log Repayment
               </Button>
             </div>

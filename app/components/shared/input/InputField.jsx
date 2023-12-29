@@ -17,6 +17,8 @@ const InputField = ({
   disabled,
   maxLength,
   onKeyPress, // Add maxLength prop
+  onWheel,
+  ariaLabel,
 }) => {
   return (
     <div className="">
@@ -47,11 +49,14 @@ const InputField = ({
             required ? "border-gray-300" : "border-gray-300"
           } focus:outline-none focus:${borderColor} ${startIcon ? "pl-8" : ""}`}
           required={required}
+          aria-label={ariaLabel}
           onChange={onChange}
           value={value}
           disabled={disabled}
           max={maxLength} // Pass maxLength prop
+          // onKeyPress={onKeyPress}
           onKeyPress={onKeyPress}
+          onWheel={onWheel}
         />
 
         {endIcon && (

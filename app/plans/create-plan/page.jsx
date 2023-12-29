@@ -50,10 +50,20 @@ const CreatePlansAndPackages = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
-    setCreatePlan((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const ariaLabel = e.target.getAttribute("aria-label");
+
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setCreatePlan((prev) => ({
+        ...prev,
+        [name]: num,
+      }));
+    } else {
+      setCreatePlan((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const resetForm = () => {
@@ -105,10 +115,9 @@ const CreatePlansAndPackages = () => {
     return isValid;
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("submit pressed")
+    console.log("submit pressed");
     const isValid = validateForm();
     if (isValid) {
       const payload = {
@@ -155,6 +164,12 @@ const CreatePlansAndPackages = () => {
     { label: "Yearly", value: "Yearly", name: "repaymentInterval" },
   ];
 
+  const preventMinus = (e) => {
+    if (/[^0-9,]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
@@ -196,7 +211,8 @@ const CreatePlansAndPackages = () => {
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
-            inputType={"number"}
+            onKeyPress={preventMinus}
+            onWheel={() => document.activeElement.blur()}
             endIcon={<MdPercent size={20} className="text-swGray" />}
             name={"interestRate"}
             value={createPlan.interestRate}
@@ -212,9 +228,11 @@ const CreatePlansAndPackages = () => {
                 label={"Loan amount range"}
                 required={true}
                 placeholder={"Minimum amount - 5000"}
+                onKeyPress={preventMinus}
+                ariaLabel={"Number input"}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"minAmount"}
-                value={createPlan.minAmount}
+                value={createPlan.minAmount.toLocaleString()}
                 onChange={handleInputChange}
               />
             </div>
@@ -222,10 +240,12 @@ const CreatePlansAndPackages = () => {
             <div className="w-full">
               <InputField
                 placeholder={"Maximum amount - 50000"}
-                inputType={"number"}
+                onKeyPress={preventMinus}
+                ariaLabel={"Number input"}
+                onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"maxAmount"}
-                value={createPlan.maxAmount}
+                value={createPlan.maxAmount.toLocaleString()}
                 onChange={handleInputChange}
               />
             </div>
@@ -263,7 +283,10 @@ const CreatePlansAndPackages = () => {
             required={true}
             label={"Minimum collateral amount"}
             placeholder={"500,000"}
-            inputType={"number"}
+             
+             
+            onKeyPress={preventMinus}
+            onWheel={() => document.activeElement.blur()}
             endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
           />
 
@@ -281,7 +304,7 @@ const CreatePlansAndPackages = () => {
               </span>
             )}
           </div> */}
-{/* 
+          {/* 
           <div>
             <p className="mb-2 text-sm">
               Loan Description <span className="text-red-500">*</span>

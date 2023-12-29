@@ -10,6 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { FiUser } from "react-icons/fi";
+import EditableButton from "../../shared/editableButtonComponent/EditableButton";
+import { Rings } from "react-loader-spinner";
+import { IoMdCheckmark } from "react-icons/io";
 
 const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   const dispatch = useDispatch();
@@ -146,6 +149,12 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     }
   };
 
+  const preventMinus = (e) => {
+    if (/[^0-9,]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     if (
       formData?.profilePicture !== null &&
@@ -249,6 +258,8 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
                     <InputField
                       label="Phone number"
                       name="phoneNumber"
+                      onKeyPress={preventMinus}
+                      onWheel={() => document.activeElement.blur()}
                       placeholder="Phone number"
                       onChange={handleInputChange}
                     />
@@ -297,20 +308,46 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
           </div>
 
           <div className="p-3 border-t flex items-center justify-end gap-2 bg-white">
-            <button
+            {/* <button
               type="button"
               onClick={onClose}
               className="border text-swGray font-semibold p-2 px-16 rounded-md"
             >
               Cancel
-            </button>
-            <Button
+            </button> */}
+            {/* <Button
               disabled={loading === "pending" ? true : false}
               onClick={handleSubmit}
               className="block  rounded-full"
             >
               {loading === "pending" ? "Processing" : " Create User"}
-            </Button>
+            </Button> */}
+            <EditableButton
+              whiteBtn={true}
+              label={"Cancel"}
+              onClick={onClose}
+            />
+            <EditableButton
+              blueBtn={true}
+              disabled={loading === "pending" ? true : false}
+              startIcon={
+                loading === "pending" && (
+                  <Rings
+                    height="20"
+                    width="20"
+                    color="#ffffff"
+                    radius="2"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                    ariaLabel="rings-loading"
+                  />
+                )
+              }
+              label={"Create user"}
+              endIcon={<IoMdCheckmark size={20} />}
+              onClick={handleSubmit}
+            />
           </div>
         </div>
       </form>

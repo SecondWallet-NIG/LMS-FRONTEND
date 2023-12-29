@@ -190,7 +190,7 @@ const CreateCustomer = () => {
   }));
 
   const preventMinus = (e) => {
-    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+    if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
     }
   };
@@ -262,7 +262,7 @@ const CreateCustomer = () => {
         resetForm();
         openModal();
         setNewUserId(response?.data?._id);
-        setProfileImg(null)
+        setProfileImg(null);
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -286,6 +286,10 @@ const CreateCustomer = () => {
       console.error("Invalid file type selected.");
     }
   }, [formData?.profilePicture]);
+
+  function preventScroll(event) {
+    event.preventDefault();
+  }
 
   const handleBulkCustomerSubmit = (e) => {
     const payload = new FormData();
@@ -448,9 +452,8 @@ const CreateCustomer = () => {
                 required={true}
                 name="nin"
                 activeBorderColor="border-swBlue"
-                inputType="number"
-                min="0"
                 onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 label="NIN"
                 placeholder="NIN"
                 isActive="loan-amount"
@@ -465,9 +468,8 @@ const CreateCustomer = () => {
               <InputField
                 required={true}
                 name="bvn"
-                inputType="number"
-                min="0"
                 onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 activeBorderColor="border-swBlue"
                 label="Bank Verification Number"
                 placeholder="Bank Verification Number"
@@ -542,9 +544,8 @@ const CreateCustomer = () => {
                   <InputField
                     name="phoneNumber"
                     placeholder="Phone Number"
-                    inputType="number"
-                    min="0"
                     onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     required={true}
                     activeBorderColor="border-swBlue"
                     label="Phone number"
@@ -587,7 +588,8 @@ const CreateCustomer = () => {
                     maxLength={10}
                     name="accountNumber"
                     placeholder="Account number"
-                    inputType="text"
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     required={true}
                     activeBorderColor="border-swBlue"
                     label="Account Number"

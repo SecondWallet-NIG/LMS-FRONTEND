@@ -52,11 +52,20 @@ const PersonalInformation = ({ userData, loading }) => {
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
+    const ariaLabel = e.target.getAttribute("aria-label");
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    if (ariaLabel === "Number input") {
+      const num = Number(value.replace(/\D/g, ""));
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: num,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
 
     if (name === "accountNumber" && value.length === 10) {
       const selectedBankOption = formData.bankName;
@@ -116,11 +125,10 @@ const PersonalInformation = ({ userData, loading }) => {
   }));
 
   const preventMinus = (e) => {
-    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+    if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
     }
   };
-
   const handleStateChange = (selectedOption) => {
     const selectedState = selectedOption?.value || selectedOption;
     const selectedLgas =
@@ -393,9 +401,8 @@ const PersonalInformation = ({ userData, loading }) => {
           required={true}
           name="nin"
           activeBorderColor="border-swBlue"
-          inputType="number"
-          min="0"
           onKeyPress={preventMinus}
+          onWheel={() => document.activeElement.blur()}
           value={formData.nin}
           label="NIN"
           placeholder="NIN"
@@ -411,10 +418,9 @@ const PersonalInformation = ({ userData, loading }) => {
         <InputField
           required={true}
           name="bvn"
-          inputType="number"
           value={formData.bvn}
-          min="0"
           onKeyPress={preventMinus}
+          onWheel={() => document.activeElement.blur()}
           activeBorderColor="border-swBlue"
           label="Bank Verification Number"
           placeholder="Bank Verification Number"
@@ -495,10 +501,9 @@ const PersonalInformation = ({ userData, loading }) => {
             <InputField
               name="phoneNumber"
               placeholder="Phone Number"
-              inputType="number"
-              min="0"
-              value={formData.phoneNumber}
               onKeyPress={preventMinus}
+              onWheel={() => document.activeElement.blur()}
+              value={formData.phoneNumber}
               required={true}
               activeBorderColor="border-swBlue"
               label="Phone number"
@@ -545,6 +550,7 @@ const PersonalInformation = ({ userData, loading }) => {
               maxLength={10}
               name="accountNumber"
               placeholder="Account number"
+              onKeyPress={preventMinus}
               inputType="text"
               required={true}
               value={formData.accountNumber}
