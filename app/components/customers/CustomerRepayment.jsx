@@ -242,7 +242,7 @@ const CustomerRepayment = ({ loanId }) => {
                 required={true}
                 placeholder="Enter amount"
                 ariaLabel={"Number input"}
-                value={formData.repaymentAmount.toLocaleString()}
+                value={formData?.repaymentAmount?.toLocaleString()}
                 onKeyPress={preventMinus}
                 onChange={(e) => {
                   setInputState(e);

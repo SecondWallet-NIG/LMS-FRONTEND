@@ -190,7 +190,7 @@ const WorkInformation = ({ userData, loading }) => {
           <div className="w-1/2">
             <InputField
               name="monthlyIncome"
-              value={formData.monthlyIncome.toLocaleString()}
+              value={formData?.monthlyIncome?.toLocaleString()}
               label="Income Per Period"
               onKeyPress={preventMinus}
               ariaLabel={"Number input"}

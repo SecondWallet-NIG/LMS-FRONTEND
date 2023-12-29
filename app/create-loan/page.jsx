@@ -437,7 +437,7 @@ const CreateLoan = () => {
                 activeBorderColor="border-swBlue"
                 endIcon={<p className="text-swGray">NGN &#8358;</p>}
                 label="Loan amount (Principal)"
-                value={formData.loanAmount.toLocaleString()}
+                value={formData?.loanAmount?.toLocaleString()}
                 placeholder="Enter loan amount"
                 isActive="loan-amount"
                 onChange={(e) => {

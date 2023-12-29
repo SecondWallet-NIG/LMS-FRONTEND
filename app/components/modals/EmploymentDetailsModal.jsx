@@ -344,7 +344,7 @@ const EmploymentDetailsModal = ({
               <div className="w-1/2">
                 <InputField
                   name="monthlyIncome"
-                  value={formData.monthlyIncome.toLocaleString()}
+                  value={formData?.monthlyIncome?.toLocaleString()}
                   ariaLabel={"Number input"}
                   label="Income Per Period"
                   onKeyPress={preventMinus}
