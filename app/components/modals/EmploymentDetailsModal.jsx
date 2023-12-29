@@ -25,17 +25,15 @@ const EmploymentDetailsModal = ({
   const { id } = useParams();
   const dispatch = useDispatch();
   const router = useRouter();
-  
+
   const { loading } = useSelector((state) => state.user);
   const [user, setUser] = useState({});
 
-  
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
     }
   }, []);
-
 
   const [formData, setFormData] = useState({
     employerName: "",
@@ -89,6 +87,12 @@ const EmploymentDetailsModal = ({
     }));
   };
 
+  const preventMinus = (e) => {
+    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+      e.preventDefault();
+    }
+  };
+
   const handleSelectChange = async (selectedOption, name) => {
     setFormData({
       ...formData,
@@ -139,7 +143,7 @@ const EmploymentDetailsModal = ({
     setErrors(newErrors);
     return isValid;
   };
-   
+
   const resetForm = () => {
     setFormData({
       employerName: "",
@@ -151,7 +155,6 @@ const EmploymentDetailsModal = ({
       employerAddress: "",
       incomePeriod: "",
     });
-
   };
 
   const handleSubmit = (e) => {
@@ -185,12 +188,6 @@ const EmploymentDetailsModal = ({
         .catch((error) => {
           toast.error(error?.message);
         });
-    }
-  };
-
-  const preventMinus = (e) => {
-    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
-      e.preventDefault();
     }
   };
 
@@ -273,9 +270,10 @@ const EmploymentDetailsModal = ({
                 <InputField
                   name="employerPhone"
                   label="Employer Contact"
-                  inputType={"number"}
+                  inputType="number"
                   min="0"
-                  // onKeyPress={preventMinus}
+                  onKeyPress={preventMinus}
+                  onWheel={() => document.activeElement.blur()}
                   required={true}
                   placeholder="Employer phone number"
                   onChange={handleInputChange}
@@ -340,9 +338,10 @@ const EmploymentDetailsModal = ({
                   name="monthlyIncome"
                   value={formData.monthlyIncome}
                   label="Income Per Period"
-                  inputType={"number"}
+                  inputType="number"
                   min="0"
                   onKeyPress={preventMinus}
+                  onWheel={() => document.activeElement.blur()}
                   includeComma={true}
                   required={true}
                   placeholder="Income per period"

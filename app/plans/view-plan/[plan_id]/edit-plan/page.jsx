@@ -132,7 +132,12 @@ const EditPlansAndPackages = () => {
   //   // )
   //   editPlan?.interestRateType
   // );
-  console.log(editPlan);
+  // console.log(editPlan);
+  const preventMinus = (e) => {
+    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+      e.preventDefault();
+    }
+  };
 
   useEffect(() => {
     setEditPlan({
@@ -180,7 +185,10 @@ const EditPlansAndPackages = () => {
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
-            inputType={"number"}
+            inputType="number"
+            min="0"
+            onKeyPress={preventMinus}
+            onWheel={() => document.activeElement.blur()}
             endIcon={<MdPercent size={20} className="text-swGray" />}
             name={"interestRate"}
             value={editPlan.interestRate}
@@ -193,6 +201,10 @@ const EditPlansAndPackages = () => {
                 label={"Loan amount range"}
                 required={true}
                 placeholder={"Minimum amount - 5000"}
+                inputType="number"
+                min="0"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"minAmount"}
                 value={editPlan.minAmount}
@@ -203,7 +215,10 @@ const EditPlansAndPackages = () => {
             <div className="w-full">
               <InputField
                 placeholder={"Maximum amount - 50000"}
-                inputType={"number"}
+                inputType="number"
+                min="0"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"maxAmount"}
                 value={editPlan.maxAmount}

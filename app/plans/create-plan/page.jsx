@@ -105,10 +105,9 @@ const CreatePlansAndPackages = () => {
     return isValid;
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("submit pressed")
+    console.log("submit pressed");
     const isValid = validateForm();
     if (isValid) {
       const payload = {
@@ -155,6 +154,12 @@ const CreatePlansAndPackages = () => {
     { label: "Yearly", value: "Yearly", name: "repaymentInterval" },
   ];
 
+  const preventMinus = (e) => {
+    if (e.code === "Minus" || e.key === "e" || e.key === "E") {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
@@ -196,7 +201,10 @@ const CreatePlansAndPackages = () => {
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
-            inputType={"number"}
+            inputType="number"
+            min="0"
+            onKeyPress={preventMinus}
+            onWheel={() => document.activeElement.blur()}
             endIcon={<MdPercent size={20} className="text-swGray" />}
             name={"interestRate"}
             value={createPlan.interestRate}
@@ -222,7 +230,10 @@ const CreatePlansAndPackages = () => {
             <div className="w-full">
               <InputField
                 placeholder={"Maximum amount - 50000"}
-                inputType={"number"}
+                inputType="number"
+                min="0"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
                 name={"maxAmount"}
                 value={createPlan.maxAmount}
@@ -263,7 +274,10 @@ const CreatePlansAndPackages = () => {
             required={true}
             label={"Minimum collateral amount"}
             placeholder={"500,000"}
-            inputType={"number"}
+            inputType="number"
+            min="0"
+            onKeyPress={preventMinus}
+            onWheel={() => document.activeElement.blur()}
             endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
           />
 
@@ -281,7 +295,7 @@ const CreatePlansAndPackages = () => {
               </span>
             )}
           </div> */}
-{/* 
+          {/* 
           <div>
             <p className="mb-2 text-sm">
               Loan Description <span className="text-red-500">*</span>

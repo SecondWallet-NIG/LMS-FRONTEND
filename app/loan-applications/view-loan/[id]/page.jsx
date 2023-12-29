@@ -170,7 +170,7 @@ const ViewLoan = () => {
             progress: undefined,
           });
         });
-    }  else if (update === "interestRate") {
+    } else if (update === "interestRate") {
       let updatedData = new FormData();
       updatedData.append("interestRate", interestRate / 100);
 
@@ -293,12 +293,11 @@ const ViewLoan = () => {
     if (data) {
       setLoanAmount(data?.data?.loanApplication?.loanAmount);
     }
-   dispatch(getLoanApprovals(id));
+    dispatch(getLoanApprovals(id));
     dispatch(getAllUsers());
     dispatch(getSingleLoan(id));
     dispatch(getLoanPackage());
     dispatch(getInterestType());
-
   }, []);
 
   return (
@@ -1057,6 +1056,10 @@ const ViewLoan = () => {
           <InputField
             label={"Enter new interest rate"}
             value={interestRate}
+            inputType="number"
+            min="0"
+            onKeyPress={preventMinus}
+            onWheel={() => document.activeElement.blur()}
             onChange={(e) => setInterestRate(e.target.value)}
           />
           <Button
@@ -1145,6 +1148,7 @@ const ViewLoan = () => {
                 inputType="number"
                 min="0"
                 onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 activeBorderColor="border-swBlue"
                 placeholder="Enter number"
                 onChange={(e) => {

@@ -12,7 +12,6 @@ import { useParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const WorkInformation = ({ userData, loading }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -138,9 +137,10 @@ const WorkInformation = ({ userData, loading }) => {
             <InputField
               name="employerPhone"
               label="Employer Contact"
-              inputType={"number"}
+              inputType="number"
               min="0"
-              // onKeyPress={preventMinus}
+              onKeyPress={preventMinus}
+              onWheel={() => document.activeElement.blur()}
               required={true}
               placeholder="Employer phone number"
               onChange={handleInputChange}
@@ -185,9 +185,10 @@ const WorkInformation = ({ userData, loading }) => {
               name="monthlyIncome"
               value={formData.monthlyIncome}
               label="Income Per Period"
-              inputType={"number"}
+              inputType="number"
               min="0"
               onKeyPress={preventMinus}
+              onWheel={() => document.activeElement.blur()}
               includeComma={true}
               required={true}
               placeholder="Income per period"

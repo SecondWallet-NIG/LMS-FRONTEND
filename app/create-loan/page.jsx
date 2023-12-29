@@ -40,7 +40,7 @@ const CreateLoan = () => {
   const [loanPackageText, setLoanPackageText] = useState(null);
   const [loanPackageRate, setLoanPackageRate] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState()
+  const [isLoading, setIsLoading] = useState();
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
 
@@ -334,7 +334,6 @@ const CreateLoan = () => {
   }, []);
 
   useEffect(() => {
-    
     const data = JSON.parse(localStorage.getItem("borrower"));
     setFormData({
       ...formData,
@@ -427,6 +426,7 @@ const CreateLoan = () => {
                 inputType="number"
                 min="0"
                 onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 activeBorderColor="border-swBlue"
                 endIcon={<p className="text-swGray">NGN &#8358;</p>}
                 label="Loan amount (Principal)"
@@ -481,6 +481,7 @@ const CreateLoan = () => {
                     inputType="number"
                     min="0"
                     onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter number"
                     onChange={(e) => {
@@ -501,6 +502,7 @@ const CreateLoan = () => {
                     inputType="number"
                     min="0"
                     onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter Value"
                     onChange={(e) => {
@@ -521,6 +523,7 @@ const CreateLoan = () => {
                     inputType="number"
                     min="0"
                     onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter Value"
                     onChange={(e) => {
@@ -558,6 +561,7 @@ const CreateLoan = () => {
                     inputType="number"
                     min="0"
                     onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     value={formData.numberOfRepayment}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter number of repayment"
@@ -625,7 +629,8 @@ const CreateLoan = () => {
                     name="commitmentValue"
                     inputType="number"
                     min="0"
- onKeyPress={preventMinus}
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     placeholder="Enter Value"
                     endIcon={<p className="text-swGray">%</p>}
@@ -862,7 +867,6 @@ const CreateLoan = () => {
                   <img
                     src="https://png.pngtree.com/png-clipart/20200224/original/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_5247852.jpg"
                     alt="borrower"
-
                   />
                 </div>
                 <p className="text-xl font-semibold">Select Borrower</p>
@@ -1016,12 +1020,12 @@ const CreateLoan = () => {
                   >
                     Compute Interest
                   </Button>
-     
+
                   <EditableButton
                     blueBtn={true}
                     disabled={loading ? true : false}
                     startIcon={
-                      loading  && (
+                      loading && (
                         <Rings
                           height="20"
                           width="20"
@@ -1239,7 +1243,6 @@ const CreateLoan = () => {
                   >
                     Create Loan
                   </Button>
-                  
                 </div>
               </div>
             </div>

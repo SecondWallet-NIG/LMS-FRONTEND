@@ -390,6 +390,7 @@ const PersonalInformation = ({ userData, loading }) => {
           inputType="number"
           min="0"
           onKeyPress={preventMinus}
+          onWheel={() => document.activeElement.blur()}
           value={formData.nin}
           label="NIN"
           placeholder="NIN"
@@ -405,10 +406,11 @@ const PersonalInformation = ({ userData, loading }) => {
         <InputField
           required={true}
           name="bvn"
-          inputType="number"
           value={formData.bvn}
+          inputType="number"
           min="0"
           onKeyPress={preventMinus}
+          onWheel={() => document.activeElement.blur()}
           activeBorderColor="border-swBlue"
           label="Bank Verification Number"
           placeholder="Bank Verification Number"
@@ -491,8 +493,9 @@ const PersonalInformation = ({ userData, loading }) => {
               placeholder="Phone Number"
               inputType="number"
               min="0"
-              value={formData.phoneNumber}
               onKeyPress={preventMinus}
+              onWheel={() => document.activeElement.blur()}
+              value={formData.phoneNumber}
               required={true}
               activeBorderColor="border-swBlue"
               label="Phone number"

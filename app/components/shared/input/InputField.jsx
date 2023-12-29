@@ -17,6 +17,7 @@ const InputField = ({
   disabled,
   maxLength,
   onKeyPress, // Add maxLength prop
+  onWheel,
 }) => {
   return (
     <div className="">
@@ -52,6 +53,7 @@ const InputField = ({
           disabled={disabled}
           max={maxLength} // Pass maxLength prop
           onKeyPress={onKeyPress}
+          onWheel={onWheel}
         />
 
         {endIcon && (

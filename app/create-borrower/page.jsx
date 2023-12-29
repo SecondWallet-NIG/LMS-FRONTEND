@@ -274,7 +274,7 @@ const CreateCustomer = () => {
         resetForm();
         openModal();
         setNewUserId(response?.data?._id);
-        setProfileImg(null)
+        setProfileImg(null);
       })
       .catch((error) => {
         toast.error(`An error occured`);
@@ -298,6 +298,10 @@ const CreateCustomer = () => {
       console.error("Invalid file type selected.");
     }
   }, [formData?.profilePicture]);
+
+  function preventScroll(event) {
+    event.preventDefault();
+  }
 
   const handleBulkCustomerSubmit = (e) => {
     const payload = new FormData();
@@ -463,6 +467,7 @@ const CreateCustomer = () => {
                 inputType="number"
                 min="0"
                 onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 label="NIN"
                 placeholder="NIN"
                 isActive="loan-amount"
@@ -480,6 +485,7 @@ const CreateCustomer = () => {
                 inputType="number"
                 min="0"
                 onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 activeBorderColor="border-swBlue"
                 label="Bank Verification Number"
                 placeholder="Bank Verification Number"
@@ -557,6 +563,7 @@ const CreateCustomer = () => {
                     inputType="number"
                     min="0"
                     onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     required={true}
                     activeBorderColor="border-swBlue"
                     label="Phone number"
@@ -599,7 +606,10 @@ const CreateCustomer = () => {
                     maxLength={10}
                     name="accountNumber"
                     placeholder="Account number"
-                    inputType="text"
+                    inputType="number"
+                    min="0"
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
                     required={true}
                     activeBorderColor="border-swBlue"
                     label="Account Number"
