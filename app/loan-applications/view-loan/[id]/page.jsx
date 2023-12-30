@@ -222,6 +222,25 @@ const ViewLoan = () => {
       let updatedData = new FormData();
 
       updatedData.append("loanFrequencyType", formData.loanFrequencyType);
+      // if (
+      //   formData.loanFrequencyType === "Monthly" &&
+      //   data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
+      // ) {
+      //   updatedData.append(
+      //     "numberOfRepayment",
+      //     data?.data?.loanApplication?.loanDuration
+      //   );
+      // }
+      // else if ()
+      // data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
+      //   ? updatedData.append(
+      //       "numberOfRepayment",
+      //       data?.data?.loanApplication?.loanDuration
+      //     )
+      //   : updatedData.append(
+      //       "numberOfRepayment",
+      //       data?.data?.loanApplication?.loanDuration / 3
+      //     );
       dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
         .unwrap()
         .then(() => {
@@ -1071,12 +1090,13 @@ const ViewLoan = () => {
               }}
             />
           </div>
-
-          <InputField
-            label={"Enter new loan amount"}
-            value={loanAmount}
-            onChange={(e) => setLoanAmount(e.target.value)}
-          />
+          <div className="w-full mb-3">
+            <InputField
+              label={"Enter new loan amount"}
+              value={loanAmount}
+              onChange={(e) => setLoanAmount(e.target.value)}
+            />
+          </div>
           <EditableButton
             blueBtn={true}
             disabled={
@@ -1086,9 +1106,8 @@ const ViewLoan = () => {
             }
             onClick={() => updateLoan("loanAmount")}
             className="w-full"
+            label={"Update Amount"}
           />
-          {/* Update Amount
-          </Button> */}
         </div>
       </CenterModal>
 
@@ -1103,29 +1122,30 @@ const ViewLoan = () => {
               }}
             />
           </div>
-          <SelectField
-            value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
-              (option) => option.value === formData.loanPackage
-            )}
-            // disabled={selectedCustomer === null ? true : false}
-            name="loanPackage"
-            optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
-            label={"Loan Package "}
-            required={true}
-            placeholder={"Select loan package"}
-            isSearchable={false}
-            onChange={(selectedOption) => {
-              handleSelectChange(selectedOption, "loanPackage");
-            }}
-          />
+          <div className="w-full mb-3">
+            <SelectField
+              value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
+                (option) => option.value === formData.loanPackage
+              )}
+              // disabled={selectedCustomer === null ? true : false}
+              name="loanPackage"
+              optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
+              label={"Loan Package "}
+              required={true}
+              placeholder={"Select loan package"}
+              isSearchable={false}
+              onChange={(selectedOption) => {
+                handleSelectChange(selectedOption, "loanPackage");
+              }}
+            />
+          </div>
           <EditableButton
+            blueBtn={true}
             onClick={() => updateLoan("loanPackage")}
             className="w-full"
             label={"Update Loan Package"}
             disabled={loading ? true : false}
           />
-          {/* Update Loan Package
-          </Button> */}
         </div>
       </CenterModal>
 
