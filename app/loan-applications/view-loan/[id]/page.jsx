@@ -40,6 +40,7 @@ import { AiOutlinePaperClip } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaDownload } from "react-icons/fa6";
 import CustomerPaymentHistory from "@/app/components/customers/CustomerHistoryPayment";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -65,6 +66,7 @@ const ViewLoan = () => {
   const [openInterestType, setOpenInterestType] = useState(false);
   const [openRepaymentType, setOpenRepaymentType] = useState(false);
   const [openLoanPeriod, setOpenLoanPeriod] = useState(false);
+  const [openLoanFrequency, setOpenLoanFrequency] = useState(false);
   const [loanDurationVal, setLoanDurationVal] = useState(0);
 
   const router = useRouter();
@@ -117,6 +119,11 @@ const ViewLoan = () => {
     });
   };
 
+  const frequencyTypeData = [
+    { value: "Monthly", label: "Monthly" },
+    { value: "Quarterly", label: "Quarterly" },
+  ];
+
   const handleDownload = async () => {
     const downloadUrl = data?.data?.loanApplication?.offerLetter;
     try {
@@ -155,6 +162,7 @@ const ViewLoan = () => {
   };
 
   const updateLoan = (update) => {
+    setLoading(true);
     if (update === "loanAmount") {
       let updatedData = new FormData();
 
@@ -166,6 +174,7 @@ const ViewLoan = () => {
           dispatch(getSingleLoan(id));
           setOpenLoanAmount(false);
           setFormData({});
+          setLoading(false);
         })
         .catch((error) => {
           console.log({ error });
@@ -180,6 +189,7 @@ const ViewLoan = () => {
             draggable: true,
             progress: undefined,
           });
+          setLoading(false);
         });
     } else if (update === "interestRate") {
       let updatedData = new FormData();
@@ -191,6 +201,7 @@ const ViewLoan = () => {
           dispatch(getSingleLoan(id));
           setOpenLoanAmount(false);
           setFormData({});
+          setLoading(false);
         })
         .catch((error) => {
           console.log({ error });
@@ -205,10 +216,48 @@ const ViewLoan = () => {
             draggable: true,
             progress: undefined,
           });
+          setLoading(false);
+        });
+    } else if (update === "loanFrequencyType") {
+      let updatedData = new FormData();
+
+      updatedData.append("loanFrequencyType", formData.loanFrequencyType);
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+        .unwrap()
+        .then(() => {
+          dispatch(getSingleLoan(id));
+          setOpenLoanPackage(false);
+          setOpenInterestType(false);
+          setOpenRepaymentType(false);
+          setOpenLoanFrequency(false);
+          setOpenLoanPeriod(false);
+          setFormData({});
+          setLoading(false);
+        })
+        .catch((error) => {
+          dispatch(getSingleLoan(id));
+          setOpenLoanPackage(false);
+          setOpenInterestType(false);
+          setOpenRepaymentType(false);
+          setOpenLoanFrequency(false);
+          setOpenLoanPeriod(false);
+          setFormData({});
+          toast.error(error?.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoading(false);
         });
     } else {
       let updatedData = new FormData();
       updatedData.append(update, formData[update]);
+      updatedData.append("loanDurationMetrics", formData.loanDurationMetrics);
+      // console.log(...updatedData);
 
       dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
         .unwrap()
@@ -219,6 +268,7 @@ const ViewLoan = () => {
           setOpenRepaymentType(false);
           setOpenLoanPeriod(false);
           setFormData({});
+          setLoading(false);
         })
         .catch((error) => {
           dispatch(getSingleLoan(id));
@@ -236,6 +286,7 @@ const ViewLoan = () => {
             draggable: true,
             progress: undefined,
           });
+          setLoading(false);
         });
     }
   };
@@ -418,7 +469,8 @@ const ViewLoan = () => {
                           "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
                         }
                         disabled={
-                          data?.data?.loanApplication?.status === "Ready for Disbursal"
+                          data?.data?.loanApplication?.status ===
+                          "Ready for Disbursal"
                             ? false
                             : true
                         }
@@ -618,7 +670,16 @@ const ViewLoan = () => {
 
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p>{data?.data?.loanApplication?.repaymentType} </p>
+                        {/* <p>{data?.data?.loanApplication?.repaymentType} </p> */}
+                        <p>
+                          {
+                            repaymentTypeData.find(
+                              (option) =>
+                                option.value ===
+                                data?.data?.loanApplication?.repaymentType
+                            )?.label
+                          }
+                        </p>
                         <div
                           className="p-2 rounded-md hover:bg-white cursor-pointer"
                           onClick={() => {
@@ -641,7 +702,7 @@ const ViewLoan = () => {
                             setLoanAmount(
                               data?.data?.loanApplication?.loanAmount
                             );
-                            setOpenLoanAmount(true);
+                            setOpenLoanFrequency(true);
                           }}
                         >
                           <MdEdit size={15} />
@@ -1016,17 +1077,18 @@ const ViewLoan = () => {
             value={loanAmount}
             onChange={(e) => setLoanAmount(e.target.value)}
           />
-          <Button
+          <EditableButton
+            blueBtn={true}
             disabled={
               loanAmount == data?.data?.loanApplication?.loanAmount
                 ? true
                 : false
             }
             onClick={() => updateLoan("loanAmount")}
-            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-          >
-            Update Amount
-          </Button>
+            className="w-full"
+          />
+          {/* Update Amount
+          </Button> */}
         </div>
       </CenterModal>
 
@@ -1056,12 +1118,14 @@ const ViewLoan = () => {
               handleSelectChange(selectedOption, "loanPackage");
             }}
           />
-          <Button
+          <EditableButton
             onClick={() => updateLoan("loanPackage")}
-            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-          >
-            Update Loan Package
-          </Button>
+            className="w-full"
+            label={"Update Loan Package"}
+            disabled={loading ? true : false}
+          />
+          {/* Update Loan Package
+          </Button> */}
         </div>
       </CenterModal>
 
@@ -1076,19 +1140,22 @@ const ViewLoan = () => {
               }}
             />
           </div>
-          <InputField
-            label={"Enter new interest rate"}
-            value={interestRate}
-            onKeyPress={preventMinus}
-            onWheel={() => document.activeElement.blur()}
-            onChange={(e) => setInterestRate(e.target.value)}
-          />
-          <Button
+          <div className="w-full mb-3">
+            <InputField
+              label={"Enter new interest rate"}
+              value={interestRate}
+              onKeyPress={preventMinus}
+              onWheel={() => document.activeElement.blur()}
+              onChange={(e) => setInterestRate(e.target.value)}
+            />
+          </div>
+          <EditableButton
+            blueBtn={true}
             onClick={() => updateLoan("interestRate")}
-            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-          >
-            Update
-          </Button>
+            className="w-full"
+            label={"Update interest rate"}
+            disabled={loading ? true : false}
+          />
         </div>
       </CenterModal>
 
@@ -1103,32 +1170,35 @@ const ViewLoan = () => {
               }}
             />
           </div>
-          <SelectField
-            value={repaymentTypeData.find(
-              (option) => option.value === formData.repaymentType
-            )}
-            name="repaymentType"
-            // disabled={formData.numberOfRepayment === 0 ? true : false}
-            optionValue={
-              data?.data?.loanPackageDetails?.interestRate?.rateType ===
-              "Reducing Balance"
-                ? reducingBalrepaymentTypeData
-                : repaymentTypeData
-            }
-            label={"Repayment Type"}
-            required={true}
-            placeholder={"Select repayment type"}
-            isSearchable={false}
-            onChange={(selectedOption) => {
-              handleSelectChange(selectedOption, "repaymentType");
-            }}
-          />
-          <Button
+          <div className="w-full mb-3">
+            <SelectField
+              value={repaymentTypeData.find(
+                (option) => option.value === formData.repaymentType
+              )}
+              name="repaymentType"
+              // disabled={formData.numberOfRepayment === 0 ? true : false}
+              optionValue={
+                data?.data?.loanPackageDetails?.interestRate?.rateType ===
+                "Reducing Balance"
+                  ? reducingBalrepaymentTypeData
+                  : repaymentTypeData
+              }
+              label={"Repayment Type"}
+              required={true}
+              placeholder={"Select repayment type"}
+              isSearchable={false}
+              onChange={(selectedOption) => {
+                handleSelectChange(selectedOption, "repaymentType");
+              }}
+            />
+          </div>
+          <EditableButton
+            blueBtn={true}
             onClick={() => updateLoan("repaymentType")}
-            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-          >
-            Update repayment type
-          </Button>
+            className="w-full"
+            label={"update repayment type"}
+            disabled={loading ? true : false}
+          />
         </div>
       </CenterModal>
 
@@ -1144,7 +1214,7 @@ const ViewLoan = () => {
             />
           </div>
 
-          <div className="flex gap-2 items-end">
+          <div className="flex gap-2 items-end mb-3">
             <div className="w-1/3">
               <SelectField
                 value={loanDurationMetricsData.find(
@@ -1177,12 +1247,54 @@ const ViewLoan = () => {
             </div>
           </div>
 
-          <Button
+          <EditableButton
+            blueBtn={true}
             onClick={() => updateLoan("loanDuration")}
-            className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
-          >
-            Update loan period
-          </Button>
+            className="w-full"
+            label={"Update loan period"}
+            disabled={loading ? true : false}
+          />
+        </div>
+      </CenterModal>
+
+      {/* Loan frequency modal */}
+      <CenterModal isOpen={openLoanFrequency} width={"35%"}>
+        <div className="p-4 overflow-x-auto">
+          <div className="flex justify-end cursor-pointer">
+            <MdClose
+              size={20}
+              onClick={() => {
+                setOpenLoanFrequency(!openLoanFrequency);
+              }}
+            />
+          </div>
+
+          <div className="flex gap-2 items-end">
+            <div className="w-full mb-3">
+              <SelectField
+                value={frequencyTypeData.find(
+                  (option) => option.value === formData.loanFrequencyType
+                )}
+                name="loanFrequencyType"
+                optionValue={frequencyTypeData}
+                label={"Loan Frequency Type"}
+                required={true}
+                placeholder={"Select frequency type"}
+                isSearchable={false}
+                onChange={(selectedOption) => {
+                  handleSelectChange(selectedOption, "loanFrequencyType");
+                }}
+              />
+            </div>
+          </div>
+
+          <EditableButton
+            blueBtn={true}
+            onClick={() => updateLoan("loanFrequencyType")}
+            disabled={loading ? true : false}
+            label="Update loan period"
+            className={"w-full"}
+          />
         </div>
       </CenterModal>
 
@@ -1242,10 +1354,8 @@ const ViewLoan = () => {
                 placeholder="Enter amount"
                 onChange={(e) => {
                   setDisbursementInputState(e);
-                  //  calCommitmentTotal(e);
                 }}
                 value={data?.data?.loanApplication?.loanAmount}
-                //   hintText="Amount paid that received the current repayment amount will spill into the next repayment cycle"
               />
             </div>
             <div className="pt-4">
