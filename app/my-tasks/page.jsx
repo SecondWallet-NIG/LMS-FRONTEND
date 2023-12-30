@@ -31,9 +31,21 @@ const MyTasks = () => {
     <DashboardLayout>
       <main className="p-8">
         <div className="flex gap-5">
-          <MyTasksCard header={"all tasks"} data={data?.totalCount} />
-          <MyTasksCard header={"completed tasks"} data={data?.doneCount} />
-          <MyTasksCard header={"pending tasks"} data={data?.pendingCount} />
+          <MyTasksCard
+            header={"all tasks"}
+            data={data?.totalCount}
+            onClick={() => setActivityButton("allTasks")}
+          />
+          <MyTasksCard
+            header={"completed tasks"}
+            data={data?.doneCount}
+            onClick={() => setActivityButton("completedTasks")}
+          />
+          <MyTasksCard
+            header={"pending tasks"}
+            data={data?.pendingCount}
+            onClick={() => setActivityButton("pendingTasks")}
+          />
         </div>
         <div className="flex gap-2 text-xs lg:text-sm mt-8">
           <button

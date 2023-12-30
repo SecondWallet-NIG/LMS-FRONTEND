@@ -154,6 +154,7 @@ const AccountPage = () => {
             <InputField
               label={"First name"}
               required={true}
+              disabled={true}
               startIcon={<FiUser size={20} />}
               placeholder={"John"}
               value={formData?.firstName}
@@ -166,6 +167,7 @@ const AccountPage = () => {
             <InputField
               label={"Last name"}
               required={true}
+              disabled={true}
               startIcon={<FiUser size={20} />}
               placeholder={"Doe"}
               value={formData?.lastName}
@@ -244,10 +246,11 @@ const AccountPage = () => {
       </div>
 
       <div className="flex justify-end gap-3 mt-5 p-3 border-t">
-        <EditableButton whiteBtn={true} label={"Cancel"} />
+        <EditableButton whiteBtn={true} label={"Cancel"} disabled={true} />
         <EditableButton
           blueBtn={true}
-          disabled={loading ? true : false}
+          // disabled={loading ? true : false}
+          disabled={true}
           label={"Save changes"}
           onClick={handleSubmit}
         />
