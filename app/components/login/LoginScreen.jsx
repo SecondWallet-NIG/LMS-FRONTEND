@@ -149,7 +149,6 @@ const LoginScreen = () => {
           <Link href="/forgetPassword">Forget Password</Link>
         </p>
       </div>
-      <ToastContainer />
     </div>
   );
 };

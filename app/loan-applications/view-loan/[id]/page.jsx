@@ -275,7 +275,7 @@ const ViewLoan = () => {
     } else {
       let updatedData = new FormData();
       updatedData.append(update, formData[update]);
-      updatedData.append("loanDurationMetrics", formData.loanDurationMetrics);
+    //  updatedData.append("loanDurationMetrics", formData.loanDurationMetrics);
       // console.log(...updatedData);
 
       dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
