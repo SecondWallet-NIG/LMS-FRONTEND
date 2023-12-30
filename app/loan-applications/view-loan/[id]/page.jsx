@@ -1150,6 +1150,7 @@ const ViewLoan = () => {
             />
           </div>
           <EditableButton
+            blueBtn={true}
             onClick={() => updateLoan("interestRate")}
             className="w-full"
             label={"Update interest rate"}
@@ -1192,6 +1193,7 @@ const ViewLoan = () => {
             />
           </div>
           <EditableButton
+            blueBtn={true}
             onClick={() => updateLoan("repaymentType")}
             className="w-full"
             label={"update repayment type"}
@@ -1212,7 +1214,7 @@ const ViewLoan = () => {
             />
           </div>
 
-          <div className="flex gap-2 items-end">
+          <div className="flex gap-2 items-end mb-3">
             <div className="w-1/3">
               <SelectField
                 value={loanDurationMetricsData.find(
@@ -1229,7 +1231,7 @@ const ViewLoan = () => {
                 }}
               />
             </div>
-            <div className="w-2/3 mb-3">
+            <div className="w-2/3">
               <InputField
                 value={formData.loanDuration}
                 required={false}
@@ -1284,7 +1286,6 @@ const ViewLoan = () => {
                 }}
               />
             </div>
-
           </div>
 
           <EditableButton
