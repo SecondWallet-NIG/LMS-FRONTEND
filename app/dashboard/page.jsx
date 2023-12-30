@@ -173,7 +173,7 @@ const DashboardPage = () => {
               cardIcon={<IoMdArrowDown size={20} />}
               cardName={"Repayments"}
               cardLinkLabel={"Repayments"}
-              cardLink={"/repayments"}
+              cardLink={"/repayment"}
               firstStat={[
                 "Total",
                 cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),

@@ -219,94 +219,186 @@ const ViewLoan = () => {
           setLoading(false);
         });
     } else if (update === "loanFrequencyType") {
-      let updatedData = new FormData();
-
-      updatedData.append("loanFrequencyType", formData.loanFrequencyType);
-      // if (
-      //   formData.loanFrequencyType === "Monthly" &&
-      //   data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
-      // ) {
-      //   updatedData.append(
-      //     "numberOfRepayment",
-      //     data?.data?.loanApplication?.loanDuration
-      //   );
-      // }
-      // else if ()
-      // data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
-      //   ? updatedData.append(
-      //       "numberOfRepayment",
-      //       data?.data?.loanApplication?.loanDuration
-      //     )
-      //   : updatedData.append(
-      //       "numberOfRepayment",
-      //       data?.data?.loanApplication?.loanDuration / 3
-      //     );
-      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
-        .unwrap()
-        .then(() => {
-          dispatch(getSingleLoan(id));
-          setOpenLoanPackage(false);
-          setOpenInterestType(false);
-          setOpenRepaymentType(false);
-          setOpenLoanFrequency(false);
-          setOpenLoanPeriod(false);
-          setFormData({});
-          setLoading(false);
-        })
-        .catch((error) => {
-          dispatch(getSingleLoan(id));
-          setOpenLoanPackage(false);
-          setOpenInterestType(false);
-          setOpenRepaymentType(false);
-          setOpenLoanFrequency(false);
-          setOpenLoanPeriod(false);
-          setFormData({});
-          toast.error(error?.message, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+      const updateLoanFreqencyType = () => {
+        let updatedData = new FormData();
+        updatedData.append("loanFrequencyType", formData.loanFrequencyType);
+        dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+          .unwrap()
+          .then(() => {})
+          .catch((error) => {
+            toast.error(error?.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           });
-          setLoading(false);
-        });
+      };
+      updateLoanFreqencyType();
+
+      const updateNoOfRepayments = () => {
+        let updatedData = new FormData();
+        if (
+          formData.loanFrequencyType === "Monthly" &&
+          data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
+        ) {
+          updatedData.append(
+            "numberOfRepayment",
+            data?.data?.loanApplication?.loanDuration
+          );
+        } else if (
+          formData.loanFrequencyType === "Quarterly" &&
+          data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
+        ) {
+          updatedData.append(
+            "numberOfRepayment",
+            data?.data?.loanApplication?.loanDuration / 3
+          );
+        } else if (
+          formData.loanFrequencyType === "Monthly" &&
+          data?.data?.loanApplication?.loanDurationMetrics === "Yearly"
+        ) {
+          updatedData.append(
+            "numberOfRepayment",
+            data?.data?.loanApplication?.loanDuration * 12
+          );
+        } else {
+          updatedData.append(
+            "numberOfRepayment",
+            data?.data?.loanApplication?.loanDuration * 4
+          );
+        }
+        dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+          .unwrap()
+          .then(() => {
+            dispatch(getSingleLoan(id));
+            setOpenLoanPackage(false);
+            setOpenInterestType(false);
+            setOpenRepaymentType(false);
+            setOpenLoanFrequency(false);
+            setOpenLoanPeriod(false);
+            setFormData({});
+            setLoading(false);
+          })
+          .catch((error) => {
+            dispatch(getSingleLoan(id));
+            setOpenLoanPackage(false);
+            setOpenInterestType(false);
+            setOpenRepaymentType(false);
+            setOpenLoanFrequency(false);
+            setOpenLoanPeriod(false);
+            setFormData({});
+            toast.error(error?.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setLoading(false);
+          });
+      };
+      updateNoOfRepayments();
     } else {
-      let updatedData = new FormData();
-      updatedData.append(update, formData[update]);
-    //  updatedData.append("loanDurationMetrics", formData.loanDurationMetrics);
-      // console.log(...updatedData);
-
-      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
-        .unwrap()
-        .then(() => {
-          dispatch(getSingleLoan(id));
-          setOpenLoanPackage(false);
-          setOpenInterestType(false);
-          setOpenRepaymentType(false);
-          setOpenLoanPeriod(false);
-          setFormData({});
-          setLoading(false);
-        })
-        .catch((error) => {
-          dispatch(getSingleLoan(id));
-          setOpenLoanPackage(false);
-          setOpenInterestType(false);
-          setOpenRepaymentType(false);
-          setOpenLoanPeriod(false);
-          setFormData({});
-          toast.error(error?.message, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+      const updateLoanPeriod = () => {
+        let updatedData = new FormData();
+        updatedData.append(update, formData[update]);
+        dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+          .unwrap()
+          .then(() => {})
+          .catch((error) => {
+            toast.error(error?.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           });
-          setLoading(false);
-        });
+      };
+      updateLoanPeriod();
+
+      const updateLoanDurationMetrics = () => {
+        let updatedData = new FormData();
+        updatedData.append("loanDurationMetrics", formData.loanDurationMetrics);
+        dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+          .unwrap()
+          .then(() => {})
+          .catch((error) => {
+            toast.error(error?.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          });
+      };
+      updateLoanDurationMetrics();
+
+      const updateNoOfRepayments = () => {
+        let updatedData = new FormData();
+        if (
+          data?.data?.loanApplication?.loanFrequencyType === "Monthly" &&
+          formData.loanDurationMetrics === "Monthly"
+        ) {
+          updatedData.append("numberOfRepayment", formData.loanDuration);
+        } else if (
+          data?.data?.loanApplication?.loanFrequencyType === "Quarterly" &&
+          formData.loanDurationMetrics === "Monthly"
+        ) {
+          updatedData.append("numberOfRepayment", formData.loanDuration / 3);
+        } else if (
+          data?.data?.loanApplication?.loanFrequencyType === "Monthly" &&
+          formData.loanDurationMetrics === "Yearly"
+        ) {
+          updatedData.append("numberOfRepayment", formData.loanDuration * 12);
+        } else {
+          updatedData.append(
+            "numberOfRepayment",
+            data?.data?.loanApplication?.loanDuration * 4
+          );
+        }
+        dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+          .unwrap()
+          .then(() => {
+            dispatch(getSingleLoan(id));
+            setOpenLoanPackage(false);
+            setOpenInterestType(false);
+            setOpenRepaymentType(false);
+            setOpenLoanPeriod(false);
+            setFormData({});
+            setLoading(false);
+          })
+          .catch((error) => {
+            dispatch(getSingleLoan(id));
+            setOpenLoanPackage(false);
+            setOpenInterestType(false);
+            setOpenRepaymentType(false);
+            setOpenLoanPeriod(false);
+            setFormData({});
+            toast.error(error?.message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setLoading(false);
+          });
+      };
+      updateNoOfRepayments()
     }
   };
 
@@ -1099,11 +1191,7 @@ const ViewLoan = () => {
           </div>
           <EditableButton
             blueBtn={true}
-            disabled={
-              loanAmount == data?.data?.loanApplication?.loanAmount
-                ? true
-                : false
-            }
+            disabled={loading ? true : false}
             onClick={() => updateLoan("loanAmount")}
             className="w-full"
             label={"Update Amount"}
