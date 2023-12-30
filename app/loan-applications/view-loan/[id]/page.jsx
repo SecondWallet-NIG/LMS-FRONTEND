@@ -1155,8 +1155,6 @@ const ViewLoan = () => {
             label={"Update interest rate"}
             disabled={loading ? true : false}
           />
-          {/* Update
-          </Button> */}
         </div>
       </CenterModal>
 
@@ -1199,8 +1197,6 @@ const ViewLoan = () => {
             label={"update repayment type"}
             disabled={loading ? true : false}
           />
-          {/* Update repayment type
-          </Button> */}
         </div>
       </CenterModal>
 
@@ -1288,19 +1284,7 @@ const ViewLoan = () => {
                 }}
               />
             </div>
-            {/* <div className="w-2/3">
-                  <InputField
-                    disabled={true}
-                    label="Number of Repayments"
-                    required={true}
-                    name="numberOfRepayment"
-                    onKeyPress={preventMinus}
-                    onWheel={() => document.activeElement.blur()}
-                    value={formData.numberOfRepayment}
-                    activeBorderColor="border-swBlue"
-                    placeholder="Enter number of repayment"
-                  />
-                </div> */}
+
           </div>
 
           <EditableButton
@@ -1309,10 +1293,7 @@ const ViewLoan = () => {
             disabled={loading ? true : false}
             label="Update loan period"
             className={"w-full"}
-            // className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
           />
-          {/* Update loan period
-          </EditableButton> */}
         </div>
       </CenterModal>
 
@@ -1372,10 +1353,8 @@ const ViewLoan = () => {
                 placeholder="Enter amount"
                 onChange={(e) => {
                   setDisbursementInputState(e);
-                  //  calCommitmentTotal(e);
                 }}
                 value={data?.data?.loanApplication?.loanAmount}
-                //   hintText="Amount paid that received the current repayment amount will spill into the next repayment cycle"
               />
             </div>
             <div className="pt-4">
