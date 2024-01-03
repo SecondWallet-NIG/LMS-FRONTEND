@@ -40,7 +40,7 @@ const StaffPage = () => {
     isRoleAdmin: false,
   });
   const profileImg = null;
-  console.log(formData);
+  console.log(data);
   const adminOptions = [
     { value: "CEO", label: "CEO" },
     { value: "CFO", label: "CFO" },
@@ -179,7 +179,7 @@ const StaffPage = () => {
                     <p className="font-medium text-2xl">
                       {data?.firstName} {data?.lastName}
                     </p>
-                    <p>Active</p>
+                    <p className="text-sm">{data?.status}</p>
                   </div>
                   <p className="font-light">{data?.email}</p>
                   <p className="font-light">SWL-{data?.staffId}</p>

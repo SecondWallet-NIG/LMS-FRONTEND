@@ -78,6 +78,7 @@ const Staffs = () => {
           <ReusableDataTable
             dataTransformer={customDataTransformer}
             apiEndpoint="https://secondwallet-stag.onrender.com/api/user"
+            onClickRow={"/team-management/staff/"}
             initialData={[]}
             headers={headers}
             filters={true}
