@@ -104,12 +104,12 @@ const StaffPage = () => {
       phoneNumber: formData.phoneNumber,
       role: formData.role,
     };
-    dispatch(updateUser({ userId: data?._id, payload }))
+    dispatch(updateUser({ userId: data?._id, updatedData: payload }))
       .unwrap()
       .then((res) => {
         toast.success("Profile updated successfully");
         getUserById(data?._id);
-        console.log(res);
+        setIsOpen(false);
       })
       .catch((error) => {
         toast.error("An error occured");
