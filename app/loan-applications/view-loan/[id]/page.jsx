@@ -850,7 +850,7 @@ const ViewLoan = () => {
               </table>
             </div>
           </div>
-          {data?.data?.loanApplication?.createdBy === useriD?._id ? (
+          {data?.data?.loanApplication?.createdBy?._id === useriD?._id ? (
             <div className="ml-5 mr-5 mt-5">
               <h6 className="text-center font-semibold p-2 ">
                 Loan Approval Needed
@@ -939,7 +939,7 @@ const ViewLoan = () => {
               </div>
             </div>
           ) : null}
-          {data?.data?.loanApplication?.createdBy === useriD?._id ? null : (
+          {data?.data?.loanApplication?.createdBy?._id === useriD?._id ? null : (
             <div className="ml-5 mr-5 mt-5">
               {loanApprovals &&
               Array.isArray(loanApprovals?.data?.data) &&
