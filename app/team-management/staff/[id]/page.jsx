@@ -8,6 +8,7 @@ import TasksCard from "@/app/components/teamManagement/TasksCard";
 import { getRoles } from "@/redux/slices/roleSlice";
 import { getUserById, updateUser } from "@/redux/slices/userSlice";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
@@ -153,7 +154,10 @@ const StaffPage = () => {
     dispatch(getRoles());
   }, []);
   return (
-    <DashboardLayout>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team management", "Staff profile"]}
+    >
       <ToastContainer />
       <main>
         <div className="p-5">
@@ -179,18 +183,36 @@ const StaffPage = () => {
                     <p className="font-medium text-2xl">
                       {data?.firstName} {data?.lastName}
                     </p>
-                    <p className="text-sm">{data?.status}</p>
+                    <p
+                      className={`${
+                        data?.status === "Active"
+                          ? "bg-[#E7F1FE] text-swBlue"
+                          : "bg-[#F8A9A3] text-white"
+                      } text-xs px-2 py-1 rounded-full text-swBlue`}
+                    >
+                      {data?.status}
+                    </p>
                   </div>
                   <p className="font-light">{data?.email}</p>
                   <p className="font-light">SWL-{data?.staffId}</p>
                   <div className="flex gap-5 items-center mt-5">
-                    <div className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer">
+                    <Link
+                      href={`mailto:${data?.email}`}
+                      target="_blank"
+                      className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer"
+                    >
                       <MdOutlineEmail size="22" />
-                    </div>
-                    <div className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer">
+                    </Link>
+                    <Link
+                      href={`tel:${data?.phoneNumber}`}
+                      className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer"
+                    >
                       <FiPhone size="20" />
-                    </div>
-                    <div className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer">
+                    </Link>
+                    <div
+                      className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer"
+                      onClick={() => setIsOpen(true)}
+                    >
                       <FiEdit2 size="20" />
                     </div>
                   </div>

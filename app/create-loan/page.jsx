@@ -863,7 +863,7 @@ const CreateLoan = () => {
                   <p className="text-sm mb-2">{selectedCustomer.email}</p>
 
                   <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
-                    {selectedCustomer.nin}
+                  {selectedCustomer.phoneNumber.slice(1)}
                   </p>
                 </div>
               </div>
@@ -1060,6 +1060,7 @@ const CreateLoan = () => {
           <div className="w-2/3 p-2 ">
             <PreviewInterest
               formData={formData}
+              selectedCustomer={selectedCustomer}
               setCurrentStep={setCurrentStep}
               data={interestValue?.data}
             />
@@ -1077,7 +1078,7 @@ const CreateLoan = () => {
           <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
             <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
             {selectedCustomer != null ? (
-              <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto flex gap-5">
+              <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto flex gap-5 items-start">
                 {selectedCustomer.image ? (
                   ""
                 ) : (
@@ -1098,7 +1099,7 @@ const CreateLoan = () => {
                   <p className="text-sm mb-2">{selectedCustomer.email}</p>
 
                   <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
-                    {selectedCustomer.nin}
+                  {selectedCustomer.phoneNumber.slice(1)}
                   </p>
                 </div>
               </div>
@@ -1112,7 +1113,7 @@ const CreateLoan = () => {
                     sizes="100%"
                   />
                 </div>
-                S<p className="text-xl font-semibold">Select Borrower</p>
+                <p className="text-xl font-semibold">Select Borrower</p>
               </div>
             )}
             <div className="flex pt-2">
