@@ -67,7 +67,7 @@ const ViewLoan = () => {
   const [openRepaymentType, setOpenRepaymentType] = useState(false);
   const [openLoanPeriod, setOpenLoanPeriod] = useState(false);
   const [openLoanFrequency, setOpenLoanFrequency] = useState(false);
-  const [loanDurationVal, setLoanDurationVal] = useState(0);
+  const [approvalDeclined, setApprovaLDeclined] = useState(false);
 
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
@@ -148,6 +148,7 @@ const ViewLoan = () => {
     { value: "cash", label: "Cash" },
     { value: "bankTransfer", label: "Bank Transfer" },
   ];
+
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
@@ -177,7 +178,6 @@ const ViewLoan = () => {
           setLoading(false);
         })
         .catch((error) => {
-          console.log({ error });
           setOpenLoanAmount(false);
           setFormData({});
           toast.error(error?.message, {
@@ -199,12 +199,11 @@ const ViewLoan = () => {
         .unwrap()
         .then(() => {
           dispatch(getSingleLoan(id));
-          setOpenLoanAmount(false);
+          setOpenInterestType(false);
           setFormData({});
           setLoading(false);
         })
         .catch((error) => {
-          console.log({ error });
           setOpenLoanAmount(false);
           setFormData({});
           toast.error(error?.message, {
@@ -222,25 +221,6 @@ const ViewLoan = () => {
       const updateLoanFreqencyType = () => {
         let updatedData = new FormData();
         updatedData.append("loanFrequencyType", formData.loanFrequencyType);
-        dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
-          .unwrap()
-          .then(() => {})
-          .catch((error) => {
-            toast.error(error?.message, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          });
-      };
-      updateLoanFreqencyType();
-
-      const updateNoOfRepayments = () => {
-        let updatedData = new FormData();
         if (
           formData.loanFrequencyType === "Monthly" &&
           data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
@@ -249,15 +229,8 @@ const ViewLoan = () => {
             "numberOfRepayment",
             data?.data?.loanApplication?.loanDuration
           );
-        } else if (
-          formData.loanFrequencyType === "Quarterly" &&
-          data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
-        ) {
-          updatedData.append(
-            "numberOfRepayment",
-            data?.data?.loanApplication?.loanDuration / 3
-          );
-        } else if (
+        }
+        if (
           formData.loanFrequencyType === "Monthly" &&
           data?.data?.loanApplication?.loanDurationMetrics === "Yearly"
         ) {
@@ -265,32 +238,35 @@ const ViewLoan = () => {
             "numberOfRepayment",
             data?.data?.loanApplication?.loanDuration * 12
           );
-        } else {
+        }
+        if (
+          formData.loanFrequencyType === "Quarterly" &&
+          data?.data?.loanApplication?.loanDurationMetrics === "Monthly"
+        ) {
           updatedData.append(
             "numberOfRepayment",
-            data?.data?.loanApplication?.loanDuration * 4
+            data?.data?.loanApplication?.loanDuration / 3
+          );
+        }
+        if (
+          formData.loanFrequencyType === "Quarterly" &&
+          data?.data?.loanApplication?.loanDurationMetrics === "Yearly"
+        ) {
+          updatedData.append(
+            "numberOfRepayment",
+            (data?.data?.loanApplication?.loanDuration * 12) / 3
           );
         }
         dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
           .unwrap()
           .then(() => {
             dispatch(getSingleLoan(id));
-            setOpenLoanPackage(false);
-            setOpenInterestType(false);
-            setOpenRepaymentType(false);
             setOpenLoanFrequency(false);
-            setOpenLoanPeriod(false);
             setFormData({});
             setLoading(false);
           })
           .catch((error) => {
-            dispatch(getSingleLoan(id));
-            setOpenLoanPackage(false);
-            setOpenInterestType(false);
-            setOpenRepaymentType(false);
             setOpenLoanFrequency(false);
-            setOpenLoanPeriod(false);
-            setFormData({});
             toast.error(error?.message, {
               position: "top-right",
               autoClose: 3000,
@@ -300,92 +276,53 @@ const ViewLoan = () => {
               draggable: true,
               progress: undefined,
             });
+            setFormData({});
             setLoading(false);
           });
       };
-      updateNoOfRepayments();
-    } else {
-      const updateLoanPeriod = () => {
-        let updatedData = new FormData();
-        updatedData.append(update, formData[update]);
-        dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
-          .unwrap()
-          .then(() => {})
-          .catch((error) => {
-            toast.error(error?.message, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          });
-      };
-      updateLoanPeriod();
-
+      updateLoanFreqencyType();
+    } else if (update === "loanDuration") {
       const updateLoanDurationMetrics = () => {
         let updatedData = new FormData();
         updatedData.append("loanDurationMetrics", formData.loanDurationMetrics);
-        dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
-          .unwrap()
-          .then(() => {})
-          .catch((error) => {
-            toast.error(error?.message, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          });
-      };
-      updateLoanDurationMetrics();
-
-      const updateNoOfRepayments = () => {
-        let updatedData = new FormData();
         if (
           data?.data?.loanApplication?.loanFrequencyType === "Monthly" &&
           formData.loanDurationMetrics === "Monthly"
         ) {
           updatedData.append("numberOfRepayment", formData.loanDuration);
+          updatedData.append("loanDuration", formData.loanDuration);
         } else if (
           data?.data?.loanApplication?.loanFrequencyType === "Quarterly" &&
           formData.loanDurationMetrics === "Monthly"
         ) {
           updatedData.append("numberOfRepayment", formData.loanDuration / 3);
+          updatedData.append("loanDuration", formData.loanDuration);
         } else if (
           data?.data?.loanApplication?.loanFrequencyType === "Monthly" &&
           formData.loanDurationMetrics === "Yearly"
         ) {
           updatedData.append("numberOfRepayment", formData.loanDuration * 12);
-        } else {
+          updatedData.append("loanDuration", formData.loanDuration);
+        } else if (
+          data?.data?.loanApplication?.loanFrequencyType === "Quarterly" &&
+          formData.loanDurationMetrics === "Yearly"
+        ) {
           updatedData.append(
             "numberOfRepayment",
-            data?.data?.loanApplication?.loanDuration * 4
+            (formData.loanDuration * 12) / 3
           );
+          updatedData.append("loanDuration", formData.loanDuration);
         }
         dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
           .unwrap()
           .then(() => {
             dispatch(getSingleLoan(id));
-            setOpenLoanPackage(false);
-            setOpenInterestType(false);
-            setOpenRepaymentType(false);
             setOpenLoanPeriod(false);
             setFormData({});
             setLoading(false);
           })
           .catch((error) => {
-            dispatch(getSingleLoan(id));
-            setOpenLoanPackage(false);
-            setOpenInterestType(false);
-            setOpenRepaymentType(false);
             setOpenLoanPeriod(false);
-            setFormData({});
             toast.error(error?.message, {
               position: "top-right",
               autoClose: 3000,
@@ -395,10 +332,63 @@ const ViewLoan = () => {
               draggable: true,
               progress: undefined,
             });
+            setFormData({});
             setLoading(false);
           });
       };
-      updateNoOfRepayments()
+      updateLoanDurationMetrics();
+    } else if (update === "loanPackage") {
+      let updatedData = new FormData();
+      updatedData.append("loanPackage", formData.loanPackage);
+
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+        .unwrap()
+        .then(() => {
+          dispatch(getSingleLoan(id));
+          setOpenLoanPackage(false);
+          setFormData({});
+          setLoading(false);
+        })
+        .catch((error) => {
+          setOpenLoanPackage(false);
+          setFormData({});
+          toast.error(error?.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoading(false);
+        });
+    } else if (update === "repaymentType") {
+      let updatedData = new FormData();
+      updatedData.append("repaymentType", formData.repaymentType);
+
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+        .unwrap()
+        .then(() => {
+          dispatch(getSingleLoan(id));
+          setOpenRepaymentType(false);
+          setFormData({});
+          setLoading(false);
+        })
+        .catch((error) => {
+          setOpenRepaymentType(false);
+          setFormData({});
+          toast.error(error?.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoading(false);
+        });
     }
   };
 
@@ -483,6 +473,23 @@ const ViewLoan = () => {
     dispatch(getInterestType());
   }, []);
 
+  let hasDecline;
+
+  const hasDeclineStatus = () => {
+    for (const approval of loanApprovals?.data?.data) {
+      if (approval.status === "Declined") {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  if (loanApprovals?.data?.data) {
+    hasDecline = hasDeclineStatus();
+    console.log({ hasDecline });
+  }
+
   return (
     <DashboardLayout
       isBackNav={true}
@@ -509,7 +516,6 @@ const ViewLoan = () => {
                 </div>
                 <div className="ml-4 h-fit">
                   <p className="text-md font-semibold text-swBlue mb-1">
-                    {/* {console.log({ data })} */}
                     {data?.data?.customerDetails?.firstName}{" "}
                     {data?.data?.customerDetails?.lastName}
                     <button
@@ -638,15 +644,19 @@ const ViewLoan = () => {
                       ₦{" "}
                       {data?.data?.loanApplication?.loanAmount.toLocaleString()}
                     </p>
-                    <div
-                      className="p-2 rounded-md hover:bg-white cursor-pointer mt-2"
-                      onClick={() => {
-                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
-                        setOpenLoanAmount(true);
-                      }}
-                    >
-                      <MdEdit size={15} />
-                    </div>
+                    {hasDecline && hasDecline === true ? (
+                      <div
+                        className="p-2 rounded-md hover:bg-white cursor-pointer mt-2"
+                        onClick={() => {
+                          setLoanAmount(
+                            data?.data?.loanApplication?.loanAmount
+                          );
+                          setOpenLoanAmount(true);
+                        }}
+                      >
+                        <MdEdit size={15} />
+                      </div>
+                    ) : null}
                   </div>
                 </div>
                 <div className="w-full bg-gray-100 rounded-xl p-2">
@@ -688,17 +698,19 @@ const ViewLoan = () => {
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>{data?.data?.loanPackageDetails?.name} </p>
-                        <div
-                          className="p-2 rounded-md hover:bg-white cursor-pointer"
-                          onClick={() => {
-                            setLoanAmount(
-                              data?.data?.loanApplication?.loanAmount
-                            );
-                            setOpenLoanPackage(true);
-                          }}
-                        >
-                          <MdEdit size={15} />
-                        </div>
+                        {hasDecline && hasDecline === true ? (
+                          <div
+                            className="p-2 rounded-md hover:bg-white cursor-pointer"
+                            onClick={() => {
+                              setLoanAmount(
+                                data?.data?.loanApplication?.loanAmount
+                              );
+                              setOpenLoanPackage(true);
+                            }}
+                          >
+                            <MdEdit size={15} />
+                          </div>
+                        ) : null}
                       </div>
                     </td>
 
@@ -720,17 +732,19 @@ const ViewLoan = () => {
                             : `${data?.data?.loanApplication?.loanDuration}`}{" "}
                           month(s)
                         </p>
-                        <div
-                          className="p-2 rounded-md hover:bg-white cursor-pointer"
-                          onClick={() => {
-                            setLoanAmount(
-                              data?.data?.loanApplication?.loanAmount
-                            );
-                            setOpenLoanPeriod(true);
-                          }}
-                        >
-                          <MdEdit size={15} />
-                        </div>
+                        {hasDecline && hasDecline === true ? (
+                          <div
+                            className="p-2 rounded-md hover:bg-white cursor-pointer"
+                            onClick={() => {
+                              setLoanAmount(
+                                data?.data?.loanApplication?.loanAmount
+                              );
+                              setOpenLoanPeriod(true);
+                            }}
+                          >
+                            <MdEdit size={15} />
+                          </div>
+                        ) : null}
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">
@@ -765,17 +779,19 @@ const ViewLoan = () => {
                         <p>
                           {data?.data?.loanApplication?.interestRate * 100} %
                         </p>
-                        <div
-                          className="p-2 rounded-md hover:bg-white cursor-pointer"
-                          onClick={() => {
-                            setLoanAmount(
-                              data?.data?.loanApplication?.loanAmount
-                            );
-                            setOpenInterestType(true);
-                          }}
-                        >
-                          <MdEdit size={15} />
-                        </div>
+                        {hasDecline && hasDecline === true ? (
+                          <div
+                            className="p-2 rounded-md hover:bg-white cursor-pointer"
+                            onClick={() => {
+                              setLoanAmount(
+                                data?.data?.loanApplication?.loanAmount
+                              );
+                              setOpenInterestType(true);
+                            }}
+                          >
+                            <MdEdit size={15} />
+                          </div>
+                        ) : null}
                       </div>
                     </td>
 
@@ -791,33 +807,37 @@ const ViewLoan = () => {
                             )?.label
                           }
                         </p>
-                        <div
-                          className="p-2 rounded-md hover:bg-white cursor-pointer"
-                          onClick={() => {
-                            setLoanAmount(
-                              data?.data?.loanApplication?.loanAmount
-                            );
-                            setOpenRepaymentType(true);
-                          }}
-                        >
-                          <MdEdit size={15} />
-                        </div>
+                        {hasDecline && hasDecline === true ? (
+                          <div
+                            className="p-2 rounded-md hover:bg-white cursor-pointer"
+                            onClick={() => {
+                              setLoanAmount(
+                                data?.data?.loanApplication?.loanAmount
+                              );
+                              setOpenRepaymentType(true);
+                            }}
+                          >
+                            <MdEdit size={15} />
+                          </div>
+                        ) : null}
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>{data?.data?.loanApplication?.loanFrequencyType} </p>
-                        <div
-                          className="p-2 rounded-md hover:bg-white cursor-pointer"
-                          onClick={() => {
-                            setLoanAmount(
-                              data?.data?.loanApplication?.loanAmount
-                            );
-                            setOpenLoanFrequency(true);
-                          }}
-                        >
-                          <MdEdit size={15} />
-                        </div>
+                        {hasDecline && hasDecline === true ? (
+                          <div
+                            className="p-2 rounded-md hover:bg-white cursor-pointer"
+                            onClick={() => {
+                              setLoanAmount(
+                                data?.data?.loanApplication?.loanAmount
+                              );
+                              setOpenLoanFrequency(true);
+                            }}
+                          >
+                            <MdEdit size={15} />
+                          </div>
+                        ) : null}
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">

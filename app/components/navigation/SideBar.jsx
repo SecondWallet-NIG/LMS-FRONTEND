@@ -6,36 +6,36 @@ import Button from "../shared/buttonComponent/Button";
 //icons
 import { RiBox3Line } from "react-icons/ri";
 import { BsPeopleFill, BsCalculator } from "react-icons/bs";
-import {
-  TbAntennaBars5,
-  TbNewSection,
-  TbFileDollar,
-  TbReportMoney,
-} from "react-icons/tb";
+import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
 import { AiFillMoneyCollect, AiOutlineSetting } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import SidebarLink from "../shared/sideBarLink/SidebarLink";
-import { useRouter } from "next/navigation";
-import { FiArrowDownLeft, FiArrowUpRight, FiDollarSign, FiSend, FiUser } from "react-icons/fi";
+import {
+  FiArrowDownLeft,
+  FiArrowUpRight,
+  FiDollarSign,
+  FiSend,
+  FiUser,
+} from "react-icons/fi";
 import { IoMdAdd, IoMdCard } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice"; 
+import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 const Sidebar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState(true);
   const [activeLink, setActiveLink] = useState("");
- const x = useSelector((state) => state.approvalAssignee);
- // console.log("x?.data?.data", x?.data);
+  const x = useSelector((state) => state.approvalAssignee);
+  const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag;
+  console.log({userRoleTag});
   const handleSidebarOpen = (state) => {
     setSideBarOpen(state);
   };
-
 
   useEffect(() => {
     setSideBarOpen(true);
@@ -52,7 +52,7 @@ const Sidebar = () => {
   useEffect(() => {
     dispatch(getApprovalAssignee(user?.data?.user?._id));
 
-   // // console.log({ x });
+    // // console.log({ x });
   }, []);
 
   return (
@@ -83,6 +83,8 @@ const Sidebar = () => {
         <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
           <div>
             <SidebarLink
+              allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO','CT0', 'DIR', 'SYSTEM ADMIN']}
+              userRoleTag={userRoleTag} 
               icon={
                 <TbAntennaBars5
                   className={`${activeLink === "dashboard" && "text-swBlue"}`}
@@ -100,6 +102,8 @@ const Sidebar = () => {
             />
           </div>
           <SidebarLink
+              allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO','ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+              userRoleTag={userRoleTag} 
             icon={
               <RiBox3Line
                 className={`${activeLink === "my-tasks" && "text-swBlue"}`}
@@ -114,8 +118,8 @@ const Sidebar = () => {
                 <div
                   className={`ml-8 bg-blue-400 text-white inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
                 >
-                  {`${x?.data?.pendingCount}` || 0} 
-                </div> 
+                  {`${x?.data?.pendingCount}` || 0}
+                </div>
               </div>
             }
             link="/my-tasks"
@@ -126,6 +130,8 @@ const Sidebar = () => {
             }}
           />
           <SidebarLink
+            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+            userRoleTag={userRoleTag} 
             icon={
               <FiUser
                 className={`${activeLink === "customers" && "text-swBlue"}`}
@@ -142,6 +148,8 @@ const Sidebar = () => {
             }}
           />
           <SidebarLink
+            allowedRoleTags={['LO']}
+            userRoleTag={userRoleTag} 
             icon={
               <IoMdAdd
                 className={`${activeLink === "create-loan" && "text-swBlue"}`}
@@ -158,6 +166,8 @@ const Sidebar = () => {
             }}
           />
           <SidebarLink
+            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO','ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+            userRoleTag={userRoleTag} 
             icon={
               <FiDollarSign
                 className={`${
@@ -175,6 +185,8 @@ const Sidebar = () => {
             }}
           />
           <SidebarLink
+            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+            userRoleTag={userRoleTag} 
             icon={
               <FiSend
                 className={`${activeLink === "disbursement" && "text-swBlue"}`}
@@ -192,6 +204,8 @@ const Sidebar = () => {
           />
 
           <SidebarLink
+            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+            userRoleTag={userRoleTag} 
             icon={
               <FiArrowDownLeft
                 className={`${activeLink === "repayment" && "text-swBlue"}`}
@@ -209,9 +223,13 @@ const Sidebar = () => {
           />
 
           <SidebarLink
+            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+            userRoleTag={userRoleTag} 
             icon={
               <AiFillMoneyCollect
-                className={`${activeLink === "payment-history" && "text-swBlue"}`}
+                className={`${
+                  activeLink === "payment-history" && "text-swBlue"
+                }`}
                 size={20}
               />
             }
@@ -230,22 +248,30 @@ const Sidebar = () => {
       <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
         <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""} `}>
           <SidebarLink
+              allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+              userRoleTag={userRoleTag} 
+            icon={<TbReportMoney size={20} />}
+            text="Report"
+            link="/report"
+            sideBarOpen={sideBarOpen}
+          />
+          <SidebarLink
+            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+            userRoleTag={userRoleTag} 
             icon={<BiMapAlt size={20} />}
             text="Loan packages"
             link="/plans"
             sideBarOpen={sideBarOpen}
           />
-          {JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag !=
-          "LO" ? (
+          {userRoleTag === "System Admin" ||
+          userRoleTag === "CFO" ||
+          userRoleTag === "CTO" ||
+          userRoleTag === "CEO" ||
+          userRoleTag === "DIR" ? (
             <>
               <SidebarLink
-                icon={<TbReportMoney size={20} />}
-                text="Report"
-                link="/report"
-                sideBarOpen={sideBarOpen}
-              />
-
-              <SidebarLink
+                allowedRoleTags={['CFO', 'CEO' , 'CT0', 'DIR', 'SYSTEM ADMIN']}
+                userRoleTag={userRoleTag} 
                 icon={<FaPeopleGroup size={20} />}
                 text="Team management"
                 link="/team-management"
@@ -292,6 +318,8 @@ const Sidebar = () => {
         Sign Out
       </Button> */}
           <SidebarLink
+             allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO','CT0', 'DIR', 'SYSTEM ADMIN']}
+             userRoleTag={userRoleTag} 
             icon={<GoSignOut size={20} />}
             text="Sign Out"
             link="/"
