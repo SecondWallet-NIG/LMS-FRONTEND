@@ -31,7 +31,7 @@ const DisbursementCard = ({ _data }) => {
             <p className="text-2xl font-semibold">{item.count}</p>
             <p className="font-semibold">
               &#8358;{" "}
-              {item?.amount?.toFixed(2)?.toLocaleString("en-US")}
+              {item?.amount?.toLocaleString("en-US")}
             </p>
           </div>
           <p

@@ -47,7 +47,7 @@ const MyTasks = () => {
             onClick={() => setActivityButton("pendingTasks")}
           />
         </div>
-        <div className="flex gap-2 text-xs lg:text-sm mt-8">
+        {/* <div className="flex gap-2 text-xs lg:text-sm mt-8">
           <button
             onClick={() => handleActivityToggle("allTasks")}
             className={`${
@@ -75,8 +75,8 @@ const MyTasks = () => {
           >
             Completed Tasks
           </button>
-        </div>
-        <div className="p-2">
+        </div> */}
+        <div className="p-2 mt-5">
           {activityButton === "allTasks" && <AllTasks />}
           {activityButton === "pendingTasks" && <PendingTasks />}
           {activityButton === "completedTasks" && <CompletedTasks />}
