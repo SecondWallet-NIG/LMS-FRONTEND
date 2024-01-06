@@ -24,6 +24,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Rings } from "react-loader-spinner";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
+import Unauthorized from "../unauthorized/page";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const CreateLoan = () => {
   const [isLoading, setIsLoading] = useState();
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
+  const [roleTag, setRoleTag] = useState("");
 
   const [formData, setFormData] = useState({
     loanAmount: "",
@@ -202,13 +204,12 @@ const CreateLoan = () => {
   };
 
   const removeCommasFromNumber = (numberString) => {
-    if (typeof numberString !== 'string') {
+    if (typeof numberString !== "string") {
       // Convert to string or handle the case appropriately
       numberString = String(numberString);
     }
     return numberString.replace(/,/g, "");
   };
-  
 
   const calCommitmentTotal = (e) => {
     let { name, value } = e.target;
@@ -358,6 +359,18 @@ const CreateLoan = () => {
     setSelectedCustomer(data?.profileInfo);
     setFilteredData(customer?.data);
   }, [customer?.data]);
+
+  useEffect(() => {
+    let userId;
+    if (typeof window !== "undefined") {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setRoleTag(storedUser?.data?.user?.role.tag);
+    }
+  }, []);
+
+  if (roleTag && roleTag !== "LO") {
+    return <Unauthorized />;
+  }
 
   return (
     <DashboardLayout>
@@ -863,7 +876,7 @@ const CreateLoan = () => {
                   <p className="text-sm mb-2">{selectedCustomer.email}</p>
 
                   <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
-                  {selectedCustomer.phoneNumber.slice(1)}
+                    {selectedCustomer.phoneNumber.slice(1)}
                   </p>
                 </div>
               </div>
@@ -1099,7 +1112,7 @@ const CreateLoan = () => {
                   <p className="text-sm mb-2">{selectedCustomer.email}</p>
 
                   <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
-                  {selectedCustomer.phoneNumber.slice(1)}
+                    {selectedCustomer.phoneNumber.slice(1)}
                   </p>
                 </div>
               </div>
@@ -1300,7 +1313,7 @@ const CreateLoan = () => {
               <div
                 key={item._id}
                 onClick={() => {
-                  console.log({item});
+                  console.log({ item });
                   setFormData({
                     ...formData,
                     customerId: item._id,

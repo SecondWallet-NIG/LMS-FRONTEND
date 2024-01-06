@@ -8,6 +8,7 @@ import { formatTimeToAMPM } from "@/helpers";
 const LoanTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
+  const [roleTag,setRoleTag] = useState("")
   const router = useRouter();
   const headers = [
     { id: "createdAt", label: "Date Created" },
@@ -82,6 +83,7 @@ const LoanTable = () => {
           const storedUser = JSON.parse(localStorage.getItem("user"));
           setUserId(storedUser?.data?.user?._id || "");
           setRole(storedUser?.data?.user?.role?.name || "");
+          setRoleTag(storedUser?.data?.user?.role?.tag || "");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -115,7 +117,7 @@ const LoanTable = () => {
             </div>
           }
           btnTextClick={() => {
-            router.push("/create-loan");
+            roleTag === "LO" ? router.push("/create-loan") : router.push("/unauthorized")
           }}
           filters={true}
           pagination={true}

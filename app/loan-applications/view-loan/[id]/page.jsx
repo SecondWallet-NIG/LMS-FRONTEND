@@ -939,7 +939,8 @@ const ViewLoan = () => {
               </div>
             </div>
           ) : null}
-          {data?.data?.loanApplication?.createdBy?._id === useriD?._id ? null : (
+          {data?.data?.loanApplication?.createdBy?._id ===
+          useriD?._id ? null : (
             <div className="ml-5 mr-5 mt-5">
               {loanApprovals &&
               Array.isArray(loanApprovals?.data?.data) &&
@@ -1187,6 +1188,7 @@ const ViewLoan = () => {
           approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
           approvalId={data?.data?.approvalNeeded?.approvalLevel}
           isOpen={isDeclineOpen}
+          closeModal={setDeclineOpen}
           onClose={() => setDeclineOpen(false)}
         />
       </CenterModal>
@@ -1547,7 +1549,12 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="flex pt-4 mb-4 items-end gap-2 justify-end">
-              <Button variant="secondary">Cancel</Button>
+              <Button
+                variant="secondary"
+                onClick={() => setLogRepayment(!logRepayment)}
+              >
+                Cancel
+              </Button>
               <Button variant="secondary" onClick={submitLoanUpdate}>
                 Confirm
               </Button>

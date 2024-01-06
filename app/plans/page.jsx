@@ -16,13 +16,17 @@ const LoanPackages = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
+  const [showCreatePlan, setShowCreatePlan] = useState(false);
+  const [userRole, setUserRole] = useState("");
+
+  console.log(showCreatePlan);
 
   const loanPackage =
     useSelector((state) => {
       return state?.loanPackage?.data?.data;
     }) || [];
 
-  console.log(data);
+  // console.log(data);
   const handleSearch = (state) => {
     setSearchOpen(state);
   };
@@ -32,26 +36,43 @@ const LoanPackages = () => {
     setSearchTerm(e.target.value);
   };
 
-
-
-
-
   useEffect(() => {
+    const _user = JSON.parse(localStorage.getItem("user"));
+    console.log({ _user });
+    if (_user) {
+      setUserRole(_user?.data?.user?.role?.tag);
+    }
     dispatch(getLoanPackage());
   }, []);
+
+  useEffect(() => {
+    if (
+      userRole === "CEO" ||
+      userRole === "CTO" ||
+      userRole === "CFO" ||
+      userRole === "DIR" ||
+      userRole === "SYSTEM ADMIN"
+    ) {
+      setShowCreatePlan(true);
+    }
+  }, [userRole]);
 
   return (
     <DashboardLayout>
       <main className="mx-auto max-w-7xl p-5 overflow-hidden text-black">
-        <Link
-          href="/plans/create-plan"
-          className="bg-swBlue py-3 px-6 font-medium rounded-lg flex items-center gap-2 text-white w-fit ml-auto"
-        >
-          Create plan
-          <RiArrowRightSLine size={20} />
-        </Link>
+        {showCreatePlan && (
+          <Link
+            href="/plans/create-plan"
+            className="bg-swBlue py-3 px-6 font-medium rounded-lg flex items-center gap-2 text-white w-fit ml-auto"
+          >
+            Create plan
+            <RiArrowRightSLine size={20} />
+          </Link>
+        )}
         <div className="flex items-center justify-between">
-          <p className="font-semibold text-swGray text-xl">Available loan plans</p>
+          <p className="font-semibold text-swGray text-xl">
+            Available loan plans
+          </p>
           {/* <div className="flex gap-2 mt-5">
             <div className="flex items-center">
               <InputField
@@ -104,7 +125,9 @@ const LoanPackages = () => {
                 className="bg-swLightGray rounded-xl p-4 flex flex-col gap-1"
               >
                 <div className="flex justify-between items-center mb-3">
-                  <p className="font-semibold text-swGray text-sm">{item?.name}</p>
+                  <p className="font-semibold text-swGray text-sm">
+                    {item?.name}
+                  </p>
                   <p
                     className={`${
                       item?.status?.toLocaleLowerCase() === "active"
@@ -135,11 +158,15 @@ const LoanPackages = () => {
                 </div> */}
                 <div className="flex justify-between mb-2">
                   <p className="text-sm">Minimum loan</p>
-                  <p className="font-semibold text-sm">{item?.loanAmountRange?.min}</p>
+                  <p className="font-semibold text-sm">
+                    {item?.loanAmountRange?.min}
+                  </p>
                 </div>
                 <div className="flex justify-between mb-2">
                   <p className="text-sm">Maximum loan</p>
-                  <p className="font-semibold text-sm">{item?.loanAmountRange?.max}</p>
+                  <p className="font-semibold text-sm">
+                    {item?.loanAmountRange?.max}
+                  </p>
                 </div>
                 {/* <div className="flex justify-between">
                   <p>Active loans</p>
