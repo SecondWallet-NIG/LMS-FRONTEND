@@ -79,6 +79,7 @@ const Staffs = () => {
             dataTransformer={customDataTransformer}
             apiEndpoint="https://secondwallet-stag.onrender.com/api/user"
             initialData={[]}
+            onClickRow={'/team-management/staff'}
             headers={headers}
             filters={true}
             pagination={true}

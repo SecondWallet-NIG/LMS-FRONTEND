@@ -32,7 +32,7 @@ const Sidebar = () => {
   const [activeLink, setActiveLink] = useState("");
   const x = useSelector((state) => state.approvalAssignee);
   const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag;
-  console.log({userRoleTag});
+
   const handleSidebarOpen = (state) => {
     setSideBarOpen(state);
   };
@@ -51,8 +51,6 @@ const Sidebar = () => {
 
   useEffect(() => {
     dispatch(getApprovalAssignee(user?.data?.user?._id));
-
-    // // console.log({ x });
   }, []);
 
   return (
@@ -270,7 +268,7 @@ const Sidebar = () => {
           userRoleTag === "DIR" ? (
             <>
               <SidebarLink
-                allowedRoleTags={['CFO', 'CEO' , 'CT0', 'DIR', 'SYSTEM ADMIN']}
+                allowedRoleTags={['CFO', 'CEO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
                 userRoleTag={userRoleTag} 
                 icon={<FaPeopleGroup size={20} />}
                 text="Team management"
@@ -298,6 +296,7 @@ const Sidebar = () => {
             </>
           ) : null}
           <SidebarLink
+            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
             icon={<AiOutlineSetting size={20} />}
             text="Settings"
             link="/settings"

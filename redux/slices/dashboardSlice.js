@@ -18,7 +18,24 @@ export const getDashboardCardData = createAsyncThunk("dashboard/card-data", asyn
         },
       }
     );
-    console.log({response});
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error);
+    } else throw new Error("An error occured, please try again later");
+  }
+});
+
+export const getDashboardGraphData = createAsyncThunk("dashboard/graph-data", async () => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/dashboard/graph-data`,
+      {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -33,6 +50,7 @@ const DashboardSlice = createSlice({
   name: "dashboardData",
   initialState: {
     data: null,
+    data1: null,
     loading: "idle",
     error: null,
   },
@@ -54,6 +72,18 @@ const DashboardSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getDashboardCardData.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getDashboardGraphData.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getDashboardGraphData.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data1 = action.payload;
+      })
+      .addCase(getDashboardGraphData.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       })
