@@ -26,6 +26,7 @@ const CustomerProfile = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const paths = ["Borrowers", "Borrowers Profile"];
+  const [roleTag, setRoleTag] = useState("");
 
   const { loading, error, data } = useSelector((state) => state.customer);
 
@@ -39,6 +40,7 @@ const CustomerProfile = () => {
   const [logSearch, setLogSearch] = useState(false);
   const [borrowerOptions, setBorrowerOptions] = useState(false);
   const buttonRef = useRef(null);
+  console.log({ roleTag });
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -70,14 +72,14 @@ const CustomerProfile = () => {
   const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");
 
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      console.log({ storedUser });
+      // console.log({ storedUser });
+      console.log({ localStorage });
 
       setUser(storedUser?.data?.user);
-    
+      setRoleTag(storedUser?.data?.user?.role?.tag);
     }
     dispatch(getCustomerById(id));
   }, []);
@@ -89,10 +91,8 @@ const CustomerProfile = () => {
       }
     };
 
-
     document.addEventListener("mousedown", handleClickOutside);
 
-  
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -211,7 +211,10 @@ const CustomerProfile = () => {
                   className="text-center rounded-md py-[0.4rem] px-3 bg-swBlue text-white border-2 border-white hover:border-blue-100"
                   onClick={() => {
                     localStorage.setItem("borrower", JSON.stringify(data));
-                    router.push("/create-loan");
+                    // router.push("/create-loan");
+                    roleTag !== "LO"
+                      ? router.push("/unauthorized")
+                      : router.push("/create-loan");
                   }}
                 >
                   Create loan
