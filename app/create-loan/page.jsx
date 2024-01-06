@@ -1037,7 +1037,7 @@ const CreateLoan = () => {
                     onClick={fetchInterest}
                     className="h-10 w-full mt-6 bg-swBlue text-white"
                   >
-                    Compute Interest
+                    Preview Interest
                   </Button>
 
                   <EditableButton
