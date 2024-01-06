@@ -183,6 +183,14 @@ function ReusableDataTable({
     let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=-createdAt`;
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
+      if (role === "Pending") {
+        apiUrl += `&status=${"Pending"}`;
+      }
+
+      if (role === "In Progress") {
+        apiUrl += `&status=${"In Progress"}`;
+      }
+      
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
@@ -243,6 +251,13 @@ function ReusableDataTable({
           const endDate = dateRange[0].endDate.toISOString();
           apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
         }
+      }
+      if (role === "Pending") {
+        apiUrl += `&status=${"Pending"}`;
+      }
+
+      if (role === "In Progress") {
+        apiUrl += `&status=${"In Progress"}`;
       }
 
       if (userId && role === "Loan Officer") {

@@ -193,7 +193,7 @@ const DashboardPage = () => {
               blueBg={true}
               cardIcon={<IoMdArrowDown size={20} />}
               cardName={"Repayments"}
-              cardLinkLabel={"Repayments"}
+              cardLinkLabel={"view"}
               cardLink={"/repayment"}
               firstStat={[
                 "Total",
@@ -211,9 +211,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              cardName={"New loans"}
+              cardName={"Pending loans"}
               cardLinkLabel={"View loans"}
-              cardLink={"/loan-applications"}
+              cardLink={"/pending-loans"}
               firstStat={[
                 "Count",
                 cardData?.data?.data.openLoanData?.totalOpenLoansCount,
@@ -226,7 +226,7 @@ const DashboardPage = () => {
             <DashboardCard
               cardName={"Active loans"}
               cardLinkLabel={"View loans"}
-              cardLink={"/loan-applications"}
+              cardLink={"/active-loans"}
               firstStat={[
                 "Count",
                 cardData?.data?.data.activeLoanData?.totalOpenLoansCount,
@@ -239,7 +239,7 @@ const DashboardPage = () => {
             <DashboardCard
               cardName={"Disbursed loans"}
               cardLinkLabel={"View loans"}
-              cardLink={"/loan-applications"}
+              cardLink={"/disbursed-loans"}
               firstStat={[
                 "Count",
                 cardData?.data?.data.disbursedLoanData?.totalOpenLoansCount,
