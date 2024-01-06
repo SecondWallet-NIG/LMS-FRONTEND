@@ -132,7 +132,7 @@ const ViewLoan = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${data?.data?.customerDetails?.firstName} ${data?.data?.customerDetails?.lastName} - Offer Letter`;
+      a.download = `${data?.data?.customerDetails.firstName} ${data?.data?.customerDetails.lastName} - Offer Letter`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

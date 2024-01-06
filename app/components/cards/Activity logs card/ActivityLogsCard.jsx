@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLoanApplicationLogs } from "@/redux/slices/loanApplicationLogSlice";
 import { useParams } from "next/navigation";
 import { formatDate, formatTimeToAMPM } from "@/helpers";
-import Link from "next/link";
 
 const CustomerActivityLogsCard = ({ data }) => {
   const { id } = useParams();
@@ -32,8 +31,8 @@ const CustomerActivityLogsCard = ({ data }) => {
                     : item.action === "LOAN_CREATION"
                     ? "Loan created by"
                     : ""}{" "}
-                  {item?.updatedBy?.firstName} {item?.updatedBy?.lastName} with
-                  email , {item?.updatedBy?.email} on{" "}
+                  {item.updatedBy.firstName} {item.updatedBy.lastName} with
+                  email , {item.updatedBy.email} on{" "}
                   {formatDate(item?.createdAt.slice(0, 10))}
                 </p>
               </div>
@@ -65,6 +64,8 @@ const CustomerActivityLogsCard = ({ data }) => {
                         <span>{item?.newValue?.interestRate * 100} %</span>
                       </p>
                     ) : null}
+
+
 
                     {item?.newValue?.hasOwnProperty("loanDuration") &&
                     item?.newValue?.hasOwnProperty("loanDurationMetrics") &&
@@ -135,43 +136,6 @@ const CustomerActivityLogsCard = ({ data }) => {
                       </p>
                     ) : null}
                   </div>
-                </div>
-              ) : item.action === "APPROVAL_REQUEST" ? (
-                <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg">
-                  <p className="text-sm text-swBlue  font-medium">
-                    Approval request sent to {item?.newValue?.approvalTitle}
-                  </p>
-                  <p className="text-sm mt-2">
-                    View assignee{" "}
-                    <Link className="underline" href={`/team-management/staff/${item?.newValue?.assignee}`}>
-                      Assignee
-                    </Link>
-                  </p>
-                </div>
-              ) : item.action === "APPROVAL_DECLINE" ? (
-                <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg">
-                  <p className="text-sm text-swBlue font-medium">
-                   {item?.newValue?.approvalTitle} declined approval request.
-                  </p>
-                  <p className="text-sm mt-2">
-                    View who declined the loan{" "}
-                    <Link className="underline" href={`/team-management/staff/${item?.newValue?.assignee}`}>
-                      User
-                    </Link>
-                  </p>
-                </div>
-              ) :
-              item.action === "APPROVAL_SUCCESS" ? (
-                <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg">
-                  <p className="text-sm text-swBlue  font-medium">
-                      {item?.newValue?.approvalTitle} approval done.
-                  </p>
-                  <p className="text-sm mt-2">
-                    View who approved the loan{" "}
-                    <Link className="underline" href={`/team-management/staff/${item?.newValue?.assignee}`}>
-                      User
-                    </Link>
-                  </p>
                 </div>
               ) : (
                 <div>

@@ -202,13 +202,12 @@ const CreateLoan = () => {
   };
 
   const removeCommasFromNumber = (numberString) => {
-    if (typeof numberString !== 'string') {
+    if (typeof numberString !== "string") {
       // Convert to string or handle the case appropriately
       numberString = String(numberString);
     }
     return numberString.replace(/,/g, "");
   };
-  
 
   const calCommitmentTotal = (e) => {
     let { name, value } = e.target;
@@ -863,7 +862,7 @@ const CreateLoan = () => {
                   <p className="text-sm mb-2">{selectedCustomer.email}</p>
 
                   <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
-                  {selectedCustomer.phoneNumber.slice(1)}
+                    {selectedCustomer.phoneNumber.slice(1)}
                   </p>
                 </div>
               </div>
@@ -1024,7 +1023,7 @@ const CreateLoan = () => {
                     onClick={fetchInterest}
                     className="h-10 w-full mt-6 bg-swBlue text-white"
                   >
-                    Compute Interest
+                    Preview Interest
                   </Button>
 
                   <EditableButton
@@ -1099,7 +1098,7 @@ const CreateLoan = () => {
                   <p className="text-sm mb-2">{selectedCustomer.email}</p>
 
                   <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
-                  {selectedCustomer.phoneNumber.slice(1)}
+                    {selectedCustomer.phoneNumber.slice(1)}
                   </p>
                 </div>
               </div>
@@ -1300,7 +1299,7 @@ const CreateLoan = () => {
               <div
                 key={item._id}
                 onClick={() => {
-                  console.log({item});
+                  console.log({ item });
                   setFormData({
                     ...formData,
                     customerId: item._id,

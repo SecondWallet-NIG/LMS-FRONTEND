@@ -12,29 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "../shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 
-
-
-
 const PaymentHistoryTable = () => {
   const dispatch = useDispatch();
-  const [user, setUser] = useState("")
-
-  useEffect(()=> {
-    const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag;
-    console.log({userRoleTag});
-    if(userRoleTag) {
-      console.log("hello");
-      setUser(userRoleTag)
-    }
-
-  }, [])
-
-  const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag;
-  console.log({userRoleTag});
-  if(userRoleTag) {
-    console.log("hello");
-  }
-
   const router = useRouter();
   const approvePayment = (loanId, repaymentId) => {
     dispatch(approveLoggedPayment({ loanId, repaymentId }))
@@ -87,8 +66,7 @@ const PaymentHistoryTable = () => {
       customerInfo: (
         <div className="">
           <div className="text-md font-[500] text-gray-700">
-            {item?.loanApplication.customerId.firstName}{" "}
-            {item?.loanApplication.customerId.lastName}
+            {item?.loanApplication.customerId.firstName} {item?.loanApplication.customerId.lastName}
           </div>
           <div className="text-md font-[500] text-gray-700">
             ₦ {item?.amountLogged.toLocaleString()}
@@ -108,9 +86,7 @@ const PaymentHistoryTable = () => {
           <div
             className="text-md font-[500] text-swBlue underline"
             onClick={() => {
-              router.push(
-                `/loan-applications/view-loan/${item?.loanApplication._id}`
-              );
+              router.push(`/loan-applications/view-loan/${item?.loanApplication._id}`);
             }}
           >
             SWL - {item?.loanApplication.loanId}
@@ -130,32 +106,27 @@ const PaymentHistoryTable = () => {
           {item?.status}
         </button>
       ),
-
       approvalBtn: (
-        <div>
-          {userRoleTag && userRoleTag === "CFO" ? (
-            <div className="flex gap-5">
-              <Button
-                disabled={item.status == "New" ? false : true}
-                onClick={() => {
-                  approvePayment(item?.loanApplication._id, item._id);
-                }}
-                className="bg-swBlue text-white text-xs font-normal px-2 py-1  px-2 py-1 rounded rounded-md"
-              >
-                Approve
-              </Button>
-              <Button
-                variant="danger"
-                disabled={item.status === "New" ? false : true}
-                onClick={() => {
-                  declinePayment(item?.loanApplication._id, item._id);
-                }}
-                className="bg-red-400 text-white text-xs font-normal px-2 py-1  px-2 py-1 rounded rounded-md"
-              >
-                Decline
-              </Button>
-            </div>
-          ) : null}
+        <div className="flex gap-5">
+          <Button
+            disabled={item.status == "New" ? false : true}
+            onClick={() => {
+              approvePayment(item?.loanApplication._id, item._id);
+            }}
+            className="bg-swBlue text-white text-xs font-normal px-2 py-1  px-2 py-1 rounded rounded-md"
+          >
+            Approve
+          </Button>
+          <Button
+            variant="danger"
+            disabled={item.status === "New" ? false : true}
+            onClick={() => {
+              declinePayment(item?.loanApplication._id, item._id);
+            }}
+            className="bg-red-400 text-white text-xs font-normal px-2 py-1  px-2 py-1 rounded rounded-md"
+          >
+            Decline
+          </Button>
         </div>
       ),
     }));

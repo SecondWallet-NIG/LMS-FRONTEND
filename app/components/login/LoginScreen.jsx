@@ -146,7 +146,7 @@ const LoginScreen = () => {
           {loading === true ? "Logging In..." : "Log In"}
         </Button>
         <p className="text-sm mt-2 pt-2 text-center">
-          <Link href="/forgetPassword">Forget Password</Link>
+          <Link href="/forgetPassword">Forgot Password</Link>
         </p>
       </div>
     </div>
