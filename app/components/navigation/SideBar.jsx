@@ -31,9 +31,8 @@ const Sidebar = () => {
   const [sideBarOpen, setSideBarOpen] = useState(true);
   const [activeLink, setActiveLink] = useState("");
   const x = useSelector((state) => state.approvalAssignee);
-  const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role
-    ?.tag;
-  console.log({ userRoleTag });
+  const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag;
+
   const handleSidebarOpen = (state) => {
     setSideBarOpen(state);
   };
@@ -354,8 +353,8 @@ const Sidebar = () => {
           userRoleTag === "DIR" ? (
             <>
               <SidebarLink
-                allowedRoleTags={["CFO", "CEO", "CT0", "DIR", "SYSTEM ADMIN"]}
-                userRoleTag={userRoleTag}
+                allowedRoleTags={['CFO', 'CEO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
+                userRoleTag={userRoleTag} 
                 icon={<FaPeopleGroup size={20} />}
                 text="Team management"
                 link="/team-management"
