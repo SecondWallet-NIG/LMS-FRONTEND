@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { FiMessageSquare } from "react-icons/fi";
@@ -8,13 +8,14 @@ import { useState } from "react";
 
 const LoanProcessCard = ({ data }) => {
   const _data = data?.data?.data;
+  console.log({ _data });
   const [commentOpen, setCommentOpen] = useState(false);
   const [approvalMsg, setApprovalMsg] = useState({});
 
   return (
     <main className="flex flex-col">
-      {
-        Array.isArray(_data) && _data?.map((item, index) => (
+      {Array.isArray(_data) &&
+        _data?.map((item, index) => (
           <div key={index} className="border-b border-gray-100 p-2">
             <div className="flex justify-between items-center">
               <p className="font-semibold capitalize text-xs text-black">
@@ -65,6 +66,7 @@ const LoanProcessCard = ({ data }) => {
                 </button>
                 <div
                   onClick={() => {
+                    console.log(">>>>>", item.approvalNote.length);
                     setCommentOpen(!commentOpen);
                     setApprovalMsg(item);
                   }}
@@ -86,16 +88,55 @@ const LoanProcessCard = ({ data }) => {
           />
         </div>
         <div className="flex justify-between mb-4 text-sm">
-          <div>Request message : </div>
-          <div>{approvalMsg?.requestNote === null ? "No note attached" : approvalMsg?.requestNote}</div>
+          <div>Request messages : </div>
+          <div>
+            {approvalMsg?.requestNote?.length == 0 ? (
+              "No note attached"
+            ) : (
+              <div>
+                {approvalMsg?.requestNote?.map((item) => (
+                  <div>
+                    <div className="mt-2">{item?.note}</div>
+                    <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex justify-between mb-4 text-sm">
-          <div>Decline message : </div>
-          <div>{approvalMsg?.declineNote === null ? "No note attached" : approvalMsg?.declineNote}</div>
+          <div>Decline messages : </div>
+          <div>
+            {approvalMsg?.declineNote?.length == 0
+              ? "No note attached"
+              : (
+                <div>
+                  {approvalMsg?.declineNote?.map((item) => (
+                    <div>
+                      <div className="mt-2">{item?.note}</div>
+                      <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+          </div>
         </div>
         <div className="flex justify-between mb-4 text-sm">
-          <div>Approval message : </div>
-          <div>{approvalMsg?.approvalNote === null ? "No note attached" : approvalMsg?.approvalNote}</div>
+          <div>Approval messages : </div>
+          <div>
+            {approvalMsg?.approvalNote?.length == 0
+              ? "No note attached"
+              : (
+                <div>
+                  {approvalMsg?.approvalNote?.map((item) => (
+                    <div>
+                      <div className="mt-2">{item?.note}</div>
+                      <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+          </div>
         </div>
       </CenterModal>
     </main>
