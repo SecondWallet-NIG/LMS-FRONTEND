@@ -9,13 +9,17 @@ import BarChart from "../components/chart/BarChart";
 import DashboardCard from "../components/cards/dashboard/DashboardCard";
 import { LuUsers } from "react-icons/lu";
 import { IoMdArrowDown, IoMdArrowUp } from "react-icons/io";
-import { getDashboardCardData } from "@/redux/slices/dashboardSlice";
+import {
+  getDashboardCardData,
+  getDashboardGraphData,
+} from "@/redux/slices/dashboardSlice";
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const cardData = useSelector((state) => state.dashboardData);
-  console.log(cardData);
+  const graphData = useSelector((state) => state.dashboardData);
+  console.log({ graphData });
 
   const options = {
     responsive: true,
@@ -35,48 +39,59 @@ const DashboardPage = () => {
   };
 
   const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
     "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
-  const dataBorrower = {
-    labels,
-    datasets: [
-      {
-        label: "Borrowers",
-        data: [
-          3000, 5000, 7000, 2000, 9000, 4000, 6000, 8000, 3000, 4000, 7000,
-          10000,
-        ],
-        backgroundColor: "#2769B3",
-        barThickness: 10,
-        borderRadius: 10,
-      },
-    ],
-  };
 
-  const dataDisbursement = {
+
+
+  const dataValues = Array(12).fill(0);
+  const dataValuesFees = Array(12).fill(0);
+  const dataValuesRepayment = Array(12).fill(0);
+  const dataValuesDisbursement = Array(12).fill(0);
+
+  // Extracting data from loanGraphData
+  graphData.data1?.data?.loanGraphData.forEach((entry) => {
+    const index = entry.month - 1; // Adjusting month to be 0-based index
+    dataValues[index] = entry.totalLoanAmount;
+  });
+
+  graphData.data1?.data?.feesGraphData.forEach((entry) => {
+    const index = entry.month - 1; // Adjusting month to be 0-based index
+    dataValuesFees[index] = entry.totalCommitmentFeePaid;
+  });
+
+  graphData.data1?.data?.repaymentsGraphData.forEach((entry) => {
+    const index = entry.month - 1; // Adjusting month to be 0-based index
+    dataValuesRepayment[index] = entry.amountPaid;
+  });
+  graphData.data1?.data?.disbursementsGraphData.forEach((entry) => {
+    const index = entry.month - 1; // Adjusting month to be 0-based index
+    dataValuesDisbursement[index] = entry.totalLoanAmount;
+  });
+
+  // Creating the dataFees object
+  const _labels = Array.from({ length: 12 }, (_, i) => i + 1); // Months from 1 to 12
+  const dataLoans = {
     labels,
     datasets: [
       {
-        label: "Disbursements",
-        data: [
-          3000, 5000, 7000, 2000, 9000, 4000, 6000, 8000, 3000, 4000, 7000,
-          10000,
-        ],
-        backgroundColor: "#E3AF0E",
-        barThickness: 10,
-        borderRadius: 10,
+        label: "Loans",
+        data: dataValues,
+        backgroundColor: "#4aba5b",
+        barThickness: 8,
+        borderRadius: 8,
       },
     ],
   };
@@ -86,13 +101,10 @@ const DashboardPage = () => {
     datasets: [
       {
         label: "Fees",
-        data: [
-          3000, 5000, 7000, 2000, 9000, 4000, 6000, 8000, 3000, 4000, 7000,
-          10000,
-        ],
-        backgroundColor: "#F04438",
-        barThickness: 10,
-        borderRadius: 10,
+        data: dataValuesFees,
+        backgroundColor: "#ba5b4a",
+        barThickness: 8,
+        borderRadius: 8,
       },
     ],
   };
@@ -102,19 +114,30 @@ const DashboardPage = () => {
     datasets: [
       {
         label: "Repayments",
-        data: [
-          3000, 5000, 7000, 2000, 9000, 4000, 6000, 8000, 3000, 4000, 7000,
-          10000,
-        ],
-        backgroundColor: "#00AEE8",
-        barThickness: 10,
-        borderRadius: 10,
+        data: dataValuesRepayment,
+        backgroundColor: "#3562a1",
+        barThickness: 8,
+        borderRadius: 8,
+      },
+    ],
+  };
+
+  const dataDisbursements = {
+    labels,
+    datasets: [
+      {
+        label: "Disbursement",
+        data: dataValuesDisbursement,
+        backgroundColor: "#8a2776",
+        barThickness: 8,
+        borderRadius: 8,
       },
     ],
   };
 
   useEffect(() => {
     dispatch(getDashboardCardData());
+    dispatch(getDashboardGraphData());
   }, []);
 
   return (
@@ -137,14 +160,12 @@ const DashboardPage = () => {
                 "This month",
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
-                cardData?.data?.data?.borrowersData
-                  ?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
+                cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
                 cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
-                cardData?.data?.data.borrowersData
-                  ?.percentageTotalBorrowerCountLast24?.toLocaleString(),
+                cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
               ]}
             />
             <DashboardCard
@@ -251,8 +272,7 @@ const DashboardPage = () => {
               ]}
               secondStat={[
                 "Total",
-                cardData?.data?.data.unpaidRepaymentData
-                  ?.totalUnpaidRepaymentsAmount?.toLocaleString(),
+                cardData?.data?.data.unpaidRepaymentData?.totalUnpaidRepaymentsAmount?.toLocaleString(),
               ]}
               thirdStat={["null"]}
             />
@@ -262,19 +282,16 @@ const DashboardPage = () => {
               cardLink={""}
               firstStat={[
                 "Count",
-                cardData?.data?.data.fullyRepaidLoansData
-                  ?.totalFullyPaidLoansCount?.toLocaleString(),
+                cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansCount?.toLocaleString(),
               ]}
               secondStat={[
                 "Total",
-                cardData?.data?.data.fullyRepaidLoansData
-                  ?.totalFullyPaidLoansAmount?.toLocaleString(),
+                cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansAmount?.toLocaleString(),
               ]}
               thirdStat={["null"]}
             />
             <DashboardCard
-              cardName={"Fees"}
-              cardLinkLabel={"View"}
+              cardName={"Commitment Fees"}
               cardLink={""}
               firstStat={[
                 "Total",
@@ -283,19 +300,34 @@ const DashboardPage = () => {
               secondStat={[
                 "This month",
                 cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
-                cardData?.data?.data?.feesData
-                  ?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
+                cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
                 cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
-                cardData?.data?.data.feesData
-                  ?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
+                cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
+              ]}
+            />
+            <DashboardCard
+              cardName={"Management Fees"}
+              cardLink={""}
+              firstStat={[
+                "Total",
+                cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
+              ]}
+              secondStat={[
+                "This month",
+                cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
+                cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
+              ]}
+              thirdStat={[
+                "Today",
+                cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
+                cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
               ]}
             />
             <DashboardCard
               cardName={"Interests"}
-              cardLinkLabel={"View"}
               cardLink={""}
               firstStat={[
                 "Total",
@@ -305,14 +337,12 @@ const DashboardPage = () => {
                 "This month",
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
-                cardData?.data?.data?.borrowersData
-                  ?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
+                cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
                 cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
-                cardData?.data?.data?.borrowersData
-                  ?.percentageTotalBorrowerCountLast24?.toLocaleString()
+                cardData?.data?.data?.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
               ]}
             />
           </div>
@@ -329,10 +359,22 @@ const DashboardPage = () => {
               </div>
             </div>
           </section>
-          <BarChart options={options} data={dataBorrower} />
-          <BarChart options={options} data={dataDisbursement} />
-          <BarChart options={options} data={dataFees} />
-          <BarChart options={options} data={dataRepayments} />
+          <div className="flex">
+            <div className="w-1/2">
+              <BarChart options={options} data={dataLoans} />
+            </div>
+            <div className="w-1/2">
+              <BarChart options={options} data={dataFees} />
+            </div>
+          </div>
+          <div className="flex">
+            <div className="w-1/2">
+              <BarChart options={options} data={dataDisbursements} />
+            </div>
+            <div className="w-1/2">
+              <BarChart options={options} data={dataRepayments} />
+            </div>
+          </div>
         </main>
       )}
     </DashboardLayout>

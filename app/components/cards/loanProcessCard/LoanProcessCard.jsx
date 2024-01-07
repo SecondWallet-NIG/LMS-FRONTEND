@@ -94,8 +94,8 @@ const LoanProcessCard = ({ data }) => {
               "No note attached"
             ) : (
               <div>
-                {approvalMsg?.requestNote?.map((item) => (
-                  <div>
+                {approvalMsg?.requestNote?.map((item, index) => (
+                  <div key={index}>
                     <div className="mt-2">{item?.note}</div>
                     <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
                   </div>
@@ -111,8 +111,8 @@ const LoanProcessCard = ({ data }) => {
               ? "No note attached"
               : (
                 <div>
-                  {approvalMsg?.declineNote?.map((item) => (
-                    <div>
+                  {approvalMsg?.declineNote?.map((item, index) => (
+                    <div key={index}>
                       <div className="mt-2">{item?.note}</div>
                       <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
                     </div>
@@ -128,8 +128,8 @@ const LoanProcessCard = ({ data }) => {
               ? "No note attached"
               : (
                 <div>
-                  {approvalMsg?.approvalNote?.map((item) => (
-                    <div>
+                  {approvalMsg?.approvalNote?.map((item, index) => (
+                    <div key={index}>
                       <div className="mt-2">{item?.note}</div>
                       <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
                     </div>
