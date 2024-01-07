@@ -150,7 +150,7 @@ const DashboardPage = () => {
               blueBg={true}
               cardIcon={<LuUsers size={20} />}
               cardName={"Borrowers"}
-              cardLinkLabel={"New Borrower"}
+              cardLinkLabel={"View"}
               cardLink={"/create-borrower"}
               firstStat={[
                 "Total",
@@ -161,10 +161,12 @@ const DashboardPage = () => {
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
                 cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
+                cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
                 cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
+                cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
                 cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
               ]}
             />
@@ -273,6 +275,7 @@ const DashboardPage = () => {
               secondStat={[
                 "Total",
                 cardData?.data?.data.unpaidRepaymentData?.totalUnpaidRepaymentsAmount?.toLocaleString(),
+                cardData?.data?.data.unpaidRepaymentData?.totalUnpaidRepaymentsAmount?.toLocaleString(),
               ]}
               thirdStat={["null"]}
             />
@@ -283,9 +286,11 @@ const DashboardPage = () => {
               firstStat={[
                 "Count",
                 cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansCount?.toLocaleString(),
+                cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansCount?.toLocaleString(),
               ]}
               secondStat={[
                 "Total",
+                cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansAmount?.toLocaleString(),
                 cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansAmount?.toLocaleString(),
               ]}
               thirdStat={["null"]}
@@ -319,10 +324,12 @@ const DashboardPage = () => {
                 "This month",
                 cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
+                cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
                 cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
+                cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
                 cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
               ]}
             />
@@ -338,10 +345,12 @@ const DashboardPage = () => {
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
                 cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
+                cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
                 cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
+                cardData?.data?.data?.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
                 cardData?.data?.data?.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
               ]}
             />
