@@ -83,8 +83,17 @@ const Sidebar = () => {
         <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
           <div>
             <SidebarLink
-              allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO','CT0', 'DIR', 'SYSTEM ADMIN']}
-              userRoleTag={userRoleTag} 
+              allowedRoleTags={[
+                "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "ICO",
+                "CT0",
+                "DIR",
+                "SYSTEM ADMIN",
+              ]}
+              userRoleTag={userRoleTag}
               icon={
                 <TbAntennaBars5
                   className={`${activeLink === "dashboard" && "text-swBlue"}`}
@@ -102,8 +111,17 @@ const Sidebar = () => {
             />
           </div>
           <SidebarLink
-              allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO','ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
-              userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "ICO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={
               <RiBox3Line
                 className={`${activeLink === "my-tasks" && "text-swBlue"}`}
@@ -130,8 +148,17 @@ const Sidebar = () => {
             }}
           />
           <SidebarLink
-            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
-            userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "ICO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={
               <FiUser
                 className={`${activeLink === "customers" && "text-swBlue"}`}
@@ -148,8 +175,8 @@ const Sidebar = () => {
             }}
           />
           <SidebarLink
-            allowedRoleTags={['LO']}
-            userRoleTag={userRoleTag} 
+            allowedRoleTags={["LO"]}
+            userRoleTag={userRoleTag}
             icon={
               <IoMdAdd
                 className={`${activeLink === "create-loan" && "text-swBlue"}`}
@@ -158,7 +185,11 @@ const Sidebar = () => {
             }
             pathname={pathname}
             text="Create loan"
-            link="/create-loan"
+            link={`${
+              user?.data?.user?.role?.tag === "LO"
+                ? "/create-loan"
+                : "/unauthorised"
+            }`}
             isActive={"create-loan"}
             sideBarOpen={sideBarOpen}
             onClick={() => {
@@ -166,8 +197,17 @@ const Sidebar = () => {
             }}
           />
           <SidebarLink
-            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO','ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
-            userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "ICO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={
               <FiDollarSign
                 className={`${
@@ -185,8 +225,17 @@ const Sidebar = () => {
             }}
           />
           <SidebarLink
-            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
-            userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "ICO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={
               <FiSend
                 className={`${activeLink === "disbursement" && "text-swBlue"}`}
@@ -204,8 +253,17 @@ const Sidebar = () => {
           />
 
           <SidebarLink
-            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
-            userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "ICO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={
               <FiArrowDownLeft
                 className={`${activeLink === "repayment" && "text-swBlue"}`}
@@ -223,8 +281,17 @@ const Sidebar = () => {
           />
 
           <SidebarLink
-            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
-            userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "ICO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={
               <AiFillMoneyCollect
                 className={`${
@@ -248,16 +315,32 @@ const Sidebar = () => {
       <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
         <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""} `}>
           <SidebarLink
-              allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
-              userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={<TbReportMoney size={20} />}
             text="Report"
             link="/report"
             sideBarOpen={sideBarOpen}
           />
           <SidebarLink
-            allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'CT0', 'DIR', 'SYSTEM ADMIN']}
-            userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={<BiMapAlt size={20} />}
             text="Loan packages"
             link="/plans"
@@ -318,8 +401,17 @@ const Sidebar = () => {
         Sign Out
       </Button> */}
           <SidebarLink
-             allowedRoleTags={['LO', 'CFO', 'CEO' , 'CAO', 'ICO','CT0', 'DIR', 'SYSTEM ADMIN']}
-             userRoleTag={userRoleTag} 
+            allowedRoleTags={[
+              "LO",
+              "CFO",
+              "CEO",
+              "CAO",
+              "ICO",
+              "CT0",
+              "DIR",
+              "SYSTEM ADMIN",
+            ]}
+            userRoleTag={userRoleTag}
             icon={<GoSignOut size={20} />}
             text="Sign Out"
             link="/"

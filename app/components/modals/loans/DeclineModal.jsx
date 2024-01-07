@@ -10,7 +10,12 @@ import { useParams } from "next/navigation";
 import InputField from "../../shared/input/InputField--";
 import Button from "../../shared/buttonComponent/Button";
 import SelectField from "../../shared/input/SelectField";
-import { declineLoanRequest, requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
+import {
+  declineLoanRequest,
+  getLoanApprovals,
+  requestLoanApproval,
+} from "@/redux/slices/loanApprovalSlice";
+import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
 
 const DeclineModal = ({
   isOpen,
@@ -18,6 +23,7 @@ const DeclineModal = ({
   width,
   data,
   selected,
+  closeModal,
   approvalId,
   approvalLevel,
 }) => {
@@ -30,8 +36,6 @@ const DeclineModal = ({
     approvalLevel: approvalId,
     declineNote: "",
   });
-
-
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
@@ -60,7 +64,6 @@ const DeclineModal = ({
     });
   };
 
-
   const submitLoan = (e) => {
     setLoading(true);
     const payload = { id, formData };
@@ -69,10 +72,13 @@ const DeclineModal = ({
       .unwrap()
       .then(() => {
         toast("Loan declined for this level");
+        dispatch(getSingleLoan(id));
+        dispatch(getLoanApprovals(id));
         setLoading(false);
+        closeModal(false);
       })
       .catch((error) => {
-        console.log({error});
+        console.log({ error });
         toast.error(`${error?.message}`);
         setLoading(true);
       });

@@ -123,7 +123,7 @@ const Repayment = () => {
                   }`}
                 >
                   <p className="text-3xl font-semibold">
-                    {item?.countLast24hr}
+                    {item?.totalRepayment}
                   </p>
                   <p className="font-medium">
                     &#8358; {item?.amount?.toLocaleString()}

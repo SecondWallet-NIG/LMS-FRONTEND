@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
-const LoanTable = () => {
+const ActiveLoanTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
   const [roleTag,setRoleTag] = useState("")
@@ -122,11 +122,11 @@ const LoanTable = () => {
           filters={true}
           pagination={true}
           userId={userId}
-          role={role}
+          role={"In Progress"}
         />
       )}
     </div>
   );
 };
 
-export default LoanTable;
+export default ActiveLoanTable;

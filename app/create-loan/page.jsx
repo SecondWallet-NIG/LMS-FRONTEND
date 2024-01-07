@@ -24,6 +24,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Rings } from "react-loader-spinner";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
+import Unauthorized from "../unauthorized/page";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const CreateLoan = () => {
   const [isLoading, setIsLoading] = useState();
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
+  const [roleTag, setRoleTag] = useState("");
 
   const [formData, setFormData] = useState({
     loanAmount: "",
@@ -357,6 +359,18 @@ const CreateLoan = () => {
     setSelectedCustomer(data?.profileInfo);
     setFilteredData(customer?.data);
   }, [customer?.data]);
+
+  useEffect(() => {
+    let userId;
+    if (typeof window !== "undefined") {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setRoleTag(storedUser?.data?.user?.role.tag);
+    }
+  }, []);
+
+  if (roleTag && roleTag !== "LO") {
+    return <Unauthorized />;
+  }
 
   return (
     <DashboardLayout>

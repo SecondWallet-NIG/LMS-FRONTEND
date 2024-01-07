@@ -3,9 +3,9 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { FiMinus } from "react-icons/fi";
-import { MdArrowBackIos, MdPercent } from "react-icons/md";
+import { MdArrowBackIos, MdKeyboardArrowDown, MdPercent } from "react-icons/md";
 import { TbCurrencyNaira } from "react-icons/tb";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createLoanPackage,
@@ -29,6 +29,8 @@ const EditPlansAndPackages = () => {
   const dispatch = useDispatch();
   const [cancelModal, setCancelModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
+  const buttonRef = useRef(null);
+  const [selectStatusMenu, setSelectStatusMenu] = useState(false);
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const loanPackage =
@@ -164,6 +166,25 @@ const EditPlansAndPackages = () => {
       createdBy: loanPackage?.createdBy,
     });
   }, [loanPackage]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (buttonRef.current && !buttonRef.current.contains(event.target)) {
+        // Click outside the button, close it
+        setSelectStatusMenu(!selectStatusMenu);
+      } else {
+        setSelectStatusMenu(false);
+      }
+    };
+
+    // Add event listener when component mounts
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup event listener when component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectStatusMenu]);
   return (
     <DashboardLayout
       isBackNav={true}
@@ -172,7 +193,65 @@ const EditPlansAndPackages = () => {
       <main className="mx-auto max-w-4xl py-10 px-5">
         <ToastContainer />
         <p className="font-semibold text-lg">Edit Loan plan and Packages</p>
-        <p className="font-semibold my-5">Loan details</p>
+        <div className="flex justify-between items-center">
+          <p className="font-semibold my-5">Loan details</p>
+          <div className="relative">
+            <div
+              className="flex gap-2 items-center cursor-pointer"
+              onClick={() => setSelectStatusMenu(!selectStatusMenu)}
+            >
+              <p
+                className={`${
+                  loanPackage?.status === "Active"
+                    ? "border-green-500 bg-green-100 text-green-500"
+                    : loanPackage?.status === "Under review"
+                    ? "border-purple-500 bg-purple-100 text-purple-500"
+                    : "border-orange-500 bg-orange-100 text-orange-500"
+                } border px-3 rounded-full text-xs flex items-center capitalize`}
+              >
+                {loanPackage?.status}
+              </p>
+              <MdKeyboardArrowDown size={20} className="text-swGray" />
+              {selectStatusMenu && (
+                <div
+                  ref={buttonRef}
+                  className="absolute w-60 p-2 shadow-md rounded-lg mt-52 border bg-white right-0 z-20"
+                >
+                  <p
+                    className={`flex justify-between items-center p-2 rounded-lg hover:bg-swLightGray ${
+                      loanPackage.status === "Active" && "text-swBlue"
+                    }`}
+                  >
+                    Active{" "}
+                    {loanPackage.status === "Active" && (
+                      <IoMdCheckmark size={20} />
+                    )}
+                  </p>
+                  <p
+                    className={`flex justify-between items-center p-2 rounded-lg hover:bg-swLightGray ${
+                      loanPackage.status === "Inacive" && "text-swBlue"
+                    }`}
+                  >
+                    Inactive{" "}
+                    {loanPackage.status === "Inctive" && (
+                      <IoMdCheckmark size={20} />
+                    )}
+                  </p>
+                  <p
+                    className={`flex justify-between items-center p-2 rounded-lg hover:bg-swLightGray ${
+                      loanPackage.status === "Under review" && "text-swBlue"
+                    }`}
+                  >
+                    Under Review{" "}
+                    {loanPackage.status === "Under review" && (
+                      <IoMdCheckmark size={20} />
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
         <div className="flex gap-5 flex-col">
           <InputField
             required={true}

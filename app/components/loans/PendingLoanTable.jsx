@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
-const LoanTable = () => {
+
+
+const PendingLoanTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
   const [roleTag,setRoleTag] = useState("")
@@ -97,15 +99,7 @@ const LoanTable = () => {
     <div>
       {userId && (
         <ReusableDataTable
-          filterParams={[
-            { name: "Pending" },
-            { name: "Ready for Disbursal" },
-            { name: "In Progress" },
-            { name: "Declined" },
-            { name: "Disbursed" },
-            { name: "Fully Paid" },
-            { name: "Cancelled Disbursement" },
-          ]}
+     
           dataTransformer={customDataTransformer}
           onClickRow="/loan-applications/view-loan"
           headers={headers}
@@ -122,11 +116,11 @@ const LoanTable = () => {
           filters={true}
           pagination={true}
           userId={userId}
-          role={role}
+          role={"Pending"}
         />
       )}
     </div>
   );
 };
 
-export default LoanTable;
+export default PendingLoanTable;

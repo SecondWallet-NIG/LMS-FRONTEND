@@ -172,7 +172,7 @@ const DashboardPage = () => {
               blueBg={true}
               cardIcon={<IoMdArrowDown size={20} />}
               cardName={"Repayments"}
-              cardLinkLabel={"Repayments"}
+              cardLinkLabel={"view"}
               cardLink={"/repayment"}
               firstStat={[
                 "Total",
@@ -190,9 +190,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              cardName={"Open loans"}
+              cardName={"Pending loans"}
               cardLinkLabel={"View loans"}
-              cardLink={"/loan-applications"}
+              cardLink={"/pending-loans"}
               firstStat={[
                 "Count",
                 cardData?.data?.data.openLoanData?.totalOpenLoansCount,
@@ -200,6 +200,32 @@ const DashboardPage = () => {
               secondStat={[
                 "Total",
                 cardData?.data?.data.openLoanData?.totalOpenLoansAmount?.toLocaleString(),
+              ]}
+            />
+            <DashboardCard
+              cardName={"Active loans"}
+              cardLinkLabel={"View loans"}
+              cardLink={"/active-loans"}
+              firstStat={[
+                "Count",
+                cardData?.data?.data.activeLoanData?.totalOpenLoansCount,
+              ]}
+              secondStat={[
+                "Total",
+                cardData?.data?.data.activeLoanData?.totalOpenLoansAmount?.toLocaleString(),
+              ]}
+            />
+            <DashboardCard
+              cardName={"Disbursed loans"}
+              cardLinkLabel={"View loans"}
+              cardLink={"/disbursed-loans"}
+              firstStat={[
+                "Count",
+                cardData?.data?.data.disbursedLoanData?.totalOpenLoansCount,
+              ]}
+              secondStat={[
+                "Total",
+                cardData?.data?.data.disbursedLoanData?.totalOpenLoansAmount?.toLocaleString(),
               ]}
             />
             <DashboardCard

@@ -37,6 +37,12 @@ const PagePath = ({ paths }) => {
         <p className="text-swBlue text-sm pb-1.5">Loan Plans and Packages</p>
       ) : pathname === "/payment-history" ? (
         <p className="text-swBlue text-sm pb-1.5">Payment History</p>
+      ) : pathname === "/disbursed-loans" ? (
+        <p className="text-swBlue text-sm pb-1.5">Disbursed Loans</p>
+      ) : pathname === "/pending-loans" ? (
+        <p className="text-swBlue text-sm pb-1.5">Pending Loans</p>
+      ) : pathname === "/active-loans" ? (
+        <p className="text-swBlue text-sm pb-1.5">Active Loans</p>
       ) : (
         <div className="flex gap-1 items-end">
           {paths?.map((item, index) => (
@@ -51,9 +57,7 @@ const PagePath = ({ paths }) => {
                 {item}
               </p>
 
-              {index !== paths?.length - 1 && (
-                <div className="flex"> / </div>
-              )}
+              {index !== paths?.length - 1 && <div className="flex"> / </div>}
             </div>
           ))}
         </div>
