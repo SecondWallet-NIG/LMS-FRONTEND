@@ -58,8 +58,7 @@ function ReusableDataTable({
     {
       startDate: null,
       endDate: null,
-      minDate: new Date(),
-      key: "selection",
+      key: 'selection'
     },
   ]);
   const [status, setStatus] = useState(" ");
@@ -693,22 +692,6 @@ function ReusableDataTable({
               onChange={(item) => setDateRange([item.selection])}
               moveRangeOnFirstSelection={false}
               ranges={dateRange}
-              // onChange={(item) => {
-              //   // Adjust the time to the start and end of the selected day
-              //   const startDate = new Date(item.selection.startDate);
-              //   startDate.setHours(1, 0, 0, 0);
-
-              //   const endDate = new Date(item.selection.endDate);
-              //   endDate.setHours(24, 59, 59, 999);
-
-              //   setDateRange([
-              //     {
-              //       startDate,
-              //       endDate,
-              //       key: 'selection'
-              //     }
-              //   ]);
-              // }}
             />
           </div>
           <div className="flex justify-between">
