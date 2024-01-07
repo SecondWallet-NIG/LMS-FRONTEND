@@ -134,7 +134,7 @@ function ReusableDataTable({
         setLoading(false);
       })
       .catch((error) => {
-        console.log({error});
+        console.log({ error });
         toast.error("An error occurred while fetching data for download.");
         setLoading(false);
       });
@@ -189,7 +189,7 @@ function ReusableDataTable({
       if (role === "In Progress") {
         apiUrl += `&status=${"In Progress"}`;
       }
-      
+
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
@@ -222,7 +222,10 @@ function ReusableDataTable({
             setData(transformedData);
             setPaginationLinks(data?.data.links);
             console.log(data?.data.links);
-            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
+            setDownloadData(
+              data?.data?.links?.totalDocuments ||
+                data?.data?.data?.links?.totalDocuments
+            );
             setLoading(false);
           } else {
             setData(
@@ -232,7 +235,10 @@ function ReusableDataTable({
                 data.results
             );
             console.log(data?.data.links.totalDocuments);
-            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
+            setDownloadData(
+              data?.data?.links?.totalDocuments ||
+                data?.data?.data?.links?.totalDocuments
+            );
             setPaginationLinks(data?.data?.links);
             setLoading(false);
           }
@@ -298,7 +304,7 @@ function ReusableDataTable({
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results
             );
-            console.log({transformedData});
+            console.log({ transformedData });
             setData(transformedData);
             setPaginationLinks(
               data?.data.links ||
@@ -306,7 +312,10 @@ function ReusableDataTable({
                 data?.data?.data?.data?.links
             );
             console.log(data?.data?.links.totalDocuments);
-            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
+            setDownloadData(
+              data?.data?.links?.totalDocuments ||
+                data?.data?.data?.links?.totalDocuments
+            );
             setLoading(false);
           } else {
             setData(
@@ -323,7 +332,10 @@ function ReusableDataTable({
                 data?.data?.data?.data?.links
             );
             console.log(data?.data.links.totalDocuments);
-            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
+            setDownloadData(
+              data?.data?.links?.totalDocuments ||
+                data?.data?.data?.links?.totalDocuments
+            );
             setLoading(false);
           }
           setLoading(false);
@@ -689,7 +701,26 @@ function ReusableDataTable({
           <div className="w-full items-center">
             <DateRange
               editableDateInputs={true}
-              onChange={(item) => setDateRange([item.selection])}
+              onChange={(item) => {
+                const adjustedItem = {
+                  ...item.selection,
+                  startDate: new Date(
+                    Date.UTC(
+                      item.selection.startDate.getFullYear(),
+                      item.selection.startDate.getMonth(),
+                      item.selection.startDate.getDate()
+                    )
+                  ),
+                  endDate: new Date(
+                    Date.UTC(
+                      item.selection.endDate.getFullYear(),
+                      item.selection.endDate.getMonth(),
+                      item.selection.endDate.getDate()
+                    )
+                  ),
+                };
+                setDateRange([adjustedItem]);
+              }}
               moveRangeOnFirstSelection={false}
               ranges={dateRange}
             />
