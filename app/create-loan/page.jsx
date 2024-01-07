@@ -1256,13 +1256,28 @@ const CreateLoan = () => {
                     </div>
                   </div>
                 </div>
-                <div className="">
-                  <Button
-                    className="h-10 w-full mt-6 bg-swBlue text-white rounded-md"
+                <div className="mb-10 mt-5">
+                  <EditableButton
+                    blueBtn={true}
+                    disabled={loading ? true : false}
+                    startIcon={
+                      loading && (
+                        <Rings
+                          height="20"
+                          width="20"
+                          color="#ffffff"
+                          radius="2"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                          ariaLabel="rings-loading"
+                        />
+                      )
+                    }
+                    className={"w-full "}
+                    label={"Create Loan"}
                     onClick={submitLoan}
-                  >
-                    Create Loan
-                  </Button>
+                  />
                 </div>
               </div>
             </div>
