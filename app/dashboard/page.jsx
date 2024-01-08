@@ -151,7 +151,7 @@ const DashboardPage = () => {
               cardIcon={<LuUsers size={20} />}
               cardName={"Borrowers"}
               cardLinkLabel={"View"}
-              cardLink={"/create-borrower"}
+              cardLink={"/borrowers"}
               firstStat={[
                 "Total",
                 cardData?.data?.data.borrowersData?.totalBorrowersCount,
