@@ -124,7 +124,7 @@ const LoanProcessCard = ({ data }) => {
                       {item?.dateLogged?.slice(0, 15)}
                     </div>
                     <div className="mt-2 text-xs text-end">
-                      Logged By : {item?.createdBy}
+                     {/* Logged By : {item?.createdBy} */}
                     </div>
                   </div>
                 ))}
@@ -147,7 +147,7 @@ const LoanProcessCard = ({ data }) => {
                       {item?.dateLogged?.slice(0, 15)}
                     </div>
                     <div className="mt-2 text-xs text-end">
-                      Logged By : {item?.createdBy}
+                      {/* Logged By : {item?.createdBy} */}
                     </div>
                   </div>
                 ))}
