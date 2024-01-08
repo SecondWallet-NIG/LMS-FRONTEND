@@ -88,54 +88,71 @@ const LoanProcessCard = ({ data }) => {
           />
         </div>
         <div className="flex justify-between mb-4 text-sm">
-          <div>Request messages : </div>
+          <div className="text-swBlue font-semibold">Request messages : </div>
           <div>
             {approvalMsg?.requestNote?.length == 0 ? (
-              "No note attached"
+              <div className="text-xs">No Message Attached Yet</div>
             ) : (
               <div>
                 {approvalMsg?.requestNote?.map((item, index) => (
                   <div key={index}>
-                    <div className="mt-2">{item?.note}</div>
-                    <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
+                    <div className="mt-2 text-xs text-end">{item?.note}</div>
+                    <div className="mt-2 text-xs text-end">
+                      {item?.dateLogged?.slice(0, 15)}
+                    </div>
+                    <div className="mt-2 text-xs text-end">
+                      Logged By : {item?.createdBy}
+                    </div>
                   </div>
                 ))}
               </div>
             )}
           </div>
         </div>
-        <div className="flex justify-between mb-4 text-sm">
-          <div>Decline messages : </div>
+        <hr></hr>
+        <div className="flex justify-between mb-4 text-sm pt-2">
+          <div className="text-swDarkRed font-semibold">Decline messages : </div>
           <div>
-            {approvalMsg?.declineNote?.length == 0
-              ? "No note attached"
-              : (
-                <div>
-                  {approvalMsg?.declineNote?.map((item, index) => (
-                    <div key={index}>
-                      <div className="mt-2">{item?.note}</div>
-                      <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
+            {approvalMsg?.declineNote?.length == 0 ? (
+              <div className="text-xs">No Message Attached Yet</div>
+            ) : (
+              <div>
+                {approvalMsg?.declineNote?.map((item, index) => (
+                  <div key={index}>
+                    <div className="mt-2 text-xs text-end">{item?.note}</div>
+                    <div className="mt-2 text-xs text-end">
+                      {item?.dateLogged?.slice(0, 15)}
                     </div>
-                  ))}
-                </div>
-              )}
+                    <div className="mt-2 text-xs text-end">
+                      Logged By : {item?.createdBy}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-        <div className="flex justify-between mb-4 text-sm">
-          <div>Approval messages : </div>
+        <hr></hr>
+        <div className="flex justify-between mb-4 text-sm pt-2">
+          <div className="text-swGreen font-semibold">Approval messages : </div>
           <div>
-            {approvalMsg?.approvalNote?.length == 0
-              ? "No note attached"
-              : (
-                <div>
-                  {approvalMsg?.approvalNote?.map((item, index) => (
-                    <div key={index}>
-                      <div className="mt-2">{item?.note}</div>
-                      <div className="mt-2">{item?.dateLogged?.slice(0, 15)}</div>
+            {approvalMsg?.approvalNote?.length == 0 ? (
+              <div className="text-xs">No Message Attached Yet</div>
+            ) : (
+              <div>
+                {approvalMsg?.approvalNote?.map((item, index) => (
+                  <div key={index}>
+                    <div className="mt-2 text-xs text-end">{item?.note}</div>
+                    <div className="mt-2text-xs text-end">
+                      {item?.dateLogged?.slice(0, 15)}
                     </div>
-                  ))}
-                </div>
-              )}
+                    <div className="mt-2 text-xs text-end">
+                      Logged By : {item?.createdBy}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </CenterModal>
