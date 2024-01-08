@@ -11,9 +11,12 @@ import InputField from "../../shared/input/InputField--";
 import Button from "../../shared/buttonComponent/Button";
 import SelectField from "../../shared/input/SelectField";
 import {
+  declineLoanRequest,
+  getLoanApprovals,
   approveLoanRequest,
   requestLoanApproval,
 } from "@/redux/slices/loanApprovalSlice";
+import { getSingleLoan } from "@/redux/slices/loanApplicationSlice";
 
 const ApprovalModal = ({
   isOpen,
@@ -21,6 +24,7 @@ const ApprovalModal = ({
   width,
   data,
   selected,
+  closeModal,
   approvalId,
   approvalLevel,
   currentTaskId
@@ -80,18 +84,18 @@ const ApprovalModal = ({
       .unwrap()
       .then(() => {
         toast("Loan approved for this level");
+        dispatch(getSingleLoan(id));
+        dispatch(getLoanApprovals(id));
         setLoading(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        closeModal(false);
+     
       })
       .catch((error) => {
-        console.log({ error });
         toast.error(`${error?.message}`);
+        dispatch(getSingleLoan(id));
+        dispatch(getLoanApprovals(id));
         setLoading(false);
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 2000);
+     
       });
   };
   //let taskId;

@@ -127,7 +127,7 @@ const CollectorReport = () => {
         </div>
       </div>
 
-      <div className="flex gap-5 mt-5">
+      {/* <div className="flex gap-5 mt-5">
         <div className="bg-white border rounded-xl p-3 w-full">
           <p className="font-semibold">Number of collectors</p>
           <p className="text-2xl font-bold mt-3">25</p>
@@ -140,7 +140,7 @@ const CollectorReport = () => {
           <p className="font-semibold">Outstanding payments</p>
           <p className="text-2xl font-bold mt-3">1,390</p>
         </div>
-      </div>
+      </div> */}
 
       <div className="rounded-xl overflow-hidden border mt-5 bg-white">
         <Staffs />

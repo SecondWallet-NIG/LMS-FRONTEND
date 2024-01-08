@@ -476,18 +476,36 @@ const ViewLoan = () => {
   let hasDecline;
 
   const hasDeclineStatus = () => {
-    for (const approval of loanApprovals?.data?.data) {
+    const approvals = loanApprovals?.data?.data;
+  
+    if (!Array.isArray(approvals)) {
+      // Handle the case where approvals is not an array
+      return false;
+    }
+  
+    for (const approval of approvals) {
       if (approval.status === "Declined") {
         return true;
-      } else {
-        return false;
       }
     }
+  
+    return false;
   };
 
+  // const hasDeclineStatus = () => {
+  //   for (const approval of loanApprovals?.data?.data || []) {
+  //     if (approval.status === "Declined") {
+  //       return true;
+  //     }
+  //   }
+  
+  //   return false;
+  // };
+  
+
   if (loanApprovals?.data?.data) {
+    console.log(">>>>>>>", loanApprovals?.data?.data);
     hasDecline = hasDeclineStatus();
-    console.log({ hasDecline });
   }
 
   return (
@@ -1179,6 +1197,7 @@ const ViewLoan = () => {
           approvalId={currentApprovalId}
           currentTaskId={currentTaskId}
           isOpen={isApprovalOpen}
+          closeModal={setApprovalOpen}
           data={data?.data}
           onClose={() => setApprovalOpen(false)}
         />{" "}
