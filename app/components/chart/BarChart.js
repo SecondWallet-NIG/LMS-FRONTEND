@@ -42,10 +42,12 @@ ChartJS.register(
 //   ],
 // };
 
+
+
 const BarChart = ({options, data}) => {
   return (
     <div style={{ height: '300px', borderRadius: '10px' }} className="border-1 mt-8 border-gray-100 p-4">
-        <Bar options={options} data={data} />
+        <Bar  options={options} data={data} />
     </div>
   )
 }

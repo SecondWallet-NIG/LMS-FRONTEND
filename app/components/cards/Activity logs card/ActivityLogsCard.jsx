@@ -66,6 +66,15 @@ const CustomerActivityLogsCard = ({ data }) => {
                       </p>
                     ) : null}
 
+{item?.newValue?.hasOwnProperty("createdBy") ? (
+                      <p className="text-sm text-swBlue">
+                        Loan management has been reassigned to {" "}
+                        <Link className="underline" href={`/team-management/staff/${item?.newValue?.createdBy}`}>
+                      User
+                    </Link>
+                      </p>
+                    ) : null}
+
                     {item?.newValue?.hasOwnProperty("loanDuration") &&
                     item?.newValue?.hasOwnProperty("loanDurationMetrics") &&
                     item?.newValue?.hasOwnProperty("numberOfRepayment") ? (

@@ -14,8 +14,6 @@ import { requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
 
 const RequestApproval = ({
   data,
-  approvals,
-  selected,
   approvalId,
   approvalLevel,
   onClose,

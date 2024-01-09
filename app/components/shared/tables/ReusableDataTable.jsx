@@ -193,15 +193,21 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-      // if (role === "report") {
-      //   apiUrl += `&status=${"Disbursed"}`;
-      // }
+  
       if (role === "pendingTask") {
         apiUrl += `&status=${"Pending"}`;
       }
 
       if (role === "completedTask") {
         apiUrl += `&status=${"Done"}`;
+      }
+
+      if (role === "unpaid-repayment") {
+        apiUrl += `&status=${"Unpaid"}`;
+      }
+
+      if (role === "Fully Paid") {
+        apiUrl += `&status=${"Fully Paid"}`;
       }
       axios
         .get(apiUrl, {
@@ -268,9 +274,7 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-      // if (role === "report") {
-      //   apiUrl += `&status=${"Disbursed"}`;
-      // }
+   
       if (role === "pendingTask") {
         apiUrl += `&status=${"Pending"}`;
       }
@@ -285,6 +289,14 @@ function ReusableDataTable({
 
       if (status != " ") {
         apiUrl += `&status=${status}`;
+      }
+
+      if (role === "unpaid-repayment") {
+        apiUrl += `&status=${"Unpaid"}`;
+      }
+
+      if (role === "Fully Paid") {
+        apiUrl += `&status=${"Fully Paid"}`;
       }
       axios
         .get(apiUrl, {
