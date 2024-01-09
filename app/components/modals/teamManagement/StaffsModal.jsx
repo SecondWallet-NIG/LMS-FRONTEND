@@ -13,6 +13,7 @@ import { FiUser } from "react-icons/fi";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 import { Rings } from "react-loader-spinner";
 import { IoMdCheckmark } from "react-icons/io";
+import { getRoles } from "@/redux/slices/roleSlice";
 
 const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   const dispatch = useDispatch();
@@ -132,10 +133,12 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
       payload.append("role", formData.role);
       payload.append("tag", formData.tag);
       payload.append("isRoleAdmin", formData.isRoleAdmin);
+      // console.log(formData)
       dispatch(createUser(formData))
         .unwrap()
         .then(() => {
           successPopup(selected);
+          dispatch(getRoles());
           document.getElementById("add-user-form").reset();
           resetForm();
           onClose();
@@ -145,7 +148,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
           toast.error(error?.message);
           setProfileImg(null);
         });
-      // console.log(...payload);
+      console.log(...payload);
     }
   };
 

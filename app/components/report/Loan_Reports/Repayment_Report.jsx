@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import { PiCalendarBlankLight } from "react-icons/pi";
 import RepaymentTable from "../../repayment/RepaymentTable";
@@ -11,11 +11,14 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { FaWindowClose } from "react-icons/fa";
 import { exportToPDF } from "@/helpers";
+import EditableButton from "../../shared/editableButtonComponent/EditableButton";
+import { handleCaptureClick } from "../../helpers/utils";
 
 const RepaymentReport = () => {
   const dispatch = useDispatch();
   const loanRepayment = useSelector((state) => state.loanRepayment);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -55,14 +58,22 @@ const RepaymentReport = () => {
     ]);
     dispatch(getRepaymentReport());
   };
+
+  const handleCapture = () => {
+    handleCaptureClick(setLoading, "captureDiv", `Repayment report`);
+  };
+
   useEffect(() => {
     dispatch(getRepaymentReport());
   }, []);
   return (
-    <main className="w-full rounded-lg bg-swLightGray p-5 shadow-xl">
+    <main
+      id="captureDiv"
+      className="w-full rounded-lg bg-swLightGray p-5 shadow-xl"
+    >
       <div className="flex justify-between">
         <p className="text-lg font-semibold text-black">Repayments Report</p>
-        <button
+        {/* <button
           className={
             "py-2 px-4 text-white text-sm bg-swBlue font-semibold rounded-md"
           }
@@ -71,7 +82,14 @@ const RepaymentReport = () => {
           }}
         >
           Export report
-        </button>
+        </button> */}
+        <EditableButton
+          blueBtn={true}
+          label={loading ? "Exporting" : "Export"}
+          disabled={loading ? true : false}
+          className={"text-swGray"}
+          onClick={handleCapture}
+        />
       </div>
 
       <div id="repaymentId">

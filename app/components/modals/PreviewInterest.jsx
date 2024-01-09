@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
 import { BsBack, BsBackspace } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,8 @@ import { FiPhone, FiUser } from "react-icons/fi";
 import Image from "next/image";
 import { MdOutlineEmail } from "react-icons/md";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
-import html2canvas from "html2canvas";
+import { handleCaptureClick } from "../helpers/utils";
+// import html2canvas from "html2canvas";
 const PreviewInterest = ({
   isOpen,
   onClose,
@@ -29,27 +30,34 @@ const PreviewInterest = ({
     return formattedNumber?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const handleCaptureClick = () => {
-    setLoading(true);
-    const captureDiv = document.getElementById("captureDiv");
+  // const handleCaptureClick = () => {
+  //   setLoading(true);
+  //   const captureDiv = document.getElementById("captureDiv");
 
-    if (captureDiv) {
-      html2canvas(captureDiv).then((canvas) => {
-        const dataUrl = canvas.toDataURL("image/png");
-        downloadScreenshot(dataUrl);
-      });
-    }
-  };
+  //   if (captureDiv) {
+  //     html2canvas(captureDiv).then((canvas) => {
+  //       const dataUrl = canvas.toDataURL("image/png");
+  //       downloadScreenshot(dataUrl);
+  //     });
+  //   }
+  // };
 
-  const downloadScreenshot = (dataUrl) => {
-    // Create an anchor element with a download attribute to download the screenshot
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = `${selectedCustomer?.firstName} ${selectedCustomer?.lastName} loan.png`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setLoading(false);
+  // const downloadScreenshot = (dataUrl) => {
+  //   // Create an anchor element with a download attribute to download the screenshot
+  //   const a = document.createElement("a");
+  //   a.href = dataUrl;
+  //   a.download = `${selectedCustomer?.firstName} ${selectedCustomer?.lastName} loan.png`;
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  //   setLoading(false);
+  // };
+  const handleCapture = () => {
+    handleCaptureClick(
+      setLoading,
+      "captureDiv",
+      `${selectedCustomer?.firstName} ${selectedCustomer?.lastName} loan`
+    );
   };
 
   return (
@@ -103,7 +111,7 @@ const PreviewInterest = ({
                   label={loading ? "Exporting" : "Export"}
                   disabled={loading ? true : false}
                   className={"text-swGray"}
-                  onClick={handleCaptureClick}
+                  onClick={handleCapture}
                 />
               </div>
             </div>
@@ -144,7 +152,7 @@ const PreviewInterest = ({
                   ₦ {formatNumberWithCommas(payment.interestPayment)}
                 </td>
                 <td className="px-6 py-6 text-xs text-end">
-                  ₦ {formatNumberWithCommas(payment?.principl)}
+                  ₦ {formatNumberWithCommas(payment?.principal)}
                 </td>
                 <td className="px-6 py-6 text-xs text-end">
                   ₦ {formatNumberWithCommas(payment.totalPayment)}
