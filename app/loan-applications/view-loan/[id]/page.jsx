@@ -67,7 +67,8 @@ const ViewLoan = () => {
   const [openRepaymentType, setOpenRepaymentType] = useState(false);
   const [openLoanPeriod, setOpenLoanPeriod] = useState(false);
   const [openLoanFrequency, setOpenLoanFrequency] = useState(false);
-  const [approvalDeclined, setApprovaLDeclined] = useState(false);
+  const [loanReassignment, setLoanReassignment] = useState(false);
+  const [usersToApprove, setUsersToApprove] = useState([]);
 
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
@@ -166,7 +167,6 @@ const ViewLoan = () => {
     setLoading(true);
     if (update === "loanAmount") {
       let updatedData = new FormData();
-
       updatedData.append("loanAmount", loanAmount);
 
       dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
@@ -389,6 +389,31 @@ const ViewLoan = () => {
           });
           setLoading(false);
         });
+    } else if (update === "loan-reassignment") {
+      let updatedData = new FormData();
+      updatedData.append("createdBy", formData.createdBy);
+      dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
+      .unwrap()
+      .then(() => {
+        dispatch(getSingleLoan(id));
+        setLoanReassignment(false);
+        setFormData({});
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoanReassignment(false);
+        setFormData({});
+        toast.error(error?.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setLoading(false);
+      });
     }
   };
 
@@ -458,6 +483,21 @@ const ViewLoan = () => {
       });
   };
 
+  const modifyUsersToApprove = () => {
+    console.log({ user });
+    console.log("hello");
+    if (Array.isArray(user)) {
+      const users = user.filter((item) => item?.role?.tag === "LO");
+console.log({users});
+      setUsersToApprove(
+        users.map((item) => ({
+          label: item.firstName + " " + item.lastName,
+          value: item._id,
+        }))
+      );
+    }
+  };
+
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));
     if (_user) {
@@ -473,22 +513,26 @@ const ViewLoan = () => {
     dispatch(getInterestType());
   }, []);
 
+  useEffect(() => {
+    modifyUsersToApprove();
+  }, []);
+
   let hasDecline;
 
   const hasDeclineStatus = () => {
     const approvals = loanApprovals?.data?.data;
-  
+
     if (!Array.isArray(approvals)) {
       // Handle the case where approvals is not an array
       return false;
     }
-  
+
     for (const approval of approvals) {
       if (approval.status === "Declined") {
         return true;
       }
     }
-  
+
     return false;
   };
 
@@ -498,10 +542,9 @@ const ViewLoan = () => {
   //       return true;
   //     }
   //   }
-  
+
   //   return false;
   // };
-  
 
   if (loanApprovals?.data?.data) {
     console.log(">>>>>>>", loanApprovals?.data?.data);
@@ -556,48 +599,12 @@ const ViewLoan = () => {
                       {data?.data?.loanApplication?.status}
                     </button>
                   </p>
-                  <p className="text-xs">SW-456789</p>
+                  <p className="text-xs">
+                    {" "}
+                    {data?.data?.loanApplication?.customerId?.customerId}
+                  </p>
 
                   <div className="flex gap-2 items-center h-fit w-fit mt-4">
-                    {/* <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                      <Link
-                        href="mailto: helloyt@gmail.com"
-                        className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                      >
-                        <AiOutlineMail size={15} />
-                      </Link>
-                    </div>
-                    <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                      <Link
-                        href="mailto: helloyt@gmail.com"
-                        className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                      >
-                        <FiPhone size={15} />
-                      </Link>
-                    </div>
-                    <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                      <Link
-                        href="mailto: helloyt@gmail.com"
-                        className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                      >
-                        <LuCalendar size={15} />
-                      </Link>
-                    </div>
-                    <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                      <Link
-                        href="mailto: helloyt@gmail.com"
-                        className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                      >
-                        <FiDatabase size={15} />
-                      </Link>
-                    </div> */}
-                    {/* <button
-                      className={
-                        "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
-                      }
-                    >
-                      <p>{data?.data?.loanApplication?.status} </p>
-                    </button> */}
                     {useriD?.role?.tag === "CFO" ? (
                       <Button
                         className={
@@ -629,6 +636,7 @@ const ViewLoan = () => {
                     >
                       View Profile
                     </button>
+
                     {data?.data?.loanApplication?.offerLetter != null ? (
                       <a
                         download
@@ -645,6 +653,26 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="w-1/2">
+              <div className="flex justify-end">
+                <div>
+                  <div className="text-xs  font-semibold">
+                    {" "}
+                    Loan created by :
+                  </div>
+                  <button
+                    onClick={() => {
+                      router.push(
+                        `/borrowers/profile/${data?.data?.customerDetails?._id}`
+                      );
+                    }}
+                    className={
+                      "text-swBlue text-sm bg-white py-2 rounded-lg font-medium underline"
+                    }
+                  >
+                    {data?.data?.loanApplication?.createdBy?.email}
+                  </button>
+                </div>
+              </div>
               <div className="flex justify-between items-center gap-5">
                 <div className="w-full bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID:</p>
@@ -1170,6 +1198,21 @@ const ViewLoan = () => {
           <div className="p-2">
             <LoanProcessCard data={loanApprovals} />
           </div>
+          <div className="flex justify-end">
+          {useriD?.role?.tag === "CFO" ||  useriD?.role?.tag === "CEO" || useriD?.role?.tag === "DIR"? (
+                        <Button
+                        onClick={() => {
+                          setLoanReassignment(true);
+                          modifyUsersToApprove();
+                        }}
+                        className="m-2 w-full block rounded-lg text-sm"
+                        variant="secondary"
+                      >
+                        Reassign Loan
+                      </Button>
+                    ) : null}
+      
+          </div>
         </section>
       </main>
 
@@ -1579,6 +1622,46 @@ const ViewLoan = () => {
               </Button>
             </div>
           </div>
+        </div>
+      </CenterModal>
+
+      <CenterModal isOpen={loanReassignment} width={"40%"}>
+        <div className="p-4 overflow-x-auto">
+          <div className="flex justify-between cursor-pointer mb-4 h-500">
+            <p className="text-md font-semibold">Loan Reassignment</p>
+            <MdClose
+              size={20}
+              color="red"
+              onClick={() => {
+                setLoanReassignment(!loanReassignment);
+              }}
+            />
+          </div>
+
+          <div className="flex gap-2 items-end">
+            <div className="w-full mb-3 ">
+              <SelectField
+                isSearchable={true}
+        
+                name="createdBy"
+                optionValue={usersToApprove}
+                label={"Loan Officer"}
+                required={true}
+                placeholder={"Select new loan officer"}
+                onChange={(selectedOption) => {
+                  handleSelectChange(selectedOption, "createdBy");
+                }}
+              />
+            </div>
+          </div>
+
+          <EditableButton
+            blueBtn={true}
+            onClick={() => updateLoan("loan-reassignment")}
+            disabled={loading ? true : false}
+            label="Reassign Loan"
+            className={"w-full"}
+          />
         </div>
       </CenterModal>
     </DashboardLayout>

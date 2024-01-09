@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { formatDate } from "@/helpers";
-const RepaymentTable = () => {
+const UnpaidRepaymentTable = () => {
 
   const [currentPage, setCurrentPage] = useState("all-repayment");
 
@@ -78,7 +78,7 @@ const RepaymentTable = () => {
           >
             All repayment
           </p>
-          <p
+          {/* <p
             className={` border-b-2  px-6 py-2 cursor-pointer ${
               currentPage === "overdue-repayment"
                 ? "text-swBlue border-b-swBlue font-medium"
@@ -87,18 +87,11 @@ const RepaymentTable = () => {
             onClick={() => setCurrentPage("overdue-repayment")}
           >
             Overdue repayment
-          </p>
+          </p> */}
         </div>
 
         <div className="w-full">
           <ReusableDataTable
-            filterParams={[
-              { name: "Unpaid" },
-              { name: "Fully paid" },
-              { name: "Overdue" },
-          
-            ]}
-          // filterParams={}
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}
@@ -108,6 +101,7 @@ const RepaymentTable = () => {
             }}
             filters={true}
             pagination={true}
+            role="unpaid-repayment"
           />
         </div>
       </main>
@@ -115,4 +109,4 @@ const RepaymentTable = () => {
   );
 };
 
-export default RepaymentTable;
+export default UnpaidRepaymentTable;
