@@ -21,7 +21,7 @@ const UnpaidRepaymentTable = () => {
       id: item._id,
       loanId: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.loanApplication?.loanId}
+          SWL - {item?.loanApplication?.loanId}
         </div>
       ),
       repaymentNumber: (

@@ -193,7 +193,7 @@ function ReusableDataTable({
   }
 
   const fetchData = (page, perPage, field, direction) => {
-    let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=-createdAt`;
+    let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}`;
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
       if (role === "Pending") {
