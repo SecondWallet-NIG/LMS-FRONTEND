@@ -6,9 +6,12 @@ import CenterModal from "../../modals/CenterModal";
 import { DateRange } from "react-date-range";
 import Button from "../../shared/buttonComponent/Button";
 import SummaryTable from "./SummaryTable";
+import { handleCaptureClick } from "../../helpers/utils";
+import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 
 const SummaryReport = () => {
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -16,7 +19,6 @@ const SummaryReport = () => {
       key: "selection",
     },
   ]);
-
 
   const fetchSummaryByDate = () => {
     if (dateRange && dateRange.length > 0) {
@@ -39,32 +41,38 @@ const SummaryReport = () => {
   const toggleDateFilter = () => {
     setDateFilterOpen(!dateFilterOpen);
   };
+
+  const handleCapture = () => {
+    handleCaptureClick(setLoading, "captureDiv", `Summary report`);
+  };
+
   return (
     <main className="w-full p-5">
       <div className="flex justify-between">
         <p className="text-2xl font-semibold text-black">Summary Report</p>
-        <button
-          className={
-            "py-2 px-4 text-white text-sm bg-swBlue font-semibold rounded-md"
-          }
-        >
-          Export report
-        </button>
+        <EditableButton
+          blueBtn={true}
+          label={loading ? "Exporting" : "Export report"}
+          disabled={loading ? true : false}
+          className={"text-swGray"}
+          onClick={handleCapture}
+        />
       </div>
       <div className="rounded-lg bg-swLightGray p-5 shadow-xl mt-5">
-        <div className="flex justify-end gap-5 items-center ">
-          <p className="font-semibold text-black">Filter report</p>
-          <div className="flex gap-3">
-            <button
-              onClick={toggleDateFilter}
-              className={
-                "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
-              }
-            >
-              <PiCalendarBlankLight size={20} />
-              Select date range
-            </button>
-            {/* <button
+        <div id="captureDiv" className="p-2">
+          <div className="flex justify-end gap-5 items-center ">
+            <p className="font-semibold text-black">Filter report</p>
+            <div className="flex gap-3">
+              <button
+                onClick={toggleDateFilter}
+                className={
+                  "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
+                }
+              >
+                <PiCalendarBlankLight size={20} />
+                Select date range
+              </button>
+              {/* <button
               className={
                 "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
               }
@@ -72,78 +80,79 @@ const SummaryReport = () => {
               <BsGraphDownArrow size={20} />
               Debt status
             </button> */}
+            </div>
           </div>
-        </div>
 
-        <div className="flex gap-5 mt-5">
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Total Portfolio value</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">
-                {/* {loanApplication?.data?.data.count} */}
-                ₦1,285,356,265
-              </p>
+          <div className="flex gap-5 mt-5">
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Total Portfolio value</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">
+                  {/* {loanApplication?.data?.data.count} */}
+                  ₦1,285,356,265
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Total Disbursements</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">5,340</p>
-              <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Total Disbursements</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">5,340</p>
+                <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+              </div>
             </div>
-          </div>
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Total Repayment</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">
-                {/* ₦{" "}
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Total Repayment</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">
+                  {/* ₦{" "}
                 {loanApplication?.data?.data.totalCommitmentTotal?.toLocaleString()}
                 .00K */}
-                ₦1,475,582,287.25
-              </p>
+                  ₦1,475,582,287.25
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex gap-5 mt-5">
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Net profit/loss</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">
-                {/* {" "}
+          <div className="flex gap-5 mt-5">
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Net profit/loss</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">
+                  {/* {" "}
                 {loanApplication?.data?.data?.ApprovedLoanCount} */}
-                + ₦268,937,930.00
-              </p>
-              <p className="text-xs py-1 px-2 text-swBlue bg-[#E7F1FE] rounded-full font-medium">
-                + 35.68%
-              </p>
+                  + ₦268,937,930.00
+                </p>
+                <p className="text-xs py-1 px-2 text-swBlue bg-[#E7F1FE] rounded-full font-medium">
+                  + 35.68%
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Pending Disbursements</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">
-                {/* {" "}
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Pending Disbursements</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">
+                  {/* {" "}
                 {loanApplication?.data?.data.pendingLoanCount}{" "} */}
-                250
-              </p>
-              <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+                  250
+                </p>
+                <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+              </div>
             </div>
-          </div>
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Pending Repayments</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">
-                {/* {" "}
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Pending Repayments</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">
+                  {/* {" "}
                 {loanApplication?.data?.data.DeclinedLoanCount}{" "} */}
-                2,630
-              </p>
-              <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+                  2,630
+                </p>
+                <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="rounded-xl overflow-hidden border mt-5 bg-white">
-          <SummaryTable/>
+          <SummaryTable />
         </div>
         <CenterModal
           isOpen={dateFilterOpen}

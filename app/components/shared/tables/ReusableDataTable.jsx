@@ -58,7 +58,7 @@ function ReusableDataTable({
     {
       startDate: null,
       endDate: null,
-      key: 'selection'
+      key: "selection",
     },
   ]);
   const [status, setStatus] = useState(" ");
@@ -73,9 +73,23 @@ function ReusableDataTable({
         dateRange[0].startDate instanceof Date &&
         dateRange[0].endDate instanceof Date
       ) {
-        const startDate = dateRange[0].startDate.toISOString();
-        const endDate = dateRange[0].endDate.toISOString();
-        x += `&startDate=${startDate}&endDate=${endDate}`;
+        // const startDate = dateRange[0].startDate.toISOString();
+        // const endDate = dateRange[0].endDate.toISOString();
+
+        // Adjust the time zone offset for the start date
+        const startDate = new Date(dateRange[0].startDate);
+        startDate.setDate(startDate.getDate() + 1);
+        startDate.setMinutes(
+          startDate.getMinutes() - startDate.getTimezoneOffset()
+        );
+
+        // Adjust the time zone offset for the end date
+        const endDate = new Date(dateRange[0].endDate);
+        endDate.setDate(endDate.getDate() + 1);
+        endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset());
+
+        // apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
+        x += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
       }
     }
 
@@ -193,7 +207,7 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-  
+
       if (role === "pendingTask") {
         apiUrl += `&status=${"Pending"}`;
       }
@@ -258,9 +272,25 @@ function ReusableDataTable({
           dateRange[0].startDate instanceof Date &&
           dateRange[0].endDate instanceof Date
         ) {
-          const startDate = dateRange[0].startDate.toISOString();
-          const endDate = dateRange[0].endDate.toISOString();
-          apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
+          // const startDate = dateRange[0].startDate.toISOString();
+          // const endDate = dateRange[0].endDate.toISOString();
+
+          // Adjust the time zone offset for the start date
+          const startDate = new Date(dateRange[0].startDate);
+          startDate.setDate(startDate.getDate() + 1);
+          startDate.setMinutes(
+            startDate.getMinutes() - startDate.getTimezoneOffset()
+          );
+
+          // Adjust the time zone offset for the end date
+          const endDate = new Date(dateRange[0].endDate);
+          endDate.setDate(endDate.getDate() + 1);
+          endDate.setMinutes(
+            endDate.getMinutes() - endDate.getTimezoneOffset()
+          );
+
+          // apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
+          apiUrl += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
         }
       }
       if (role === "Pending") {
@@ -274,7 +304,7 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-   
+
       if (role === "pendingTask") {
         apiUrl += `&status=${"Pending"}`;
       }
