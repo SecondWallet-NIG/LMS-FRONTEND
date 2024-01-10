@@ -26,13 +26,13 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   };
 
   const [formData, setFormData] = useState({
-    // profilePicture: null,
+    profilePicture: null,
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
     role: "",
-    tag: null,
+   // tag: null,
     isRoleAdmin: false,
   });
 
@@ -127,14 +127,16 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     if (isValid) {
       const payload = new FormData();
       payload.append("firstName", formData.firstName);
+      payload.append("profilePicture", formData.profilePicture);
       payload.append("lastName", formData.lastName);
       payload.append("email", formData.email);
       payload.append("phoneNumber", formData.phoneNumber);
       payload.append("role", formData.role);
-      payload.append("tag", formData.tag);
+    //  payload.append("tag", formData.tag);
       payload.append("isRoleAdmin", formData.isRoleAdmin);
-      // console.log(formData)
-      dispatch(createUser(formData))
+
+      console.log({payload});
+      dispatch(createUser(payload))
         .unwrap()
         .then(() => {
           successPopup(selected);

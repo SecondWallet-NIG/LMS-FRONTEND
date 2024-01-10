@@ -164,10 +164,10 @@ const StaffPage = () => {
           <div className="bg-swBlue rounded-2xl p-10 text-white">
             <div className="flex justify-between items-center">
               <div className="flex gap-5 items-start">
-                {profileImg !== null ? (
+                {data?.profilePicture !== null ? (
                   <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
                     <Image
-                      src={profileImg !== null && profileImg}
+                      src={data?.profilePicture}
                       alt="profile"
                       fill
                       sizes="100%"

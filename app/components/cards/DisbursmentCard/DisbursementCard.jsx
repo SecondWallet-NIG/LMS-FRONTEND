@@ -36,23 +36,23 @@ const DisbursementCard = ({ _data }) => {
           </div>
           <p
             className={`${
-              item.disbursement_type.includes("Approved")
+              item?.disbursement_type.includes("Approved")
                 ? "bg-blue-200"
-                : item.disbursement_type.includes("Total")
+                : item?.disbursement_type.includes("Total")
                 ? "bg-green-100"
-                : item.disbursement_type.includes("Pending")
+                : item?.disbursement_type.includes("Pending")
                 ? "bg-red-100"
                 : "bg-swLightGray"
             } w-full flex justify-between items-center text-[0.65rem] px-2 rounded-full`}
           >
             <span>
               {" "}
-              {item.disbursement_no}{" "}
-              {item.disbursement_type.includes("Approved")
+              {item?.disbursement_no}{" "}
+              {item?.disbursement_type.includes("Approved")
                 ? "approvals"
-                : item.disbursement_type.includes("Total")
+                : item?.disbursement_type.includes("Total")
                 ? "payouts"
-                : item.disbursement_type.includes("Pending")
+                : item?.disbursement_type.includes("Pending")
                 ? "pending payouts"
                 : "payouts cancelled"}{" "}
               in 24 hours
