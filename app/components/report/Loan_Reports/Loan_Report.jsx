@@ -49,7 +49,7 @@ const LoanReport = () => {
   };
 
   const handleCapture = () => {
-    handleCaptureClick(setLoading, "captureDiv", `Loan report`);
+    handleCaptureClick(setLoading, "loanId", `Loan report`);
   };
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const LoanReport = () => {
       id="captureDiv"
       className="w-full rounded-lg bg-swLightGray p-5 shadow-xl"
     >
-      <div id="loanId">
+      <div id="loanId" className="p-2">
         <div className="flex justify-between">
           <p className="text-lg font-semibold text-black">Loan Report</p>
           {/* <button

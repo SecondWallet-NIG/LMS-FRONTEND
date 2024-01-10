@@ -12,7 +12,7 @@ const DisbursementReport = () => {
     handleCaptureClick(setLoading, "captureDiv", `Disbursement report`);
   };
   return (
-    <main id="captureDiv" className="w-full rounded-lg bg-swLightGray p-5 shadow-xl">
+    <main className="w-full rounded-lg bg-swLightGray p-5 shadow-xl">
       <div className="flex justify-between">
         <p className="text-lg font-semibold text-black">Disbursement Report</p>
         {/* <button
@@ -30,8 +30,10 @@ const DisbursementReport = () => {
           onClick={handleCapture}
         />
       </div>
-      <div className="rounded-xl overflow-hidden bg-white border mt-5">
-        <DisbursementCard />
+      <div className="rounded-xl overflow-hidden bg-white border">
+        <div id="captureDiv" className="p-1">
+          <DisbursementCard />
+        </div>
         <DisbursedLoans />
       </div>
     </main>
