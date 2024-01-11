@@ -177,7 +177,7 @@ export const getRepaymentReport = createAsyncThunk('loanApplication/repayment-su
 });
 
 const LoanRepaymentSlice = createSlice({
-  name: "LoanRepayment",
+  name: "loanRepayment",
   initialState: {
     data: null,
     loading: "idle",

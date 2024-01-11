@@ -5,10 +5,10 @@ export const formatDate = (inputDate) => {
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
   
-    const dateParts = inputDate.split('-');
-    const year = dateParts[0];
-    const monthIndex = parseInt(dateParts[1], 10) - 1; // Month is zero-based
-    const day = dateParts[2];
+    const dateParts = inputDate?.split('-');
+    const year = dateParts?.[0];
+    const monthIndex = parseInt(dateParts?.[1], 10) - 1; // Month is zero-based
+    const day = dateParts?.[2];
   
     const formattedDate = `${months[monthIndex]}, ${day} ${year}`;
   

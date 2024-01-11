@@ -28,7 +28,6 @@ const StaffPage = () => {
 
   const { loading, error, data } = useSelector((state) => state?.user);
   const { data: roleData } = useSelector((state) => state?.role);
-  console.log({ staffdata: data });
 
   const [formData, setFormData] = useState({
     // profilePicture: null,
@@ -38,10 +37,11 @@ const StaffPage = () => {
     phoneNumber: "",
     role: "",
     tag: null,
+    status: "",
     isRoleAdmin: false,
   });
   const profileImg = null;
-  console.log(data);
+
   const adminOptions = [
     { value: "CEO", label: "CEO" },
     { value: "CFO", label: "CFO" },
@@ -82,6 +82,11 @@ const StaffPage = () => {
       : [];
   };
 
+  const userStatus = [
+    { label: "Active", value: "Active" },
+    { label: "Inactive", value: "Inactive" },
+  ];
+
   const preventMinus = (e) => {
     if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
@@ -104,6 +109,7 @@ const StaffPage = () => {
       email: formData.email,
       phoneNumber: formData.phoneNumber,
       role: formData.role,
+      status: formData.status,
     };
     dispatch(updateUser({ userId: data?._id, updatedData: payload }))
       .unwrap()
@@ -127,6 +133,7 @@ const StaffPage = () => {
       phoneNumber: data?.phoneNumber,
       role: data?.role?._id,
       tag: data?.role?.tag,
+      status: data?.status,
       isRoleAdmin: false,
     });
   }, [data]);
@@ -413,6 +420,24 @@ const StaffPage = () => {
                       }
                     />
                   )}
+                </div>
+              </div>
+              <div className="flex justify-between mt-5">
+                <p className="w-1/4 font-semibold mr-2">Status</p>
+                <div className="w-3/4 flex flex-col gap-3">
+                  <SelectField
+                    name="status"
+                    label={"Select User Status"}
+                    required={true}
+                    value={userStatus.find(
+                      (option) => option.value === formData.status
+                    )}
+                    isSearchable={false}
+                    optionValue={userStatus}
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "status")
+                    }
+                  />
                 </div>
               </div>
             </div>

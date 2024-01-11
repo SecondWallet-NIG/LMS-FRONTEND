@@ -1,6 +1,6 @@
 import React from "react";
 
-const CenterModal = ({ isOpen, bgColor, onClose, children, width }) => {
+const CenterModal = ({ isOpen, bgColor, onClose, children, width, height }) => {
   if (!isOpen) return null;
   const modalStyles = {
     width: width || "90%",
@@ -13,9 +13,9 @@ const CenterModal = ({ isOpen, bgColor, onClose, children, width }) => {
         style={width && modalStyles}
         className={`${
           bgColor ? bgColor : "bg-white"
-        } overflow-hidden rounded-md shadow-md" style={modalStyles} m-8 p-4 ${
-          !width ? "max-w-xl w-full" : ""
-        } `}
+        } overflow-hidden rounded-md shadow-md" style={modalStyles} ${
+          height && height
+        } m-8 p-4 ${!width ? "max-w-xl w-full" : ""} `}
       >
         {children}
       </div>
