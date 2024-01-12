@@ -21,6 +21,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   const { loading } = useSelector((state) => state.user);
   const [profileImg, setProfileImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [fileError, setFileError] = useState("");
   const successPopup = (selected) => {
     selected(true);
   };
@@ -32,7 +33,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     email: "",
     phoneNumber: "",
     role: "",
-   // tag: null,
+    // tag: null,
     isRoleAdmin: false,
   });
 
@@ -44,13 +45,21 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   const handleFileInputChange = (e) => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
+      const fileExtension = files[0].name.split(".").pop().toLowerCase();
+      console.log(fileExtension);
+
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      if (!allowedExtensions.includes(fileExtension)) {
+        setFileError(
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png)."
+        );
+        return;
+      }
       setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
     } else {
       setSelectedFiles(files);
     }
   };
-
-  console.log(formData);
 
   const modifyObjects = (arr) => {
     return Array.isArray(arr)
@@ -132,10 +141,10 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
       payload.append("email", formData.email);
       payload.append("phoneNumber", formData.phoneNumber);
       payload.append("role", formData.role);
-    //  payload.append("tag", formData.tag);
+      //  payload.append("tag", formData.tag);
       payload.append("isRoleAdmin", formData.isRoleAdmin);
 
-      console.log({payload});
+      console.log({ payload });
       dispatch(createUser(payload))
         .unwrap()
         .then(() => {
@@ -201,34 +210,39 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
           <div className="pt-8 px-5 pb-16 h-[20rem] overflow-y-auto bg-white relative custom-scrollbar">
             <div className="flex">
               <p className="font-semibold my-5 w-1/4">Profile picture</p>
-              <div className="flex gap-5 items-center">
-                {profileImg !== null ? (
-                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                    <Image
-                      src={profileImg !== null && profileImg}
-                      alt="profile"
-                      fill
-                      sizes="100%"
-                    />
-                  </div>
-                ) : (
-                  <div className="border-2 p-4 rounded-full">
-                    <FiUser size={40} />
-                  </div>
-                )}
+              <div>
+                <div className="flex gap-5 items-center">
+                  {profileImg !== null ? (
+                    <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                      <Image
+                        src={profileImg !== null && profileImg}
+                        alt="profile"
+                        fill
+                        sizes="100%"
+                      />
+                    </div>
+                  ) : (
+                    <div className="border-2 p-4 rounded-full">
+                      <FiUser size={40} />
+                    </div>
+                  )}
 
-                <label
-                  htmlFor="profilePicture"
-                  className="border-2 rounded-lg p-2 px-4 font-semibold cursor-pointer"
-                >
-                  <input
-                    type="file"
-                    id="profilePicture"
-                    className="hidden"
-                    onChange={handleFileInputChange}
-                  />
-                  {profileImg !== null ? "Change file" : "Select a file"}
-                </label>
+                  <label
+                    htmlFor="profilePicture"
+                    className="border-2 rounded-lg p-2 px-4 font-semibold cursor-pointer"
+                  >
+                    <input
+                      type="file"
+                      id="profilePicture"
+                      className="hidden"
+                      onChange={handleFileInputChange}
+                    />
+                    {profileImg !== null ? "Change file" : "Select a file"}
+                  </label>
+                </div>
+                {fileError && (
+                  <p className="text-red-500 text-sm mt-2">{fileError}</p>
+                )}
               </div>
             </div>
             <div className="flex justify-between mt-5">

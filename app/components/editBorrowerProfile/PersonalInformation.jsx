@@ -9,15 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import {genderOptions, countryOptions
-} from "../helpers/utils";
+import { genderOptions, countryOptions } from "../helpers/utils";
 import { bankArr, statesAndLgas } from "@/constant";
 import InputField from "../shared/input/InputField";
 import { updateCustomer } from "@/redux/slices/customerSlice";
 const PersonalInformation = ({ userData, loading }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const {id} = useParams()
+  const { id } = useParams();
   const [isInputOpen, setIsInputOpen] = useState(false);
   const [userId, setUserId] = useState("");
   const [bankNameVal, setBankNameVal] = useState("");
@@ -25,7 +24,6 @@ const PersonalInformation = ({ userData, loading }) => {
   const [lga, setLga] = useState([]);
   const [profileImg, setProfileImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
-
 
   const [formData, setFormData] = useState({
     profilePicture: null,
@@ -52,20 +50,11 @@ const PersonalInformation = ({ userData, loading }) => {
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
-    const ariaLabel = e.target.getAttribute("aria-label");
 
-    if (ariaLabel === "Number input") {
-      const num = Number(value.replace(/\D/g, ""));
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: num,
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-    }
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
 
     if (name === "accountNumber" && value.length === 10) {
       const selectedBankOption = formData.bankName;
@@ -187,8 +176,7 @@ const PersonalInformation = ({ userData, loading }) => {
     payload.append("bankAccount[bankName]", formData.bankName);
     payload.append("createdBy", userId?._id);
 
- 
-    dispatch(updateCustomer({customerId: id, payload}))
+    dispatch(updateCustomer({ customerId: id, payload }))
       .unwrap()
       .then((response) => {
         document.getElementById("add-customer-form").reset();
@@ -267,14 +255,14 @@ const PersonalInformation = ({ userData, loading }) => {
     };
     getBankName();
     const _user = JSON.parse(localStorage.getItem("user"));
-    console.log({_user});
+    console.log({ _user });
     if (_user) {
       setUserId(_user?.data?.user);
     }
   }, [userData]);
   return (
     <form id="add-customer-form">
-       <ToastContainer />
+      <ToastContainer />
       <div className="flex flex-col gap-5 mb-10">
         <p className="font-semibold text-lg text-swBlack">
           Personal information

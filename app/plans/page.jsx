@@ -38,7 +38,6 @@ const LoanPackages = () => {
 
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));
-    console.log({ _user });
     if (_user) {
       setUserRole(_user?.data?.user?.role?.tag);
     }
