@@ -69,7 +69,7 @@ const ViewLoan = () => {
   const [openLoanFrequency, setOpenLoanFrequency] = useState(false);
   const [loanReassignment, setLoanReassignment] = useState(false);
   const [usersToApprove, setUsersToApprove] = useState([]);
-
+  const [fileError, setFileError] = useState("");
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -79,9 +79,23 @@ const ViewLoan = () => {
     docs: null,
   });
 
+  console.log({ file: formData.docs });
+
   const handleFileChange = (e) => {
+    setFileError("");
     let { name, files } = e.target;
     const file = files[0];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    console.log(fileExtension);
+
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    if (!allowedExtensions.includes(fileExtension)) {
+      setFileError(
+        "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+      );
+      return;
+    }
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: file,
@@ -393,27 +407,27 @@ const ViewLoan = () => {
       let updatedData = new FormData();
       updatedData.append("createdBy", formData.createdBy);
       dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
-      .unwrap()
-      .then(() => {
-        dispatch(getSingleLoan(id));
-        setLoanReassignment(false);
-        setFormData({});
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoanReassignment(false);
-        setFormData({});
-        toast.error(error?.message, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+        .unwrap()
+        .then(() => {
+          dispatch(getSingleLoan(id));
+          setLoanReassignment(false);
+          setFormData({});
+          setLoading(false);
+        })
+        .catch((error) => {
+          setLoanReassignment(false);
+          setFormData({});
+          toast.error(error?.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoading(false);
         });
-        setLoading(false);
-      });
     }
   };
 
@@ -488,7 +502,7 @@ const ViewLoan = () => {
     console.log("hello");
     if (Array.isArray(user)) {
       const users = user.filter((item) => item?.role?.tag === "LO");
-console.log({users});
+      console.log({ users });
       setUsersToApprove(
         users.map((item) => ({
           label: item.firstName + " " + item.lastName,
@@ -1199,19 +1213,20 @@ console.log({users});
             <LoanProcessCard data={loanApprovals} />
           </div>
           <div className="flex justify-end">
-          {useriD?.role?.tag === "CFO" ||  useriD?.role?.tag === "CEO" || useriD?.role?.tag === "DIR"? (
-                        <Button
-                        onClick={() => {
-                          setLoanReassignment(true);
-                          modifyUsersToApprove();
-                        }}
-                        className="m-2 w-full block rounded-lg text-sm"
-                        variant="secondary"
-                      >
-                        Reassign Loan
-                      </Button>
-                    ) : null}
-      
+            {useriD?.role?.tag === "CFO" ||
+            useriD?.role?.tag === "CEO" ||
+            useriD?.role?.tag === "DIR" ? (
+              <Button
+                onClick={() => {
+                  setLoanReassignment(true);
+                  modifyUsersToApprove();
+                }}
+                className="m-2 w-full block rounded-lg text-sm"
+                variant="secondary"
+              >
+                Reassign Loan
+              </Button>
+            ) : null}
           </div>
         </section>
       </main>
@@ -1573,6 +1588,7 @@ console.log({users});
                 Document types uploaded should be JPEGS, PNG or PDF and should
                 not exceed 4mb
               </p>
+              {fileError && <p className="text-red-500 text-sm">{fileError}</p>}
               <div className="relative">
                 <input
                   name="docs"
@@ -1642,7 +1658,6 @@ console.log({users});
             <div className="w-full mb-3 ">
               <SelectField
                 isSearchable={true}
-        
                 name="createdBy"
                 optionValue={usersToApprove}
                 label={"Loan Officer"}

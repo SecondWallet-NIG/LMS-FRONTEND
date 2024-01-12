@@ -30,10 +30,16 @@ const AccountPage = () => {
   });
 
   const handleFileInputChange = (e) => {
-    // console.log(e.target.id);
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
-      // console.log(files[0])
+      const fileExtension = files[0].name.split(".").pop().toLowerCase();
+      console.log(fileExtension);
+
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      if (!allowedExtensions.includes(fileExtension)) {
+        alert("Invalid file type. Please select an image (.jpg, .jpeg, .png).");
+        return;
+      }
       setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
     } else {
       setSelectedFiles(files);

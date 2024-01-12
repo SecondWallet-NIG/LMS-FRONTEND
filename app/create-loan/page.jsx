@@ -45,6 +45,12 @@ const CreateLoan = () => {
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
   const [roleTag, setRoleTag] = useState("");
+  const [fileError, setFileError] = useState({
+    collaterals: "",
+    applicationForm: "",
+    loanAffidavit: "",
+    guarantorForm: "",
+  });
 
   const [formData, setFormData] = useState({
     loanAmount: "",
@@ -281,9 +287,27 @@ const CreateLoan = () => {
 
   const handleFileChange = (e) => {
     let { name, files } = e.target;
+    setFileError((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
     // console.log({ name, files });
     const file = files[0];
-    // console.log({ file });
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    console.log(fileExtension);
+
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    if (!allowedExtensions.includes(fileExtension)) {
+      // setFileError(
+      //   "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+      // );
+      setFileError((prev) => ({
+        ...prev,
+        [name]:
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf).",
+      }));
+      return;
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: files[0],
@@ -666,7 +690,9 @@ const CreateLoan = () => {
             </div>
             <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Collateral documents</p>
-
+              {fileError.collaterals && (
+                <p className="text-red-500 text-sm">{fileError.collaterals}</p>
+              )}
               <div className="relative">
                 <input
                   name="collaterals"
@@ -708,7 +734,11 @@ const CreateLoan = () => {
             </div>
             <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Loan Application form</p>
-
+              {fileError.applicationForm && (
+                <p className="text-red-500 text-sm">
+                  {fileError.applicationForm}
+                </p>
+              )}
               <div className="relative">
                 <input
                   name="applicationForm"
@@ -753,7 +783,11 @@ const CreateLoan = () => {
             </div>
             <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Loan Affidavit document</p>
-
+              {fileError.loanAffidavit && (
+                <p className="text-red-500 text-sm">
+                  {fileError.loanAffidavit}
+                </p>
+              )}
               <div className="relative">
                 <input
                   name="loanAffidavit"
@@ -797,7 +831,11 @@ const CreateLoan = () => {
             </div>
             <div className="flex flex-col gap-2 mt-5">
               <p className="font-semibold">Upload Guarantor Form</p>
-
+              {fileError.guarantorForm && (
+                <p className="text-red-500 text-sm">
+                  {fileError.guarantorForm}
+                </p>
+              )}
               <div className="relative">
                 <input
                   name="guarantorForm"
@@ -824,7 +862,7 @@ const CreateLoan = () => {
                 {formData?.guarantorForm?.name ? (
                   <div
                     id="fileLabel"
-                    className="bg-swLightGray p-2 flex justify-between"
+                    className="bg-swLightGray p-2 flex justify-between mb-5"
                   >
                     <div className="text-xs">
                       {formData?.guarantorForm?.name}

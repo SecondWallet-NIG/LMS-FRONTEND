@@ -17,6 +17,7 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const [fileError, setFileError] = useState("");
 
   const [formData, setFormData] = useState({
     applicationForm: null || "null",
@@ -26,8 +27,21 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
     customerId: customerId,
   });
   const handleFileChange = (e) => {
+    setFileError("");
     let { name, files } = e.target;
     const file = files[0];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    if (!allowedExtensions.includes(fileExtension)) {
+      // alert(
+      //   "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+      // );
+      setFileError(
+        "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+      );
+      return;
+    }
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -91,6 +105,9 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
             {fieldType == "applicationForm" ? (
               <div className="flex flex-col gap-2 mt-5">
                 <p className="font-semibold">Upload Loan Application form</p>
+                {fileError && (
+                  <p className="text-red-500 text-sm">{fileError}</p>
+                )}
 
                 <div className="relative">
                   <input
@@ -138,7 +155,9 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
             {fieldType == "loanAffidavit" ? (
               <div className="flex flex-col gap-2 mt-5">
                 <p className="font-semibold">Upload Loan Affidavit</p>
-
+                {fileError && (
+                  <p className="text-red-500 text-sm">{fileError}</p>
+                )}
                 <div className="relative">
                   <input
                     name="loanAffidavit"
@@ -185,7 +204,9 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
             {fieldType == "guarantorForm" ? (
               <div className="flex flex-col gap-2 mt-5">
                 <p className="font-semibold">Upload Guarantor&apos;s Form</p>
-
+                {fileError && (
+                  <p className="text-red-500 text-sm">{fileError}</p>
+                )}
                 <div className="relative">
                   <input
                     name="guarantorForm"
@@ -232,7 +253,9 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
             {fieldType == "collaterals" ? (
               <div className="flex flex-col gap-2 mt-5">
                 <p className="font-semibold">Upload Collateral Form</p>
-
+                {fileError && (
+                  <p className="text-red-500 text-sm">{fileError}</p>
+                )}
                 <div className="relative">
                   <input
                     name="collaterals"

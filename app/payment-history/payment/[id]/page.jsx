@@ -30,17 +30,17 @@ const PaymentPage = () => {
   return (
     <DashboardLayout isBackNav={true} paths={["Payment History", "Payment"]}>
       <main className="mx-auto max-w-4xl py-10 px-5">
-        <div className="ml-auto flex gap-2 justify-end font-semibold">
-          <div className="flex whitespace-nowrap gap-5">
+        <div className="ml-auto flex gap-2 text-sm justify-end font-semibold">
+          <div className="flex items-center whitespace-nowrap gap-5">
             <p>Log Status: </p>
             <p
               className={`${
                 repaymentData?.status === "New"
-                  ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+                  ? "bg-[#E7F1FE] text-swBlue"
                   : repaymentData?.status === "Approved"
                   ? "bg-green-50 text-swGreen"
                   : "text-red-400 bg-red-100"
-              } px-2 py-1 rounded-full`}
+              } px-2 py-1 rounded-full  `}
             >
               {repaymentData?.status}
             </p>
