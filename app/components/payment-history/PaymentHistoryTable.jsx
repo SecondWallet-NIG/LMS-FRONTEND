@@ -12,26 +12,24 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "../shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 
-
-
-
 const PaymentHistoryTable = () => {
   const dispatch = useDispatch();
-  const [user, setUser] = useState("")
+  const [user, setUser] = useState("");
 
-  useEffect(()=> {
-    const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag;
-    console.log({userRoleTag});
-    if(userRoleTag) {
+  useEffect(() => {
+    const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user
+      ?.role?.tag;
+    console.log({ userRoleTag });
+    if (userRoleTag) {
       console.log("hello");
-      setUser(userRoleTag)
+      setUser(userRoleTag);
     }
+  }, []);
 
-  }, [])
-
-  const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role?.tag;
-  console.log({userRoleTag});
-  if(userRoleTag) {
+  const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role
+    ?.tag;
+  console.log({ userRoleTag });
+  if (userRoleTag) {
     console.log("hello");
   }
 
@@ -67,6 +65,7 @@ const PaymentHistoryTable = () => {
 
   const customDataTransformer = (apiData) => {
     return apiData?.map((item) => ({
+      id: item._id,
       createdAt: (
         <div className="text-md font-[500] text-gray-700">
           {formatDate(item?.createdAt?.slice(0, 10))}
@@ -172,6 +171,7 @@ const PaymentHistoryTable = () => {
           ]}
           headers={header}
           dataTransformer={customDataTransformer}
+          onClickRow={"/payment-history/payment/"}
           initialData={[]}
           apiEndpoint="https://secondwallet-stag.onrender.com/api/repayment/payment-history-all"
           filters={true}
