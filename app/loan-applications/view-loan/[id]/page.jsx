@@ -558,7 +558,7 @@ console.log({users});
     >
       <ToastContainer />
       <main className="flex h-full">
-        <section className="w-full">
+        <section className="w-full border-r border-gray-300">
           <section
             id="customer_details"
             className="flex gap-2 border-b border-gray-300 items-end py-4 px-8"
@@ -1190,7 +1190,7 @@ console.log({users});
         </section>
         <section
           id="loan_process"
-          className="w-[30%] border-l border-gray-300 h-full"
+          className="w-[30%] h-full"
         >
           <p className="border-b border-gray-300 p-4 text-swGray font-semibold">
             Loan Processes

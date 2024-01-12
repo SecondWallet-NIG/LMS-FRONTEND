@@ -5,6 +5,7 @@ import { FiMessageSquare } from "react-icons/fi";
 import CenterModal from "../../modals/CenterModal";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useState } from "react";
+import { FaUserCircle } from "react-icons/fa";
 
 const LoanProcessCard = ({ data }) => {
   const _data = data?.data?.data;
@@ -45,13 +46,25 @@ const LoanProcessCard = ({ data }) => {
               </p>
             </div>
             <div className="flex items-center gap-2 mt-2">
-              <Image
-                src={"https://cdn-icons-png.flaticon.com/512/4128/4128349.png"}
-                alt="profile pic"
-                className="rounded-full"
-                height={50}
-                width={50}
-              />
+              {/* <Image
+                  src={item?.assignee?.profilePicture}
+                  alt="profile pic"
+                  className="rounded-full"
+                  height={50}
+                  width={50}
+                /> */}
+              {item?.assignee?.profilePicture ? (
+                <div className="h-12 w-12 rounded-full relative border border-swBlue overflow-hidden">
+                  <Image
+                    src={item?.assignee?.profilePicture}
+                    alt="profile pic"
+                    fill
+                  />
+                </div>
+              ) : (
+                <FaUserCircle size={47} className="text-swBlack" />
+              )}
+
               <div>
                 <button
                   className={`flex text-sm font-semibold border-2 border-white rounded-lg overflow-hidden cursor-pointer `}
@@ -111,7 +124,9 @@ const LoanProcessCard = ({ data }) => {
         </div>
         <hr></hr>
         <div className="flex justify-between mb-4 text-sm pt-2">
-          <div className="text-swDarkRed font-semibold">Decline messages : </div>
+          <div className="text-swDarkRed font-semibold">
+            Decline messages :{" "}
+          </div>
           <div>
             {approvalMsg?.declineNote?.length == 0 ? (
               <div className="text-xs">No Message Attached Yet</div>
@@ -124,7 +139,7 @@ const LoanProcessCard = ({ data }) => {
                       {item?.dateLogged?.slice(0, 15)}
                     </div>
                     <div className="mt-2 text-xs text-end">
-                     {/* Logged By : {item?.createdBy} */}
+                      {/* Logged By : {item?.createdBy} */}
                     </div>
                   </div>
                 ))}
