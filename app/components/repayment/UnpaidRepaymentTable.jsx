@@ -95,7 +95,7 @@ const UnpaidRepaymentTable = () => {
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}
-            apiEndpoint="https://secondwallet-stag.onrender.com/api/repayment"
+            apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
             btnTextClick={() => {
               router.push("/create-borrower");
             }}

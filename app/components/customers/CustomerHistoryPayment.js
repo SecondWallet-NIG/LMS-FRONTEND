@@ -98,7 +98,7 @@ const CustomerPaymentHistory = ({ loanId }) => {
             dataTransformer={customDataTransformer}
             headers={headers}
             initialData={[]}
-            apiEndpoint={`https://secondwallet-stag.onrender.com/api/repayment/payment-history/${loanId}`}
+            apiEndpoint={`/api/repayment/payment-history/${loanId}`}
             filters={false}
             pagination={false}
           /> : null

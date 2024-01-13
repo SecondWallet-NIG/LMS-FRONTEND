@@ -110,7 +110,7 @@ const ActiveLoanTable = () => {
           onClickRow="/loan-applications/view-loan"
           headers={headers}
           initialData={[]}
-          apiEndpoint="https://secondwallet-stag.onrender.com/api/loan-application/all"
+          apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/all`}
           btnText={
             <div className="flex gap-1 items-center p-1">
               <p className="hidden lg:block">create loan</p>
