@@ -77,7 +77,7 @@ const Staffs = () => {
         <div className="flex justify-between items-center">
           <ReusableDataTable
             dataTransformer={customDataTransformer}
-            apiEndpoint="https://secondwallet-stag.onrender.com/api/user"
+            apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/user`}
             onClickRow={"/team-management/staff/"}
             initialData={[]}
             headers={headers}

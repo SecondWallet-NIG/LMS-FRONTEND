@@ -87,7 +87,7 @@ const DisbursedLoans = () => {
           onClickRow="/loan-applications/view-loan"
           headers={headers}
           initialData={[]}
-          apiEndpoint="https://secondwallet-stag.onrender.com/api/disbursement"
+          apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/disbursement`}
           filters={true}
           pagination={true}
         //  userId={userId}
