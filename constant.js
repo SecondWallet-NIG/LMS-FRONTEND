@@ -1,4 +1,4 @@
-export const API_URL="https://secondwallet-stag.onrender.com/api"
+export const API_URL=`${process.env.NEXT_PUBLIC_API_URL}/api`
 
 
 export const bankArr = [

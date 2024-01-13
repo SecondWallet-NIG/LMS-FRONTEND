@@ -59,6 +59,7 @@ const DashboardPage = () => {
   const dataValues = Array(12).fill(0);
   const dataValuesFees = Array(12).fill(0);
   const dataValuesRepayment = Array(12).fill(0);
+  const dataValuesPaymentRecovered = Array(12).fill(0);
   const dataValuesDisbursement = Array(12).fill(0);
 
   // Extracting data from loanGraphData
@@ -79,6 +80,10 @@ const DashboardPage = () => {
   graphData.data1?.data?.disbursementsGraphData.forEach((entry) => {
     const index = entry.month - 1; // Adjusting month to be 0-based index
     dataValuesDisbursement[index] = entry.totalLoanAmount;
+  });
+  graphData.data1?.data?.paymentHistory.forEach((entry) => {
+    const index = entry.month - 1; // Adjusting month to be 0-based index
+  dataValuesPaymentRecovered[index] = entry.totalAmountLogged;
   });
 
   // Creating the dataFees object
@@ -105,18 +110,58 @@ const DashboardPage = () => {
         backgroundColor: "#ba5b4a",
         barThickness: 8,
         borderRadius: 8,
+        stack: 'Stack 0',
+      },
+      {
+        label: "Management Fees",
+        data: dataValuesFees,
+        backgroundColor: "#4aba5b",
+        barThickness : 10, 
+        borderRadius: 8,
+        stack: 'Stack 1',
       },
     ],
   };
+  
+  const _options = {
+    responsive: true,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    maintainAspectRatio: false, // Set to false to allow custom height
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
+
+
+  
 
   const dataRepayments = {
     labels,
     datasets: [
       {
-        label: "Repayments",
+        label: "Expected Repayments",
         data: dataValuesRepayment,
         backgroundColor: "#3562a1",
-        barThickness: 8,
+        barThickness : 10,
+        borderRadius: 8,
+      },
+      {
+        label: "Actual Repayments",
+        data: dataValuesPaymentRecovered,
+        backgroundColor: "#ba5b4a",
+        barThickness : 10,
         borderRadius: 8,
       },
     ],
@@ -128,8 +173,8 @@ const DashboardPage = () => {
       {
         label: "Disbursement",
         data: dataValuesDisbursement,
-        backgroundColor: "#8a2776",
-        barThickness: 8,
+        backgroundColor: "#4aba5b",
+        barThickness : 10,
         borderRadius: 8,
       },
     ],

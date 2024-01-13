@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
-const ActiveLoanTable = () => {
+
+
+const FullyPaidLoanTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
   const [roleTag,setRoleTag] = useState("")
@@ -97,15 +99,7 @@ const ActiveLoanTable = () => {
     <div>
       {userId && (
         <ReusableDataTable
-          filterParams={[
-            { name: "Pending" },
-            { name: "Ready for Disbursal" },
-            { name: "In Progress" },
-            { name: "Declined" },
-            { name: "Disbursed" },
-            { name: "Fully Paid" },
-            { name: "Cancelled Disbursement" },
-          ]}
+     
           dataTransformer={customDataTransformer}
           onClickRow="/loan-applications/view-loan"
           headers={headers}
@@ -122,11 +116,11 @@ const ActiveLoanTable = () => {
           filters={true}
           pagination={true}
           userId={userId}
-          role={"In Progress"}
+          role={"Fully Paid"}
         />
       )}
     </div>
   );
 };
 
-export default ActiveLoanTable;
+export default FullyPaidLoanTable;

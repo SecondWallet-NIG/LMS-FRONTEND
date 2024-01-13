@@ -82,7 +82,7 @@ const PendingTasks = () => {
         onClickRow={`/loan-applications/view-loan`}
         headers={headers}
         initialData={[]}
-        apiEndpoint={`https://secondwallet-stag.onrender.com/api/loan-application/task/${user?.data?.user?._id}`}
+        apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/task/${user?.data?.user?._id}`}
         filters={false}
         pagination={true}
         role={"pendingTask"}

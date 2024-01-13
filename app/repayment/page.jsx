@@ -7,7 +7,7 @@ import { getRepaymentSummary } from "@/redux/slices/loanRepaymentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "@/helpers";
 
-const Repayment = () => {
+const Repayment = () => { 
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("all-repayment");
   const { loading, error, data } = useSelector((state) => state.loanRepayment);
@@ -138,7 +138,7 @@ const Repayment = () => {
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}
-            apiEndpoint="https://secondwallet-stag.onrender.com/api/repayment"
+            apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
             btnTextClick={() => {
               router.push("/create-borrower");
             }}

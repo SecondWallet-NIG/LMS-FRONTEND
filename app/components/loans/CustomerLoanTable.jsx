@@ -64,7 +64,7 @@ const CustomerLoanTable = ({ id }) => {
       onClickRow="/loan-applications/view-loan"
       headers={headers}
       initialData={[]}
-      apiEndpoint={`https://secondwallet-stag.onrender.com/api/loan-application/customer/${id}`}
+      apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/customer/${id}`}
       // btnText={
       //   <div classNhttps://secondwallet-stag.onrender.com
       //     <p className="hidden lg:block">create customer</p>
