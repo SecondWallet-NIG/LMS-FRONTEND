@@ -7,6 +7,7 @@ const EditableButton = ({
   endIcon,
   whiteBtn,
   blueBtn,
+  redBtn,
 }) => {
   return (
     <button
@@ -17,6 +18,8 @@ const EditableButton = ({
           ? "hover:border-gray-300"
           : blueBtn
           ? " hover:border-blue-300"
+          : redBtn
+          ? "hover:border-gray-300"
           : ""
       }`}
       disabled={disabled}
@@ -27,7 +30,13 @@ const EditableButton = ({
       )}
       <div
         className={` ${
-          whiteBtn ? `bg-white border` : blueBtn ? `bg-swBlue text-white` : ""
+          whiteBtn
+            ? `bg-white border`
+            : blueBtn
+            ? `bg-swBlue text-white`
+            : redBtn
+            ? "bg-swIndicatorLightRed text-white"
+            : ""
         }  flex items-center justify-center text-sm semi-bold w-full py-2 px-5 rounded-md gap-1`}
       >
         {startIcon && <span>{startIcon}</span>}

@@ -6,9 +6,12 @@ import { PiCalendarBlankLight } from "react-icons/pi";
 import { useState } from "react";
 import { BsGraphDownArrow } from "react-icons/bs";
 import LoanOfficerTable from "./Tables/LoanOfficerTable";
+import EditableButton from "../../shared/editableButtonComponent/EditableButton";
+import { handleCaptureClick } from "../../helpers/utils";
 
 const LoanOfficerReport = () => {
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -39,56 +42,69 @@ const LoanOfficerReport = () => {
     setDateFilterOpen(!dateFilterOpen);
   };
 
+  const handleCapture = () => {
+    handleCaptureClick(setLoading, "captureDiv", `Loan officer report`);
+  };
+
   return (
     <main className="w-full">
       <div className="rounded-lg bg-swLightGray p-5 shadow-xl">
-        <div className="flex justify-between">
-          <p className="text-xl font-semibold text-black">
-            Loan Officer Report
-          </p>
-          <button
-            className={
-              "py-2 px-4 text-white text-sm bg-swBlue font-semibold rounded-md"
-            }
-          >
-            Export report
-          </button>
-        </div>
-        <div className="flex justify-between gap-5 items-center mt-5">
-          <p className="font-semibold text-black">Filter report</p>
-          <div className="flex gap-3">
-            <button
-              onClick={toggleDateFilter}
+        <div id="captureDiv" className="p-2">
+          <div className="flex justify-between">
+            <p className="text-xl font-semibold text-black">
+              Loan Officer Report
+            </p>
+            {/* <button
               className={
-                "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
+                "py-2 px-4 text-white text-sm bg-swBlue font-semibold rounded-md"
               }
             >
-              <PiCalendarBlankLight size={20} />
-              Select date range
-            </button>
+              Export report
+            </button> */}
+            <EditableButton
+              blueBtn={true}
+              label={loading ? "Exporting" : "Export report"}
+              disabled={loading ? true : false}
+              className={"text-swGray"}
+              onClick={handleCapture}
+            />
           </div>
-        </div>
+          <div className="flex justify-between gap-5 items-center mt-5">
+            <p className="font-semibold text-black">Filter report</p>
+            <div className="flex gap-3">
+              <button
+                onClick={toggleDateFilter}
+                className={
+                  "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
+                }
+              >
+                <PiCalendarBlankLight size={20} />
+                Select date range
+              </button>
+            </div>
+          </div>
 
-        <div className="flex gap-5 mt-5">
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Number of loan officers</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">
-                {/* {loanApplication?.data?.data.count} */}
-                20
-              </p>
+          <div className="flex gap-5 mt-5">
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Number of loan officers</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">
+                  {/* {loanApplication?.data?.data.count} */}
+                  20
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Loan Originated</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">6,750</p>
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Loan Originated</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">6,750</p>
+              </div>
             </div>
-          </div>
-          <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Overall Loan approvel rate</p>
-            <div className="flex justify-between items-end">
-              <p className="text-2xl font-bold mt-3">70%</p>
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Overall Loan approvel rate</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">70%</p>
+              </div>
             </div>
           </div>
         </div>

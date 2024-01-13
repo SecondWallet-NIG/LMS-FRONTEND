@@ -25,11 +25,10 @@ const StaffPage = () => {
   const dispatch = useDispatch();
   const [pageState, setPageState] = useState("r&p");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [fileError, setFileError] = useState("");
   const { loading, error, data } = useSelector((state) => state?.user);
   const { data: roleData } = useSelector((state) => state?.role);
-  console.log({ staffdata: data });
-
+  const [profileImg, setProfileImg] = useState(null);
   const [formData, setFormData] = useState({
     // profilePicture: null,
     firstName: "",
@@ -38,10 +37,11 @@ const StaffPage = () => {
     phoneNumber: "",
     role: "",
     tag: null,
+    status: "",
     isRoleAdmin: false,
   });
-  const profileImg = null;
-  console.log(data);
+  // const profileImg = null;
+
   const adminOptions = [
     { value: "CEO", label: "CEO" },
     { value: "CFO", label: "CFO" },
@@ -65,8 +65,19 @@ const StaffPage = () => {
   };
 
   const handleFileInputChange = (e) => {
+    setFileError("");
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
+      const fileExtension = files[0].name.split(".").pop().toLowerCase();
+      console.log(fileExtension);
+
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      if (!allowedExtensions.includes(fileExtension)) {
+        setFileError(
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png)."
+        );
+        return;
+      }
       setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
     } else {
       setSelectedFiles(files);
@@ -81,6 +92,11 @@ const StaffPage = () => {
         }))
       : [];
   };
+
+  const userStatus = [
+    { label: "Active", value: "Active" },
+    { label: "Inactive", value: "Inactive" },
+  ];
 
   const preventMinus = (e) => {
     if (/[^0-9,]/g.test(e.key)) {
@@ -104,6 +120,7 @@ const StaffPage = () => {
       email: formData.email,
       phoneNumber: formData.phoneNumber,
       role: formData.role,
+      status: formData.status,
     };
     dispatch(updateUser({ userId: data?._id, updatedData: payload }))
       .unwrap()
@@ -127,6 +144,7 @@ const StaffPage = () => {
       phoneNumber: data?.phoneNumber,
       role: data?.role?._id,
       tag: data?.role?.tag,
+      status: data?.status,
       isRoleAdmin: false,
     });
   }, [data]);
@@ -164,10 +182,10 @@ const StaffPage = () => {
           <div className="bg-swBlue rounded-2xl p-10 text-white">
             <div className="flex justify-between items-center">
               <div className="flex gap-5 items-start">
-                {profileImg !== null ? (
+                {data?.profilePicture !== null ? (
                   <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
                     <Image
-                      src={profileImg !== null && profileImg}
+                      src={data?.profilePicture}
                       alt="profile"
                       fill
                       sizes="100%"
@@ -307,38 +325,45 @@ const StaffPage = () => {
               />
             </div>
             <div className="pt-8 px-5 pb-16 h-[20rem] overflow-y-auto bg-white relative custom-scrollbar">
+              {/* <div className="flex flex-col"> */}
               <div className="flex">
                 <p className="font-semibold my-5 w-1/4">Profile picture</p>
-                <div className="flex gap-5 items-center">
-                  {profileImg !== null ? (
-                    <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                      <Image
-                        src={profileImg !== null && profileImg}
-                        alt="profile"
-                        fill
-                        sizes="100%"
-                      />
-                    </div>
-                  ) : (
-                    <div className="border-2 p-4 rounded-full">
-                      <FiUser size={40} />
-                    </div>
-                  )}
+                <div className="flex flex-col">
+                  <div className="flex gap-5 items-center">
+                    {profileImg !== null ? (
+                      <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                        <Image
+                          src={profileImg !== null && profileImg}
+                          alt="profile"
+                          fill
+                          sizes="100%"
+                        />
+                      </div>
+                    ) : (
+                      <div className="border-2 p-4 rounded-full">
+                        <FiUser size={40} />
+                      </div>
+                    )}
 
-                  <label
-                    htmlFor="profilePicture"
-                    className="border-2 rounded-lg p-2 px-4 font-semibold cursor-pointer"
-                  >
-                    <input
-                      type="file"
-                      id="profilePicture"
-                      className="hidden"
-                      onChange={handleFileInputChange}
-                    />
-                    {profileImg !== null ? "Change file" : "Select a file"}
-                  </label>
+                    <label
+                      htmlFor="profilePicture"
+                      className="border-2 rounded-lg p-2 px-4 font-semibold cursor-pointer whitespace-nowrap"
+                    >
+                      <input
+                        type="file"
+                        id="profilePicture"
+                        className="hidden"
+                        onChange={handleFileInputChange}
+                      />
+                      {profileImg !== null ? "Change file" : "Select a file"}
+                    </label>
+                  </div>
+                  {fileError && (
+                    <p className="text-red-500 text-sm mt-2">{fileError}</p>
+                  )}
                 </div>
               </div>
+
               <div className="flex justify-between mt-5">
                 <p className="w-1/4 font-semibold mr-2">Personal information</p>
                 <div className="w-3/4 flex flex-col gap-2">
@@ -413,6 +438,24 @@ const StaffPage = () => {
                       }
                     />
                   )}
+                </div>
+              </div>
+              <div className="flex justify-between mt-5">
+                <p className="w-1/4 font-semibold mr-2">Status</p>
+                <div className="w-3/4 flex flex-col gap-3">
+                  <SelectField
+                    name="status"
+                    label={"Select User Status"}
+                    required={true}
+                    value={userStatus.find(
+                      (option) => option.value === formData.status
+                    )}
+                    isSearchable={false}
+                    optionValue={userStatus}
+                    onChange={(selectedOption) =>
+                      handleSelectChange(selectedOption, "status")
+                    }
+                  />
                 </div>
               </div>
             </div>

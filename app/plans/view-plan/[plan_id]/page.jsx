@@ -12,6 +12,8 @@ import { LuTrash } from "react-icons/lu";
 
 const ViewPlan = () => {
   const { plan_id } = useParams();
+  const [userRole, setUserRole] = useState(false);
+  const [showEditBtn, setShowEditBtn] = useState(false);
   // console.log({ plan_id });
   const dispatch = useDispatch();
   const loanPackage =
@@ -21,8 +23,24 @@ const ViewPlan = () => {
   // console.log({ loanPackage });
 
   useEffect(() => {
+    const _user = JSON.parse(localStorage.getItem("user"));
+    if (_user) {
+      setUserRole(_user?.data?.user?.role?.tag);
+    }
     dispatch(getSingleLoanPackage(plan_id));
   }, []);
+
+  useEffect(() => {
+    if (
+      userRole === "CEO" ||
+      userRole === "CTO" ||
+      userRole === "CFO" ||
+      userRole === "DIR" ||
+      userRole === "SYSTEM ADMIN"
+    ) {
+      setShowEditBtn(true);
+    }
+  }, [userRole]);
 
   return (
     <DashboardLayout
@@ -31,13 +49,15 @@ const ViewPlan = () => {
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">
-          <Link
-            href={`/plans/view-plan/${plan_id}/edit-plan`}
-            className="border py-2 px-3 flex gap-2 items-center rounded-lg"
-          >
-            <FiEdit2 size={20} />
-            Edit
-          </Link>
+          {showEditBtn && (
+            <Link
+              href={`/plans/view-plan/${plan_id}/edit-plan`}
+              className="border py-2 px-3 flex gap-2 items-center rounded-lg"
+            >
+              <FiEdit2 size={20} />
+              Edit
+            </Link>
+          )}
         </div>
 
         <div className="flex justify-between mt-5 p-5 border-b">

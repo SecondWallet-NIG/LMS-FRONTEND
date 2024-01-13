@@ -58,7 +58,7 @@ function ReusableDataTable({
     {
       startDate: null,
       endDate: null,
-      key: 'selection'
+      key: "selection",
     },
   ]);
   const [status, setStatus] = useState(" ");
@@ -73,9 +73,23 @@ function ReusableDataTable({
         dateRange[0].startDate instanceof Date &&
         dateRange[0].endDate instanceof Date
       ) {
-        const startDate = dateRange[0].startDate.toISOString();
-        const endDate = dateRange[0].endDate.toISOString();
-        x += `&startDate=${startDate}&endDate=${endDate}`;
+        // const startDate = dateRange[0].startDate.toISOString();
+        // const endDate = dateRange[0].endDate.toISOString();
+
+        // Adjust the time zone offset for the start date
+        const startDate = new Date(dateRange[0].startDate);
+        startDate.setDate(startDate.getDate() + 1);
+        startDate.setMinutes(
+          startDate.getMinutes() - startDate.getTimezoneOffset()
+        );
+
+        // Adjust the time zone offset for the end date
+        const endDate = new Date(dateRange[0].endDate);
+        endDate.setDate(endDate.getDate() + 1);
+        endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset());
+
+        // apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
+        x += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
       }
     }
 
@@ -134,7 +148,7 @@ function ReusableDataTable({
         setLoading(false);
       })
       .catch((error) => {
-        console.log({error});
+        console.log({ error });
         toast.error("An error occurred while fetching data for download.");
         setLoading(false);
       });
@@ -179,7 +193,7 @@ function ReusableDataTable({
   }
 
   const fetchData = (page, perPage, field, direction) => {
-    let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}&sortedBy=-createdAt`;
+    let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}`;
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
       if (role === "Pending") {
@@ -189,19 +203,25 @@ function ReusableDataTable({
       if (role === "In Progress") {
         apiUrl += `&status=${"In Progress"}`;
       }
-      
+
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-      // if (role === "report") {
-      //   apiUrl += `&status=${"Disbursed"}`;
-      // }
+
       if (role === "pendingTask") {
         apiUrl += `&status=${"Pending"}`;
       }
 
       if (role === "completedTask") {
         apiUrl += `&status=${"Done"}`;
+      }
+
+      if (role === "unpaid-repayment") {
+        apiUrl += `&status=${"Unpaid"}`;
+      }
+
+      if (role === "Fully Paid") {
+        apiUrl += `&status=${"Fully Paid"}`;
       }
       axios
         .get(apiUrl, {
@@ -222,7 +242,10 @@ function ReusableDataTable({
             setData(transformedData);
             setPaginationLinks(data?.data.links);
             console.log(data?.data.links);
-            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
+            setDownloadData(
+              data?.data?.links?.totalDocuments ||
+                data?.data?.data?.links?.totalDocuments
+            );
             setLoading(false);
           } else {
             setData(
@@ -232,7 +255,10 @@ function ReusableDataTable({
                 data.results
             );
             console.log(data?.data.links.totalDocuments);
-            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
+            setDownloadData(
+              data?.data?.links?.totalDocuments ||
+                data?.data?.data?.links?.totalDocuments
+            );
             setPaginationLinks(data?.data?.links);
             setLoading(false);
           }
@@ -246,9 +272,25 @@ function ReusableDataTable({
           dateRange[0].startDate instanceof Date &&
           dateRange[0].endDate instanceof Date
         ) {
-          const startDate = dateRange[0].startDate.toISOString();
-          const endDate = dateRange[0].endDate.toISOString();
-          apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
+          // const startDate = dateRange[0].startDate.toISOString();
+          // const endDate = dateRange[0].endDate.toISOString();
+
+          // Adjust the time zone offset for the start date
+          const startDate = new Date(dateRange[0].startDate);
+          startDate.setDate(startDate.getDate() + 1);
+          startDate.setMinutes(
+            startDate.getMinutes() - startDate.getTimezoneOffset()
+          );
+
+          // Adjust the time zone offset for the end date
+          const endDate = new Date(dateRange[0].endDate);
+          endDate.setDate(endDate.getDate() + 1);
+          endDate.setMinutes(
+            endDate.getMinutes() - endDate.getTimezoneOffset()
+          );
+
+          // apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
+          apiUrl += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
         }
       }
       if (role === "Pending") {
@@ -262,9 +304,7 @@ function ReusableDataTable({
       if (userId && role === "Loan Officer") {
         apiUrl += `&userId=${userId}`;
       }
-      // if (role === "report") {
-      //   apiUrl += `&status=${"Disbursed"}`;
-      // }
+
       if (role === "pendingTask") {
         apiUrl += `&status=${"Pending"}`;
       }
@@ -279,6 +319,14 @@ function ReusableDataTable({
 
       if (status != " ") {
         apiUrl += `&status=${status}`;
+      }
+
+      if (role === "unpaid-repayment") {
+        apiUrl += `&status=${"Unpaid"}`;
+      }
+
+      if (role === "Fully Paid") {
+        apiUrl += `&status=${"Fully Paid"}`;
       }
       axios
         .get(apiUrl, {
@@ -298,7 +346,7 @@ function ReusableDataTable({
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results
             );
-            console.log({transformedData});
+            console.log({ transformedData });
             setData(transformedData);
             setPaginationLinks(
               data?.data.links ||
@@ -306,7 +354,10 @@ function ReusableDataTable({
                 data?.data?.data?.data?.links
             );
             console.log(data?.data?.links.totalDocuments);
-            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
+            setDownloadData(
+              data?.data?.links?.totalDocuments ||
+                data?.data?.data?.links?.totalDocuments
+            );
             setLoading(false);
           } else {
             setData(
@@ -323,7 +374,10 @@ function ReusableDataTable({
                 data?.data?.data?.data?.links
             );
             console.log(data?.data.links.totalDocuments);
-            setDownloadData(data?.data?.links?.totalDocuments || data?.data?.data?.links?.totalDocuments);
+            setDownloadData(
+              data?.data?.links?.totalDocuments ||
+                data?.data?.data?.links?.totalDocuments
+            );
             setLoading(false);
           }
           setLoading(false);
@@ -689,7 +743,26 @@ function ReusableDataTable({
           <div className="w-full items-center">
             <DateRange
               editableDateInputs={true}
-              onChange={(item) => setDateRange([item.selection])}
+              onChange={(item) => {
+                const adjustedItem = {
+                  ...item.selection,
+                  startDate: new Date(
+                    Date.UTC(
+                      item.selection.startDate.getFullYear(),
+                      item.selection.startDate.getMonth(),
+                      item.selection.startDate.getDate()
+                    )
+                  ),
+                  endDate: new Date(
+                    Date.UTC(
+                      item.selection.endDate.getFullYear(),
+                      item.selection.endDate.getMonth(),
+                      item.selection.endDate.getDate()
+                    )
+                  ),
+                };
+                setDateRange([adjustedItem]);
+              }}
               moveRangeOnFirstSelection={false}
               ranges={dateRange}
             />

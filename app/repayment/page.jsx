@@ -27,7 +27,7 @@ const Repayment = () => {
       id: item._id,
       loanId: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.loanApplication?.loanId}
+          SWL - {item?.loanApplication?.loanId}
         </div>
       ),
       repaymentNumber: (
@@ -71,7 +71,6 @@ const Repayment = () => {
   useEffect(() => {
     dispatch(getRepaymentSummary());
   }, []);
-  
 
   return (
     <DashboardLayout>
@@ -135,6 +134,11 @@ const Repayment = () => {
 
         <div className="w-full">
           <ReusableDataTable
+            filterParams={[
+              { name: "Unpaid" },
+              { name: "Fully paid" },
+              { name: "Overdue" },
+            ]}
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}

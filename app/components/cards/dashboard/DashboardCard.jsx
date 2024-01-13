@@ -65,7 +65,7 @@ const DashboardCard = ({
             <p className="text-sm">{thirdStat[0]}</p>
             <p className="font-semibold mt-1 text-sm">{thirdStat[1]}</p>
             <p
-              className={`font-semibold mt-1 text-ss ${"bg-[#E8F7F0]"} py-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
+              className={`mt-1 text-sm ${"bg-[#E8F7F0]"} py-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
             >
               {thirdStat[2]} %
             </p>

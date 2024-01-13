@@ -92,6 +92,13 @@ const RepaymentTable = () => {
 
         <div className="w-full">
           <ReusableDataTable
+            filterParams={[
+              { name: "Unpaid" },
+              { name: "Fully paid" },
+              { name: "Overdue" },
+          
+            ]}
+          // filterParams={}
             headers={header}
             dataTransformer={customDataTransformer}
             initialData={[]}

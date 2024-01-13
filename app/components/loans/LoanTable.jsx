@@ -5,17 +5,20 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
+import Link from "next/link";
+
 const LoanTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
-  const [roleTag,setRoleTag] = useState("")
+  const [roleTag, setRoleTag] = useState("");
   const router = useRouter();
   const headers = [
     { id: "createdAt", label: "Date Created" },
     { id: "name", label: "Borrower's Name & ID" },
     { id: "loanPackageId", label: "Loan ID & package" },
     { id: "loanAmount", label: "Loan Amount" },
-    { id: "status", label: "Loan Status" },
+    { id: "status", label: "Status" },
+    { id: "createdBy", label: "Initiated By" },
   ];
 
   const customDataTransformer = (apiData) => {
@@ -45,7 +48,9 @@ const LoanTable = () => {
       loanPackageId: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
-          <div className="text-xs text-gray-500 pt-2">SWL-{`${item?.loanId}`}</div>
+          <div className="text-xs text-gray-500 pt-2">
+            SWL-{`${item?.loanId}`}
+          </div>
         </div>
       ),
       loanAmount: (
@@ -73,6 +78,21 @@ const LoanTable = () => {
         >
           {item.status}
         </button>
+      ),
+      createdBy: (
+        <div>
+          <div className="text-md font-[500] text-swDarkGreen">
+            {item?.createdBy?.firstName} {item?.createdBy?.lastName}
+          </div>
+          <div className="text-md font-[500] text-gray-700">
+            <Link
+              className="underline"
+              href={`/team-management/staff/${item?.createdBy?._id}`}
+            >
+              {item?.createdBy?.email}
+            </Link>
+          </div>
+        </div>
       ),
     }));
   };
@@ -117,7 +137,9 @@ const LoanTable = () => {
             </div>
           }
           btnTextClick={() => {
-            roleTag === "LO" ? router.push("/create-loan") : router.push("/unauthorized")
+            roleTag === "LO"
+              ? router.push("/create-loan")
+              : router.push("/unauthorized");
           }}
           filters={true}
           pagination={true}

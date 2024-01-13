@@ -66,7 +66,7 @@ const CustomerLoanTable = ({ id }) => {
       initialData={[]}
       apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/customer/${id}`}
       // btnText={
-      //   <div classNhttps://secondwallet-stag.onrender.com
+      //   <div className="flex gap-1 items-center p-1">
       //     <p className="hidden lg:block">create customer</p>
       //   </div>
       // }

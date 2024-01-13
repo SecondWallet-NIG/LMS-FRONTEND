@@ -13,6 +13,7 @@ import { AiOutlinePaperClip } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { logRepaymentFunc } from "@/redux/slices/loanRepaymentSlice";
 import { useDispatch } from "react-redux";
+import { clearUserState } from "@/redux/slices/loanPackageSlice";
 
 const CustomerRepayment = ({ loanId }) => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const CustomerRepayment = ({ loanId }) => {
   const [enableLogRepaymentBtn, setEnableLogRepaymentBtn] = useState(true);
   const [enableLogRepayment, setEnableLogRepayment] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [fileError, setFileError] = useState("");
   const [formData, setFormData] = useState({
     repaymentMethod: "",
     repaymentAmount: "",
@@ -27,8 +29,18 @@ const CustomerRepayment = ({ loanId }) => {
   });
 
   const handleFileChange = (e) => {
+    setFileError("");
     let { name, files } = e.target;
     const file = files[0];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    if (!allowedExtensions.includes(fileExtension)) {
+      setFileError(
+        "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+      );
+      return;
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: file,
@@ -270,6 +282,7 @@ const CustomerRepayment = ({ loanId }) => {
                 Document types uploaded should be JPEGS, PNG or PDF and should
                 not exceed 4mb
               </p>
+              {fileError && <p className="text-red-500 text-sm">{fileError}</p>}
               <div className="relative">
                 <input
                   name="repaymentReceipts"

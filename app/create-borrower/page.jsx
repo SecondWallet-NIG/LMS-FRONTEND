@@ -30,7 +30,6 @@ import { AiOutlineDelete } from "react-icons/ai";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Image from "next/image";
 
-
 const CreateCustomer = () => {
   const [isInputOpen, setIsInputOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +38,7 @@ const CreateCustomer = () => {
   const [verificationResponse, setVerificationResponse] = useState(null);
   const [lga, setLga] = useState([]);
   const [newUserId, setNewUserId] = useState("");
+  const [fileError, setFileError] = useState("");
   const [borrowerType, setBorrowerType] = useState({
     value: "Single borrower",
     label: "Single borrower",
@@ -132,10 +132,19 @@ const CreateCustomer = () => {
   };
 
   const handleFileInputChange = (e) => {
-    // console.log(e.target.id);
+    setFileError("");
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
-      // console.log(files[0])
+      const fileExtension = files[0].name.split(".").pop().toLowerCase();
+      console.log(fileExtension);
+
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      if (!allowedExtensions.includes(fileExtension)) {
+        setFileError(
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png)."
+        );
+        return;
+      }
       setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
     } else {
       setSelectedFiles(files);
@@ -337,6 +346,7 @@ const CreateCustomer = () => {
               <p className="font-semibold text-lg text-swBlack">
                 Personal information
               </p>
+
               <div>
                 <p className="font-semibold my-5">Profile picture</p>
                 <div className="flex gap-5 items-center">
@@ -369,6 +379,7 @@ const CreateCustomer = () => {
                   </label>
                 </div>
               </div>
+              {fileError && <p className="text-red-500 text-sm">{fileError}</p>}
               <p className="font-semibold my-3">Borrower information</p>
 
               <div className="flex flex-col md:flex-row gap-4">
