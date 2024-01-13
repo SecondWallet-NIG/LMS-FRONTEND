@@ -8,44 +8,65 @@ import {
   declineLoggedPayment,
 } from "@/redux/slices/loanRepaymentSlice";
 // import { getAllRepayments } from "@/redux/slices/loanRepaymentSlice";
-import { getAllRepaymentHistory } from "@/redux/slices/repaymentHistorySlice";
+import {
+  getAllRepaymentHistory,
+  getSingleRepayment,
+} from "@/redux/slices/repaymentHistorySlice";
 import { Button } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Viewer from "react-viewer";
 
 const PaymentPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [repaymentData, setRepaymentData] = useState({});
+  // const [repaymentData, setRepaymentData] = useState({});
   const [openReceipt, setOpenReceipt] = useState(false);
-  const { data } = useSelector((state) => state?.repaymentHistory);
+  const { data: repaymentData } = useSelector(
+    (state) => state?.repaymentHistory
+  );
   const [showApprovalBtns, setShowApprovalBtns] = useState(false);
+  const [disableApprovalBtn, setDisableApprovalBtn] = useState(false);
   const [userRole, setUserRole] = useState("");
 
   // console.log({ repaymentData: data });
   console.log({ repaymentData });
 
+  const handleFileExtention = (file) => {
+    const fileExtension = file.split(".").pop().toLowerCase();
+
+    return fileExtension;
+  };
+  console.log(
+    handleFileExtention(
+      "https://res.cloudinary.com/drzkozm7j/image/upload/v1705177607/staging/jm2ykhblngemsjt7txdk.pdf"
+    )
+  );
+
   const approvePayment = (loanId, repaymentId) => {
+    setDisableApprovalBtn(true);
     dispatch(approveLoggedPayment({ loanId, repaymentId }))
       .unwrap()
       .then(() => {
         toast.success("Payment approved");
         dispatch(getAllRepaymentHistory());
+        setDisableApprovalBtn(false);
         // window.location.reload();
       })
       .catch(() => {
         dispatch(getAllRepaymentHistory());
         toast.error("An error occured");
+        setDisableApprovalBtn(false);
       });
   };
 
   const declinePayment = (loanId, repaymentId) => {
+    setDisableApprovalBtn(true);
     dispatch(declineLoggedPayment({ loanId, repaymentId }))
       .unwrap()
       .then(() => {
@@ -55,9 +76,9 @@ const PaymentPage = () => {
       .catch((error) => toast.error("An error occured"));
   };
 
-  useEffect(() => {
-    setRepaymentData(data?.results.find((option) => option._id === id));
-  }, [data]);
+  // useEffect(() => {
+  //   setRepaymentData(data?.results.find((option) => option._id === id));
+  // }, [data]);
 
   useEffect(() => {
     if (
@@ -76,7 +97,7 @@ const PaymentPage = () => {
     if (_user) {
       setUserRole(_user?.data?.user?.role?.tag);
     }
-    dispatch(getAllRepaymentHistory());
+    dispatch(getSingleRepayment(id));
   }, []);
 
   return (
@@ -88,14 +109,14 @@ const PaymentPage = () => {
             <p>Log Status: </p>
             <p
               className={`${
-                repaymentData?.status === "New"
+                repaymentData?.result.status === "New"
                   ? "bg-[#E7F1FE] text-swBlue"
-                  : repaymentData?.status === "Approved"
+                  : repaymentData?.result.status === "Approved"
                   ? "bg-green-50 text-swGreen"
                   : "text-red-400 bg-red-100"
               } px-2 py-1 rounded-full  `}
             >
-              {repaymentData?.status}
+              {repaymentData?.result.status}
             </p>
           </div>
         </div>
@@ -105,7 +126,7 @@ const PaymentPage = () => {
           {showApprovalBtns ? (
             <div className="flex gap-5">
               {/* <Button
-                disabled={repaymentData?.status == "New" ? false : true}
+                disabled={repaymentData?.result.status == "New" ? false : true}
                 onClick={() => {
                   approvePayment(item?.loanApplication._id, item._id);
                 }}
@@ -116,17 +137,23 @@ const PaymentPage = () => {
               <EditableButton
                 blueBtn={true}
                 label={"Approve"}
-                disabled={repaymentData?.status === "New" ? false : true}
+                disabled={
+                  repaymentData?.result.status !== "New"
+                    ? true
+                    : disableApprovalBtn
+                    ? true
+                    : false
+                }
                 onClick={() =>
                   approvePayment(
-                    repaymentData?.loanApplication._id,
+                    repaymentData?.result.loanApplication._id,
                     repaymentData._id
                   )
                 }
               />
               {/* <Button
                 variant="danger"
-                disabled={repaymentData?.status === "New" ? false : true}
+                disabled={repaymentData?.result.status === "New" ? false : true}
                 onClick={() => {
                   declinePayment(item?.loanApplication._id, item._id);
                 }}
@@ -137,10 +164,16 @@ const PaymentPage = () => {
               <EditableButton
                 redBtn={true}
                 label={"Decline"}
-                disabled={repaymentData?.status === "New" ? false : true}
+                disabled={
+                  repaymentData?.result.status !== "New"
+                    ? true
+                    : disableApprovalBtn
+                    ? true
+                    : false
+                }
                 onClick={() =>
                   declinePayment(
-                    repaymentData?.loanApplication._id,
+                    repaymentData?.result.loanApplication._id,
                     repaymentData._id
                   )
                 }
@@ -153,37 +186,37 @@ const PaymentPage = () => {
           <p className="text-lg font-semibold">payment details</p>
           <div className="flex">
             <p className="min-w-[15rem]">Date Logged</p>
-            <p>{formatDate(repaymentData?.createdAt?.slice(0, 10))}</p>
+            <p>{formatDate(repaymentData?.result.createdAt?.slice(0, 10))}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Loan ID</p>
             <Link
-              href={`/loan-applications/view-loan/${repaymentData?.loanApplication?._id}`}
+              href={`/loan-applications/view-loan/${repaymentData?.result.loanApplication?._id}`}
               className="text-swBlue"
             >
-              SWL-{repaymentData?.loanApplication?.loanId}
+              SWL-{repaymentData?.result.loanApplication?.loanId}
             </Link>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Logged by</p>
             <p>
-              {repaymentData?.loggedBy?.firstName}{" "}
-              {repaymentData?.loggedBy?.lastName}
+              {repaymentData?.result.loggedBy?.firstName}{" "}
+              {repaymentData?.result.loggedBy?.lastName}
             </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Borrower name</p>
             <p>
-              {repaymentData?.loanApplication?.customerId?.firstName}{" "}
-              {repaymentData?.loanApplication?.customerId?.lastName}
+              {repaymentData?.result.loanApplication?.customerId?.firstName}{" "}
+              {repaymentData?.result.loanApplication?.customerId?.lastName}
             </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Payment method</p>
-            <p>{repaymentData?.repaymentMethod}</p>
+            <p>{repaymentData?.result.repaymentMethod}</p>
           </div>
-          {repaymentData?.repaymentReceipts?.length > 0 &&
-          repaymentData?.repaymentReceipts?.[0] !== "null" ? (
+          {repaymentData?.result.repaymentReceipts?.length > 0 &&
+          repaymentData?.result.repaymentReceipts?.[0] !== "null" ? (
             <div className="flex">
               <p className="min-w-[15rem]">Receipt</p>
               <p
@@ -192,32 +225,17 @@ const PaymentPage = () => {
               >
                 View receipt
               </p>
-              <div
-                className={`fixed top-0 left-0 ${
-                  openReceipt ? "flex" : "hidden"
-                } items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]`}
-              >
-                <div className="h-[60%] max-w-xl">
-                  <div
-                    className="flex justify-end"
-                    onClick={() => setOpenReceipt(false)}
-                  >
-                    <IoMdClose size={20} className="cursor-pointer" />
-                  </div>
-                  <div className="h-full w-fit relative">
-                    {/* <iframe
-                    src={repaymentData?.repaymentReceipts}
-                    className="h-full w-full"
-                    title="Iframe Example"
-                  ></iframe> */}
-                    <Image
-                      src={repaymentData?.repaymentReceipts?.[0]}
-                      fill
-                      alt="receipt"
-                    />
-                  </div>
-                </div>
-              </div>
+
+              <Viewer
+                visible={openReceipt}
+                onClose={() => {
+                  setOpenReceipt(false);
+                }}
+                images={repaymentData?.result.repaymentReceipts.map((item) => ({
+                  src: item,
+                  key: item,
+                }))}
+              />
             </div>
           ) : (
             <div className="flex">
