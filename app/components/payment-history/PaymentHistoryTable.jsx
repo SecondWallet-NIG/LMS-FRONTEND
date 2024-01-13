@@ -105,7 +105,7 @@ const PaymentHistoryTable = () => {
             {item?.repaymentMethod}
           </div>
           <div
-            className="text-md font-[500] text-swBlue underline"
+            className="text-md font-[500] text-swBlue underline z-20"
             onClick={() => {
               router.push(
                 `/loan-applications/view-loan/${item?.loanApplication._id}`
@@ -130,33 +130,33 @@ const PaymentHistoryTable = () => {
         </button>
       ),
 
-      approvalBtn: (
-        <div>
-          {userRoleTag && userRoleTag === "CFO" ? (
-            <div className="flex gap-5">
-              <Button
-                disabled={item.status == "New" ? false : true}
-                onClick={() => {
-                  approvePayment(item?.loanApplication._id, item._id);
-                }}
-                className="bg-swBlue text-white text-xs font-normal px-2 py-1  px-2 py-1 rounded rounded-md"
-              >
-                Approve
-              </Button>
-              <Button
-                variant="danger"
-                disabled={item.status === "New" ? false : true}
-                onClick={() => {
-                  declinePayment(item?.loanApplication._id, item._id);
-                }}
-                className="bg-red-400 text-white text-xs font-normal px-2 py-1  px-2 py-1 rounded rounded-md"
-              >
-                Decline
-              </Button>
-            </div>
-          ) : null}
-        </div>
-      ),
+      // approvalBtn: (
+      //   <div>
+      //     {userRoleTag && userRoleTag === "CFO" ? (
+      //       <div className="flex gap-5">
+      //         <Button
+      //           disabled={item.status == "New" ? false : true}
+      //           onClick={() => {
+      //             approvePayment(item?.loanApplication._id, item._id);
+      //           }}
+      //           className="bg-swBlue text-white text-xs font-normal px-2 py-1  px-2 py-1 rounded rounded-md"
+      //         >
+      //           Approve
+      //         </Button>
+      //         <Button
+      //           variant="danger"
+      //           disabled={item.status === "New" ? false : true}
+      //           onClick={() => {
+      //             declinePayment(item?.loanApplication._id, item._id);
+      //           }}
+      //           className="bg-red-400 text-white text-xs font-normal px-2 py-1  px-2 py-1 rounded rounded-md"
+      //         >
+      //           Decline
+      //         </Button>
+      //       </div>
+      //     ) : null}
+      //   </div>
+      // ),
     }));
   };
 
