@@ -171,7 +171,7 @@ const PaymentHistoryTable = () => {
           ]}
           headers={header}
           dataTransformer={customDataTransformer}
-         // onClickRow={"/payment-history/payment/"}
+          onClickRow={"/payment-history/payment/"}
           initialData={[]}
           apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment/payment-history-all`}
           filters={true}
