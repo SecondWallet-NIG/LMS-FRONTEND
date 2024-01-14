@@ -34,9 +34,6 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
 
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     if (!allowedExtensions.includes(fileExtension)) {
-      // alert(
-      //   "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
-      // );
       setFileError(
         "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
       );

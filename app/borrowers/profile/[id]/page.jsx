@@ -21,6 +21,7 @@ import CustomerSummary from "@/app/components/customers/CustomerSummary";
 import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
 import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
 import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs";
+import Viewer from "react-viewer";
 const CustomerProfile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const CustomerProfile = () => {
   const [infoHover, setInfoHover] = useState("");
   const [logSearch, setLogSearch] = useState(false);
   const [borrowerOptions, setBorrowerOptions] = useState(false);
+  const [openProfilePic, setOpenProfilePic] = useState(false);
   const buttonRef = useRef(null);
   console.log({ roleTag });
 
@@ -112,6 +114,20 @@ const CustomerProfile = () => {
                       : "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                   }
                   alt="user"
+                  className="cursor-pointer"
+                  onClick={() =>
+                    data?.profileInfo?.profilePicture && setOpenProfilePic(true)
+                  }
+                />
+                <Viewer
+                  visible={openProfilePic}
+                  onClose={() => {
+                    setOpenProfilePic(false);
+                  }}
+                  images={[data?.profileInfo?.profilePicture].map((item) => ({
+                    src: item,
+                    key: item,
+                  }))}
                 />
               </div>
               <div className="ml-4 h-fit">
