@@ -96,9 +96,9 @@ const LoginScreen = () => {
         <div className="flex justify-center items-center mb-20 -ml-5">
           <Image src={companyLogo} alt="company logo" />
         </div>
-        <h2 className="text-2xl text-center font-semibold mb-4">
+        {/* <h2 className="text-2xl text-center font-semibold mb-4">
           Log into your account
-        </h2>
+        </h2> */}
         <div className="mt-2">
           <InputField
             css={"relative"}

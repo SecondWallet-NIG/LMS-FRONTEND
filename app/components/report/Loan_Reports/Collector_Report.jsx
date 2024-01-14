@@ -108,17 +108,17 @@ const CollectorReport = () => {
         >
           Export report
         </button> */}
-        <EditableButton
+        {/* <EditableButton
           blueBtn={true}
           label={loading ? "Exporting" : "Export"}
           disabled={loading ? true : false}
           className={"text-swGray"}
           onClick={handleCapture}
-        />
+        /> */}
       </div>
 
       <div className="flex justify-between items-center mt-5">
-        <p className="font-semibold text-black">Filter report</p>
+        {/* <p className="font-semibold text-black">Filter report</p> */}
         <div className="flex gap-3">
           <button
             className={
@@ -128,7 +128,7 @@ const CollectorReport = () => {
             <PiCalendarBlankLight size={20} />
             Select date range
           </button>
-          <button
+          {/* <button
             className={
               "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md"
             }
@@ -141,7 +141,7 @@ const CollectorReport = () => {
             }
           >
             Outstanding Range
-          </button>
+          </button> */}
         </div>
       </div>
 
