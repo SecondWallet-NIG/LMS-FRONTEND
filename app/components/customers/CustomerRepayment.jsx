@@ -151,9 +151,13 @@ const CustomerRepayment = ({ loanId }) => {
         <button
           className={`${
             item.status === "Unpaid"
-              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              ? "bg-[#E7F1FE] text-swBlue"
+              : item.status === "Fully paid"
+              ? "bg-swLightGreenIndcatorBg text-swGreen"
+              : item.status === "Due"
+              ? "bg-swLightPinkIndcatorBg text-swIndicatorLightRed"
               : "bg-[#F8A9A3] text-white"
-          } px-2 py-1 rounded-full `}
+          } px-2 py-1 text-xs font-normal rounded-full`}
         >
           {item.status}
         </button>
