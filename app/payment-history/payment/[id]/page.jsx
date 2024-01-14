@@ -18,6 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -203,8 +204,8 @@ const PaymentPage = () => {
           <div className="flex">
             <p className="min-w-[15rem]">Borrower name</p>
             <p>
-              {repaymentData?.result.loanApplication?.customerId?.firstName}{" "}
-              {repaymentData?.result.loanApplication?.customerId?.lastName}
+              {repaymentData?.result?.customer.firstName}{" "}
+              {repaymentData?.result?.customer.lastName}
             </p>
           </div>
           <div className="flex">
@@ -230,9 +231,10 @@ const PaymentPage = () => {
                     openReceipt ? "flex" : "hidden"
                   } justify-center items-center text-white z-[110]`}
                 >
-                  <PdfViewer
-                    file={repaymentData?.result?.repaymentReceipts?.[0]}
-                  />
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                  <div className="flex justify-end"><IoMdClose size={20} className="cursor-pointer text-swBlack" onClick={() => setOpenReceipt(false)}/></div>
+                  <iframe src={repaymentData?.result?.repaymentReceipts?.[0]} className="h-full w-full"></iframe>
+                  </div>
                 </div>
               ) : (
                 <Viewer
