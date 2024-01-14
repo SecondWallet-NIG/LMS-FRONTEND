@@ -1,4 +1,6 @@
 import html2canvas from "html2canvas";
+import { useState } from "react";
+import { Document, Page } from "react-pdf";
 
 export const cls = (input) =>
   input
@@ -51,6 +53,30 @@ const downloadScreenshot = (dataUrl, loading, fileName) => {
 
 export const handleFileExtention = (file) => {
   const fileExtension = file.split(".").pop().toLowerCase();
-
+  console.log(fileExtension);
   return fileExtension;
+};
+
+export const PdfViewer = (file) => {
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+  const goToPrevPage = () =>
+    setPageNumber(pageNumber - 1 <= 1 ? 1 : pageNumber - 1);
+
+  const goToNextPage = () =>
+    setPageNumber(pageNumber + 1 >= numPages ? numPages : pageNumber + 1);
+  return (
+    <div>
+      <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page pageNumber={pageNumber} />
+      </Document>
+      <p>
+        Page {pageNumber} of {numPages}
+      </p>
+    </div>
+  );
 };

@@ -1,6 +1,6 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import { handleFileExtention } from "@/app/components/helpers/utils";
+import { PdfViewer, handleFileExtention } from "@/app/components/helpers/utils";
 import CenterModal from "@/app/components/modals/CenterModal";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { formatDate } from "@/helpers";
@@ -223,9 +223,18 @@ const PaymentPage = () => {
               </p>
               {handleFileExtention(
                 repaymentData?.result?.repaymentReceipts?.[0]
-              ) === "jpg" ||
-              "jpeg" ||
-              "png" ? (
+              ) === "pdf" ? (
+                // <p>It's a pdf</p>
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openReceipt ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <PdfViewer
+                    file={repaymentData?.result?.repaymentReceipts?.[0]}
+                  />
+                </div>
+              ) : (
                 <Viewer
                   visible={openReceipt}
                   onClose={() => {
@@ -238,8 +247,6 @@ const PaymentPage = () => {
                     })
                   )}
                 />
-              ) : (
-                <p>It's a pdf</p>
               )}
             </div>
           ) : (
