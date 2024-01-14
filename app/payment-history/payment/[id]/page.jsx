@@ -1,5 +1,6 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
+import { handleFileExtention } from "@/app/components/helpers/utils";
 import CenterModal from "@/app/components/modals/CenterModal";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { formatDate } from "@/helpers";
@@ -37,16 +38,11 @@ const PaymentPage = () => {
   // console.log({ repaymentData: data });
   console.log({ repaymentData });
 
-  const handleFileExtention = (file) => {
-    const fileExtension = file.split(".").pop().toLowerCase();
-
-    return fileExtension;
-  };
-  console.log(
-    handleFileExtention(
-      "https://res.cloudinary.com/drzkozm7j/image/upload/v1705177607/staging/jm2ykhblngemsjt7txdk.pdf"
-    )
-  );
+  // console.log(
+  //   handleFileExtention(
+  //     "https://res.cloudinary.com/drzkozm7j/image/upload/v1705177607/staging/jm2ykhblngemsjt7txdk.pdf"
+  //   )
+  // );
 
   const approvePayment = (loanId, repaymentId) => {
     setDisableApprovalBtn(true);
@@ -225,17 +221,26 @@ const PaymentPage = () => {
               >
                 View receipt
               </p>
-
-              <Viewer
-                visible={openReceipt}
-                onClose={() => {
-                  setOpenReceipt(false);
-                }}
-                images={repaymentData?.result.repaymentReceipts.map((item) => ({
-                  src: item,
-                  key: item,
-                }))}
-              />
+              {handleFileExtention(
+                repaymentData?.result?.repaymentReceipts?.[0]
+              ) === "jpg" ||
+              "jpeg" ||
+              "png" ? (
+                <Viewer
+                  visible={openReceipt}
+                  onClose={() => {
+                    setOpenReceipt(false);
+                  }}
+                  images={repaymentData?.result?.repaymentReceipts.map(
+                    (item) => ({
+                      src: item,
+                      key: item,
+                    })
+                  )}
+                />
+              ) : (
+                <p>It's a pdf</p>
+              )}
             </div>
           ) : (
             <div className="flex">

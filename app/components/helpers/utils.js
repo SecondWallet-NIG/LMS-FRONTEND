@@ -48,3 +48,9 @@ const downloadScreenshot = (dataUrl, loading, fileName) => {
   // setLoading(false);
   loading(false);
 };
+
+export const handleFileExtention = (file) => {
+  const fileExtension = file.split(".").pop().toLowerCase();
+
+  return fileExtension;
+};
