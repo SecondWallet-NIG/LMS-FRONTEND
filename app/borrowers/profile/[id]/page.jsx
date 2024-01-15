@@ -21,7 +21,7 @@ import CustomerSummary from "@/app/components/customers/CustomerSummary";
 import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
 import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
 import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs";
-import Viewer from "react-viewer";
+// import Viewer from "react-viewer";
 import { bankArr } from "@/constant";
 const CustomerProfile = () => {
   const router = useRouter();
@@ -120,16 +120,22 @@ const CustomerProfile = () => {
                     data?.profileInfo?.profilePicture && setOpenProfilePic(true)
                   }
                 />
-                <Viewer
-                  visible={openProfilePic}
-                  onClose={() => {
-                    setOpenProfilePic(false);
-                  }}
-                  images={[data?.profileInfo?.profilePicture].map((item) => ({
-                    src: item,
-                    key: item,
-                  }))}
-                />
+                {/* {typeof window !== "undefined" ? (
+                  <>
+                    <Viewer
+                      visible={openProfilePic}
+                      onClose={() => {
+                        setOpenProfilePic(false);
+                      }}
+                      images={[data?.profileInfo?.profilePicture].map(
+                        (item) => ({
+                          src: item,
+                          key: item,
+                        })
+                      )}
+                    />
+                  </>
+                ) : null} */}
               </div>
               <div className="ml-4 h-fit">
                 <p className="text-xl font-semibold text-swBlue mb-1">

@@ -19,7 +19,7 @@ import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Viewer from "react-viewer";
+ // import Viewer from "react-viewer";
 import { getStaffTasks } from "@/redux/slices/userTaskSlice";
 
 const StaffPage = () => {
@@ -199,16 +199,20 @@ const StaffPage = () => {
                         data?.profilePicture && setOpenProfilePic(true)
                       }
                     />
-                    <Viewer
-                      visible={openProfilePic}
-                      onClose={() => {
-                        setOpenProfilePic(false);
-                      }}
-                      images={[data?.profilePicture].map((item) => ({
-                        src: item,
-                        key: item,
-                      }))}
-                    />
+                    {/* {typeof window !== "undefined" ? (
+                      <>
+                        <Viewer
+                          visible={openProfilePic}
+                          onClose={() => {
+                            setOpenProfilePic(false);
+                          }}
+                          images={[data?.profilePicture].map((item) => ({
+                            src: item,
+                            key: item,
+                          }))}
+                        />
+                      </>
+                    ) : null} */}
                   </div>
                 ) : (
                   <div className="border-2 p-4 rounded-full">
@@ -279,9 +283,18 @@ const StaffPage = () => {
             </div>
 
             <div className="mt-10 grid grid-cols-3 gap-5">
-              <TasksCard taskName={"Total tasks"} taskAmount={tasks?.data?.totalCount} />
-              <TasksCard taskName={"Pending tasks"} taskAmount={tasks?.data?.pendingCount} />
-              <TasksCard taskName={"Completed tasks"} taskAmount={tasks?.data?.doneCount} />
+              <TasksCard
+                taskName={"Total tasks"}
+                taskAmount={tasks?.data?.totalCount}
+              />
+              <TasksCard
+                taskName={"Pending tasks"}
+                taskAmount={tasks?.data?.pendingCount}
+              />
+              <TasksCard
+                taskName={"Completed tasks"}
+                taskAmount={tasks?.data?.doneCount}
+              />
             </div>
           </div>
         </div>
