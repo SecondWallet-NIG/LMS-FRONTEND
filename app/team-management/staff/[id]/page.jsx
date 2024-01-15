@@ -43,6 +43,7 @@ const StaffPage = () => {
     isRoleAdmin: false,
   });
   // const profileImg = null;
+  console.log({ thisData: data });
 
   const adminOptions = [
     { value: "CEO", label: "CEO" },
@@ -130,6 +131,7 @@ const StaffPage = () => {
         toast.success("Profile updated successfully");
         getUserById(data?._id);
         setIsOpen(false);
+        window.location.reload();
       })
       .catch((error) => {
         toast.error("An error occured");
@@ -184,7 +186,7 @@ const StaffPage = () => {
           <div className="bg-swBlue rounded-2xl p-10 text-white">
             <div className="flex justify-between items-center">
               <div className="flex gap-5 items-start">
-                {data?.profilePicture !== null ? (
+                {data?.profilePicture ? (
                   <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
                     <Image
                       src={data?.profilePicture}
