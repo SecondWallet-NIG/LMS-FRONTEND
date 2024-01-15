@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import MyTasksCard from "../components/cards/MyTasksCard/MyTasksCard";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import { useDispatch, useSelector } from "react-redux";
-import { getStaffTasks } from "@/redux/slices/approvalAssigneeSlice";
+import { getStaffTasks } from "@/redux/slices/userTaskSlice";
 import Button from "../components/shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 import AllTasks from "../components/task-tables/AllTask";

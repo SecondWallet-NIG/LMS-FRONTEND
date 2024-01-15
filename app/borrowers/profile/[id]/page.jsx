@@ -21,7 +21,8 @@ import CustomerSummary from "@/app/components/customers/CustomerSummary";
 import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
 import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
 import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs";
-import Viewer from "react-viewer";
+// import Viewer from "react-viewer";
+import { bankArr } from "@/constant";
 const CustomerProfile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -119,16 +120,22 @@ const CustomerProfile = () => {
                     data?.profileInfo?.profilePicture && setOpenProfilePic(true)
                   }
                 />
-                <Viewer
-                  visible={openProfilePic}
-                  onClose={() => {
-                    setOpenProfilePic(false);
-                  }}
-                  images={[data?.profileInfo?.profilePicture].map((item) => ({
-                    src: item,
-                    key: item,
-                  }))}
-                />
+                {/* {typeof window !== "undefined" ? (
+                  <>
+                    <Viewer
+                      visible={openProfilePic}
+                      onClose={() => {
+                        setOpenProfilePic(false);
+                      }}
+                      images={[data?.profileInfo?.profilePicture].map(
+                        (item) => ({
+                          src: item,
+                          key: item,
+                        })
+                      )}
+                    />
+                  </>
+                ) : null} */}
               </div>
               <div className="ml-4 h-fit">
                 <p className="text-xl font-semibold text-swBlue mb-1">
@@ -155,22 +162,6 @@ const CustomerProfile = () => {
                       {/* <FiPhone size={15} /> */}
                     </Link>
                   </div>
-                  {/* <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                    <Link
-                      href="mailto: helloyt@gmail.com"
-                      className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                    >
-                      <LuCalendar size={15} />
-                    </Link>
-                  </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                    <Link
-                      href="mailto: helloyt@gmail.com"
-                      className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                    >
-                      <FiDatabase size={15} />
-                    </Link>
-                  </div> */}
                 </div>
               </div>
             </div>
@@ -386,7 +377,13 @@ const CustomerProfile = () => {
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Bank Name: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo?.bankAccount?.bankName}
+                        {
+                          bankArr.find(
+                            (option) =>
+                              option.value ===
+                              data?.profileInfo?.bankAccount?.bankName
+                          )?.label
+                        }
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">

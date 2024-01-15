@@ -22,7 +22,7 @@ import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Viewer from "react-viewer";
+// import Viewer from "react-viewer";
 
 const PaymentPage = () => {
   const { id } = useParams();
@@ -232,23 +232,57 @@ const PaymentPage = () => {
                   } justify-center items-center text-white z-[110]`}
                 >
                   <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
-                  <div className="flex justify-end"><IoMdClose size={20} className="cursor-pointer text-swBlack" onClick={() => setOpenReceipt(false)}/></div>
-                  <iframe src={repaymentData?.result?.repaymentReceipts?.[0]} className="h-full w-full"></iframe>
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenReceipt(false)}
+                      />
+                    </div>
+                    <iframe
+                      src={repaymentData?.result?.repaymentReceipts?.[0]}
+                      className="h-full w-full"
+                    ></iframe>
                   </div>
                 </div>
               ) : (
-                <Viewer
-                  visible={openReceipt}
-                  onClose={() => {
-                    setOpenReceipt(false);
-                  }}
-                  images={repaymentData?.result?.repaymentReceipts.map(
-                    (item) => ({
-                      src: item,
-                      key: item,
-                    })
-                  )}
-                />
+                <>
+                    <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openReceipt ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenReceipt(false)}
+                      />
+                    </div>
+                    <iframe
+                      src={repaymentData?.result?.repaymentReceipts?.[0]}
+                      className="h-full w-full"
+                    ></iframe>
+                  </div>
+                </div>
+                  {/* {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openReceipt}
+                        onClose={() => {
+                          setOpenReceipt(false);
+                        }}
+                        images={repaymentData?.result?.repaymentReceipts.map(
+                          (item) => ({
+                            src: item,
+                            key: item,
+                          })
+                        )}
+                      />
+                    </>
+                  ) : null} */}
+                </>
               )}
             </div>
           ) : (

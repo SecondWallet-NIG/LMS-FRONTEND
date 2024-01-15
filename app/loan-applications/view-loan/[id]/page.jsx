@@ -41,6 +41,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FaDownload } from "react-icons/fa6";
 import CustomerPaymentHistory from "@/app/components/customers/CustomerHistoryPayment";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
+import { bankArr } from "@/constant";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -1202,10 +1203,7 @@ const ViewLoan = () => {
             </section>
           </div>
         </section>
-        <section
-          id="loan_process"
-          className="w-[30%] h-full"
-        >
+        <section id="loan_process" className="w-[30%] h-full">
           <p className="border-b border-gray-300 p-4 text-swGray font-semibold">
             Loan Processes
           </p>
@@ -1535,7 +1533,13 @@ const ViewLoan = () => {
                 <div className="flex gap-2 ">
                   <p className="pt-3">Bank Name: </p>
                   <p className="pt-3 font-semibold">
-                    {data?.data?.customerDetails?.bankAccount?.bankName}
+                    {
+                      bankArr.find(
+                        (option) =>
+                          option.value ===
+                          data?.data?.customerDetails?.bankAccount?.bankName
+                      )?.label
+                    }
                   </p>
                 </div>
                 <div className="flex gap-2 ">
@@ -1554,7 +1558,7 @@ const ViewLoan = () => {
             </div>
             <div className="pt-4">
               <InputField
-                name={formData?.amount?.toLocaleString()}
+                name={formData?.amount}
                 label="Amount paid"
                 required={true}
                 ariaLabel={"Number input"}
@@ -1562,7 +1566,7 @@ const ViewLoan = () => {
                 onChange={(e) => {
                   setDisbursementInputState(e);
                 }}
-                value={data?.data?.loanApplication?.loanAmount}
+                value={data?.data?.loanApplication?.loanAmount?.toLocaleString()}
               />
             </div>
             <div className="pt-4">

@@ -11,6 +11,7 @@ import { IoArrowBackSharp, IoCloseSharp } from "react-icons/io5";
 import navPatternBg from "../../../public/images/navPatterns.png";
 import Image from "next/image";
 import { formatDate } from "@/helpers";
+//import Viewer from "react-viewer";
 
 const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
@@ -20,21 +21,19 @@ const NavBar = ({ paths, isBackNav }) => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");
-
-
+  const [openProfilePic, setOpenProfilePic] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       console.log({ storedUser });
 
-      setUser(storedUser?.data?.user?.firstName);
+      setUser(storedUser?.data?.user);
       dispatch(getApprovalAssignee(storedUser?.data?.user?._id));
     }
   }, []);
 
   const openNotifications = (state) => {
-    console.log("peace");
     setIsNotificationsOpen(state);
   };
 
@@ -52,11 +51,7 @@ const NavBar = ({ paths, isBackNav }) => {
         <PagePath paths={paths} />
       </div>
       <div className=" flex gap-5 items-center relative">
-        <p
-          className="text-sm"
-        >
-          Welcome {user} 👋{" "}
-        </p>
+        <p className="text-sm">Welcome {user?.firstName} 👋 </p>
         <div
           className="relative cursor-pointer"
           onClick={() => openNotifications(!isNotificationsOpen)}
@@ -112,10 +107,15 @@ const NavBar = ({ paths, isBackNav }) => {
                       {/* <div
                         className={`w-1 rounded-full bg-swIndicatorYellow`}
                       /> */}
-                      <div className="cursor-pointer hover:bg-swLightGray p-4" onClick={() => {
-                      //  router.push(`${item.url}`)
-                      router.push(`${process.env.NEXT_PUBLIC_API_URL}/loan-applications/view-loan/${item?.loanApplication?._id}`)
-                      }}>
+                      <div
+                        className="cursor-pointer hover:bg-swLightGray p-4"
+                        onClick={() => {
+                          //  router.push(`${item.url}`)
+                          router.push(
+                            `${process.env.NEXT_PUBLIC_API_URL}/loan-applications/view-loan/${item?.loanApplication?._id}`
+                          );
+                        }}
+                      >
                         <div className="flex justify-between gap-3">
                           <div>
                             <p className="text-sm">{item.approvalTitle}</p>
@@ -153,9 +153,29 @@ const NavBar = ({ paths, isBackNav }) => {
             </div>
           </div>
         )}
-        <div className="relative">
-          <HiMiniUserCircle size={50} />
-          {/* <div className="bg-swIndicatorYellow h-3 w-3 rounded-full bottom-1 right-1 absolute" /> */}
+        <div className="rounded-full border-2 border-swBlue overflow-hidden h-[3.15rem] w-[3.15rem] relative">
+          <img
+            src={
+              user?.profilePicture
+                ? user?.profilePicture
+                : "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
+            }
+            alt="user"
+            className="cursor-pointer"
+            onClick={() =>
+             user?.profilePicture && setOpenProfilePic(true)
+            }
+          />
+          {/* <Viewer
+            visible={openProfilePic}
+            onClose={() => {
+              setOpenProfilePic(false);
+            }}
+            images={[user?.profilePicture].map((item) => ({
+              src: item,
+              key: item,
+            }))}
+          /> */}
         </div>
       </div>
 
