@@ -91,7 +91,7 @@ const Sidebar = () => {
                 "CAO",
                 "ICO",
                 "CT0",
-                "DIR",
+                "Dir",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
@@ -119,7 +119,7 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -156,7 +156,7 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -205,7 +205,7 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -233,7 +233,7 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -261,7 +261,7 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -289,7 +289,7 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -322,7 +322,7 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -338,7 +338,7 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -351,10 +351,10 @@ const Sidebar = () => {
           userRoleTag === "CFO" ||
           userRoleTag === "CTO" ||
           userRoleTag === "CEO" ||
-          userRoleTag === "DIR" ? (
+          userRoleTag === "Dir" ? (
             <>
               <SidebarLink
-                allowedRoleTags={["CFO", "CEO", "CT0", "DIR", "System Admin"]}
+                allowedRoleTags={["CFO", "CEO", "CT0", "Dir", "System Admin"]}
                 userRoleTag={userRoleTag}
                 icon={<FaPeopleGroup size={20} />}
                 text="Team management"
@@ -389,7 +389,7 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}
@@ -420,7 +420,7 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
+              "Dir",
               "System Admin",
             ]}
             userRoleTag={userRoleTag}

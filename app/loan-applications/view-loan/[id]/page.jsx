@@ -1215,7 +1215,7 @@ const ViewLoan = () => {
           <div className="flex justify-end">
             {useriD?.role?.tag === "CFO" ||
             useriD?.role?.tag === "CEO" ||
-            useriD?.role?.tag === "DIR" ? (
+            useriD?.role?.tag === "Dir" ? (
               <Button
                 onClick={() => {
                   setLoanReassignment(true);
