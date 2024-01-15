@@ -22,6 +22,7 @@ import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
 import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
 import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs";
 import Viewer from "react-viewer";
+import { bankArr } from "@/constant";
 const CustomerProfile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -386,7 +387,13 @@ const CustomerProfile = () => {
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Bank Name: </p>
                       <p className="pt-3 font-semibold">
-                        {data?.profileInfo?.bankAccount?.bankName}
+                        {
+                          bankArr.find(
+                            (option) =>
+                              option.value ===
+                              data?.profileInfo?.bankAccount?.bankName
+                          )?.label
+                        }
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
