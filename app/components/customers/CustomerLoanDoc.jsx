@@ -5,6 +5,7 @@ import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
 import PreviewLoanDocs from "./PreviewLoanDocs";
 import { handleFileExtention } from "../helpers/utils";
 import Viewer from "react-viewer";
+import { IoMdClose } from "react-icons/io";
 
 const CustomerLoanDoc = (data) => {
   const [url, setUrl] = useState("");
