@@ -92,7 +92,7 @@ const Sidebar = () => {
                 "ICO",
                 "CT0",
                 "DIR",
-                "SYSTEM ADMIN",
+                "System Admin",
               ]}
               userRoleTag={userRoleTag}
               icon={
@@ -120,7 +120,7 @@ const Sidebar = () => {
               "ICO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -157,7 +157,7 @@ const Sidebar = () => {
               "ICO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -206,7 +206,7 @@ const Sidebar = () => {
               "ICO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -234,7 +234,7 @@ const Sidebar = () => {
               "ICO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -262,7 +262,7 @@ const Sidebar = () => {
               "ICO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -290,7 +290,7 @@ const Sidebar = () => {
               "ICO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -323,7 +323,7 @@ const Sidebar = () => {
               "CAO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={<TbReportMoney size={20} />}
@@ -339,7 +339,7 @@ const Sidebar = () => {
               "CAO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={<BiMapAlt size={20} />}
@@ -354,7 +354,7 @@ const Sidebar = () => {
           userRoleTag === "DIR" ? (
             <>
               <SidebarLink
-                allowedRoleTags={["CFO", "CEO", "CT0", "DIR", "SYSTEM ADMIN"]}
+                allowedRoleTags={["CFO", "CEO", "CT0", "DIR", "System Admin"]}
                 userRoleTag={userRoleTag}
                 icon={<FaPeopleGroup size={20} />}
                 text="Team management"
@@ -390,7 +390,7 @@ const Sidebar = () => {
               "ICO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={<AiOutlineSetting size={20} />}
@@ -421,7 +421,7 @@ const Sidebar = () => {
               "ICO",
               "CT0",
               "DIR",
-              "SYSTEM ADMIN",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={<GoSignOut size={20} />}
