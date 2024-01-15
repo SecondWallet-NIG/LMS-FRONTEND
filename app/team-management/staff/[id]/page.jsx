@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Viewer from "react-viewer";
+import { getStaffTasks } from "@/redux/slices/userTaskSlice";
 
 const StaffPage = () => {
   const { id } = useParams();
@@ -29,6 +30,7 @@ const StaffPage = () => {
   const [fileError, setFileError] = useState("");
   const { loading, error, data } = useSelector((state) => state?.user);
   const { data: roleData } = useSelector((state) => state?.role);
+  const tasks = useSelector((state) => state.UserTasks);
   const [profileImg, setProfileImg] = useState(null);
   const [openProfilePic, setOpenProfilePic] = useState(false);
   const [formData, setFormData] = useState({
@@ -42,8 +44,6 @@ const StaffPage = () => {
     status: "",
     isRoleAdmin: false,
   });
-  // const profileImg = null;
-  console.log({ thisData: data });
 
   const adminOptions = [
     { value: "CEO", label: "CEO" },
@@ -174,6 +174,7 @@ const StaffPage = () => {
   useEffect(() => {
     dispatch(getUserById(id));
     dispatch(getRoles());
+    dispatch(getStaffTasks(id));
   }, []);
   return (
     <DashboardLayout
@@ -278,9 +279,9 @@ const StaffPage = () => {
             </div>
 
             <div className="mt-10 grid grid-cols-3 gap-5">
-              <TasksCard taskName={"Total tasks"} taskAmount={"10"} />
-              <TasksCard taskName={"Pending tasks"} taskAmount={"5"} />
-              <TasksCard taskName={"Completed tasks"} taskAmount={"5"} />
+              <TasksCard taskName={"Total tasks"} taskAmount={tasks?.data?.totalCount} />
+              <TasksCard taskName={"Pending tasks"} taskAmount={tasks?.data?.pendingCount} />
+              <TasksCard taskName={"Completed tasks"} taskAmount={tasks?.data?.doneCount} />
             </div>
           </div>
         </div>

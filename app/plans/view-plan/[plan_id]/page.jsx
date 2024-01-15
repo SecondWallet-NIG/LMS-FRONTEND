@@ -35,8 +35,8 @@ const ViewPlan = () => {
       userRole === "CEO" ||
       userRole === "CTO" ||
       userRole === "CFO" ||
-      userRole === "DIR" ||
-      userRole === "SYSTEM ADMIN"
+      userRole === "Dir" ||
+      userRole === "System Admin"
     ) {
       setShowEditBtn(true);
     }

@@ -90,9 +90,10 @@ const Sidebar = () => {
                 "CEO",
                 "CAO",
                 "ICO",
+                "LR0",
                 "CT0",
-                "DIR",
-                "SYSTEM ADMIN",
+                "Dir",
+                "System Admin",
               ]}
               userRoleTag={userRoleTag}
               icon={
@@ -118,9 +119,10 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "ICO",
+              "LR0",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -155,9 +157,10 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "ICO",
+              "LR0",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -204,9 +207,10 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "ICO",
+              "LR0",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -232,9 +236,10 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "ICO",
+              "LR0",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -261,8 +266,9 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "LR0",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -289,8 +295,9 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "LR0",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={
@@ -322,8 +329,8 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={<TbReportMoney size={20} />}
@@ -338,8 +345,8 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={<BiMapAlt size={20} />}
@@ -351,10 +358,10 @@ const Sidebar = () => {
           userRoleTag === "CFO" ||
           userRoleTag === "CTO" ||
           userRoleTag === "CEO" ||
-          userRoleTag === "DIR" ? (
+          userRoleTag === "Dir" ? (
             <>
               <SidebarLink
-                allowedRoleTags={["CFO", "CEO", "CT0", "DIR", "SYSTEM ADMIN"]}
+                allowedRoleTags={["CFO", "CEO", "CT0", "Dir", "System Admin"]}
                 userRoleTag={userRoleTag}
                 icon={<FaPeopleGroup size={20} />}
                 text="Team management"
@@ -389,8 +396,9 @@ const Sidebar = () => {
               "CAO",
               "ICO",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "LR0",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={<AiOutlineSetting size={20} />}
@@ -419,9 +427,10 @@ const Sidebar = () => {
               "CEO",
               "CAO",
               "ICO",
+              "LR0",
               "CT0",
-              "DIR",
-              "SYSTEM ADMIN",
+              "Dir",
+              "System Admin",
             ]}
             userRoleTag={userRoleTag}
             icon={<GoSignOut size={20} />}

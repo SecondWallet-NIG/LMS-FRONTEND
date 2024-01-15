@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import MyTasksCard from "../components/cards/MyTasksCard/MyTasksCard";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import { useDispatch, useSelector } from "react-redux";
-import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
+import { getStaffTasks } from "@/redux/slices/approvalAssigneeSlice";
 import Button from "../components/shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 import AllTasks from "../components/task-tables/AllTask";
@@ -17,14 +17,14 @@ const MyTasks = () => {
   if (typeof window !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
   }
-  console.log({ data });
+ 
 
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
 
   useEffect(() => {
-    dispatch(getApprovalAssignee(user?.data?.user?._id));
+    dispatch(getStaffTasks(user?.data?.user?._id));
   }, []);
 
   return (

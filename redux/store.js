@@ -14,6 +14,7 @@ import dashboardReducer from "./slices/dashboardSlice";
 import approvalAssigneeReducer from "./slices/approvalAssigneeSlice";
 import loanApplicationLogReducer from "./slices/loanApplicationLogSlice";
 import repaymentHistoryReducer from "./slices/repaymentHistorySlice";
+import userTaskReducer from "./slices/userTaskSlice";
 export const store = configureStore({
   reducer: {
     post: postReducer,
@@ -28,6 +29,7 @@ export const store = configureStore({
     loanRepayment: loanRepaymentReducer,
     dashboardData: dashboardReducer,
     approvalAssignee: approvalAssigneeReducer,
+    UserTasks: userTaskReducer,
     loanApplicationLogs : loanApplicationLogReducer,
     repaymentHistory: repaymentHistoryReducer
   },
