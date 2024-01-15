@@ -158,13 +158,13 @@ const LoanPackages = () => {
                 <div className="flex justify-between mb-2">
                   <p className="text-sm">Minimum loan</p>
                   <p className="font-semibold text-sm">
-                    {item?.loanAmountRange?.min}
+                    &#8358; {item?.loanAmountRange?.min.toLocaleString()}
                   </p>
                 </div>
                 <div className="flex justify-between mb-2">
                   <p className="text-sm">Maximum loan</p>
                   <p className="font-semibold text-sm">
-                    {item?.loanAmountRange?.max}
+                    &#8358; {item?.loanAmountRange?.max.toLocaleString()}
                   </p>
                 </div>
                 {/* <div className="flex justify-between">

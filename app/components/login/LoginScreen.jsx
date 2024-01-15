@@ -21,7 +21,7 @@ const LoginScreen = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
- const { loading, error, data: userData } = useSelector((state) => state.user); 
+  const { loading, error, data: userData } = useSelector((state) => state.user);
   // const [loading, setLoading] = useState(false);
   const [loginData, setLoginData] = useState({
     email: "",
@@ -48,10 +48,9 @@ const LoginScreen = () => {
     }
   };
 
-
-
   const handleLogin = () => {
     // Dispatch the loginUser async thunk with the loginData
+    console.log(loginData);
     dispatch(loginUser(loginData))
       .unwrap()
       .then((res) => {
@@ -72,7 +71,7 @@ const LoginScreen = () => {
   // // Handle the response data when it changes
   // useEffect(() => {
   //  let x = JSON.parse(localStorage.getItem("user"))
-  
+
   //   if (x) {
   //   //  localStorage.setItem("user", JSON.stringify(userData));
   //     if (userData?.data?.user?.firstLogin === true) {
@@ -88,6 +87,25 @@ const LoginScreen = () => {
   const handleSeePassWord = () => {
     setSeePassword(!seePassword);
   };
+
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      console.log("User pressed: ", event.key);
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+
+        // 👇️ your logic here
+        handleLogin();
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, [loginData]);
 
   return (
     <div className="h-screen flex justify-center items-center">

@@ -19,6 +19,7 @@ import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Viewer from "react-viewer";
 
 const StaffPage = () => {
   const { id } = useParams();
@@ -29,6 +30,7 @@ const StaffPage = () => {
   const { loading, error, data } = useSelector((state) => state?.user);
   const { data: roleData } = useSelector((state) => state?.role);
   const [profileImg, setProfileImg] = useState(null);
+  const [openProfilePic, setOpenProfilePic] = useState(false);
   const [formData, setFormData] = useState({
     // profilePicture: null,
     firstName: "",
@@ -189,6 +191,20 @@ const StaffPage = () => {
                       alt="profile"
                       fill
                       sizes="100%"
+                      className="cursor-pointer"
+                      onClick={() =>
+                        data?.profilePicture && setOpenProfilePic(true)
+                      }
+                    />
+                    <Viewer
+                      visible={openProfilePic}
+                      onClose={() => {
+                        setOpenProfilePic(false);
+                      }}
+                      images={[data?.profilePicture].map((item) => ({
+                        src: item,
+                        key: item,
+                      }))}
                     />
                   </div>
                 ) : (
