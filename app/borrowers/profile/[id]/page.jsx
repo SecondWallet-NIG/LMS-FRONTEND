@@ -156,22 +156,6 @@ const CustomerProfile = () => {
                       {/* <FiPhone size={15} /> */}
                     </Link>
                   </div>
-                  {/* <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                    <Link
-                      href="mailto: helloyt@gmail.com"
-                      className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                    >
-                      <LuCalendar size={15} />
-                    </Link>
-                  </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                    <Link
-                      href="mailto: helloyt@gmail.com"
-                      className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                    >
-                      <FiDatabase size={15} />
-                    </Link>
-                  </div> */}
                 </div>
               </div>
             </div>
