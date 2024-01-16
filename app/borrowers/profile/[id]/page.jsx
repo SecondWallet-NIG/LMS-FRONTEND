@@ -288,31 +288,31 @@ const CustomerProfile = () => {
                   <div className=" text-xs  text-swGray">
                     <div className="flex justify-between">
                       <p className="pt-3">D.O.B: </p>
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {data?.profileInfo?.dateOfBirth}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Gender: </p>
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {data?.profileInfo?.gender}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">NIN/SSN: </p>
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {data?.profileInfo?.nin}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Phone: </p>
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {data?.profileInfo?.phoneNumber}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Email: </p>
-                      <p className="pt-3 font-semibold cursor-copy">
+                      <p className="pt-3 font-semibold cursor-copy text-swBlue">
                         {data?.profileInfo?.email}
                       </p>
                     </div>
@@ -347,20 +347,20 @@ const CustomerProfile = () => {
                   <div className="mt-2 text-xs text-swGray">
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Country: </p>
-                      <p className="pt-3 font-semibold">Nigeria</p>
+                      <p className="pt-3 font-semibold text-swBlue">Nigeria</p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">State: </p>
-                      <p className="pt-3 font-semibold">Ekiti state</p>
+                      <p className="pt-3 font-semibold text-swBlue">Ekiti state</p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Lga: </p>
-                      <p className="pt-3 font-semibold">Ijero LGA/LCDA</p>
+                      <p className="pt-3 font-semibold text-swBlue">Ijero LGA/LCDA</p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3 ">Address: </p>
 
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {data?.profileInfo?.address}
                       </p>
                     </div>
@@ -383,7 +383,7 @@ const CustomerProfile = () => {
                   <div className="text-xs text-swGray">
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Bank Name: </p>
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {
                           bankArr.find(
                             (option) =>
@@ -395,19 +395,19 @@ const CustomerProfile = () => {
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Account Number: </p>
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {data?.profileInfo?.bankAccount?.accountNumber}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Account Name: </p>
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {data?.profileInfo?.bankAccount?.accountName}
                       </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Bvn: </p>
-                      <p className="pt-3 font-semibold">
+                      <p className="pt-3 font-semibold text-swBlue">
                         {data?.profileInfo?.bvn}
                       </p>
                     </div>
@@ -449,7 +449,7 @@ const CustomerProfile = () => {
                         <div className=" text-xs  text-swGray">
                           <div className="flex justify-between">
                             <p className="pt-3">Status: </p>
-                            <p className="pt-3 font-semibold">
+                            <p className="pt-3 font-semibold text-swBlue">
                               {
                                 data?.employmentInformation
                                   ?.currentEmploymentStatus
@@ -458,7 +458,7 @@ const CustomerProfile = () => {
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Employer Name: </p>
-                            <p className="pt-3 font-semibold">
+                            <p className="pt-3 font-semibold text-swBlue">
                               {
                                 data?.employmentInformation?.employerInformation
                                   ?.name
@@ -467,7 +467,7 @@ const CustomerProfile = () => {
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Employer Phone: </p>
-                            <p className="pt-3 font-semibold">
+                            <p className="pt-3 font-semibold text-swBlue">
                               {
                                 data?.employmentInformation?.employerInformation
                                   ?.contact
@@ -476,7 +476,7 @@ const CustomerProfile = () => {
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Job Title: </p>
-                            <p className="pt-3 font-semibold">
+                            <p className="pt-3 font-semibold text-swBlue">
                               {data?.employmentInformation?.jobTitle}
                             </p>
                           </div>
@@ -499,21 +499,21 @@ const CustomerProfile = () => {
                         <div className="mt-2 text-xs text-swGray">
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Income Period: </p>
-                            <p className="pt-3 font-semibold">
+                            <p className="pt-3 font-semibold text-swBlue">
                               {" "}
                               {data?.employmentInformation?.incomeSource}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Amount Earned: </p>
-                            <p className="pt-3 font-semibold">
+                            <p className="pt-3 font-semibold text-swBlue">
                               {" "}
                               {data?.employmentInformation?.monthlyIncome}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Annual Income: </p>
-                            <p className="pt-3 font-semibold">
+                            <p className="pt-3 font-semibold text-swBlue">
                               {" "}
                               {data?.employmentInformation?.monthlyIncome}
                             </p>
@@ -521,7 +521,7 @@ const CustomerProfile = () => {
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3 ">Income Source: </p>
 
-                            <p className="pt-3 font-semibold">
+                            <p className="pt-3 font-semibold text-swBlue">
                               {data?.employmentInformation?.incomeSource}
                             </p>
                           </div>

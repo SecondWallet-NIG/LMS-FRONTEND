@@ -15,12 +15,9 @@ const CustomerPaymentHistory = ({ loanId }) => {
 
 
   const headers = [
-    // { id: "createdAt", label: "Due Date" },
     { id: "amountLogged", label: "Amount Logged" },
     { id: "loggedBy", label: "Collected By" },
     { id: "repaymentMethod", label: "Payment Method" },
-    //{ id: "amountPaid", label: "Amount Paid" },
-    //{ id: "balanceToPay", label: "Balance To Pay" },
     { id: "status", label: "Payment Status" },
   ];
 
@@ -98,7 +95,7 @@ const CustomerPaymentHistory = ({ loanId }) => {
             dataTransformer={customDataTransformer}
             headers={headers}
             initialData={[]}
-            apiEndpoint={`/api/repayment/payment-history/${loanId}`}
+            apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment/payment-history/${loanId}`}
             filters={false}
             pagination={false}
           /> : null
