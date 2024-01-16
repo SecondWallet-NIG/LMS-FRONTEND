@@ -27,11 +27,11 @@ const AllTasks = () => {
       ),
       loanId: (
         <div>
-          <div className="text-md font-[500] text-gray-700">
-            {" "}
-            {item?.loanApplication?.loanId}
-          </div>
+        <div className="text-md font-[500] text-swBlue text-underline">
+          {" "}
+          SWL-{item?.loanApplication?.loanId}
         </div>
+      </div>
       ),
       loanAmount: (
         <div>

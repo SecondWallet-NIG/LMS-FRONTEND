@@ -20,6 +20,7 @@ const Staffs = () => {
 
   const headers = [
     { id: "name", label: "Name and Staff ID" },
+    {id: "email", label: "Email"},
     { id: "role", label: "Staff Role" },
     { id: "status", label: "Status" },
     { id: "createdAt", label: "Date Added" },
@@ -39,6 +40,12 @@ const Staffs = () => {
         <div>
           <div className="text-md font-semibold text-gray-700">{`${item.firstName} ${item.lastName}`}</div>
           <div className="text-xs text-gray-500">{`SWS-${item.staffId}`}</div>
+        </div>
+      ),
+      email: (
+        <div>
+          <div className="text-md underline text-swBlue">{item.email}</div>
+       
         </div>
       ),
       status: (

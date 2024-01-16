@@ -141,14 +141,14 @@ const PaymentPage = () => {
                 blueBtn={true}
                 label={"Approve"}
                 disabled={
-                  repaymentData?.result.status !== "New"
+                  repaymentData?.result?.status !== "New"
                     ? true
                     : disableApprovalBtn
                     ? true
                     : false
                 }
                 onClick={() =>
-                  approvePayment(repaymentData?.result.loanApplication._id, id)
+                  approvePayment(repaymentData?.result?.loanApplication?._id, id)
                 }
               />
               {/* <Button
@@ -165,14 +165,14 @@ const PaymentPage = () => {
                 redBtn={true}
                 label={"Decline"}
                 disabled={
-                  repaymentData?.result.status !== "New"
+                  repaymentData?.result?.status !== "New"
                     ? true
                     : disableApprovalBtn
                     ? true
                     : false
                 }
                 onClick={() =>
-                  declinePayment(repaymentData?.result.loanApplication._id, id)
+                  declinePayment(repaymentData?.result?.loanApplication._id, id)
                 }
               />
             </div>
@@ -183,37 +183,37 @@ const PaymentPage = () => {
           <p className="text-lg font-semibold">payment details</p>
           <div className="flex">
             <p className="min-w-[15rem]">Date Logged</p>
-            <p>{formatDate(repaymentData?.result.createdAt?.slice(0, 10))}</p>
+            <p>{formatDate(repaymentData?.result?.createdAt?.slice(0, 10))}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Loan ID</p>
             <Link
-              href={`/loan-applications/view-loan/${repaymentData?.result.loanApplication?._id}`}
+              href={`/loan-applications/view-loan/${repaymentData?.result?.loanApplication?._id}`}
               className="text-swBlue"
             >
-              SWL-{repaymentData?.result.loanApplication?.loanId}
+              SWL-{repaymentData?.result?.loanApplication?.loanId}
             </Link>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Logged by</p>
             <p>
-              {repaymentData?.result.loggedBy?.firstName}{" "}
-              {repaymentData?.result.loggedBy?.lastName}
+              {repaymentData?.result?.loggedBy?.firstName}{" "}
+              {repaymentData?.result?.loggedBy?.lastName}
             </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Borrower name</p>
             <p>
-              {repaymentData?.result?.customer.firstName}{" "}
-              {repaymentData?.result?.customer.lastName}
+              {repaymentData?.result?.customer?.firstName}{" "}
+              {repaymentData?.result?.customer?.lastName}
             </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Payment method</p>
             <p>{repaymentData?.result.repaymentMethod}</p>
           </div>
-          {repaymentData?.result.repaymentReceipts?.length > 0 &&
-          repaymentData?.result.repaymentReceipts?.[0] !== "null" ? (
+          {repaymentData?.result?.repaymentReceipts?.length > 0 &&
+          repaymentData?.result?.repaymentReceipts?.[0] !== "null" ? (
             <div className="flex">
               <p className="min-w-[15rem]">Receipt</p>
               <p

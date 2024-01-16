@@ -11,7 +11,7 @@ const PendingTasks = () => {
     }
   const headers = [
     { id: "createdAt", label: "Date Created" },
-    { id: "loanId", label: "Borrower's Name & ID" },
+    { id: "loanId", label: "Loan ID" },
     { id: "loanAmount", label: "Loan Amount" },
     { id: "actionStatus", label: "Task Status" },
   ];
@@ -26,9 +26,9 @@ const PendingTasks = () => {
       ),
       loanId: (
         <div>
-          <div className="text-md font-[500] text-gray-700">
+          <div className="text-md font-[500] text-swBlue text-underline">
             {" "}
-            {item?.loanApplication?.loanId}
+            SWL-{item?.loanApplication?.loanId}
           </div>
         </div>
       ),
