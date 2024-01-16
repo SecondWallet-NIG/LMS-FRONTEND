@@ -34,7 +34,7 @@ const StaffPage = () => {
   const [profileImg, setProfileImg] = useState(null);
   const [openProfilePic, setOpenProfilePic] = useState(false);
   const [formData, setFormData] = useState({
-    // profilePicture: null,
+     profilePicture: null,
     firstName: "",
     lastName: "",
     email: "",
@@ -109,29 +109,30 @@ const StaffPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const payload = new FormData();
-    // payload.append("firstName", formData.firstName);
-    // payload.append("lastName", formData.lastName);
-    // payload.append("email", formData.email);
-    // payload.append("phoneNumber", formData.phoneNumber);
-    // payload.append("role", formData.role);
-    // payload.append("tag", formData.tag);
-    // payload.append("isRoleAdmin", formData.isRoleAdmin);
-    const payload = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      phoneNumber: formData.phoneNumber,
-      role: formData.role,
-      status: formData.status,
-    };
+    const payload = new FormData();
+    payload.append("firstName", formData.firstName);
+    payload.append("lastName", formData.lastName);
+    payload.append("email", formData.email);
+    payload.append("phoneNumber", formData.phoneNumber);
+    payload.append("role", formData.role);
+    payload.append("profilePicture", formData.profilePicture);
+
+    console.log({payload});
+    // const payload = {
+    //   firstName: formData.firstName,
+    //   lastName: formData.lastName,
+    //   email: formData.email,
+    //   phoneNumber: formData.phoneNumber,
+    //   role: formData.role,
+    //   status: formData.status,
+    // };
     dispatch(updateUser({ userId: data?._id, updatedData: payload }))
       .unwrap()
       .then((res) => {
         toast.success("Profile updated successfully");
         getUserById(data?._id);
         setIsOpen(false);
-        window.location.reload();
+      //  window.location.reload();
       })
       .catch((error) => {
         toast.error("An error occured");
@@ -141,7 +142,7 @@ const StaffPage = () => {
 
   useEffect(() => {
     setFormData({
-      // profilePicture: null,
+      profilePicture: null,
       firstName: data?.firstName,
       lastName: data?.lastName,
       email: data?.email,
@@ -150,6 +151,7 @@ const StaffPage = () => {
       tag: data?.role?.tag,
       status: data?.status,
       isRoleAdmin: false,
+      profilePicture: data?.profilePicture
     });
   }, [data]);
 

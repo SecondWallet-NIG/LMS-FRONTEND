@@ -351,11 +351,11 @@ const DashboardPage = () => {
                 "₦ " + cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
               ]}
-              thirdStat={[
-                "Today",
-                "₦ " +  cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
-                cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
-              ]}
+              // thirdStat={[
+              //   "Today",
+              //   "₦ " +  cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
+              //   cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
+              // ]}
             />
             <DashboardCard
               cardLinkLabel={"View"}
@@ -371,12 +371,12 @@ const DashboardPage = () => {
                 cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
               ]}
-              thirdStat={[
-                "Today",
-                "₦ " + cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
-                cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
-                cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
-              ]}
+              // thirdStat={[
+              //   "Today",
+              //   "₦ " + cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
+              //   cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
+              //   cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
+              // ]}
             />
             <DashboardCard
               cardLinkLabel={"View"}
