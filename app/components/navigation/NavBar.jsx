@@ -91,16 +91,6 @@ const NavBar = ({ paths, isBackNav }) => {
               >
                 Tasks
               </button>
-              {/* <button
-                className={`py-2 px-4 rounded-md ${
-                  openedMessages === "all" && "bg-swLightGray"
-                }`}
-                onClick={() => {
-                  setOpenedMessages("all");
-                }}
-              >
-                All
-              </button> */}
             </div>
 
             <div className="mt-[8.7rem]">
@@ -109,15 +99,12 @@ const NavBar = ({ paths, isBackNav }) => {
                   .filter((item) => item.actionStatus == "Pending")
                   .map((item, index) => (
                     <div key={index} className=" mx-1 border-b">
-                      {/* <div
-                        className={`w-1 rounded-full bg-swIndicatorYellow`}
-                      /> */}
+                  
                       <div
                         className="cursor-pointer hover:bg-swLightGray p-4"
                         onClick={() => {
-                          //  router.push(`${item.url}`)
                           router.push(
-                            `${process.env.NEXT_PUBLIC_API_URL}/loan-applications/view-loan/${item?.loanApplication?._id}`
+                            `/loan-applications/view-loan/${item?.loanApplication?._id}`
                           );
                         }}
                       >
