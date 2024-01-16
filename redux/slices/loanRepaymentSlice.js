@@ -144,7 +144,8 @@ export const getDisbursementSummary = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${user?.data?.token}`,
         },
-      }); console.log("disbursement", response.data);
+      }); 
+     
       return response.data;
     } catch (error) {
       if (error.response.data.error) {
@@ -162,7 +163,7 @@ export const getRepaymentReport = createAsyncThunk('loanApplication/repayment-su
         Authorization: `Bearer ${user?.data?.token}`
       }
     });
-    console.log({ response });
+
     return response.data;
   } else {
     const response = await axios.get(`${API_URL}/repayment/report`, {

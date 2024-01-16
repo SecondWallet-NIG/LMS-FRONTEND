@@ -120,7 +120,7 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
         },
       }
     );
-    console.log({ response });
+ 
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
