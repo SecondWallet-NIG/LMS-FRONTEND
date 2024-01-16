@@ -19,7 +19,7 @@ const PaymentHistoryTable = () => {
   useEffect(() => {
     const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user
       ?.role?.tag;
-    console.log({ userRoleTag });
+
     if (userRoleTag) {
       console.log("hello");
       setUser(userRoleTag);

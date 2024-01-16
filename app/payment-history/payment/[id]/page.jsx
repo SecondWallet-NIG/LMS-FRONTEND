@@ -112,14 +112,14 @@ const PaymentPage = () => {
             <p>Log Status: </p>
             <p
               className={`${
-                repaymentData?.result.status === "New"
+                repaymentData?.result?.status === "New"
                   ? "bg-[#E7F1FE] text-swBlue"
-                  : repaymentData?.result.status === "Approved"
+                  : repaymentData?.result?.status === "Approved"
                   ? "bg-green-50 text-swGreen"
                   : "text-red-400 bg-red-100"
               } px-2 py-1 rounded-full  `}
             >
-              {repaymentData?.result.status}
+              {repaymentData?.result?.status}
             </p>
           </div>
         </div>
@@ -148,10 +148,7 @@ const PaymentPage = () => {
                     : false
                 }
                 onClick={() =>
-                  approvePayment(
-                    repaymentData?.result.loanApplication._id,
-                    repaymentData._id
-                  )
+                  approvePayment(repaymentData?.result.loanApplication._id, id)
                 }
               />
               {/* <Button
@@ -175,10 +172,7 @@ const PaymentPage = () => {
                     : false
                 }
                 onClick={() =>
-                  declinePayment(
-                    repaymentData?.result.loanApplication._id,
-                    repaymentData._id
-                  )
+                  declinePayment(repaymentData?.result.loanApplication._id, id)
                 }
               />
             </div>

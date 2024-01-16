@@ -6,7 +6,7 @@ import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
 
 const header = [
-  { id: "firstName", label: "Borrower Name & ID" },
+  { id: "firstName", label: "Borrower Name" },
   { id: "customerId", label: "SWID" },
   { id: "numberOfLoans", label: " Number of Loans" },
   { id: "totalLoanAmount", label: "Total Loan Amount" },
@@ -22,7 +22,7 @@ const customDataTransformer = (apiData) => {
       </div>
     ),
     customerId: (
-      <div className="text-sm font-[400] text-swGray">{item?.customerId}</div>
+      <div className="text-sm font-[400] text-swBlue">{item?.customerId}</div>
     ),
     numberOfLoans: (
       <div>
