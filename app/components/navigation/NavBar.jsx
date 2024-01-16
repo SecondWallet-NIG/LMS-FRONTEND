@@ -23,7 +23,6 @@ const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const x = useSelector((state) => state.approvalAssignee);
-  console.log("x?.data?.data", x?.data?.results);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");

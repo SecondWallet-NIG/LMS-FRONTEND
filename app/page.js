@@ -13,7 +13,6 @@ export default function Home() {
       setUser(_user);
     }
     setLoading(false);
-    console.log(_user?.data?.success);
   }, []);
 
   if (!user?.data && !loading) {

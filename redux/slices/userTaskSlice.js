@@ -21,7 +21,7 @@ export const getStaffTasks = createAsyncThunk(
           },
         }
       );
-      console.log("",response.data?.data?.data);
+    
       return response.data?.data?.data;
     } catch (error) {
       if (error.response.data.error) {

@@ -79,7 +79,6 @@ const LoanProcessCard = ({ data }) => {
                 </button>
                 <div
                   onClick={() => {
-                    console.log(">>>>>", item.approvalNote.length);
                     setCommentOpen(!commentOpen);
                     setApprovalMsg(item);
                   }}

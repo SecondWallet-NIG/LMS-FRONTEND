@@ -46,7 +46,7 @@ export const getLoanApprovals = createAsyncThunk('loanApproval/approval', async 
 
 export const requestLoanApproval = createAsyncThunk('loanApproval/request-approval', async (payload) => {
   try {
-   console.log({payload});
+  
     const response = await axios.post(API_URL + `/loan-application/${payload.id}/approval/request-approval`, payload.formData, {
       headers: {
         Authorization: `Bearer ${user?.data?.token}`
@@ -62,7 +62,7 @@ export const requestLoanApproval = createAsyncThunk('loanApproval/request-approv
 
 export const approveLoanRequest = createAsyncThunk('loanApproval/approve', async (payload) => {
   try {
-   console.log({payload});
+
     const response = await axios.post(API_URL + `/loan-application/${payload?.id}/approval/approve`, payload?._formData, {
       headers: {
         Authorization: `Bearer ${user?.data?.token}`

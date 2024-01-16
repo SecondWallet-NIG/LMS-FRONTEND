@@ -76,12 +76,12 @@ const interestTypeSlice = createSlice({
         state.error = null;
       })
       .addCase(calculateInterest.fulfilled, (state, action) => {
-        console.log({ state });
+
         state.loading = 'succeeded';
         state.interestValue = action.payload;
       })
       .addCase(calculateInterest.rejected, (state, action,) => {
-        console.log("action.error.message", action.error.message);
+
         state.loading = 'failed';
         state.error = action.error.message;
       })
