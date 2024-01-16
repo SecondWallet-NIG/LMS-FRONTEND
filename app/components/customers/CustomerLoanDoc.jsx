@@ -4,10 +4,15 @@ import CenterModal from "../modals/CenterModal";
 import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
 import PreviewLoanDocs from "./PreviewLoanDocs";
 import { handleFileExtention } from "../helpers/utils";
-// import Viewer from "react-viewer";
-import ImageViewer from 'react-simple-image-viewer';
-
 import { IoMdClose } from "react-icons/io";
+import dynamic from 'next/dynamic';
+// import ImageViewer from 'react-simple-image-viewer';
+
+// import Viewer from "react-viewer";
+const Viewer = dynamic(
+  () => import("react-viewer"),
+  { ssr: false } // This line is important
+);
 
 const CustomerLoanDoc = (data) => {
   const [url, setUrl] = useState("");
@@ -63,7 +68,7 @@ const CustomerLoanDoc = (data) => {
                 </div>
               ) : (
                 <>
-                  {/* {typeof window !== "undefined" ? (
+                  {typeof window !== "undefined" ? (
                     <>
                       <Viewer
                         visible={openFileModal}
@@ -76,7 +81,7 @@ const CustomerLoanDoc = (data) => {
                         }))}
                       />
                     </>
-                  ) : null} */}
+                  ) : null}
                 </>
               )}
             </div>
@@ -130,7 +135,7 @@ const CustomerLoanDoc = (data) => {
                 </div>
               ) : (
                 <>
-                  {/* {typeof window !== "undefined" ? (
+                  {typeof window !== "undefined" ? (
                     <>
                       <Viewer
                         visible={openFileModal}
@@ -143,7 +148,7 @@ const CustomerLoanDoc = (data) => {
                         }))}
                       />
                     </>
-                  ) : null} */}
+                  ) : null}
                 </>
               )}
             </div>
@@ -194,22 +199,22 @@ const CustomerLoanDoc = (data) => {
                   </div>
                 </div>
               ) : (
-                <div
-                className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
-                  openFileModal ? "flex" : "hidden"
-                } justify-center items-center text-white z-[110]`}
-              >
-                <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
-                  <div className="flex justify-end">
-                    <IoMdClose
-                      size={20}
-                      className="cursor-pointer text-swBlack"
-                      onClick={() => setOpenFileModal(false)}
-                    />
-                  </div>
-                  <iframe src={url} className="h-full w-full"></iframe>
-                </div>
-              </div>
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
               )}
             </div>
           ) : (
@@ -260,7 +265,7 @@ const CustomerLoanDoc = (data) => {
                 </div>
               ) : (
                 <>
-                  {/* {typeof window !== "undefined" ? (
+                  {typeof window !== "undefined" ? (
                     <>
                       <Viewer
                         visible={openFileModal}
@@ -273,7 +278,7 @@ const CustomerLoanDoc = (data) => {
                         }))}
                       />
                     </>
-                  ) : null} */}
+                  ) : null}
                 </>
               )}
             </div>
