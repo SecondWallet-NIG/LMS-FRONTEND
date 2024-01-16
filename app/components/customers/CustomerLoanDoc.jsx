@@ -25,7 +25,7 @@ const CustomerLoanDoc = (data) => {
     setUrl(content);
     setIsOpen(true);
   };
-  console.log({ fileUrl: data?.data?.loanApplication });
+ 
   return (
     <main>
       <div className="pt-4 font-semibold text-md text-swBlue pl-4">
