@@ -21,8 +21,15 @@ import CustomerSummary from "@/app/components/customers/CustomerSummary";
 import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
 import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
 import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs";
-// import Viewer from "react-viewer";
+import dynamic from "next/dynamic";
 import { bankArr } from "@/constant";
+
+// import Viewer from "react-viewer";
+const Viewer = dynamic(
+  () => import("react-viewer"),
+  { ssr: false } // This line is important
+);
+
 const CustomerProfile = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -120,7 +127,7 @@ const CustomerProfile = () => {
                     data?.profileInfo?.profilePicture && setOpenProfilePic(true)
                   }
                 />
-                {/* {typeof window !== "undefined" ? (
+                {typeof window !== "undefined" ? (
                   <>
                     <Viewer
                       visible={openProfilePic}
@@ -135,7 +142,7 @@ const CustomerProfile = () => {
                       )}
                     />
                   </>
-                ) : null} */}
+                ) : null}
               </div>
               <div className="ml-4 h-fit">
                 <p className="text-xl font-semibold text-swBlue mb-1">
