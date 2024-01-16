@@ -11,7 +11,13 @@ import { IoArrowBackSharp, IoCloseSharp } from "react-icons/io5";
 import navPatternBg from "../../../public/images/navPatterns.png";
 import Image from "next/image";
 import { formatDate } from "@/helpers";
+import dynamic from 'next/dynamic';
+
 //import Viewer from "react-viewer";
+const Viewer = dynamic(
+  () => import('react-viewer'),
+  { ssr: false } // This line is important
+ );
 
 const NavBar = ({ paths, isBackNav }) => {
   const router = useRouter();
@@ -166,7 +172,7 @@ const NavBar = ({ paths, isBackNav }) => {
              user?.profilePicture && setOpenProfilePic(true)
             }
           />
-          {/* <Viewer
+          <Viewer
             visible={openProfilePic}
             onClose={() => {
               setOpenProfilePic(false);
@@ -175,7 +181,7 @@ const NavBar = ({ paths, isBackNav }) => {
               src: item,
               key: item,
             }))}
-          /> */}
+          />
         </div>
       </div>
 

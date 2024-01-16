@@ -3,13 +3,21 @@ import { useState } from "react";
 import CenterModal from "../modals/CenterModal";
 import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
 import PreviewLoanDocs from "./PreviewLoanDocs";
+import { handleFileExtention } from "../helpers/utils";
+import dynamic from "next/dynamic";
+import { IoMdClose } from "react-icons/io";
+
+const Viewer = dynamic(
+  () => import("react-viewer"),
+  { ssr: false } // This line is important
+);
 
 const CustomerProfileDocs = (data) => {
-
   const [url, setUrl] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [fieldType, setFieldType] = useState("");
+  const [openFileModal, setOpenFileModal] = useState(false);
 
   const handleSetUrl = (content) => {
     setUrl(content);
@@ -17,22 +25,59 @@ const CustomerProfileDocs = (data) => {
   };
   return (
     <main>
-     
       <div className="flex justify-between pl-4">
         <div className="pt-4 font-semibold text-xs text-swGray">
-        Utility bill
+          Utility bill
         </div>
         {/* {data?.data?.identityVerification?.applicationForm} */}
         <div>
           {data?.data?.identityVerification?.utilityBill != null ? (
-            <button
-              onClick={() => {
-                handleSetUrl(data?.data?.identityVerification?.utilityBill);
-              }}
-              className="text-sm text-swGray underline mt-4"
-            >
-              View Docs
-            </button>
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(data?.data?.identityVerification?.utilityBill);
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline mt-4"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
           ) : (
             <button
               onClick={() => {
@@ -48,19 +93,59 @@ const CustomerProfileDocs = (data) => {
       </div>
       <div className="flex justify-between pl-4">
         <div className="pt-4 font-semibold text-xs text-swGray">
-        Statement of Account
+          Statement of Account
         </div>
         {/* {data?.data?.identityVerification?.applicationForm} */}
         <div>
           {data?.data?.identityVerification?.statementOfAccount != null ? (
-            <button
-              onClick={() => {
-                handleSetUrl(data?.data?.identityVerification?.statementOfAccount);
-              }}
-              className="text-sm text-swGray underline mt-4"
-            >
-              View Docs
-            </button>
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(
+                    data?.data?.identityVerification?.statementOfAccount
+                  );
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline mt-4"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
           ) : (
             <button
               onClick={() => {
@@ -75,19 +160,55 @@ const CustomerProfileDocs = (data) => {
         </div>
       </div>
       <div className="flex justify-between pl-4">
-        <div className="pt-4 font-semibold text-xs text-swGray">
-        ID card
-        </div>
+        <div className="pt-4 font-semibold text-xs text-swGray">ID card</div>
         <div>
           {data?.data?.identityVerification?.idCard != null ? (
-            <button
-              onClick={() => {
-                handleSetUrl(data?.data?.identityVerification?.idCard);
-              }}
-              className="text-sm text-swGray underline mt-4"
-            >
-              View Docs
-            </button>
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(data?.data?.identityVerification?.idCard);
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline mt-4"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
           ) : (
             <button
               onClick={() => {
@@ -102,19 +223,55 @@ const CustomerProfileDocs = (data) => {
         </div>
       </div>
       <div className="flex justify-between pl-4">
-        <div className="pt-4 font-semibold text-xs text-swGray">
-        KYC
-        </div>
+        <div className="pt-4 font-semibold text-xs text-swGray">KYC</div>
         <div>
           {data?.data?.identityVerification?.kyc != null ? (
-            <button
-              onClick={() => {
-                handleSetUrl(data?.data?.identityVerification?.kyc);
-              }}
-              className="text-sm text-swGray underline mt-4"
-            >
-              View Docs
-            </button>
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(data?.data?.identityVerification?.kyc);
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline mt-4"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
           ) : (
             <button
               onClick={() => {
@@ -130,18 +287,58 @@ const CustomerProfileDocs = (data) => {
       </div>
       <div className="flex justify-between pl-4">
         <div className="pt-4 font-semibold text-xs text-swGray">
-        Power of Attorney
+          Power of Attorney
         </div>
         <div>
           {data?.data?.identityVerification?.powerOfAttorney != null ? (
-            <button
-              onClick={() => {
-                handleSetUrl(data?.data?.identityVerification?.powerOfAttorney);
-              }}
-              className="text-sm text-swGray underline mt-4"
-            >
-              View Docs
-            </button>
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(
+                    data?.data?.identityVerification?.powerOfAttorney
+                  );
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline mt-4"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
           ) : (
             <button
               onClick={() => {
@@ -157,18 +354,58 @@ const CustomerProfileDocs = (data) => {
       </div>
       <div className="flex justify-between pl-4">
         <div className="pt-4 font-semibold text-xs text-swGray">
-        Transfer of Ownership
+          Transfer of Ownership
         </div>
         <div>
           {data?.data?.identityVerification?.transferOfOwnership != null ? (
-            <button
-              onClick={() => {
-                handleSetUrl(data?.data?.identityVerification?.transferOfOwnership);
-              }}
-              className="text-sm text-swGray underline mt-4"
-            >
-              View Docs
-            </button>
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(
+                    data?.data?.identityVerification?.transferOfOwnership
+                  );
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline mt-4"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
           ) : (
             <button
               onClick={() => {
@@ -182,7 +419,7 @@ const CustomerProfileDocs = (data) => {
           )}
         </div>
       </div>
-      <CenterModal
+      {/* <CenterModal
         width={"70%"}
         isOpen={isOpen}
         onClose={() => {
@@ -208,7 +445,7 @@ const CustomerProfileDocs = (data) => {
             ) : null}
           </div>
         </div>
-      </CenterModal>
+      </CenterModal> */}
       <CenterModal
         width={"35%"}
         isOpen={uploadModalOpen}

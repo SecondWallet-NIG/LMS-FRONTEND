@@ -19,8 +19,14 @@ import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
- // import Viewer from "react-viewer";
 import { getStaffTasks } from "@/redux/slices/userTaskSlice";
+import dynamic from 'next/dynamic';
+
+// import Viewer from "react-viewer";
+const Viewer = dynamic(
+  () => import('react-viewer'),
+  { ssr: false } // This line is important
+ );
 
 const StaffPage = () => {
   const { id } = useParams();
@@ -201,7 +207,7 @@ const StaffPage = () => {
                         data?.profilePicture && setOpenProfilePic(true)
                       }
                     />
-                    {/* {typeof window !== "undefined" ? (
+                    {typeof window !== "undefined" ? (
                       <>
                         <Viewer
                           visible={openProfilePic}
@@ -214,7 +220,7 @@ const StaffPage = () => {
                           }))}
                         />
                       </>
-                    ) : null} */}
+                    ) : null}
                   </div>
                 ) : (
                   <div className="border-2 p-4 rounded-full">
