@@ -81,8 +81,7 @@ const CreateCustomer = () => {
     bankName: "",
     createdBy: "",
   });
-  // console.log(formData);
-  // console.log(URL?.createObjectURL(formData?.profilePicture));
+
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
 
@@ -104,7 +103,7 @@ const CreateCustomer = () => {
           }));
           setBankNameVal(response.data.account_name);
         } catch (error) {
-          // console.error("Error verifying bank details:", error);
+     
         }
       }
     }
@@ -151,11 +150,7 @@ const CreateCustomer = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    let { name, files } = e.target;
-    setSelectedFiles(files[0]);
-    // console.log(formData);
-  };
+  
 
   const handleFileDelete = (index) => {
     selectedFiles.splice(index, 1);
@@ -261,8 +256,6 @@ const CreateCustomer = () => {
     payload.append("bankAccount[accountName]", formData.accountName);
     payload.append("bankAccount[bankName]", formData.bankName);
     payload.append("createdBy", userId?.data?.user?._id);
-
-    console.log(...payload);
     dispatch(createCustomer(payload))
       .unwrap()
       .then((response) => {
@@ -274,7 +267,8 @@ const CreateCustomer = () => {
         setProfileImg(null);
       })
       .catch((error) => {
-        toast.error(`An error occured`);
+        console.log({error});
+        toast.error(error?.message);
       });
   };
 
@@ -296,9 +290,7 @@ const CreateCustomer = () => {
     }
   }, [formData?.profilePicture]);
 
-  function preventScroll(event) {
-    event.preventDefault();
-  }
+
 
   const handleBulkCustomerSubmit = (e) => {
     const payload = new FormData();
