@@ -1083,6 +1083,13 @@ const ViewLoan = () => {
                                     <button
                                       className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md"
                                       onClick={() => {
+                                        setCurrentTaskId(item?.currentTaskId);
+                                        setCurrentApprovalId(
+                                          item?.approvalLevel
+                                        );
+                                        setCurrentApprovalLevel(
+                                          item?.approvalTitle
+                                        );
                                         setDeclineOpen(true);
                                       }}
                                     >
@@ -1260,8 +1267,8 @@ const ViewLoan = () => {
       </CenterModal>
       <CenterModal isOpen={isDeclineOpen}>
         <DeclineModal
-          approvalLevel={data?.data?.approvalNeeded?.approvalTitle}
-          approvalId={data?.data?.approvalNeeded?.approvalLevel}
+          approvalLevel={currentApprovalLevel}
+          approvalId={currentApprovalId}
           isOpen={isDeclineOpen}
           closeModal={setDeclineOpen}
           onClose={() => setDeclineOpen(false)}
