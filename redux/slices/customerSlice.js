@@ -22,9 +22,7 @@ export const createCustomer = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      if (error.response.data.error === "Incorrect email or password") {
-        throw new Error("Incorrect email or password");
-      } else throw new Error("An error occured, please try again later");
+      throw new Error(error.response.data.error);
     }
   }
 );
