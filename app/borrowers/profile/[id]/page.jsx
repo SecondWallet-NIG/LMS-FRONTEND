@@ -347,15 +347,15 @@ const CustomerProfile = () => {
                   <div className="mt-2 text-xs text-swGray">
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Country: </p>
-                      <p className="pt-3 font-semibold text-swBlue">Nigeria</p>
+                      <p className="pt-3 font-semibold text-swBlue"> Nigeria</p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">State: </p>
-                      <p className="pt-3 font-semibold text-swBlue">Ekiti state</p>
+                      <p className="pt-3 font-semibold text-swBlue"> {data?.profileInfo?.state}</p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Lga: </p>
-                      <p className="pt-3 font-semibold text-swBlue">Ijero LGA/LCDA</p>
+                      <p className="pt-3 font-semibold text-swBlue"> {data?.profileInfo?.lga}</p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3 ">Address: </p>
