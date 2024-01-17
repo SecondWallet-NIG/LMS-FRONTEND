@@ -367,7 +367,7 @@ const EmploymentDetailsModal = ({
             <EditableButton
               whiteBtn={true}
               label={"Cancel"}
-              className="px-20"
+              // className="px-20"
               onClick={() => onClose("employmentDetails")}
             />
 
