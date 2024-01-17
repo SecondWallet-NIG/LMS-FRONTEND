@@ -28,6 +28,7 @@ const DeclineModal = ({
   approvalLevel,
 }) => {
   const dispatch = useDispatch();
+  console.log({approvalId, approvalLevel});
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
