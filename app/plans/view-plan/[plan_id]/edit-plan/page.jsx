@@ -277,8 +277,8 @@ const EditPlansAndPackages = () => {
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
-            onKeyPress={preventMinus}
-            onWheel={() => document.activeElement.blur()}
+            //onKeyPress={preventMinus}
+            //onWheel={() => document.activeElement.blur()}
             endIcon={<MdPercent size={20} className="text-swGray" />}
             name={"interestRate"}
             value={editPlan.interestRate}
