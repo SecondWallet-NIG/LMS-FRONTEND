@@ -23,6 +23,7 @@ import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
 import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs";
 import dynamic from "next/dynamic";
 import { bankArr } from "@/constant";
+import { formatDate } from "@/helpers";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -179,12 +180,12 @@ const CustomerProfile = () => {
                 Customer onboarded by: <br />
                 <span className="font-semibold text-swGreen">
       
-                  {data?.profileInfo?.createdBy?.email}
+                  {data?.profileInfo?.createdBy?.email} on {formatDate(data?.profileInfo?.createdAt.slice(0, 10)) }
                 </span>
               </p>
               <div className="flex gap-2 items-center">
                 <div className="relative">
-                  <div
+                  {/* <div
                     className="border-2 border-transparent hover:border-swLightGray w-fit h-fit rounded-md cursor-pointer"
                     onClick={() => setBorrowerOptions(!borrowerOptions)}
                     // onClick={() => }
@@ -192,7 +193,7 @@ const CustomerProfile = () => {
                     <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
                       <BsThreeDotsVertical size={20} />
                     </div>
-                  </div>
+                  </div> */}
                   {borrowerOptions && (
                     <div
                       ref={buttonRef}
