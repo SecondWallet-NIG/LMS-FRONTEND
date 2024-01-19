@@ -46,7 +46,6 @@ const PersonalInformation = ({ userData, loading }) => {
     createdBy: "",
   });
 
-  console.log(formData.bankName);
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
