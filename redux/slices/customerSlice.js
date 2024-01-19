@@ -95,6 +95,28 @@ export const createEmployment = createAsyncThunk(
   }
 );
 
+export const updateEmployment = createAsyncThunk(
+  "employment/update",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        API_URL + "/employment/create",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getCustomerById = createAsyncThunk(
   "customer/getCustomerById",
   async (customerId) => {
@@ -162,6 +184,28 @@ export const identityVerification = createAsyncThunk(
     try {
       const response = await axios.post(
         `${API_URL}/customer/identity-verification/create`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const updateIdentityVerification = createAsyncThunk(
+  "/customer/identity-verification/update",
+  async ({id, payload}) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/customer/identity-verification/${id}/update`,
         payload,
         {
           headers: {
@@ -292,6 +336,19 @@ const customerSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(createBulkCustomer.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(updateIdentityVerification.pending, (state, action) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(updateIdentityVerification.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(updateIdentityVerification.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

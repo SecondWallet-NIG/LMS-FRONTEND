@@ -308,7 +308,7 @@ const CustomerLoanDoc = (data) => {
             setUploadModalOpen(!uploadModalOpen);
           }}
           fieldType={fieldType}
-          customerId={data?.data?.customerDetails?._id}
+          customerId={data?.data?.profileInfo?._id}
         />
       </CenterModal>
     </main>

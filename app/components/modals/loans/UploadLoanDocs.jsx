@@ -12,19 +12,27 @@ import {
   getSingleLoan,
   updateLoanApplication,
 } from "@/redux/slices/loanApplicationSlice";
+import {
+  getCustomerById,
+  updateEmployment,
+  updateIdentityVerification,
+} from "@/redux/slices/customerSlice";
+import { useRouter } from "next/navigation";
 
 const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
+
+  console.log({ fieldType, customerId });
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [fileError, setFileError] = useState("");
 
   const [formData, setFormData] = useState({
-    applicationForm: null || "null",
-    collaterals: "",
-    guarantorForm: null,
-    loanAffidavit: null,
-    customerId: customerId,
+    utilityBill: null || "null",
+    powerOfAttorney: "",
+    kyc: null,
+    idCard: null,
+    //  customerId: customerId,
   });
   const handleFileChange = (e) => {
     setFileError("");
@@ -57,28 +65,30 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
     e.preventDefault();
 
     const payload = new FormData();
-    payload.append("customer", formData.customerId);
-    fieldType === "applicationForm" &&
-      payload.append("applicationForm", formData.applicationForm);
-    fieldType == "loanAffidavit" &&
-      payload.append("loanAffidavit", formData.loanAffidavit);
-    fieldType == "guarantorForm" &&
-      payload.append("guarantorForm", formData.guarantorForm);
-    fieldType == "collaterals" &&
-      payload.append("collaterals", formData.collaterals);
+    //  payload.append("customer", formData.customerId);
+    fieldType === "utilityBill" &&
+      payload.append("utilityBill", formData.utilityBill);
+    fieldType == "idCard" && payload.append("idCard", formData.idCard);
+    fieldType == "kyc" && payload.append("kyc", formData.kyc);
+    fieldType == "powerOfAttorney" &&
+      payload.append("powerOfAttorney", formData.powerOfAttorney);
+    fieldType == "transferOfOwnership" &&
+      payload.append("transferOfOwnership", formData.transferOfOwnership);
 
-    dispatch(updateLoanApplication({ loanId: id, payload }))
+    dispatch(updateIdentityVerification({ id: customerId, payload }))
       .unwrap()
       .then(() => {
-        toast("Document uploaded");
+        toast.success("Document uploaded");
+        dispatch(getCustomerById(id));
+        window.location.reload();
         setLoading(false);
-        dispatch(getSingleLoan(id));
         onClose(false);
       })
       .catch((error) => {
         toast.error(`${error?.message}`);
+        dispatch(getCustomerById(id));
+        window.location.reload();
         setLoading(false);
-        dispatch(getSingleLoan(id));
         onClose(false);
       });
   };
@@ -99,16 +109,16 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
       >
         <div className="border bg-white border-swLightGray rounded-lg">
           <div className="p-4">
-            {fieldType == "applicationForm" ? (
+            {fieldType == "utilityBill" ? (
               <div className="flex flex-col gap-2 mt-5">
-                <p className="font-semibold">Upload Loan Application form</p>
+                <p className="font-semibold">Upload Utility Bill</p>
                 {fileError && (
                   <p className="text-red-500 text-sm">{fileError}</p>
                 )}
 
                 <div className="relative">
                   <input
-                    name="applicationForm"
+                    name="utilityBill"
                     type="file"
                     id="fileInput1"
                     className="absolute w-0 h-0 opacity-0"
@@ -123,23 +133,23 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
                       <AiOutlinePaperClip color="black" size={20} />
                       <p className="font-semibold text-black">
                         {" "}
-                        {formData?.applicationForm?.name
+                        {formData?.utilityBill?.name
                           ? "Change file"
                           : "Select file"}
                       </p>
                     </span>
                   </label>
-                  {formData?.applicationForm?.name ? (
+                  {formData?.utilityBill?.name ? (
                     <div
                       id="fileLabel1"
                       className="bg-swLightGray p-2 flex justify-between"
                     >
                       <div className="text-xs">
-                        {formData?.applicationForm?.name}
+                        {formData?.utilityBill?.name}
                       </div>
                       <div
                         onClick={() => {
-                          deleteFile("applicationForm");
+                          deleteFile("utilityBill");
                         }}
                       >
                         <AiOutlineDelete color="red" size={20} />
@@ -149,15 +159,15 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
                 </div>
               </div>
             ) : null}
-            {fieldType == "loanAffidavit" ? (
+            {fieldType == "idCard" ? (
               <div className="flex flex-col gap-2 mt-5">
-                <p className="font-semibold">Upload Loan Affidavit</p>
+                <p className="font-semibold">Upload ID Card</p>
                 {fileError && (
                   <p className="text-red-500 text-sm">{fileError}</p>
                 )}
                 <div className="relative">
                   <input
-                    name="loanAffidavit"
+                    name="idCard"
                     type="file"
                     id="fileInput1"
                     className="absolute w-0 h-0 opacity-0"
@@ -172,23 +182,19 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
                       <AiOutlinePaperClip color="black" size={20} />
                       <p className="font-semibold text-black">
                         {" "}
-                        {formData?.loanAffidavit?.name
-                          ? "Change file"
-                          : "Select file"}
+                        {formData?.idCard?.name ? "Change file" : "Select file"}
                       </p>
                     </span>
                   </label>
-                  {formData?.loanAffidavit?.name ? (
+                  {formData?.idCard?.name ? (
                     <div
                       id="fileLabel1"
                       className="bg-swLightGray p-2 flex justify-between"
                     >
-                      <div className="text-xs">
-                        {formData?.loanAffidavit?.name}
-                      </div>
+                      <div className="text-xs">{formData?.idCard?.name}</div>
                       <div
                         onClick={() => {
-                          deleteFile("loanAffidavit");
+                          deleteFile("idCard");
                         }}
                       >
                         <AiOutlineDelete color="red" size={20} />
@@ -198,15 +204,15 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
                 </div>
               </div>
             ) : null}
-            {fieldType == "guarantorForm" ? (
+            {fieldType == "kyc" ? (
               <div className="flex flex-col gap-2 mt-5">
-                <p className="font-semibold">Upload Guarantor&apos;s Form</p>
+                <p className="font-semibold">Upload KYC</p>
                 {fileError && (
                   <p className="text-red-500 text-sm">{fileError}</p>
                 )}
                 <div className="relative">
                   <input
-                    name="guarantorForm"
+                    name="kyc"
                     type="file"
                     id="fileInput1"
                     className="absolute w-0 h-0 opacity-0"
@@ -221,23 +227,19 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
                       <AiOutlinePaperClip color="black" size={20} />
                       <p className="font-semibold text-black">
                         {" "}
-                        {formData?.guarantorForm?.name
-                          ? "Change file"
-                          : "Select file"}
+                        {formData?.kyc?.name ? "Change file" : "Select file"}
                       </p>
                     </span>
                   </label>
-                  {formData?.guarantorForm?.name ? (
+                  {formData?.kyc?.name ? (
                     <div
                       id="fileLabel1"
                       className="bg-swLightGray p-2 flex justify-between"
                     >
-                      <div className="text-xs">
-                        {formData?.guarantorForm?.name}
-                      </div>
+                      <div className="text-xs">{formData?.kyc?.name}</div>
                       <div
                         onClick={() => {
-                          deleteFile("guarantorForm");
+                          deleteFile("kyc");
                         }}
                       >
                         <AiOutlineDelete color="red" size={20} />
@@ -247,15 +249,15 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
                 </div>
               </div>
             ) : null}
-            {fieldType == "collaterals" ? (
+            {fieldType == "powerOfAttorney" ? (
               <div className="flex flex-col gap-2 mt-5">
-                <p className="font-semibold">Upload Collateral Form</p>
+                <p className="font-semibold">Upload Power of Attorney</p>
                 {fileError && (
                   <p className="text-red-500 text-sm">{fileError}</p>
                 )}
                 <div className="relative">
                   <input
-                    name="collaterals"
+                    name="powerOfAttorney"
                     type="file"
                     id="fileInput1"
                     className="absolute w-0 h-0 opacity-0"
@@ -270,23 +272,72 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
                       <AiOutlinePaperClip color="black" size={20} />
                       <p className="font-semibold text-black">
                         {" "}
-                        {formData?.collaterals?.name
+                        {formData?.powerOfAttorney?.name
                           ? "Change file"
                           : "Select file"}
                       </p>
                     </span>
                   </label>
-                  {formData?.collaterals?.name ? (
+                  {formData?.powerOfAttorney?.name ? (
                     <div
                       id="fileLabel1"
                       className="bg-swLightGray p-2 flex justify-between"
                     >
                       <div className="text-xs">
-                        {formData?.collaterals?.name}
+                        {formData?.powerOfAttorney?.name}
                       </div>
                       <div
                         onClick={() => {
-                          deleteFile("collaterals");
+                          deleteFile("powerOfAttorney");
+                        }}
+                      >
+                        <AiOutlineDelete color="red" size={20} />
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+            {fieldType == "transferOfOwnership" ? (
+              <div className="flex flex-col gap-2 mt-5">
+                <p className="font-semibold">Upload Transfer of Ownership</p>
+                {fileError && (
+                  <p className="text-red-500 text-sm">{fileError}</p>
+                )}
+                <div className="relative">
+                  <input
+                    name="transferOfOwnership"
+                    type="file"
+                    id="fileInput1"
+                    className="absolute w-0 h-0 opacity-0"
+                    onChange={handleFileChange}
+                    onClick={(e) => (e.target.value = null)}
+                  />
+                  <label
+                    htmlFor="fileInput1"
+                    className="px-4 py-2 text-white rounded-md cursor-pointer"
+                  >
+                    <span className="py-2 px-6 rounded-md flex gap-2 border w-full justify-center">
+                      <AiOutlinePaperClip color="black" size={20} />
+                      <p className="font-semibold text-black">
+                        {" "}
+                        {formData?.transferOfOwnership?.name
+                          ? "Change file"
+                          : "Select file"}
+                      </p>
+                    </span>
+                  </label>
+                  {formData?.transferOfOwnership?.name ? (
+                    <div
+                      id="fileLabel1"
+                      className="bg-swLightGray p-2 flex justify-between"
+                    >
+                      <div className="text-xs">
+                        {formData?.transferOfOwnership?.name}
+                      </div>
+                      <div
+                        onClick={() => {
+                          deleteFile("transferOfOwnership");
                         }}
                       >
                         <AiOutlineDelete color="red" size={20} />

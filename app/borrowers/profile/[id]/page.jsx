@@ -178,8 +178,8 @@ const CustomerProfile = () => {
               <p className="text-sm mb-2">
                 Customer onboarded by: <br />
                 <span className="font-semibold text-swGreen">
-                  {" "}
-                  {user?.firstName} {user?.lastName}{" "}
+      
+                  {data?.profileInfo?.createdBy?.email}
                 </span>
               </p>
               <div className="flex gap-2 items-center">
@@ -351,11 +351,17 @@ const CustomerProfile = () => {
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">State: </p>
-                      <p className="pt-3 font-semibold text-swBlue"> {data?.profileInfo?.state}</p>
+                      <p className="pt-3 font-semibold text-swBlue">
+                        {" "}
+                        {data?.profileInfo?.state}
+                      </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3">Lga: </p>
-                      <p className="pt-3 font-semibold text-swBlue"> {data?.profileInfo?.lga}</p>
+                      <p className="pt-3 font-semibold text-swBlue">
+                        {" "}
+                        {data?.profileInfo?.lga}
+                      </p>
                     </div>
                     <div className="flex gap-1 justify-between">
                       <p className="pt-3 ">Address: </p>
@@ -508,14 +514,14 @@ const CustomerProfile = () => {
                             <p className="pt-3">Amount Earned: </p>
                             <p className="pt-3 font-semibold text-swBlue">
                               {" "}
-                              {data?.employmentInformation?.monthlyIncome}
+                              {Number(data?.employmentInformation?.monthlyIncome).toLocaleString()}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Annual Income: </p>
                             <p className="pt-3 font-semibold text-swBlue">
                               {" "}
-                              {data?.employmentInformation?.monthlyIncome}
+                              {Number(data?.employmentInformation?.monthlyIncome).toLocaleString()}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
