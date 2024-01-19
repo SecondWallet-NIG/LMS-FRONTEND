@@ -5,7 +5,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import InputField from "../shared/input/InputField";
 import SelectField from "../shared/input/SelectField";
 import { AiOutlineClose } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createEmployment } from "@/redux/slices/customerSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "next/navigation";
@@ -25,6 +25,8 @@ const WorkInformation = ({ userData, loading }) => {
     employerAddress: "",
     incomePeriod: "",
   });
+
+  console.log({ userData });
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -101,6 +103,25 @@ const WorkInformation = ({ userData, loading }) => {
       });
   };
 
+  useEffect(() => {
+    if (userData?.employmentInformation !== "null") {
+      setFormData({
+        employerName:
+          userData?.employmentInformation?.employerInformation?.name,
+        employerPhone:
+          userData?.employmentInformation?.employerInformation?.contact,
+        incomeSource: userData?.employmentInformation?.incomeSource,
+        currentEmploymentStatus:
+          userData?.employmentInformation?.currentEmploymentStatus,
+        jobTitle: userData?.employmentInformation?.jobTitle,
+        monthlyIncome: userData?.employmentInformation?.monthlyIncome,
+        employerAddress:
+          userData?.employmentInformation?.employerInformation?.address,
+        incomePeriod: userData?.employmentInformation,
+      });
+    }
+  }, [userData]);
+
   return (
     <form id="add-user-form">
       <ToastContainer />
@@ -115,6 +136,9 @@ const WorkInformation = ({ userData, loading }) => {
                 label={"Employment Status"}
                 required={true}
                 isSearchable={false}
+                value={employmentStatus.find(
+                  (option) => option.value === formData.currentEmploymentStatus
+                )}
                 optionValue={employmentStatus}
                 onChange={(selectedOption) =>
                   handleSelectChange(selectedOption, "currentEmploymentStatus")
@@ -126,6 +150,7 @@ const WorkInformation = ({ userData, loading }) => {
                 name="employerName"
                 label="Employer Name"
                 required={true}
+                value={formData.employerName}
                 placeholder="Employer name"
                 onChange={handleInputChange}
               />
@@ -138,6 +163,7 @@ const WorkInformation = ({ userData, loading }) => {
               name="employerAddress"
               label="Employer Address"
               required={true}
+              value={formData.employerAddress}
               placeholder="Employer address "
               onChange={handleInputChange}
             />
@@ -146,6 +172,7 @@ const WorkInformation = ({ userData, loading }) => {
             <InputField
               name="employerPhone"
               label="Employer Contact"
+              value={formData?.employerPhone?.toLocaleString()}
               onKeyPress={preventMinus}
               onWheel={() => document.activeElement.blur()}
               required={true}
@@ -159,6 +186,7 @@ const WorkInformation = ({ userData, loading }) => {
             <InputField
               name="jobTitle"
               label="Job Title"
+              value={formData.jobTitle}
               required={true}
               placeholder="Job title"
               onChange={handleInputChange}
@@ -168,6 +196,7 @@ const WorkInformation = ({ userData, loading }) => {
             <InputField
               name="incomeSource"
               label="Income Source"
+              value={formData.incomeSource}
               required={true}
               placeholder="Income source"
               onChange={handleInputChange}
@@ -190,7 +219,7 @@ const WorkInformation = ({ userData, loading }) => {
           <div className="w-1/2">
             <InputField
               name="monthlyIncome"
-              value={formData?.monthlyIncome?.toLocaleString()}
+              value={Number(formData?.monthlyIncome)?.toLocaleString()}
               label="Income Per Period"
               onKeyPress={preventMinus}
               ariaLabel={"Number input"}
