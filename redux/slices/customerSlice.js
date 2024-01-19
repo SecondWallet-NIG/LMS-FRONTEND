@@ -97,10 +97,10 @@ export const createEmployment = createAsyncThunk(
 
 export const updateEmployment = createAsyncThunk(
   "employment/update",
-  async (payload) => {
+  async ({ id, payload }) => {
     try {
-      const response = await axios.post(
-        API_URL + "/employment/create",
+      const response = await axios.put(
+        API_URL + `/customer/employment-information/${id}/update`,
         payload,
         {
           headers: {
@@ -202,7 +202,7 @@ export const identityVerification = createAsyncThunk(
 
 export const updateIdentityVerification = createAsyncThunk(
   "/customer/identity-verification/update",
-  async ({id, payload}) => {
+  async ({ id, payload }) => {
     try {
       const response = await axios.put(
         `${API_URL}/customer/identity-verification/${id}/update`,
@@ -349,6 +349,18 @@ const customerSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(updateIdentityVerification.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      }).addCase(updateEmployment.pending, (state, action) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(updateEmployment.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(updateEmployment.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

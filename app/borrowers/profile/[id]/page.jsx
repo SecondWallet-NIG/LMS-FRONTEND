@@ -277,12 +277,7 @@ const CustomerProfile = () => {
                     onMouseLeave={() => handleInfoHoverIn("close")}
                   >
                     <p>Bio Data</p>
-                    {infoHover === "bio-data" && (
-                      <FiEdit2
-                        size={15}
-                        className="text-swGray hover:text-black"
-                      />
-                    )}
+               
                   </div>
 
                   <div className=" text-xs  text-swGray">
@@ -317,17 +312,7 @@ const CustomerProfile = () => {
                       </p>
                     </div>
 
-                    {/* <Button
-                      onClick={() => {
-                        handleActivityToggle("activity-log");
-                      }}
-                      variant={"secondary"}
-                      size={"normal"}
-                      className="py-1.5 text-sm rounded-md items-center flex gap-1 justify-between border mt-2"
-                    >
-                      <AiOutlinePlus size={20} />
-                      <p className="whitespace-nowrap">Add details</p>
-                    </Button> */}
+            
                   </div>
                 </div>
                 <div className="p-2 border-t border-text-300">
@@ -337,12 +322,7 @@ const CustomerProfile = () => {
                     onMouseLeave={() => handleInfoHoverIn("close")}
                   >
                     <p>Address</p>
-                    {infoHover === "address" && (
-                      <FiEdit2
-                        size={15}
-                        className="text-swGray hover:text-black"
-                      />
-                    )}
+                 
                   </div>
                   <div className="mt-2 text-xs text-swGray">
                     <div className="flex gap-1 justify-between">
@@ -379,12 +359,7 @@ const CustomerProfile = () => {
                     onMouseLeave={() => handleInfoHoverIn("close")}
                   >
                     <p>Bank Details</p>
-                    {infoHover === "bank" && (
-                      <FiEdit2
-                        size={15}
-                        className="text-swGray hover:text-black"
-                      />
-                    )}
+             
                   </div>
                   <div className="text-xs text-swGray">
                     <div className="flex gap-1 justify-between">
@@ -507,21 +482,21 @@ const CustomerProfile = () => {
                             <p className="pt-3">Income Period: </p>
                             <p className="pt-3 font-semibold text-swBlue">
                               {" "}
-                              {data?.employmentInformation?.incomeSource}
+                              {data?.employmentInformation?.incomePeriod}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Amount Earned: </p>
                             <p className="pt-3 font-semibold text-swBlue">
                               {" "}
-                              {Number(data?.employmentInformation?.monthlyIncome).toLocaleString()}
+                              ₦ {Number(data?.employmentInformation?.monthlyIncome).toLocaleString()}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Annual Income: </p>
                             <p className="pt-3 font-semibold text-swBlue">
                               {" "}
-                              {Number(data?.employmentInformation?.monthlyIncome).toLocaleString()}
+                              ₦ {Number(data?.employmentInformation?.monthlyIncome * 12 ).toLocaleString() }
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
