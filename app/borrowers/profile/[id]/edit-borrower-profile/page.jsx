@@ -64,7 +64,13 @@ const EditProfile = () => {
             <PersonalInformation userData={userData} loading={loading} />
           )}
           {pageState === "Work information" && (
-            <WorkInformation userData={userData} loading={loading} />
+            <div>
+                 {
+              userData && userData?.employmentInformation === null ? <div>No employment information uploaded yet</div> :   <WorkInformation userData={userData} loading={loading} />
+            }
+            </div>
+         
+          
           )}
           {pageState === "Documents" && (
             <ProfileDocuments userData={userData} loading={loading} />

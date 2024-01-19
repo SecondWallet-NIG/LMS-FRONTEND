@@ -6,7 +6,7 @@ import InputField from "../shared/input/InputField";
 import SelectField from "../shared/input/SelectField";
 import { AiOutlineClose } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { createEmployment } from "@/redux/slices/customerSlice";
+import { createEmployment, updateEmployment } from "@/redux/slices/customerSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -26,7 +26,6 @@ const WorkInformation = ({ userData, loading }) => {
     incomePeriod: "",
   });
 
-  console.log({ userData });
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -83,20 +82,20 @@ const WorkInformation = ({ userData, loading }) => {
       },
       jobTitle: formData.jobTitle,
       monthlyIncome: formData.monthlyIncome,
+      incomePeriod: formData.incomePeriod,
       incomeSource: formData.incomeSource,
       customerProfileInformation: id,
       createdBy: "650f659167a782d8868b76ee",
     };
 
-    dispatch(createEmployment(payload))
+    console.log({payload});
+
+
+    dispatch(updateEmployment({id: userData?.employmentInformation?._id, payload}))
       .unwrap()
       .then((res) => {
-        // dispatch(getCustomer(id));
-        // onClose("employmentDetails");
         toast.success("Profile updated successfully");
-        // resetForm();
-        document.getElementById("add-user-form").reset();
-        // Close the modal here
+        window.location.reload()
       })
       .catch((error) => {
         toast.error(error?.message);
@@ -105,6 +104,7 @@ const WorkInformation = ({ userData, loading }) => {
 
   useEffect(() => {
     if (userData?.employmentInformation !== "null") {
+      console.log(",,,,,,", userData?.employmentInformation?.incomePeriod);
       setFormData({
         employerName:
           userData?.employmentInformation?.employerInformation?.name,
@@ -117,7 +117,7 @@ const WorkInformation = ({ userData, loading }) => {
         monthlyIncome: userData?.employmentInformation?.monthlyIncome,
         employerAddress:
           userData?.employmentInformation?.employerInformation?.address,
-        incomePeriod: userData?.employmentInformation,
+        incomePeriod: userData?.employmentInformation?.incomePeriod,
       });
     }
   }, [userData]);
@@ -206,6 +206,9 @@ const WorkInformation = ({ userData, loading }) => {
         <div className="flex justify-between mt-5 gap-4">
           <div className="w-1/2">
             <SelectField
+              value={incomePeriodData.find(
+                (option) => option.value === formData.incomePeriod
+              )}
               name="incomePeriod"
               label={"Income Period"}
               required={true}

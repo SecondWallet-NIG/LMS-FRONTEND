@@ -182,6 +182,7 @@ const EmploymentDetailsModal = ({
         jobTitle: formData.jobTitle,
         monthlyIncome: formData.monthlyIncome,
         incomeSource: formData.incomeSource,
+        incomePeriod: formData.incomePeriod,
         customerProfileInformation: id,
         createdBy: "650f659167a782d8868b76ee",
       };

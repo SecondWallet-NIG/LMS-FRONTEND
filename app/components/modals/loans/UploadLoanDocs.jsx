@@ -65,7 +65,7 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
     e.preventDefault();
 
     const payload = new FormData();
-    //  payload.append("customer", formData.customerId);
+
     fieldType === "utilityBill" &&
       payload.append("utilityBill", formData.utilityBill);
     fieldType == "idCard" && payload.append("idCard", formData.idCard);
