@@ -178,8 +178,8 @@ const CustomerProfile = () => {
               <p className="text-sm mb-2">
                 Customer onboarded by: <br />
                 <span className="font-semibold text-swGreen">
-                  {" "}
-                  {user?.firstName} {user?.lastName}{" "}
+      
+                  {data?.profileInfo?.createdBy?.email}
                 </span>
               </p>
               <div className="flex gap-2 items-center">

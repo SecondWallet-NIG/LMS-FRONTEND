@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import CenterModal from "../modals/CenterModal";
 import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
@@ -9,10 +10,12 @@ import { IoMdClose } from "react-icons/io";
 
 const Viewer = dynamic(
   () => import("react-viewer"),
-  { ssr: false } // This line is important
+  { ssr: false } 
 );
 
 const CustomerProfileDocs = (data) => {
+  console.log({data});
+
   const [url, setUrl] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -343,6 +346,7 @@ const CustomerProfileDocs = (data) => {
             <button
               onClick={() => {
                 setFieldType("powerOfAttorney");
+                ("powerOfAttorney");
                 setUploadModalOpen(!uploadModalOpen);
               }}
               className="text-sm text-swBlue underline mt-4"
@@ -453,12 +457,14 @@ const CustomerProfileDocs = (data) => {
           setUploadModalOpen(!uploadModalOpen);
         }}
       >
+     
         <UploadLoanDocs
           isOpen={uploadModalOpen}
           onClose={() => {
             setUploadModalOpen(!uploadModalOpen);
           }}
           fieldType={fieldType}
+          customerId={data?.data?.identityVerification?._id}
         />
       </CenterModal>
     </main>

@@ -98,12 +98,12 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
     }
     e.preventDefault();
     const payload = new FormData();
-    payload.append("utilityBill", selectedFilesObj["Utility bill"]);
-    payload.append("statementOfAccount", selectedFilesObj["Statement of account"]);
-    payload.append("idCard", selectedFilesObj["ID card"]);
-    payload.append("kyc", selectedFilesObj["KYC"]);
-    payload.append("powerOfAttorney", selectedFilesObj["Power of attorney"]);
-    payload.append("transferOfOwnership", selectedFilesObj["Transfer of Ownership"]);
+    payload.append("utilityBill", selectedFilesObj["Utility bill"] || null);
+    payload.append("statementOfAccount", selectedFilesObj["Statement of account"] || null);
+    payload.append("idCard", selectedFilesObj["ID card"] || null);
+    payload.append("kyc", selectedFilesObj["KYC"]|| null);
+    payload.append("powerOfAttorney", selectedFilesObj["Power of attorney"]|| null);
+    payload.append("transferOfOwnership", selectedFilesObj["Transfer of Ownership"]|| null);
     payload.append("customerProfileInformation", customerID);
     payload.append("createdBy", userId);
 
@@ -148,9 +148,7 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
               <div>
                 {documents.map((item, docIndex) => (
                   <div key={docIndex}>
-                    <div className="flex justify-start flex-col md:flex-row-reverse md:items-center gap-2  mt-5">
-                    
-                   
+                    <div className="flex justify-start flex-col md:flex-row-reverse md:items-center gap-2  mt-5">       
                       <div className="w-full">
                         {selectedFilesArr.length > 0 &&
                           selectedFilesArr
@@ -263,10 +261,7 @@ const UploadDocumentsModal = ({ isOpen, onClose, customerID, cload }) => {
                             onChange={(e) => handleFileInputChange(e, item)}
                             onClick={(e) => (e.target.value = null)}
                           />
-
                         </label>
-                      
-                       
                       </div>
                     </div>
                   </div>

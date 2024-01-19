@@ -1,20 +1,18 @@
-import { AiOutlineClose } from "react-icons/ai";
-import { FaPaperclip } from "react-icons/fa";
-import EditableButton from "../shared/editableButtonComponent/EditableButton";
-import { IoMdCheckmark } from "react-icons/io";
+"use client"
 import { useState } from "react";
 import { FiTrash } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { identityVerification } from "@/redux/slices/customerSlice";
-// import SuccessModal from "./SuccessModal";
+import { updateIdentityVerification } from "@/redux/slices/customerSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Rings } from "react-loader-spinner";
-// import CancelModal from "./CancelModal";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
+import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
+import CustomerProfileDocs from "../customers/CustomerProfileDocs";
 
-const ProfileDocuments = () => {
+const ProfileDocuments = ({userData}) => {
+
+  console.log(">>>>>>>>>", userData?.identityVerification);
   const {id} = useParams()
   const dispatch = useDispatch();
   const [selectedFilesArr, setSelectedFilesArr] = useState([]);
@@ -32,6 +30,7 @@ const ProfileDocuments = () => {
   ];
 
   const { loading, error, data } = useSelector((state) => state.customer);
+ 
 
   // This puts the names of  all the selected forms in an array
   const keysArray = Object.keys(selectedFilesObj);
@@ -66,7 +65,7 @@ const ProfileDocuments = () => {
         }
       }
     } else {
-      // setFileLengthError("You chose more than one file");
+
       alert(`You chose more than one file for ${formName}`);
     }
   };
@@ -112,7 +111,7 @@ const ProfileDocuments = () => {
     payload.append("customerProfileInformation", id);
     payload.append("createdBy", userId);
 
-    dispatch(identityVerification(payload))
+    dispatch(updateIdentityVerification(payload))
       .unwrap()
       .then(() => {
         toast.success("Profile successfully updated");
@@ -123,16 +122,18 @@ const ProfileDocuments = () => {
       .catch((error) => {
         toast.error(`An error occured`);
       });
+
   };
+
   return (
     <div>
       <ToastContainer />
 
       <div className="p-5 pb-0 my-2">
         <p className="font-semibold text-lg text-swBlack">
-          Identity verification/Document
+          Identity Verification Document
         </p>
-        <p className="">
+        {/* <p className="">
           Document types uploaded should be JPEGS, PNG or PDF and should not
           exceed 4mb
         </p>
@@ -142,6 +143,7 @@ const ProfileDocuments = () => {
               {documents.map((item, docIndex) => (
                 <div key={docIndex}>
                   <div className="flex justify-start flex-col md:flex-row-reverse md:items-center gap-2  mt-5">
+                  <div>{userData?.identityVerification[item]}</div>
                     <div className="w-full">
                       {selectedFilesArr.length > 0 &&
                         selectedFilesArr
@@ -255,15 +257,17 @@ const ProfileDocuments = () => {
                           onClick={(e) => (e.target.value = null)}
                         />
                       </label>
+
                     </div>
+                  
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
-      <div className="p-3 mt-5 flex justify-center gap-5">
+      {/* <div className="p-3 mt-5 flex justify-center gap-5">
         <EditableButton
           blueBtn={true}
           disabled={loading === "pending" ? true : false}
@@ -286,32 +290,14 @@ const ProfileDocuments = () => {
           endIcon={<IoMdCheckmark size={20} />}
           onClick={handleProfileUpdate}
         />
-        {/* <SuccessModal
-          isOpen={successModal}
-          description={"Documents are successfully uploaded"}
-          title={"Successfully Uploaded"}
-          noButtons={true}
-          onClose={() => setSuccessModal(false)}
-        />
-        <CancelModal
-          btnLeft={"Close"}
-          btnRight={"Yes cancel"}
-          description={
-            <div>
-              <p>
-                You&apos;re currently updating a borrowers profile, Cancelling
-                will make you loose your progress.
-              </p>
-              <p className="mt-2">Are you sure you want to cancel update?</p>
-            </div>
-          }
-          title={"Cancel warning"}
-          isOpen={cancelModal}
-          onClose={() => setCancelModal(false)}
-          btnLeftFunc={() => setCancelModal(false)}
-          btnRightFunc={() => resetUploadModal()}
-        /> */}
-      </div>
+  
+  
+      </div> */}
+      {
+        userData && userData?.identityVerification == null ? <div className="text-center pt-8" >Please upload verification document first </div> :    <CustomerProfileDocs data={data} />
+      }
+   
+  
     </div>
   );
 };
