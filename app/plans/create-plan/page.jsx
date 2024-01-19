@@ -50,10 +50,11 @@ const CreatePlansAndPackages = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
+    console.log({value});
     const ariaLabel = e.target.getAttribute("aria-label");
 
     if (ariaLabel === "Number input") {
-      const num = Number(value.replace(/\D/g, ""));
+      //const num = Number(value.replace(/\D/g, ""));
       setCreatePlan((prev) => ({
         ...prev,
         [name]: num,
@@ -211,8 +212,8 @@ const CreatePlansAndPackages = () => {
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
-            onKeyPress={preventMinus}
-            onWheel={() => document.activeElement.blur()}
+          //  onKeyPress={preventMinus}
+           // onWheel={() => document.activeElement.blur()}
             endIcon={<MdPercent size={20} className="text-swGray" />}
             name={"interestRate"}
             value={createPlan.interestRate}
