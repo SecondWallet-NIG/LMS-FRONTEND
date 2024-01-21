@@ -13,6 +13,7 @@ import { genderOptions, countryOptions } from "../helpers/utils";
 import { bankArr, statesAndLgas } from "@/constant";
 import InputField from "../shared/input/InputField";
 import { updateCustomer } from "@/redux/slices/customerSlice";
+import { IoIosClose } from "react-icons/io";
 const PersonalInformation = ({ userData, loading }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -24,6 +25,7 @@ const PersonalInformation = ({ userData, loading }) => {
   const [lga, setLga] = useState([]);
   const [profileImg, setProfileImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [fileDeleteBtn, setFileDeleteBtn] = useState(false);
 
   const [formData, setFormData] = useState({
     profilePicture: null,
@@ -46,6 +48,8 @@ const PersonalInformation = ({ userData, loading }) => {
     createdBy: "",
   });
 
+  // console.log({ useData: userData?.profileInfo });
+  console.log({ formData });
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -156,7 +160,9 @@ const PersonalInformation = ({ userData, loading }) => {
     e.preventDefault();
 
     let payload = new FormData();
-    payload.append("profilePicture", formData.profilePicture);
+
+    formData.profilePicture !== null &&
+      payload.append("profilePicture", formData.profilePicture);
     payload.append("firstName", formData.firstName);
     payload.append("lastName", formData.lastName);
     payload.append("middleName", formData.middleName);
@@ -194,30 +200,30 @@ const PersonalInformation = ({ userData, loading }) => {
     });
   };
 
-  // useEffect(() => {
-  //   if (
-  //     formData?.profilePicture !== null &&
-  //     formData?.profilePicture &&
-  //     (formData?.profilePicture instanceof Blob ||
-  //       formData?.profilePicture instanceof File)
-  //   ) {
-  //     try {
-  //       setProfileImg(URL.createObjectURL(formData.profilePicture));
-  //     } catch (error) {
-  //       console.error("Error creating object URL:", error);
-  //     }
-  //   } else {
-  //     // Handle cases where the selected file is not a Blob or File
-  //     console.error("Invalid file type selected.");
-  //   }
-  // }, [formData?.profilePicture]);
+  useEffect(() => {
+    if (
+      formData?.profilePicture !== null &&
+      formData?.profilePicture &&
+      (formData?.profilePicture instanceof Blob ||
+        formData?.profilePicture instanceof File)
+    ) {
+      try {
+        setProfileImg(URL.createObjectURL(formData.profilePicture));
+      } catch (error) {
+        console.error("Error creating object URL:", error);
+      }
+    } else {
+      // Handle cases where the selected file is not a Blob or File
+      console.error("Invalid file type selected.");
+    }
+  }, [formData?.profilePicture]);
 
   useEffect(() => {
     handleStateChange(userData?.profileInfo?.state);
 
     // handleSelectChange(userData?.profileInfo?.genderlga, "lga");
     setFormData({
-      profilePicture: null,
+      profilePicture: userData?.profileInfo?.profilePicture,
       firstName: userData?.profileInfo?.firstName,
       lastName: userData?.profileInfo?.lastName,
       middleName: userData?.profileInfo?.middleName,
@@ -268,15 +274,41 @@ const PersonalInformation = ({ userData, loading }) => {
         </p>
         <div>
           <p className="font-semibold my-5">Profile picture</p>
-          {/* <div className="flex gap-5 items-center">
-            {profileImg !== null ? (
+          <div className="flex gap-5 items-center">
+            {userData?.profileInfo?.profilePicture && profileImg === null ? (
               <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
                 <Image
-                  src={profileImg !== null && profileImg}
+                  src={userData?.profileInfo?.profilePicture}
                   alt="profile"
                   fill
                   sizes="100%"
                 />
+              </div>
+            ) : profileImg !== null ? (
+              <div
+                className="relative"
+                onMouseEnter={() => setFileDeleteBtn(true)}
+                onMouseLeave={() => setFileDeleteBtn(false)}
+              >
+                <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                  <Image
+                    src={profileImg !== null && profileImg}
+                    alt="profile"
+                    fill
+                    sizes="100%"
+                  />
+                </div>
+                {fileDeleteBtn && (
+                  <div className="p-[0.2rem] bg-red-500 text-white rounded-full absolute top-0 right-1">
+                    <IoIosClose
+                      size={17}
+                      onClick={() => {
+                        setProfileImg(null);
+                        formData.profilePicture = null;
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             ) : (
               <div className="border-2 p-4 rounded-full">
@@ -296,7 +328,7 @@ const PersonalInformation = ({ userData, loading }) => {
               />
               {profileImg !== null ? "Change file" : "Select a file"}
             </label>
-          </div> */}
+          </div>
         </div>
         <p className="font-semibold my-3">Borrower information</p>
 
