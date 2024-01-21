@@ -1042,7 +1042,7 @@ const CreateLoan = () => {
                     <div className="text-swBlue">
                       ₦
                       {interest
-                        ?.toString()
+                        ?.toFixed(2)
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
@@ -1269,7 +1269,7 @@ const CreateLoan = () => {
                     <div className="text-swBlue">
                       ₦
                       {interestValue?.data?.totalInterestPayments
-                        ?.toString()
+                        ?.toFixed(2)
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
                     </div>
                   </div>
