@@ -51,20 +51,12 @@ const CreatePlansAndPackages = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
     console.log({value});
-    const ariaLabel = e.target.getAttribute("aria-label");
-
-    if (ariaLabel === "Number input") {
-      //const num = Number(value.replace(/\D/g, ""));
-      setCreatePlan((prev) => ({
-        ...prev,
-        [name]: num,
-      }));
-    } else {
+  //  const ariaLabel = e.target.getAttribute("aria-label");
       setCreatePlan((prev) => ({
         ...prev,
         [name]: value,
       }));
-    }
+    
   };
 
   const resetForm = () => {
