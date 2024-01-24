@@ -200,6 +200,10 @@ function ReusableDataTable({
         apiUrl += `&status=${"Pending"}`;
       }
 
+      if (role === "Overdue") {
+        apiUrl += `&status=${"Overdue"}`;
+      }
+
       if (role === "In Progress") {
         apiUrl += `&status=${"In Progress"}`;
       }
@@ -234,11 +238,10 @@ function ReusableDataTable({
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
               data?.data?.data?.repayments ||
-                data?.data.results ||
+                data?.data?.results ||
                 data?.data?.data ||
-                data.results
+                data?.results
             );
-
             setData(transformedData);
             setPaginationLinks(data?.data.links);
             console.log(data?.data.links);
@@ -296,6 +299,9 @@ function ReusableDataTable({
       if (role === "Pending") {
         apiUrl += `&status=${"Pending"}`;
       }
+      if (role === "Overdue") {
+        apiUrl += `&status=${"Overdue"}`;
+      }
 
       if (role === "In Progress") {
         apiUrl += `&status=${"In Progress"}`;
@@ -340,20 +346,20 @@ function ReusableDataTable({
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
               data?.data?.data?.repayments ||
-                data?.data.results ||
+                data?.data?.results ||
                 data?.data?.data ||
-                data.results ||
+                data?.results ||
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results
             );
-            console.log({ transformedData });
+            console.log("table data", data );
             setData(transformedData);
             setPaginationLinks(
-              data?.data.links ||
+              data?.data?.links ||
                 data?.data?.data?.links ||
                 data?.data?.data?.data?.links
             );
-            console.log(data?.data?.links.totalDocuments);
+            // console.log(data?.data?.links?.totalDocuments);
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -396,7 +402,7 @@ function ReusableDataTable({
     setStatus(" ");
     fetchData(currentPage, perPage, sortField, sortDirection);
   };
-
+  
   const clearDateFilter = () => {
     setDateRange([
       {
@@ -480,6 +486,9 @@ function ReusableDataTable({
 
     return pageNumbers;
   };
+
+
+  console.log("data.length", data.length);
 
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
