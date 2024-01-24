@@ -60,7 +60,7 @@ const DashboardPage = () => {
   const dataValuesDisbursement = Array(12).fill(0);
 
   // Extracting data from loanGraphData
-  graphData.data1?.data?.loanGraphData.forEach((entry) => {
+  graphData.data1?.data?.loanGraphData?.forEach((entry) => {
     const index = entry.month - 1; // Adjusting month to be 0-based index
     dataValues[index] = entry.totalLoanAmount;
   });
