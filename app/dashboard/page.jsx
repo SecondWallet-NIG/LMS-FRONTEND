@@ -80,7 +80,7 @@ const DashboardPage = () => {
   });
   graphData.data1?.data?.paymentHistory.forEach((entry) => {
     const index = entry.month - 1; // Adjusting month to be 0-based index
-  dataValuesPaymentRecovered[index] = entry.totalAmountLogged;
+    dataValuesPaymentRecovered[index] = entry.totalAmountLogged;
   });
 
   // Creating the dataFees object
@@ -92,7 +92,7 @@ const DashboardPage = () => {
         label: "Loans",
         data: dataValues,
         backgroundColor: "#4aba5b",
-        barThickness : 10,
+        barThickness: 10,
         borderRadius: 8,
       },
     ],
@@ -105,25 +105,25 @@ const DashboardPage = () => {
         label: "Commitment Fees",
         data: dataValuesFees,
         backgroundColor: "#ba5b4a",
-        barThickness : 10, // Adjust the width of each bar
+        barThickness: 10, // Adjust the width of each bar
         borderRadius: 8,
-        stack: 'Stack 0',
+        stack: "Stack 0",
       },
       {
         label: "Management Fees",
         data: dataValuesFees,
         backgroundColor: "#4aba5b",
-        barThickness : 10, 
+        barThickness: 10,
         borderRadius: 8,
-        stack: 'Stack 1',
+        stack: "Stack 1",
       },
     ],
   };
-  
+
   const _options = {
     responsive: true,
     interaction: {
-      mode: 'index',
+      mode: "index",
       intersect: false,
     },
     maintainAspectRatio: false, // Set to false to allow custom height
@@ -141,9 +141,6 @@ const DashboardPage = () => {
     },
   };
 
-
-  
-
   const dataRepayments = {
     labels,
     datasets: [
@@ -151,14 +148,14 @@ const DashboardPage = () => {
         label: "Expected Repayments",
         data: dataValuesRepayment,
         backgroundColor: "#3562a1",
-        barThickness : 10,
+        barThickness: 10,
         borderRadius: 8,
       },
       {
         label: "Actual Repayments",
         data: dataValuesPaymentRecovered,
         backgroundColor: "#ba5b4a",
-        barThickness : 10,
+        barThickness: 10,
         borderRadius: 8,
       },
     ],
@@ -171,7 +168,7 @@ const DashboardPage = () => {
         label: "Disbursement",
         data: dataValuesDisbursement,
         backgroundColor: "#4aba5b",
-        barThickness : 10,
+        barThickness: 10,
         borderRadius: 8,
       },
     ],
@@ -196,7 +193,7 @@ const DashboardPage = () => {
               cardLink={"/borrowers"}
               firstStat={[
                 "Total",
-                 cardData?.data?.data.borrowersData?.totalBorrowersCount,
+                cardData?.data?.data.borrowersData?.totalBorrowersCount,
               ]}
               secondStat={[
                 "This month",
@@ -220,16 +217,19 @@ const DashboardPage = () => {
               cardLink={"/disbursement"}
               firstStat={[
                 "Total",
-                "₦ " +   cardData?.data?.data.disbursementData?.totalDisbursementsPaid?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.disbursementData?.totalDisbursementsPaid?.toLocaleString(),
               ]}
               secondStat={[
                 "This month",
-                "₦ " + cardData?.data?.data.disbursementData?.totalDisbursementsPaid?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.disbursementData?.totalDisbursementsPaid?.toLocaleString(),
                 cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
-                "₦ " +  cardData?.data?.data.disbursementData?.totalDisbursementsPaidLast24?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.disbursementData?.totalDisbursementsPaidLast24?.toLocaleString(),
                 cardData?.data?.data.disbursementData?.percentageTotalDisbursementsPaidLast24?.toLocaleString(),
               ]}
             />
@@ -241,16 +241,19 @@ const DashboardPage = () => {
               cardLink={"/repayment"}
               firstStat={[
                 "Total",
-                "₦ " +   cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
               ]}
               secondStat={[
                 "This month",
-                "₦ " +  cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
                 cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
                 "Today",
-                "₦ " + cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24?.toLocaleString(),
                 cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24?.toLocaleString(),
               ]}
             />
@@ -264,7 +267,8 @@ const DashboardPage = () => {
               ]}
               secondStat={[
                 "Total",
-                "₦ " +   cardData?.data?.data.allLoanData?.totalOpenLoansAmount?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.allLoanData?.totalOpenLoansAmount?.toLocaleString(),
               ]}
             />
             <DashboardCard
@@ -277,7 +281,8 @@ const DashboardPage = () => {
               ]}
               secondStat={[
                 "Total",
-                "₦ " +  cardData?.data?.data.openLoanData?.totalOpenLoansAmount?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.openLoanData?.totalOpenLoansAmount?.toLocaleString(),
               ]}
             />
             <DashboardCard
@@ -290,7 +295,8 @@ const DashboardPage = () => {
               ]}
               secondStat={[
                 "Total",
-                "₦ " +   cardData?.data?.data.activeLoanData?.totalOpenLoansAmount?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.activeLoanData?.totalOpenLoansAmount?.toLocaleString(),
               ]}
             />
 
@@ -303,14 +309,15 @@ const DashboardPage = () => {
               ]}
               secondStat={[
                 "This month",
-                "₦ " +  cardData?.data?.data?.declinedLoanData
-                  ?.totalDeclinedLoanApplicationsCountThisMonth,
+                "₦ " +
+                  cardData?.data?.data?.declinedLoanData
+                    ?.totalDeclinedLoanApplicationsCountThisMonth,
               ]}
               thirdStat={["null"]}
             />
             <DashboardCard
               cardLinkLabel={"View"}
-              cardLink={'/unpaid-repayment'}
+              cardLink={"/unpaid-repayment"}
               cardName={"Pending repayments"}
               firstStat={[
                 "Count",
@@ -319,7 +326,8 @@ const DashboardPage = () => {
               ]}
               secondStat={[
                 "Total",
-                "₦ " +  cardData?.data?.data.unpaidRepaymentData?.totalUnpaidRepaymentsAmount?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.unpaidRepaymentData?.totalUnpaidRepaymentsAmount?.toLocaleString(),
               ]}
               thirdStat={["null"]}
             />
@@ -334,7 +342,8 @@ const DashboardPage = () => {
               ]}
               secondStat={[
                 "Total",
-                "₦ " + cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansAmount?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansAmount?.toLocaleString(),
               ]}
               thirdStat={["null"]}
             />
@@ -344,11 +353,13 @@ const DashboardPage = () => {
               cardLinkLabel={"View"}
               firstStat={[
                 "Total",
-                "₦ " +  cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
               ]}
               secondStat={[
                 "This month",
-                "₦ " + cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
               ]}
               // thirdStat={[
@@ -363,11 +374,13 @@ const DashboardPage = () => {
               cardLink={""}
               firstStat={[
                 "Total",
-                "₦ " + cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
               ]}
               secondStat={[
                 "This month",
-                "₦ " + cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
               ]}
@@ -384,7 +397,8 @@ const DashboardPage = () => {
               cardLink={""}
               firstStat={[
                 "Expected Interest",
-                "₦ " + cardData?.data?.data.interestData?.totalExpectedInterest.toLocaleString(),
+                "₦ " +
+                  cardData?.data?.data.interestData?.totalExpectedInterest.toLocaleString(),
               ]}
               // secondStat={[
               //   "Actual Interest",
@@ -411,19 +425,19 @@ const DashboardPage = () => {
               </div>
             </div>
           </section>
-          <div className="flex">
-            <div className="w-1/2">
+          <div className="flex flex-col sm:flex-row">
+            <div className="w-full sm:w-1/2">
               <BarChart options={options} data={dataLoans} />
             </div>
-            <div className="w-1/2">
+            <div className="w-full sm:w-1/2">
               <BarChart options={_options} data={dataFees} />
             </div>
           </div>
-          <div className="flex">
-            <div className="w-1/2">
+          <div className="flex flex-col sm:flex-row">
+            <div className="w-full sm:w-1/2">
               <BarChart options={options} data={dataDisbursements} />
             </div>
-            <div className="w-1/2">
+            <div className="w-full sm:w-1/2">
               <BarChart options={options} data={dataRepayments} />
             </div>
           </div>
