@@ -15,6 +15,7 @@ const Repayment = () => {
   const header = [
     { id: "loanId", label: "Loan ID" },
     { id: "dueDate", label: "Due Date" },
+    { id: "borrower", label: "Borrower's Name" },
     { id: "repaymentNumber", label: "Loan Repayment No" },
     { id: "amountDue", label: "Due Amount" },
     { id: "amountPaid", label: "Amount Paid" },
@@ -24,10 +25,15 @@ const Repayment = () => {
 
   const customDataTransformer = (apiData) => {
     return apiData?.map((item) => ({
-      id: item._id,
+      id: item?.loanApplication?._id,
       loanId: (
         <div className="text-md font-[500] text-gray-700">
           SWL - {item?.loanApplication?.loanId}
+        </div>
+      ),
+      borrower: (
+        <div className="text-md font-[500] text-gray-700">
+          {item?.loanApplication?.customerId?.firstName}  {item?.loanApplication?.customerId?.lastName}
         </div>
       ),
       repaymentNumber: (
