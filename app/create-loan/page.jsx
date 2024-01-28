@@ -350,7 +350,7 @@ const CreateLoan = () => {
     payload.append("guarantorForm", formData.guarantorForm);
     payload.append("loanAffidavit", formData.loanAffidavit);
     payload.append("offerLetter", formData.offerLetter);
-    payload.append("customerId", formData.customerId);
+    payload.append("customerId", selectedCustomer?._id);
     payload.append("createdBy", userId?._id);
     payload.append("tag", userId?.role.tag);
 

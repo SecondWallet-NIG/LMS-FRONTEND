@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import CenterModal from "../modals/CenterModal";
-import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
+import LoanDocsUpload from "../modals/loans/LoanDocsUpload";
 import PreviewLoanDocs from "./PreviewLoanDocs";
 import { handleFileExtention } from "../helpers/utils";
 import { IoMdClose } from "react-icons/io";
@@ -235,7 +235,7 @@ const CustomerLoanDoc = (data) => {
           Collateral Form
         </div>
         <div>
-          {data?.data?.loanApplication?.collaterals.length != 0 ? (
+          {data?.data?.loanApplication?.collaterals?.length != 0 ? (
             <div>
               <button
                 onClick={() => {
@@ -302,13 +302,13 @@ const CustomerLoanDoc = (data) => {
           setUploadModalOpen(!uploadModalOpen);
         }}
       >
-        <UploadLoanDocs
+        <LoanDocsUpload
           isOpen={uploadModalOpen}
           onClose={() => {
             setUploadModalOpen(!uploadModalOpen);
           }}
           fieldType={fieldType}
-          customerId={data?.data?.profileInfo?._id}
+          customerId={data?.data?.loanApplication?.applicationForm?._id}
         />
       </CenterModal>
     </main>

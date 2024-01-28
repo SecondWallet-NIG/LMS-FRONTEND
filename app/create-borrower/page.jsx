@@ -423,8 +423,8 @@ const CreateCustomer = () => {
                   />
                 </div>
               </div>
-              <div className="flex space-x-4">
-                <div className="w-1/2">
+              <div className="flex flex-col md:flex-row gap-5">
+                <div className="w-full md:w-1/2">
                   <InputField
                     name="dateOfBirth"
                     placeholder="Date of Birth"
@@ -436,7 +436,7 @@ const CreateCustomer = () => {
                     onChange={handleInputChange}
                   />
                 </div>
-                <div className="w-1/2">
+                <div className="w-full md:w-1/2">
                   <SelectField
                     name="gender"
                     optionValue={genderOptions}
@@ -542,8 +542,8 @@ const CreateCustomer = () => {
                 onChange={handleInputChange}
               />
 
-              <div className="flex space-x-4">
-                <div className="w-1/2">
+              <div className="flex flex-col md:flex-row gap-5">
+                <div className="w-full md:w-1/2">
                   <InputField
                     name="phoneNumber"
                     placeholder="Phone Number"
@@ -556,7 +556,7 @@ const CreateCustomer = () => {
                     onChange={handleInputChange}
                   />
                 </div>
-                <div className="w-1/2">
+                <div className="w-full md:w-1/2">
                   <InputField
                     name="email"
                     placeholder="Email Address"
@@ -572,8 +572,8 @@ const CreateCustomer = () => {
             </div>
             <div className="flex flex-col gap-5 mt-5">
               <p className="font-semibold">Bank Account Information</p>
-              <div className="flex space-x-4">
-                <div className="w-1/2">
+              <div className="flex flex-col md:flex-row gap-5">
+                <div className="w-full md:w-1/2">
                   <SelectField
                     name="bankName"
                     label="Bank name"
@@ -586,7 +586,7 @@ const CreateCustomer = () => {
                     }
                   />
                 </div>
-                <div className="w-1/2">
+                <div className="w-full md:w-1/2">
                   <InputField
                     maxLength={10}
                     name="accountNumber"

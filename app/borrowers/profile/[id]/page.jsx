@@ -179,8 +179,8 @@ const CustomerProfile = () => {
               <p className="text-sm mb-2">
                 Customer onboarded by: <br />
                 <span className="font-semibold text-swGreen">
-      
-                  {data?.profileInfo?.createdBy?.email} on {formatDate(data?.profileInfo?.createdAt.slice(0, 10)) }
+                  {data?.profileInfo?.createdBy?.email} on{" "}
+                  {formatDate(data?.profileInfo?.createdAt.slice(0, 10))}
                 </span>
               </p>
               <div className="flex gap-2 items-center">
@@ -238,8 +238,8 @@ const CustomerProfile = () => {
             </div>
           </div>
         </div>
-        <div className="flex">
-          <div className="w-[30%] h-full p-2 md:p-4">
+        <div className="flex flex-col md:flex-row">
+          <div className="w-full md:w-[30%] h-full p-2 md:p-4">
             <div className="flex gap-2 text-xs lg:text-sm  items-center flex-wrap">
               <button
                 onClick={() => handleInfoToggle("bio-data")}
@@ -278,7 +278,6 @@ const CustomerProfile = () => {
                     onMouseLeave={() => handleInfoHoverIn("close")}
                   >
                     <p>Bio Data</p>
-               
                   </div>
 
                   <div className=" text-xs  text-swGray">
@@ -312,8 +311,6 @@ const CustomerProfile = () => {
                         {data?.profileInfo?.email}
                       </p>
                     </div>
-
-            
                   </div>
                 </div>
                 <div className="p-2 border-t border-text-300">
@@ -323,7 +320,6 @@ const CustomerProfile = () => {
                     onMouseLeave={() => handleInfoHoverIn("close")}
                   >
                     <p>Address</p>
-                 
                   </div>
                   <div className="mt-2 text-xs text-swGray">
                     <div className="flex gap-1 justify-between">
@@ -360,7 +356,6 @@ const CustomerProfile = () => {
                     onMouseLeave={() => handleInfoHoverIn("close")}
                   >
                     <p>Bank Details</p>
-             
                   </div>
                   <div className="text-xs text-swGray">
                     <div className="flex gap-1 justify-between">
@@ -490,14 +485,20 @@ const CustomerProfile = () => {
                             <p className="pt-3">Amount Earned: </p>
                             <p className="pt-3 font-semibold text-swBlue">
                               {" "}
-                              ₦ {Number(data?.employmentInformation?.monthlyIncome).toLocaleString()}
+                              ₦{" "}
+                              {Number(
+                                data?.employmentInformation?.monthlyIncome
+                              ).toLocaleString()}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
                             <p className="pt-3">Annual Income: </p>
                             <p className="pt-3 font-semibold text-swBlue">
                               {" "}
-                              ₦ {Number(data?.employmentInformation?.monthlyIncome * 12 ).toLocaleString() }
+                              ₦{" "}
+                              {Number(
+                                data?.employmentInformation?.monthlyIncome * 12
+                              ).toLocaleString()}
                             </p>
                           </div>
                           <div className="flex gap-1 justify-between">
@@ -540,7 +541,7 @@ const CustomerProfile = () => {
               </div>
             )}
           </div>
-          <div className="w-[70%] border-l h-screen border-gray-300 relative">
+          <div className="w-full md:w-[70%] md:border-l h-screen border-gray-300 relative">
             <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap bg-white">
               <div className="flex gap-2 text-xs lg:text-sm">
                 {/* <button
