@@ -235,7 +235,7 @@ const CustomerLoanDoc = (data) => {
           Collateral Form
         </div>
         <div>
-          {data?.data?.loanApplication?.collaterals.length != 0 ? (
+          {data?.data?.loanApplication?.collaterals?.length != 0 ? (
             <div>
               <button
                 onClick={() => {
