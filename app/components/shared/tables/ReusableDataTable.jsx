@@ -352,7 +352,7 @@ function ReusableDataTable({
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results
             );
-            console.log("table data", data );
+            console.log("table data", data);
             setData(transformedData);
             setPaginationLinks(
               data?.data?.links ||
@@ -402,7 +402,7 @@ function ReusableDataTable({
     setStatus(" ");
     fetchData(currentPage, perPage, sortField, sortDirection);
   };
-  
+
   const clearDateFilter = () => {
     setDateRange([
       {
@@ -486,7 +486,6 @@ function ReusableDataTable({
 
     return pageNumbers;
   };
-
 
   console.log("data.length", data.length);
 
@@ -575,29 +574,31 @@ function ReusableDataTable({
               ) : null}
             </div>
 
-            <div className="mb-4 flex items-center justify-between w-full md:w-fit">
-              <div className="flex justify-center items-center gap-2 ml-auto">
-                <InputField
-                  startIcon={<FiSearch size={20} />}
-                  endIcon={
-                    <IoIosClose
-                      size={20}
-                      className="cursor-pointer"
-                      onClick={() => {
-                        handleLogSearch("close");
-                      }}
-                    />
-                  }
-                  placeholder={"Search..."}
-                  css={`
-                    ${logSearch
-                      ? "translate-x-[3rem] opacity-1 z-10"
-                      : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
-                  `}
-                  borderColor="bg-gray-200 "
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
+            <div className="mb-4 flex flex-col gap-2 sm:gap-0 sm:flex-row items-center justify-between w-full md:w-fit">
+              <div className="flex justify-center items-center gap-2 w-full">
+                
+                  <InputField
+                    startIcon={<FiSearch size={20} />}
+                    endIcon={
+                      <IoIosClose
+                        size={20}
+                        className="cursor-pointer"
+                        onClick={() => {
+                          handleLogSearch("close");
+                        }}
+                      />
+                    }
+                    placeholder={"Search..."}
+                    css={`
+                      ${logSearch
+                        ? "translate-x-[3rem] opacity-1 z-10"
+                        : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
+                    `}
+                    borderColor="bg-gray-200 "
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                
 
                 <div
                   className={`${
@@ -616,28 +617,27 @@ function ReusableDataTable({
                   <BsThreeDotsVertical size={20} />
                 </div> */}
               </div>
-              {btnText ? (
-                <div>
-                  <Button
-                    className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
-                    onClick={btnTextClick}
-                  >
-                    {btnText}
-                  </Button>
-                </div>
-              ) : null}
-              <Button
-                disabled={loading ? true : false}
-                className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
-                onClick={handleDownload}
-              >
-                <div className="flex gap-1 items-center p-1">
-                  <p className="hidden lg:block">
-                    {" "}
-                    {loading ? "Exporting" : "Export"}
-                  </p>
-                </div>
-              </Button>
+              <div className="flex">
+                {btnText ? (
+                  <div>
+                    <Button
+                      className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                      onClick={btnTextClick}
+                    >
+                      {btnText}
+                    </Button>
+                  </div>
+                ) : null}
+                <Button
+                  disabled={loading ? true : false}
+                  className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                  onClick={handleDownload}
+                >
+                  <div className="flex gap-1 items-center p-1">
+                    <p className=""> {loading ? "Exporting" : "Export"}</p>
+                  </div>
+                </Button>
+              </div>
             </div>
           </div>
         )}

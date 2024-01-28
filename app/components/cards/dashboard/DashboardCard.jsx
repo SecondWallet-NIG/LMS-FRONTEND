@@ -7,7 +7,7 @@ const DashboardCard = ({
   cardLink,
   cardLinkLabel,
   firstStat,
-  secondStat,
+  secondStat, 
   thirdStat,
 }) => {
   console.log("thirdStat", thirdStat?.length);
@@ -24,12 +24,12 @@ const DashboardCard = ({
               {cardIcon}
             </div>
           )}
-          <p className="font-semibold  text-[0.7rem] sm:text-sm">{cardName}</p>
+          <p className="font-semibold  text-[0.5rem] xs:text-[0.6rem] sm:text-xs">{cardName}</p>
         </div>
         {cardLinkLabel && (
           <Link
             href={`${cardLink}`}
-            className={` text-[0.7rem] sm:text-sm font-semibold  border py-2 px-4 rounded-lg whitespace-nowrap
+            className={` text-[0.5rem] xs:text-[0.6rem] sm:text-xs font-semibold  border py-2 px-4 rounded-lg whitespace-nowrap
             }`}
           >
             {cardLinkLabel}
@@ -38,36 +38,36 @@ const DashboardCard = ({
       </div>
       <div className="mt-4 flex justify-center text-center text-base">
         {firstStat && (
-          <div className="flex flex-col pr-5 lg:pr-10">
-            <p className="text-[0.7rem] sm:text-sm">{firstStat[0]}</p>
-            <p className="mt-1 text-[0.7rem] sm:text-sm">{firstStat[1]}</p>
+          <div className="flex flex-col pr-3 xs:pr-5">
+            <p className="text-[0.5rem] xs:text-[0.6rem] sm:text-xs">{firstStat[0]}</p>
+            <p className="mt-1 text-[0.5rem] xs:text-[0.6rem] sm:text-xs">{firstStat[1]}</p>
           </div>
         )}
         {secondStat && (
           <div
-            className={`flex flex-col border-l pl-5 lg:pl-10 ${
-              thirdStat && "pr-5 lg:pr-10"
+            className={`flex flex-col border-l pl-3 xs:pl-5  ${
+              thirdStat && "pr-3 xs:pr-5 "
             }`}
           >
-            <p className="text-[0.7rem] sm:text-sm">{secondStat[0]}</p>
-            <p className=" mt-1 text-[0.7rem] sm:text-sm">{secondStat[1]}</p>
+            <p className="text-[0.5rem] xs:text-[0.6rem] sm:text-xs">{secondStat[0]}</p>
+            <p className=" mt-1 text-[0.5rem] xs:text-[0.6rem] sm:text-xs">{secondStat[1]}</p>
             {secondStat[2] && (
               <p
-                className={` mt-1 text-[0.7rem] sm:text-sm ${"bg-[#E8F7F0]"} p-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
+                className={` mt-1 text-[0.5rem] xs:text-[0.6rem] sm:text-xs ${"bg-[#E8F7F0]"} p-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
               >
-                {secondStat[2]} %
+                {secondStat[2]}%
               </p>
             )}
           </div>
         )}
         {thirdStat && thirdStat.length > 1 ? (
-          <div className="flex flex-col border-l pl-5 lg:pl-5">
-            <p className="text-[0.7rem] sm:text-sm">{thirdStat[0]}</p>
-            <p className="font-semibold mt-1 text-[0.7rem] sm:text-sm">{thirdStat[1]}</p>
+          <div className="flex flex-col border-l pl-3 xs:pl-5 ">
+            <p className="text-[0.5rem] xs:text-[0.6rem] sm:text-xs">{thirdStat[0]}</p>
+            <p className="font-semibold mt-1 text-[0.5rem] xs:text-[0.6rem] sm:text-xs">{thirdStat[1]}</p>
             <p
-              className={`mt-1 text-[0.7rem] sm:text-sm ${"bg-[#E8F7F0]"} py-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
+              className={`mt-1 text-[0.5rem] xs:text-[0.6rem] sm:text-xs ${"bg-[#E8F7F0]"} py-1 px-2 rounded-full text-swGreen w-fit mx-auto`}
             >
-              {thirdStat[2]} %
+              {thirdStat[2]}%
             </p>
           </div>
         ) : null}

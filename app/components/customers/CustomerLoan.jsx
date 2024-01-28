@@ -65,7 +65,7 @@ const CustomerLoan = () => {
         btnText={
           <div className="flex gap-1 items-center p-1">
             <AiOutlinePlus size={15} />
-            <p className="hidden lg:block">create borrower</p>
+            <p className="">create borrower</p>
           </div>
         }
         btnTextClick={() => {

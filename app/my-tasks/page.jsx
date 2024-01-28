@@ -17,7 +17,6 @@ const MyTasks = () => {
   if (typeof window !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
   }
- 
 
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
@@ -29,23 +28,25 @@ const MyTasks = () => {
 
   return (
     <DashboardLayout>
-      <main className="p-8">
-        <div className="flex gap-5">
-          <MyTasksCard
-            header={"all tasks"}
-            data={data?.totalCount}
-            onClick={() => setActivityButton("allTasks")}
-          />
-          <MyTasksCard
-            header={"completed tasks"}
-            data={data?.doneCount}
-            onClick={() => setActivityButton("completedTasks")}
-          />
-          <MyTasksCard
-            header={"pending tasks"}
-            data={data?.pendingCount}
-            onClick={() => setActivityButton("pendingTasks")}
-          />
+      <main>
+        <div className="p-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <MyTasksCard
+              header={"all tasks"}
+              data={data?.totalCount}
+              onClick={() => setActivityButton("allTasks")}
+            />
+            <MyTasksCard
+              header={"completed tasks"}
+              data={data?.doneCount}
+              onClick={() => setActivityButton("completedTasks")}
+            />
+            <MyTasksCard
+              header={"pending tasks"}
+              data={data?.pendingCount}
+              onClick={() => setActivityButton("pendingTasks")}
+            />
+          </div>
         </div>
         {/* <div className="flex gap-2 text-xs lg:text-sm mt-8">
           <button
@@ -76,7 +77,7 @@ const MyTasks = () => {
             Completed Tasks
           </button>
         </div> */}
-        <div className="p-2 mt-5">
+        <div className="py-2 mt-5">
           {activityButton === "allTasks" && <AllTasks />}
           {activityButton === "pendingTasks" && <PendingTasks />}
           {activityButton === "completedTasks" && <CompletedTasks />}
