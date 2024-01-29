@@ -583,7 +583,11 @@ const ViewLoan = () => {
                 <div>
                   <Image
                     src={
-                      "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
+                      data?.data?.loanApplication?.customerId?.customerId
+                        ?.profilePicture
+                        ? data?.data?.loanApplication?.customerId?.customerId
+                            ?.profilePicture
+                        : "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                     }
                     alt="user image"
                     width={60}
