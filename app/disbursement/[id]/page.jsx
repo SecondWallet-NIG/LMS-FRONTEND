@@ -1,11 +1,25 @@
+"use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { formatDate } from "@/helpers";
+import { getDisbursementById } from "@/redux/slices/disbursementSlice";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 
 const Disbursement = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
   const repaymentData = null;
+  const { loading, error, data } = useSelector((state) => state.disbursement);
+  console.log({ data });
+
+  useEffect(() => {
+    dispatch(getDisbursementById(id));
+  }, []);
+
   return (
     <DashboardLayout isBackNav={true} paths={["Disbursements", "Disbursement"]}>
       <ToastContainer />
