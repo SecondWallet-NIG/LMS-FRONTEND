@@ -112,9 +112,9 @@ const CustomerProfile = () => {
   return (
     <DashboardLayout isBackNav={true} paths={paths}>
       <div className="overflow-x-hidden">
-        <div className="flex gap-2 border-b border-gray-300 items-end py-4 px-8">
-          <div className="w-1/2">
-            <div className="flex ">
+        <div className="flex flex-col sm:flex-row gap-2 border-b border-gray-300 items-end py-4 px-8">
+          <div className="w-full sm:w-1/2">
+            <div className="flex items-start">
               <div className="rounded-full border-2 border-swBlue overflow-hidden h-[4.7rem] w-[4.7rem] relative">
                 <img
                   src={
@@ -174,8 +174,8 @@ const CustomerProfile = () => {
               </div>
             </div>
           </div>
-          <div className="w-1/2 text-end">
-            <div className="ml-4 flex flex-col justify-between items-end ">
+          <div className="w-full sm:w-1/2 sm:text-end">
+            <div className="sm:ml-4 flex flex-col justify-between  sm:items-end">
               <p className="text-sm mb-2">
                 Customer onboarded by: <br />
                 <span className="font-semibold text-swGreen">
@@ -183,7 +183,7 @@ const CustomerProfile = () => {
                   {formatDate(data?.profileInfo?.createdAt.slice(0, 10))}
                 </span>
               </p>
-              <div className="flex gap-2 items-center">
+              <div className="flex items-center">
                 <div className="relative">
                   {/* <div
                     className="border-2 border-transparent hover:border-swLightGray w-fit h-fit rounded-md cursor-pointer"
@@ -541,7 +541,7 @@ const CustomerProfile = () => {
               </div>
             )}
           </div>
-          <div className="w-full md:w-[70%] md:border-l h-screen border-gray-300 relative">
+          <div className="w-full mt-10 md:mt-0 md:w-[70%] md:border-l h-screen border-gray-300 relative">
             <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap bg-white">
               <div className="flex gap-2 text-xs lg:text-sm">
                 {/* <button
