@@ -9,7 +9,6 @@ import sketch from "../../../../public/images/sketch.jpg";
 import { useRouter } from "next/navigation";
 import InputField from "../input/InputField";
 import { IoIosClose } from "react-icons/io";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from "axios";
 import CenterModal from "../../modals/CenterModal";
 import { toast, ToastContainer } from "react-toastify";
@@ -78,18 +77,18 @@ function ReusableDataTable({
 
         // Adjust the time zone offset for the start date
         const startDate = new Date(dateRange[0].startDate);
-        startDate.setDate(startDate.getDate() + 1);
+        startDate.setDate(startDate.getDate() );
         startDate.setMinutes(
           startDate.getMinutes() - startDate.getTimezoneOffset()
         );
 
         // Adjust the time zone offset for the end date
         const endDate = new Date(dateRange[0].endDate);
-        endDate.setDate(endDate.getDate() + 1);
+        endDate.setDate(endDate.getDate());
         endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset());
 
         // apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
-        x += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+        x += `&startDate=${startDate.toISOString().slice(0, 10)}&endDate=${endDate.toISOString().slice(0, 10)}`;
       }
     }
 
@@ -280,20 +279,20 @@ function ReusableDataTable({
 
           // Adjust the time zone offset for the start date
           const startDate = new Date(dateRange[0].startDate);
-          startDate.setDate(startDate.getDate() + 1);
+          startDate.setDate(startDate.getDate());
           startDate.setMinutes(
             startDate.getMinutes() - startDate.getTimezoneOffset()
           );
 
           // Adjust the time zone offset for the end date
           const endDate = new Date(dateRange[0].endDate);
-          endDate.setDate(endDate.getDate() + 1);
+          endDate.setDate(endDate.getDate());
           endDate.setMinutes(
             endDate.getMinutes() - endDate.getTimezoneOffset()
           );
 
           // apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
-          apiUrl += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+          apiUrl += `&startDate=${startDate.toISOString().slice(0, 10)}&endDate=${endDate.toISOString().slice(0, 10) + 'T23:59:59'}`;
         }
       }
       if (role === "Pending") {
@@ -751,6 +750,8 @@ function ReusableDataTable({
           </div>
           <div className="w-full items-center">
             <DateRange
+              startDatePlaceholder="From"
+              endDatePlaceholder="To"
               editableDateInputs={true}
               onChange={(item) => {
                 const adjustedItem = {
