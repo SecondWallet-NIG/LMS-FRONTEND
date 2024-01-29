@@ -84,7 +84,7 @@ const DisbursedLoans = () => {
       {userId && (
         <ReusableDataTable
           dataTransformer={customDataTransformer}
-          onClickRow="/loan-applications/view-loan"
+          onClickRow="/disbursement/"
           headers={headers}
           initialData={[]}
           apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/disbursement`}

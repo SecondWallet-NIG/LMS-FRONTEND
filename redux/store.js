@@ -15,6 +15,7 @@ import approvalAssigneeReducer from "./slices/approvalAssigneeSlice";
 import loanApplicationLogReducer from "./slices/loanApplicationLogSlice";
 import repaymentHistoryReducer from "./slices/repaymentHistorySlice";
 import userTaskReducer from "./slices/userTaskSlice";
+import disbursementReducer from "./slices/disbursementSlice";
 export const store = configureStore({
   reducer: {
     post: postReducer,
@@ -30,8 +31,9 @@ export const store = configureStore({
     dashboardData: dashboardReducer,
     approvalAssignee: approvalAssigneeReducer,
     UserTasks: userTaskReducer,
-    loanApplicationLogs : loanApplicationLogReducer,
-    repaymentHistory: repaymentHistoryReducer
+    loanApplicationLogs: loanApplicationLogReducer,
+    repaymentHistory: repaymentHistoryReducer,
+    disbursement: disbursementReducer,
   },
   // Add middleware or other configuration options as needed
 });
