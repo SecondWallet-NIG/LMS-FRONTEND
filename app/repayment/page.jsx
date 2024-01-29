@@ -68,6 +68,8 @@ const Repayment = () => {
           className={`${
             item.status === "Unpaid"
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              : item.status === "Overdue"
+              ? "bg-swIndicatorLightRed text-white text-xs font-normal px-2 py-1 rounded-full"
               : "bg-[#F8A9A3] text-white"
           } px-2 py-1 rounded-full`}
         >
@@ -163,7 +165,25 @@ const Repayment = () => {
 
         {currentPage === "overdue-repayment" && (
           <div className="w-full">
-            <RepaymentOverdueTable />
+            {/* <RepaymentOverdueTable /> */}
+            <ReusableDataTable
+              filterParams={[
+                { name: "Unpaid" },
+                { name: "Fully paid" },
+                { name: "Overdue" },
+              ]}
+              headers={header}
+              dataTransformer={customDataTransformer}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
+              btnTextClick={() => {
+                router.push("/create-borrower");
+              }}
+              filters={true}
+              pagination={true}
+              onClickRow={"/loan-applications/view-loan"}
+              role={"Overdue"}
+            />
           </div>
         )}
       </main>
