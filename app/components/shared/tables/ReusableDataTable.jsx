@@ -77,7 +77,7 @@ function ReusableDataTable({
 
         // Adjust the time zone offset for the start date
         const startDate = new Date(dateRange[0].startDate);
-        startDate.setDate(startDate.getDate() );
+        startDate.setDate(startDate.getDate());
         startDate.setMinutes(
           startDate.getMinutes() - startDate.getTimezoneOffset()
         );
@@ -88,7 +88,9 @@ function ReusableDataTable({
         endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset());
 
         // apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
-        x += `&startDate=${startDate.toISOString().slice(0, 10)}&endDate=${endDate.toISOString().slice(0, 10)}`;
+        x += `&startDate=${startDate
+          .toISOString()
+          .slice(0, 10)}&endDate=${endDate.toISOString().slice(0, 10)}`;
       }
     }
 
@@ -292,7 +294,11 @@ function ReusableDataTable({
           );
 
           // apiUrl += `&startDate=${startDate}&endDate=${endDate}`;
-          apiUrl += `&startDate=${startDate.toISOString().slice(0, 10)}&endDate=${endDate.toISOString().slice(0, 10) + 'T23:59:59'}`;
+          apiUrl += `&startDate=${startDate
+            .toISOString()
+            .slice(0, 10)}&endDate=${
+            endDate.toISOString().slice(0, 10) + "T23:59:59"
+          }`;
         }
       }
       if (role === "Pending") {
@@ -573,31 +579,29 @@ function ReusableDataTable({
               ) : null}
             </div>
 
-            <div className="mb-4 flex flex-col gap-2 sm:gap-0 sm:flex-row items-center justify-between w-full md:w-fit">
+            <div className="mb-4 flex flex-col gap-2 sm:gap-0 xs:flex-row items-center justify-between w-ful">
               <div className="flex justify-center items-center gap-2 w-full">
-                
-                  <InputField
-                    startIcon={<FiSearch size={20} />}
-                    endIcon={
-                      <IoIosClose
-                        size={20}
-                        className="cursor-pointer"
-                        onClick={() => {
-                          handleLogSearch("close");
-                        }}
-                      />
-                    }
-                    placeholder={"Search..."}
-                    css={`
-                      ${logSearch
-                        ? "translate-x-[3rem] opacity-1 z-10"
-                        : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
-                    `}
-                    borderColor="bg-gray-200 "
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                  />
-                
+                <InputField
+                  startIcon={<FiSearch size={20} />}
+                  endIcon={
+                    <IoIosClose
+                      size={20}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        handleLogSearch("close");
+                      }}
+                    />
+                  }
+                  placeholder={"Search..."}
+                  css={`
+                    ${logSearch
+                      ? "translate-x-[3rem] opacity-1 z-10"
+                      : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
+                  `}
+                  borderColor="bg-gray-200 "
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
 
                 <div
                   className={`${
@@ -641,55 +645,57 @@ function ReusableDataTable({
           </div>
         )}
         {data?.length > 0 && loading == false ? (
-          <table className="table-auto w-full border-collapse border overflow-hidden">
-            <thead>
-              <tr>
-                {headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
-                      header.id === sortField ? "" : ""
-                    }`}
-                    onClick={() => handleSort(header.id)}
-                  >
-                    {header.label}
-                    {header.id === sortField && (
-                      <span className="ml-1">
-                        {sortDirection === "asc" ? "↑" : "↓"}
-                      </span>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data?.map((item) => (
-                <tr
-                  onClick={() => {
-                    if (onClickRow) {
-                      setIsLoading(true);
-                      router.push(`${onClickRow}/${item.id || item._id}`);
-                      item?.taskId
-                        ? localStorage.setItem("taskId", item?.taskId)
-                        : null;
-                    }
-                  }}
-                  key={item._id}
-                  className="border pt-2 pb-2 hover:bg-swLightGray"
-                  style={{ cursor: "pointer" }}
-                >
+          <div className="overflow-x-auto">
+            <table className="table-auto w-full border-collapse border overflow-hidden">
+              <thead>
+                <tr>
                   {headers.map((header) => (
-                    <td
+                    <th
                       key={header.id}
-                      className="px-5 py-4 border font-400 text-xs font-semibold text-swGray border-none"
+                      className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
+                        header.id === sortField ? "" : ""
+                      }`}
+                      onClick={() => handleSort(header.id)}
                     >
-                      {item[header.id]}
-                    </td>
+                      {header.label}
+                      {header.id === sortField && (
+                        <span className="ml-1">
+                          {sortDirection === "asc" ? "↑" : "↓"}
+                        </span>
+                      )}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data?.map((item) => (
+                  <tr
+                    onClick={() => {
+                      if (onClickRow) {
+                        setIsLoading(true);
+                        router.push(`${onClickRow}/${item.id || item._id}`);
+                        item?.taskId
+                          ? localStorage.setItem("taskId", item?.taskId)
+                          : null;
+                      }
+                    }}
+                    key={item._id}
+                    className="border pt-2 pb-2 hover:bg-swLightGray"
+                    style={{ cursor: "pointer" }}
+                  >
+                    {headers.map((header) => (
+                      <td
+                        key={header.id}
+                        className="px-5 py-4 border font-400 text-xs font-semibold text-swGray border-none"
+                      >
+                        {item[header.id]}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : data?.length == 0 && !isLoading ? (
           <div class="min-h-500 flex items-center justify-center">
             <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
