@@ -6,8 +6,9 @@ import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { getRepaymentSummary } from "@/redux/slices/loanRepaymentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "@/helpers";
+import RepaymentOverdueTable from "../components/repayment/OverdueTable";
 
-const Repayment = () => { 
+const Repayment = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("all-repayment");
   const { loading, error, data } = useSelector((state) => state.loanRepayment);
@@ -33,7 +34,8 @@ const Repayment = () => {
       ),
       borrower: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.loanApplication?.customerId?.firstName}  {item?.loanApplication?.customerId?.lastName}
+          {item?.loanApplication?.customerId?.firstName}{" "}
+          {item?.loanApplication?.customerId?.lastName}
         </div>
       ),
       repaymentNumber: (
@@ -66,6 +68,8 @@ const Repayment = () => {
           className={`${
             item.status === "Unpaid"
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              : item.status === "Overdue"
+              ? "bg-swIndicatorLightRed text-white text-xs font-normal px-2 py-1 rounded-full"
               : "bg-[#F8A9A3] text-white"
           } px-2 py-1 rounded-full`}
         >
@@ -137,26 +141,51 @@ const Repayment = () => {
               </div>
             ))}
         </div>
+        {currentPage === "all-repayment" && (
+          <div className="w-full">
+            <ReusableDataTable
+              filterParams={[
+                { name: "Unpaid" },
+                { name: "Fully paid" },
+                { name: "Overdue" },
+              ]}
+              headers={header}
+              dataTransformer={customDataTransformer}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
+              btnTextClick={() => {
+                router.push("/create-borrower");
+              }}
+              filters={true}
+              pagination={true}
+              onClickRow={"/loan-applications/view-loan"}
+            />
+          </div>
+        )}
 
-        <div className="w-full">
-          <ReusableDataTable
-            filterParams={[
-              { name: "Unpaid" },
-              { name: "Fully paid" },
-              { name: "Overdue" },
-            ]}
-            headers={header}
-            dataTransformer={customDataTransformer}
-            initialData={[]}
-            apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
-            btnTextClick={() => {
-              router.push("/create-borrower");
-            }}
-            filters={true}
-            pagination={true}
-            onClickRow={"/loan-applications/view-loan"}
-          />
-        </div>
+        {currentPage === "overdue-repayment" && (
+          <div className="w-full">
+            {/* <RepaymentOverdueTable /> */}
+            <ReusableDataTable
+              filterParams={[
+                { name: "Unpaid" },
+                { name: "Fully paid" },
+                { name: "Overdue" },
+              ]}
+              headers={header}
+              dataTransformer={customDataTransformer}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
+              btnTextClick={() => {
+                router.push("/create-borrower");
+              }}
+              filters={true}
+              pagination={true}
+              onClickRow={"/loan-applications/view-loan"}
+              role={"Overdue"}
+            />
+          </div>
+        )}
       </main>
     </DashboardLayout>
   );

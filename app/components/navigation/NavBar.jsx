@@ -11,15 +11,16 @@ import { IoArrowBackSharp, IoCloseSharp } from "react-icons/io5";
 import navPatternBg from "../../../public/images/navPatterns.png";
 import Image from "next/image";
 import { formatDate } from "@/helpers";
-import dynamic from 'next/dynamic';
+import { RxHamburgerMenu } from "react-icons/rx";
+import dynamic from "next/dynamic";
 
 //import Viewer from "react-viewer";
 const Viewer = dynamic(
-  () => import('react-viewer'),
+  () => import("react-viewer"),
   { ssr: false } // This line is important
- );
+);
 
-const NavBar = ({ paths, isBackNav }) => {
+const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const x = useSelector((state) => state.approvalAssignee);
@@ -43,8 +44,14 @@ const NavBar = ({ paths, isBackNav }) => {
   };
 
   return (
-    <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-[90%] md:w-[95%] px-5 z-[100]">
-      <div className="flex gap-5 items-center">
+    <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-full md:w-[95%] px-5 z-[100]">
+      <div className="flex gap-2 sm:gap-5 items-center">
+        <div className="sm:hidden">
+          <RxHamburgerMenu
+            size={20}
+            onClick={() => sideBarOpen(!sideBarState)}
+          />
+        </div>
         {isBackNav && (
           <div
             className="border-2 p-2 rounded-md border-transparent hover:border-swLightGray cursor-pointer"
@@ -56,7 +63,7 @@ const NavBar = ({ paths, isBackNav }) => {
         <PagePath paths={paths} />
       </div>
       <div className=" flex gap-5 items-center relative">
-        <p className="text-sm">Welcome {user?.firstName} 👋 </p>
+        <p className="text-sm hidden sm:block">Welcome {user?.firstName} 👋 </p>
         <div
           className="relative cursor-pointer"
           onClick={() => openNotifications(!isNotificationsOpen)}
@@ -99,7 +106,6 @@ const NavBar = ({ paths, isBackNav }) => {
                   .filter((item) => item.actionStatus == "Pending")
                   .map((item, index) => (
                     <div key={index} className=" mx-1 border-b">
-                  
                       <div
                         className="cursor-pointer hover:bg-swLightGray p-4"
                         onClick={() => {
@@ -154,9 +160,7 @@ const NavBar = ({ paths, isBackNav }) => {
             }
             alt="user"
             className="cursor-pointer"
-            onClick={() =>
-             user?.profilePicture && setOpenProfilePic(true)
-            }
+            onClick={() => user?.profilePicture && setOpenProfilePic(true)}
           />
           <Viewer
             visible={openProfilePic}

@@ -11,6 +11,7 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
   const [minimizeSidebar, setMinimizeSidebar] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+  const [sideBarOpen, setSideBarOpen] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -31,12 +32,17 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
       <div className="flex h-full w-full">
         {isAuthenticated && (
           <div>
-            <Sidebar />
-            <NavBar paths={paths} isBackNav={isBackNav} />
+            <Sidebar sideBarOpen={setSideBarOpen} sideBarState={sideBarOpen} />
+            <NavBar
+              sideBarOpen={setSideBarOpen}
+              sideBarState={sideBarOpen}
+              paths={paths}
+              isBackNav={isBackNav}
+            />
           </div>
         )}
         {/* w-[10%] lg:w-[5%] */}
-        <div className="h-full w-[90%] md:w-[95%] ml-auto mt-[4.5rem] text-swGray">
+        <div className="h-full w-full md:w-[95%] ml-auto mt-[4.5rem] text-swGray">
           <div className="overflow-y-auto">{isAuthenticated && children}</div>
         </div>
         <RealTimeComponent />
