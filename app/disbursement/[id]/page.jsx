@@ -2,7 +2,7 @@
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { formatDate } from "@/helpers";
-import { getDisbursementById } from "@/redux/slices/disbursementSlice";
+import { getDisbursementById } from "@/redux/slices/loanApplicationSlice";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
@@ -13,8 +13,10 @@ const Disbursement = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const repaymentData = null;
-  const { loading, error, data } = useSelector((state) => state.disbursement);
-  console.log({ data });
+  const { loading, error, data } = useSelector(
+    (state) => state.loanApplication
+  );
+  console.log({ data: data?.data   });
 
   useEffect(() => {
     dispatch(getDisbursementById(id));
@@ -29,14 +31,16 @@ const Disbursement = () => {
             <p>Log Status: </p>
             <p
               className={`${
-                repaymentData?.result?.status === "New"
+                data?.data?.status === "New"
                   ? "bg-[#E7F1FE] text-swBlue"
-                  : repaymentData?.result?.status === "Approved"
+                  : data?.data?.status === "Approved"
                   ? "bg-green-50 text-swGreen"
+                  : data?.data?.status === "Disbursed"
+                  ? "bg-swBlue text-white"
                   : "text-red-400 bg-red-100"
               } px-2 py-1 rounded-full  `}
             >
-              {repaymentData?.result?.status}
+              {data?.data?.status}
             </p>
           </div>
         </div>
@@ -48,16 +52,16 @@ const Disbursement = () => {
         <div className="p-5 flex flex-col gap-5 font-500">
           <p className="text-lg font-semibold">Disbursement details</p>
           <div className="flex">
-            <p className="min-w-[15rem]">Date Logged</p>
-            <p>{formatDate(repaymentData?.result?.createdAt?.slice(0, 10))}</p>
+            <p className="min-w-[15rem]">Disbursement Date</p>
+            <p>{formatDate(data?.data?.createdAt?.slice(0, 10))}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Loan ID</p>
             <Link
-              href={`/loan-applications/view-loan/${repaymentData?.result?.loanApplication?._id}`}
+              href={`/loan-applications/view-loan/${data?.data?.loanId}`}
               className="text-swBlue"
             >
-              SWL-{repaymentData?.result?.loanApplication?.loanId}
+              SWL-{data?.data?.loanId}
             </Link>
           </div>
           <div className="flex">
