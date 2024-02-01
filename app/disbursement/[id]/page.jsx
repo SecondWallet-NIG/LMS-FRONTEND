@@ -19,6 +19,7 @@ const Disbursement = () => {
   console.log({ data: data?.data   });
 
   useEffect(() => {
+    console.log("hello");
     dispatch(getDisbursementById(id));
   }, []);
 
