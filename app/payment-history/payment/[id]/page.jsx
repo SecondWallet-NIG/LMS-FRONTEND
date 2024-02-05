@@ -213,7 +213,7 @@ const PaymentPage = () => {
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Payment method</p>
-            <p>{repaymentData?.result.repaymentMethod}</p>
+            <p>{repaymentData?.result?.repaymentMethod}</p>
           </div>
           {repaymentData?.result?.repaymentReceipts?.length > 0 &&
           repaymentData?.result?.repaymentReceipts?.[0] !== "null" ? (
