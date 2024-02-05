@@ -1,22 +1,27 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
+import { handleFileExtention } from "@/app/components/helpers/utils";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { formatDate } from "@/helpers";
 import { getDisbursementById } from "@/redux/slices/loanApplicationSlice";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import Viewer from "react-viewer";
 
 const Disbursement = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [openReceipt, setOpenReceipt] = useState(false);
+  const [openOfferLetter, setOpenOfferLetter] = useState(false);
   const repaymentData = null;
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
-  console.log({ data: data?.data   });
+  console.log({ data: data?.data });
 
   useEffect(() => {
     console.log("hello");
@@ -81,10 +86,64 @@ const Disbursement = () => {
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Payment method</p>
-            <p>{repaymentData?.result.repaymentMethod}</p>
+            <p>{data?.data?.paymentMethod}</p>
           </div>
-          {repaymentData?.result?.repaymentReceipts?.length > 0 &&
-          repaymentData?.result?.repaymentReceipts?.[0] !== "null" ? (
+          {data?.data?.offerLetter ? (
+            <div className="flex">
+              <p className="min-w-[15rem]">Offer Letter</p>
+              <p
+                className="text-swBlue cursor-pointer"
+                onClick={() => setOpenOfferLetter(true)}
+              >
+                View Offer Letter
+              </p>
+              {handleFileExtention(data?.data?.offerLetter) === "pdf" ? (
+                // <p>It's a pdf</p>
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openOfferLetter ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenOfferLetter(false)}
+                      />
+                    </div>
+                    <iframe
+                      src={data?.data?.offerLetter}
+                      className="h-full w-full"
+                    ></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openOfferLetter}
+                        onClose={() => {
+                          setOpenOfferLetter(false);
+                        }}
+                        images={[data?.data?.offerLetter].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="flex">
+              <p className="min-w-[15rem]">Offer Letter</p>
+              <p>No offer letter to show</p>
+            </div>
+          )}
+          {data?.data?.disbursementReceipt ? (
             <div className="flex">
               <p className="min-w-[15rem]">Receipt</p>
               <p
@@ -94,7 +153,7 @@ const Disbursement = () => {
                 View receipt
               </p>
               {handleFileExtention(
-                repaymentData?.result?.repaymentReceipts?.[0]
+                data?.data?.disbursementReceipt
               ) === "pdf" ? (
                 // <p>It's a pdf</p>
                 <div
@@ -111,32 +170,14 @@ const Disbursement = () => {
                       />
                     </div>
                     <iframe
-                      src={repaymentData?.result?.repaymentReceipts?.[0]}
+                      src={data?.data?.disbursementReceipt}
                       className="h-full w-full"
                     ></iframe>
                   </div>
                 </div>
               ) : (
                 <>
-                  <div
-                    className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
-                      openReceipt ? "flex" : "hidden"
-                    } justify-center items-center text-white z-[110]`}
-                  >
-                    <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
-                      <div className="flex justify-end">
-                        <IoMdClose
-                          size={20}
-                          className="cursor-pointer text-swBlack"
-                          onClick={() => setOpenReceipt(false)}
-                        />
-                      </div>
-                      <iframe
-                        src={repaymentData?.result?.repaymentReceipts?.[0]}
-                        className="h-full w-full"
-                      ></iframe>
-                    </div>
-                  </div>
+                  
                   {typeof window !== "undefined" ? (
                     <>
                       <Viewer
@@ -144,7 +185,7 @@ const Disbursement = () => {
                         onClose={() => {
                           setOpenReceipt(false);
                         }}
-                        images={repaymentData?.result?.repaymentReceipts.map(
+                        images={[data?.data?.disbursementReceipt].map(
                           (item) => ({
                             src: item,
                             key: item,
