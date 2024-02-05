@@ -73,15 +73,15 @@ const Disbursement = () => {
           <div className="flex">
             <p className="min-w-[15rem]">Logged by</p>
             <p>
-              {repaymentData?.result?.loggedBy?.firstName}{" "}
-              {repaymentData?.result?.loggedBy?.lastName}
+              {data?.data?.createdBy?.firstName}{" "}
+              {data?.data?.createdBy?.lastName}
             </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Borrower name</p>
             <p>
-              {repaymentData?.result?.customer?.firstName}{" "}
-              {repaymentData?.result?.customer?.lastName}
+              {data?.data?.customerId?.firstName}{" "}
+              {data?.data?.customerId?.lastName}
             </p>
           </div>
           <div className="flex">
