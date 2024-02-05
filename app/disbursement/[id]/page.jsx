@@ -64,7 +64,7 @@ const Disbursement = () => {
           <div className="flex">
             <p className="min-w-[15rem]">Loan ID</p>
             <Link
-              href={`/loan-applications/view-loan/${data?.data?.loanId}`}
+              href={`/loan-applications/view-loan/${data?.data?._id}`}
               className="text-swBlue"
             >
               SWL-{data?.data?.loanId}
