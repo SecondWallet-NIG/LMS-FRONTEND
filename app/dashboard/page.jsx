@@ -223,7 +223,7 @@ const DashboardPage = () => {
               secondStat={[
                 "This month",
                 "₦ " +
-                  cardData?.data?.data.disbursementData?.totalDisbursementsPaid?.toLocaleString(),
+                  cardData?.data?.data.disbursementData?.totalDisbursementsPaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
               ]}
               thirdStat={[
