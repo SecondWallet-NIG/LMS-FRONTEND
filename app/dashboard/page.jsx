@@ -226,12 +226,12 @@ const DashboardPage = () => {
                   cardData?.data?.data.disbursementData?.totalDisbursementsPaidThisMonth?.toLocaleString(),
                 cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
               ]}
-              thirdStat={[
-                "Today",
-                "₦ " +
-                  cardData?.data?.data.disbursementData?.totalDisbursementsPaidLast24?.toLocaleString(),
-                cardData?.data?.data.disbursementData?.percentageTotalDisbursementsPaidLast24?.toLocaleString(),
-              ]}
+              // thirdStat={[
+              //   "Today",
+              //   "₦ " +
+              //     cardData?.data?.data.disbursementData?.totalDisbursementsPaidLast24?.toLocaleString(),
+              //   cardData?.data?.data.disbursementData?.percentageTotalDisbursementsPaidLast24?.toLocaleString(),
+              // ]}
             />
             <DashboardCard
               blueBg={true}
