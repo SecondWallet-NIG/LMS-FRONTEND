@@ -402,7 +402,7 @@ const CreateLoan = () => {
 
       {currentStep === 1 ? (
         <main className="flex text-sm">
-          <div className="w-2/3 pl-5 pr-5 pt-10 ">
+          <div className="w-full md:w-2/3 pl-5 pr-5 pt-10 ">
             <div className="flex justify-between">
               <p className="text-lg font-semibold">Initiate loan application</p>
 
@@ -503,8 +503,8 @@ const CreateLoan = () => {
                 }}
                 inputOpen={isInputOpen}
               />
-              <div className="flex gap-2 items-end">
-                <div className="w-1/3">
+              <div className="flex flex-col sm:flex-row gap-2 items-end">
+                <div className="w-full sm:w-1/3">
                   <SelectField
                     value={loanDurationMetricsData.find(
                       (option) => option.value === formData.loanDurationMetrics
@@ -521,7 +521,7 @@ const CreateLoan = () => {
                     }}
                   />
                 </div>
-                <div className="w-2/3">
+                <div className="w-full sm:w-2/3">
                   <InputField
                     disabled={
                       formData.loanDurationMetrics === null ? true : false
@@ -578,8 +578,8 @@ const CreateLoan = () => {
                   />
                 </div>
               </div>
-              <div className="flex gap-2">
-                <div className="w-1/3">
+              <div className="flex flex-col sm:flex-row gap-5 sm:gap-2">
+                <div className="w-full sm:w-1/3">
                   <SelectField
                     value={frequencyTypeData.find(
                       (option) => option.value === formData.loanFrequencyType
@@ -597,7 +597,7 @@ const CreateLoan = () => {
                     }}
                   />
                 </div>
-                <div className="w-2/3">
+                <div className="w-full sm:w-2/3">
                   <InputField
                     disabled={true}
                     label="Number of Repayments"
@@ -880,8 +880,43 @@ const CreateLoan = () => {
                 ) : null}
               </div>
             </div>
+
+            <div className="flex items-center gap-5 my-5 md:hidden">
+              <EditableButton
+                blueBtn={true}
+                disabled={
+                  formData.interestType === null || isLoading === true
+                    ? true
+                    : false
+                }
+                className={"w-full"}
+                label={"Preview Interest"}
+                onClick={fetchInterest}
+              />
+              <EditableButton
+                blueBtn={true}
+                disabled={loading ? true : false}
+                startIcon={
+                  loading && (
+                    <Rings
+                      height="20"
+                      width="20"
+                      color="#ffffff"
+                      radius="2"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                      visible={true}
+                      ariaLabel="rings-loading"
+                    />
+                  )
+                }
+                className={"w-full "}
+                label={"Create Loan"}
+                onClick={submitLoan}
+              />
+            </div>
           </div>
-          <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
+          <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300 hidden md:block">
             <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
             {selectedCustomer != null ? (
               <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto items-start flex gap-5">
@@ -1065,18 +1100,18 @@ const CreateLoan = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-5">
-                  <Button
+                <div className="flex flex-col gap-5 mt-5">
+                  <EditableButton
+                    blueBtn={true}
                     disabled={
                       formData.interestType === null || isLoading === true
                         ? true
                         : false
                     }
+                    className={"w-full"}
+                    label={"Preview Interest"}
                     onClick={fetchInterest}
-                    className="h-10 w-full mt-6 bg-swBlue text-white"
-                  >
-                    Preview Interest
-                  </Button>
+                  />
 
                   <EditableButton
                     blueBtn={true}
@@ -1108,14 +1143,15 @@ const CreateLoan = () => {
 
       {currentStep === 2 && (
         <div className="flex">
-          <div className="w-2/3 p-2 ">
+          <div className="w-full md:w-2/3 p-2">
             <PreviewInterest
               formData={formData}
               selectedCustomer={selectedCustomer}
               setCurrentStep={setCurrentStep}
               data={interestValue?.data}
             />
-            <div className="text-end pt-4">
+
+            <div className="text-end pt-4 flex gap-5 justify-end">
               <Button
                 variant="danger"
                 onClick={() => {
@@ -1124,9 +1160,32 @@ const CreateLoan = () => {
               >
                 Edit Loan Details
               </Button>
+              <div className="md:hidden">
+                <EditableButton
+                  blueBtn={true}
+                  disabled={loading ? true : false}
+                  startIcon={
+                    loading && (
+                      <Rings
+                        height="20"
+                        width="20"
+                        color="#ffffff"
+                        radius="2"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                        ariaLabel="rings-loading"
+                      />
+                    )
+                  }
+                  // className={"w-full "}
+                  label={"Create Loan"}
+                  onClick={submitLoan}
+                />
+              </div>
             </div>
           </div>
-          <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
+          <div className="hidden md:block w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
             <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
             {selectedCustomer != null ? (
               <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto flex gap-5 items-start">
