@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PiCalendarBlankLight } from "react-icons/pi";
 import CenterModal from "../../modals/CenterModal";
 import { DateRange } from "react-date-range";
@@ -8,8 +8,15 @@ import Button from "../../shared/buttonComponent/Button";
 import SummaryTable from "./SummaryTable";
 import { handleCaptureClick } from "../../helpers/utils";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
+import { useDispatch, useSelector } from "react-redux";
+// import { getSummaryReport } from "@/redux/slices/customerSlice";
+import { getSummaryReport } from "@/redux/slices/reportSlice";
+import { getCustomerSummary } from "@/redux/slices/customerSlice";
 
 const SummaryReport = () => {
+  const dispatch = useDispatch();
+  const summaryReport = useSelector((state) => state.report);
+  const customerSummary = useSelector((state) => state.customer);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState([
@@ -45,6 +52,11 @@ const SummaryReport = () => {
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Summary report`);
   };
+
+  useEffect(() => {
+    dispatch(getSummaryReport());
+    dispatch(getCustomerSummary());
+  }, []);
 
   return (
     <main className="w-full p-5">
@@ -88,64 +100,67 @@ const SummaryReport = () => {
               <p className="font-semibold">Total Portfolio value</p>
               <div className="flex justify-between items-end">
                 <p className="text-2xl font-bold mt-3">
-                  {/* {loanApplication?.data?.data.count} */}
-                  ₦1,285,356,265
+                  {/* {loanApplication?.data?.data.count} */}₦
+                  {summaryReport?.data?.data?.totalPortfolioValue?.toLocaleString()}
                 </p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Total Disbursements</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">5,340</p>
-                <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+                <p className="text-2xl font-bold mt-3">
+                  {summaryReport?.data?.data?.totalDisbursementsCount?.toLocaleString()}
+                </p>
+                <p className="text-xl font-medium mt-3">
+                  ₦
+                  {summaryReport?.data?.data?.totalDisbursementsValue?.toLocaleString()}
+                </p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Total Repayment</p>
               <div className="flex justify-between items-end">
                 <p className="text-2xl font-bold mt-3">
-                  {/* ₦{" "}
-                {loanApplication?.data?.data.totalCommitmentTotal?.toLocaleString()}
-                .00K */}
-                  ₦1,475,582,287.25
+                  {summaryReport?.data?.data?.totalRepaymentCount?.toLocaleString()}
+                </p>
+                <p className="text-xl font-medium mt-3">
+                  ₦
+                  {summaryReport?.data?.data?.totalRepaymentValue?.toLocaleString()}
                 </p>
               </div>
             </div>
           </div>
           <div className="flex gap-5 mt-5">
             <div className="bg-white border rounded-xl p-3 w-full">
-              <p className="font-semibold">Net profit/loss</p>
-              <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">
-                  {/* {" "}
-                {loanApplication?.data?.data?.ApprovedLoanCount} */}
-                  + ₦268,937,930.00
-                </p>
-                <p className="text-xs py-1 px-2 text-swBlue bg-[#E7F1FE] rounded-full font-medium">
-                  + 35.68%
-                </p>
-              </div>
-            </div>
-            <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Pending Disbursements</p>
               <div className="flex justify-between items-end">
                 <p className="text-2xl font-bold mt-3">
-                  {/* {" "}
-                {loanApplication?.data?.data.pendingLoanCount}{" "} */}
-                  250
+                  {summaryReport?.data?.data?.pendingDisbursementsCount?.toLocaleString()}
                 </p>
-                <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+                <p className="text-xl font-medium mt-3">
+                  ₦
+                  {summaryReport?.data?.data?.pendingDisbursements?.toLocaleString()}
+                </p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Pending Repayments</p>
               <div className="flex justify-between items-end">
                 <p className="text-2xl font-bold mt-3">
-                  {/* {" "}
-                {loanApplication?.data?.data.DeclinedLoanCount}{" "} */}
-                  2,630
+                  {summaryReport?.data?.data?.pendingRepaymentCount?.toLocaleString()}
                 </p>
-                <p className="text-xl font-medium mt-3">₦967,582,287.25</p>
+                <p className="text-xl font-medium mt-3">
+                  ₦
+                  {summaryReport?.data?.data?.pendingRepaymentValue?.toLocaleString()}
+                </p>
+              </div>
+            </div>
+            <div className="bg-white border rounded-xl p-3 w-full">
+              <p className="font-semibold">Total Borrowers</p>
+              <div className="flex justify-between items-end">
+                <p className="text-2xl font-bold mt-3">
+                  {customerSummary?.data?.data?.totalCount?.toLocaleString()}
+                </p>
               </div>
             </div>
           </div>
