@@ -95,7 +95,7 @@ const SummaryReport = () => {
             </div>
           </div>
 
-          <div className="flex gap-5 mt-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5">
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Total Portfolio value</p>
               <div className="flex justify-between items-end">
@@ -129,8 +129,6 @@ const SummaryReport = () => {
                 </p>
               </div>
             </div>
-          </div>
-          <div className="flex gap-5 mt-5">
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Pending Disbursements</p>
               <div className="flex justify-between items-end">
@@ -164,6 +162,9 @@ const SummaryReport = () => {
               </div>
             </div>
           </div>
+          {/* <div className="flex gap-5 mt-5">
+            
+          </div> */}
         </div>
 
         <div className="rounded-xl overflow-hidden border mt-5 bg-white">
