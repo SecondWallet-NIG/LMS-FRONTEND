@@ -65,7 +65,7 @@ const PreviewInterest = ({
       <div className=" w-full">
         <div className="p-5">
           <div className="bg-swBlue rounded-2xl p-10 text-white">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start gap-5 flex-wrap">
               <div className="flex gap-5 items-start">
                 {selectedCustomer?.profilePicture ? (
                   <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">

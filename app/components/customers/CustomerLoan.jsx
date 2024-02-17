@@ -18,7 +18,7 @@ const customDataTransformer = (apiData) => {
     id: item._id,
     firstName: (
       <div className="text-md font-[500] text-gray-700">
-        {item.firstName} {item.lastName}
+        {item?.firstName} {item?.lastName}
       </div>
     ),
     customerId: (
