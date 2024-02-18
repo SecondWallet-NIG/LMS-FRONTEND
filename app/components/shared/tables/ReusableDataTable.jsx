@@ -240,6 +240,7 @@ function ReusableDataTable({
             const transformedData = dataTransformer(
               data?.data?.data?.repayments ||
                 data?.data?.results ||
+                data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
                 data?.results
             );
@@ -255,6 +256,7 @@ function ReusableDataTable({
             setData(
               data?.data?.data?.repayments ||
                 data?.data?.results ||
+                data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
                 data.results
             );
@@ -351,6 +353,7 @@ function ReusableDataTable({
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
               data?.data?.data?.repayments ||
+              data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.results ||
                 data?.data?.data ||
                 data?.results ||

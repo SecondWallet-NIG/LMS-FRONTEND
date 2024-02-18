@@ -580,9 +580,9 @@ const ViewLoan = () => {
         <section className="w-full border-r border-gray-300">
           <section
             id="customer_details"
-            className="flex gap-2 border-b border-gray-300 items-end py-4 px-8"
+            className="flex flex-col md:flex-row   gap-2 border-b border-gray-300 items-center py-4 px-8"
           >
-            <div className="w-1/2">
+            <div className="w-full md:w-1/4">
               <div className="flex ">
                 <div>
                   <Image
@@ -675,8 +675,8 @@ const ViewLoan = () => {
                 </div>
               </div>
             </div>
-            <div className="w-1/2">
-              <div className="flex justify-end">
+            <div className="w-full md:w-3/4">
+              <div className="flex md:justify-end">
                 <div>
                   <div className="text-xs  font-semibold">
                     {" "}
@@ -696,8 +696,8 @@ const ViewLoan = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex justify-between items-center gap-5">
-                <div className="w-full bg-gray-100 rounded-xl p-2">
+              <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
+                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID:</p>
                   <div className="flex justify-between items-center">
                     <p className="text-md text-swBlue font-semibold mt-4">
@@ -705,7 +705,7 @@ const ViewLoan = () => {
                     </p>
                   </div>
                 </div>
-                <div className="w-full bg-gray-100 rounded-xl p-2">
+                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan Amount:</p>
 
                   <div className="flex justify-between items-center">
@@ -728,7 +728,7 @@ const ViewLoan = () => {
                     ) : null}
                   </div>
                 </div>
-                <div className="w-full bg-gray-100 rounded-xl p-2">
+                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Outstanding Balance</p>
                   <div className="flex justify-between items-center">
                     <p className="text-md text-red-500 font-semibold mt-4">
@@ -743,7 +743,7 @@ const ViewLoan = () => {
           </section>
           <div className="ml-5 mr-5 mt-5">
             <h6 className="text-center font-semibold p-2">Loan Details</h6>
-            <div className="border rounded-lg">
+            <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
                   <tr>
@@ -924,7 +924,7 @@ const ViewLoan = () => {
               <h6 className="text-center font-semibold p-2 ">
                 Loan Approval Needed
               </h6>
-              <div className="border rounded-lg">
+              <div className="border rounded-lg overflow-auto">
                 <table className=" w-full ">
                   <thead className="bg-swLightGray ">
                     <tr>
@@ -1124,7 +1124,7 @@ const ViewLoan = () => {
             >
               {/* <div className="p-4 flex justify-between items-center"></div> */}
               <div className="flex items-center justify-between overflow-x-hidden border-b border-gray-300 py-2 px-4 flex-wrap">
-                <div className="flex gap-2 text-xs lg:text-sm">
+                <div className="flex gap-2 text-xs lg:text-sm overflow-auto">
                   <button
                     onClick={() => handleActivityToggle("activity-logs")}
                     className={`${
@@ -1218,7 +1218,7 @@ const ViewLoan = () => {
             </section>
           </div>
         </section>
-        <section id="loan_process" className="w-[30%] h-full">
+        <section id="loan_process" className="hidden md:block w-[30%] h-full">
           <p className="border-b border-gray-300 p-4 text-swGray font-semibold">
             Loan Processes
           </p>

@@ -28,7 +28,7 @@ export const createCustomer = createAsyncThunk(
 );
 
 export const updateCustomer = createAsyncThunk(
-  'customer-update',
+  "customer-update",
   async ({ customerId, payload }) => {
     try {
       // /profile-information/:id/update
@@ -37,8 +37,8 @@ export const updateCustomer = createAsyncThunk(
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`
-          }
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
         }
       );
       return response.data;
@@ -66,9 +66,8 @@ export const createBulkCustomer = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error.response.data.error) {
-        throw new Error(error.response.data.error)
-      }
-      else throw new Error("An error occured, please try again later")
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
     }
   }
 );
@@ -352,7 +351,8 @@ const customerSlice = createSlice({
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;
-      }).addCase(updateEmployment.pending, (state, action) => {
+      })
+      .addCase(updateEmployment.pending, (state, action) => {
         state.loading = "pending";
         state.error = null;
       })

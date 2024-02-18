@@ -15,6 +15,7 @@ import approvalAssigneeReducer from "./slices/approvalAssigneeSlice";
 import loanApplicationLogReducer from "./slices/loanApplicationLogSlice";
 import repaymentHistoryReducer from "./slices/repaymentHistorySlice";
 import userTaskReducer from "./slices/userTaskSlice";
+import reportReducer from "./slices/reportSlice";
 export const store = configureStore({
   reducer: {
     post: postReducer,
@@ -32,6 +33,7 @@ export const store = configureStore({
     UserTasks: userTaskReducer,
     loanApplicationLogs: loanApplicationLogReducer,
     repaymentHistory: repaymentHistoryReducer,
+    report: reportReducer,
   },
   // Add middleware or other configuration options as needed
 });
