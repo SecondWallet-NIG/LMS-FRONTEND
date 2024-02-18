@@ -194,7 +194,7 @@ const RepaymentReport = () => {
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
-              <p className="font-semibold">Total Balance to Pay</p>
+              <p className="font-semibold">Total Installment to Pay </p>
               <div className="flex justify-between items-end">
                 <p className="text-2xl font-bold mt-3">
                   {" "}
