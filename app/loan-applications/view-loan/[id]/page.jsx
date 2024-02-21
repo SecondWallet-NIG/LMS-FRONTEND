@@ -580,7 +580,7 @@ const ViewLoan = () => {
         <section className="w-full border-r border-gray-300">
           <section
             id="customer_details"
-            className="flex flex-col md:flex-row gap-2 border-b border-gray-300 items-center py-4 px-8"
+            className="flex flex-col md:flex-row gap-2 border-b border-gray-300 items-center py-4 px-5"
           >
             <div className="w-full md:w-[30%] whitespace-nowrap">
               <div className="flex ">
@@ -1161,44 +1161,6 @@ const ViewLoan = () => {
                   >
                     Payment History
                   </button>
-                </div>
-
-                <div className="flex justify-center items-center gap-2 ml-auto">
-                  <InputField
-                    startIcon={<FiSearch size={20} />}
-                    endIcon={
-                      <IoIosClose
-                        size={20}
-                        className="cursor-pointer"
-                        onClick={() => {
-                          handleLogSearch("close");
-                        }}
-                      />
-                    }
-                    placeholder={"Search..."}
-                    css={`
-                      ${logSearch
-                        ? "translate-x-[3rem] opacity-1 z-10"
-                        : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
-                    `}
-                    borderColor="bg-gray-200 "
-                  />
-
-                  <div
-                    className={`${
-                      logSearch ? "opacity-0" : "opacity-1"
-                    } bg-white w-fit p-2 transition-all ease-in-out rounded-md border-2 border-transparent  cursor-pointer`}
-                  >
-                    <FiSearch
-                      size={20}
-                      onClick={() => {
-                        handleLogSearch("open");
-                      }}
-                    />
-                  </div>
-                  <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent  cursor-pointer">
-                    <BsThreeDotsVertical size={20} />
-                  </div>
                 </div>
               </div>
               <div className="p-2">
