@@ -580,9 +580,9 @@ const ViewLoan = () => {
         <section className="w-full border-r border-gray-300">
           <section
             id="customer_details"
-            className="flex flex-col md:flex-row   gap-2 border-b border-gray-300 items-center py-4 px-8"
+            className="flex flex-col md:flex-row gap-2 border-b border-gray-300 items-center py-4 px-8"
           >
-            <div className="w-full md:w-1/4">
+            <div className="w-full md:w-[30%] whitespace-nowrap">
               <div className="flex ">
                 <div>
                   <Image
@@ -675,7 +675,7 @@ const ViewLoan = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-3/4">
+            <div className="w-full md:w-[70%]">
               <div className="flex md:justify-end">
                 <div>
                   <div className="text-xs  font-semibold">
@@ -697,7 +697,7 @@ const ViewLoan = () => {
                 </div>
               </div>
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
-                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID:</p>
                   <div className="flex justify-between items-center">
                     <p className="text-md text-swBlue font-semibold mt-4">
@@ -705,7 +705,7 @@ const ViewLoan = () => {
                     </p>
                   </div>
                 </div>
-                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan Amount:</p>
 
                   <div className="flex justify-between items-center">
@@ -728,7 +728,7 @@ const ViewLoan = () => {
                     ) : null}
                   </div>
                 </div>
-                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Outstanding Balance</p>
                   <div className="flex justify-between items-center">
                     <p className="text-md text-red-500 font-semibold mt-4">
