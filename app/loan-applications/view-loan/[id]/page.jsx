@@ -580,9 +580,9 @@ const ViewLoan = () => {
         <section className="w-full border-r border-gray-300">
           <section
             id="customer_details"
-            className="flex flex-col md:flex-row   gap-2 border-b border-gray-300 items-center py-4 px-8"
+            className="flex flex-col md:flex-row gap-2 border-b border-gray-300 items-center py-4 px-5"
           >
-            <div className="w-full md:w-1/4">
+            <div className="w-full md:w-[30%] whitespace-nowrap">
               <div className="flex ">
                 <div>
                   <Image
@@ -675,7 +675,7 @@ const ViewLoan = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-3/4">
+            <div className="w-full md:w-[70%]">
               <div className="flex md:justify-end">
                 <div>
                   <div className="text-xs  font-semibold">
@@ -697,7 +697,7 @@ const ViewLoan = () => {
                 </div>
               </div>
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
-                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID:</p>
                   <div className="flex justify-between items-center">
                     <p className="text-md text-swBlue font-semibold mt-4">
@@ -705,7 +705,7 @@ const ViewLoan = () => {
                     </p>
                   </div>
                 </div>
-                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan Amount:</p>
 
                   <div className="flex justify-between items-center">
@@ -728,7 +728,7 @@ const ViewLoan = () => {
                     ) : null}
                   </div>
                 </div>
-                <div className="w-[10rem] bg-gray-100 rounded-xl p-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Outstanding Balance</p>
                   <div className="flex justify-between items-center">
                     <p className="text-md text-red-500 font-semibold mt-4">
@@ -742,7 +742,7 @@ const ViewLoan = () => {
             </div>
           </section>
           <div className="ml-5 mr-5 mt-5">
-            <h6 className="text-center font-semibold p-2">Loan Details</h6>
+            <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
@@ -919,9 +919,10 @@ const ViewLoan = () => {
               </table>
             </div>
           </div>
+     
           {data?.data?.loanApplication?.createdBy?._id === useriD?._id ? (
             <div className="ml-5 mr-5 mt-5">
-              <h6 className="text-center font-semibold p-2 ">
+              <h6 className="text-swBlue font-semibold p-2 ">
                 Loan Approval Needed
               </h6>
               <div className="border rounded-lg overflow-auto">
@@ -1115,6 +1116,47 @@ const ViewLoan = () => {
             </div>
           )}
 
+<div className="ml-5 mr-5 mt-5">
+            <h6 className="font-semibold text-swDarkRed p-2">Loan Accurals</h6>
+            <div className="border rounded-lg overflow-auto">
+              <table className=" w-full ">
+                <thead className="bg-swLightGray ">
+                  <tr>
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swDarkRed text-xs border-0 text-start">
+                      Number of Overdue days
+                    </th>
+
+                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swDarkRed text-xs border-0 text-start">
+                      <h1>Overdue Period Amount</h1>
+                    </th>
+          
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="text-start text-xs">
+                    <td className="w-1/4 px-3 py-3">
+                      <div className="flex gap-2 items-center text-swDarkRed font-semibold">
+                        <p>{data?.data?.loanApplication?.currentOverdueDaysCount || 0} day(s) </p>
+            
+                      </div>
+                    </td>
+
+                    <td className="w-1/4 px-3 py-3">
+                      <div>
+                        <p className="text-swDarkRed font-semibold">
+                          ₦{" "}
+                          {data?.data?.loanApplication?.totalAmountAccruedForOverdue?.toLocaleString() || 0}
+                        </p>
+                      </div>
+                    </td>
+             
+                  </tr>
+                </tbody>
+              </table>
+         
+            </div>
+          </div>
+
           <div className="p-5">
             <section id="loan-details">{/* <ReusableDataTables/> */}</section>
             <section></section>
@@ -1161,44 +1203,6 @@ const ViewLoan = () => {
                   >
                     Payment History
                   </button>
-                </div>
-
-                <div className="flex justify-center items-center gap-2 ml-auto">
-                  <InputField
-                    startIcon={<FiSearch size={20} />}
-                    endIcon={
-                      <IoIosClose
-                        size={20}
-                        className="cursor-pointer"
-                        onClick={() => {
-                          handleLogSearch("close");
-                        }}
-                      />
-                    }
-                    placeholder={"Search..."}
-                    css={`
-                      ${logSearch
-                        ? "translate-x-[3rem] opacity-1 z-10"
-                        : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
-                    `}
-                    borderColor="bg-gray-200 "
-                  />
-
-                  <div
-                    className={`${
-                      logSearch ? "opacity-0" : "opacity-1"
-                    } bg-white w-fit p-2 transition-all ease-in-out rounded-md border-2 border-transparent  cursor-pointer`}
-                  >
-                    <FiSearch
-                      size={20}
-                      onClick={() => {
-                        handleLogSearch("open");
-                      }}
-                    />
-                  </div>
-                  <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent  cursor-pointer">
-                    <BsThreeDotsVertical size={20} />
-                  </div>
                 </div>
               </div>
               <div className="p-2">
