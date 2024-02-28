@@ -156,6 +156,8 @@ const CustomerRepayment = ({ loanId }) => {
               ? "bg-swLightGreenIndcatorBg text-swGreen"
               : item.status === "Due"
               ? "bg-swLightPinkIndcatorBg text-swIndicatorLightRed"
+              : item.status === "Overdue"
+              ? "text-red-400 bg-red-100"
               : "bg-[#F8A9A3] text-white"
           } px-2 py-1 text-xs font-normal rounded-full`}
         >
