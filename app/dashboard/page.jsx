@@ -19,7 +19,7 @@ const DashboardPage = () => {
   const user = useSelector((state) => state.auth.user);
   const cardData = useSelector((state) => state.dashboardData);
   const graphData = useSelector((state) => state.dashboardData);
-  console.log({ graphData });
+
 
   const options = {
     responsive: true,
