@@ -633,12 +633,12 @@ const ViewLoan = () => {
                         className={
                           "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
                         }
-                        // disabled={
-                        //   data?.data?.loanApplication?.status ===
-                        //   "Ready for Disbursal"
-                        //     ? false
-                        //     : true
-                        // }
+                        disabled={
+                          data?.data?.loanApplication?.status ===
+                          "Ready for Disbursal"
+                            ? false
+                            : true
+                        }
                         onClick={() => {
                           setLogRepayment(!logRepayment);
                         }}

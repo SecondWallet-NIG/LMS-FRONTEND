@@ -70,6 +70,8 @@ const Repayment = () => {
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
               : item.status === "Overdue"
               ? "bg-swIndicatorLightRed text-white text-xs font-normal px-2 py-1 rounded-full"
+              : item.status === "Fully paid"
+              ? "bg-swGreen text-white text-xs font-normal px-2 py-1 rounded-full"
               : "bg-[#F8A9A3] text-white"
           } px-2 py-1 rounded-full`}
         >
