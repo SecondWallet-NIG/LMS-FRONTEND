@@ -151,6 +151,28 @@ export const getLoanOfficersCardsData = createAsyncThunk(
   }
 );
 
+export const getLoanProductsCardsData = createAsyncThunk(
+  "user/loanProduct",
+  async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/report/loan-product/cards-data`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const resetPassword = createAsyncThunk(
   "auth/restPassword",
   async (payload) => {
@@ -276,6 +298,18 @@ const userSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getLoanOfficersCardsData.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getLoanProductsCardsData.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getLoanProductsCardsData.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getLoanProductsCardsData.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       })
