@@ -70,7 +70,6 @@ const LoanOfficerTable = () => {
   return (
     <ReusableDataTable
       dataTransformer={customDataTransformer}
-      onClickRow="/loan-applications/view-loan"
       headers={headers}
       initialData={[]}
       apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/report/loan-officer/table-data`}
