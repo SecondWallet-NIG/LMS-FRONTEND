@@ -919,7 +919,7 @@ const ViewLoan = () => {
               </table>
             </div>
           </div>
-     
+
           {data?.data?.loanApplication?.createdBy?._id === useriD?._id ? (
             <div className="ml-5 mr-5 mt-5">
               <h6 className="text-swBlue font-semibold p-2 ">
@@ -1116,7 +1116,7 @@ const ViewLoan = () => {
             </div>
           )}
 
-<div className="ml-5 mr-5 mt-5">
+          <div className="ml-5 mr-5 mt-5">
             <h6 className="font-semibold text-swDarkRed p-2">Loan Accurals</h6>
             <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
@@ -1129,15 +1129,17 @@ const ViewLoan = () => {
                     <th className="w-1/4  px-3 py-3 bg-swLightGray text-swDarkRed text-xs border-0 text-start">
                       <h1>Overdue Period Amount</h1>
                     </th>
-          
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="text-start text-xs">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center text-swDarkRed font-semibold">
-                        <p>{data?.data?.loanApplication?.currentOverdueDaysCount || 0} day(s) </p>
-            
+                        <p>
+                          {data?.data?.loanApplication
+                            ?.totalLoanOverdueDaysCount || 0}{" "}
+                          day(s){" "}
+                        </p>
                       </div>
                     </td>
 
@@ -1145,15 +1147,14 @@ const ViewLoan = () => {
                       <div>
                         <p className="text-swDarkRed font-semibold">
                           ₦{" "}
-                          {data?.data?.loanApplication?.totalAmountAccruedForOverdue?.toLocaleString() || 0}
+                          {data?.data?.loanApplication?.totalAmountAccruedForOverdue?.toLocaleString() ||
+                            0}
                         </p>
                       </div>
                     </td>
-             
                   </tr>
                 </tbody>
               </table>
-         
             </div>
           </div>
 
@@ -1172,7 +1173,7 @@ const ViewLoan = () => {
                     className={`${
                       activityButton === "activity-logs" &&
                       "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md whitespace-nowrap`}
+                    } p-2 rounded-md text-xs md:text-sm`}
                   >
                     Activity logs
                   </button>
@@ -1181,7 +1182,7 @@ const ViewLoan = () => {
                     className={`${
                       activityButton === "loans" &&
                       "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
+                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
                   >
                     Loan Documents
                   </button>
@@ -1190,7 +1191,7 @@ const ViewLoan = () => {
                     className={`${
                       activityButton === "repayment" &&
                       "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
+                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
                   >
                     Repayments
                   </button>
@@ -1199,7 +1200,7 @@ const ViewLoan = () => {
                     className={`${
                       activityButton === "paymentHistory" &&
                       "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
+                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
                   >
                     Payment History
                   </button>
