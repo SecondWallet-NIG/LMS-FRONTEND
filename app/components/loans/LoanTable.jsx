@@ -126,6 +126,7 @@ const LoanTable = () => {
             { name: "Declined" },
             { name: "Disbursed" },
             { name: "Fully Paid" },
+            { name: "Overdue" },
             { name: "Cancelled Disbursement" },
           ]}
           dataTransformer={customDataTransformer}

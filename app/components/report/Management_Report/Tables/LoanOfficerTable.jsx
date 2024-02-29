@@ -18,7 +18,8 @@ const LoanOfficerTable = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    return apiData?.map((item) => ({
+    console.log({apiData});
+    return apiData?.loanOfficers?.map((item) => ({
       staffId: (
         <div>
           <div className="text-md font-[500] text-swBlue">
@@ -68,27 +69,11 @@ const LoanOfficerTable = () => {
   }, [router.pathname]);
   return (
     <ReusableDataTable
-      // filterParams={[
-      //   { name: "Pending" },
-      //   { name: "Ready for Disbursal" },
-      //   { name: "In Progress" },
-      //   { name: "Declined" },
-      //   { name: "Disbursed" },
-      //   { name: "Cancelled Disbursement" },
-      // ]}
       dataTransformer={customDataTransformer}
       onClickRow="/loan-applications/view-loan"
       headers={headers}
       initialData={[]}
       apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/report/loan-officer/table-data`}
-      // btnText={
-      //   <div className="flex gap-1 items-center p-1">
-      //     <p className="hidden lg:block">create loan</p>
-      //   </div>
-      // }
-      // btnTextClick={() => {
-      //   router.push("/create-loan");
-      // }}
       filters={true}
       pagination={true}
       userId={userId}

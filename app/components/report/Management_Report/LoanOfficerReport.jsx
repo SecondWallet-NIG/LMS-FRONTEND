@@ -107,7 +107,7 @@ const LoanOfficerReport = () => {
               <p className="font-semibold">Loan Originated</p>
               <div className="flex justify-between items-end">
                 <p className="text-2xl font-bold mt-3">
-                  {data?.data?.totalLoanApplications.toLocaleString()}
+                  {data?.data?.totalLoanApplications}
                 </p>
               </div>
             </div>
