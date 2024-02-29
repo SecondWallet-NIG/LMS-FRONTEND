@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
 import Link from "next/link";
+import Button from "../shared/buttonComponent/Button";
+import EditableButton from "../shared/editableButtonComponent/EditableButton";
 
 const LoanTable = () => {
   const [userId, setUserId] = useState("");
@@ -74,7 +76,7 @@ const LoanTable = () => {
               : item.status === "Fully Paid"
               ? "bg-swGreen"
               : "bg-swIndicatorDarkRed"
-          } px-2 py-1 rounded-full text-xs font-normal text-white`}
+          } px-2 py-1 rounded-full text-xs font-normal text-white whitespace-nowrap`}
         >
           {item.status}
         </button>
@@ -133,7 +135,7 @@ const LoanTable = () => {
           apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/all`}
           btnText={
             <div className="flex gap-1 items-center p-1">
-              <p className="hidden lg:block">create loan</p>
+              <p className="">create loan</p>
             </div>
           }
           btnTextClick={() => {

@@ -66,12 +66,15 @@ const CustomerActivityLogsCard = ({ data }) => {
                       </p>
                     ) : null}
 
-{item?.newValue?.hasOwnProperty("createdBy") ? (
+                    {item?.newValue?.hasOwnProperty("createdBy") ? (
                       <p className="text-xs sm:text-sm text-swBlue">
-                        Loan management has been reassigned to {" "}
-                        <Link className="underline" href={`/team-management/staff/${item?.newValue?.createdBy}`}>
-                      User
-                    </Link>
+                        Loan management has been reassigned to{" "}
+                        <Link
+                          className="underline"
+                          href={`/team-management/staff/${item?.newValue?.createdBy}`}
+                        >
+                          User
+                        </Link>
                       </p>
                     ) : null}
 
@@ -152,46 +155,66 @@ const CustomerActivityLogsCard = ({ data }) => {
                   </p>
                   <p className="text-xs sm:text-sm mt-2">
                     View assignee{" "}
-                    <Link className="underline" href={`/team-management/staff/${item?.newValue?.assignee}`}>
+                    <Link
+                      className="underline"
+                      href={`/team-management/staff/${item?.newValue?.assignee}`}
+                    >
                       Assignee
                     </Link>
                   </p>
+                  <div className="flex justify-end text-xs font-medium text-green-500 sm:hidden">
+                    {formatTimeToAMPM(item.createdAt)}
+                  </div>
                 </div>
               ) : item.action === "APPROVAL_DECLINE" ? (
                 <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg">
                   <p className="text-xs sm:text-sm text-swBlue font-medium">
-                   {item?.newValue?.approvalTitle} declined approval request.
+                    {item?.newValue?.approvalTitle} declined approval request.
                   </p>
                   <p className="text-xs sm:text-sm mt-2">
                     View who declined the loan{" "}
-                    <Link className="underline" href={`/team-management/staff/${item?.newValue?.assignee}`}>
+                    <Link
+                      className="underline"
+                      href={`/team-management/staff/${item?.newValue?.assignee}`}
+                    >
                       User
                     </Link>
                   </p>
+                  <div className="flex justify-end text-xs font-medium text-green-500 sm:hidden">
+                    {formatTimeToAMPM(item.createdAt)}
+                  </div>
                 </div>
-              ) :
-              item.action === "APPROVAL_SUCCESS" ? (
+              ) : item.action === "APPROVAL_SUCCESS" ? (
                 <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg">
                   <p className="text-xs sm:text-sm text-swBlue  font-medium">
-                      {item?.newValue?.approvalTitle} approval done.
+                    {item?.newValue?.approvalTitle} approval done.
                   </p>
                   <p className="text-xs sm:text-sm mt-2">
                     View who approved the loan{" "}
-                    <Link className="underline" href={`/team-management/staff/${item?.newValue?.assignee}`}>
+                    <Link
+                      className="underline"
+                      href={`/team-management/staff/${item?.newValue?.assignee}`}
+                    >
                       User
                     </Link>
                   </p>
+                  <div className="flex justify-end text-xs font-medium text-green-500 sm:hidden">
+                    {formatTimeToAMPM(item.createdAt)}
+                  </div>
                 </div>
               ) : (
                 <div>
-                  <p className="text-xs sm:text-sm text-swBlue p-4 w-full bg-gray-100 mt-2 rounded-lg font-medium">
+                  <div className="text-xs sm:text-sm text-swBlue p-4 w-full bg-gray-100 mt-2 rounded-lg font-medium">
                     Loan created with Loan ID, SWL-{item?.newValue.loanId}
-                  </p>
+                    <div className="flex justify-end text-xs font-medium text-green-500 sm:hidden">
+                      {formatTimeToAMPM(item.createdAt)}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
           </div>
-          <div className="text-xs text-swGreen font-semibold whitespace-nowrap pt-3">
+          <div className="text-xs hidden sm:block text-swGreen font-semibold whitespace-nowrap pt-3">
             {formatTimeToAMPM(item.createdAt)}
           </div>
         </div>

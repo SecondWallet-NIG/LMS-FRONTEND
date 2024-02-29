@@ -353,7 +353,7 @@ function ReusableDataTable({
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
               data?.data?.data?.repayments ||
-              data?.data?.data?.LoanApplicationAggregateData ||
+                data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.results ||
                 data?.data?.data ||
                 data?.results ||
@@ -507,7 +507,7 @@ function ReusableDataTable({
       <div className="">
         {filters && (
           <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
-            <div className="flex gap-2 items-center justify-between w-full md:w-fit">
+            <div className="flex gap-2 items-center justify-between w-fit">
               <div className="text-xs font-semibold flex border border-1 items-center mb-4 h-3">
                 <Select
                   className="text-xs"
