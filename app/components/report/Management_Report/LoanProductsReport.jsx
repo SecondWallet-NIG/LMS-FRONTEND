@@ -3,12 +3,18 @@ import { PiCalendarBlankLight } from "react-icons/pi";
 import CenterModal from "../../modals/CenterModal";
 import { DateRange } from "react-date-range";
 import Button from "../../shared/buttonComponent/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoanProductsTable from "./Tables/LoanProductsTable";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 import { handleCaptureClick } from "../../helpers/utils";
+import { getLoanProductsCardsData } from "@/redux/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const LoanProductsReport = () => {
+  const dispatch = useDispatch();
+  const colors = ['swLightBlueIndcatorBg','swLightPinkIndcatorBg', "swLightGreenIndcatorBg",'swLightPurpleIndcatorBg', 'swLightBlueIndcatorBg','swLightPinkIndcatorBg', "swLightGreenIndcatorBg",'swLightPurpleIndcatorBg'];
+
+  const [colorIndex, setColorIndex] = useState(0);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState([
@@ -18,7 +24,9 @@ const LoanProductsReport = () => {
       key: "selection",
     },
   ]);
+  const { data } = useSelector((state) => state.user);
 
+  console.log({ ppp: data?.data?.loanPackagesCards });
   const fetchSummaryByDate = () => {
     if (dateRange && dateRange.length > 0) {
       if (
@@ -31,7 +39,7 @@ const LoanProductsReport = () => {
           startDate,
           endDate,
         };
-        dispatch(getLoanApplicationSummary(data));
+        dispatch(getLoanProductsCardsData(data));
         setDateFilterOpen(false);
       }
     }
@@ -44,6 +52,10 @@ const LoanProductsReport = () => {
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Loan products report`);
   };
+
+  useEffect(() => {
+    dispatch(getLoanProductsCardsData());
+  }, []);
   return (
     <main className="w-full">
       <div className="rounded-lg bg-swLightGray p-5 shadow-xl">
@@ -86,96 +98,56 @@ const LoanProductsReport = () => {
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Number of Loan Products</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">6</p>
+                <p className="text-2xl font-bold mt-3">{data?.data?.summary?.loanPackagesCount}</p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Loan Originated</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">6,750</p>
+                <p className="text-2xl font-bold mt-3">{data?.data?.summary?.totalLoanApplications}</p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Overall Loan approvel rate</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">70%</p>
+                <p className="text-2xl font-bold mt-3">{data?.data?.summary?.loanApprovalRate} %</p>
               </div>
             </div>
           </div>
 
-          <div className="border p-3 bg-white rounded-lg overflow-hidden mt-5">
-            <div className="overflow-x-auto flex gap-3 rounded-lg">
-              <div className="flex gap-2 p-5 bg-swLightBlueIndcatorBg rounded-lg items-start">
-                <div className="p-[0.35rem] rounded-full bg-swLightBlue" />
-                <div className="-mt-1">
-                  <p className="font-medium">Student loan</p>
-                  <p className="mt-2 font-semibold text-lg">2,259 loans</p>
-                  <p className="font-semibold text-lg text-swLightBlue whitespace-nowrap">
-                    N 457,937,948.05
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-2 p-5 bg-swLightPinkIndcatorBg rounded-lg items-start">
-                <div className="p-[0.35rem] rounded-full bg-swIndicatorPink" />
-                <div className="-mt-1">
-                  <p className="font-medium">Student loan</p>
-                  <p className="mt-2 font-semibold text-lg">2,259 loans</p>
-                  <p className="font-semibold text-lg text-swIndicatorPink whitespace-nowrap">
-                    N 457,937,948.05
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-2 p-5 bg-swLightGreenIndcatorBg rounded-lg items-start">
-                <div className="p-[0.35rem] rounded-full bg-swGreen" />
-                <div className="-mt-1">
-                  <p className="font-medium">Student loan</p>
-                  <p className="mt-2 font-semibold text-lg">2,259 loans</p>
-                  <p className="font-semibold text-lg text-swGreen whitespace-nowrap">
-                    N 457,937,948.05
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-2 p-5 bg-swLightPurpleIndcatorBg rounded-lg items-start">
-                <div className="p-[0.35rem] rounded-full bg-swPurple" />
-                <div className="-mt-1">
-                  <p className="font-medium">Asset loan</p>
-                  <p className="mt-2 font-semibold text-lg">2,259 loans</p>
-                  <p className="font-semibold text-lg text-swPurple whitespace-nowrap">
-                    N 457,937,948.05
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-2 p-5 bg-swLightBlueIndcatorBg rounded-lg items-start">
-                <div className="p-[0.35rem] rounded-full bg-swBlue" />
-                <div className="-mt-1">
-                  <p className="font-medium">Market loan</p>
-                  <p className="mt-2 font-semibold text-lg">2,259 loans</p>
-                  <p className="font-semibold text-lg text-swBlue whitespace-nowrap">
-                    N 457,937,948.05
-                  </p>
-                </div>
-              </div>
-
-              {/* <div className="flex gap-2 p-5 bg-swLightBlueIndcatorBg rounded-lg items-start">
-              <div className="p-[0.35rem] rounded-full bg-swBlue" />
-              <div className="-mt-1">
-                <p className="font-medium">Market loan</p>
-                <p className="mt-2 font-semibold text-lg">2,259 loans</p>
-                <p className="font-semibold text-lg text-swBlue whitespace-nowrap">
-                  N 457,937,948.05
-                </p>
-              </div>
-            </div> */}
+          <div className="border p-3 bg-white rounded-lg mt-5">
+            <div className="overflow-auto flex gap-3 rounded-lg">
+              {data &&
+                data.data &&
+                data.data.loanPackagesCards &&
+                data.data.loanPackagesCards.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`flex gap-2 p-5  rounded-lg items-start min-w-[250px] bg-${colors[index]}`}
+  
+                  >
+                    <div className="p-[0.35rem] rounded-full bg-swLightBlue" />
+                    <div className="-mt-1">
+                      {item && (
+                        <>
+                          <p className="font-medium">{item.name}</p>
+                          <p className="mt-2 font-semibold text-md">
+                            {item.totalLoansCount} loans
+                          </p>
+                          <p className="font-semibold text-md text-swLightBlue whitespace-nowrap">
+                            {item.totalLoanAmount?.toLocaleString()} NGN
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
-        <div className="rounded-xl overflow-hidden border mt-5 bg-white">
+        {/* <div className="rounded-xl border mt-5 bg-white">
           <LoanProductsTable />
-        </div>
+        </div> */}
         <CenterModal
           isOpen={dateFilterOpen}
           onClose={() => {

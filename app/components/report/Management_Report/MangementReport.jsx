@@ -88,7 +88,7 @@ const ManagementReport = () => {
         </p>
       </section>
 
-      <section className="w-full">
+      <section className="w-4/5">
         {reportToggle === "loan-officer" && <LoanOfficerReport />}
         {reportToggle === "loan-products" && <LoanProductsReport />}
         {reportToggle === "fee" && <FeeReport />}

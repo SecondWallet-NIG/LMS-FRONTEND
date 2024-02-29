@@ -4,7 +4,6 @@ import CenterModal from "../../modals/CenterModal";
 import Button from "../../shared/buttonComponent/Button";
 import { PiCalendarBlankLight } from "react-icons/pi";
 import { useEffect, useState } from "react";
-import { BsGraphDownArrow } from "react-icons/bs";
 import LoanOfficerTable from "./Tables/LoanOfficerTable";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 import { handleCaptureClick } from "../../helpers/utils";
@@ -24,7 +23,7 @@ const LoanOfficerReport = () => {
   ]);
   const { data } = useSelector((state) => state.user);
 
-  console.log({ loanOfficerCard: data });
+
 
   const fetchSummaryByDate = () => {
     if (dateRange && dateRange.length > 0) {
