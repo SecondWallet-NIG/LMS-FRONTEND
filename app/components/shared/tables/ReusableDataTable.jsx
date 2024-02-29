@@ -242,7 +242,9 @@ function ReusableDataTable({
                 data?.data?.results ||
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
-                data?.results
+                data?.results ||
+                data?.data?.data?.loanOfficers ||
+                data?.data?.loanOfficers
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
@@ -358,7 +360,9 @@ function ReusableDataTable({
                 data?.data?.data ||
                 data?.results ||
                 data?.data?.data?.results ||
-                data?.data?.data?.data?.results
+                data?.data?.data?.data?.results ||
+                data?.data?.data?.loanOfficers ||
+                data?.data?.loanOfficers
             );
             console.log("table data", data);
             setData(transformedData);

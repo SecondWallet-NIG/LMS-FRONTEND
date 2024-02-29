@@ -120,7 +120,7 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
         },
       }
     );
- 
+
     return response.data;
   } catch (error) {
     if (error.response.data.error) {
@@ -128,6 +128,28 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
     } else throw new Error("An error occured, please try again later");
   }
 });
+
+export const getLoanOfficersCardsData = createAsyncThunk(
+  "user/getLoanOfficers",
+  async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/report/loan-officer/cards-data`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
 
 export const resetPassword = createAsyncThunk(
   "auth/restPassword",
@@ -242,6 +264,18 @@ const userSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(verifyToken.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getLoanOfficersCardsData.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getLoanOfficersCardsData.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getLoanOfficersCardsData.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       })

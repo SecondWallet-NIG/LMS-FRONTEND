@@ -3,13 +3,16 @@ import { DateRange } from "react-date-range";
 import CenterModal from "../../modals/CenterModal";
 import Button from "../../shared/buttonComponent/Button";
 import { PiCalendarBlankLight } from "react-icons/pi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsGraphDownArrow } from "react-icons/bs";
 import LoanOfficerTable from "./Tables/LoanOfficerTable";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 import { handleCaptureClick } from "../../helpers/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { getLoanOfficersCardsData } from "@/redux/slices/userSlice";
 
 const LoanOfficerReport = () => {
+  const dispatch = useDispatch();
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState([
@@ -19,6 +22,9 @@ const LoanOfficerReport = () => {
       key: "selection",
     },
   ]);
+  const { data } = useSelector((state) => state.user);
+
+  console.log({ loanOfficerCard: data });
 
   const fetchSummaryByDate = () => {
     if (dateRange && dateRange.length > 0) {
@@ -45,6 +51,10 @@ const LoanOfficerReport = () => {
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Loan officer report`);
   };
+
+  useEffect(() => {
+    dispatch(getLoanOfficersCardsData());
+  }, []);
 
   return (
     <main className="w-full">
@@ -89,21 +99,24 @@ const LoanOfficerReport = () => {
               <p className="font-semibold">Number of loan officers</p>
               <div className="flex justify-between items-end">
                 <p className="text-2xl font-bold mt-3">
-                  {/* {loanApplication?.data?.data.count} */}
-                  20
+                  {data?.data?.loanOfficersCount}
                 </p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Loan Originated</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">6,750</p>
+                <p className="text-2xl font-bold mt-3">
+                  {data?.data?.totalLoanApplications}
+                </p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Overall Loan approvel rate</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">70%</p>
+                <p className="text-2xl font-bold mt-3">
+                  {data?.data?.loanApprovalRate}%
+                </p>
               </div>
             </div>
           </div>
