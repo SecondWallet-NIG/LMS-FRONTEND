@@ -281,33 +281,38 @@ const CustomerProfile = () => {
                   </div>
 
                   <div className=" text-xs  text-swGray">
-                    <div className="flex justify-between">
-                      <p className="pt-3">D.O.B: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex items-center gap-1">
+                      <p className="">D.O.B: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold text-swBlue whitespace-nowrap">
                         {data?.profileInfo?.dateOfBirth}
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Gender: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">Gender: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold text-swBlue">
                         {data?.profileInfo?.gender}
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">NIN/SSN: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">NIN/SSN: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold text-swBlue">
                         {data?.profileInfo?.nin}
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Phone: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">Phone: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold text-swBlue">
                         {data?.profileInfo?.phoneNumber}
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Email: </p>
-                      <p className="pt-3 font-semibold cursor-copy text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">Email: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold cursor-copy text-swBlue">
                         {data?.profileInfo?.email}
                       </p>
                     </div>
@@ -322,28 +327,29 @@ const CustomerProfile = () => {
                     <p>Address</p>
                   </div>
                   <div className="mt-2 text-xs text-swGray">
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Country: </p>
-                      <p className="pt-3 font-semibold text-swBlue"> Nigeria</p>
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">Country: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className=" font-semibold text-swBlue"> Nigeria</p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">State: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
-                        {" "}
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">State: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className=" font-semibold text-swBlue">
                         {data?.profileInfo?.state}
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Lga: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
-                        {" "}
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">Lga: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold text-swBlue">
                         {data?.profileInfo?.lga}
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3 ">Address: </p>
-
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">Address: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold text-swBlue">
                         {data?.profileInfo?.address}
                       </p>
                     </div>
@@ -358,9 +364,10 @@ const CustomerProfile = () => {
                     <p>Bank Details</p>
                   </div>
                   <div className="text-xs text-swGray">
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Bank Name: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="whitespace-nowrap">Bank Name: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="whitespace-nowrap font-semibold text-swBlue">
                         {
                           bankArr.find(
                             (option) =>
@@ -370,21 +377,24 @@ const CustomerProfile = () => {
                         }
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Account Number: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="whitespace-nowrap">Account Number: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold text-swBlue">
                         {data?.profileInfo?.bankAccount?.accountNumber}
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Account Name: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="whitespace-nowrap">Account Name: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="whitespace-nowrap font-semibold text-swBlue">
                         {data?.profileInfo?.bankAccount?.accountName}
                       </p>
                     </div>
-                    <div className="flex gap-1 justify-between">
-                      <p className="pt-3">Bvn: </p>
-                      <p className="pt-3 font-semibold text-swBlue">
+                    <div className="pt-3 flex gap-1 items-center">
+                      <p className="">Bvn: </p>
+                      <div className="w-full border-t border-dashed" />
+                      <p className="font-semibold text-swBlue">
                         {data?.profileInfo?.bvn}
                       </p>
                     </div>
@@ -424,36 +434,44 @@ const CustomerProfile = () => {
                         </div>
 
                         <div className=" text-xs  text-swGray">
-                          <div className="flex justify-between">
-                            <p className="pt-3">Status: </p>
-                            <p className="pt-3 font-semibold text-swBlue">
+                          <div className="pt-3 flex items-center">
+                            <p className="">Status: </p>
+                            <div className="w-full border-t border-dashed" />
+                            <p className="font-semibold text-swBlue">
                               {
                                 data?.employmentInformation
                                   ?.currentEmploymentStatus
                               }
                             </p>
                           </div>
-                          <div className="flex gap-1 justify-between">
-                            <p className="pt-3">Employer Name: </p>
-                            <p className="pt-3 font-semibold text-swBlue">
+                          <div className="pt-3 flex gap-1 items-center">
+                            <p className="whitespace-nowrap ">
+                              Employer Name:{" "}
+                            </p>
+                            <div className="w-full border-t border-dashed" />
+                            <p className="whitespace-nowrap font-semibold text-swBlue">
                               {
                                 data?.employmentInformation?.employerInformation
                                   ?.name
                               }
                             </p>
                           </div>
-                          <div className="flex gap-1 justify-between">
-                            <p className="pt-3">Employer Phone: </p>
-                            <p className="pt-3 font-semibold text-swBlue">
+                          <div className="pt-3 flex gap-1 items-center">
+                            <p className="whitespace-nowrap ">
+                              Employer Phone:{" "}
+                            </p>
+                            <div className="w-full border-t border-dashed" />
+                            <p className="font-semibold text-swBlue">
                               {
                                 data?.employmentInformation?.employerInformation
                                   ?.contact
                               }
                             </p>
                           </div>
-                          <div className="flex gap-1 justify-between">
-                            <p className="pt-3">Job Title: </p>
-                            <p className="pt-3 font-semibold text-swBlue">
+                          <div className="pt-3 flex gap-1 items-center">
+                            <p className="whitespace-nowrap ">Job Title: </p>
+                            <div className="w-full border-t border-dashed" />
+                            <p className="whitespace-nowrap font-semibold text-swBlue">
                               {data?.employmentInformation?.jobTitle}
                             </p>
                           </div>
@@ -474,16 +492,18 @@ const CustomerProfile = () => {
                           )}
                         </div>
                         <div className="mt-2 text-xs text-swGray">
-                          <div className="flex gap-1 justify-between">
-                            <p className="pt-3">Income Period: </p>
-                            <p className="pt-3 font-semibold text-swBlue">
+                          <div className="pt-3 flex gap-1 items-center">
+                            <p className="whitespace-nowrap">Income Period: </p>
+                            <div className="w-full border-t border-dashed" />
+                            <p className="whitespace-nowrap font-semibold text-swBlue">
                               {" "}
                               {data?.employmentInformation?.incomePeriod}
                             </p>
                           </div>
-                          <div className="flex gap-1 justify-between">
-                            <p className="pt-3">Amount Earned: </p>
-                            <p className="pt-3 font-semibold text-swBlue">
+                          <div className="pt-3 flex gap-1 items-center">
+                            <p className="whitespace-nowrap">Amount Earned: </p>
+                            <div className="w-full border-t border-dashed" />
+                            <p className="whitespace-nowrap font-semibold text-swBlue">
                               {" "}
                               ₦{" "}
                               {Number(
@@ -491,20 +511,20 @@ const CustomerProfile = () => {
                               ).toLocaleString()}
                             </p>
                           </div>
-                          <div className="flex gap-1 justify-between">
-                            <p className="pt-3">Annual Income: </p>
-                            <p className="pt-3 font-semibold text-swBlue">
-                              {" "}
+                          <div className="pt-3 flex gap-1 items-center">
+                            <p className="whitespace-nowrap">Annual Income: </p>
+                            <div className="w-full border-t border-dashed" />
+                            <p className="whitespace-nowrap font-semibold text-swBlue">
                               ₦{" "}
                               {Number(
                                 data?.employmentInformation?.monthlyIncome * 12
                               ).toLocaleString()}
                             </p>
                           </div>
-                          <div className="flex gap-1 justify-between">
-                            <p className="pt-3 ">Income Source: </p>
-
-                            <p className="pt-3 font-semibold text-swBlue">
+                          <div className="pt-3 flex gap-1 items-center">
+                            <p className="whitespace-nowrap">Income Source: </p>
+                            <div className="w-full border-t border-dashed" />
+                            <p className="whitespace-nowrap font-semibold text-swBlue">
                               {data?.employmentInformation?.incomeSource}
                             </p>
                           </div>
