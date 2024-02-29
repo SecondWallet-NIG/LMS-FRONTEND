@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdArrowDropright } from "react-icons/io";
 import LoanOfficerReport from "./LoanOfficerReport";
 import LoanProductsReport from "./LoanProductsReport";
 import FeeReport from "./FeeReport";
+import { useDispatch } from "react-redux";
 
 const ManagementReport = () => {
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
@@ -41,6 +42,8 @@ const ManagementReport = () => {
   const handleLoanToggle = (state) => {
     setReportToggle(state);
   };
+
+  
   return (
     <main className="flex gap-5 text-swTextColor">
       <section className="w-1/5 flex flex-col gap-2">
