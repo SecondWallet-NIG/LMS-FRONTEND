@@ -28,7 +28,7 @@ const BorrowersReport = () => {
   }, []);
 
   return (
-    <main className="w-full rounded-lg bg-swLightGray p-5 shadow-xl">
+    <main className="w-full rounded-lg bg-swLightGray p-3 sm:p-5 shadow-xl">
       <div id="captureDiv" className="p-2">
         <div className="flex justify-between">
           <p className="text-lg font-semibold text-black">Borrowers Report</p>
@@ -47,7 +47,7 @@ const BorrowersReport = () => {
             onClick={handleCapture}
           />
         </div>
-        <div className="flex gap-5 mt-5">
+        <div className="flex flex-col sm:flex-row gap-5 mt-5">
           <div className="bg-white border rounded-xl p-3 w-full">
             <p className="font-semibold">Total borrowers</p>
             <p className="text-2xl font-bold mt-3">

@@ -80,7 +80,7 @@ const FeeReport = () => {
             </div>
           </div>
 
-          <div className="flex gap-5 mt-5">
+          <div className="flex flex-col sm:flex-row gap-5 mt-5">
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Number of available fees</p>
               <div className="flex justify-between items-end">
