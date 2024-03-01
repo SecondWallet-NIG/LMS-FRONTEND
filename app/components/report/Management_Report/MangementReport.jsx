@@ -43,10 +43,9 @@ const ManagementReport = () => {
     setReportToggle(state);
   };
 
-  
   return (
-    <main className="flex gap-5 text-swTextColor">
-      <section className="w-1/5 flex flex-col gap-2">
+    <main className="flex flex-col sm:flex-row gap-5 text-swTextColor">
+      <section className="md:w-1/5 flex flex-row sm:flex-col gap-2 overflow-auto text-xs sm:text-base p-5">
         <p
           className={`${
             reportToggle === "loan-officer" && "text-swBlue font-semibold"
@@ -88,7 +87,7 @@ const ManagementReport = () => {
         </p>
       </section>
 
-      <section className="w-4/5">
+      <section className="md:w-4/5">
         {reportToggle === "loan-officer" && <LoanOfficerReport />}
         {reportToggle === "loan-products" && <LoanProductsReport />}
         {reportToggle === "fee" && <FeeReport />}

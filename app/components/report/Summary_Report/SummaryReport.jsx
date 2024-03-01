@@ -59,9 +59,11 @@ const SummaryReport = () => {
   }, []);
 
   return (
-    <main className="w-full p-5">
-      <div className="flex justify-between">
-        <p className="text-2xl font-semibold text-black">Summary Report</p>
+    <main className="w-full sm:p-5">
+      <div className="flex justify-between p-5">
+        <p className="text-xl sm:text-2xl font-semibold text-black">
+          Summary Report
+        </p>
         <EditableButton
           blueBtn={true}
           label={loading ? "Exporting" : "Export report"}

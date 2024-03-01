@@ -126,7 +126,7 @@ const RepaymentReport = () => {
               </button>
             </div>
           </div>
-          <div className="flex gap-5 mt-5">
+          <div className="flex flex-col sm:flex-row gap-5 mt-5">
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Number of All Repayment</p>
               <div className="flex justify-between items-end">
@@ -152,7 +152,7 @@ const RepaymentReport = () => {
               </div>
             </div>
           </div>
-          <div className="flex gap-5 mt-5">
+          <div className="flex flex-col sm:flex-row gap-5 mt-5">
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Number of Overdue Repayment</p>
               <div className="flex justify-between items-end">
@@ -182,7 +182,7 @@ const RepaymentReport = () => {
               </div>
             </div>
           </div>
-          <div className="flex gap-5 mt-5">
+          <div className="flex flex-col sm:flex-row gap-5 mt-5">
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Total Repayment Paid</p>
               <div className="flex justify-between items-end">

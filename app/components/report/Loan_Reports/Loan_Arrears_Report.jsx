@@ -143,9 +143,9 @@ const LoanArrearsAgingReport = () => {
           />
         </div>
 
-        <div className="flex justify-between items-center mt-5">
+        <div className="flex justify-between items-center mt-5 flex-wrap gap-2">
           <p className="font-semibold text-black">Filter report</p>
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-wrap ">
             <button
               className={
                 "py-2 px-4 font-semibold text-sm border border-gray-200 rounded-md flex gap-2 items-center"
@@ -171,7 +171,7 @@ const LoanArrearsAgingReport = () => {
           </div>
         </div>
 
-        <div className="flex gap-5 mt-5">
+        <div className="flex flex-col sm:flex-row gap-5 mt-5">
           <div className="bg-white border rounded-xl p-3 w-full">
             <p className="font-semibold">Overdue payments</p>
 
