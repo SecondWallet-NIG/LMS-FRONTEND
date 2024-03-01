@@ -9,7 +9,7 @@ const DisbursedLoans = () => {
   const [role, setRole] = useState("");
   const router = useRouter();
   const headers = [
-    { id: "createdAt", label: "Date Created" },
+    { id: "disbursedAt", label: "Date Disbursed" },
     { id: "name", label: "Borrower's Name & ID" },
     { id: "loanPackageId", label: "Loan ID & package" },
     { id: "loanAmount", label: "Loan Amount" },
@@ -19,9 +19,9 @@ const DisbursedLoans = () => {
   const customDataTransformer = (apiData) => {
     return apiData?.map((item) => ({
       id: item._id,
-      createdAt: (
+      disbursedAt: (
         <div className="text-md font-[500] text-gray-700">
-         {formatDate(item.createdAt?.slice(0, 10))}
+         {formatDate(item.disbursedAt?.slice(0, 10))}
         </div>
       ),
       name: (

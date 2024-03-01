@@ -67,6 +67,7 @@ function ReusableDataTable({
 
   const handleDownload = () => {
     let x = `${apiEndpoint}?page=${1}&per_page=${downloadData}`;
+    console.log({dateRange});
     if (dateRange && dateRange.length > 0) {
       if (
         dateRange[0].startDate instanceof Date &&
@@ -364,7 +365,7 @@ function ReusableDataTable({
                 data?.data?.data?.loanOfficers ||
                 data?.data?.loanOfficers
             );
-            console.log("table data", data);
+
             setData(transformedData);
             setPaginationLinks(
               data?.data?.links ||
@@ -499,7 +500,6 @@ function ReusableDataTable({
     return pageNumbers;
   };
 
-  console.log("data.length", data.length);
 
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
