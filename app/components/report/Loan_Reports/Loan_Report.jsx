@@ -61,7 +61,7 @@ const LoanReport = () => {
       id="captureDiv"
       className="w-full rounded-lg bg-swLightGray p-5 shadow-xl"
     >
-      <div id="loanId" className="p-2">
+      <div id="loanId" className="">
         <div className="flex justify-between">
           <p className="text-lg font-semibold text-black">Loan Report</p>
           {/* <button
@@ -111,7 +111,7 @@ const LoanReport = () => {
           </button> */}
           </div>
         </div>
-        <div className="flex gap-5 mt-5">
+        <div className="flex flex-col sm:flex-row gap-5 mt-5">
           <div className="bg-white border rounded-xl p-3 w-full">
             <p className="font-semibold">Total Number of Loans</p>
             <div className="flex justify-between items-end">
@@ -141,7 +141,7 @@ const LoanReport = () => {
             </div>
           </div>
         </div>
-        <div className="flex gap-5 mt-5">
+        <div className="flex flex-col sm:flex-row gap-5 mt-5">
           <div className="bg-white border rounded-xl p-3 w-full">
             <p className="font-semibold">Number of Approved Loans</p>
             <div className="flex justify-between items-end">
@@ -170,7 +170,7 @@ const LoanReport = () => {
             </div>
           </div>
         </div>
-        <div className="flex gap-5 mt-5">
+        <div className="flex flex-col sm:flex-row gap-5 mt-5">
           <div className="bg-white border rounded-xl p-3 w-full">
             <p className="font-semibold">Number of Interest Servicing Loans</p>
             <div className="flex justify-between items-end">

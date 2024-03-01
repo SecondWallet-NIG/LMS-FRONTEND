@@ -12,7 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 const LoanProductsReport = () => {
   const dispatch = useDispatch();
-  const colors = ['swLightBlueIndcatorBg','swLightPinkIndcatorBg', "swLightGreenIndcatorBg",'swLightPurpleIndcatorBg', 'swLightBlueIndcatorBg','swLightPinkIndcatorBg', "swLightGreenIndcatorBg",'swLightPurpleIndcatorBg'];
+  const colors = [
+    "swLightBlueIndcatorBg",
+    "swLightPinkIndcatorBg",
+    "swLightGreenIndcatorBg",
+    "swLightPurpleIndcatorBg",
+    "swLightBlueIndcatorBg",
+    "swLightPinkIndcatorBg",
+    "swLightGreenIndcatorBg",
+    "swLightPurpleIndcatorBg",
+  ];
 
   const [colorIndex, setColorIndex] = useState(0);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
@@ -94,23 +103,29 @@ const LoanProductsReport = () => {
             </div>
           </div>
 
-          <div className="flex gap-5 mt-5">
+          <div className="flex flex-col sm:flex-row gap-5 mt-5">
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Number of Loan Products</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">{data?.data?.summary?.loanPackagesCount}</p>
+                <p className="text-2xl font-bold mt-3">
+                  {data?.data?.summary?.loanPackagesCount}
+                </p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Loan Originated</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">{data?.data?.summary?.totalLoanApplications}</p>
+                <p className="text-2xl font-bold mt-3">
+                  {data?.data?.summary?.totalLoanApplications}
+                </p>
               </div>
             </div>
             <div className="bg-white border rounded-xl p-3 w-full">
               <p className="font-semibold">Overall Loan approvel rate</p>
               <div className="flex justify-between items-end">
-                <p className="text-2xl font-bold mt-3">{data?.data?.summary?.loanApprovalRate} %</p>
+                <p className="text-2xl font-bold mt-3">
+                  {data?.data?.summary?.loanApprovalRate} %
+                </p>
               </div>
             </div>
           </div>
@@ -124,7 +139,6 @@ const LoanProductsReport = () => {
                   <div
                     key={index}
                     className={`flex gap-2 p-5  rounded-lg items-start min-w-[250px] bg-${colors[index]}`}
-  
                   >
                     <div className="p-[0.35rem] rounded-full bg-swLightBlue" />
                     <div className="-mt-1">

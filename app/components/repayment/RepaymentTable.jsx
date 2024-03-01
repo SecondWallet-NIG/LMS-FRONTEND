@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { formatDate } from "@/helpers";
 const RepaymentTable = () => {
-
   const [currentPage, setCurrentPage] = useState("all-repayment");
 
   const header = [
@@ -36,17 +35,17 @@ const RepaymentTable = () => {
       ),
       amountDue: (
         <div className="text-md font-[500] text-gray-700">
-         ₦ {item?.amountDue.toLocaleString()|| 0} 
+          ₦ {item?.amountDue.toLocaleString() || 0}
         </div>
       ),
       amountPaid: (
         <div className="text-md font-[500] text-gray-700">
-         ₦ {item?.amountPaid?.toLocaleString() || 0} 
+          ₦ {item?.amountPaid?.toLocaleString() || 0}
         </div>
       ),
       balanceToPay: (
         <div className="text-md font-[500] text-gray-700">
-         ₦ {item?.balanceToPay?.toLocaleString() || 0} 
+          ₦ {item?.balanceToPay?.toLocaleString() || 0}
         </div>
       ),
       status: (
@@ -63,55 +62,51 @@ const RepaymentTable = () => {
     }));
   };
 
-
   return (
+    <main>
+      <div className="flex text-xs sm:text-base">
+        <p
+          className={`border-b-2 px-6 py-2 cursor-pointer ${
+            currentPage === "all-repayment"
+              ? "text-swBlue border-swBlue font-medium"
+              : "border-transparent"
+          } `}
+          onClick={() => setCurrentPage("all-repayment")}
+        >
+          All repayment
+        </p>
+        <p
+          className={` border-b-2  px-6 py-2 cursor-pointer ${
+            currentPage === "overdue-repayment"
+              ? "text-swBlue border-b-swBlue font-medium"
+              : "border-transparent"
+          }`}
+          onClick={() => setCurrentPage("overdue-repayment")}
+        >
+          Overdue repayment
+        </p>
+      </div>
 
-      <main>
-        <div className="flex">
-          <p
-            className={`border-b-2 px-6 py-2 cursor-pointer ${
-              currentPage === "all-repayment"
-                ? "text-swBlue border-swBlue font-medium"
-                : "border-transparent"
-            } `}
-            onClick={() => setCurrentPage("all-repayment")}
-          >
-            All repayment
-          </p>
-          <p
-            className={` border-b-2  px-6 py-2 cursor-pointer ${
-              currentPage === "overdue-repayment"
-                ? "text-swBlue border-b-swBlue font-medium"
-                : "border-transparent"
-            }`}
-            onClick={() => setCurrentPage("overdue-repayment")}
-          >
-            Overdue repayment
-          </p>
-        </div>
-
-        <div className="w-full">
-          <ReusableDataTable
-            filterParams={[
-              { name: "Unpaid" },
-              { name: "Fully paid" },
-              { name: "Overdue" },
-          
-            ]}
+      <div className="w-full">
+        <ReusableDataTable
+          filterParams={[
+            { name: "Unpaid" },
+            { name: "Fully paid" },
+            { name: "Overdue" },
+          ]}
           // filterParams={}
-            headers={header}
-            dataTransformer={customDataTransformer}
-            initialData={[]}
-            apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
-            btnTextClick={() => {
-              router.push("/create-borrower");
-            }}
-            filters={true}
-            pagination={true}
-          />
-        </div>
-      </main>
-
+          headers={header}
+          dataTransformer={customDataTransformer}
+          initialData={[]}
+          apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
+          btnTextClick={() => {
+            router.push("/create-borrower");
+          }}
+          filters={true}
+          pagination={true}
+        />
+      </div>
+    </main>
   );
 };
 

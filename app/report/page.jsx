@@ -15,19 +15,17 @@ const Report = () => {
   const [reportToggle, setReportToggle] = useState("loan");
   const [searchBtn, setSearchBtn] = useState(false);
 
-
-
   const handleReports = (id) => {
     setReportToggle(id);
   };
   return (
     <DashboardLayout>
-      <main className="p-5">
+      <main className="">
         <section
           aria-label="Report toggles"
-          className={`flex justify-between items-center font-medium ${poppins.className}`}
+          className={`text-xs sm:text-base flex justify-between items-center font-medium ${poppins.className}`}
         >
-          <div className="flex">
+          <div className="flex px-5">
             <div
               className={`cursor-pointer py-1 px-4 border-b-2 border-transparent ${
                 reportToggle === "loan"
@@ -67,7 +65,7 @@ const Report = () => {
           </div>
         </section>
 
-        <section className="my-8">
+        <section className="my-8 md:mx-5">
           {reportToggle === "loan" && <LoanReports />}
           {reportToggle === "summary" && <SummaryReport />}
           {reportToggle === "management" && <ManagementReport />}
