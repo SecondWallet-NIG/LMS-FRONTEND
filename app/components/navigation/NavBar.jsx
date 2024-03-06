@@ -175,7 +175,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
         </div>
       </div>
 
-      {/* <Image
+      <Image
         src={navPatternBg}
         alt="nav pattern"
         fill
@@ -183,7 +183,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
         // height={"100%"}
         sizes="50%"
         className="absolute w-1/2 ml-auto"
-      /> */}
+      />
     </nav>
   );
 };

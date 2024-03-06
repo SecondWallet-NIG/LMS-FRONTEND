@@ -20,7 +20,6 @@ const DashboardPage = () => {
   const cardData = useSelector((state) => state.dashboardData);
   const graphData = useSelector((state) => state.dashboardData);
 
-
   const options = {
     responsive: true,
     maintainAspectRatio: false, // Set to false to allow custom height
@@ -110,7 +109,7 @@ const DashboardPage = () => {
         stack: "Stack 0",
       },
       {
-        label: "Management Fees",
+        label: "Monthly Expected Interest",
         data: dataValuesFees,
         backgroundColor: "#4aba5b",
         barThickness: 10,
@@ -192,22 +191,22 @@ const DashboardPage = () => {
               cardLinkLabel={"View"}
               cardLink={"/borrowers"}
               firstStat={[
-                "Total",
+                "Total Borrowers",
                 cardData?.data?.data.borrowersData?.totalBorrowersCount,
               ]}
               secondStat={[
                 "This month",
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
-                cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
-                cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
+               // cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
+               // cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
-              thirdStat={[
-                "Today",
-                cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
-                cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
-                cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
-              ]}
+              // thirdStat={[
+              //   "Backlisted Borrowers",
+              //   cardData?.data?.data.borrowersData?.totalInactiveAccountsCount,
+              //   cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
+              //   cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
+              // ]}
             />
             <DashboardCard
               blueBg={true}
@@ -224,7 +223,7 @@ const DashboardPage = () => {
                 "This month",
                 "₦ " +
                   cardData?.data?.data.disbursementData?.totalDisbursementsPaidThisMonth?.toLocaleString(),
-                cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
+               // cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
               ]}
               // thirdStat={[
               //   "Today",
@@ -248,14 +247,14 @@ const DashboardPage = () => {
                 "This month",
                 "₦ " +
                   cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
-                cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth?.toLocaleString(),
+               // cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth?.toLocaleString(),
               ]}
-              thirdStat={[
-                "Today",
-                "₦ " +
-                  cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24?.toLocaleString(),
-                cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24?.toLocaleString(),
-              ]}
+              // thirdStat={[
+              //   "Today",
+              //   "₦ " +
+              //     cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24?.toLocaleString(),
+              //   cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24?.toLocaleString(),
+              // ]}
             />
             <DashboardCard
               cardName={"All Loans"}
@@ -272,21 +271,21 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              cardName={"New loans"}
+              cardName={"Loans Approved for Disbursement"}
               cardLinkLabel={"View"}
               cardLink={"/pending-loans"}
               firstStat={[
                 "Count",
-                cardData?.data?.data.openLoanData?.totalOpenLoansCount,
+                cardData?.data?.data.disbursementData?.totalReadyDisbursementsPaidCount || 0,
               ]}
               secondStat={[
                 "Total",
                 "₦ " +
-                  cardData?.data?.data.openLoanData?.totalOpenLoansAmount?.toLocaleString(),
+                  cardData?.data?.data.disbursementData?.totalReadyDisbursed?.toLocaleString() || 0,
               ]}
             />
             <DashboardCard
-              cardName={"Active loans"}
+              cardName={"Total Outstanding Active Loans"}
               cardLinkLabel={"View"}
               cardLink={"/active-loans"}
               firstStat={[
@@ -296,71 +295,65 @@ const DashboardPage = () => {
               secondStat={[
                 "Total",
                 "₦ " +
-                  cardData?.data?.data.activeLoanData?.totalOpenLoansAmount?.toLocaleString(),
+                cardData?.data?.data.activeLoanData?.totalOpenLoansAmount?.toLocaleString(),
               ]}
             />
 
             <DashboardCard
-              cardName={"Denied loans"}
+              cardName={"Active / Fully Paid Loans"}
+              // cardLinkLabel={"View"}
+              // cardLink={"/loan-applications"}
               firstStat={[
-                "Total",
-                cardData?.data?.data.declinedLoanData
-                  ?.totalDeclinedLoanApplicationsCount,
-              ]}
-              secondStat={[
-                "This month",
+                "Total Outstanding Active Loans",
                 "₦ " +
-                  cardData?.data?.data?.declinedLoanData
-                    ?.totalDeclinedLoanApplicationsCountThisMonth,
-              ]}
-              thirdStat={["null"]}
-            />
-            <DashboardCard
-              cardLinkLabel={"View"}
-              cardLink={"/unpaid-repayment"}
-              cardName={"Pending repayments"}
-              firstStat={[
-                "Count",
-                cardData?.data?.data.unpaidRepaymentData
-                  ?.totalUnpaidRepaymentsCount,
+                  cardData?.data?.data.activeLoanData?.totalOpenLoansAmount?.toLocaleString(),
               ]}
               secondStat={[
-                "Total",
-                "₦ " +
-                  cardData?.data?.data.unpaidRepaymentData?.totalUnpaidRepaymentsAmount?.toLocaleString(),
-              ]}
-              thirdStat={["null"]}
-            />
-            <DashboardCard
-              cardName={"Fully paid loans"}
-              cardLinkLabel={"View"}
-              cardLink={"/fully-paid-loans"}
-              firstStat={[
-                "Count",
-                cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansCount?.toLocaleString(),
-                cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansCount?.toLocaleString(),
-              ]}
-              secondStat={[
-                "Total",
+                "Fully Paid Loans",
                 "₦ " +
                   cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansAmount?.toLocaleString(),
               ]}
+            />
+            <DashboardCard
+              // cardLinkLabel={"View"}
+              // cardLink={"/unpaid-repayment"}
+              cardName={"Total Fees"}
+              firstStat={[
+                "Management Fees",
+                "₦ " +
+                cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
+              ]}
+              secondStat={[
+                "Commitment Fees",
+                "₦ " +
+                  cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
+              ]}
               thirdStat={["null"]}
             />
             <DashboardCard
-              cardName={"Commitment Fees"}
+              cardName={"Principal Outstanding Active Loans"}
+              cardLinkLabel={"View"}
+              cardLink={"/fully-paid-loans"}
+              firstStat={[
+                "Total",
+                "₦ " +
+                cardData?.data?.data.activeLoanData?.totalActivePrincipal?.toLocaleString()
+              ]}
+              thirdStat={["null"]}
+            />
+            <DashboardCard
+              cardName={"Restructured Loans"}
               cardLink={""}
               cardLinkLabel={"View"}
               firstStat={[
                 "Total",
-                "₦ " +
-                  cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
+
+                 "Coming soon",
               ]}
               secondStat={[
-                "This month",
-                "₦ " +
-                  cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
-                cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
+                "Count",
+
+                "Coming soon",
               ]}
               // thirdStat={[
               //   "Today",
@@ -370,19 +363,17 @@ const DashboardPage = () => {
             />
             <DashboardCard
               cardLinkLabel={"View"}
-              cardName={"Management Fees"}
+              cardName={"Expected Interest"}
               cardLink={""}
               firstStat={[
                 "Total",
                 "₦ " +
-                  cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
+                cardData?.data?.data.interestData?.totalExpectedInterest.toLocaleString()
               ]}
               secondStat={[
                 "This month",
                 "₦ " +
-                  cardData?.data?.data.feesData?.totalCommitmentFeePaidThisMonth?.toLocaleString(),
-                cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
-                cardData?.data?.data?.feesData?.percentageTotalCommitmentFeePaidThisMonth?.toLocaleString(),
+                cardData?.data?.data.interestData?.totalExpectedInterestThisMonth.toLocaleString()
               ]}
               // thirdStat={[
               //   "Today",
@@ -393,12 +384,12 @@ const DashboardPage = () => {
             />
             <DashboardCard
               cardLinkLabel={"View"}
-              cardName={"Interests"}
+              cardName={"Interest Outstanding Active Loans"}
               cardLink={""}
               firstStat={[
                 "Expected Interest",
                 "₦ " +
-                  cardData?.data?.data.interestData?.totalExpectedInterest.toLocaleString(),
+                  cardData?.data?.data.activeLoanData?.totalActiveInterest.toLocaleString(),
               ]}
               // secondStat={[
               //   "Actual Interest",
