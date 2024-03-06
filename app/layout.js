@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const interval = setInterval(() => {
       checkForInactivity();
-    }, 1800000);
+    }, 900000);
 
     return () => clearInterval(interval);
   }, []);
