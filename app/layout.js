@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
   };
 
   const updateExpireTime = () => {
-    const expireTime = Date.now() + 7200000;
+    const expireTime = Date.now() + 3600;
 
     localStorage.setItem("expireTime", expireTime);
   };
@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const interval = setInterval(() => {
       checkForInactivity();
-    }, 900000);
+    }, 3600);
 
     return () => clearInterval(interval);
   }, []);

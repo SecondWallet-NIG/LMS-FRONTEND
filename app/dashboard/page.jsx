@@ -198,15 +198,15 @@ const DashboardPage = () => {
                 "This month",
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
-                cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
-                cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
+               // cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
+               // cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
-              thirdStat={[
-                "Backlisted Borrowers",
-                cardData?.data?.data.borrowersData?.totalInactiveAccountsCount,
-                cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
-                cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
-              ]}
+              // thirdStat={[
+              //   "Backlisted Borrowers",
+              //   cardData?.data?.data.borrowersData?.totalInactiveAccountsCount,
+              //   cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
+              //   cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
+              // ]}
             />
             <DashboardCard
               blueBg={true}
@@ -223,7 +223,7 @@ const DashboardPage = () => {
                 "This month",
                 "₦ " +
                   cardData?.data?.data.disbursementData?.totalDisbursementsPaidThisMonth?.toLocaleString(),
-                cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
+               // cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
               ]}
               // thirdStat={[
               //   "Today",
@@ -247,14 +247,14 @@ const DashboardPage = () => {
                 "This month",
                 "₦ " +
                   cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
-                cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth?.toLocaleString(),
+               // cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth?.toLocaleString(),
               ]}
-              thirdStat={[
-                "Today",
-                "₦ " +
-                  cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24?.toLocaleString(),
-                cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24?.toLocaleString(),
-              ]}
+              // thirdStat={[
+              //   "Today",
+              //   "₦ " +
+              //     cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24?.toLocaleString(),
+              //   cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24?.toLocaleString(),
+              // ]}
             />
             <DashboardCard
               cardName={"All Loans"}
@@ -335,11 +335,6 @@ const DashboardPage = () => {
               cardLinkLabel={"View"}
               cardLink={"/fully-paid-loans"}
               firstStat={[
-                "Count",
-                cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansCount?.toLocaleString(),
-                cardData?.data?.data.fullyRepaidLoansData?.totalFullyPaidLoansCount?.toLocaleString(),
-              ]}
-              secondStat={[
                 "Total",
                 "₦ " +
                 cardData?.data?.data.activeLoanData?.totalActivePrincipal?.toLocaleString()
