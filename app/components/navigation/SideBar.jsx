@@ -16,9 +16,10 @@ import SidebarLink from "../shared/sideBarLink/SidebarLink";
 import {
   FiArrowDownLeft,
   FiArrowUpRight,
-  FiDollarSign,
+  FiFile,
   FiSend,
   FiUser,
+  FiFileText
 } from "react-icons/fi";
 import { IoMdAdd, IoMdCard, IoMdClose } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
@@ -227,7 +228,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               ]}
               userRoleTag={userRoleTag}
               icon={
-                <FiDollarSign
+                <FiFile
                   className={`${
                     activeLink === "loan-applications" && "text-swBlue"
                   } `}
@@ -237,6 +238,36 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Loan applications"
               link="/loan-applications"
+              sideBarOpen={sideBarOpen}
+              onClick={() => {
+                setActiveLink("loan-applications");
+              }}
+            />
+                <SidebarLink
+              allowedRoleTags={[
+                "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "ICO",
+                "COF",
+                "LR0",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={
+                <FiFileText
+                  className={`${
+                    activeLink === "loan-drafts" && "text-swBlue"
+                  } `}
+                  size={20}
+                />
+              }
+              pathname={pathname}
+              text="Loan drafts"
+              link="/loan-drafts"
               sideBarOpen={sideBarOpen}
               onClick={() => {
                 setActiveLink("loan-applications");
@@ -620,7 +651,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               ]}
               userRoleTag={userRoleTag}
               icon={
-                <FiDollarSign
+                <FiFile
                   className={`${
                     activeLink === "loan-applications" && "text-swBlue"
                   } `}
@@ -629,6 +660,36 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }
               pathname={pathname}
               text="Loan applications"
+              link="/loan-applications"
+              sideBarOpen={sideBarOpen}
+              onClick={() => {
+                setActiveLink("loan-applications");
+              }}
+            />
+            <SidebarLink
+              allowedRoleTags={[
+                "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "ICO",
+                "COF",
+                "LR0",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={
+                <FiFile
+                  className={`${
+                    activeLink === "loan-applications" && "text-swBlue"
+                  } `}
+                  size={20}
+                />
+              }
+              pathname={pathname}
+              text="Loan Drafts"
               link="/loan-applications"
               sideBarOpen={sideBarOpen}
               onClick={() => {

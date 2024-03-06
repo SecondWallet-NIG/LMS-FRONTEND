@@ -9,7 +9,7 @@ import Link from "next/link";
 import Button from "../shared/buttonComponent/Button";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
 
-const LoanTable = () => {
+const LoanDraftTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
   const [roleTag, setRoleTag] = useState("");
@@ -31,7 +31,7 @@ const LoanTable = () => {
       id: item._id,
       createdAt: (
         <div>
-          <div className="text-xs font-[500] text-gray-700">
+          <div className="text-md font-[500] text-gray-700">
             {formatDate(item.createdAt?.slice(0, 10))}
           </div>
           <div className="text-xs font-light text-gray-500 pt-2">
@@ -41,7 +41,7 @@ const LoanTable = () => {
       ),
       name: (
         <div>
-          <div className="text-xs font-[500] text-gray-700">{`${item?.customer?.firstName} ${item?.customer?.lastName}`}</div>
+          <div className="text-md font-[500] text-gray-700">{`${item?.customer?.firstName} ${item?.customer?.lastName}`}</div>
           <div className="text-xs text-gray-500 font-light pt-2">
             {item?.customer?.customerId}
           </div>
@@ -49,7 +49,7 @@ const LoanTable = () => {
       ),
       loanPackageId: (
         <div>
-          <div className="text-xs font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
+          <div className="text-md font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
           <div className="text-xs text-gray-500 pt-2">
             SWL-{`${item?.loanId}`}
           </div>
@@ -119,21 +119,21 @@ const LoanTable = () => {
     <div>
       {userId && (
         <ReusableDataTable
-          filterParams={[
-            { name: "Pending" },
-            { name: "Ready for Disbursal" },
-            { name: "In Progress" },
-            { name: "Declined" },
-            { name: "Disbursed" },
-            { name: "Fully Paid" },
-            { name: "Overdue" },
-            { name: "Cancelled Disbursement" },
-          ]}
+        //   filterParams={[
+        //     { name: "Pending" },
+        //     { name: "Ready for Disbursal" },
+        //     { name: "In Progress" },
+        //     { name: "Declined" },
+        //     { name: "Disbursed" },
+        //     { name: "Fully Paid" },
+        //     { name: "Overdue" },
+        //     { name: "Cancelled Disbursement" },
+        //   ]}
           dataTransformer={customDataTransformer}
           onClickRow="/loan-applications/view-loan"
           headers={headers}
           initialData={[]}
-          apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/all`}
+          apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/draft`}
           btnText={
             <div className="flex gap-1 items-center p-1">
               <p className="">create loan</p>
@@ -154,4 +154,4 @@ const LoanTable = () => {
   );
 };
 
-export default LoanTable;
+export default LoanDraftTable;
