@@ -246,7 +246,7 @@ const DashboardPage = () => {
               secondStat={[
                 "This month",
                 "₦ " +
-                  cardData?.data?.data.repaymentData?.totalRepaymentsPaid?.toLocaleString(),
+                  cardData?.data?.data.repaymentData?.totalRepaymentsPaidThisMonth?.toLocaleString(),
                // cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth?.toLocaleString(),
               ]}
               // thirdStat={[
@@ -257,7 +257,7 @@ const DashboardPage = () => {
               // ]}
             />
             <DashboardCard
-              cardName={"All Loans"}
+              cardName={"All Loans (DL | OVD | FPL)"}
               cardLinkLabel={"View"}
               cardLink={"/loan-applications"}
               firstStat={[
