@@ -10,7 +10,7 @@ import RepaymentOverdueTable from "../components/repayment/OverdueTable";
 
 const Repayment = () => {
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState("all-repayment");
+  const [currentPage, setCurrentPage] = useState("overdue-repayment");
   const { loading, error, data } = useSelector((state) => state.loanRepayment);
 
   const header = [
@@ -81,6 +81,7 @@ const Repayment = () => {
     }));
   };
   useEffect(() => {
+    setCurrentPage("overdue-repayment");
     dispatch(getRepaymentSummary());
   }, []);
 
@@ -88,16 +89,7 @@ const Repayment = () => {
     <DashboardLayout>
       <main>
         <div className="flex">
-          <p
-            className={`border-b-2 px-6 py-2 cursor-pointer ${
-              currentPage === "all-repayment"
-                ? "text-swBlue border-swBlue font-medium"
-                : "border-transparent"
-            } `}
-            onClick={() => setCurrentPage("all-repayment")}
-          >
-            All repayment
-          </p>
+
           <p
             className={` border-b-2  px-6 py-2 cursor-pointer ${
               currentPage === "overdue-repayment"
@@ -106,7 +98,17 @@ const Repayment = () => {
             }`}
             onClick={() => setCurrentPage("overdue-repayment")}
           >
-            Overdue repayment
+            This Month Repayment
+          </p>
+          <p
+            className={`border-b-2 px-6 py-2 cursor-pointer ${
+              currentPage === "all-repayment"
+                ? "text-swBlue border-swBlue font-medium"
+                : "border-transparent"
+            } `}
+            onClick={() => setCurrentPage("all-repayment")}
+          >
+            All Repayment
           </p>
         </div>
 
@@ -143,6 +145,29 @@ const Repayment = () => {
               </div>
             ))}
         </div>
+        {currentPage === "overdue-repayment" && (
+          <div className="w-full">
+            {/* <RepaymentOverdueTable /> */}
+            <ReusableDataTable
+              // filterParams={[
+              //   { name: "Unpaid" },
+              //   { name: "Fully paid" },
+              //   { name: "Overdue" },
+              // ]}
+              headers={header}
+              dataTransformer={customDataTransformer}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment/per-month`}
+              btnTextClick={() => {
+                router.push("/create-borrower");
+              }}
+              filters={true}
+              pagination={true}
+              onClickRow={"/loan-applications/view-loan"}
+             // role={"Overdue"}
+            />
+          </div>
+        )}
         {currentPage === "all-repayment" && (
           <div className="w-full">
             <ReusableDataTable
@@ -165,29 +190,7 @@ const Repayment = () => {
           </div>
         )}
 
-        {currentPage === "overdue-repayment" && (
-          <div className="w-full">
-            {/* <RepaymentOverdueTable /> */}
-            <ReusableDataTable
-              filterParams={[
-                { name: "Unpaid" },
-                { name: "Fully paid" },
-                { name: "Overdue" },
-              ]}
-              headers={header}
-              dataTransformer={customDataTransformer}
-              initialData={[]}
-              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
-              btnTextClick={() => {
-                router.push("/create-borrower");
-              }}
-              filters={true}
-              pagination={true}
-              onClickRow={"/loan-applications/view-loan"}
-              role={"Overdue"}
-            />
-          </div>
-        )}
+
       </main>
     </DashboardLayout>
   );
