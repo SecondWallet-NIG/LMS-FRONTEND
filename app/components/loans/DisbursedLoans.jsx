@@ -54,6 +54,8 @@ const DisbursedLoans = () => {
               ? "bg-swIndicatorPurple"
               : item.status === "Disbursed"
               ? "bg-swBlue"
+              : item.status === "Overdue"
+              ? "bg-swIndicatorLightRed "
               : "bg-swGreen"
           } px-2 py-1 rounded-full text-xs font-normal text-white`}
         >
