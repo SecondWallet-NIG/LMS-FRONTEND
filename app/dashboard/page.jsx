@@ -198,15 +198,7 @@ const DashboardPage = () => {
                 "This month",
                 cardData?.data?.data.borrowersData
                   ?.totalBorrowersCountThisMonth,
-               // cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
-               // cardData?.data?.data?.borrowersData?.percentageTotalBorrowersCountThisMonth?.toLocaleString(),
               ]}
-              // thirdStat={[
-              //   "Backlisted Borrowers",
-              //   cardData?.data?.data.borrowersData?.totalInactiveAccountsCount,
-              //   cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
-              //   cardData?.data?.data.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
-              // ]}
             />
             <DashboardCard
               blueBg={true}
@@ -223,14 +215,7 @@ const DashboardPage = () => {
                 "This month",
                 "₦ " +
                   cardData?.data?.data.disbursementData?.totalDisbursementsPaidThisMonth?.toLocaleString(),
-               // cardData?.data?.data?.disbursementData?.percentageTotalDisbursementsPaidThisMonth?.toLocaleString(),
               ]}
-              // thirdStat={[
-              //   "Today",
-              //   "₦ " +
-              //     cardData?.data?.data.disbursementData?.totalDisbursementsPaidLast24?.toLocaleString(),
-              //   cardData?.data?.data.disbursementData?.percentageTotalDisbursementsPaidLast24?.toLocaleString(),
-              // ]}
             />
             <DashboardCard
               blueBg={true}
@@ -247,14 +232,7 @@ const DashboardPage = () => {
                 "This month",
                 "₦ " +
                   cardData?.data?.data.repaymentData?.totalRepaymentsPaidThisMonth?.toLocaleString(),
-               // cardData?.data?.data?.repaymentData?.percentageTotalRepaymentsPaidThisMonth?.toLocaleString(),
               ]}
-              // thirdStat={[
-              //   "Today",
-              //   "₦ " +
-              //     cardData?.data?.data.repaymentData?.totalRepaymentsPaidLast24?.toLocaleString(),
-              //   cardData?.data?.data.repaymentData?.percentageTotalRepaymentsPaidLast24?.toLocaleString(),
-              // ]}
             />
             <DashboardCard
               cardName={"All Loans (DL | OVD | FPL)"}
@@ -315,8 +293,6 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              // cardLinkLabel={"View"}
-              // cardLink={"/unpaid-repayment"}
               cardName={"Total Fees"}
               firstStat={[
                 "Management Fees",
@@ -355,11 +331,6 @@ const DashboardPage = () => {
 
                 "Coming soon",
               ]}
-              // thirdStat={[
-              //   "Today",
-              //   "₦ " +  cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
-              //   cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
-              // ]}
             />
             <DashboardCard
               cardLinkLabel={"View"}
@@ -375,12 +346,6 @@ const DashboardPage = () => {
                 "₦ " +
                 cardData?.data?.data.interestData?.totalExpectedInterestThisMonth.toLocaleString()
               ]}
-              // thirdStat={[
-              //   "Today",
-              //   "₦ " + cardData?.data?.data.feesData?.totalCommitmentFeePaidLast24?.toLocaleString(),
-              //   cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
-              //   cardData?.data?.data.feesData?.percentageTotalCommitmentFeePaidLast24?.toLocaleString(),
-              // ]}
             />
             <DashboardCard
               cardLinkLabel={"View"}
@@ -391,16 +356,6 @@ const DashboardPage = () => {
                 "₦ " +
                   cardData?.data?.data.activeLoanData?.totalActiveInterest.toLocaleString(),
               ]}
-              // secondStat={[
-              //   "Actual Interest",
-              //   cardData?.data?.data.interestData?.totalExpectedInterest.toLocaleString(),
-              // ]}
-              // thirdStat={[
-              //   "Today",
-              //   cardData?.data?.data.borrowersData?.totalBorrowerCountLast24,
-              //   cardData?.data?.data?.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
-              //   cardData?.data?.data?.borrowersData?.percentageTotalBorrowerCountLast24?.toLocaleString(),
-              // ]}
             />
           </div>
 
