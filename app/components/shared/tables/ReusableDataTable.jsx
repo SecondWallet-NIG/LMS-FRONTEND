@@ -96,7 +96,6 @@ function ReusableDataTable({
     }
 
     if (status != " ") {
-      console.log({ status });
       x += `&status=${status}`;
     }
 

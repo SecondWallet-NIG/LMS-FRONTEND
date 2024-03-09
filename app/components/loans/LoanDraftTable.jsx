@@ -119,16 +119,12 @@ const LoanDraftTable = () => {
     <div>
       {userId && (
         <ReusableDataTable
-        //   filterParams={[
-        //     { name: "Pending" },
-        //     { name: "Ready for Disbursal" },
-        //     { name: "In Progress" },
-        //     { name: "Declined" },
-        //     { name: "Disbursed" },
-        //     { name: "Fully Paid" },
-        //     { name: "Overdue" },
-        //     { name: "Cancelled Disbursement" },
-        //   ]}
+          filterParams={[
+            { name: "Pending" },
+            { name: "Ready for Disbursal" },
+            { name: "In Progress" },
+            { name: "Declined" }
+          ]}
           dataTransformer={customDataTransformer}
           onClickRow="/loan-applications/view-loan"
           headers={headers}
