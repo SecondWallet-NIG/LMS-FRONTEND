@@ -7,13 +7,17 @@ import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { getRepaymentSummary } from "@/redux/slices/loanRepaymentSlice";
 
 const LoanArrearsAgingReport = () => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
   const [roleTag, setRoleTag] = useState("");
   const router = useRouter();
+  const {  error, data } = useSelector((state) => state.loanRepayment);
 
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Loan arrears aging report`);
@@ -115,6 +119,7 @@ const LoanArrearsAgingReport = () => {
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
+      dispatch(getRepaymentSummary());
     };
 
     fetchUserData();
@@ -127,13 +132,6 @@ const LoanArrearsAgingReport = () => {
           <p className="text-lg font-semibold text-black">
             Loan Arears Ageing Report
           </p>
-          {/* <button
-          className={
-            "py-2 px-4 text-white text-sm bg-swBlue font-semibold rounded-md"
-          }
-        >
-          Export report
-        </button> */}
           <EditableButton
             blueBtn={true}
             label={loading ? "Exporting" : "Export"}
@@ -173,13 +171,13 @@ const LoanArrearsAgingReport = () => {
 
         <div className="flex flex-col sm:flex-row gap-5 mt-5">
           <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Overdue payments</p>
+            <p className="font-semibold">Number of Overdue payments</p>
 
-            <p className="text-2xl font-bold mt-3">700</p>
+            <p className="text-2xl font-bold mt-3">{data?.data[2].totalRepayment}</p>
           </div>
           <div className="bg-white border rounded-xl p-3 w-full">
-            <p className="font-semibold">Amount of overdue payments</p>
-            <p className="text-2xl font-bold mt-3">23,028,258.36</p>
+            <p className="font-semibold">Amount of Overdue payments</p>
+            <p className="text-2xl font-bold mt-3">NGN {data?.data[2].amount.toLocaleString()}</p>
           </div>
         </div>
       </div>

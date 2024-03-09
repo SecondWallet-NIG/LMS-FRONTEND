@@ -88,8 +88,7 @@ const Repayment = () => {
   return (
     <DashboardLayout>
       <main>
-        <div className="flex">
-
+        {/* <div className="flex">
           <p
             className={` border-b-2  px-6 py-2 cursor-pointer ${
               currentPage === "overdue-repayment"
@@ -110,19 +109,32 @@ const Repayment = () => {
           >
             All Repayment
           </p>
-        </div>
+        </div> */}
 
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
           {data &&
             data?.data?.map((item, index) => (
               <div
-                className={`rounded-lg border p-2 ${
+                onClick={() => {
+                  item?.loanTypeTitle === "Total Repayments"
+                    ? setCurrentPage("all-repayment")
+                    : item?.loanTypeTitle === "Upcoming Repayments"
+                    ? setCurrentPage("overdue-repayment")
+                    : item?.loanTypeTitle === "Fully Paid Repayments"
+                    ? setCurrentPage("fully-paid-repayment")
+                    : item?.loanTypeTitle === "Overdue Repayments"
+                    ? setCurrentPage("overdue")
+                    : null;
+
+                    
+                }}
+                className={`rounded-lg border p-2  hover:bg-swLightGray cursor-pointer ${
                   item?.loanTypeTitle === "Total Repayments"
                     ? "border-blue-200 text-swBlue"
-                    : item?.loanTypeTitle === "Upcoming Repayments"
+                    : item?.loanTypeTitle === "Fully Paid Repayments"
                     ? "border-green-200 text-swGreen"
                     : "border-red-100 text-swIndicatorLightRed"
-                }`}
+                } ${currentPage === item.loanTypeTitle ? "bg-gray-200" : ""}`}
                 key={index}
               >
                 <p>{item.loanTypeTitle}</p>
@@ -130,7 +142,7 @@ const Repayment = () => {
                   className={`flex justify-between items-center font-medium mt-5 ${
                     item?.loanTypeTitle === "Total Repayments"
                       ? "text-swDarkBlue"
-                      : item?.loanTypeTitle === "Upcoming Repayments"
+                      : item?.loanTypeTitle === "Fully Paid Repayments"
                       ? "text-swDarkGreen"
                       : "text-swDarkRed"
                   }`}
@@ -145,8 +157,13 @@ const Repayment = () => {
               </div>
             ))}
         </div>
+        <>
+
+        
+        </>
         {currentPage === "overdue-repayment" && (
           <div className="w-full">
+            <div className="mt-4 mb-4 ml-4 text-swDarkRed">Upcoming Repayments (This Month Repayment)</div>
             {/* <RepaymentOverdueTable /> */}
             <ReusableDataTable
               // filterParams={[
@@ -164,12 +181,53 @@ const Repayment = () => {
               filters={true}
               pagination={true}
               onClickRow={"/loan-applications/view-loan"}
-             // role={"Overdue"}
+              // role={"Overdue"}
             />
           </div>
         )}
+        {currentPage === "overdue" && (
+          <div className="w-full">
+            {/* <RepaymentOverdueTable /> */}
+            <div className="mt-4 mb-4 ml-4 text-swIndicatorLightRed">Overdue Repayments</div>
+            <ReusableDataTable
+              headers={header}
+              dataTransformer={customDataTransformer}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
+              btnTextClick={() => {
+                router.push("/create-borrower");
+              }}
+              filters={true}
+              pagination={true}
+              onClickRow={"/loan-applications/view-loan"}
+              role={"Overdue"}
+            />
+          </div>
+        )}
+        {currentPage === "fully-paid-repayment" && (
+          
+          <div className="w-full">
+              <div className="mt-4 mb-4 ml-4 text-swDarkGreen">Fully Paid Repayment</div>
+            {/* <RepaymentOverdueTable /> */}
+            <ReusableDataTable
+              headers={header}
+              dataTransformer={customDataTransformer}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/repayment`}
+              btnTextClick={() => {
+                router.push("/create-borrower");
+              }}
+              filters={true}
+              pagination={true}
+              onClickRow={"/loan-applications/view-loan"}
+              role={"Fully paid"}
+            />
+          </div>
+        )}
+
         {currentPage === "all-repayment" && (
           <div className="w-full">
+              <div className="mt-4 mb-4 ml-4 text-swBlue">All Repayments</div>
             <ReusableDataTable
               filterParams={[
                 { name: "Unpaid" },
@@ -189,8 +247,6 @@ const Repayment = () => {
             />
           </div>
         )}
-
-
       </main>
     </DashboardLayout>
   );

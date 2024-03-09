@@ -344,6 +344,10 @@ function ReusableDataTable({
       if (role === "Fully Paid") {
         apiUrl += `&status=${"Fully Paid"}`;
       }
+
+      if (role === "Fully paid") {
+        apiUrl += `&status=${"Fully paid"}`;
+      }
       axios
         .get(apiUrl, {
           headers: {
