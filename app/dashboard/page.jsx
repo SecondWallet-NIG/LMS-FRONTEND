@@ -26,12 +26,12 @@ const DashboardPage = () => {
     scales: {
       x: {
         grid: {
-          display: false,
+          display: true,
         },
       },
       y: {
         grid: {
-          display: false,
+          display: true,
         },
       },
     },
@@ -129,12 +129,12 @@ const DashboardPage = () => {
     scales: {
       x: {
         grid: {
-          display: false,
+          display: true,
         },
       },
       y: {
         grid: {
-          display: false,
+          display: true,
         },
       },
     },
