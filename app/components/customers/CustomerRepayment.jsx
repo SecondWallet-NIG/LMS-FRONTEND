@@ -161,7 +161,7 @@ const CustomerRepayment = ({ loanId }) => {
               : "bg-[#F8A9A3] text-white"
           } px-2 py-1 text-xs font-normal rounded-full`}
         >
-          {item.status}
+          {item.status === "Fully paid" ? "Paid" : item.status}
         </button>
       ),
     }));
