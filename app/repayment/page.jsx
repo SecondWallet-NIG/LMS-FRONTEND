@@ -75,7 +75,7 @@ const Repayment = () => {
               : "bg-[#F8A9A3] text-white"
           } px-2 py-1 rounded-full`}
         >
-          {item?.status}
+          {item?.status === "Fully paid" ? "Paid" : item?.status}
         </button>
       ),
     }));
