@@ -129,7 +129,7 @@ const DashboardPageCard = (data) => {
                   <p className="text-sm ">
                     {item.name === "Open loans" && "Total open loans"}
                     {item.name === "Pending repayments" && "Total pending"}
-                    {item.name === "Fully paid loans" && "Total poans paid"}
+                    {item.name === "Fully paid loans" && "Total loans paid"}
                   </p>
                   <p className="font-semibold mt-1">{item.total}</p>
                 </div>
