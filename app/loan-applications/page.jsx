@@ -15,8 +15,8 @@ const LoanApplications = () => {
       {showParagraph && (
         <div className="flex justify-between rounded bg-swLightBlueIndcatorBg p-3 m-5">
           <p className="italic text-sm text-swBlue">
-            Draft Loans are loans that are Pending, In progress, Declined and
-            Ready for disbursal.
+            Loan applications are loans that has been disbursed, overdue and
+            fully paid
           </p>
           <AiOutlineClose
             className="cursor-pointer"
