@@ -65,7 +65,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
       <div className=" flex gap-5 items-center relative">
         <p className="text-sm hidden sm:block">Welcome {user?.firstName} 👋 </p>
         <div
-          className="relative cursor-pointer"
+          className="relative cursor-pointer z-20"
           onClick={() => openNotifications(!isNotificationsOpen)}
         >
           <FaBell size={20} />
