@@ -78,7 +78,9 @@ const LoanDraftTable = () => {
               : "bg-swIndicatorDarkRed"
           } px-2 py-1 rounded-full text-xs font-normal text-white whitespace-nowrap`}
         >
-          {item.status}
+          {item.status === "Ready for Disbursal"
+            ? "Ready for Disbursement"
+            : item.status}
         </button>
       ),
       createdBy: (
@@ -123,7 +125,7 @@ const LoanDraftTable = () => {
             { name: "Pending" },
             { name: "Ready for Disbursal" },
             { name: "In Progress" },
-            { name: "Declined" }
+            { name: "Declined" },
           ]}
           dataTransformer={customDataTransformer}
           onClickRow="/loan-applications/view-loan"
