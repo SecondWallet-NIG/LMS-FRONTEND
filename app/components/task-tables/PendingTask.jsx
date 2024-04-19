@@ -3,12 +3,11 @@
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 
 const PendingTasks = () => {
-
-    let user;
-    if (typeof window !== "undefined") {
-      user = JSON.parse(localStorage.getItem("user"));
-      // Rest of your client-side code using the 'user' object
-    }
+  let user;
+  if (typeof window !== "undefined") {
+    user = JSON.parse(localStorage.getItem("user"));
+    // Rest of your client-side code using the 'user' object
+  }
   const headers = [
     { id: "createdAt", label: "Date Created" },
     { id: "loanId", label: "Loan ID" },
@@ -25,7 +24,11 @@ const PendingTasks = () => {
         </div>
       ),
       loanId: (
-        <div>
+        <div class="flex flex-col">
+          <p className="font-medium capitalize">
+            {item?.loanApplication?.customerId?.firstName}{" "}
+            {item?.loanApplication?.customerId?.lastName}
+          </p>
           <div className="text-md font-[500] text-swBlue text-underline">
             {" "}
             SWL-{item?.loanApplication?.loanId}
@@ -92,4 +95,3 @@ const PendingTasks = () => {
 };
 
 export default PendingTasks;
-

@@ -78,7 +78,9 @@ const LoanTable = () => {
               : "bg-swIndicatorDarkRed"
           } px-2 py-1 rounded-full text-xs font-normal text-white whitespace-nowrap`}
         >
-          {item.status}
+          {item.status === "Ready for Disbursal"
+            ? "Ready for Disbursement"
+            : item.status}
         </button>
       ),
       createdBy: (

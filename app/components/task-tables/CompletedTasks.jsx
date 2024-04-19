@@ -23,12 +23,16 @@ const CompletedTasks = () => {
         </div>
       ),
       loanId: (
-        <div>
-        <div className="text-md font-[500] text-swBlue text-underline">
-          {" "}
-          SWL-{item?.loanApplication?.loanId}
+        <div className="flex flex-col">
+          <p className="text-base font-medium capitalize">
+            {item?.loanApplication?.customerId?.firstName}{" "}
+            {item?.loanApplication?.customerId?.lastName}
+          </p>
+          <div className="text-md font-[500] text-swBlue text-underline">
+            {" "}
+            SWL-{item?.loanApplication?.loanId}
+          </div>
         </div>
-      </div>
       ),
       loanAmount: (
         <div>

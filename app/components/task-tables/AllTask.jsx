@@ -19,19 +19,24 @@ const AllTasks = () => {
     console.log({ apiData });
     return apiData?.data?.results.map((item) => ({
       id: item?.loanApplication?._id,
-      taskId : item?._id,
+      taskId: item?._id,
       createdAt: (
         <div className="text-md font-[500] text-gray-700">
           {item.createdAt?.slice(0, 10)}
         </div>
       ),
       loanId: (
-        <div>
-        <div className="text-md font-[500] text-swBlue text-underline">
-          {" "}
-          SWL-{item?.loanApplication?.loanId}
+        <div className="flex flex-col">
+          <p className="font-medium capitalize">
+            {item?.loanApplication?.customerId?.firstName}{" "}
+            {item?.loanApplication?.customerId?.lastName}
+          </p>
+
+          <p className="text-md font-[500] text-swBlue text-underline">
+            {" "}
+            SWL-{item?.loanApplication?.loanId}
+          </p>
         </div>
-      </div>
       ),
       loanAmount: (
         <div>
