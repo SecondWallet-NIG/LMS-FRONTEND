@@ -95,10 +95,17 @@ const PaymentHistoryTable = () => {
           </div>
         </div>
       ),
+      
       amountLogged: (
-        <div className="text-md font-[500] text-gray-700">
-          ₦ {item?.amountLogged.toLocaleString() || 0}
-        </div>
+   <div>
+         <div className="text-md font-[500] text-gray-700">
+            {item?.loanApplication?.customerId?.firstName}{" "}
+            {item?.loanApplication?.customerId?.lastName}
+          </div>
+          <div className="text-md font-[500] text-gray-700">
+            ₦ {item?.amountLogged.toLocaleString()}
+          </div>
+   </div>
       ),
       repaymentMethod: (
         <div>
