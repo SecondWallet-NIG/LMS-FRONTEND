@@ -87,8 +87,8 @@ const PaymentHistoryTable = () => {
       customerInfo: (
         <div className="">
           <div className="text-md font-[500] text-gray-700">
-            {/* {item?.loanApplication.customerId.firstName}{" "}
-            {item?.loanApplication.customerId.lastName} */}
+            {item?.loanApplication?.customerId?.firstName}{" "}
+            {item?.loanApplication?.customerId?.lastName}
           </div>
           <div className="text-md font-[500] text-gray-700">
             ₦ {item?.amountLogged.toLocaleString()}
