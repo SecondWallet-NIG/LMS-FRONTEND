@@ -20,6 +20,8 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { FaWindowClose } from "react-icons/fa";
+import { HiDotsVertical } from "react-icons/hi";
+import CustomizeTableModal from "./CustomizeTableModal";
 
 function ReusableDataTable({
   apiEndpoint,
@@ -37,6 +39,8 @@ function ReusableDataTable({
   role,
 }) {
   const [data, setData] = useState(initialData || []);
+  const [dataId, setDataId] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [dataCheck, setDataCheck] = useState(null);
   const [downloadData, setDownloadData] = useState();
   const [loading, setLoading] = useState(false);
@@ -49,10 +53,12 @@ function ReusableDataTable({
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [paginationLinks, setPaginationLinks] = useState(null);
+
   const [logSearch, setLogSearch] = useState(false);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [filterOptions, setFilterOptions] = useState(false);
-
+  const [customiseOption, setCustomizeOption] = useState(false);
+  const [customiseTableModal, setCustomizeTableModal] = useState(false);
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -65,9 +71,11 @@ function ReusableDataTable({
     setDateFilterOpen(!dateFilterOpen);
   };
 
+  console.log({ filteredData });
+
   const handleDownload = () => {
     let x = `${apiEndpoint}?page=${1}&per_page=${downloadData}`;
-    console.log({dateRange});
+    console.log({ dateRange });
     if (dateRange && dateRange.length > 0) {
       if (
         dateRange[0].startDate instanceof Date &&
@@ -248,7 +256,7 @@ function ReusableDataTable({
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
-            console.log(data?.data.links);
+            // console.log(data?.data.links);
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -262,7 +270,7 @@ function ReusableDataTable({
                 data?.data?.data ||
                 data.results
             );
-            console.log(data?.data.links.totalDocuments);
+            // console.log(data?.data.links.totalDocuments);
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -273,7 +281,7 @@ function ReusableDataTable({
         })
         .catch(() => {});
     } else {
-      console.log({ dateRange });
+      // console.log({ dateRange });
       setIsLoading(true);
       if (dateRange && dateRange.length > 0) {
         if (
@@ -354,7 +362,7 @@ function ReusableDataTable({
           },
         })
         .then((data) => {
-          console.log({ data });
+          // console.log({ data });
           setDataCheck(data);
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
@@ -395,7 +403,7 @@ function ReusableDataTable({
                 data?.data?.data?.links ||
                 data?.data?.data?.data?.links
             );
-            console.log(data?.data.links.totalDocuments);
+            // console.log(data?.data.links.totalDocuments);
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -503,13 +511,20 @@ function ReusableDataTable({
     return pageNumbers;
   };
 
-
   const handleLogSearch = (state) => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
 
+  useEffect(() => {
+    if (data.length > 0) {
+      setDataId(Object.keys(data[0]));
+      // const newData = data.map((item) => ({ ...item }));
+      setFilteredData(data.map((item) => ({ ...item })));
+    }
+  }, [data]);
+
   return (
-    <div className="w-full mx-auto text-xs font-semibold md:text-sm overflow-x-hidden">
+    <div className="relative w-full mx-auto text-xs font-semibold md:text-sm overflow-x-hidden">
       <ToastContainer />
       <div className="">
         {filters && (
@@ -651,6 +666,22 @@ function ReusableDataTable({
                   </div>
                 </Button>
               </div>
+              <div
+                className="ml-2 p-1 rounded-lg cursor-pointer hover:bg-gray-50 relative"
+                onClick={() => setCustomizeOption(!customiseOption)}
+              >
+                <HiDotsVertical size={20} />
+                {customiseOption && (
+                  <div className="absolute p-2 rounded-lg bg-white top-full right-0 mt-2 shadow-md w-52">
+                    <p
+                      className="p-2 hover:bg-gray-50"
+                      onClick={() => setCustomizeTableModal(true)}
+                    >
+                      Customize table
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -659,26 +690,28 @@ function ReusableDataTable({
             <table className="table-auto w-full border-collapse border overflow-hidden">
               <thead>
                 <tr>
-                  {headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
-                        header.id === sortField ? "" : ""
-                      }`}
-                      onClick={() => handleSort(header.id)}
-                    >
-                      {header.label}
-                      {header.id === sortField && (
-                        <span className="ml-1">
-                          {sortDirection === "asc" ? "↑" : "↓"}
-                        </span>
-                      )}
-                    </th>
-                  ))}
+                  {headers
+                    .filter((item) => dataId.includes(item.id))
+                    .map((header) => (
+                      <th
+                        key={header.id}
+                        className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
+                          header.id === sortField ? "" : ""
+                        }`}
+                        onClick={() => handleSort(header.id)}
+                      >
+                        {header.label}
+                        {header.id === sortField && (
+                          <span className="ml-1">
+                            {sortDirection === "asc" ? "↑" : "↓"}
+                          </span>
+                        )}
+                      </th>
+                    ))}
                 </tr>
               </thead>
               <tbody>
-                {data?.map((item) => (
+                {filteredData.map((item) => (
                   <tr
                     onClick={() => {
                       if (onClickRow) {
@@ -693,14 +726,16 @@ function ReusableDataTable({
                     className="border pt-2 pb-2 hover:bg-swLightGray"
                     style={{ cursor: "pointer" }}
                   >
-                    {headers.map((header) => (
-                      <td
-                        key={header.id}
-                        className="px-5 py-4 border font-400 text-xs font-semibold text-swGray border-none"
-                      >
-                        {item[header.id]}
-                      </td>
-                    ))}
+                    {headers
+                      .filter((item) => dataId.includes(item.id))
+                      .map((header) => (
+                        <td
+                          key={header.id}
+                          className="px-5 py-4 border font-400 text-xs font-semibold text-swGray border-none"
+                        >
+                          {item[header.id]}
+                        </td>
+                      ))}
                   </tr>
                 ))}
               </tbody>
@@ -847,6 +882,16 @@ function ReusableDataTable({
           </div>
         </CenterModal>
       )}
+      <CustomizeTableModal
+        open={customiseTableModal}
+        onClose={setCustomizeTableModal}
+        dataId={dataId}
+        data={data}
+        filteredData={filteredData}
+        setFilteredData={setFilteredData}
+        setDataId={setDataId}
+        headers={headers}
+      />
     </div>
   );
 }
