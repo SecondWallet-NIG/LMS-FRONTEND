@@ -33,6 +33,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-date-input": "^0.0.2",
     "react-date-range": "^1.4.0",
+    "react-day-picker": "^8.10.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-loader-spinner": "^5.4.5",
@@ -46,6 +47,7 @@
   },
   "devDependencies": {
     "babel-register": "^6.26.0",
-    "dotenv-webpack": "^8.0.1"
+    "dotenv-webpack": "^8.0.1",
+    "eslint": "^9.3.0"
   }
 }
