@@ -495,7 +495,7 @@ const ViewLoan = () => {
       format(formData.disbursementDate, "yyyy-MM-dd")
     );
 
-    console.log([ ...payload ]);
+    console.log([...payload]);
 
     setLoading(true);
     e.preventDefault();
@@ -1535,7 +1535,7 @@ const ViewLoan = () => {
         </div>
       </CenterModal>
 
-      <CenterModal isOpen={logRepayment} width={"40%"}>
+      <CenterModal isOpen={logRepayment}>
         <div className="p-4">
           <div className="flex justify-between items-center text-white">
             <div>
@@ -1629,7 +1629,7 @@ const ViewLoan = () => {
                 <FaRegCalendar size={20} />
               </div>
               {openDibursementDatePicker && (
-                <div className="absolute w-fit right-0 bottom-full bg-white border rounded-md z-10">
+                <div className="absolute w-fit -right-5 bottom-full bg-white border rounded-md z-10">
                   <DayPicker
                     styles={{
                       caption: { color: "#2769b3" },
@@ -1704,15 +1704,18 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="flex pt-4 mb-4 items-end gap-2 justify-end">
-              <Button
-                variant="secondary"
+              <EditableButton
+                redBtn={true}
                 onClick={() => setLogRepayment(!logRepayment)}
-              >
-                Cancel
-              </Button>
-              <Button variant="secondary" onClick={submitLoanUpdate}>
-                Confirm
-              </Button>
+                disabled={loading ? true : false}
+                label="Cancel"
+              />
+              <EditableButton
+                blueBtn={true}
+                onClick={(e) => submitLoanUpdate(e)}
+                disabled={loading ? true : false}
+                label="Confirm"
+              />
             </div>
           </div>
         </div>

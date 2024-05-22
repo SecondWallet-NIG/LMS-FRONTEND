@@ -5,6 +5,7 @@ import { store } from "@/redux/store";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
+import "react-day-picker/dist/style.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
