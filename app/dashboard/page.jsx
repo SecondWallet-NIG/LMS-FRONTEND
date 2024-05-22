@@ -181,7 +181,7 @@ const DashboardPage = () => {
   return (
     <DashboardLayout>
       {cardData && (
-        <main className="text-swGray p-5 sm:p-10 bg-gray-50 h-full">
+        <main className="text-swGray text-lg p-5 sm:p-10 bg-gray-50 h-full">
           {/* <DashboardPageCard /> */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <DashboardCard
