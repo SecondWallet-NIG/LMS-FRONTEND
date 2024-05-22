@@ -360,7 +360,7 @@ const CreateLoan = () => {
       .unwrap()
       .then(() => {
         toast("Loan application successful");
-        router.push("/loan-applications");
+        router.push("/loan-drafts");
         setLoading(false);
       })
       .catch((error) => {

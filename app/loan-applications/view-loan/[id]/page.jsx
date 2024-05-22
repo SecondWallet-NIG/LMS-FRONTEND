@@ -42,6 +42,9 @@ import { FaDownload } from "react-icons/fa6";
 import CustomerPaymentHistory from "@/app/components/customers/CustomerHistoryPayment";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { bankArr } from "@/constant";
+import { format } from "date-fns";
+import { FaRegCalendar } from "react-icons/fa";
+import { DayPicker } from "react-day-picker";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -74,9 +77,12 @@ const ViewLoan = () => {
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openDibursementDatePicker, setOpenDisbursementDatePicker] =
+    useState(false);
   const [formData, setFormData] = useState({
     amount: "",
-    paymentMehod: "",
+    paymentMethod: "",
+    disbursementDate: new Date(),
     docs: null,
   });
 
@@ -482,8 +488,14 @@ const ViewLoan = () => {
 
   const submitLoanUpdate = (e) => {
     let payload = new FormData();
-    payload.append("paymentMehod", formData.paymentMehod);
+    payload.append("paymentMethod", formData.paymentMethod);
     payload.append("disbursementReceipt", formData.docs);
+    payload.append(
+      "disbursementDate",
+      format(formData.disbursementDate, "yyyy-MM-dd")
+    );
+
+    console.log([...payload]);
 
     setLoading(true);
     e.preventDefault();
@@ -1523,7 +1535,7 @@ const ViewLoan = () => {
         </div>
       </CenterModal>
 
-      <CenterModal isOpen={logRepayment} width={"40%"}>
+      <CenterModal isOpen={logRepayment}>
         <div className="p-4">
           <div className="flex justify-between items-center text-white">
             <div>
@@ -1592,17 +1604,58 @@ const ViewLoan = () => {
             <div className="pt-4">
               <SelectField
                 optionValue={paymentMethodTypes}
-                name="paymentMehod"
+                name="paymentMethod"
                 label="Payment Method"
                 required={true}
                 placeholder="Select payment method"
                 onChange={(selectedOption) => {
                   handleDisbursementSelectChange(
                     selectedOption,
-                    "paymentMehod"
+                    "paymentMethod"
                   );
                 }}
               />
+            </div>
+            <div className="relative pt-4 flex justify-between items-center">
+              <p>
+                Disbursement Date: {format(formData.disbursementDate, "PPP")}
+              </p>
+              <div
+                className="w-fit p-2 rounded-full border border-jsPrimary100 text-jsPrimary100 cursor-pointer"
+                onClick={() =>
+                  setOpenDisbursementDatePicker(!openDibursementDatePicker)
+                }
+              >
+                <FaRegCalendar size={20} />
+              </div>
+              {openDibursementDatePicker && (
+                <div className="absolute w-fit -right-5 bottom-full bg-white border rounded-md z-10">
+                  <DayPicker
+                    styles={{
+                      caption: { color: "#2769b3" },
+                    }}
+                    modifiers={{
+                      selected: formData.disbursementDate,
+                    }}
+                    modifiersClassNames={{
+                      selected: "my-selected",
+                    }}
+                    onDayClick={(value) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        disbursementDate: value,
+                      }))
+                    }
+                    className="w-full"
+                  />
+                  <p
+                    className="w-fit ml-auto mr-2 mb-2 -mt-2 p-2 text-[#2769b3] hover:text-white hover:bg-[#2769b3] cursor-pointer"
+                    onClick={() => setOpenDisbursementDatePicker(false)}
+                  >
+                    OK
+                  </p>
+                </div>
+              )}
             </div>
             <div className="pt-4">
               <p className="font-semibold pt-2 text-sm">
@@ -1651,15 +1704,18 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="flex pt-4 mb-4 items-end gap-2 justify-end">
-              <Button
-                variant="secondary"
+              <EditableButton
+                redBtn={true}
                 onClick={() => setLogRepayment(!logRepayment)}
-              >
-                Cancel
-              </Button>
-              <Button variant="secondary" onClick={submitLoanUpdate}>
-                Confirm
-              </Button>
+                disabled={loading ? true : false}
+                label="Cancel"
+              />
+              <EditableButton
+                blueBtn={true}
+                onClick={(e) => submitLoanUpdate(e)}
+                disabled={loading ? true : false}
+                label="Confirm"
+              />
             </div>
           </div>
         </div>

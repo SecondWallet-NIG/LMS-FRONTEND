@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -9,14 +9,14 @@
 }
 
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* For Internet Explorer and Edge */
-  scrollbar-width: none;  /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  scrollbar-width: none; /* For Firefox */
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* For WebKit browsers (Chrome, Safari) */
@@ -30,7 +30,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #2769B3; /* color of the scrollbar thumb */
+  background-color: #2769b3; /* color of the scrollbar thumb */
   border-radius: 6px; /* rounded corners of the scrollbar thumb */
 }
 
@@ -40,11 +40,20 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background-color: rgb(219 234 254 / var(1)) !important; /* color of the scrollbar track */
+  background-color: rgb(
+    219 234 254 / var(1)
+  ) !important; /* color of the scrollbar track */
   border-radius: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track:hover {
-  background-color: rgb(219 234 254 / var(1)) !important; /* color of the scrollbar track */
+  background-color: rgb(
+    219 234 254 / var(1)
+  ) !important; /* color of the scrollbar track */
   border-radius: 6px;
-  width: 10px !important; 
+  width: 10px !important;
+}
+
+.my-selected:not([disabled]) {
+  background-color: #2769b3;
+  color: white;
 }
