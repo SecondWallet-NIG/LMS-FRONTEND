@@ -16,14 +16,14 @@ const CenterModal = ({
     minWidth: "300px",
   };
   return (
-    <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[110]">
+    <div className="fixed top-0 left-0 flex items-center justify-center w-screen p-5 h-screen bg-black bg-opacity-50 z-[110]">
       <div
         style={width && modalStyles}
         className={`${
           bgColor ? bgColor : "bg-white"
         } overflow-hidden rounded-md shadow-md" style={modalStyles} ${
           height && height
-        } m-8 p-4 ${!width ? twidth || "max-w-xl w-full" : ""} `}
+        } p-4 ${!width ? twidth || "max-w-xl w-full" : ""} `}
       >
         {children}
       </div>
