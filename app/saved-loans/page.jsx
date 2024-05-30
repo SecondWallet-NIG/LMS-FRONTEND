@@ -155,8 +155,13 @@ const SavedLoans = () => {
                 </tr>
               ))
             ) : (
-              <tr>
-                <td></td>
+              <tr className="p-10">
+                <td
+                  colSpan={3}
+                  className="w-full text-center text-lg font-medium p-10"
+                >
+                  No saved loans
+                </td>
               </tr>
             )}
           </tbody>
