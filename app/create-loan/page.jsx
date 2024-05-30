@@ -396,6 +396,45 @@ const CreateLoan = () => {
     return <Unauthorized />;
   }
 
+  const savedLoans = () => {
+    const savedLoans = localStorage.getItem("savedLoans");
+    if (savedLoans) {
+      const loans = JSON.parse(savedLoans);
+      const loansLength = loans.length;
+      // let newFormData = { ...formData };
+      let newFormData = {
+        formData: {
+          ...formData,
+        },
+        selectedCustomer: selectedCustomer,
+        savedAt: new Date(),
+        id: loansLength,
+      };
+      console.log({ formData });
+      console.log({ newFormData });
+      loans.push(newFormData);
+      localStorage.setItem("savedLoans", JSON.stringify(loans));
+      toast.success("Your partly created loan has been successfully saved");
+      router.push("/saved-loans");
+    } else {
+      let loans = [];
+      let newFormData = {
+        formData: {
+          ...formData,
+        },
+        selectedCustomer: selectedCustomer,
+        savedAt: new Date(),
+        id: 0,
+      };
+      // console.log({ formData });
+      // console.log({ newFormData });
+      loans.push(newFormData);
+      localStorage.setItem("savedLoans", JSON.stringify(loans));
+      toast.success("Your partly created loan has been successfully saved");
+      router.push("/saved-loans");
+    }
+  };
+
   return (
     <DashboardLayout>
       <ToastContainer />
@@ -406,13 +445,21 @@ const CreateLoan = () => {
             <div className="flex justify-between">
               <p className="text-lg font-semibold">Initiate loan application</p>
 
-              <Link
-                href="/create-borrower"
-                className="flex gap-1 py-2 px-3 border-2 text-white bg-swBlue border-swLightGray rounded-md focus:outline-none whitespace-nowrap"
-              >
-                <IoMdAdd size={20} />
-                <p>Add new borrower</p>
-              </Link>
+              <div className="flex items-center gap-5">
+                <Link
+                  href="/create-borrower"
+                  className="flex gap-1 py-2 px-3 border-2 text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
+                >
+                  <IoMdAdd size={20} />
+                  <p>Add new borrower</p>
+                </Link>
+                <div
+                  onClick={savedLoans}
+                  className="flex gap-1 py-2 px-7 cursor-pointer border-2  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
+                >
+                  <p>Save</p>
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col gap-5 mt-5">
