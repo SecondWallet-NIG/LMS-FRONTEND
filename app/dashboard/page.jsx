@@ -221,7 +221,7 @@ const DashboardPage = () => {
               blueBg={true}
               cardIcon={<IoMdArrowDown size={20} />}
               cardName={"Repayments"}
-              cardLinkLabel={"view"}
+              cardLinkLabel={"View"}
               cardLink={"/repayment"}
               firstStat={[
                 "Total",
