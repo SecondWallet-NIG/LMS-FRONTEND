@@ -56,14 +56,16 @@ const ResetPasswordScreen = ({
   };
 
   const handleResetPassword = async () => {
-    const email = JSON.parse(
-      localStorage.getItem("email")
-     );
+    const email = JSON.parse(localStorage.getItem("email"));
     const verificationToken = JSON.parse(
-     localStorage.getItem("verificationCode")
+      localStorage.getItem("verificationCode")
     );
-   
-    const payload = { ...resetData, email: email, verificationToken: verificationToken };
+
+    const payload = {
+      ...resetData,
+      email: email,
+      verificationToken: verificationToken,
+    };
     dispatch(resetPassword(payload))
       .unwrap()
       .then(() => {
@@ -98,7 +100,7 @@ const ResetPasswordScreen = ({
         </h2>
         <div className="mt-2">
           <InputField
-           css={"relative"}
+            css={"relative"}
             name="newPassword"
             inputType={passwordVisible ? "text" : "password"}
             placeholder="Enter New Password"
@@ -126,7 +128,7 @@ const ResetPasswordScreen = ({
         </div>
         <div className="mt-2">
           <InputField
-           css={"relative"}
+            css={"relative"}
             name="newPasswordConfirmation"
             inputType={ndPasswordVisible ? "text" : "password"}
             placeholder="Confirm New Password"
@@ -189,10 +191,12 @@ const ResetPasswordScreen = ({
           <div className="flex gap-1">
             <input
               type="radio"
-              checked={/^<>(?=.*[!@#\$%\^&\*])/.test(password) ? true : false}
+              checked={
+                /^[!@#\$%\^&\*.(),\-_+='"]+$/.test(password) ? true : false
+              }
               onClick={handleRadioClick}
             />
-            <p className="text-[14px]">Symbols (_, @, #, &lt;, &gt;, etc)</p>
+            <p className="text-[14px]">Symbols (_, @, #, $,&, etc)</p>
           </div>
         </div>
         <Button

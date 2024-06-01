@@ -19,13 +19,14 @@ import {
   FiFile,
   FiSend,
   FiUser,
-  FiFileText
+  FiFileText,
 } from "react-icons/fi";
 import { IoMdAdd, IoMdCard, IoMdClose } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
+import Link from "next/link";
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -196,7 +197,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <IoMdAdd
-                  className={`${activeLink === "create-loan" && "text-swBlue"}`}
+                  className={`${
+                    (activeLink === "create-loan" || "saved-loans") &&
+                    "text-swBlue"
+                  }`}
                   size={20}
                 />
               }
@@ -212,6 +216,19 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               onClick={() => {
                 setActiveLink("create-loan");
               }}
+              hasDropdown={true}
+              dropdownContent={
+                <Link
+                  href={`${
+                    user?.data?.user?.role?.tag === "LO"
+                      ? "/saved-loans"
+                      : "/unauthorised"
+                  }`}
+                  className="ml-5 text-sm hover:text-swBlue"
+                >
+                  Saved Loans
+                </Link>
+              }
             />
             <SidebarLink
               allowedRoleTags={[
@@ -243,7 +260,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 setActiveLink("loan-applications");
               }}
             />
-                <SidebarLink
+            <SidebarLink
               allowedRoleTags={[
                 "LO",
                 "CFO",

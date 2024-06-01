@@ -2,33 +2,34 @@
 
 import { useEffect } from "react";
 import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
-import InputField from "../components/shared/input/InputField";
-import SelectField from "../components/shared/input/SelectField";
+import InputField from "../../components/shared/input/InputField";
+import SelectField from "../../components/shared/input/SelectField";
 import { useState } from "react";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
-import Button from "../components/shared/buttonComponent/Button";
+import Button from "../../components/shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "@/redux/slices/customerSlice";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { createLoanApplication } from "@/redux/slices/loanApplicationSlice";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import { calculateInterest } from "@/redux/slices/interestTypeSlice";
-import CenterModal from "../components/modals/CenterModal";
+import CenterModal from "../../components/modals/CenterModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import PreviewInterest from "../components/modals/PreviewInterest";
+import PreviewInterest from "../../components/modals/PreviewInterest";
 import { FiUser } from "react-icons/fi";
-import { useRouter } from "next/navigation";
-import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
+import { useParams, useRouter } from "next/navigation";
+import DashboardLayout from "../../components/dashboardLayout/DashboardLayout";
 import Link from "next/link";
 import Image from "next/image";
 import { Rings } from "react-loader-spinner";
-import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
-import Unauthorized from "../unauthorized/page";
+import EditableButton from "../../components/shared/editableButtonComponent/EditableButton";
+import Unauthorized from "../../unauthorized/page";
 
-const CreateLoan = () => {
+const SavedLoan = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const param = useParams();
   const loanPackage = useSelector((state) => state.loanPackage);
   const interestType = useSelector((state) => state.interestType);
   const customer = useSelector((state) => state.customer);
@@ -359,6 +360,11 @@ const CreateLoan = () => {
     dispatch(createLoanApplication(payload))
       .unwrap()
       .then(() => {
+        const saved = localStorage.getItem("savedLoans");
+        const savedLoans = saved ? JSON.parse(saved) : null;
+        savedLoans.splice(param.id, 1);
+
+        localStorage.setItem("savedLoans", JSON.stringify(savedLoans));
         toast("Loan application successful");
         router.push("/loan-drafts");
         setLoading(false);
@@ -374,15 +380,15 @@ const CreateLoan = () => {
     dispatch(getInterestType());
   }, []);
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("borrower"));
-    setFormData({
-      ...formData,
-      customerId: data?.profileInfo?._id,
-    });
-    setSelectedCustomer(data?.profileInfo);
-    setFilteredData(customer?.data);
-  }, [customer?.data]);
+  // useEffect(() => {
+  //   const data = JSON.parse(localStorage.getItem("borrower"));
+  //   setFormData({
+  //     ...formData,
+  //     customerId: data?.profileInfo?._id,
+  //   });
+  //   setSelectedCustomer(data?.profileInfo);
+  //   setFilteredData(customer?.data);
+  // }, [customer?.data]);
 
   useEffect(() => {
     let userId;
@@ -400,7 +406,7 @@ const CreateLoan = () => {
     const savedLoans = localStorage.getItem("savedLoans");
     if (savedLoans) {
       const loans = JSON.parse(savedLoans);
-      const loansLength = loans.length;
+      // const loansLength = loans.length;
       // let newFormData = { ...formData };
       let newFormData = {
         formData: {
@@ -408,32 +414,48 @@ const CreateLoan = () => {
         },
         selectedCustomer: selectedCustomer,
         savedAt: new Date(),
-        id: loansLength,
+        id: param.id,
       };
-      console.log({ formData });
-      console.log({ newFormData });
-      loans.push(newFormData);
-      localStorage.setItem("savedLoans", JSON.stringify(loans));
-      toast.success("Your partly created loan has been successfully saved");
-      router.push("/saved-loans");
-    } else {
-      let loans = [];
-      let newFormData = {
-        formData: {
-          ...formData,
-        },
-        selectedCustomer: selectedCustomer,
-        savedAt: new Date(),
-        id: 0,
-      };
-      // console.log({ formData });
-      // console.log({ newFormData });
-      loans.push(newFormData);
+      loans[param.id] = newFormData;
       localStorage.setItem("savedLoans", JSON.stringify(loans));
       toast.success("Your partly created loan has been successfully saved");
       router.push("/saved-loans");
     }
+
+    console.log("Save loan");
   };
+
+  useEffect(() => {
+    const saved = localStorage.getItem("savedLoans");
+    const savedLoans = saved ? JSON.parse(saved) : null;
+
+    if (savedLoans) {
+      setFormData(savedLoans[param.id].formData);
+      setSelectedCustomer(savedLoans[param.id].selectedCustomer);
+      console.log(
+        "profilePic",
+        savedLoans[param.id].selectedCustomer.profilePicture
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("savedLoans");
+    const savedLoans = saved ? JSON.parse(saved) : null;
+
+    if (loanPackage.loading === "succeeded") {
+      console.log("savedLoans", savedLoans[param.id].formData.loanPackage);
+      console.log("loanPackage", loanPackage?.data?.data);
+      const loanPackageData = loanPackage?.data?.data;
+
+      const loanPackageDataId = loanPackageData.find(
+        (item) => item._id === savedLoans[param.id].formData.loanPackage
+      );
+      console.log("loanPackageDataId", loanPackageDataId);
+      setLoanPackageText(loanPackageDataId.name);
+      setLoanPackageRate(loanPackageDataId?.interestRate?.rate);
+    }
+  }, [loanPackage]);
 
   return (
     <DashboardLayout>
@@ -1511,4 +1533,4 @@ const CreateLoan = () => {
   );
 };
 
-export default CreateLoan;
+export default SavedLoan;
