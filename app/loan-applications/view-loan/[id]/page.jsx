@@ -11,10 +11,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { AiOutlineMail } from "react-icons/ai";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { FiDatabase, FiPhone, FiSearch } from "react-icons/fi";
-import { IoIosClose } from "react-icons/io";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import {
   disburseLoan,
@@ -1640,12 +1636,13 @@ const ViewLoan = () => {
                     modifiersClassNames={{
                       selected: "my-selected",
                     }}
-                    onDayClick={(value) =>
+                    onDayClick={(value) => {
                       setFormData((prev) => ({
                         ...prev,
-                        disbursementDate: value,
-                      }))
-                    }
+                        disbursementDate:
+                          value > new Date() ? new Date() : value,
+                      }));
+                    }}
                     className="w-full"
                   />
                   <p

@@ -932,7 +932,7 @@ const CreateLoan = () => {
               <EditableButton
                 blueBtn={true}
                 disabled={
-                  formData.interestType === null || isLoading === true
+                  formData.repaymentType === null || isLoading === true
                     ? true
                     : false
                 }
@@ -942,7 +942,11 @@ const CreateLoan = () => {
               />
               <EditableButton
                 blueBtn={true}
-                disabled={loading ? true : false}
+                disabled={
+                  formData.repaymentType === null || isLoading === true
+                    ? true
+                    : false
+                }
                 startIcon={
                   loading && (
                     <Rings
@@ -1151,7 +1155,7 @@ const CreateLoan = () => {
                   <EditableButton
                     blueBtn={true}
                     disabled={
-                      formData.interestType === null || isLoading === true
+                      formData.repaymentType === null || isLoading === true
                         ? true
                         : false
                     }
@@ -1162,7 +1166,11 @@ const CreateLoan = () => {
 
                   <EditableButton
                     blueBtn={true}
-                    disabled={loading ? true : false}
+                    disabled={
+                      formData.repaymentType === null || isLoading === true
+                        ? true
+                        : false
+                    }
                     startIcon={
                       loading && (
                         <Rings
@@ -1210,7 +1218,11 @@ const CreateLoan = () => {
               <div className="md:hidden">
                 <EditableButton
                   blueBtn={true}
-                  disabled={loading ? true : false}
+                  disabled={
+                    formData.repaymentType === null || isLoading === true
+                      ? true
+                      : false
+                  }
                   startIcon={
                     loading && (
                       <Rings
@@ -1403,7 +1415,11 @@ const CreateLoan = () => {
                 <div className="mb-10 mt-5">
                   <EditableButton
                     blueBtn={true}
-                    disabled={loading ? true : false}
+                    disabled={
+                      formData.repaymentType === null || isLoading === true
+                        ? true
+                        : false
+                    }
                     startIcon={
                       loading && (
                         <Rings
