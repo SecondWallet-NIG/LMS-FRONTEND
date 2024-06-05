@@ -14,6 +14,9 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { logRepaymentFunc } from "@/redux/slices/loanRepaymentSlice";
 import { useDispatch } from "react-redux";
 import { clearUserState } from "@/redux/slices/loanPackageSlice";
+import { format, isValid } from "date-fns";
+import { FaRegCalendar } from "react-icons/fa";
+import { DayPicker } from "react-day-picker";
 
 const CustomerRepayment = ({ loanId }) => {
   const dispatch = useDispatch();
@@ -22,9 +25,11 @@ const CustomerRepayment = ({ loanId }) => {
   const [enableLogRepayment, setEnableLogRepayment] = useState(true);
   const [loading, setLoading] = useState(false);
   const [fileError, setFileError] = useState("");
+  const [openDateCollected, setOpenDateCollected] = useState(false);
   const [formData, setFormData] = useState({
     repaymentMethod: "",
     repaymentAmount: "",
+    dateCollected: new Date(),
     repaymentReceipts: null,
   });
 
@@ -188,6 +193,7 @@ const CustomerRepayment = ({ loanId }) => {
     data.append("repaymentMethod", formData?.repaymentMethod);
     data.append("repaymentAmount", formData?.repaymentAmount);
     data.append("repaymentReceipts", formData?.repaymentReceipts);
+    data.append("dateCollected", format(formData?.dateCollected, "yyyy-MM-dd"));
     e.preventDefault();
     dispatch(logRepaymentFunc({ loanId, payload: data }))
       .unwrap()
@@ -279,6 +285,51 @@ const CustomerRepayment = ({ loanId }) => {
                   handleSelectChange(selectedOption, "repaymentMethod");
                 }}
               />
+            </div>
+            <div className="relative pt-4 flex justify-between items-center">
+              <p>
+                Date Collected:{" "}
+                {format(
+                  formData && isValid(new Date(formData?.dateCollected))
+                    ? new Date(formData?.dateCollected)
+                    : new Date(),
+                  "PPP"
+                )}
+              </p>
+              <div
+                className="w-fit p-2 rounded-full border border-jsPrimary100 text-jsPrimary100 cursor-pointer"
+                onClick={() => setOpenDateCollected(!openDateCollected)}
+              >
+                <FaRegCalendar size={20} />
+              </div>
+              {openDateCollected && (
+                <div className="absolute w-fit -right-5  bg-white border rounded-md z-10">
+                  <DayPicker
+                    styles={{
+                      caption: { color: "#2769b3" },
+                    }}
+                    modifiers={{
+                      selected: formData.dateCollected,
+                    }}
+                    modifiersClassNames={{
+                      selected: "my-selected",
+                    }}
+                    onDayClick={(value) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        dateCollected: value > new Date() ? new Date() : value,
+                      }));
+                    }}
+                    className="w-full"
+                  />
+                  <p
+                    className="w-fit ml-auto mr-2 mb-2 -mt-2 p-2 text-[#2769b3] hover:text-white hover:bg-[#2769b3] cursor-pointer"
+                    onClick={() => setOpenDateCollected(false)}
+                  >
+                    OK
+                  </p>
+                </div>
+              )}
             </div>
             <div className="pt-4">
               <p className="font-semibold pt-2 text-sm">
