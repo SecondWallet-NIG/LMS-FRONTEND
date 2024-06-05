@@ -71,17 +71,33 @@ const ViewPlan = () => {
             <p>{loanPackage?.interestRate?.rateType}</p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Interest rate</p>
+            <p className="min-w-[15rem]">Minimum interest rate</p>
+            <p>0% per month</p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Maximum interest rate</p>
             <p>{loanPackage?.interestRate?.rate}% per month</p>
           </div>
           <div className="flex">
+            <p className="min-w-[15rem]">Minimum loan</p>
+            <p>&#8358; {loanPackage?.loanAmountRange?.min.toLocaleString()}</p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Maximum loan</p>
+            <p>&#8358; {loanPackage?.loanAmountRange?.max.toLocaleString()}</p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Active loans</p>
+            <p>100</p>
+          </div>
+          {/* <div className="flex">
             <p className="min-w-[15rem]">Loan amount</p>
             <p>
               {" "}
               ₦ {loanPackage?.loanAmountRange?.min} - ₦{" "}
               {loanPackage?.loanAmountRange?.max}
             </p>
-          </div>
+          </div> */}
           {/* <div className="flex">
             <p className="min-w-[15rem]">Eligibility criteria</p>
             <div className="">

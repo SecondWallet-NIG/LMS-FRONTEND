@@ -139,8 +139,18 @@ const LoanPackages = () => {
                     {item?.status}
                   </p>
                 </div>
-                <div className="flex justify-between mb-2">
+                {/* <div className="flex justify-between mb-2">
                   <p className="text-sm">Interest rate</p>
+                  <p className="text-sm font-bold">
+                    {item?.interestRate?.rate}%
+                  </p>
+                </div> */}
+                <div className="flex justify-between mb-2">
+                  <p className="text-sm">Minimum interest rate</p>
+                  <p className="text-sm font-bold">0%</p>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <p className="text-sm">Maximum interest rate</p>
                   <p className="text-sm font-bold">
                     {item?.interestRate?.rate}%
                   </p>
@@ -166,6 +176,10 @@ const LoanPackages = () => {
                   <p className="font-semibold text-sm">
                     &#8358; {item?.loanAmountRange?.max.toLocaleString()}
                   </p>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <p className="text-sm">Active loans</p>
+                  <p className="font-semibold text-sm">100</p>
                 </div>
                 {/* <div className="flex justify-between">
                   <p>Active loans</p>
