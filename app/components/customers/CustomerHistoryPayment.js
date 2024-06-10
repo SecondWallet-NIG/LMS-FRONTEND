@@ -25,7 +25,7 @@ const CustomerPaymentHistory = ({ loanId }) => {
       setEnableLogRepayment(false);
     }
     return apiData?.map((item) => ({
-      //   id: item._id,
+       id: item._id,
       //   createdAt: (
       //     <div className="text-md font-[500] text-gray-700">{item?.dueDate.slice(0, 10)}</div>
       //   ),
@@ -103,6 +103,7 @@ const CustomerPaymentHistory = ({ loanId }) => {
       <div>
         {enableLogRepaymentBtn == true ? (
           <ReusableDataTable
+          onClickRow={"/payment-history/payment/"}
             dataTransformer={customDataTransformer}
             headers={headers}
             initialData={[]}

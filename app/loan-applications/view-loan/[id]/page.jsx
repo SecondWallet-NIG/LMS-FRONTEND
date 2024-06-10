@@ -826,7 +826,7 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        <p>null</p>
+                       {data?.data?.loanApplication?.disbursedAt === null ? "null" : <p>{data?.data?.loanApplication?.disbursedAt.slice(0, 10)}</p>} 
                       </div>
                     </td>
                   </tr>
