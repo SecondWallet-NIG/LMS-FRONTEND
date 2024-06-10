@@ -509,7 +509,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 handleSidebarOpen(false);
                 localStorage.removeItem("user");
                 localStorage.removeItem("email");
-                localStorage.clear();
+                //localStorage.clear();
               }}
             />
           </div>
@@ -932,7 +932,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 handleSidebarOpen(false);
                 localStorage.removeItem("user");
                 localStorage.removeItem("email");
-                localStorage.clear();
+               // localStorage.clear();
               }}
             />
           </div>
