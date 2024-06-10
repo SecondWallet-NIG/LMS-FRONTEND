@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
     if (expireTime < Date.now()) {
       localStorage.removeItem("user");
       localStorage.removeItem("email");
-      localStorage.clear();
+     // localStorage.clear();
       route.push("/");
     }
   };
