@@ -43,7 +43,8 @@ const EditPlansAndPackages = () => {
     minAmount: "",
     maxAmount: "",
     interestRateType: "",
-    interestRate: "",
+    minRate: "",
+    maxRate: "",
     repaymentInterval: "",
     status: "Active",
     createdBy: "",
@@ -78,7 +79,8 @@ const EditPlansAndPackages = () => {
       minAmount: "",
       maxAmount: "",
       interestRateType: "",
-      interestRate: "",
+      minRate: "",
+      maxRate: "",
       repaymentInterval: "",
       status: "Active",
       createdBy: "",
@@ -96,7 +98,8 @@ const EditPlansAndPackages = () => {
       },
       interestRate: {
         rateType: editPlan.interestRateType,
-        rate: editPlan.interestRate,
+        minRate: editPlan.minRate,
+        maxRate: editPlan.maxRate,
       },
     };
 
@@ -160,7 +163,8 @@ const EditPlansAndPackages = () => {
       minAmount: loanPackage?.loanAmountRange?.min,
       maxAmount: loanPackage?.loanAmountRange?.max,
       interestRateType: loanPackage?.interestRate?.rateType,
-      interestRate: loanPackage?.interestRate?.rate,
+      minRate: loanPackage?.interestRate?.minRate,
+      maxRate: loanPackage?.interestRate?.maxRate,
       repaymentInterval: loanPackage?.repaymentInterval,
       status: loanPackage?.status,
       createdBy: loanPackage?.createdBy,
@@ -266,9 +270,11 @@ const EditPlansAndPackages = () => {
             required={true}
             name={"interestRateType"}
             label={"Interest type"}
-            value={interestTypeOptions.find(
-              (option) => option.value === editPlan?.interestRateType
-            )}
+            value={
+              interestTypeOptions.find(
+                (option) => option.value === editPlan?.interestRateType
+              ) || ""
+            }
             optionValue={interestTypeOptions}
             onChange={handleInputChange}
           />
@@ -284,17 +290,18 @@ const EditPlansAndPackages = () => {
             value={editPlan.interestRate}
             onChange={handleInputChange}
           /> */}
+
           <div className="flex gap-5 items-end">
             <div className="w-full">
               <InputField
                 label={"Interest rate range"}
                 placeholder={"Maximum amount"}
                 required={true}
-                //  onKeyPress={preventMinus}
-                // onWheel={() => document.activeElement.blur()}
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
                 endIcon={<MdPercent size={20} className="text-swGray" />}
-                name={"interestRate"}
-                value={editPlan.interestRate}
+                name={"minRate"}
+                value={editPlan?.minRate?.toLocaleString()}
                 onChange={handleInputChange}
               />
             </div>
@@ -306,8 +313,8 @@ const EditPlansAndPackages = () => {
                 ariaLabel={"Number input"}
                 onWheel={() => document.activeElement.blur()}
                 endIcon={<MdPercent size={20} className="text-swGray" />}
-                name={"maxAmount"}
-                // value={createPlan.maxAmount.toLocaleString()}
+                name={"maxRate"}
+                value={editPlan?.maxRate?.toLocaleString()}
                 onChange={handleInputChange}
               />
             </div>
@@ -342,7 +349,6 @@ const EditPlansAndPackages = () => {
               />
             </div>
           </div>
-
 
           <div className="flex justify-between ">
             <button
