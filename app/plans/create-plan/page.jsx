@@ -50,13 +50,12 @@ const CreatePlansAndPackages = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
-    console.log({value});
-  //  const ariaLabel = e.target.getAttribute("aria-label");
-      setCreatePlan((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    
+    console.log({ value });
+    //  const ariaLabel = e.target.getAttribute("aria-label");
+    setCreatePlan((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const resetForm = () => {
@@ -200,7 +199,7 @@ const CreatePlansAndPackages = () => {
             </span>
           )}
 
-          <InputField
+          {/* <InputField
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
@@ -213,14 +212,50 @@ const CreatePlansAndPackages = () => {
           />
           {errors.interestRate && (
             <span className="text-red-500 text-xs">{errors.interestRate}</span>
-          )}
+          )} */}
+          <div className="flex gap-5 items-end">
+            <div className="w-full">
+              <InputField
+                label={"Interest rate range"}
+                placeholder={"Maximum amount"}
+                required={true}
+                //  onKeyPress={preventMinus}
+                // onWheel={() => document.activeElement.blur()}
+                endIcon={<MdPercent size={20} className="text-swGray" />}
+                name={"interestRate"}
+                value={createPlan.interestRate}
+                onChange={handleInputChange}
+              />
+            </div>
+            <FiMinus size={60} className="text-swGray -mb-3" />
+            <div className="w-full">
+              <InputField
+                placeholder={"Maximum amount"}
+                onKeyPress={preventMinus}
+                ariaLabel={"Number input"}
+                onWheel={() => document.activeElement.blur()}
+                endIcon={<MdPercent size={20} className="text-swGray" />}
+                name={"maxAmount"}
+                // value={createPlan.maxAmount.toLocaleString()}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+          <div className="flex gap-10">
+            {/* {errors.minAmount && (
+              <span className="text-red-500 text-xs">{errors.minAmount}</span>
+            )}
+            {errors.maxAmount && (
+              <span className="text-red-500 text-xs">{errors.maxAmount}</span>
+            )} */}
+          </div>
 
           <div className="flex gap-5 items-end">
             <div className="w-full">
               <InputField
                 label={"Loan amount range"}
                 required={true}
-                placeholder={"Minimum amount - 5000"}
+                placeholder={"Minimum amount"}
                 onKeyPress={preventMinus}
                 ariaLabel={"Number input"}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
@@ -232,7 +267,7 @@ const CreatePlansAndPackages = () => {
             <FiMinus size={60} className="text-swGray -mb-3" />
             <div className="w-full">
               <InputField
-                placeholder={"Maximum amount - 50000"}
+                placeholder={"Maximum amount"}
                 onKeyPress={preventMinus}
                 ariaLabel={"Number input"}
                 onWheel={() => document.activeElement.blur()}

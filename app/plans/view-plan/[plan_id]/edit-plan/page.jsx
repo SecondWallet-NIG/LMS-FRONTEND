@@ -273,7 +273,7 @@ const EditPlansAndPackages = () => {
             onChange={handleInputChange}
           />
 
-          <InputField
+          {/* <InputField
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
@@ -283,7 +283,35 @@ const EditPlansAndPackages = () => {
             name={"interestRate"}
             value={editPlan.interestRate}
             onChange={handleInputChange}
-          />
+          /> */}
+          <div className="flex gap-5 items-end">
+            <div className="w-full">
+              <InputField
+                label={"Interest rate range"}
+                placeholder={"Maximum amount"}
+                required={true}
+                //  onKeyPress={preventMinus}
+                // onWheel={() => document.activeElement.blur()}
+                endIcon={<MdPercent size={20} className="text-swGray" />}
+                name={"interestRate"}
+                value={editPlan.interestRate}
+                onChange={handleInputChange}
+              />
+            </div>
+            <FiMinus size={60} className="text-swGray -mb-3" />
+            <div className="w-full">
+              <InputField
+                placeholder={"Maximum amount"}
+                onKeyPress={preventMinus}
+                ariaLabel={"Number input"}
+                onWheel={() => document.activeElement.blur()}
+                endIcon={<MdPercent size={20} className="text-swGray" />}
+                name={"maxAmount"}
+                // value={createPlan.maxAmount.toLocaleString()}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
 
           <div className="flex gap-5 items-end">
             <div className="w-full">
@@ -314,6 +342,7 @@ const EditPlansAndPackages = () => {
               />
             </div>
           </div>
+
 
           <div className="flex justify-between ">
             <button
