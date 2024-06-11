@@ -2,33 +2,34 @@
 
 import { useEffect } from "react";
 import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
-import InputField from "../components/shared/input/InputField";
-import SelectField from "../components/shared/input/SelectField";
+import InputField from "../../components/shared/input/InputField";
+import SelectField from "../../components/shared/input/SelectField";
 import { useState } from "react";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
-import Button from "../components/shared/buttonComponent/Button";
+import Button from "../../components/shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "@/redux/slices/customerSlice";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { createLoanApplication } from "@/redux/slices/loanApplicationSlice";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import { calculateInterest } from "@/redux/slices/interestTypeSlice";
-import CenterModal from "../components/modals/CenterModal";
+import CenterModal from "../../components/modals/CenterModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import PreviewInterest from "../components/modals/PreviewInterest";
+import PreviewInterest from "../../components/modals/PreviewInterest";
 import { FiUser } from "react-icons/fi";
-import { useRouter } from "next/navigation";
-import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
+import { useParams, useRouter } from "next/navigation";
+import DashboardLayout from "../../components/dashboardLayout/DashboardLayout";
 import Link from "next/link";
 import Image from "next/image";
 import { Rings } from "react-loader-spinner";
-import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
-import Unauthorized from "../unauthorized/page";
+import EditableButton from "../../components/shared/editableButtonComponent/EditableButton";
+import Unauthorized from "../../unauthorized/page";
 
-const CreateLoan = () => {
+const SavedLoan = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const param = useParams();
   const loanPackage = useSelector((state) => state.loanPackage);
   const interestType = useSelector((state) => state.interestType);
   const customer = useSelector((state) => state.customer);
@@ -68,13 +69,10 @@ const CreateLoan = () => {
     interestType: null,
     applicationForm: null || "null",
     assetImages: null || "null",
-    collaterals: [],
+    collaterals: "",
     guarantorForm: null,
     loanAffidavit: null,
     offerLetter: null || "null",
-    // Account statement
-    // Power of attorney
-    // Transfer of ownership
     customerId: "",
   });
 
@@ -311,37 +309,19 @@ const CreateLoan = () => {
       }));
       return;
     }
-
-    name === "collaterals"
-      ? setFormData((prevFormData) => ({
-          ...prevFormData,
-          [name]: [...prevFormData.collaterals, files[0]],
-        }))
-      : setFormData((prevFormData) => ({
-          ...prevFormData,
-          [name]: files[0],
-        }));
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: files[0],
+    }));
     // console.log(formData);
   };
 
-  const deleteFile = (name, inputName) => {
-    if (inputName === "collaterals") {
-      const newFiles = formData.collaterals.filter(
-        (file, index) => index !== name
-      );
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [inputName]: newFiles,
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: null,
-      }));
-    }
+  const deleteFile = (name) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: null,
+    }));
   };
-
-  console.log("collaterals", formData.collaterals);
 
   const submitLoan = (e) => {
     localStorage.removeItem("borrower");
@@ -367,39 +347,32 @@ const CreateLoan = () => {
     payload.append("interestType", formData.interestType);
     payload.append("applicationForm", formData.applicationForm);
     payload.append("assetImages", formData.assetImages);
-    // payload.append("collaterals", formData.collaterals);
-    if (formData.collaterals.length > 0) {
-      formData.collaterals.forEach((file) => {
-        payload.append("collaterals", file);
-      });
-    } else {
-      payload.append("collaterals", null);
-    }
+    payload.append("collaterals", formData.collaterals);
     payload.append("guarantorForm", formData.guarantorForm);
     payload.append("loanAffidavit", formData.loanAffidavit);
     payload.append("offerLetter", formData.offerLetter);
-    // Account statement
-    // Power of attorney
-    // Transfer of ownership
     payload.append("customerId", selectedCustomer?._id);
     payload.append("createdBy", userId?._id);
     payload.append("tag", userId?.role.tag);
 
-    console.log(...payload);
+    setLoading(true);
+    e.preventDefault();
+    dispatch(createLoanApplication(payload))
+      .unwrap()
+      .then(() => {
+        const saved = localStorage.getItem("savedLoans");
+        const savedLoans = saved ? JSON.parse(saved) : null;
+        savedLoans.splice(param.id, 1);
 
-    // setLoading(true);
-    // e.preventDefault();
-    // dispatch(createLoanApplication(payload))
-    //   .unwrap()
-    //   .then(() => {
-    //     toast("Loan application successful");
-    //     router.push("/loan-drafts");
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     toast.error(`${error?.message}`);
-    //     setLoading(false);
-    //   });
+        localStorage.setItem("savedLoans", JSON.stringify(savedLoans));
+        toast("Loan application successful");
+        router.push("/loan-drafts");
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(`${error?.message}`);
+        setLoading(false);
+      });
   };
   useEffect(() => {
     dispatch(getCustomers());
@@ -407,15 +380,15 @@ const CreateLoan = () => {
     dispatch(getInterestType());
   }, []);
 
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("borrower"));
-    setFormData({
-      ...formData,
-      customerId: data?.profileInfo?._id,
-    });
-    setSelectedCustomer(data?.profileInfo);
-    setFilteredData(customer?.data);
-  }, [customer?.data]);
+  // useEffect(() => {
+  //   const data = JSON.parse(localStorage.getItem("borrower"));
+  //   setFormData({
+  //     ...formData,
+  //     customerId: data?.profileInfo?._id,
+  //   });
+  //   setSelectedCustomer(data?.profileInfo);
+  //   setFilteredData(customer?.data);
+  // }, [customer?.data]);
 
   useEffect(() => {
     let userId;
@@ -433,7 +406,7 @@ const CreateLoan = () => {
     const savedLoans = localStorage.getItem("savedLoans");
     if (savedLoans) {
       const loans = JSON.parse(savedLoans);
-      const loansLength = loans.length;
+      // const loansLength = loans.length;
       // let newFormData = { ...formData };
       let newFormData = {
         formData: {
@@ -441,101 +414,48 @@ const CreateLoan = () => {
         },
         selectedCustomer: selectedCustomer,
         savedAt: new Date(),
-        id: loansLength,
+        id: param.id,
       };
-      console.log({ formData });
-      console.log({ newFormData });
-      loans.push(newFormData);
-      localStorage.setItem("savedLoans", JSON.stringify(loans));
-      toast.success("Your partly created loan has been successfully saved");
-      router.push("/saved-loans");
-    } else {
-      let loans = [];
-      let newFormData = {
-        formData: {
-          ...formData,
-        },
-        selectedCustomer: selectedCustomer,
-        savedAt: new Date(),
-        id: 0,
-      };
-      // console.log({ formData });
-      // console.log({ newFormData });
-      loans.push(newFormData);
+      loans[param.id] = newFormData;
       localStorage.setItem("savedLoans", JSON.stringify(loans));
       toast.success("Your partly created loan has been successfully saved");
       router.push("/saved-loans");
     }
+
+    console.log("Save loan");
   };
 
-  const renderFileInput = (text, name) => {
-    return (
-      <div className="flex flex-col items-center justify-center gap-2 mt-5">
-        <p className="font-semibold text-center">{text}</p>
-        {fileError[name] && (
-          <p className="text-red-500 text-sm">{fileError[name]}</p>
-        )}
+  useEffect(() => {
+    const saved = localStorage.getItem("savedLoans");
+    const savedLoans = saved ? JSON.parse(saved) : null;
 
-        {name === "collaterals" &&
-          formData[name]?.map((file, index) => (
-            <div
-              key={index}
-              id="fileLabel3"
-              className="bg-swLightGray p-2 flex justify-between"
-            >
-              <div className="text-xs">{file.name}</div>
-              <div
-                onClick={() => {
-                  deleteFile(index, "collaterals");
-                }}
-              >
-                <AiOutlineDelete color="red" size={20} />
-              </div>
-            </div>
-          ))}
+    if (savedLoans) {
+      setFormData(savedLoans[param.id].formData);
+      setSelectedCustomer(savedLoans[param.id].selectedCustomer);
+      console.log(
+        "profilePic",
+        savedLoans[param.id].selectedCustomer.profilePicture
+      );
+    }
+  }, []);
 
-        {formData[name]?.name ? (
-          <div
-            id="fileLabel3"
-            className="bg-swLightGray p-2 flex justify-between"
-          >
-            <div className="text-xs">{formData[name]?.name}</div>
-            <div
-              onClick={() => {
-                deleteFile(name);
-              }}
-            >
-              <AiOutlineDelete color="red" size={20} />
-            </div>
-          </div>
-        ) : null}
+  useEffect(() => {
+    const saved = localStorage.getItem("savedLoans");
+    const savedLoans = saved ? JSON.parse(saved) : null;
 
-        <div className="relative">
-          <input
-            name={name}
-            type="file"
-            id={`fileInput-${name}`}
-            className="absolute w-0 h-0 opacity-0"
-            onChange={handleFileChange}
-            onClick={(e) => (e.target.value = null)}
-          />
-          <label
-            htmlFor={`fileInput-${name}`}
-            className="text-white cursor-pointer"
-          >
-            <span
-              className={`py-2 px-6 rounded-md outline outline-2 hover:outline-gray-200 flex gap-2 border w-fit  `}
-            >
-              <AiOutlinePaperClip color="black" size={20} />
-              <p className="font-semibold text-black">
-                {formData[name]?.name ? "Change file" : "Select file"}
-              </p>
-            </span>
-          </label>
-        </div>
-      </div>
-    );
-  };
+    if (loanPackage.loading === "succeeded") {
+      console.log("savedLoans", savedLoans[param.id].formData.loanPackage);
+      console.log("loanPackage", loanPackage?.data?.data);
+      const loanPackageData = loanPackage?.data?.data;
+
+      const loanPackageDataId = loanPackageData.find(
+        (item) => item._id === savedLoans[param.id].formData.loanPackage
+      );
+      console.log("loanPackageDataId", loanPackageDataId);
+      setLoanPackageText(loanPackageDataId.name);
+      setLoanPackageRate(loanPackageDataId?.interestRate?.rate);
+    }
+  }, [loanPackage]);
 
   return (
     <DashboardLayout>
@@ -837,27 +757,204 @@ const CreateLoan = () => {
                   </div>
                 </div> */}
             </div>
-            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-5 mb-10">
-              {renderFileInput("Upload Collateral documents", "collaterals")}
-              {renderFileInput(
-                "Upload Loan Application form",
-                "applicationForm"
+            <div className="flex flex-col gap-2 mt-5">
+              <p className="font-semibold">Upload Collateral documents</p>
+              {fileError.collaterals && (
+                <p className="text-red-500 text-sm">{fileError.collaterals}</p>
               )}
-              {renderFileInput(
-                "Upload Loan Affidavit document",
-                "loanAffidavit"
+              <div className="relative">
+                <input
+                  name="collaterals"
+                  type="file"
+                  id="fileInput"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
+                />
+                <label
+                  htmlFor="fileInput"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {formData?.collaterals?.name
+                        ? "Change file"
+                        : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {formData?.collaterals?.name ? (
+                  <div
+                    id="fileLabel"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">{formData?.collaterals?.name}</div>
+                    <div
+                      onClick={() => {
+                        deleteFile("collaterals");
+                      }}
+                    >
+                      <AiOutlineDelete color="red" size={20} />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 mt-5">
+              <p className="font-semibold">Upload Loan Application form</p>
+              {fileError.applicationForm && (
+                <p className="text-red-500 text-sm">
+                  {fileError.applicationForm}
+                </p>
               )}
-              {renderFileInput("Upload Guarantor Form", "guarantorForm")}
-              {renderFileInput("Upload Account Statement", "accountStatement")}
-              {renderFileInput("Upload Power of Attorney", "powerOfAttorney")}
-              {renderFileInput("Transfer of Ownership", "transferOfOwnership")}
+              <div className="relative">
+                <input
+                  name="applicationForm"
+                  type="file"
+                  id="fileInput1"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
+                />
+                <label
+                  htmlFor="fileInput1"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {" "}
+                      {formData?.applicationForm?.name
+                        ? "Change file"
+                        : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {formData?.applicationForm?.name ? (
+                  <div
+                    id="fileLabel1"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">
+                      {formData?.applicationForm?.name}
+                    </div>
+                    <div
+                      onClick={() => {
+                        deleteFile("applicationForm");
+                      }}
+                    >
+                      <AiOutlineDelete color="red" size={20} />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 mt-5">
+              <p className="font-semibold">Upload Loan Affidavit document</p>
+              {fileError.loanAffidavit && (
+                <p className="text-red-500 text-sm">
+                  {fileError.loanAffidavit}
+                </p>
+              )}
+              <div className="relative">
+                <input
+                  name="loanAffidavit"
+                  type="file"
+                  id="fileInput2"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
+                />
+                <label
+                  htmlFor="fileInput2"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {formData?.loanAffidavit?.name
+                        ? "Change file"
+                        : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {formData?.loanAffidavit?.name ? (
+                  <div
+                    id="fileLabel3"
+                    className="bg-swLightGray p-2 flex justify-between"
+                  >
+                    <div className="text-xs">
+                      {formData?.loanAffidavit?.name}
+                    </div>
+                    <div
+                      onClick={() => {
+                        deleteFile("loanAffidavit");
+                      }}
+                    >
+                      <AiOutlineDelete color="red" size={20} />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 mt-5">
+              <p className="font-semibold">Upload Guarantor Form</p>
+              {fileError.guarantorForm && (
+                <p className="text-red-500 text-sm">
+                  {fileError.guarantorForm}
+                </p>
+              )}
+              <div className="relative">
+                <input
+                  name="guarantorForm"
+                  type="file"
+                  id="fileInput3"
+                  className="absolute w-0 h-0 opacity-0"
+                  onChange={handleFileChange}
+                  onClick={(e) => (e.target.value = null)}
+                />
+                <label
+                  htmlFor="fileInput3"
+                  className="px-4 py-2 text-white rounded-md cursor-pointer"
+                >
+                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                    <AiOutlinePaperClip color="black" size={20} />
+                    <p className="font-semibold text-black">
+                      {" "}
+                      {formData?.guarantorForm?.name
+                        ? "Change file"
+                        : "Select file"}
+                    </p>
+                  </span>
+                </label>
+                {formData?.guarantorForm?.name ? (
+                  <div
+                    id="fileLabel"
+                    className="bg-swLightGray p-2 flex justify-between mb-5"
+                  >
+                    <div className="text-xs">
+                      {formData?.guarantorForm?.name}
+                    </div>
+                    <div>
+                      <AiOutlineDelete
+                        onClick={() => {
+                          deleteFile("guarantorForm");
+                        }}
+                        color="red"
+                        size={20}
+                      />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             </div>
 
             <div className="flex items-center gap-5 my-5 md:hidden">
               <EditableButton
                 blueBtn={true}
                 disabled={
-                  formData.repaymentType === null || isLoading === true
+                  formData.interestType === null || isLoading === true
                     ? true
                     : false
                 }
@@ -867,11 +964,7 @@ const CreateLoan = () => {
               />
               <EditableButton
                 blueBtn={true}
-                disabled={
-                  formData.repaymentType === null || isLoading === true
-                    ? true
-                    : false
-                }
+                disabled={loading ? true : false}
                 startIcon={
                   loading && (
                     <Rings
@@ -1080,7 +1173,7 @@ const CreateLoan = () => {
                   <EditableButton
                     blueBtn={true}
                     disabled={
-                      formData.repaymentType === null || isLoading === true
+                      formData.interestType === null || isLoading === true
                         ? true
                         : false
                     }
@@ -1091,11 +1184,7 @@ const CreateLoan = () => {
 
                   <EditableButton
                     blueBtn={true}
-                    disabled={
-                      formData.repaymentType === null || isLoading === true
-                        ? true
-                        : false
-                    }
+                    disabled={loading ? true : false}
                     startIcon={
                       loading && (
                         <Rings
@@ -1143,11 +1232,7 @@ const CreateLoan = () => {
               <div className="md:hidden">
                 <EditableButton
                   blueBtn={true}
-                  disabled={
-                    formData.repaymentType === null || isLoading === true
-                      ? true
-                      : false
-                  }
+                  disabled={loading ? true : false}
                   startIcon={
                     loading && (
                       <Rings
@@ -1340,11 +1425,7 @@ const CreateLoan = () => {
                 <div className="mb-10 mt-5">
                   <EditableButton
                     blueBtn={true}
-                    disabled={
-                      formData.repaymentType === null || isLoading === true
-                        ? true
-                        : false
-                    }
+                    disabled={loading ? true : false}
                     startIcon={
                       loading && (
                         <Rings
@@ -1452,4 +1533,4 @@ const CreateLoan = () => {
   );
 };
 
-export default CreateLoan;
+export default SavedLoan;

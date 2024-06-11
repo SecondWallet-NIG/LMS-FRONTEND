@@ -51,7 +51,7 @@ const PaymentPage = () => {
   //   )
   // );
 
-  const approvePayment = (loanId, repaymentId) => {
+  const approvePayment = async (loanId, repaymentId) => {
     setDisableApprovalBtn(true);
     dispatch(approveLoggedPayment({ loanId, repaymentId }))
       .unwrap()
@@ -59,12 +59,14 @@ const PaymentPage = () => {
         toast.success("Payment approved");
         dispatch(getAllRepaymentHistory());
         setDisableApprovalBtn(false);
-        // window.location.reload();
+        dispatch(getSingleRepayment(id));
+        window.location.reload();
       })
       .catch(() => {
         dispatch(getAllRepaymentHistory());
         toast.error("An error occured");
         setDisableApprovalBtn(false);
+        window.location.reload();
       });
   };
 
@@ -74,6 +76,7 @@ const PaymentPage = () => {
       .unwrap()
       .then(() => {
         toast.success("Payment declined successfully");
+        dispatch(getSingleRepayment(id));
         window.location.reload();
       })
       .catch((error) => toast.error("An error occured"));
@@ -183,13 +186,26 @@ const PaymentPage = () => {
         </div>
 
         <div className="p-5 flex flex-col gap-5 font-500">
-          <p className="text-lg font-semibold">payment details</p>
+          <p className="text-lg font-semibold text-swBlue">payment details</p>
           <div className="flex">
-            <p className="min-w-[15rem]">Date Logged</p>
+            <p className="min-w-[15rem]  text-swBlue">Borrower name</p>
+            <p>
+              {repaymentData?.result?.customer?.firstName}{" "}
+              {repaymentData?.result?.customer?.lastName}
+            </p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem] text-swBlue">Date Logged</p>
             <p>{formatDate(repaymentData?.result?.createdAt?.slice(0, 10))}</p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Loan ID</p>
+            <p className="min-w-[15rem]  text-swBlue">Customer Payment Date</p>
+            <p>
+              {formatDate(repaymentData?.result?.dateCollected?.slice(0, 10))}
+            </p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]  text-swBlue">Loan ID</p>
             <Link
               href={`/loan-applications/view-loan/${repaymentData?.result?.loanApplication?._id}`}
               className="text-swBlue"
@@ -198,27 +214,21 @@ const PaymentPage = () => {
             </Link>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Logged by</p>
+            <p className="min-w-[15rem]  text-swBlue">Logged by</p>
             <p>
               {repaymentData?.result?.loggedBy?.firstName}{" "}
               {repaymentData?.result?.loggedBy?.lastName}
             </p>
           </div>
+
           <div className="flex">
-            <p className="min-w-[15rem]">Borrower name</p>
-            <p>
-              {repaymentData?.result?.customer?.firstName}{" "}
-              {repaymentData?.result?.customer?.lastName}
-            </p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem]">Payment method</p>
+            <p className="min-w-[15rem]  text-swBlue ">Payment method</p>
             <p>{repaymentData?.result?.repaymentMethod}</p>
           </div>
           {repaymentData?.result?.repaymentReceipts?.length > 0 &&
           repaymentData?.result?.repaymentReceipts?.[0] !== "null" ? (
             <div className="flex">
-              <p className="min-w-[15rem]">Receipt</p>
+              <p className="min-w-[15rem] text-swBlue">Receipt</p>
               <p
                 className="text-swBlue cursor-pointer"
                 onClick={() => setOpenReceipt(true)}
@@ -290,7 +300,7 @@ const PaymentPage = () => {
             </div>
           ) : (
             <div className="flex">
-              <p className="min-w-[15rem]">Receipt</p>
+              <p className="min-w-[15rem] text-swBlue">Receipt</p>
               <p>No receipt to show</p>
             </div>
           )}
