@@ -24,6 +24,7 @@ import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs"
 import dynamic from "next/dynamic";
 import { bankArr } from "@/constant";
 import { formatDate } from "@/helpers";
+import BorrowerOptions from "@/app/components/customers/BorrowerOptions";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -184,8 +185,8 @@ const CustomerProfile = () => {
                 </span>
               </p>
               <div className="flex items-center">
-                <div className="relative">
-                  {/* <div
+                {/* <div className="relative">
+                  <div
                     className="border-2 border-transparent hover:border-swLightGray w-fit h-fit rounded-md cursor-pointer"
                     onClick={() => setBorrowerOptions(!borrowerOptions)}
                     // onClick={() => }
@@ -193,7 +194,7 @@ const CustomerProfile = () => {
                     <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
                       <BsThreeDotsVertical size={20} />
                     </div>
-                  </div> */}
+                  </div>
                   {borrowerOptions && (
                     <div
                       ref={buttonRef}
@@ -219,7 +220,8 @@ const CustomerProfile = () => {
                       </p>
                     </div>
                   )}
-                </div>
+                </div> */}
+
                 <div className="flex gap-5">
                   <Link
                     href={"/create-loan"}
@@ -235,6 +237,16 @@ const CustomerProfile = () => {
                   >
                     Create loan
                   </Link>
+                  <div className="relative">
+                    <div
+                      className="border-2 border-transparent hover:border-blue-100 w-fit h-fit rounded-md cursor-pointer"
+                      onClick={() => setBorrowerOptions(!borrowerOptions)}
+                    >
+                      <div className="bg-white border border-blue-300 w-fit p-2 px-4 rounded-md text-swBlue">
+                        Blacklist
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -675,6 +687,7 @@ const CustomerProfile = () => {
           onClose={closeModal}
           customerID={id}
         />
+        <BorrowerOptions open={borrowerOptions} onClose={setBorrowerOptions} />
       </div>
     </DashboardLayout>
   );
