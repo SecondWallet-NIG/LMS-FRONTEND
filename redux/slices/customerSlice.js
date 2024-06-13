@@ -221,6 +221,28 @@ export const updateIdentityVerification = createAsyncThunk(
   }
 );
 
+export const customerBlackList = createAsyncThunk(
+  "/customer/profile-information/blacklist",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/customer/profile-information/blacklist`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const customerSlice = createSlice({
   name: "customer",
   initialState: {

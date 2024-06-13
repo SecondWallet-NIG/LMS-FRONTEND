@@ -33,7 +33,8 @@ const CreatePlansAndPackages = () => {
     minAmount: "",
     maxAmount: "",
     interestRateType: "",
-    interestRate: "",
+    minRate: "",
+    maxRate: "",
     repaymentInterval: "",
     status: "Active",
     createdBy: "",
@@ -50,13 +51,12 @@ const CreatePlansAndPackages = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
-    console.log({value});
-  //  const ariaLabel = e.target.getAttribute("aria-label");
-      setCreatePlan((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    
+    console.log({ value });
+    //  const ariaLabel = e.target.getAttribute("aria-label");
+    setCreatePlan((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const resetForm = () => {
@@ -65,7 +65,8 @@ const CreatePlansAndPackages = () => {
       minAmount: "",
       maxAmount: "",
       interestRateType: "",
-      interestRate: "",
+      minRate: "",
+      maxRate: "",
       repaymentInterval: "",
       status: "Active",
       createdBy: user?.data?.user?._id,
@@ -95,8 +96,12 @@ const CreatePlansAndPackages = () => {
       isValid = false;
     }
 
-    if (createPlan.interestRate.trim() === "") {
-      newErrors.interestRate = "Interest rate is required";
+    if (createPlan.minRate.trim() === "") {
+      newErrors.minRate = "Interest rate is required";
+      isValid = false;
+    }
+    if (createPlan.maxRate.trim() === "") {
+      newErrors.maxRate = "Interest rate is required";
       isValid = false;
     }
     // if (createPlan.repaymentInterval.trim() === "") {
@@ -121,7 +126,8 @@ const CreatePlansAndPackages = () => {
         },
         interestRate: {
           rateType: createPlan.interestRateType,
-          rate: createPlan.interestRate,
+          min: createPlan.minRate,
+          max: createPlan.maxRate,
         },
         repaymentInterval: createPlan.repaymentInterval,
         status: "Active",
@@ -163,6 +169,8 @@ const CreatePlansAndPackages = () => {
     }
   };
 
+  console.log({ createPlan });
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
@@ -191,6 +199,11 @@ const CreatePlansAndPackages = () => {
             required={true}
             name={"interestRateType"}
             label={"Interest type"}
+            value={
+              interestTypeOptions.find(
+                (item) => item.value === createPlan.interestRateType
+              ) || ""
+            }
             optionValue={interestTypeOptions}
             onChange={handleInputChange}
           />
@@ -200,7 +213,7 @@ const CreatePlansAndPackages = () => {
             </span>
           )}
 
-          <InputField
+          {/* <InputField
             label={"Interest rate"}
             required={true}
             placeholder={"5"}
@@ -213,7 +226,43 @@ const CreatePlansAndPackages = () => {
           />
           {errors.interestRate && (
             <span className="text-red-500 text-xs">{errors.interestRate}</span>
-          )}
+          )}  */}
+          <div className="flex gap-5 items-end">
+            <div className="w-full">
+              <InputField
+                label={"Interest rate range"}
+                placeholder={"Maximum amount"}
+                required={true}
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                endIcon={<MdPercent size={20} className="text-swGray" />}
+                name={"minRate"}
+                value={createPlan?.minRate?.toLocaleString()}
+                onChange={handleInputChange}
+              />
+            </div>
+            <FiMinus size={60} className="text-swGray -mb-3" />
+            <div className="w-full">
+              <InputField
+                placeholder={"Maximum amount"}
+                onKeyPress={preventMinus}
+                ariaLabel={"Number input"}
+                onWheel={() => document.activeElement.blur()}
+                endIcon={<MdPercent size={20} className="text-swGray" />}
+                name={"maxRate"}
+                value={createPlan?.maxRate?.toLocaleString()}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+          <div className="flex gap-10">
+            {/* {errors.minAmount && (
+              <span className="text-red-500 text-xs">{errors.minAmount}</span>
+            )}
+            {errors.maxAmount && (
+              <span className="text-red-500 text-xs">{errors.maxAmount}</span>
+            )} */}
+          </div>
 
           <div className="flex gap-5 items-end">
             <div className="w-full">

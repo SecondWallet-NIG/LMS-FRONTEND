@@ -24,6 +24,7 @@ import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs"
 import dynamic from "next/dynamic";
 import { bankArr } from "@/constant";
 import { formatDate } from "@/helpers";
+import BorrowerOptions from "@/app/components/customers/BorrowerOptions";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -51,7 +52,8 @@ const CustomerProfile = () => {
   const [borrowerOptions, setBorrowerOptions] = useState(false);
   const [openProfilePic, setOpenProfilePic] = useState(false);
   const buttonRef = useRef(null);
-  console.log({ roleTag });
+
+  console.log({ data });
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -146,10 +148,22 @@ const CustomerProfile = () => {
                 ) : null}
               </div>
               <div className="ml-4 h-fit">
-                <p className="text-xl font-semibold text-swBlue mb-1">
-                  {data?.profileInfo?.firstName} {data?.profileInfo?.middleName}{" "}
-                  {data?.profileInfo?.lastName}
-                </p>
+                <div className="flex items-center gap-5">
+                  <p className="text-xl font-semibold text-swBlue mb-1">
+                    {data?.profileInfo?.firstName}{" "}
+                    {data?.profileInfo?.middleName}{" "}
+                    {data?.profileInfo?.lastName}
+                  </p>
+                  <div
+                    className={`${
+                      data?.profileInfo?.status === "Active"
+                        ? "bg-blue-50 text-swBlue"
+                        : "bg-red-50 text-red-500"
+                    } text-xs font-normal px-2 py-1 rounded-full`}
+                  >
+                    {data?.profileInfo?.status}
+                  </div>
+                </div>
                 <p className="text-xs"> {data?.profileInfo?.customerId}</p>
 
                 <div className="flex gap-2 items-center h-fit w-fit mt-4">
@@ -184,8 +198,8 @@ const CustomerProfile = () => {
                 </span>
               </p>
               <div className="flex items-center">
-                <div className="relative">
-                  {/* <div
+                {/* <div className="relative">
+                  <div
                     className="border-2 border-transparent hover:border-swLightGray w-fit h-fit rounded-md cursor-pointer"
                     onClick={() => setBorrowerOptions(!borrowerOptions)}
                     // onClick={() => }
@@ -193,7 +207,7 @@ const CustomerProfile = () => {
                     <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
                       <BsThreeDotsVertical size={20} />
                     </div>
-                  </div> */}
+                  </div>
                   {borrowerOptions && (
                     <div
                       ref={buttonRef}
@@ -219,7 +233,8 @@ const CustomerProfile = () => {
                       </p>
                     </div>
                   )}
-                </div>
+                </div> */}
+
                 <div className="flex gap-5">
                   <Link
                     href={"/create-loan"}
@@ -235,6 +250,18 @@ const CustomerProfile = () => {
                   >
                     Create loan
                   </Link>
+                  <div className="relative">
+                    <div
+                      className={`p-2 px-4 border-2 rounded-md ${
+                        data?.profileInfo?.status === "Blacklisted"
+                          ? "pointer-events-none cursor-not-allowed bg-gray-200 text-gray-400"
+                          : "cursor-pointer hover:border-blue-100 text-swBlue"
+                      } `}
+                      onClick={() => setBorrowerOptions(!borrowerOptions)}
+                    >
+                      Blacklist
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -675,6 +702,7 @@ const CustomerProfile = () => {
           onClose={closeModal}
           customerID={id}
         />
+        <BorrowerOptions open={borrowerOptions} onClose={setBorrowerOptions} />
       </div>
     </DashboardLayout>
   );

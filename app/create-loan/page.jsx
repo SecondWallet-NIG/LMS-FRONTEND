@@ -68,10 +68,13 @@ const CreateLoan = () => {
     interestType: null,
     applicationForm: null || "null",
     assetImages: null || "null",
-    collaterals: "",
+    collaterals: [],
     guarantorForm: null,
     loanAffidavit: null,
     offerLetter: null || "null",
+    // Account statement
+    // Power of attorney
+    // Transfer of ownership
     customerId: "",
   });
 
@@ -308,19 +311,37 @@ const CreateLoan = () => {
       }));
       return;
     }
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: files[0],
-    }));
+
+    name === "collaterals"
+      ? setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: [...prevFormData.collaterals, files[0]],
+        }))
+      : setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: files[0],
+        }));
     // console.log(formData);
   };
 
-  const deleteFile = (name) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: null,
-    }));
+  const deleteFile = (name, inputName) => {
+    if (inputName === "collaterals") {
+      const newFiles = formData.collaterals.filter(
+        (file, index) => index !== name
+      );
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [inputName]: newFiles,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: null,
+      }));
+    }
   };
+
+  console.log("collaterals", formData.collaterals);
 
   const submitLoan = (e) => {
     localStorage.removeItem("borrower");
@@ -346,27 +367,39 @@ const CreateLoan = () => {
     payload.append("interestType", formData.interestType);
     payload.append("applicationForm", formData.applicationForm);
     payload.append("assetImages", formData.assetImages);
-    payload.append("collaterals", formData.collaterals);
+    // payload.append("collaterals", formData.collaterals);
+    if (formData.collaterals.length > 0) {
+      formData.collaterals.forEach((file) => {
+        payload.append("collaterals", file);
+      });
+    } else {
+      payload.append("collaterals", null);
+    }
     payload.append("guarantorForm", formData.guarantorForm);
     payload.append("loanAffidavit", formData.loanAffidavit);
     payload.append("offerLetter", formData.offerLetter);
+    // Account statement
+    // Power of attorney
+    // Transfer of ownership
     payload.append("customerId", selectedCustomer?._id);
     payload.append("createdBy", userId?._id);
     payload.append("tag", userId?.role.tag);
 
-    setLoading(true);
-    e.preventDefault();
-    dispatch(createLoanApplication(payload))
-      .unwrap()
-      .then(() => {
-        toast("Loan application successful");
-        router.push("/loan-drafts");
-        setLoading(false);
-      })
-      .catch((error) => {
-        toast.error(`${error?.message}`);
-        setLoading(false);
-      });
+    console.log(...payload);
+
+    // setLoading(true);
+    // e.preventDefault();
+    // dispatch(createLoanApplication(payload))
+    //   .unwrap()
+    //   .then(() => {
+    //     toast("Loan application successful");
+    //     router.push("/loan-drafts");
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     toast.error(`${error?.message}`);
+    //     setLoading(false);
+    //   });
   };
   useEffect(() => {
     dispatch(getCustomers());
@@ -433,6 +466,75 @@ const CreateLoan = () => {
       toast.success("Your partly created loan has been successfully saved");
       router.push("/saved-loans");
     }
+  };
+
+  const renderFileInput = (text, name) => {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 mt-5">
+        <p className="font-semibold text-center">{text}</p>
+        {fileError[name] && (
+          <p className="text-red-500 text-sm">{fileError[name]}</p>
+        )}
+
+        {name === "collaterals" &&
+          formData[name]?.map((file, index) => (
+            <div
+              key={index}
+              id="fileLabel3"
+              className="bg-swLightGray p-2 flex justify-between"
+            >
+              <div className="text-xs">{file.name}</div>
+              <div
+                onClick={() => {
+                  deleteFile(index, "collaterals");
+                }}
+              >
+                <AiOutlineDelete color="red" size={20} />
+              </div>
+            </div>
+          ))}
+
+        {formData[name]?.name ? (
+          <div
+            id="fileLabel3"
+            className="bg-swLightGray p-2 flex justify-between"
+          >
+            <div className="text-xs">{formData[name]?.name}</div>
+            <div
+              onClick={() => {
+                deleteFile(name);
+              }}
+            >
+              <AiOutlineDelete color="red" size={20} />
+            </div>
+          </div>
+        ) : null}
+
+        <div className="relative">
+          <input
+            name={name}
+            type="file"
+            id={`fileInput-${name}`}
+            className="absolute w-0 h-0 opacity-0"
+            onChange={handleFileChange}
+            onClick={(e) => (e.target.value = null)}
+          />
+          <label
+            htmlFor={`fileInput-${name}`}
+            className="text-white cursor-pointer"
+          >
+            <span
+              className={`py-2 px-6 rounded-md outline outline-2 hover:outline-gray-200 flex gap-2 border w-fit  `}
+            >
+              <AiOutlinePaperClip color="black" size={20} />
+              <p className="font-semibold text-black">
+                {formData[name]?.name ? "Change file" : "Select file"}
+              </p>
+            </span>
+          </label>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -735,197 +837,20 @@ const CreateLoan = () => {
                   </div>
                 </div> */}
             </div>
-            <div className="flex flex-col gap-2 mt-5">
-              <p className="font-semibold">Upload Collateral documents</p>
-              {fileError.collaterals && (
-                <p className="text-red-500 text-sm">{fileError.collaterals}</p>
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-5 mb-10">
+              {renderFileInput("Upload Collateral documents", "collaterals")}
+              {renderFileInput(
+                "Upload Loan Application form",
+                "applicationForm"
               )}
-              <div className="relative">
-                <input
-                  name="collaterals"
-                  type="file"
-                  id="fileInput"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {formData?.collaterals?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.collaterals?.name ? (
-                  <div
-                    id="fileLabel"
-                    className="bg-swLightGray p-2 flex justify-between"
-                  >
-                    <div className="text-xs">{formData?.collaterals?.name}</div>
-                    <div
-                      onClick={() => {
-                        deleteFile("collaterals");
-                      }}
-                    >
-                      <AiOutlineDelete color="red" size={20} />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 mt-5">
-              <p className="font-semibold">Upload Loan Application form</p>
-              {fileError.applicationForm && (
-                <p className="text-red-500 text-sm">
-                  {fileError.applicationForm}
-                </p>
+              {renderFileInput(
+                "Upload Loan Affidavit document",
+                "loanAffidavit"
               )}
-              <div className="relative">
-                <input
-                  name="applicationForm"
-                  type="file"
-                  id="fileInput1"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput1"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {" "}
-                      {formData?.applicationForm?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.applicationForm?.name ? (
-                  <div
-                    id="fileLabel1"
-                    className="bg-swLightGray p-2 flex justify-between"
-                  >
-                    <div className="text-xs">
-                      {formData?.applicationForm?.name}
-                    </div>
-                    <div
-                      onClick={() => {
-                        deleteFile("applicationForm");
-                      }}
-                    >
-                      <AiOutlineDelete color="red" size={20} />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 mt-5">
-              <p className="font-semibold">Upload Loan Affidavit document</p>
-              {fileError.loanAffidavit && (
-                <p className="text-red-500 text-sm">
-                  {fileError.loanAffidavit}
-                </p>
-              )}
-              <div className="relative">
-                <input
-                  name="loanAffidavit"
-                  type="file"
-                  id="fileInput2"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput2"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {formData?.loanAffidavit?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.loanAffidavit?.name ? (
-                  <div
-                    id="fileLabel3"
-                    className="bg-swLightGray p-2 flex justify-between"
-                  >
-                    <div className="text-xs">
-                      {formData?.loanAffidavit?.name}
-                    </div>
-                    <div
-                      onClick={() => {
-                        deleteFile("loanAffidavit");
-                      }}
-                    >
-                      <AiOutlineDelete color="red" size={20} />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 mt-5">
-              <p className="font-semibold">Upload Guarantor Form</p>
-              {fileError.guarantorForm && (
-                <p className="text-red-500 text-sm">
-                  {fileError.guarantorForm}
-                </p>
-              )}
-              <div className="relative">
-                <input
-                  name="guarantorForm"
-                  type="file"
-                  id="fileInput3"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput3"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {" "}
-                      {formData?.guarantorForm?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.guarantorForm?.name ? (
-                  <div
-                    id="fileLabel"
-                    className="bg-swLightGray p-2 flex justify-between mb-5"
-                  >
-                    <div className="text-xs">
-                      {formData?.guarantorForm?.name}
-                    </div>
-                    <div>
-                      <AiOutlineDelete
-                        onClick={() => {
-                          deleteFile("guarantorForm");
-                        }}
-                        color="red"
-                        size={20}
-                      />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
+              {renderFileInput("Upload Guarantor Form", "guarantorForm")}
+              {renderFileInput("Upload Account Statement", "accountStatement")}
+              {renderFileInput("Upload Power of Attorney", "powerOfAttorney")}
+              {renderFileInput("Transfer of Ownership", "transferOfOwnership")}
             </div>
 
             <div className="flex items-center gap-5 my-5 md:hidden">
