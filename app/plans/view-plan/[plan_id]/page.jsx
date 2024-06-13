@@ -72,11 +72,11 @@ const ViewPlan = () => {
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Minimum interest rate</p>
-            <p>0% per month</p>
+            <p>{loanPackage?.interestRate?.min}% per month</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Maximum interest rate</p>
-            <p>{loanPackage?.interestRate?.rate}% per month</p>
+            <p>{loanPackage?.interestRate?.max}% per month</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Minimum loan</p>

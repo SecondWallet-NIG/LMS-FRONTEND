@@ -147,12 +147,14 @@ const LoanPackages = () => {
                 </div> */}
                 <div className="flex justify-between mb-2">
                   <p className="text-sm">Minimum interest rate</p>
-                  <p className="text-sm font-bold">0%</p>
+                  <p className="text-sm font-bold">
+                    {item?.interestRate?.min}%
+                  </p>
                 </div>
                 <div className="flex justify-between mb-2">
                   <p className="text-sm">Maximum interest rate</p>
                   <p className="text-sm font-bold">
-                    {item?.interestRate?.rate}%
+                    {item?.interestRate?.max}%
                   </p>
                 </div>
                 <div className="flex justify-between mb-2">

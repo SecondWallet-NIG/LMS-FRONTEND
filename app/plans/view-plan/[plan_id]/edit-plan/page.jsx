@@ -98,8 +98,8 @@ const EditPlansAndPackages = () => {
       },
       interestRate: {
         rateType: editPlan.interestRateType,
-        minRate: editPlan.minRate,
-        maxRate: editPlan.maxRate,
+        min: editPlan.minRate,
+        max: editPlan.maxRate,
       },
     };
 
