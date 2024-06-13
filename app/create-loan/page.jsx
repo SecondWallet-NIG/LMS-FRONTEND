@@ -54,6 +54,7 @@ const CreateLoan = () => {
 
   const [formData, setFormData] = useState({
     loanAmount: "",
+    interestRate: null,
     loanPackage: null,
     loanDuration: "",
     commitmentValue: "",
@@ -268,6 +269,7 @@ const CreateLoan = () => {
         interestTypeId: formData.interestType,
         repaymentType: formData.repaymentType,
         loanFrequencyType: formData.loanFrequencyType,
+        interestRate: formData.interestRate,
         startDate: "",
       };
       e.preventDefault();
@@ -340,9 +342,6 @@ const CreateLoan = () => {
       }));
     }
   };
-
-  console.log("collaterals", formData.collaterals);
-
   const submitLoan = (e) => {
     localStorage.removeItem("borrower");
     let userId;
@@ -354,6 +353,7 @@ const CreateLoan = () => {
     const num = parseInt(removeCommasFromNumber(formData.loanAmount));
     payload.append("loanAmount", num);
     payload.append("loanPackage", formData.loanPackage);
+    payload.append("interestRate", formData.interestRate);
     payload.append("loanDuration", formData.loanDuration);
     payload.append("commitmentValue", formData.commitmentValue);
     payload.append("commitmentTotal", formData.commitmentTotal);
@@ -385,21 +385,21 @@ const CreateLoan = () => {
     payload.append("createdBy", userId?._id);
     payload.append("tag", userId?.role.tag);
 
-    console.log(...payload);
+    console.log({...payload});
 
-    // setLoading(true);
-    // e.preventDefault();
-    // dispatch(createLoanApplication(payload))
-    //   .unwrap()
-    //   .then(() => {
-    //     toast("Loan application successful");
-    //     router.push("/loan-drafts");
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     toast.error(`${error?.message}`);
-    //     setLoading(false);
-    //   });
+    setLoading(true);
+    e.preventDefault();
+    dispatch(createLoanApplication(payload))
+      .unwrap()
+      .then(() => {
+        toast("Loan application successful");
+        router.push("/loan-drafts");
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(`${error?.message}`);
+        setLoading(false);
+      });
   };
   useEffect(() => {
     dispatch(getCustomers());
@@ -601,6 +601,39 @@ const CreateLoan = () => {
                   setLoanPackageText(selectedOption.label);
                   setLoanPackageRate(selectedOption.interestRate);
                 }}
+              />
+                 <InputField
+                disabled={formData.loanPackage === null ? true : false}
+                name="interestRate"
+                required={true}
+                //ariaLabel={"Number input"}
+                //onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
+                endIcon={<p className="text-swGray">NGN &#8358;</p>}
+                label="Interest Rate"
+                value={formData?.interestRate}
+                placeholder="Enter interest rate"
+                isActive="loan-amount"
+                onChange={(e) => {
+                  setInputState(e);
+                  if (formData.commitmentValue > 0) {
+                    updateCommitmentTotal(e);
+                  }
+                  if (
+                    formData.loanPackage &&
+                    formData.loanDuration &&
+                    formData.repaymentType
+                  ) {
+                    calculateInterest(
+                      e.target.value,
+                      formData.loanPackage,
+                      formData.loanDuration,
+                      formData.repaymentType
+                    );
+                  }
+                }}
+                inputOpen={isInputOpen}
               />
               {formData.loanPackage === "65390f290d0a83675c9517b3" ? (
                 <SelectField
@@ -848,9 +881,9 @@ const CreateLoan = () => {
                 "loanAffidavit"
               )}
               {renderFileInput("Upload Guarantor Form", "guarantorForm")}
-              {renderFileInput("Upload Account Statement", "accountStatement")}
-              {renderFileInput("Upload Power of Attorney", "powerOfAttorney")}
-              {renderFileInput("Transfer of Ownership", "transferOfOwnership")}
+              {/* {renderFileInput("Upload Account Statement", "accountStatement")} */}
+              {/* {renderFileInput("Upload Power of Attorney", "powerOfAttorney")} */}
+              {/* {renderFileInput("Transfer of Ownership", "transferOfOwnership")} */}
             </div>
 
             <div className="flex items-center gap-5 my-5 md:hidden">
@@ -957,7 +990,7 @@ const CreateLoan = () => {
               </div>
               <div className="w-2/3">
                 <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {loanPackageRate || 0} %
+                  {formData?.interestRate || 0} %
                 </div>
               </div>
             </div>

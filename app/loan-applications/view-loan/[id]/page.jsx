@@ -795,7 +795,7 @@ const ViewLoan = () => {
                       <div>
                         <p>
                           ₦{" "}
-                          {data?.data?.interestCalculation?.totalPayments.toLocaleString()}
+                          {data?.data?.interestCalculation?.totalPayments?.toLocaleString()}
                         </p>
                       </div>
                     </td>
@@ -854,7 +854,7 @@ const ViewLoan = () => {
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>
-                          {data?.data?.loanApplication?.interestRate * 100} %
+                          {data?.data?.loanApplication?.interestRate} %
                         </p>
                         {hasDecline && hasDecline === true ? (
                           <div
@@ -1145,7 +1145,8 @@ const ViewLoan = () => {
                       <div className="flex gap-2 items-center text-swDarkRed font-semibold">
                         <p>
                           {data?.data?.loanApplication
-                            ?.totalLoanOverdueDaysCount || 0}{" "}
+                            ?.currentOverdueDaysCount
+                            || 0}{" "}
                           day(s){" "}
                         </p>
                       </div>
@@ -1155,7 +1156,7 @@ const ViewLoan = () => {
                       <div>
                         <p className="text-swDarkRed font-semibold">
                           ₦{" "}
-                          {data?.data?.loanApplication?.totalAmountAccruedForOverdue?.toLocaleString() ||
+                          {data?.data?.loanApplication?.amountAccruedForcurrentOverdue?.toLocaleString() ||
                             0}
                         </p>
                       </div>
