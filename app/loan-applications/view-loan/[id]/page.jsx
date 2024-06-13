@@ -795,7 +795,7 @@ const ViewLoan = () => {
                       <div>
                         <p>
                           ₦{" "}
-                          {data?.data?.interestCalculation?.totalPayments.toLocaleString()}
+                          {data?.data?.interestCalculation?.totalPayments?.toLocaleString()}
                         </p>
                       </div>
                     </td>
@@ -854,7 +854,7 @@ const ViewLoan = () => {
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>
-                          {data?.data?.loanApplication?.interestRate * 100} %
+                          {data?.data?.loanApplication?.interestRate} %
                         </p>
                         {hasDecline && hasDecline === true ? (
                           <div
