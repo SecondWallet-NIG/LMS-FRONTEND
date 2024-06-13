@@ -57,7 +57,7 @@ const SavedLoans = () => {
   console.log(checkedLoans);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout paths={["Saved Loans"]}>
       <div className="p-5 overflow-x-auto">
         <table className="w-full">
           {/* px-5 py-4 bg-swightGray text-swGray border-0 font-[500] cursor-pointer text-start */}

@@ -1,23 +1,25 @@
 import {
   customerBlackList,
+  customerWhiteList,
   getCustomerById,
 } from "@/redux/slices/customerSlice";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import { redirect, useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 
-const BorrowerOptions = ({ open, onClose }) => {
+const BorrowerOptions = ({ open, onClose, whiteList, borrowerId }) => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [formData, setFormData] = useState({
-    customerProfileId: id,
-    reason: "",
-  });
+  const router = useRouter();
   const [otherReason, setOtherReason] = useState("");
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    customerProfileId: "",
+    reason: "",
+  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -56,14 +58,25 @@ const BorrowerOptions = ({ open, onClose }) => {
       toast.error("Please specify a reason for blacklisting the customer");
     } else {
       setLoading(true);
-      console.log(formData);
-      dispatch(customerBlackList(formData))
+      dispatch(
+        whiteList
+          ? customerWhiteList({
+              customerProfileId: borrowerId,
+              reason: formData.reason,
+            })
+          : customerBlackList({
+              customerProfileId: id,
+              reason: formData.reason,
+            })
+      )
         .unwrap()
         .then((res) => {
           toast.success(res.message);
-          dispatch(getCustomerById(id));
           setTimeout(() => {
-            setFormData({ customerProfileId: id, reason: "" });
+            setFormData({ customerProfileId: "", reason: "" });
+            whiteList
+              ? window.location.reload()
+              : dispatch(getCustomerById(id));
             onClose(false);
             setLoading(false);
           }, 2000);
@@ -76,14 +89,15 @@ const BorrowerOptions = ({ open, onClose }) => {
     // customerBlackList(formData);
   };
 
-  // console.log(formData);
   if (!open) return null;
   return (
     <main className="fixed top-0 left-0 w-screen h-screen border bg-black bg-opacity-25 flex justify-center items-center z-[200] p-5">
       <ToastContainer />
       <div className="max-w-md w-full rounded-3xl bg-white p-5 text-black">
         <div className="flex items-center justify-between">
-          <p className="font-medium">Blacklist Customer</p>
+          <p className="font-medium">
+            {whiteList ? "Whitelist Customer" : "Blacklist Customer"}
+          </p>
           <div
             onClick={() => onClose(false)}
             className="p-2 rounded-lg hover:bg-gray-200 cursor-pointer"
@@ -92,30 +106,54 @@ const BorrowerOptions = ({ open, onClose }) => {
           </div>
         </div>
         <div className="flex items-center justify-center mt-5">
-          <Image src="/images/warning.gif" width={30} height={30} />
+          <Image
+            src="/images/warning.gif"
+            alt="warning"
+            width={30}
+            height={30}
+          />
         </div>
         <p className="mt-5 text-sm">
-          You are trying to blacklist this customer. Kindly select a reason or
-          specify
+          {whiteList
+            ? "You are trying to whitelist this customer. Kindly select a reason or specify"
+            : "You are trying to blacklist this customer. Kindly select a reason or specify"}
         </p>
 
         <div className="mt-5 flex flex-col gap-3">
-          {RenderOptions("fraudulentActivity", "Fraudulent activity")}
-          {RenderOptions("poorCreditHistory", "Poor credit history")}
-          {RenderOptions(
-            "highDebitToIncomeRatio",
-            "High debit to income ratio"
-          )}
-          {RenderOptions("previousLoanDefault", "Previous loan default")}
-          {RenderOptions(
-            "unuseableEmploymetHistory",
-            "Unuseable employmet history"
-          )}
-          {RenderOptions(
-            "unstableEmploymetHistory",
-            "Unstable Employmet history"
-          )}
-          {RenderOptions("loanPolicyViolations", "Loan policy violations")}
+          {whiteList
+            ? RenderOptions("noFraudulentActivity", "No fraudulent activity")
+            : RenderOptions("fraudulentActivity", "Fraudulent activity")}
+          {whiteList
+            ? RenderOptions("goodCreditHistory", "Good credit history")
+            : RenderOptions("poorCreditHistory", "Poor credit history")}
+          {whiteList
+            ? RenderOptions(
+                "lowDebitToIncomeRatio",
+                "Low debit to income ratio"
+              )
+            : RenderOptions(
+                "highDebitToIncomeRatio",
+                "High debit to income ratio"
+              )}
+          {whiteList
+            ? RenderOptions("noLoanDefault", "No loan default")
+            : RenderOptions("previousLoanDefault", "Previous loan default")}
+          {whiteList
+            ? RenderOptions(
+                "stableEmploymentHistory",
+                "Stable employment history"
+              )
+            : RenderOptions(
+                "unuseableEmploymetHistory",
+                "Unuseable employmet history"
+              )}
+
+          {whiteList
+            ? RenderOptions(
+                "noLoanPolicyViolations",
+                "No loan policy violations"
+              )
+            : RenderOptions("loanPolicyViolations", "Loan policy violations")}
           {RenderOptions("others", "Others")}
         </div>
 
@@ -132,7 +170,7 @@ const BorrowerOptions = ({ open, onClose }) => {
             className="relative text-center rounded-md py-2 px-4 w-full bg-swBlue text-white border-2 border-swBlue hover:border-blue-100 overflow-hidden"
             onClick={handleBlacklist}
           >
-            Blacklist
+            {whiteList ? "Whitelist" : "Blacklist"}
             {(!formData.reason || loading) && (
               <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 cursor-not-allowed" />
             )}
