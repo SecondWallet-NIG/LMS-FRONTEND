@@ -25,7 +25,7 @@ const CustomerPaymentHistory = ({ loanId }) => {
       setEnableLogRepayment(false);
     }
     return apiData?.map((item) => ({
-       id: item._id,
+      id: item._id,
       //   createdAt: (
       //     <div className="text-md font-[500] text-gray-700">{item?.dueDate.slice(0, 10)}</div>
       //   ),
@@ -39,8 +39,12 @@ const CustomerPaymentHistory = ({ loanId }) => {
       ),
       dateCollected: (
         <div>
+
           <div className="text-md font-[500] text-gray-700">
-            {format(new Date(item?.dateCollected), "PPP")}
+            {
+              item?.dateCollected != null ? <div> {format(new Date(item?.dateCollected), "PPP")}</div> : <div>NIL</div>
+            }
+
           </div>
         </div>
       ),
@@ -76,13 +80,12 @@ const CustomerPaymentHistory = ({ loanId }) => {
       ),
       status: (
         <button
-          className={`${
-            item.status === "New"
+          className={`${item.status === "New"
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
               : item.status === "Approved"
-              ? "bg-green-50 text-swGreen"
-              : "text-red-400 bg-red-100"
-          } px-2 py-1 rounded-full`}
+                ? "bg-green-50 text-swGreen"
+                : "text-red-400 bg-red-100"
+            } px-2 py-1 rounded-full`}
         >
           {item?.status}
         </button>
@@ -103,7 +106,7 @@ const CustomerPaymentHistory = ({ loanId }) => {
       <div>
         {enableLogRepaymentBtn == true ? (
           <ReusableDataTable
-          onClickRow={"/payment-history/payment/"}
+            onClickRow={"/payment-history/payment/"}
             dataTransformer={customDataTransformer}
             headers={headers}
             initialData={[]}
