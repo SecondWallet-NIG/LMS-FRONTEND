@@ -460,6 +460,15 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   text="Investors"
                   link="/investors"
                   sideBarOpen={sideBarOpen}
+                  hasDropdown={true}
+                  dropdownContent={
+                    <Link
+                      href={`/asset-management`}
+                      className="ml-5 text-sm hover:text-swBlue"
+                    >
+                      Asset management
+                    </Link>
+                  }
                 />
               </>
             ) : null}
@@ -905,6 +914,15 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   text="Investors"
                   link="/investors"
                   sideBarOpen={sideBarOpen}
+                  hasDropdown={true}
+                  dropdownContent={
+                    <Link
+                      href={`/asset-management`}
+                      className="ml-5 text-sm hover:text-swBlue"
+                    >
+                      Asset management
+                    </Link>
+                  }
                 />
               </>
             ) : null}
