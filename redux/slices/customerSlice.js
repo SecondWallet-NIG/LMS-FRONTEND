@@ -243,6 +243,28 @@ export const customerBlackList = createAsyncThunk(
   }
 );
 
+export const customerWhiteList = createAsyncThunk(
+  "/customer/profile-information/whitelist",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/customer/profile-information/whitelist`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const customerSlice = createSlice({
   name: "customer",
   initialState: {

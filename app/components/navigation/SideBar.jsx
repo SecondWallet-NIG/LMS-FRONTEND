@@ -191,6 +191,15 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               onClick={() => {
                 setActiveLink("borrowers");
               }}
+              hasDropdown={true}
+              dropdownContent={
+                <Link
+                  href={`/blacklisted-borrowers`}
+                  className="ml-5 text-sm hover:text-swBlue"
+                >
+                  Blacklisted borrowers
+                </Link>
+              }
             />
             <SidebarLink
               allowedRoleTags={["LO"]}
@@ -446,12 +455,21 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   link="/payroll"
                   sideBarOpen={sideBarOpen}
                 />
-                <SidebarLink
+                {/* <SidebarLink
                   icon={<FaRegStar size={20} />}
                   text="Investors"
                   link="/investors"
                   sideBarOpen={sideBarOpen}
-                />
+                  hasDropdown={true}
+                  dropdownContent={
+                    <Link
+                      href={`/asset-management`}
+                      className="ml-5 text-sm hover:text-swBlue"
+                    >
+                      Asset management
+                    </Link>
+                  }
+                /> */}
               </>
             ) : null}
             <SidebarLink
@@ -630,6 +648,15 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               onClick={() => {
                 setActiveLink("borrowers");
               }}
+              hasDropdown={true}
+              dropdownContent={
+                <Link
+                  href={`/blacklisted-borrowers`}
+                  className="ml-5 text-sm hover:text-swBlue"
+                >
+                  Blacklisted borrowers
+                </Link>
+              }
             />
             <SidebarLink
               allowedRoleTags={["LO"]}
@@ -652,6 +679,19 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               onClick={() => {
                 setActiveLink("create-loan");
               }}
+              hasDropdown={true}
+              dropdownContent={
+                <Link
+                  href={`${
+                    user?.data?.user?.role?.tag === "LO"
+                      ? "/saved-loans"
+                      : "/unauthorised"
+                  }`}
+                  className="ml-5 text-sm hover:text-swBlue"
+                >
+                  Saved Loans
+                </Link>
+              }
             />
             <SidebarLink
               allowedRoleTags={[
@@ -869,12 +909,21 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   link="/payroll"
                   sideBarOpen={sideBarOpen}
                 />
-                <SidebarLink
+                {/* <SidebarLink
                   icon={<FaRegStar size={20} />}
                   text="Investors"
                   link="/investors"
                   sideBarOpen={sideBarOpen}
-                />
+                  hasDropdown={true}
+                  dropdownContent={
+                    <Link
+                      href={`/asset-management`}
+                      className="ml-5 text-sm hover:text-swBlue"
+                    >
+                      Asset management
+                    </Link>
+                  }
+                /> */}
               </>
             ) : null}
             <SidebarLink
@@ -932,7 +981,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 handleSidebarOpen(false);
                 localStorage.removeItem("user");
                 localStorage.removeItem("email");
-               // localStorage.clear();
+                // localStorage.clear();
               }}
             />
           </div>
