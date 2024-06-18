@@ -6,6 +6,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
 import "react-day-picker/dist/style.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +28,7 @@ export default function RootLayout({ children }) {
     if (expireTime < Date.now()) {
       localStorage.removeItem("user");
       localStorage.removeItem("email");
-     // localStorage.clear();
+      // localStorage.clear();
       route.push("/");
     }
   };

@@ -455,7 +455,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   link="/payroll"
                   sideBarOpen={sideBarOpen}
                 />
-                <SidebarLink
+                {/* <SidebarLink
                   icon={<FaRegStar size={20} />}
                   text="Investors"
                   link="/investors"
@@ -469,7 +469,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                       Asset management
                     </Link>
                   }
-                />
+                /> */}
               </>
             ) : null}
             <SidebarLink
@@ -909,7 +909,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   link="/payroll"
                   sideBarOpen={sideBarOpen}
                 />
-                <SidebarLink
+                {/* <SidebarLink
                   icon={<FaRegStar size={20} />}
                   text="Investors"
                   link="/investors"
@@ -923,7 +923,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                       Asset management
                     </Link>
                   }
-                />
+                /> */}
               </>
             ) : null}
             <SidebarLink
