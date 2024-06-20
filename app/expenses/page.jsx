@@ -101,7 +101,7 @@ const Expenses = () => {
     ],
   };
 
-  revenue.map((data) => console.log(data.label));
+  // revenue.map((data) => console.log(data.label));
   useEffect(() => {
     setLoading(false);
     dispatch(getAllAssets());
