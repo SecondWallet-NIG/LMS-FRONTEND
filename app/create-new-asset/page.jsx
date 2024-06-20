@@ -8,7 +8,6 @@ import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
-
 import { createNewAsset } from "@/redux/slices/assetManagementSlice";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +19,7 @@ const CreateNewAsset = () => {
   const [openDate, setOpenDate] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
+    category: "Fixed asset",
     description: "",
     acquisitionDate: new Date(),
     value: "",
@@ -28,6 +27,13 @@ const CreateNewAsset = () => {
   const options = [
     { value: "Single asset", label: "Single asset" },
     { value: "Bulk asset", label: "Bulk asset" },
+  ];
+  const assetTypeOptions = [
+    { value: "Fixed asset", label: "Fixed asset" },
+    { value: "Current asset", label: "Current asset" },
+    { value: "Financial asset", label: "Financial asset" },
+    { value: "Intagible asset", label: "Intagible asset" },
+    { value: "Digital asset", label: "Digital asset" },
   ];
 
   const handleChange = (e) => {
@@ -92,10 +98,9 @@ const CreateNewAsset = () => {
       .catch((err) => {
         toast.error(err?.message);
       });
-    // console.log("all", { newValue }, { newDate });
   };
 
-  // console.log({ formData });
+  console.log({ formData });
   return (
     <DashboardLayout paths={["Asset management", "Add new asset"]}>
       <ToastContainer />
@@ -172,13 +177,20 @@ const CreateNewAsset = () => {
               </div>
             )}
           </div>
-          <InputField
+          <SelectField
             label={"Asset type"}
             required={true}
+            optionValue={assetTypeOptions}
             name="category"
-            value={formData.category}
-            placeholder={"Enter asset type"}
-            onChange={handleChange}
+            value={assetTypeOptions.find(
+              (option) => option.value === formData.category
+            )}
+            onChange={(selectedOption) =>
+              setFormData((prev) => ({
+                ...prev,
+                category: selectedOption.value,
+              }))
+            }
           />
           <InputField
             label={"Describe asset"}
@@ -189,24 +201,19 @@ const CreateNewAsset = () => {
             onChange={handleChange}
           />
           <InputField
-            // disabled={formData.loanPackage === null ? true : false}
             name="value"
             required={true}
             ariaLabel={"Number input"}
             onKeyPress={preventMinus}
             onWheel={() => document.activeElement.blur()}
-            // activeBorderColor="border-swBlue"
             endIcon={<p className="text-swGray">NGN &#8358;</p>}
             label="Value"
             value={formData?.value?.toLocaleString()}
             placeholder="Enter loan amount"
-            // isActive="loan-amount"
             onChange={handleChange}
-            // inputOpen={isInputOpen}
           />
         </div>
 
-        {/* <div className="flex justify-between items-center "> */}
         <div className="flex items-center justify-between gap-5 mt-20">
           <div
             onClick={() => router.back()}
@@ -226,7 +233,6 @@ const CreateNewAsset = () => {
             <p>{loading ? "Adding asset..." : "Add asset"}</p>
           </div>
         </div>
-        {/* </div> */}
       </main>
     </DashboardLayout>
   );

@@ -190,7 +190,9 @@ const DashboardPage = () => {
           {/* <DashboardPageCard /> */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <DashboardCard
-              blueBg={true}
+              // blueBg={true}
+              iconBg="bg-blue-200"
+              iconColor="text-swBlue"
               cardIcon={<LuUsers size={20} />}
               cardName={"Borrowers"}
               cardLinkLabel={"View"}
@@ -206,7 +208,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              blueBg={true}
+              // blueBg={true}
+              iconBg="bg-yellow-200"
+              iconColor="text-yellow-500"
               cardIcon={<IoMdArrowUp size={20} />}
               cardName={"Disbursements"}
               cardLinkLabel={"View"}
@@ -223,7 +227,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              blueBg={true}
+              // blueBg={true}
+              iconBg="bg-blue-200"
+              iconColor="text-[#00AEE8]"
               cardIcon={<IoMdArrowDown size={20} />}
               cardName={"Repayments"}
               cardLinkLabel={"View"}

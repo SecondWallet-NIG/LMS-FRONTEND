@@ -49,43 +49,8 @@ const customDataTransformer = (apiData) => {
 const AssetManagement = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [assets, setAssets] = useState([]);
   const { data } = useSelector((state) => state.asset);
-  console.log("asset data", data);
-
-  const revenue = [
-    {
-      label: "Jan",
-      cost: 100000000,
-    },
-    {
-      label: "Feb",
-      cost: 2000000,
-    },
-    {
-      label: "Mar",
-      cost: 10000000,
-    },
-    {
-      label: "Apr",
-      cost: 150000000,
-    },
-  ];
-  // const dataValuesRepayment = Array(12).fill(0);
-  // const dataValuesPaymentRecovered = Array(12).fill(0);
-  // const labels = [
-  //   "Jan",
-  //   "Feb",
-  //   "Mar",
-  //   "Apr",
-  //   "May",
-  //   "Jun",
-  //   "Jul",
-  //   "Aug",
-  //   "Sept",
-  //   "Oct",
-  //   "Nov",
-  //   "Dec",
-  // ];
 
   const options = {
     responsive: true,
@@ -117,22 +82,33 @@ const AssetManagement = () => {
   };
 
   const chartData = {
-    labels: revenue.map((data) => data.label),
+    labels:
+      assets?.length > 0
+        ? assets.map(
+            (data) =>
+              data?.acquisitionDate &&
+              // format(new Date(data?.acquisitionDate), "PPP")
+              format(new Date(data?.acquisitionDate), "d MMM yy")
+          )
+        : [],
     datasets: [
       {
         label: "Cost",
-        data: revenue.map((data) => data.cost),
+        data: assets?.map((data) => data?.value) ?? [],
         backgroundColor: "#fff",
         borderColor: "#fff",
       },
     ],
   };
 
-  revenue.map((data) => console.log(data.label));
+  // revenue.map((data) => console.log(data.label));
   useEffect(() => {
     setLoading(false);
     dispatch(getAllAssets());
   }, []);
+  useEffect(() => {
+    setAssets(data?.data?.results);
+  }, [data]);
 
   return (
     <>
