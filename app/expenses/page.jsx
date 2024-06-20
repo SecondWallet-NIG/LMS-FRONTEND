@@ -110,7 +110,6 @@ const Expenses = () => {
     setAssets(data?.data?.results);
   }, [data]);
 
-
   return (
     <>
       {loading ? (
@@ -123,19 +122,19 @@ const Expenses = () => {
             </div>
             <div className="flex items-center justify-end gap-5 mt-5">
               <Link
-                href={"/create-new-asset"}
+                href={"#"}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
-                <p>New asset</p>
+                <p>New expenses</p>
               </Link>
-              <div
+              {/* <div
                 // onClick={savedLoans}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
                 <p>Asset category</p>
-              </div>
+              </div> */}
             </div>
           </div>
 

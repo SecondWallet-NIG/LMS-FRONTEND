@@ -223,7 +223,7 @@ const CreateNewAsset = () => {
           </div>
           <div
             className={`flex gap-1 items-center py-2 px-3 border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap ${
-              Object.values(formData).includes("")
+              Object.values(formData).includes("") || loading
                 ? "opacity-50 cursor-not-allowed pointer-events-none"
                 : "cursor-pointer"
             }`}
