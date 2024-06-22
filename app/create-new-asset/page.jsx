@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import SelectField from "../components/shared/input/SelectField";
 import InputField from "../components/shared/input/InputField";
@@ -8,7 +8,10 @@ import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
-import { createNewAsset } from "@/redux/slices/assetManagementSlice";
+import {
+  createNewAsset,
+  getAllAssetCategories,
+} from "@/redux/slices/assetManagementSlice";
 import { useRouter } from "next/navigation";
 
 const CreateNewAsset = () => {
@@ -100,6 +103,12 @@ const CreateNewAsset = () => {
       });
   };
 
+  useEffect(() => {
+    dispatch(getAllAssetCategories())
+      .unwrap()
+      .then((res) => console.log({ res }))
+      .catch((err) => console.log({ err }));
+  }, []);
   console.log({ formData });
   return (
     <DashboardLayout paths={["Asset management", "Add new asset"]}>
