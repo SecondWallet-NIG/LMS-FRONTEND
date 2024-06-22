@@ -17,9 +17,9 @@ export const getAllAssets = createAsyncThunk("asset/all", async () => {
 });
 
 export const getAllAssetCategories = createAsyncThunk(
-  "asset/categories",
+  "asset/category",
   async () => {
-    const response = await axios.get(`${API_URL}/asset-category/`, {
+    const response = await axios.get(`${API_URL}/asset-category`, {
       headers: {
         Authorization: `Bearer ${user?.data?.token}`,
       },

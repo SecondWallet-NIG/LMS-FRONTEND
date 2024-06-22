@@ -20,9 +20,10 @@ const CreateNewAsset = () => {
   const [loading, setLoading] = useState(false);
   const [assetUploadType, setAssetUploadType] = useState("Single asset");
   const [openDate, setOpenDate] = useState(false);
+  const [assetTypeOptions, setAssetTypeOptions] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
-    category: "Fixed asset",
+    category: "",
     description: "",
     acquisitionDate: new Date(),
     value: "",
@@ -31,13 +32,11 @@ const CreateNewAsset = () => {
     { value: "Single asset", label: "Single asset" },
     { value: "Bulk asset", label: "Bulk asset" },
   ];
-  const assetTypeOptions = [
-    { value: "Fixed asset", label: "Fixed asset" },
-    { value: "Current asset", label: "Current asset" },
-    { value: "Financial asset", label: "Financial asset" },
-    { value: "Intagible asset", label: "Intagible asset" },
-    { value: "Digital asset", label: "Digital asset" },
-  ];
+
+  const transformedOptions = assetTypeOptions.map((option) => ({
+    value: option?.name,
+    label: option?.name,
+  }));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -106,7 +105,7 @@ const CreateNewAsset = () => {
   useEffect(() => {
     dispatch(getAllAssetCategories())
       .unwrap()
-      .then((res) => console.log({ res }))
+      .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
   }, []);
   console.log({ formData });
@@ -189,9 +188,9 @@ const CreateNewAsset = () => {
           <SelectField
             label={"Asset type"}
             required={true}
-            optionValue={assetTypeOptions}
+            optionValue={transformedOptions}
             name="category"
-            value={assetTypeOptions.find(
+            value={transformedOptions.find(
               (option) => option.value === formData.category
             )}
             onChange={(selectedOption) =>

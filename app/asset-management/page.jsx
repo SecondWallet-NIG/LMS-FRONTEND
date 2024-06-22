@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllAssets } from "@/redux/slices/assetManagementSlice";
 import { IoMdAdd } from "react-icons/io";
 import Link from "next/link";
+import CreateAssetModal from "../components/modals/CreateAssetModal";
+import Loader from "../components/shared/Loader";
 
 const header = [
   { id: "asset", label: "Asset" },
@@ -50,6 +52,7 @@ const AssetManagement = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [assets, setAssets] = useState([]);
+  const [openCreateAssetModal, setOpenCreateModal] = useState(false);
   const { data } = useSelector((state) => state.asset);
 
   const options = {
@@ -110,11 +113,12 @@ const AssetManagement = () => {
     setAssets(data?.data?.results);
   }, [data]);
 
+  console.log();
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <div>Loading...</div>
-      ) : (
+      ) : ( */}
         <DashboardLayout paths={["Asset management"]}>
           <div className="p-5">
             <div className="w-full bg-swBlue text-white rounded-3xl">
@@ -129,7 +133,7 @@ const AssetManagement = () => {
                 <p>New asset</p>
               </Link>
               <div
-                // onClick={savedLoans}
+                onClick={() => setOpenCreateModal(!openCreateAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
@@ -156,8 +160,13 @@ const AssetManagement = () => {
             filters={true}
             pagination={true}
           />
+          <Loader isOpen={loading} />
+          <CreateAssetModal
+            open={openCreateAssetModal}
+            onClose={setOpenCreateModal}
+          />
         </DashboardLayout>
-      )}
+      {/* )} */}
     </>
   );
 };
