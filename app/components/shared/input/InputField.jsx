@@ -28,7 +28,7 @@ const InputField = ({
           {required ? (
             <span className="text-red-600 ml-1">*</span>
           ) : (
-            <div className="mb-2 text-white">*</div>
+            <span className="mb-2 text-white">*</span>
           )}
         </label>
       )}
