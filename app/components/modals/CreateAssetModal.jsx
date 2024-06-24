@@ -3,10 +3,10 @@ import { IoClose } from "react-icons/io5";
 import InputField from "../shared/input/InputField";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { useDispatch } from "react-redux";
-import { creatAssetCategory } from "@/redux/slices/assetManagementSlice";
+import { creatAssetCategory, getAllAssetCategories } from "@/redux/slices/assetManagementSlice";
 import { ToastContainer, toast } from "react-toastify";
 
-const CreateAssetModal = ({ open, onClose }) => {
+const CreateAssetModal = ({ open, onClose, setAssetTypeOptions }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [loading, setLoading] = useState(false);
@@ -23,6 +23,10 @@ const CreateAssetModal = ({ open, onClose }) => {
         if (res.success === true) {
           toast.success(res.message);
           console.log("success", res);
+          dispatch(getAllAssetCategories())
+            .unwrap()
+            .then((res) => setAssetTypeOptions(res?.data))
+            .catch((err) => console.log({ err }));
           // setTimeout(() => {
           onClose(false);
           resetForm();
@@ -51,7 +55,7 @@ const CreateAssetModal = ({ open, onClose }) => {
           </div>
           <IoClose
             size={20}
-            className="ml-auto"
+            className="ml-auto cursor-pointer"
             onClick={() => {
               resetForm();
               onClose(false);

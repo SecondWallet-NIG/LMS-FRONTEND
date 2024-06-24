@@ -16,6 +16,61 @@ export const getAllAssets = createAsyncThunk("asset/all", async () => {
   return response.data;
 });
 
+export const getSingleAsset = createAsyncThunk("/asset/assetId", async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}/asset/${id}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response.data.error) {
+      throw new Error(error.response.data.error);
+    } else throw new Error("An error occured, please try again later");
+  }
+});
+
+export const deleteSingleAsset = createAsyncThunk(
+  "/asset/delete/assetId",
+  async (id) => {
+    try {
+      const response = await axios.delete(`${API_URL}/asset/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const updateSingleAsset = createAsyncThunk(
+  "/asset/update/assetId",
+  async (id, payload) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/asset/update/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getAllAssetCategories = createAsyncThunk(
   "asset/category",
   async () => {
@@ -94,6 +149,32 @@ const assetManagementSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getAllAssets.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getSingleAsset.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getSingleAsset.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getSingleAsset.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getAllAssetCategories.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getAllAssetCategories.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getAllAssetCategories.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;
