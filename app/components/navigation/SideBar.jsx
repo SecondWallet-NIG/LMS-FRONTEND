@@ -458,7 +458,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 />
               </>
             ) : null}
-            {/* <SidebarLink
+            <SidebarLink
               allowedRoleTags={[
                 // "LO",
                 "CFO",
@@ -473,7 +473,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Asset management"
               link="/asset-management"
               sideBarOpen={sideBarOpen}
-            /> */}
+            />
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -907,7 +907,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 />
               </>
             ) : null}
-            {/* <SidebarLink
+            <SidebarLink
               allowedRoleTags={[
                 // "LO",  
                 "CFO",
@@ -922,7 +922,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Asset management"
               link="/asset-management"
               sideBarOpen={sideBarOpen}
-            /> */}
+            />
             <SidebarLink
               allowedRoleTags={[
                 "LO",
