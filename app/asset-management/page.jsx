@@ -16,12 +16,13 @@ import Loader from "../components/shared/Loader";
 import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
 
 const header = [
+  
   { id: "asset", label: "Asset" },
   { id: "category", label: "Category" },
   { id: "description", label: "Description" },
   { id: "acquisitionDate", label: "Acquisition Date" },
   { id: "value", label: "Value" },
-  { id: "action", label: "Action" },
+  // { id: "action", label: "Action" },
 ];
 
 const customDataTransformer = (apiData) => {
@@ -52,16 +53,16 @@ const customDataTransformer = (apiData) => {
         {item?.value?.toLocaleString()}
       </div>
     ),
-    action: (
-      <div className="text-md font-[500] text-gray-700">
-        <Link
-          href={`/asset-management/${item?._id}/view-asset`}
-          className="border rounded p-2"
-        >
-          View details
-        </Link>
-      </div>
-    ),
+    // action: (
+    //   <div className="text-md font-[500] text-gray-700">
+    //     <Link
+    //       href={`/asset-management/${item?._id}/view-asset`}
+    //       className="border rounded p-2"
+    //     >
+    //       View details
+    //     </Link>
+    //   </div>
+    // ),
   }));
 };
 
@@ -143,7 +144,7 @@ const AssetManagement = () => {
       {/* {loading ? (
         <div>Loading...</div>
       ) : ( */}
-      <DashboardLayout paths={["Asset management"]}>
+      <DashboardLayout isBackNav={true} paths={["Asset Management"]}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
             className={`py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
@@ -188,7 +189,7 @@ const AssetManagement = () => {
 
             <ReusableDataTable
               dataTransformer={customDataTransformer}
-              // onClickRow="/borrowers/profile"
+              onClickRow={`/asset-management/view-asset`}
               headers={header}
               initialData={[]}
               apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/asset/all`}
@@ -216,13 +217,14 @@ const AssetManagement = () => {
                 <IoMdAdd size={20} />
                 <p>Add asset category</p>
               </div>
-              <div
+              {/* <div
+                aria-disabled="true"
                 onClick={() => setOpenDeleteModal(!openDeleteAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
                 <p>Delete asset category</p>
-              </div>
+              </div> */}
             </div>
             <p className="text-xl font-semibold">Available asset categories</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">

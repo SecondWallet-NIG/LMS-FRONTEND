@@ -34,7 +34,7 @@ const CreateNewAsset = () => {
   ];
 
   const transformedOptions = assetTypeOptions.map((option) => ({
-    value: option?.name,
+    value: option?._id,
     label: option?.name,
   }));
 
@@ -110,7 +110,7 @@ const CreateNewAsset = () => {
   }, []);
   console.log({ formData });
   return (
-    <DashboardLayout paths={["Asset management", "Add new asset"]}>
+    <DashboardLayout isBackNav={true} paths={["Asset Management", "Add new asset"]}>
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "

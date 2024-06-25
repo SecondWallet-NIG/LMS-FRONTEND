@@ -23,11 +23,11 @@ const ViewAsset = () => {
     setLoading(false);
   }, []);
   return (
-    <DashboardLayout paths={["Assetmanagement", "View asset"]}>
+    <DashboardLayout isBackNav={true} paths={["Asset Management", "View asset"]}>
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">
           <Link
-            href={`/asset-management/${id}/edit-asset`}
+            href={`/asset-management/edit-asset/${id}`}
             className="border py-2 px-3 flex gap-2 items-center rounded-lg"
           >
             Edit
@@ -47,7 +47,6 @@ const ViewAsset = () => {
         </div>
 
         <div className="p-5 flex flex-col gap-5 font-500">
-          <p className="text-lg font-semibold">Investment product interest</p>
           <div className="flex">
             <p className="min-w-[15rem]">Asset</p>
             <p>{data?.data?.name}</p>

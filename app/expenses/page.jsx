@@ -115,7 +115,7 @@ const Expenses = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <DashboardLayout paths={["Asset management"]}>
+        <DashboardLayout isBackNav={true} paths={["Asset Management"]}>
           <div className="p-5">
             <div className="w-full bg-swBlue text-white rounded-3xl">
               <BarChart options={options} data={chartData} />
