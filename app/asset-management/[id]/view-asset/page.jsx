@@ -23,7 +23,7 @@ const ViewAsset = () => {
     setLoading(false);
   }, []);
   return (
-    <DashboardLayout paths={["Assetmanagement", "View asset"]}>
+    <DashboardLayout isBackNav={true} paths={["Assetmanagement", "View asset"]}>
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">
           <Link

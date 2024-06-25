@@ -5,9 +5,15 @@ import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllAssets } from "@/redux/slices/assetManagementSlice";
+import {
+  getAllAssetCategories,
+  getAllAssets,
+} from "@/redux/slices/assetManagementSlice";
 import { IoMdAdd } from "react-icons/io";
 import Link from "next/link";
+import CreateAssetModal from "../components/modals/CreateAssetModal";
+import Loader from "../components/shared/Loader";
+import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
 
 const header = [
   { id: "asset", label: "Asset" },
@@ -15,6 +21,7 @@ const header = [
   { id: "description", label: "Description" },
   { id: "acquisitionDate", label: "Acquisition Date" },
   { id: "value", label: "Value" },
+  { id: "action", label: "Action" },
 ];
 
 const customDataTransformer = (apiData) => {
@@ -23,7 +30,9 @@ const customDataTransformer = (apiData) => {
     id: item?._id,
     asset: <div className="text-md font-[500] text-gray-700">{item?.name}</div>,
     category: (
-      <div className="text-md font-[500] text-gray-700">{item?.category}</div>
+      <div className="text-md font-[500] text-gray-700">
+        {item?.category?.name}
+      </div>
     ),
     description: (
       <div className="text-md font-[500] text-gray-700">
@@ -43,13 +52,27 @@ const customDataTransformer = (apiData) => {
         {item?.value?.toLocaleString()}
       </div>
     ),
+    action: (
+      <div className="text-md font-[500] text-gray-700">
+        <Link
+          href={`/asset-management/${item?._id}/view-asset`}
+          className="border rounded p-2"
+        >
+          View details
+        </Link>
+      </div>
+    ),
   }));
 };
 
 const Expenses = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [pageState, setPageState] = useState("expenses");
   const [assets, setAssets] = useState([]);
+  const [openCreateAssetModal, setOpenCreateModal] = useState(false);
+  const [openDeleteAssetModal, setOpenDeleteModal] = useState(false);
+  const [assetTypeOptions, setAssetTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.asset);
 
   const options = {
@@ -103,61 +126,136 @@ const Expenses = () => {
 
   // revenue.map((data) => console.log(data.label));
   useEffect(() => {
-    setLoading(false);
     dispatch(getAllAssets());
+    dispatch(getAllAssetCategories())
+      .unwrap()
+      .then((res) => setAssetTypeOptions(res?.data))
+      .catch((err) => console.log({ err }));
+    setLoading(false);
   }, []);
   useEffect(() => {
     setAssets(data?.data?.results);
   }, [data]);
 
+  console.log({ assetTypeOptions });
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <div>Loading...</div>
-      ) : (
-        <DashboardLayout paths={["Asset management"]}>
-          <div className="p-5">
-            <div className="w-full bg-swBlue text-white rounded-3xl">
-              <BarChart options={options} data={chartData} />
+      ) : ( */}
+      <DashboardLayout paths={["Expenses"]}>
+        <div className="pt-5 pl-5 flex items-centers">
+          <p
+            className={`py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
+              pageState === "expenses" && "border-b-swBlue text-swBlue"
+            }`}
+            onClick={() => setPageState("expenses")}
+          >
+            Expenses
+          </p>
+          <p
+            className={`py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
+              pageState === "expenses category" && "border-b-swBlue text-swBlue"
+            }`}
+            onClick={() => setPageState("expenses category")}
+          >
+            Expenses Category
+          </p>
+        </div>
+        {pageState === "expenses" && (
+          <>
+            <div className="p-5">
+              <div className="w-full bg-swBlue text-white rounded-3xl">
+                <BarChart options={options} data={chartData} />
+              </div>
+              <div className="flex items-center justify-end gap-5 mt-5">
+                <Link
+                  href={"/create-new-asset"}
+                  className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
+                >
+                  <IoMdAdd size={20} />
+                  <p>New Expenses</p>
+                </Link>
+                {/* <div
+                  onClick={() => setOpenCreateModal(!openCreateAssetModal)}
+                  className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
+                >
+                  <IoMdAdd size={20} />
+                  <p>Asset category</p>
+                </div> */}
+              </div>
             </div>
-            <div className="flex items-center justify-end gap-5 mt-5">
-              <Link
-                href={"#"}
+
+            <ReusableDataTable
+              dataTransformer={customDataTransformer}
+              // onClickRow="/borrowers/profile"
+              headers={header}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/asset/all`}
+              // btnText={
+              //   <div className="flex gap-1 items-center p-1">
+              //     <AiOutlinePlus size={15} />
+              //     <p className="">create borrower</p>
+              //   </div>
+              // }
+              // btnTextClick={() => {
+              //   router.push("/create-borrower");
+              // }}
+              filters={true}
+              pagination={true}
+            />
+          </>
+        )}
+        {pageState === "expenses category" && (
+          <div className="p-10 text-black">
+            <div className="flex justify-end items-center gap-5">
+              <div
+                onClick={() => setOpenCreateModal(!openCreateAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
-                <p>New expenses</p>
-              </Link>
-              {/* <div
-                // onClick={savedLoans}
+                <p>Add expense category</p>
+              </div>
+              <div
+                onClick={() => setOpenDeleteModal(!openDeleteAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
-                <p>Asset category</p>
-              </div> */}
+                <p>Delete expense category</p>
+              </div>
             </div>
+            <p className="text-xl font-semibold">Available expense categories</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">
+              {assetTypeOptions.length > 0 &&
+                assetTypeOptions?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="border rounded-xl p-4 flex flex-col gap-1"
+                  >
+                    <div className="">
+                      <p className="font-semibold  text-sm">{item?.name}</p>
+                      <p className="font-medium text-swGray text-xs mt-2">
+                        {item?.description}
+                        {/* HEllo there */}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            <CreateAssetModal
+              open={openCreateAssetModal}
+              onClose={setOpenCreateModal}
+              setAssetTypeOptions={setAssetTypeOptions}
+            />
+            <DeleteAssetCategoryModal
+              open={openDeleteAssetModal}
+              onClose={() => setOpenDeleteModal(false)}
+            />
           </div>
-
-          <ReusableDataTable
-            dataTransformer={customDataTransformer}
-            // onClickRow="/borrowers/profile"
-            headers={header}
-            initialData={[]}
-            apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/asset/all`}
-            // btnText={
-            //   <div className="flex gap-1 items-center p-1">
-            //     <AiOutlinePlus size={15} />
-            //     <p className="">create borrower</p>
-            //   </div>
-            // }
-            // btnTextClick={() => {
-            //   router.push("/create-borrower");
-            // }}
-            filters={true}
-            pagination={true}
-          />
-        </DashboardLayout>
-      )}
+        )}
+        <Loader isOpen={loading} />
+      </DashboardLayout>
+      {/* )} */}
     </>
   );
 };
