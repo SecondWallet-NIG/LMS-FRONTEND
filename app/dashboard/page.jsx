@@ -23,6 +23,11 @@ const DashboardPage = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: false, // Set to false to allow custom height
+    elements: {
+      line: {
+        tension: 0.5,
+      },
+    },
     scales: {
       x: {
         grid: {
@@ -185,7 +190,9 @@ const DashboardPage = () => {
           {/* <DashboardPageCard /> */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <DashboardCard
-              blueBg={true}
+              // blueBg={true}
+              iconBg="bg-blue-200"
+              iconColor="text-swBlue"
               cardIcon={<LuUsers size={20} />}
               cardName={"Borrowers"}
               cardLinkLabel={"View"}
@@ -201,7 +208,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              blueBg={true}
+              // blueBg={true}
+              iconBg="bg-yellow-200"
+              iconColor="text-yellow-500"
               cardIcon={<IoMdArrowUp size={20} />}
               cardName={"Disbursements"}
               cardLinkLabel={"View"}
@@ -218,7 +227,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              blueBg={true}
+              // blueBg={true}
+              iconBg="bg-blue-200"
+              iconColor="text-[#00AEE8]"
               cardIcon={<IoMdArrowDown size={20} />}
               cardName={"Repayments"}
               cardLinkLabel={"View"}
@@ -254,12 +265,14 @@ const DashboardPage = () => {
               cardLink={"/pending-loans"}
               firstStat={[
                 "Count",
-                cardData?.data?.data.disbursementData?.totalReadyDisbursementsPaidCount || 0,
+                cardData?.data?.data.disbursementData
+                  ?.totalReadyDisbursementsPaidCount || 0,
               ]}
               secondStat={[
                 "Total",
                 "₦ " +
-                  cardData?.data?.data.disbursementData?.totalReadyDisbursed?.toLocaleString() || 0,
+                  cardData?.data?.data.disbursementData?.totalReadyDisbursed?.toLocaleString() ||
+                  0,
               ]}
             />
             <DashboardCard
@@ -273,7 +286,7 @@ const DashboardPage = () => {
               secondStat={[
                 "Total",
                 "₦ " +
-                cardData?.data?.data.activeLoanData?.totalOpenLoansAmount?.toLocaleString(),
+                  cardData?.data?.data.activeLoanData?.totalOpenLoansAmount?.toLocaleString(),
               ]}
             />
 
@@ -297,7 +310,7 @@ const DashboardPage = () => {
               firstStat={[
                 "Management Fees",
                 "₦ " +
-                cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
+                  cardData?.data?.data.feesData?.totalCommitmentFeePaid?.toLocaleString(),
               ]}
               secondStat={[
                 "Commitment Fees",
@@ -313,7 +326,7 @@ const DashboardPage = () => {
               firstStat={[
                 "Total",
                 "₦ " +
-                cardData?.data?.data.activeLoanData?.totalActivePrincipal?.toLocaleString()
+                  cardData?.data?.data.activeLoanData?.totalActivePrincipal?.toLocaleString(),
               ]}
               thirdStat={["null"]}
             />
@@ -321,16 +334,8 @@ const DashboardPage = () => {
               cardName={"Restructured Loans"}
               cardLink={""}
               cardLinkLabel={"View"}
-              firstStat={[
-                "Total",
-
-                 "Coming soon",
-              ]}
-              secondStat={[
-                "Count",
-
-                "Coming soon",
-              ]}
+              firstStat={["Total", "Coming soon"]}
+              secondStat={["Count", "Coming soon"]}
             />
             <DashboardCard
               cardLinkLabel={"View"}
@@ -339,12 +344,12 @@ const DashboardPage = () => {
               firstStat={[
                 "Total",
                 "₦ " +
-                cardData?.data?.data.interestData?.totalExpectedInterest.toLocaleString()
+                  cardData?.data?.data.interestData?.totalExpectedInterest.toLocaleString(),
               ]}
               secondStat={[
                 "This month",
                 "₦ " +
-                cardData?.data?.data.interestData?.totalExpectedInterestThisMonth.toLocaleString()
+                  cardData?.data?.data.interestData?.totalExpectedInterestThisMonth.toLocaleString(),
               ]}
             />
             <DashboardCard

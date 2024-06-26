@@ -22,7 +22,7 @@ import {
   FiFileText,
 } from "react-icons/fi";
 import { IoMdAdd, IoMdCard, IoMdClose } from "react-icons/io";
-import { FaRegStar } from "react-icons/fa";
+import { FaInbox, FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
@@ -413,6 +413,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               link="/report"
               sideBarOpen={sideBarOpen}
             />
+
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -455,14 +456,24 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   link="/payroll"
                   sideBarOpen={sideBarOpen}
                 />
-                <SidebarLink
-                  icon={<FaRegStar size={20} />}
-                  text="Investors"
-                  link="/investors"
-                  sideBarOpen={sideBarOpen}
-                />
               </>
             ) : null}
+            <SidebarLink
+              allowedRoleTags={[
+                // "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<FaInbox size={20} />}
+              text="Asset management"
+              link="/asset-management"
+              sideBarOpen={sideBarOpen}
+            />
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -490,12 +501,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
 
         <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
           <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
-            {/* <Button variant="secondary" onClick={() => {
-         localStorage.removeItem("user");
-         router.push("/")
-      }}>
-        Sign Out
-      </Button> */}
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -900,14 +905,24 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   link="/payroll"
                   sideBarOpen={sideBarOpen}
                 />
-                <SidebarLink
-                  icon={<FaRegStar size={20} />}
-                  text="Investors"
-                  link="/investors"
-                  sideBarOpen={sideBarOpen}
-                />
               </>
             ) : null}
+            <SidebarLink
+              allowedRoleTags={[
+                // "LO",  
+                "CFO",
+                "CEO",
+                "CAO",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<FaInbox size={20} />}
+              text="Asset management"
+              link="/asset-management"
+              sideBarOpen={sideBarOpen}
+            />
             <SidebarLink
               allowedRoleTags={[
                 "LO",
