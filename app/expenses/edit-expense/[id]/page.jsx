@@ -15,6 +15,11 @@ import {
   updateSingleAsset,
 } from "@/redux/slices/assetManagementSlice";
 import { useParams, useRouter } from "next/navigation";
+import {
+  getAllExpenseCategories,
+  getSingleExpense,
+  updateSingleExpense,
+} from "@/redux/slices/expenseManagementSlice";
 
 const EditAsset = () => {
   const dispatch = useDispatch();
@@ -38,7 +43,7 @@ const EditAsset = () => {
   // ];
 
   const transformedOptions = assetTypeOptions.map((option) => ({
-    value: option?.name,
+    value: option?._id,
     label: option?.name,
   }));
 
@@ -77,26 +82,22 @@ const EditAsset = () => {
     return numberString.replace(/,/g, "");
   };
 
-  const handleAddAsset = () => {
+  const handleUpdateExpense = async () => {
     setLoading(true);
     const newDate = format(formData.date, "yyyy-MM-dd");
     const newValue = parseInt(removeCommasFromNumber(formData.amount));
-    dispatch(
-      updateSingleAsset(id, {
-        ...formData,
-        date: newDate,
-        amount: newValue,
-      })
-    )
+    const payload = {
+      ...formData,
+      date: newDate,
+      amount: newValue,
+    };
+    // delete payload.category;
+    // console.log(payload);
+    dispatch(updateSingleExpense({ id, payload }))
       .unwrap()
       .then((res) => {
-        if (res?.success === true) {
-          toast.success(res?.message);
-          setLoading(false);
-        } else {
-          toast.error(res.message);
-          setLoading(false);
-        }
+        toast.success(res?.message);
+        setLoading(false);
       })
       .catch((err) => {
         toast.error(err?.message);
@@ -107,25 +108,30 @@ const EditAsset = () => {
   //TODO fix this to work with edit expense
 
   useEffect(() => {
-    dispatch(getSingleAsset(id))
+    dispatch(getSingleExpense(id))
       .unwrap()
       .then((res) => {
         console.log("hiiii", res?.data);
+        // {
+        //   category: "",
+        //   description: "",
+        //   date: new Date(),
+        //   amount: "",
+        // }
         setFormData({
-          name: res?.data?.name,
-          category: res?.data?.category?.name,
+          category: res?.data?.category?._id,
           description: res?.data?.description,
-          acquisitionDate: new Date(res?.data?.acquisitionDate),
-          value: res?.data?.value,
+          date: new Date(res?.data?.date),
+          amount: res?.data?.amount,
         });
       })
       .catch((err) => console.log({ err }));
-    dispatch(getAllAssetCategories())
+    dispatch(getAllExpenseCategories())
       .unwrap()
       .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
   }, []);
-  console.log({ formData });
+  console.log(formData);
 
   return (
     <DashboardLayout isBackNav={true} paths={["Expense", "Edit expense"]}>
@@ -242,7 +248,7 @@ const EditAsset = () => {
                 ? "opacity-50 cursor-not-allowed pointer-events-none"
                 : "cursor-pointer"
             }`}
-            onClick={handleAddAsset}
+            onClick={handleUpdateExpense}
           >
             <LuCheck size={20} />
             <p>{loading ? "Updating expense..." : "Update expense"}</p>

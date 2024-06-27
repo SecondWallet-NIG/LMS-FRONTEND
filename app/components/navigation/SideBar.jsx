@@ -27,6 +27,7 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import Link from "next/link";
+import { LuArrowUpRight } from "react-icons/lu";
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -476,6 +477,22 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
             <SidebarLink
               allowedRoleTags={[
+                // "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<LuArrowUpRight size={20} />}
+              text="Expenses"
+              link="/expenses"
+              sideBarOpen={sideBarOpen}
+            />
+            <SidebarLink
+              allowedRoleTags={[
                 "LO",
                 "CFO",
                 "CEO",
@@ -909,7 +926,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             ) : null}
             <SidebarLink
               allowedRoleTags={[
-                // "LO",  
+                // "LO",
                 "CFO",
                 "CEO",
                 "CAO",
@@ -921,6 +938,22 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<FaInbox size={20} />}
               text="Asset management"
               link="/asset-management"
+              sideBarOpen={sideBarOpen}
+            />
+            <SidebarLink
+              allowedRoleTags={[
+                // "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<LuArrowUpRight size={20} />}
+              text="Expenses"
+              link="/expenses"
               sideBarOpen={sideBarOpen}
             />
             <SidebarLink

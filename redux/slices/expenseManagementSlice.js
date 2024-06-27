@@ -52,6 +52,29 @@ export const getSingleExpense = createAsyncThunk(
   }
 );
 
+export const updateSingleExpense = createAsyncThunk(
+  "expense/expenseId",
+  async ({ id, payload }) => {
+    console.log("payloaad", payload);
+    try {
+      const response = await axios.put(
+        `${API_URL}/expense/update/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const deleteSingleExpense = createAsyncThunk(
   "/expense/delete/assetId",
   async (id) => {

@@ -9,7 +9,6 @@ import { DayPicker } from "react-day-picker";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import {
-  createNewAsset,
   getAllAssetCategories,
   getSingleAsset,
   updateSingleAsset,
@@ -39,7 +38,7 @@ const EditAsset = () => {
   ];
 
   const transformedOptions = assetTypeOptions.map((option) => ({
-    value: option?.name,
+    value: option?._id,
     label: option?.name,
   }));
 
@@ -82,13 +81,12 @@ const EditAsset = () => {
     setLoading(true);
     const newDate = format(formData.acquisitionDate, "yyyy-MM-dd");
     const newValue = parseInt(removeCommasFromNumber(formData.value));
-    dispatch(
-      updateSingleAsset(id, {
-        ...formData,
-        acquisitionDate: newDate,
-        value: newValue,
-      })
-    )
+    const payload = {
+      ...formData,
+      acquisitionDate: newDate,
+      value: newValue,
+    };
+    dispatch(updateSingleAsset({ id, payload }))
       .unwrap()
       .then((res) => {
         if (res?.success === true) {
@@ -112,7 +110,7 @@ const EditAsset = () => {
         console.log("hiiii", res?.data);
         setFormData({
           name: res?.data?.name,
-          category: res?.data?.category?.name,
+          category: res?.data?.category?._id,
           description: res?.data?.description,
           acquisitionDate: new Date(res?.data?.acquisitionDate),
           value: res?.data?.value,
@@ -127,7 +125,10 @@ const EditAsset = () => {
   console.log({ formData });
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Asset Management", "Add new asset"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Asset Management", "Add new asset"]}
+    >
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "
