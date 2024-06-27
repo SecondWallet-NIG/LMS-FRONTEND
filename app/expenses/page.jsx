@@ -50,7 +50,16 @@ const customDataTransformer = (apiData) => {
       <div className="text-md font-[500] text-gray-700">{item?.amount}</div>
     ),
     status: (
-      <div className="text-md font-[500] text-gray-700">{item?.status}</div>
+      <div className="text-xs font-[500] text-gray-700">
+        <div className="py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1">
+          <div
+            className={`h-1 w-1 rounded-full ${
+              item?.status === "New" ? "bg-green-500" : "bg-red-500"
+            }`}
+          />
+          {item?.status}
+        </div>
+      </div>
     ),
   }));
 };

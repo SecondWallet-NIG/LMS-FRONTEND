@@ -66,6 +66,10 @@ const ViewExpense = () => {
             <p className="min-w-[15rem]">Amount</p>
             <p>{data?.data?.amount?.toLocaleString()}</p>
           </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Status</p>
+            <p>{"HEllo"}</p>
+          </div>
         </div>
       </main>
       <Loader isOpen={loading} />
