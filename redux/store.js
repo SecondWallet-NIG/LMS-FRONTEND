@@ -17,6 +17,7 @@ import repaymentHistoryReducer from "./slices/repaymentHistorySlice";
 import userTaskReducer from "./slices/userTaskSlice";
 import reportReducer from "./slices/reportSlice";
 import assetReducer from "./slices/assetManagementSlice";
+import expenseReducer from "./slices/expenseManagementSlice";
 
 export const store = configureStore({
   reducer: {
@@ -37,6 +38,7 @@ export const store = configureStore({
     repaymentHistory: repaymentHistoryReducer,
     report: reportReducer,
     asset: assetReducer,
+    expense: expenseReducer,
   },
   // Add middleware or other configuration options as needed
 });

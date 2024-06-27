@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
-import SelectField from "../components/shared/input/SelectField";
-import InputField from "../components/shared/input/InputField";
+import DashboardLayout from "../../../components/dashboardLayout/DashboardLayout";
+import SelectField from "../../../components/shared/input/SelectField";
+import InputField from "../../../components/shared/input/InputField";
 import { LuCalendar, LuCheck } from "react-icons/lu";
 import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
@@ -11,11 +11,14 @@ import { toast, ToastContainer } from "react-toastify";
 import {
   createNewAsset,
   getAllAssetCategories,
+  getSingleAsset,
+  updateSingleAsset,
 } from "@/redux/slices/assetManagementSlice";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
-const CreateNewAsset = () => {
+const EditAsset = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [assetUploadType, setAssetUploadType] = useState("Single asset");
@@ -28,13 +31,15 @@ const CreateNewAsset = () => {
     acquisitionDate: new Date(),
     value: "",
   });
+  // const { data } = useSelector((state) => state.asset);
+
   const options = [
     { value: "Single asset", label: "Single asset" },
     { value: "Bulk asset", label: "Bulk asset" },
   ];
 
   const transformedOptions = assetTypeOptions.map((option) => ({
-    value: option?._id,
+    value: option?.name,
     label: option?.name,
   }));
 
@@ -78,19 +83,16 @@ const CreateNewAsset = () => {
     const newDate = format(formData.acquisitionDate, "yyyy-MM-dd");
     const newValue = parseInt(removeCommasFromNumber(formData.value));
     dispatch(
-      createNewAsset({ ...formData, acquisitionDate: newDate, value: newValue })
+      updateSingleAsset(id, {
+        ...formData,
+        acquisitionDate: newDate,
+        value: newValue,
+      })
     )
       .unwrap()
       .then((res) => {
         if (res?.success === true) {
           toast.success(res?.message);
-          setFormData({
-            name: "",
-            category: "",
-            description: "",
-            acquisitionDate: new Date(),
-            value: "",
-          });
           setLoading(false);
         } else {
           toast.error(res.message);
@@ -99,36 +101,43 @@ const CreateNewAsset = () => {
       })
       .catch((err) => {
         toast.error(err?.message);
+        setLoading(false);
       });
   };
 
   useEffect(() => {
+    dispatch(getSingleAsset(id))
+      .unwrap()
+      .then((res) => {
+        console.log("hiiii", res?.data);
+        setFormData({
+          name: res?.data?.name,
+          category: res?.data?.category?.name,
+          description: res?.data?.description,
+          acquisitionDate: new Date(res?.data?.acquisitionDate),
+          value: res?.data?.value,
+        });
+      })
+      .catch((err) => console.log({ err }));
     dispatch(getAllAssetCategories())
       .unwrap()
       .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
   }, []);
   console.log({ formData });
+
   return (
-    <DashboardLayout isBackNav={true} paths={["Asset Management", "Add new asset"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Asset Management", "Edit asset"]}
+    >
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         <div className="flex justify-between items-center">
-          <p className="text-xl font-semibold text-swBlack">Add new assets</p>
-          <div className="w-60">
-            <SelectField
-              value={options.find((option) => option.value === assetUploadType)}
-              name="name"
-              optionValue={options}
-              isSearchable={false}
-              onChange={(selectedOption) =>
-                setAssetUploadType(selectedOption.value)
-              }
-            />
-          </div>
+          <p className="text-xl font-semibold text-swBlack">Edit assets</p>
         </div>
 
         <div className="flex flex-col gap-5">
@@ -154,7 +163,7 @@ const CreateNewAsset = () => {
               onClick={() => setOpenDate(!openDate)}
             >
               <LuCalendar size={22} className="text-swTextColor" />
-              {format(formData.acquisitionDate, "PPP")}
+              {format(formData?.acquisitionDate, "PPP")}
             </div>
             {openDate && (
               <div className="absolute w-fit right-0  -mb-5 bg-white border rounded-md z-50">
@@ -238,7 +247,7 @@ const CreateNewAsset = () => {
             onClick={handleAddAsset}
           >
             <LuCheck size={20} />
-            <p>{loading ? "Adding asset..." : "Add asset"}</p>
+            <p>{loading ? "Updating asset..." : "Update asset"}</p>
           </div>
         </div>
       </main>
@@ -246,4 +255,4 @@ const CreateNewAsset = () => {
   );
 };
 
-export default CreateNewAsset;
+export default EditAsset;

@@ -3,10 +3,23 @@ import { IoClose } from "react-icons/io5";
 import InputField from "../shared/input/InputField";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { useDispatch } from "react-redux";
-import { creatAssetCategory, getAllAssetCategories } from "@/redux/slices/assetManagementSlice";
+import {
+  creatAssetCategory,
+  getAllAssetCategories,
+} from "@/redux/slices/assetManagementSlice";
 import { ToastContainer, toast } from "react-toastify";
+import {
+  createExpenseCategory,
+  getAllExpenseCategories,
+} from "@/redux/slices/expenseManagementSlice";
 
-const CreateAssetModal = ({ open, onClose, setAssetTypeOptions }) => {
+const CreateAssetModal = ({
+  open,
+  onClose,
+  setAssetTypeOptions,
+  setExpenseTypeOptions,
+  type,
+}) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [loading, setLoading] = useState(false);
@@ -17,27 +30,52 @@ const CreateAssetModal = ({ open, onClose, setAssetTypeOptions }) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    dispatch(creatAssetCategory(formData))
-      .unwrap()
-      .then((res) => {
-        if (res.success === true) {
-          toast.success(res.message);
-          console.log("success", res);
-          dispatch(getAllAssetCategories())
-            .unwrap()
-            .then((res) => setAssetTypeOptions(res?.data))
-            .catch((err) => console.log({ err }));
-          // setTimeout(() => {
-          onClose(false);
-          resetForm();
+    if (type === "asset") {
+      dispatch(creatAssetCategory(formData))
+        .unwrap()
+        .then((res) => {
+          if (res.success === true) {
+            toast.success(res.message);
+            console.log("success", res);
+            setTimeout(() => {
+              dispatch(getAllAssetCategories())
+                .unwrap()
+                .then((res) => setAssetTypeOptions(res?.data))
+                .catch((err) => console.log({ err }));
+              onClose(false);
+              resetForm();
+              setLoading(false);
+            }, 2000);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.message);
           setLoading(false);
-          // }, 2000);
-        }
-      })
-      .catch((error) => {
-        toast.error(error.message);
-        setLoading(false);
-      });
+        });
+    } else {
+      dispatch(createExpenseCategory(formData))
+        .unwrap()
+        .then((res) => {
+          if (res.success === true) {
+            toast.success(res.message);
+            console.log("success", res);
+
+            setTimeout(() => {
+              dispatch(getAllExpenseCategories())
+                .unwrap()
+                .then((res) => setExpenseTypeOptions(res?.data))
+                .catch((err) => console.log({ err }));
+              onClose(false);
+              resetForm();
+              setLoading(false);
+            }, 2000);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.message);
+          setLoading(false);
+        });
+    }
   };
 
   console.log({ formData });
@@ -49,9 +87,12 @@ const CreateAssetModal = ({ open, onClose, setAssetTypeOptions }) => {
         <div className="flex justify-between items-center gap-5">
           <div>
             <p className="text-xl font-semibold text-swBlack">
-              Add asset Category
+              {type === "asset" ? "Add asset category" : "Add expense category"}
             </p>
-            <p>This category helps to organise each asset</p>
+            <p>
+              This category helps to organise each{" "}
+              {type === "asset" ? "asset" : "category"}
+            </p>
           </div>
           <IoClose
             size={20}
@@ -65,7 +106,9 @@ const CreateAssetModal = ({ open, onClose, setAssetTypeOptions }) => {
 
         <div className="mt-5">
           <InputField
-            label="Asset catergory"
+            label={`${
+              type === "asset" ? "Asset category" : "Expense category"
+            }`}
             name={"name"}
             required={true}
             value={formData.name}
