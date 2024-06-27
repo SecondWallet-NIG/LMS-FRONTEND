@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { useParams } from "next/navigation";
+import { getAllExpenseCategories } from "@/redux/slices/expenseManagementSlice";
 
-const DeleteAssetCategoryModal = ({ open, onClose }) => {
+const DeleteAssetCategoryModal = ({ open, onClose, type }) => {
   const dispatch = useDispatch();
   const [assetTypeOptions, setAssetTypeOptions] = useState([]);
   const [formData, setFormData] = useState({ category: "" });
@@ -18,13 +19,18 @@ const DeleteAssetCategoryModal = ({ open, onClose }) => {
     label: option?.name,
   }));
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    
+  };
 
   useEffect(() => {
-    dispatch(getAllAssetCategories())
+    dispatch(
+      type === "asset" ? getAllAssetCategories() : getAllExpenseCategories()
+    )
       .unwrap()
       .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
+
     // setLoading(false);
   }, []);
 
@@ -36,7 +42,9 @@ const DeleteAssetCategoryModal = ({ open, onClose }) => {
         <div className="flex justify-between items-center gap-5">
           <div>
             <p className="text-xl font-semibold text-swBlack">
-              Delete asset Category
+              {type === "asset"
+                ? "Delete asset category"
+                : "Delete expense category"}
             </p>
             {/* <p>This category helps to organise each asset</p> */}
           </div>
@@ -52,7 +60,9 @@ const DeleteAssetCategoryModal = ({ open, onClose }) => {
 
         <div className="w-full mt-5">
           <SelectField
-            label={"Asset category"}
+            label={`${
+              type === "asset" ? "Asset category" : "Expense category"
+            }`}
             required={true}
             optionValue={transformedOptions}
             name="category"

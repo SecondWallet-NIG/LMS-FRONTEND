@@ -6,8 +6,9 @@ import { useDispatch } from "react-redux";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { deleteSingleExpense } from "@/redux/slices/expenseManagementSlice";
 
-const DeleteAssetModal = ({ open, onClose }) => {
+const DeleteAssetModal = ({ open, onClose, type }) => {
   const { id } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -15,12 +16,16 @@ const DeleteAssetModal = ({ open, onClose }) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    dispatch(deleteSingleAsset(id))
+    dispatch(type === "asset" ? deleteSingleAsset(id) : deleteSingleExpense(id))
       .unwrap()
       .then((res) => {
-        toast.success("Asset deleted successfully");
+        toast.success(
+          type === "asset"
+            ? "Asset deleted successfully"
+            : "Expense deleted successfully"
+        );
         setTimeout(() => {
-          router.push("/asset-management");
+          router.push(type === "asset" ? "/asset-management" : "/expenses");
         }, 2000);
       })
       .catch((err) => {
@@ -38,7 +43,9 @@ const DeleteAssetModal = ({ open, onClose }) => {
       <div className="max-w-sm w-full p-5 bg-white rounded-xl">
         <div className="flex justify-between items-center gap-5">
           <div>
-            <p className="text-xl font-semibold text-swBlack">Delete Asset</p>
+            <p className="text-xl font-semibold text-swBlack">
+              Delete {type === "asset" ? "Asset" : "Expense"}
+            </p>
           </div>
           <IoClose
             size={20}
@@ -54,7 +61,10 @@ const DeleteAssetModal = ({ open, onClose }) => {
             height={50}
             width={50}
           />
-          <p>Are you sure you want to delete this asset?</p>
+          <p className="text-center">
+            Are you sure you want to delete this{" "}
+            {type === "asset" ? "asset" : "expense"}?
+          </p>
         </div>
 
         <div className="flex gap-5 mt-5">

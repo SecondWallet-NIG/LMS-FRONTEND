@@ -9,8 +9,9 @@ import { FiEdit2, FiTrash } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAssetModal from "@/app/components/modals/DeleteAssetModal";
+import { getSingleExpense } from "@/redux/slices/expenseManagementSlice";
 
-const ViewAsset = () => {
+const ViewExpense = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -19,18 +20,15 @@ const ViewAsset = () => {
   console.log("aseet data", data);
 
   useEffect(() => {
-    dispatch(getSingleAsset(id));
+    dispatch(getSingleExpense(id));
     setLoading(false);
   }, []);
   return (
-    <DashboardLayout
-      isBackNav={true}
-      paths={["Asset Management", "View asset"]}
-    >
+    <DashboardLayout isBackNav={true} paths={["Expenses", "View expense"]}>
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">
           <Link
-            href={`/asset-management/edit-asset/${id}`}
+            href={`/expenses/edit-expense/${id}`}
             className="border py-2 px-3 flex gap-2 items-center rounded-lg"
           >
             Edit
@@ -46,32 +44,31 @@ const ViewAsset = () => {
         </div>
 
         <div className="flex justify-between mt-5 p-5 border-b">
-          <p className="font-semibold text-xl">Asset Details</p>
+          <p className="font-semibold text-xl">Expense Details</p>
         </div>
 
         <div className="p-5 flex flex-col gap-5 font-500">
           <div className="flex">
-            <p className="min-w-[15rem]">Asset</p>
-            <p>{data?.data?.name}</p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem]">Asset category</p>
-            <p>{data?.data?.category?.name}</p>
-          </div>
-          <div className="flex">
             <p className="min-w-[15rem]">Acquisition date</p>
             <p>
-              {data?.data?.acquisitionDate &&
-                format(new Date(data?.data?.acquisitionDate), "PPP")}
+              {data?.data?.date && format(new Date(data?.data?.date), "PPP")}
             </p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Expense category</p>
+            <p>{data?.data?.category?.name}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Description</p>
             <p>{data?.data?.description}</p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Value</p>
-            <p>{data?.data?.value?.toLocaleString()}</p>
+            <p className="min-w-[15rem]">Amount</p>
+            <p>{data?.data?.amount?.toLocaleString()}</p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Status</p>
+            <p>{"HEllo"}</p>
           </div>
         </div>
       </main>
@@ -79,10 +76,10 @@ const ViewAsset = () => {
       <DeleteAssetModal
         open={openDeleteModal}
         onClose={setOpenDeleteModal}
-        type="asset"
+        type="expense"
       />
     </DashboardLayout>
   );
 };
 
-export default ViewAsset;
+export default ViewExpense;
