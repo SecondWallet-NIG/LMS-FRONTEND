@@ -60,15 +60,14 @@ export default function InvestorsRecords() {
         headers={header}
         initialData={[]}
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/product/all`}
-        // btnText={
-        //   <div className="flex gap-1 items-center p-1">
-        //     <AiOutlinePlus size={15} />
-        //     <p className="">create borrower</p>
-        //   </div>
-        // }
-        // btnTextClick={() => {
-        //   router.push("/create-borrower");
-        // }}
+        btnText={
+          <div className="flex gap-1 items-center p-1">
+            <p className="">create investor</p>
+          </div>
+        }
+        btnTextClick={() => {
+          router.push("/create-borrower");
+        }}
         filters={true}
         pagination={true}
       />

@@ -148,18 +148,18 @@ const Expenses = () => {
       <DashboardLayout isBackNav={true} paths={["Expenses"]}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
-            className={`hover:font-medium py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
+            className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
               pageState === "expenses" &&
-              "border-b-swBlue text-swBlue font-medium"
+              "border-b-swBlue text-swBlue font-semibold"
             }`}
             onClick={() => setPageState("expenses")}
           >
             Expenses
           </p>
           <p
-            className={`hover:font-medium py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
+            className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
               pageState === "expenses category" &&
-              "border-b-swBlue text-swBlue font-medium"
+              "border-b-swBlue text-swBlue font-semibold"
             }`}
             onClick={() => setPageState("expenses category")}
           >

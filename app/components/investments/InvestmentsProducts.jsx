@@ -49,15 +49,14 @@ export default function InvestmentProducts() {
         headers={header}
         initialData={[]}
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/product/all`}
-        // btnText={
-        //   <div className="flex gap-1 items-center p-1">
-        //     <AiOutlinePlus size={15} />
-        //     <p className="">create borrower</p>
-        //   </div>
-        // }
-        // btnTextClick={() => {
-        //   router.push("/create-borrower");
-        // }}
+        btnText={
+          <div className="flex gap-1 items-center p-1">
+            <p className="">create investment product</p>
+          </div>
+        }
+        btnTextClick={() => {
+          router.push("/create-investment-product");
+        }}
         filters={true}
         pagination={true}
       />
