@@ -57,7 +57,7 @@ export default function InvestmentProducts() {
           </div>
         }
         btnTextClick={() => {
-          router.push("/create-investment-product");
+          router.push("investors/create-investment-product");
         }}
         filters={true}
         pagination={true}
