@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
+import { useRouter } from "next/navigation";
 
 const header = [
   { id: "productName", label: "Product name" },
@@ -41,6 +42,7 @@ const customDataTransformer = (apiData) => {
 };
 
 export default function InvestmentProducts() {
+  const router = useRouter();
   return (
     <div>
       <ReusableDataTable

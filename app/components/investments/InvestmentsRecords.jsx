@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import InvestmentsCards from "./InvestmentsCards";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
+import { useRouter } from "next/navigation";
 
 const header = [
   { id: "productName", label: "Product name" },
@@ -42,6 +43,8 @@ const customDataTransformer = (apiData) => {
 };
 
 export default function InvestmentsRecords() {
+  const router = useRouter();
+
   const cards = [
     { title: "Number of investors", value: "22" },
     { title: "Amount invested", value: "123,368,937.03" },

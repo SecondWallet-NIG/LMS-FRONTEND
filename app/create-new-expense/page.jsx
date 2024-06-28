@@ -93,6 +93,7 @@ const CreateNewExpense = () => {
             description: "",
             amount: "",
           });
+          router.push("/expenses");
           setLoading(false);
         } else {
           toast.error(res.message);
