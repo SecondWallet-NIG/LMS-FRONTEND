@@ -248,6 +248,7 @@ function ReusableDataTable({
             const transformedData = dataTransformer(
               data?.data?.data?.repayments ||
                 data?.data?.results ||
+                data?.data?.expenses ||
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
                 data?.results ||
@@ -266,6 +267,7 @@ function ReusableDataTable({
             setData(
               data?.data?.data?.repayments ||
                 data?.data?.results ||
+                data?.data?.expenses ||
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
                 data.results
@@ -370,6 +372,7 @@ function ReusableDataTable({
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.results ||
                 data?.data?.data ||
+                data?.data?.expenses ||
                 data?.results ||
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results ||
@@ -394,6 +397,7 @@ function ReusableDataTable({
               data?.data?.data?.repayments ||
                 data?.data?.results ||
                 data?.data?.data ||
+                data?.data?.expenses ||
                 data.results ||
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results
@@ -516,7 +520,7 @@ function ReusableDataTable({
   };
 
   useEffect(() => {
-    if (data.length > 0) {
+    if (data?.length > 0) {
       setDataId(Object.keys(data[0]));
       // const newData = data.map((item) => ({ ...item }));
       setFilteredData(data.map((item) => ({ ...item })));

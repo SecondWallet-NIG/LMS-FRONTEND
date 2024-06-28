@@ -9,11 +9,17 @@ import { DayPicker } from "react-day-picker";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import {
+  createNewAsset,
   getAllAssetCategories,
   getSingleAsset,
   updateSingleAsset,
 } from "@/redux/slices/assetManagementSlice";
 import { useParams, useRouter } from "next/navigation";
+import {
+  getAllExpenseCategories,
+  getSingleExpense,
+  updateSingleExpense,
+} from "@/redux/slices/expenseManagementSlice";
 
 const EditAsset = () => {
   const dispatch = useDispatch();
@@ -24,18 +30,17 @@ const EditAsset = () => {
   const [openDate, setOpenDate] = useState(false);
   const [assetTypeOptions, setAssetTypeOptions] = useState([]);
   const [formData, setFormData] = useState({
-    name: "",
     category: "",
     description: "",
-    acquisitionDate: new Date(),
-    value: "",
+    date: new Date(),
+    amount: "",
   });
   // const { data } = useSelector((state) => state.asset);
 
-  const options = [
-    { value: "Single asset", label: "Single asset" },
-    { value: "Bulk asset", label: "Bulk asset" },
-  ];
+  // const options = [
+  //   { value: "Single asset", label: "Single asset" },
+  //   { value: "Bulk asset", label: "Bulk asset" },
+  // ];
 
   const transformedOptions = assetTypeOptions.map((option) => ({
     value: option?._id,
@@ -44,7 +49,7 @@ const EditAsset = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "value") {
+    if (name === "amount") {
       // Remove all non-numeric characters except for a dot
       const numericValue = value.replace(/[^0-9.]/g, "");
 
@@ -77,25 +82,22 @@ const EditAsset = () => {
     return numberString.replace(/,/g, "");
   };
 
-  const handleAddAsset = () => {
+  const handleUpdateExpense = async () => {
     setLoading(true);
-    const newDate = format(formData.acquisitionDate, "yyyy-MM-dd");
-    const newValue = parseInt(removeCommasFromNumber(formData.value));
+    const newDate = format(formData.date, "yyyy-MM-dd");
+    const newValue = parseInt(removeCommasFromNumber(formData.amount));
     const payload = {
       ...formData,
-      acquisitionDate: newDate,
-      value: newValue,
+      date: newDate,
+      amount: newValue,
     };
-    dispatch(updateSingleAsset({ id, payload }))
+    // delete payload.category;
+    // console.log(payload);
+    dispatch(updateSingleExpense({ id, payload }))
       .unwrap()
       .then((res) => {
-        if (res?.success === true) {
-          toast.success(res?.message);
-          setLoading(false);
-        } else {
-          toast.error(res.message);
-          setLoading(false);
-        }
+        toast.success(res?.message);
+        setLoading(false);
       })
       .catch((err) => {
         toast.error(err?.message);
@@ -103,57 +105,61 @@ const EditAsset = () => {
       });
   };
 
+  //TODO fix this to work with edit expense
+
   useEffect(() => {
-    dispatch(getSingleAsset(id))
+    dispatch(getSingleExpense(id))
       .unwrap()
       .then((res) => {
         console.log("hiiii", res?.data);
+        // {
+        //   category: "",
+        //   description: "",
+        //   date: new Date(),
+        //   amount: "",
+        // }
         setFormData({
-          name: res?.data?.name,
           category: res?.data?.category?._id,
           description: res?.data?.description,
-          acquisitionDate: new Date(res?.data?.acquisitionDate),
-          value: res?.data?.value,
+          date: new Date(res?.data?.date),
+          amount: res?.data?.amount,
         });
       })
       .catch((err) => console.log({ err }));
-    dispatch(getAllAssetCategories())
+    dispatch(getAllExpenseCategories())
       .unwrap()
       .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
   }, []);
-  console.log({ formData });
+  console.log(formData);
 
   return (
-    <DashboardLayout
-      isBackNav={true}
-      paths={["Asset Management", "Add new asset"]}
-    >
+    <DashboardLayout isBackNav={true} paths={["Expense", "Edit expense"]}>
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         <div className="flex justify-between items-center">
-          <p className="text-xl font-semibold text-swBlack">Edit assets</p>
+          <p className="text-xl font-semibold text-swBlack">Edit expense</p>
         </div>
 
         <div className="flex flex-col gap-5">
           <p className="text-lg font-semibold text-swBlack mt-10">
-            Asset details
+            Expense details
           </p>
 
-          <InputField
+          {/* <InputField
             label={"Asset name"}
             required={true}
             name="name"
             placeholder={"Enter asset name"}
             value={formData.name}
             onChange={handleChange}
-          />
+          /> */}
           <div className="relative">
             <div className="block text-gray-700 text-sm mb-2">
-              Acquisition date
+              Date of expense
               <span className="text-red-600 ml-1">*</span>
             </div>
             <div
@@ -161,7 +167,7 @@ const EditAsset = () => {
               onClick={() => setOpenDate(!openDate)}
             >
               <LuCalendar size={22} className="text-swTextColor" />
-              {format(formData?.acquisitionDate, "PPP")}
+              {format(formData?.date, "PPP")}
             </div>
             {openDate && (
               <div className="absolute w-fit right-0  -mb-5 bg-white border rounded-md z-50">
@@ -170,7 +176,7 @@ const EditAsset = () => {
                     caption: { color: "#2769b3" },
                   }}
                   modifiers={{
-                    selected: formData.acquisitionDate,
+                    selected: formData.date,
                   }}
                   modifiersClassNames={{
                     selected: "my-selected",
@@ -178,7 +184,7 @@ const EditAsset = () => {
                   onDayClick={(value) => {
                     setFormData((prev) => ({
                       ...prev,
-                      acquisitionDate: value > new Date() ? new Date() : value,
+                      date: value > new Date() ? new Date() : value,
                     }));
                   }}
                   className="w-full"
@@ -193,7 +199,7 @@ const EditAsset = () => {
             )}
           </div>
           <SelectField
-            label={"Asset type"}
+            label={"Expense category"}
             required={true}
             optionValue={transformedOptions}
             name="category"
@@ -208,22 +214,22 @@ const EditAsset = () => {
             }
           />
           <InputField
-            label={"Describe asset"}
+            label={"Describe expense"}
             required={true}
             name="description"
             value={formData.description}
-            placeholder={"Enter asset description"}
+            placeholder={"Cleaning tools"}
             onChange={handleChange}
           />
           <InputField
-            name="value"
+            name="amount"
             required={true}
             ariaLabel={"Number input"}
             onKeyPress={preventMinus}
             onWheel={() => document.activeElement.blur()}
             endIcon={<p className="text-swGray">NGN &#8358;</p>}
-            label="Value"
-            value={formData?.value?.toLocaleString()}
+            label="Total amount"
+            value={formData?.amount?.toLocaleString()}
             placeholder="Enter loan amount"
             onChange={handleChange}
           />
@@ -242,10 +248,10 @@ const EditAsset = () => {
                 ? "opacity-50 cursor-not-allowed pointer-events-none"
                 : "cursor-pointer"
             }`}
-            onClick={handleAddAsset}
+            onClick={handleUpdateExpense}
           >
             <LuCheck size={20} />
-            <p>{loading ? "Updating asset..." : "Update asset"}</p>
+            <p>{loading ? "Updating expense..." : "Update expense"}</p>
           </div>
         </div>
       </main>

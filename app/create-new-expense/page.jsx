@@ -1,50 +1,45 @@
 "use client";
 import { useEffect, useState } from "react";
-import DashboardLayout from "../../../components/dashboardLayout/DashboardLayout";
-import SelectField from "../../../components/shared/input/SelectField";
-import InputField from "../../../components/shared/input/InputField";
+import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
+import SelectField from "../components/shared/input/SelectField";
+import InputField from "../components/shared/input/InputField";
 import { LuCalendar, LuCheck } from "react-icons/lu";
 import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
 import {
-  getAllAssetCategories,
-  getSingleAsset,
-  updateSingleAsset,
-} from "@/redux/slices/assetManagementSlice";
-import { useParams, useRouter } from "next/navigation";
+  createExpense,
+  getAllExpenseCategories,
+} from "@/redux/slices/expenseManagementSlice";
 
-const EditAsset = () => {
+const CreateNewExpense = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [assetUploadType, setAssetUploadType] = useState("Single asset");
+  const [expenseUploadType, setExpenseUploadType] = useState("Single expense");
   const [openDate, setOpenDate] = useState(false);
-  const [assetTypeOptions, setAssetTypeOptions] = useState([]);
+  const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const [formData, setFormData] = useState({
-    name: "",
+    date: new Date(),
     category: "",
     description: "",
-    acquisitionDate: new Date(),
-    value: "",
+    amount: "",
   });
-  // const { data } = useSelector((state) => state.asset);
-
   const options = [
-    { value: "Single asset", label: "Single asset" },
-    { value: "Bulk asset", label: "Bulk asset" },
+    { value: "Single expense", label: "Single expense" },
+    { value: "Bulk expenses", label: "Bulk expenses" },
   ];
 
-  const transformedOptions = assetTypeOptions.map((option) => ({
+  const transformedOptions = expenseTypeOptions.map((option) => ({
     value: option?._id,
     label: option?.name,
   }));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "value") {
+    if (name === "amount") {
       // Remove all non-numeric characters except for a dot
       const numericValue = value.replace(/[^0-9.]/g, "");
 
@@ -79,18 +74,25 @@ const EditAsset = () => {
 
   const handleAddAsset = () => {
     setLoading(true);
-    const newDate = format(formData.acquisitionDate, "yyyy-MM-dd");
-    const newValue = parseInt(removeCommasFromNumber(formData.value));
-    const payload = {
-      ...formData,
-      acquisitionDate: newDate,
-      value: newValue,
-    };
-    dispatch(updateSingleAsset({ id, payload }))
+    const newDate = format(formData.date, "yyyy-MM-dd");
+    const newAmount = parseInt(removeCommasFromNumber(formData.amount));
+    dispatch(
+      createExpense({
+        ...formData,
+        date: newDate,
+        amount: newAmount,
+      })
+    )
       .unwrap()
       .then((res) => {
         if (res?.success === true) {
           toast.success(res?.message);
+          setFormData({
+            date: new Date(),
+            category: "",
+            description: "",
+            amount: "",
+          });
           setLoading(false);
         } else {
           toast.error(res.message);
@@ -104,56 +106,52 @@ const EditAsset = () => {
   };
 
   useEffect(() => {
-    dispatch(getSingleAsset(id))
+    dispatch(getAllExpenseCategories())
       .unwrap()
-      .then((res) => {
-        console.log("hiiii", res?.data);
-        setFormData({
-          name: res?.data?.name,
-          category: res?.data?.category?._id,
-          description: res?.data?.description,
-          acquisitionDate: new Date(res?.data?.acquisitionDate),
-          value: res?.data?.value,
-        });
-      })
-      .catch((err) => console.log({ err }));
-    dispatch(getAllAssetCategories())
-      .unwrap()
-      .then((res) => setAssetTypeOptions(res?.data))
+      .then((res) => setExpenseTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
   }, []);
   console.log({ formData });
-
   return (
-    <DashboardLayout
-      isBackNav={true}
-      paths={["Asset Management", "Add new asset"]}
-    >
+    <DashboardLayout isBackNav={true} paths={["Expenses", "Add new expense"]}>
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         <div className="flex justify-between items-center">
-          <p className="text-xl font-semibold text-swBlack">Edit assets</p>
+          <p className="text-xl font-semibold text-swBlack">Add new expense</p>
+          <div className="w-60">
+            <SelectField
+              value={options.find(
+                (option) => option.value === expenseUploadType
+              )}
+              name="name"
+              optionValue={options}
+              isSearchable={false}
+              onChange={(selectedOption) =>
+                setExpenseUploadType(selectedOption.value)
+              }
+            />
+          </div>
         </div>
 
         <div className="flex flex-col gap-5">
           <p className="text-lg font-semibold text-swBlack mt-10">
-            Asset details
+            Expense details
           </p>
 
-          <InputField
-            label={"Asset name"}
+          {/* <InputField
+            label={"Expense name"}
             required={true}
             name="name"
             placeholder={"Enter asset name"}
             value={formData.name}
             onChange={handleChange}
-          />
+          /> */}
           <div className="relative">
             <div className="block text-gray-700 text-sm mb-2">
-              Acquisition date
+              Date of expense
               <span className="text-red-600 ml-1">*</span>
             </div>
             <div
@@ -161,7 +159,7 @@ const EditAsset = () => {
               onClick={() => setOpenDate(!openDate)}
             >
               <LuCalendar size={22} className="text-swTextColor" />
-              {format(formData?.acquisitionDate, "PPP")}
+              {format(formData.date, "PPP")}
             </div>
             {openDate && (
               <div className="absolute w-fit right-0  -mb-5 bg-white border rounded-md z-50">
@@ -170,7 +168,7 @@ const EditAsset = () => {
                     caption: { color: "#2769b3" },
                   }}
                   modifiers={{
-                    selected: formData.acquisitionDate,
+                    selected: formData.date,
                   }}
                   modifiersClassNames={{
                     selected: "my-selected",
@@ -178,7 +176,7 @@ const EditAsset = () => {
                   onDayClick={(value) => {
                     setFormData((prev) => ({
                       ...prev,
-                      acquisitionDate: value > new Date() ? new Date() : value,
+                      date: value > new Date() ? new Date() : value,
                     }));
                   }}
                   className="w-full"
@@ -193,7 +191,7 @@ const EditAsset = () => {
             )}
           </div>
           <SelectField
-            label={"Asset type"}
+            label={"Expense category"}
             required={true}
             optionValue={transformedOptions}
             name="category"
@@ -208,22 +206,22 @@ const EditAsset = () => {
             }
           />
           <InputField
-            label={"Describe asset"}
+            label={"Expense description"}
             required={true}
             name="description"
             value={formData.description}
-            placeholder={"Enter asset description"}
+            placeholder={"Cleaning tools"}
             onChange={handleChange}
           />
           <InputField
-            name="value"
+            name="amount"
             required={true}
             ariaLabel={"Number input"}
             onKeyPress={preventMinus}
             onWheel={() => document.activeElement.blur()}
             endIcon={<p className="text-swGray">NGN &#8358;</p>}
-            label="Value"
-            value={formData?.value?.toLocaleString()}
+            label="Total amount"
+            value={formData?.amount?.toLocaleString()}
             placeholder="Enter loan amount"
             onChange={handleChange}
           />
@@ -245,7 +243,7 @@ const EditAsset = () => {
             onClick={handleAddAsset}
           >
             <LuCheck size={20} />
-            <p>{loading ? "Updating asset..." : "Update asset"}</p>
+            <p>{loading ? "Adding expense..." : "Add expense"}</p>
           </div>
         </div>
       </main>
@@ -253,4 +251,4 @@ const EditAsset = () => {
   );
 };
 
-export default EditAsset;
+export default CreateNewExpense;

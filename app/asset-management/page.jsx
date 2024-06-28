@@ -248,10 +248,12 @@ const AssetManagement = () => {
               open={openCreateAssetModal}
               onClose={setOpenCreateModal}
               setAssetTypeOptions={setAssetTypeOptions}
+              type="asset"
             />
             <DeleteAssetCategoryModal
               open={openDeleteAssetModal}
               onClose={() => setOpenDeleteModal(false)}
+              type="asset"
             />
           </div>
         )}

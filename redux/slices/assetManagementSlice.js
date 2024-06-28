@@ -51,7 +51,7 @@ export const deleteSingleAsset = createAsyncThunk(
 
 export const updateSingleAsset = createAsyncThunk(
   "/asset/update/assetId",
-  async (id, payload) => {
+  async ({ id, payload }) => {
     try {
       const response = await axios.put(
         `${API_URL}/asset/update/${id}`,
