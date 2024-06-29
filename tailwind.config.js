@@ -13,8 +13,10 @@ module.exports = {
       colors: {
         swGray: "#737373",
         swGrey50: "#EAEAEA",
+        swGrey200: "#9F9F9F",
         swLightGray: "#f5f5f5",
         swBlue: "#2769B3",
+        swBlue500: "#9CBADC",
         swBlueActiveStateBg: "#E9F0F7",
         swDarkBlue: "#2360A3",
         swDarkBlueOutline: "#1C4B7F",

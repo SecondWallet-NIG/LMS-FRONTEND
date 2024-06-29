@@ -66,7 +66,7 @@ export default function InvestmentsRecords() {
           </div>
         }
         btnTextClick={() => {
-          router.push("/create-investment");
+          router.push("/investors/create-investment");
         }}
         filters={true}
         pagination={true}
