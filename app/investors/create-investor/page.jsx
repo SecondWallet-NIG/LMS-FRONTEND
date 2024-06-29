@@ -1,5 +1,5 @@
 const CreateInvestor = () => {
-  return <div>Create investor</div>;
+    return <div>Create investor</div>;
 };
 
 export default CreateInvestor;
