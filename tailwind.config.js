@@ -12,6 +12,7 @@ module.exports = {
       screens: { xxs: "270px", xs: "350px", ...defaultTheme.screens },
       colors: {
         swGray: "#737373",
+        swGrey10: "#FAFAFA",
         swGrey50: "#EAEAEA",
         swGrey200: "#9F9F9F",
         swGrey500: "#2E2E2E",
