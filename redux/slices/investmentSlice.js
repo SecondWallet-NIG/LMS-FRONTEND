@@ -7,7 +7,32 @@ if (typeof window !== "undefined") {
   user = JSON.parse(localStorage.getItem("user"));
 }
 
-// investment products
+// investmentProducts
+
+export const createInvestmentProduct = createAsyncThunk(
+  "investment/product/create",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/investment/product/create`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+
+// investMentRecords
 
 export const createInvestment = createAsyncThunk(
   "investment/create",
@@ -34,14 +59,18 @@ export const createInvestment = createAsyncThunk(
 // InvestorRecords
 
 export const createInvestor = createAsyncThunk(
-  "investor/create",
+  "investment/investor/create",
   async (payload) => {
     try {
-      const response = await axios.post(`${API_URL}/investor/create`, payload, {
-        headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
-        },
-      });
+      const response = await axios.post(
+        `${API_URL}/investment/investor/create`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       if (error.response.data.error) {

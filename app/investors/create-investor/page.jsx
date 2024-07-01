@@ -18,12 +18,22 @@ import {
 } from "../../components/helpers/utils";
 import { bankArr, statesAndLgas } from "@/constant";
 import { createInvestor } from "@/redux/slices/investmentSlice";
+import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
+import Image from "next/image";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 const CreateInvestor = () => {
   const headerClass = "font-medium text-sm leading-5 text-swBlack";
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [userId, setUserId] = useState("");
   const [lga, setLga] = useState([]);
+  const [profileImg, setProfileImg] = useState(null);
   const [bankNameVal, setBankNameVal] = useState("");
+  const [loading, setLoading] = useState(false);
   const [verificationResponse, setVerificationResponse] = useState(null);
   const [formData, setFormData] = useState({
     profilePicture: null,
@@ -49,6 +59,39 @@ const CreateInvestor = () => {
     taxDoc: null,
     bvnDoc: null,
     ninDoc: null,
+  });
+
+  const resetForm = () => {
+    setFormData({
+      profilePicture: null,
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      dateOfBirth: "",
+      gender: "",
+      nin: "",
+      bvn: "",
+      country: "",
+      state: "",
+      lga: "",
+      houseNumber: "",
+      houseLocation: "",
+      email: "",
+      phoneNumber: "",
+      annualIncome: "",
+      networth: "",
+      sourceOfIncome: "",
+      bankAccount: "",
+      workStatus: "",
+      taxDoc: null,
+      bvnDoc: null,
+      ninDoc: null,
+    });
+  };
+  const [fileError, setFileError] = useState({
+    taxDoc: "",
+    bvnDoc: "",
+    ninoc: "",
   });
 
   const states = statesAndLgas.map((item, index) => ({
@@ -82,6 +125,42 @@ const CreateInvestor = () => {
       ...formData,
       [name]: selectedOption.value,
     });
+  };
+
+  const handleFileChange = (e) => {
+    let { name, files } = e.target;
+    setFileError((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+    // console.log({ name, files });
+    const file = files[0];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    if (!allowedExtensions.includes(fileExtension)) {
+      // setFileError(
+      //   "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+      // );
+      setFileError((prev) => ({
+        ...prev,
+        [name]:
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf).",
+      }));
+      return;
+    }
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: files[0],
+    }));
+  };
+
+  const deleteFile = (name) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: null,
+    }));
   };
 
   const handleStateChange = (selectedOption) => {
@@ -129,8 +208,60 @@ const CreateInvestor = () => {
     }
   };
 
+  const renderFileInput = (text, name) => {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2">
+        <p className="text-center text-swTextColor text-sm">{text}</p>
+        {fileError[name] && (
+          <p className="text-red-500 text-sm">{fileError[name]}</p>
+        )}
+
+        {formData[name]?.name ? (
+          <div
+            id="fileLabel3"
+            className="bg-swLightGray p-2 flex justify-between"
+          >
+            <div className="text-xs">{formData[name]?.name}</div>
+            <div
+              onClick={() => {
+                deleteFile(name);
+              }}
+            >
+              <AiOutlineDelete color="red" size={20} />
+            </div>
+          </div>
+        ) : null}
+
+        <div className="relative">
+          <input
+            name={name}
+            type="file"
+            id={`fileInput-${name}`}
+            className="absolute w-0 h-0 opacity-0"
+            onChange={handleFileChange}
+            onClick={(e) => (e.target.value = null)}
+          />
+          <label
+            htmlFor={`fileInput-${name}`}
+            className="text-white cursor-pointer"
+          >
+            <span
+              className={`py-2 px-6 rounded-md outline outline-2 hover:outline-gray-200 flex gap-2 border w-fit  `}
+            >
+              <AiOutlinePaperClip className="text-swTextColor" size={20} />
+              <p className="font-medium text-sm text-swTextColor">
+                {formData[name]?.name ? "Change file" : "Select file"}
+              </p>
+            </span>
+          </label>
+        </div>
+      </div>
+    );
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     let payload = new FormData();
     payload.append("profilePicture", formData.profilePicture);
@@ -162,18 +293,55 @@ const CreateInvestor = () => {
     dispatch(createInvestor(payload))
       .unwrap()
       .then((response) => {
+        toast.success(response?.message);
         console.log(response);
-        document.getElementById("add-customer-form").reset();
         resetForm();
-        openModal();
-        setNewUserId(response?.data?._id);
         setProfileImg(null);
+        router.push("/investors");
+        // setNewUserId(response?.data?._id);
       })
       .catch((error) => {
         console.log({ error });
         toast.error(error?.message);
+        setLoading(false);
       });
   };
+
+  const handleFileInputChange = (e) => {
+    setFileError("");
+    const files = Array.from(e.target.files);
+    if (e.target.id === "profilePicture" && e.target.files.length > 0) {
+      const fileExtension = files[0].name.split(".").pop().toLowerCase();
+      console.log(fileExtension);
+
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      if (!allowedExtensions.includes(fileExtension)) {
+        setFileError(
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png)."
+        );
+        return;
+      }
+      setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
+    }
+  };
+
+  useEffect(() => {
+    if (
+      formData?.profilePicture !== null &&
+      formData?.profilePicture &&
+      (formData?.profilePicture instanceof Blob ||
+        formData?.profilePicture instanceof File)
+    ) {
+      try {
+        setProfileImg(URL.createObjectURL(formData.profilePicture));
+      } catch (error) {
+        console.error("Error creating object URL:", error);
+      }
+    } else {
+      // Handle cases where the selected file is not a Blob or File
+      console.error("Invalid file type selected.");
+    }
+  }, [formData?.profilePicture]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -181,8 +349,10 @@ const CreateInvestor = () => {
   }, []);
 
   console.log({ formData });
+  console.log(profileImg);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]}>
+      <ToastContainer />
       <div className="mx-auto w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create investor profile
@@ -193,54 +363,88 @@ const CreateInvestor = () => {
 
         {/* Profile Picture */}
         <h6 className={`${headerClass}`}>Profile picture</h6>
-        <div className="mt-5 flex gap-6 mb-10">
-          <FiUser className="opacity-50 border-2 rounded-full p-4" size={82} />
-          <div className="mt-5">
-            <Button className="px-2 text-black rounded-md text-sm">
-              Select a file
-            </Button>
+        <div className="mt-5 mb-10">
+          <div className="flex gap-5 items-center">
+            {profileImg !== null ? (
+              <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                <Image src={profileImg} alt="profile" fill sizes="100%" />
+              </div>
+            ) : (
+              <div className="border-2 p-4 rounded-full">
+                <FiUser size={40} />
+              </div>
+            )}
+
+            <label
+              htmlFor="profilePicture"
+              className="border-2 rounded-lg p-2 px-4 font-semibold cursor-pointer"
+            >
+              <input
+                type="file"
+                id="profilePicture"
+                className="hidden"
+                onChange={handleFileInputChange}
+              />
+              {profileImg !== null ? "Change file" : "Select a file"}
+            </label>
           </div>
         </div>
 
         {/* Investor Information */}
         <div>
           <h6 className={`${headerClass}`}>Investor information</h6>
-          <div className="my-5 flex justify-between gap-6">
-            <InputField
-              name={"firstName"}
-              label={"First name"}
-              placeholder={"Start typing"}
-              required={true}
-              value={formData.firstName}
-              onChange={handleInputChange}
-            />
-            <InputField
-              name={"middleName"}
-              label={"Middle name"}
-              placeholder={"Start typing"}
-              required={false}
-              value={formData.middleName}
-              onChange={handleInputChange}
-            />
-            <InputField
-              name={"lastname"}
-              label={"Last Name"}
-              placeholder={"Start typing"}
-              required={true}
-              value={formData.lastName}
-              onChange={handleInputChange}
-            />
+          <div className="my-5 flex flex-col md:flex-row gap-6">
+            <div className="w-full">
+              <InputField
+                name={"firstName"}
+                label={"First name"}
+                placeholder={"Start typing"}
+                required={true}
+                value={formData.firstName}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="w-full">
+              <InputField
+                name={"middleName"}
+                label={"Middle name"}
+                placeholder={"Start typing"}
+                required={false}
+                value={formData.middleName}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="w-full">
+              <InputField
+                name={"lastName"}
+                label={"Last Name"}
+                placeholder={"Start typing"}
+                required={true}
+                value={formData.lastName}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
 
           <div className="flex justify-between gap-6">
             <div className="w-full">
-              <InputField
+              {/* <InputField
                 name={"dateOfBirth"}
                 label={"Date of Birth"}
                 placeholder={"mm/dd/yyyy"}
                 required={true}
                 endIcon={<FiCalendar />}
                 value={formData.dateOfBirth}
+                onChange={handleInputChange}
+              /> */}
+              <InputField
+                name="dateOfBirth"
+                placeholder="Date of Birth"
+                inputType={"date"}
+                required={true}
+                activeBorderColor="border-swBlue"
+                label="Date of Birth"
+                isActive="loan-amount"
                 onChange={handleInputChange}
               />
             </div>
@@ -254,7 +458,7 @@ const CreateInvestor = () => {
                 optionValue={genderOptions}
                 value={genderOptions.find((e) => e.value === formData.gender)}
                 onChange={(selectedOption) =>
-                  handleSelectChange(selectedOption, gender)
+                  handleSelectChange(selectedOption, "gender")
                 }
               />
             </div>
@@ -263,22 +467,40 @@ const CreateInvestor = () => {
           <div className="flex justify-between mt-5 mb-10 gap-6">
             <div className="w-full">
               <InputField
-                name={"nin"}
-                label={"NIN"}
-                placeholder={"Start typing"}
                 required={true}
-                value={formData.nin}
+                name="nin"
+                activeBorderColor="border-swBlue"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                label="NIN"
+                placeholder="NIN"
+                // isActive="loan-amount"
+                // onclick={() => {
+                //   isInputOpen === "loan-amount"
+                //     ? setIsInputOpen(null)
+                //     : setIsInputOpen("loan-amount");
+                // }}
+                // inputOpen={isInputOpen}
                 onChange={handleInputChange}
               />
             </div>
 
             <div className="w-full">
               <InputField
-                name={"bvn"}
-                label={"BVN"}
-                placeholder={"Start typing"}
                 required={true}
-                value={formData.bvn}
+                name="bvn"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
+                label="BVN"
+                placeholder="Bank Verification Number"
+                isActive="loan-amount"
+                // onclick={() => {
+                //   isInputOpen === "loan-amount"
+                //     ? setIsInputOpen(null)
+                //     : setIsInputOpen("loan-amount");
+                // }}
+                // inputOpen={isInputOpen}
                 onChange={handleInputChange}
               />
             </div>
@@ -494,40 +716,23 @@ const CreateInvestor = () => {
           </p>
 
           <div className="flex justify-between gap-6 text-center">
-            <span className="w-full">
-              <p className="text-swGrey500 leading-5 text-sm">
-                Upload Tax Identification Number (TIN)
-              </p>
-              <Button className="mt-5 rounded-md flex gap-1 items-center">
-                <FiPaperclip />
-                Select files
-              </Button>
-            </span>
-
-            <span className="w-full">
-              <p className="text-swGrey500 leading-5 text-sm">
-                Upload Bank Verification Number (BVN)
-              </p>
-              <Button className="mt-5 rounded-md flex gap-1 items-center">
-                <FiPaperclip />
-                Select files
-              </Button>
-            </span>
-
-            <span className="w-full">
-              <p className="text-swGrey500 leading-5 text-sm">
-                Upload National Identity Number (NIN)
-              </p>
-              <Button className="mt-5 rounded-md flex gap-1 items-center">
-                <FiPaperclip />
-                Select files
-              </Button>
-            </span>
+            {renderFileInput(
+              "Upload Tax Identification Number (TIN)",
+              "taxDoc"
+            )}
+            {renderFileInput("Upload Bank Verification Number (BVN)", "bvnDoc")}
+            {renderFileInput("Upload National Identity Number (NIN)", "ninDoc")}
           </div>
         </div>
 
         <div className="flex justify-center my-20">
-          <Button className="rounded-md">Create Investor profile</Button>
+          <EditableButton
+            disabled={loading}
+            blueBtn={true}
+            onClick={handleSubmit}
+            className="rounded-md"
+            label={"Create Investor profile"}
+          />
         </div>
       </div>
     </DashboardLayout>
