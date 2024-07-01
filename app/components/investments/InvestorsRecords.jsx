@@ -1,50 +1,68 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import InvestmentsCards from "./InvestmentsCards";
+import InvestmentsCards from "../cards/InvestmentsCard/InvestmentsCards";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
+import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 
 const header = [
   { id: "investorName", label: "Investor name" },
-  { id: "id", label: "ID" },
-  { id: "dob", label: "Date of birth" },
+  { id: "investorId", label: "ID" },
+  { id: "dateOfBirth", label: "Date of birth" },
   { id: "gender", label: "Gender" },
+  { id: "state", label: "state" },
   { id: "phone", label: "Phone no" },
   { id: "annualIncome", label: "Annual income" },
   { id: "workStatus", label: "Work status" },
-  { id: "investement status", label: "Investment status" },
+  { id: "investorStatus", label: "Investor status" },
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
-  return apiData?.expenses?.map((item, i) => ({
+  console.log("record", apiData);
+  return apiData?.investorProfiles?.map((item) => ({
     id: item?._id,
-    productName: (
+    investorName: (
       <div className="text-md font-[500] text-gray-700">
-        {/* {format(new Date(item?.date), "PPP")} */} Product name
+        {item?.firstName} {item?.lastName}
       </div>
     ),
-    investorsUsingProduct: (
+    investorId: (
+      <div className="text-md font-[500] text-gray-700">{item?.investorId}</div>
+    ),
+    dateOfBirth: (
       <div className="text-md font-[500] text-gray-700">
-        {/* {item?.description} */} Investors using product
+        {item?.dateOfBirth && format(new Date(item?.dateOfBirth), "PPP")}
       </div>
     ),
-    roi: (
-      <div className="text-md font-[500] text-gray-700">
-        {/* {item?.category?.name} */} ROI
+    gender: (
+      <div className="text-md font-[500] text-gray-700">{item?.gender}</div>
+    ),
+    state: (
+      <div className="text-md font-[500] text-gray-700">{item?.state}</div>
+    ),
+    phone: (
+      <div className="text-xs font-[500] text-gray-700">
+        {item?.phoneNumber}
       </div>
     ),
-    amountPaidOut: (
-      <div className="text-md font-[500] text-gray-700">
-        {/* {item?.amount} */} Amount paid out
+    annualIncome: (
+      <div className="text-xs font-[500] text-gray-700">
+        {item?.annualIncome.toLocaleString()}
       </div>
     ),
-    dateCreated: (
-      <div className="text-xs font-[500] text-gray-700">Date created</div>
+    workStatus: (
+      <div className="text-xs font-[500] text-gray-700">{item?.workStatus}</div>
+    ),
+    investorStatus: (
+      <div className="text-xs font-[500] text-gray-700">
+        {item?.investorStatus || "status"}
+      </div>
     ),
   }));
 };
 
 export default function InvestorsRecords() {
+  const router = useRouter();
   const cards = [
     { title: "Number of investors", value: "12,820,382.36" },
     { title: "Current pending payments", value: "20" },
@@ -56,19 +74,18 @@ export default function InvestorsRecords() {
       <InvestmentsCards cards={cards} />
       <ReusableDataTable
         dataTransformer={customDataTransformer}
-        // onClickRow="/expenses/view-expense"
+        onClickRow="/investors/investor-profile/"
         headers={header}
         initialData={[]}
-        apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/product/all`}
-        // btnText={
-        //   <div className="flex gap-1 items-center p-1">
-        //     <AiOutlinePlus size={15} />
-        //     <p className="">create borrower</p>
-        //   </div>
-        // }
-        // btnTextClick={() => {
-        //   router.push("/create-borrower");
-        // }}
+        apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/investor/all`}
+        btnText={
+          <div className="flex gap-1 items-center p-1">
+            <p className="">create investor</p>
+          </div>
+        }
+        btnTextClick={() => {
+          router.push("/investors/create-investor");
+        }}
         filters={true}
         pagination={true}
       />

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react"
 
 export default function InvestmentsCards({ cards }) {
-    const cardClass = 'rounded-lg bg-swGrey50 w-full gap-6 p-4 border-solid border-1'
+    const cardClass = 'rounded-lg bg-swGrey10 w-full gap-6 p-4 border-solid border-2'
 
     return (
         <div className="flex justify-between mb-10 mt-16 px-10 gap-6">

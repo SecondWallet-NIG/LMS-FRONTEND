@@ -16,7 +16,6 @@ import Loader from "../components/shared/Loader";
 import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
 
 const header = [
-  
   { id: "asset", label: "Asset" },
   { id: "category", label: "Category" },
   { id: "description", label: "Description" },
@@ -147,16 +146,16 @@ const AssetManagement = () => {
       <DashboardLayout isBackNav={true} paths={["Asset Management"]}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
-            className={`py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
-              pageState === "asset" && "border-b-swBlue text-swBlue"
+            className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
+              pageState === "asset" && "border-b-swBlue text-swBlue font-semibold"
             }`}
             onClick={() => setPageState("asset")}
           >
             Asset
           </p>
           <p
-            className={`py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
-              pageState === "asset category" && "border-b-swBlue text-swBlue"
+            className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
+              pageState === "asset category" && "border-b-swBlue text-swBlue font-semibold"
             }`}
             onClick={() => setPageState("asset category")}
           >

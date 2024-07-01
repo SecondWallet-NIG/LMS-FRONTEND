@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
+import { useRouter } from "next/navigation";
 
 const header = [
   { id: "productName", label: "Product name" },
@@ -12,11 +13,12 @@ const header = [
 
 const customDataTransformer = (apiData) => {
   console.log({ apiData });
-  return apiData?.expenses?.map((item, i) => ({
+  return apiData?.investmentProducts?.map((item, i) => ({
     id: item?._id,
     productName: (
       <div className="text-md font-[500] text-gray-700">
         {/* {format(new Date(item?.date), "PPP")} */} Product name
+        {item?.name}
       </div>
     ),
     investorsUsingProduct: (
@@ -41,6 +43,7 @@ const customDataTransformer = (apiData) => {
 };
 
 export default function InvestmentProducts() {
+  const router = useRouter();
   return (
     <div>
       <ReusableDataTable
@@ -49,15 +52,14 @@ export default function InvestmentProducts() {
         headers={header}
         initialData={[]}
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/product/all`}
-        // btnText={
-        //   <div className="flex gap-1 items-center p-1">
-        //     <AiOutlinePlus size={15} />
-        //     <p className="">create borrower</p>
-        //   </div>
-        // }
-        // btnTextClick={() => {
-        //   router.push("/create-borrower");
-        // }}
+        btnText={
+          <div className="flex gap-1 items-center p-1">
+            <p className="">create investment product</p>
+          </div>
+        }
+        btnTextClick={() => {
+          router.push("investors/create-investment-product");
+        }}
         filters={true}
         pagination={true}
       />
