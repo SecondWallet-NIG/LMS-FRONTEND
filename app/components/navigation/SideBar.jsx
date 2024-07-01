@@ -493,6 +493,22 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
             <SidebarLink
               allowedRoleTags={[
+                // "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<FaRegStar size={20} />}
+              text="Investors"
+              link="/investors"
+              sideBarOpen={sideBarOpen}
+            />
+            <SidebarLink
+              allowedRoleTags={[
                 "LO",
                 "CFO",
                 "CEO",
@@ -992,6 +1008,22 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<LuArrowUpRight size={20} />}
               text="Expenses"
               link="/expenses"
+              sideBarOpen={sideBarOpen}
+            />
+            <SidebarLink
+              allowedRoleTags={[
+                // "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<FaRegStar size={20} />}
+              text="Investors"
+              link="/investors"
               sideBarOpen={sideBarOpen}
             />
             <SidebarLink

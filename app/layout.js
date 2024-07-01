@@ -21,7 +21,7 @@ const metadata = {
 
 export default function RootLayout({ children }) {
   const route = useRouter();
-
+ 
   const checkForInactivity = () => {
     const expireTime = localStorage.getItem("expireTime");
 
