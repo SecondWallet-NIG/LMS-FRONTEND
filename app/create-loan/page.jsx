@@ -45,6 +45,7 @@ const CreateLoan = () => {
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
   const [roleTag, setRoleTag] = useState("");
+  const [loanPackageInterestRate, setLoanPackageInterestRate] = useState({});
   const [fileError, setFileError] = useState({
     collaterals: "",
     applicationForm: "",
@@ -343,6 +344,40 @@ const CreateLoan = () => {
     }
   };
   const submitLoan = (e) => {
+    if (
+      formData.loanAmount < loanPackageInterestRate?.loanAmountRange?.min ||
+      formData.loanAmount > loanPackageInterestRate?.loanAmountRange?.max
+    ) {
+      if (formData.loanAmount < loanPackageInterestRate?.loanAmountRange?.min) {
+        toast.error(
+          `Loan amount cannot be less than ₦${loanPackageInterestRate?.loanAmountRange?.min.toLocaleString()}`
+        );
+      } else if (
+        formData.loanAmount > loanPackageInterestRate?.loanAmountRange?.max
+      ) {
+        toast.error(
+          `Loan amount cannot be more than ₦${loanPackageInterestRate?.loanAmountRange?.max.toLocaleString()}`
+        );
+      }
+      return;
+    }
+    if (
+      formData.interestRate < loanPackageInterestRate?.interestRate?.min ||
+      formData.interestRate > loanPackageInterestRate?.interestRate?.max
+    ) {
+      if (formData.interestRate < loanPackageInterestRate?.interestRate?.min) {
+        toast.error(
+          `Interest rate cannot be less than ${loanPackageInterestRate?.interestRate?.min}%`
+        );
+      } else if (
+        formData.interestRate > loanPackageInterestRate?.interestRate?.max
+      ) {
+        toast.error(
+          `Interest rate cannot be more than ${loanPackageInterestRate?.interestRate?.max}%`
+        );
+      }
+      return;
+    }
     localStorage.removeItem("borrower");
     let userId;
     if (typeof window !== "undefined") {
@@ -385,7 +420,7 @@ const CreateLoan = () => {
     payload.append("createdBy", userId?._id);
     payload.append("tag", userId?.role.tag);
 
-    console.log({...payload});
+    console.log({ ...payload });
 
     setLoading(true);
     e.preventDefault();
@@ -459,8 +494,7 @@ const CreateLoan = () => {
         savedAt: new Date(),
         id: 0,
       };
-      // console.log({ formData });
-      // console.log({ newFormData });
+
       loans.push(newFormData);
       localStorage.setItem("savedLoans", JSON.stringify(loans));
       toast.success("Your partly created loan has been successfully saved");
@@ -537,6 +571,16 @@ const CreateLoan = () => {
     );
   };
 
+  useEffect(() => {
+    const loanpackage = loanPackage?.data?.data.find(
+      (item) => item._id === formData.loanPackage
+    );
+    setLoanPackageInterestRate(loanpackage);
+  }, [formData.loanPackage]);
+  console.log({ loanPackageInterestRate });
+
+  // console.log("loanPackage", loanPackageInterestRate);
+  console.log("loanPackage", formData.loanAmount);
   return (
     <DashboardLayout>
       <ToastContainer />
@@ -602,39 +646,63 @@ const CreateLoan = () => {
                   setLoanPackageRate(selectedOption.interestRate);
                 }}
               />
-                 <InputField
-                disabled={formData.loanPackage === null ? true : false}
-                name="interestRate"
-                required={true}
-                //ariaLabel={"Number input"}
-                //onKeyPress={preventMinus}
-                onWheel={() => document.activeElement.blur()}
-                activeBorderColor="border-swBlue"
-                endIcon={<p className="text-swGray">NGN &#8358;</p>}
-                label="Interest Rate"
-                value={formData?.interestRate}
-                placeholder="Enter interest rate"
-                isActive="loan-amount"
-                onChange={(e) => {
-                  setInputState(e);
-                  if (formData.commitmentValue > 0) {
-                    updateCommitmentTotal(e);
-                  }
-                  if (
-                    formData.loanPackage &&
-                    formData.loanDuration &&
-                    formData.repaymentType
-                  ) {
-                    calculateInterest(
-                      e.target.value,
-                      formData.loanPackage,
-                      formData.loanDuration,
+              <div>
+                <InputField
+                  disabled={formData.loanPackage === null ? true : false}
+                  name="interestRate"
+                  required={true}
+                  //ariaLabel={"Number input"}
+                  //onKeyPress={preventMinus}
+                  onWheel={() => document.activeElement.blur()}
+                  activeBorderColor="border-swBlue"
+                  endIcon={<p className="text-swGray">%</p>}
+                  label="Interest Rate"
+                  value={formData?.interestRate}
+                  placeholder={`Enter interest rate`}
+                  isActive="loan-amount"
+                  onChange={(e) => {
+                    setInputState(e);
+
+                    if (formData.commitmentValue > 0) {
+                      updateCommitmentTotal(e);
+                    }
+                    if (
+                      formData.loanPackage &&
+                      formData.loanDuration &&
                       formData.repaymentType
-                    );
-                  }
-                }}
-                inputOpen={isInputOpen}
-              />
+                    ) {
+                      calculateInterest(
+                        e.target.value,
+                        formData.loanPackage,
+                        formData.loanDuration,
+                        formData.repaymentType
+                      );
+                    }
+                  }}
+                  inputOpen={isInputOpen}
+                />
+                <p
+                  className={`${
+                    (formData?.interestRate <
+                      loanPackageInterestRate?.interestRate?.min ||
+                      formData?.interestRate >
+                        loanPackageInterestRate?.interestRate?.max) &&
+                    "text-red-500"
+                  }`}
+                >
+                  {formData?.interestRate <
+                  loanPackageInterestRate?.interestRate?.min
+                    ? `Interest rate cannot be less than ${loanPackageInterestRate?.interestRate?.min}%`
+                    : formData?.interestRate >
+                      loanPackageInterestRate?.interestRate?.max
+                    ? `Interest rate cannot be more than ${loanPackageInterestRate?.interestRate?.min}%`
+                    : `min = ${
+                        loanPackageInterestRate?.interestRate?.min || 0
+                      }% and max = ${
+                        loanPackageInterestRate?.interestRate?.max || 0
+                      }%`}
+                </p>
+              </div>
               {formData.loanPackage === "65390f290d0a83675c9517b3" ? (
                 <SelectField
                   value={assetTypeData?.find(
@@ -652,39 +720,64 @@ const CreateLoan = () => {
                   }
                 />
               ) : null}
-              <InputField
-                disabled={formData.loanPackage === null ? true : false}
-                name="loanAmount"
-                required={true}
-                ariaLabel={"Number input"}
-                onKeyPress={preventMinus}
-                onWheel={() => document.activeElement.blur()}
-                activeBorderColor="border-swBlue"
-                endIcon={<p className="text-swGray">NGN &#8358;</p>}
-                label="Loan amount (Principal)"
-                value={formData?.loanAmount?.toLocaleString()}
-                placeholder="Enter loan amount"
-                isActive="loan-amount"
-                onChange={(e) => {
-                  setInputState(e);
-                  if (formData.commitmentValue > 0) {
-                    updateCommitmentTotal(e);
-                  }
-                  if (
-                    formData.loanPackage &&
-                    formData.loanDuration &&
-                    formData.repaymentType
-                  ) {
-                    calculateInterest(
-                      e.target.value,
-                      formData.loanPackage,
-                      formData.loanDuration,
+              <div>
+                <InputField
+                  disabled={formData.loanPackage === null ? true : false}
+                  name="loanAmount"
+                  required={true}
+                  ariaLabel={"Number input"}
+                  onKeyPress={preventMinus}
+                  onWheel={() => document.activeElement.blur()}
+                  activeBorderColor="border-swBlue"
+                  endIcon={<p className="text-swGray">NGN &#8358;</p>}
+                  label="Loan amount (Principal)"
+                  value={formData?.loanAmount?.toLocaleString()}
+                  placeholder="Enter loan amount"
+                  isActive="loan-amount"
+                  onChange={(e) => {
+                    setInputState(e);
+                    if (formData.commitmentValue > 0) {
+                      updateCommitmentTotal(e);
+                    }
+                    if (
+                      formData.loanPackage &&
+                      formData.loanDuration &&
                       formData.repaymentType
-                    );
-                  }
-                }}
-                inputOpen={isInputOpen}
-              />
+                    ) {
+                      calculateInterest(
+                        e.target.value,
+                        formData.loanPackage,
+                        formData.loanDuration,
+                        formData.repaymentType
+                      );
+                    }
+                  }}
+                  inputOpen={isInputOpen}
+                />
+                <p
+                  className={`${
+                    (formData?.loanAmount <
+                      loanPackageInterestRate?.loanAmountRange?.min ||
+                      formData?.loanAmount >
+                        loanPackageInterestRate?.loanAmountRange?.max) &&
+                    "text-red-500"
+                  }`}
+                >
+                  {formData?.loanAmount <
+                  loanPackageInterestRate?.loanAmountRange?.min
+                    ? `Interest rate cannot be less than ₦${loanPackageInterestRate?.loanAmountRange?.min.toLocaleString()}`
+                    : formData?.loanAmount >
+                      loanPackageInterestRate?.loanAmountRange?.max
+                    ? `Interest rate cannot be more than ₦${loanPackageInterestRate?.loanAmountRange?.max.toLocaleString()}`
+                    : `min = ₦${
+                        loanPackageInterestRate?.loanAmountRange?.min.toLocaleString() ||
+                        0
+                      } and max = ₦${
+                        loanPackageInterestRate?.loanAmountRange?.max.toLocaleString() ||
+                        0
+                      }`}
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row gap-2 items-end">
                 <div className="w-full sm:w-1/3">
                   <SelectField

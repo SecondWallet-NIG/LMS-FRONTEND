@@ -102,9 +102,7 @@ const CreateCustomer = () => {
             accountName: response.data.account_name,
           }));
           setBankNameVal(response.data.account_name);
-        } catch (error) {
-     
-        }
+        } catch (error) {}
       }
     }
   };
@@ -149,8 +147,6 @@ const CreateCustomer = () => {
       setSelectedFiles(files);
     }
   };
-
-  
 
   const handleFileDelete = (index) => {
     selectedFiles.splice(index, 1);
@@ -267,7 +263,7 @@ const CreateCustomer = () => {
         setProfileImg(null);
       })
       .catch((error) => {
-        console.log({error});
+        console.log({ error });
         toast.error(error?.message);
       });
   };
@@ -289,8 +285,6 @@ const CreateCustomer = () => {
       console.error("Invalid file type selected.");
     }
   }, [formData?.profilePicture]);
-
-
 
   const handleBulkCustomerSubmit = (e) => {
     const payload = new FormData();
