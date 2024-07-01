@@ -26,6 +26,8 @@ module.exports = {
         swBrown: "#545454",
         swDarkBlue: "#153A62",
         swGreen: "#17B26A",
+        swGreen200: "#94DCBA",
+        swGreen700: "#107E4B",
         swDarkGreen: "#0D623A",
         swIndicatorYellow: "#F9C00F",
         swIndicatorPink: "#FF00AE",
