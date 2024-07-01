@@ -42,6 +42,7 @@ module.exports = {
         swLightPinkIndcatorBg: "#FFF0FA",
         swLightGreenIndcatorBg: "#F1FDF8",
         swLightPurpleIndcatorBg: "#FBF0FF",
+        swGold: "#B1880B",
       },
     },
   },

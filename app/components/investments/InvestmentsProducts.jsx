@@ -13,11 +13,12 @@ const header = [
 
 const customDataTransformer = (apiData) => {
   console.log({ apiData });
-  return apiData?.expenses?.map((item, i) => ({
+  return apiData?.investmentProducts?.map((item, i) => ({
     id: item?._id,
     productName: (
       <div className="text-md font-[500] text-gray-700">
         {/* {format(new Date(item?.date), "PPP")} */} Product name
+        {item?.name}
       </div>
     ),
     investorsUsingProduct: (

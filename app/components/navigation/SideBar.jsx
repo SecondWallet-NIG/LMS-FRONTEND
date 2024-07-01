@@ -491,6 +491,60 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               link="/expenses"
               sideBarOpen={sideBarOpen}
             />
+            {/* <SidebarLink
+              allowedRoleTags={[
+                // "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<FaRegStar size={20} />}
+              text="Investors"
+              link="/investors"
+              sideBarOpen={sideBarOpen}
+            /> */}
+            <SidebarLink
+              allowedRoleTags={[
+                "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "ICO",
+                "COF",
+                "LR0",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={
+                <FiUser
+                  className={`${activeLink === "investors" && "text-swBlue"}`}
+                  size={20}
+                />
+              }
+              pathname={pathname}
+              text="Investment Dashboard"
+              link="/investors"
+              // hasDropdown={true}
+              sideBarOpen={sideBarOpen}
+              onClick={() => {
+                setActiveLink("");
+              }}
+              hasDropdown={true}
+              dropdownContent={
+                <Link
+                  href={`/investors`}
+                  className="ml-5 text-sm hover:text-swBlue"
+                >
+                  Investment
+                </Link>
+              }
+            />
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -956,6 +1010,22 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               link="/expenses"
               sideBarOpen={sideBarOpen}
             />
+            {/* <SidebarLink
+              allowedRoleTags={[
+                // "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<FaRegStar size={20} />}
+              text="Investors"
+              link="/investors"
+              sideBarOpen={sideBarOpen}
+            /> */}
             <SidebarLink
               allowedRoleTags={[
                 "LO",

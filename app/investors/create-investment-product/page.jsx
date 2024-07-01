@@ -4,18 +4,114 @@ import InputField from "../../components/shared/input/InputField";
 import { AiOutlinePercentage, AiOutlineMinus } from "react-icons/ai";
 import SelectField from "../../components/shared/input/SelectField";
 import Button from "../../components/shared/buttonComponent/Button";
+import { useState } from "react";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
+import { createInvestmentProduct } from "@/redux/slices/investmentSlice";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const CreateInvestmentProduct = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    minInterestRange: "",
+    maxInterestRange: "",
+    interestMethod: "",
+    minimumInvestmentAmount: "",
+  });
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      minInterestRange: "",
+      maxInterestRange: "",
+      interestMethod: "",
+      minimumInvestmentAmount: "",
+    });
+  };
   const investOptions = [
-    { value: "", label: "Last investor account balance" },
-    { value: "", label: "Pro-Rata basis" },
+    {
+      value: "LIAB",
+      label: "Last investor account balance",
+    },
+    { value: "PRB", label: "Pro-Rata basis" },
   ];
+
+  const handleInputChange = async (e) => {
+    const { name, value } = e.target;
+    if (name === "minimumInvestmentAmount") {
+      // Remove all non-numeric characters except for a dot
+      const numericValue = value.replace(/[^0-9.]/g, "");
+
+      // Format the value with commas
+      const formattedValue = Number(numericValue).toLocaleString();
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: formattedValue,
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const preventMinus = (e) => {
+    if (/[^0-9,]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    let payload = {
+      name: formData.name,
+      interestRateRange: {
+        min: Number(formData.minInterestRange),
+        max: Number(formData.maxInterestRange),
+      },
+      interestMethod: formData.interestMethod,
+      minimumInvestmentAmount: Number(
+        removeCommasFromNumber(formData.minimumInvestmentAmount)
+      ),
+    };
+
+    dispatch(createInvestmentProduct(payload))
+      .unwrap()
+      .then((response) => {
+        toast.success(response?.message);
+        console.log(response);
+        resetForm();
+        router.push("/investors");
+        // setNewUserId(response?.data?._id);
+      })
+      .catch((error) => {
+        console.log({ error });
+        toast.error(error?.message);
+        setLoading(false);
+      });
+  };
+
+  const removeCommasFromNumber = (numberString) => {
+    if (typeof numberString !== "string") {
+      // Convert to string or handle the case appropriately
+      numberString = String(numberString);
+    }
+    return numberString.replace(/,/g, "");
+  };
+
+  console.log({ formData });
 
   return (
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "Create investment product"]}
     >
+      <ToastContainer />
       <div className="mx-auto w-3/5">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create investment product
@@ -23,10 +119,12 @@ const CreateInvestmentProduct = () => {
         <div>
           <div className="mt-5">
             <InputField
-              name={"productName"}
+              name={"name"}
               label={"Product Name"}
               placeholder={"Enter product name"}
               required={true}
+              value={formData.name}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -34,12 +132,16 @@ const CreateInvestmentProduct = () => {
           <div className="my-10 flex justify-between gap-4">
             <div className="w-full">
               <InputField
-                css={""}
-                name={"minRate"}
-                label={"Interest rate range"}
-                placeholder={"Minimum rate"}
                 required={true}
-                endIcon={<AiOutlinePercentage />}
+                name="minInterestRange"
+                inputType="number"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
+                label={"Interest rate range"}
+                value={formData.minInterestRange}
+                placeholder={"Minimum rate"}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-10">
@@ -47,10 +149,15 @@ const CreateInvestmentProduct = () => {
             </div>
             <div className="w-full mt-7">
               <InputField
-                name={"maxRate"}
-                placeholder={"Maximum rate"}
                 required={true}
-                endIcon={<AiOutlinePercentage />}
+                name="maxInterestRange"
+                inputType="number"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
+                value={formData.maxInterestRange}
+                placeholder={"Maximum rate"}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -58,11 +165,17 @@ const CreateInvestmentProduct = () => {
           {/* Invest method */}
           <div>
             <SelectField
-              name={"investMethod"}
+              name={"interestMethod"}
               label={"Interest method"}
               required={true}
               placeholder={"Select method"}
               optionValue={investOptions}
+              value={investOptions.find(
+                (e) => e.value === formData.interestMethod
+              )}
+              onChange={(e) =>
+                setFormData({ ...formData, interestMethod: e.value })
+              }
             />
             <div className="mt-2 text-sm leading-5">
               <p className="font-normal">
@@ -80,31 +193,45 @@ const CreateInvestmentProduct = () => {
           <div className="my-10 flex justify-between gap-4">
             <div className="w-full">
               <InputField
-                css={""}
-                name={"minAmount"}
-                label={"Investment amount range"}
-                placeholder={"Minimum amount"}
                 required={true}
+                name={"minimumInvestmentAmount"}
+                label={"Investment amount range"}
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
                 endIcon={"NGN"}
+                value={formData.minimumInvestmentAmount}
+                placeholder={"Minimum amount"}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-10">
               <AiOutlineMinus className="text-swGray" size={20} />
             </div>
-            <div className="w-full mt-7">
+            <div className="w-full">
               <InputField
-                name={"maxAmount"}
-                placeholder={"Maximum amount"}
                 required={true}
+                name={"minimumInvestmentAmount"}
+                label={"Investment amount range"}
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
                 endIcon={"NGN"}
+                // value={formData.maxInterestRange}
+                placeholder={"Minimum amount"}
+                // onChange={handleInputChange}
               />
             </div>
           </div>
 
-          <div className="text-center my-40">
-            <Button className="text-white font-base leading-6 font-semibold rounded-md px-2 gap-2">
-              Create investment product
-            </Button>
+          <div className="flex justify-center my-20">
+            <EditableButton
+              disabled={loading}
+              blueBtn={true}
+              onClick={handleSubmit}
+              className="rounded-md"
+              label={"Create investment product"}
+            />
           </div>
         </div>
       </div>

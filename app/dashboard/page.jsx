@@ -93,7 +93,7 @@ const DashboardPage = () => {
     labels,
     datasets: [
       {
-        label: "Loans",
+        label: "Disbursed Loans",
         data: dataValues,
         backgroundColor: "#4aba5b",
         barThickness: 10,
@@ -366,7 +366,7 @@ const DashboardPage = () => {
 
           <section className="mt-10">
             <div className="flex justify-between">
-              <p className="text-xl font-semibold">Charts</p>
+              <p className="text-xl font-semibold text-swBlue">Analytics</p>
               <div className="flex gap-3 items-center">
                 Select Timeframe
                 <div className="flex items-center gap-2 border rounded-lg text-sm font-semibold py-2 px-4">
@@ -377,21 +377,24 @@ const DashboardPage = () => {
             </div>
           </section>
           <div className="flex flex-col sm:flex-row">
-            <div className="w-full sm:w-1/2">
+            {/* <div className="w-full sm:w-1/2">
+              <BarChart options={options} data={dataDisbursements} />
+            </div> */}
+          
+
+            <div className="w-full">
               <BarChart options={options} data={dataLoans} />
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row">
+          <div className="w-full sm:w-1/2">
+              <BarChart options={options} data={dataRepayments} />
             </div>
             <div className="w-full sm:w-1/2">
               <BarChart options={_options} data={dataFees} />
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row">
-            <div className="w-full sm:w-1/2">
-              <BarChart options={options} data={dataDisbursements} />
-            </div>
-            <div className="w-full sm:w-1/2">
-              <BarChart options={options} data={dataRepayments} />
-            </div>
-          </div>
+ 
         </main>
       )}
     </DashboardLayout>
