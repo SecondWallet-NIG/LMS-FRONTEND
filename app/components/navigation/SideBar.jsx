@@ -499,6 +499,44 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
+                "LR0",
+                "CT0",
+                "Dir",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={
+                <FiUser
+                  className={`${activeLink === "investors" && "text-swBlue"}`}
+                  size={20}
+                />
+              }
+              pathname={pathname}
+              text="Investment Dashboard"
+              link="/investors"
+              // hasDropdown={true}
+              sideBarOpen={sideBarOpen}
+              onClick={() => {
+                setActiveLink("");
+              }}
+              hasDropdown={true}
+              dropdownContent={
+                <Link
+                  href={`/investors`}
+                  className="ml-5 text-sm hover:text-swBlue"
+                >
+                  Investment
+                </Link>
+              }
+            />
+            <SidebarLink
+              allowedRoleTags={[
+                "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "ICO",
+                "COF",
                 "CT0",
                 "LR0",
                 "Dir",
