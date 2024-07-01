@@ -491,7 +491,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               link="/expenses"
               sideBarOpen={sideBarOpen}
             />
-            <SidebarLink
+            {/* <SidebarLink
               allowedRoleTags={[
                 // "LO",
                 "CFO",
@@ -506,7 +506,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Investors"
               link="/investors"
               sideBarOpen={sideBarOpen}
-            />
+            /> */}
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -1010,7 +1010,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               link="/expenses"
               sideBarOpen={sideBarOpen}
             />
-            <SidebarLink
+            {/* <SidebarLink
               allowedRoleTags={[
                 // "LO",
                 "CFO",
@@ -1025,7 +1025,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Investors"
               link="/investors"
               sideBarOpen={sideBarOpen}
-            />
+            /> */}
             <SidebarLink
               allowedRoleTags={[
                 "LO",
