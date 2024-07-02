@@ -13,6 +13,7 @@ module.exports = {
       colors: {
         swGray: "#737373",
         swGrey10: "#FAFAFA",
+        swGrey25: "#F4F4F4",
         swGrey50: "#EAEAEA",
         swGrey200: "#9F9F9F",
         swGrey500: "#2E2E2E",
@@ -30,6 +31,7 @@ module.exports = {
         swGreen700: "#107E4B",
         swDarkGreen: "#0D623A",
         swIndicatorYellow: "#F9C00F",
+        swYellow600: "#E3AF0E",
         swIndicatorPink: "#FF00AE",
         swTextColor: "#545454",
         swBlack: "#333333",
