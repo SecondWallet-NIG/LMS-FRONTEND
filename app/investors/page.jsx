@@ -55,7 +55,6 @@ const Investors = () => {
           {selectedNav === 'inRec' && <InvestmentsRecords />}
         </div>
       </div>
-
     </DashboardLayout>
   );
 };
