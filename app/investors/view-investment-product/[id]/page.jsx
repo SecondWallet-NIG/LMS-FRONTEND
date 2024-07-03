@@ -62,24 +62,34 @@ export default function ViewInvestmentProducts() {
             <p>{data?.data?.name}</p>
           </div>
           <div className="flex">
+            <p className="min-w-[15rem] font-medium">Product Timeframe</p>
+            <p>Daily</p>
+          </div>
+          <div className="flex">
             <p className="min-w-[15rem] font-medium">Minimum interest rate</p>
-            <p>{data?.data?.interestRateRange?.min}% per annum</p>
+            <p>{data?.data?.interestRateRanges?.daily?.min}% per day</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem] font-medium">Maximum interest rate</p>
-            <p>{data?.data?.interestRateRange?.max}% per annum</p>
+            <p>{data?.data?.interestRateRanges?.daily?.max}% per day</p>
           </div>
-          <div className="flex">
+          {/* <div className="flex">
             <p className="min-w-[15rem] font-medium">Interest method</p>
             <p>{data?.data?.interestMethod?.name}</p>
-          </div>
+          </div> */}
           <div className="flex">
-            <p className="min-w-[15rem] font-medium">Minimum interest amount</p>
-            <p>{data?.data?.minimumInvestmentAmount?.toLocaleString()}</p>
+            <p className="min-w-[15rem] font-medium">
+              Minimum investment amount
+            </p>
+            <p>
+              {data?.data?.investmentAmountRange?.daily?.min?.toLocaleString()}
+            </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem] font-medium">Maximum interest amount</p>
-            <p>{data?.data?.maximumInvestmentAmount?.toLocaleString()}</p>
+            <p>
+              {data?.data?.investmentAmountRange?.daily?.min?.toLocaleString()}
+            </p>
           </div>
         </div>
       </div>
