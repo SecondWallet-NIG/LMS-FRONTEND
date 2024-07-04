@@ -528,22 +528,13 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 />
               }
               pathname={pathname}
-              text="Investment Dashboard"
+              text="Investment"
               link="/investors"
               // hasDropdown={true}
               sideBarOpen={sideBarOpen}
               onClick={() => {
                 setActiveLink("");
               }}
-              hasDropdown={true}
-              dropdownContent={
-                <Link
-                  href={`/investors`}
-                  className="ml-5 text-sm hover:text-swBlue"
-                >
-                  Investment
-                </Link>
-              }
             />
             <SidebarLink
               allowedRoleTags={[
