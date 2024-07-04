@@ -55,22 +55,22 @@ const EditPlansAndPackages = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
 
-    const ariaLabel = e.target.getAttribute("aria-label");
+    // const ariaLabel = e.target.getAttribute("aria-label");
 
-    if (ariaLabel === "Number input") {
-      const num = Number(value.replace(/\D/g, ""));
-      setEditPlan((prevFormData) => ({
-        ...prevFormData,
-        [name]: num,
-        createdBy: user?.data?.user?._id,
-      }));
-    } else {
-      setEditPlan((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-        createdBy: user?.data?.user?._id,
-      }));
-    }
+    // if (ariaLabel === "Number input") {
+    //   const num = Number(value.replace(/\D/g, ""));
+    //   setEditPlan((prevFormData) => ({
+    //     ...prevFormData,
+    //     [name]: num,
+    //     createdBy: user?.data?.user?._id,
+    //   }));
+    // } else {
+    setEditPlan((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+      createdBy: user?.data?.user?._id,
+    }));
+    // }
   };
 
   const resetForm = () => {
@@ -110,6 +110,7 @@ const EditPlansAndPackages = () => {
         resetForm();
         setLoading(false);
         console.log({ response });
+        dispatch(getSingleLoanPackage(plan_id));
       })
       .catch((error) => {
         toast.error(error?.message);
@@ -310,7 +311,7 @@ const EditPlansAndPackages = () => {
               <InputField
                 placeholder={"Maximum amount"}
                 onKeyPress={preventMinus}
-                ariaLabel={"Number input"}
+                // ariaLabel={"Number input"}
                 onWheel={() => document.activeElement.blur()}
                 endIcon={<MdPercent size={20} className="text-swGray" />}
                 name={"maxRate"}
@@ -326,7 +327,7 @@ const EditPlansAndPackages = () => {
                 label={"Loan amount range"}
                 required={true}
                 placeholder={"Minimum amount - 5000"}
-                ariaLabel={"Number input"}
+                // ariaLabel={"Number input"}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
@@ -339,7 +340,7 @@ const EditPlansAndPackages = () => {
             <div className="w-full">
               <InputField
                 placeholder={"Maximum amount - 50000"}
-                ariaLabel={"Number input"}
+                // ariaLabel={"Number input"}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
                 endIcon={<TbCurrencyNaira size={20} className="text-swGray" />}
