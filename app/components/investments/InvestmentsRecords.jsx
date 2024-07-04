@@ -56,7 +56,7 @@ export default function InvestmentsRecords() {
       <InvestmentsCards cards={cards} />
       <ReusableDataTable
         dataTransformer={customDataTransformer}
-        // onClickRow="/expenses/view-expense"
+        onClickRow="/investors/view-investment-product"
         headers={header}
         initialData={[]}
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/product/all`}

@@ -25,6 +25,7 @@ import Image from "next/image";
 import { Rings } from "react-loader-spinner";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Unauthorized from "../unauthorized/page";
+import Loader from "../components/shared/Loader";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const CreateLoan = () => {
   const [loanPackageText, setLoanPackageText] = useState(null);
   const [loanPackageRate, setLoanPackageRate] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
   const [roleTag, setRoleTag] = useState("");
@@ -74,9 +75,9 @@ const CreateLoan = () => {
     guarantorForm: null,
     loanAffidavit: null,
     offerLetter: null || "null",
-    // Account statement
-    // Power of attorney
-    // Transfer of ownership
+    proofOfOwnership: null || "null",
+    powerOfAttorney: null || "null",
+    statementOfAccounts: null || "null",
     customerId: "",
   });
 
@@ -413,9 +414,11 @@ const CreateLoan = () => {
     payload.append("guarantorForm", formData.guarantorForm);
     payload.append("loanAffidavit", formData.loanAffidavit);
     payload.append("offerLetter", formData.offerLetter);
-    // Account statement
-    // Power of attorney
-    // Transfer of ownership
+
+    payload.append("statementOfAccounts", formData.statementOfAccounts); // Account statement
+    payload.append("powerOfAttorney", formData.powerOfAttorney); // Power of attorney
+    payload.append("proofOfOwnership", formData.proofOfOwnership); // Proof of ownership
+
     payload.append("customerId", selectedCustomer?._id);
     payload.append("createdBy", userId?._id);
     payload.append("tag", userId?.role.tag);
@@ -440,6 +443,7 @@ const CreateLoan = () => {
     dispatch(getCustomers());
     dispatch(getLoanPackage());
     dispatch(getInterestType());
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -459,10 +463,6 @@ const CreateLoan = () => {
       setRoleTag(storedUser?.data?.user?.role.tag);
     }
   }, []);
-
-  if (roleTag && roleTag !== "LO") {
-    return <Unauthorized />;
-  }
 
   const savedLoans = () => {
     const savedLoans = localStorage.getItem("savedLoans");
@@ -581,10 +581,13 @@ const CreateLoan = () => {
 
   // console.log("loanPackage", loanPackageInterestRate);
   console.log("loanPackage", formData.loanAmount);
+
+  if (roleTag && roleTag !== "LO") {
+    return <Unauthorized />;
+  }
   return (
     <DashboardLayout>
       <ToastContainer />
-
       {currentStep === 1 ? (
         <main className="flex text-sm">
           <div className="w-full md:w-2/3 pl-5 pr-5 pt-10 ">
@@ -974,9 +977,12 @@ const CreateLoan = () => {
                 "loanAffidavit"
               )}
               {renderFileInput("Upload Guarantor Form", "guarantorForm")}
-              {/* {renderFileInput("Upload Account Statement", "accountStatement")} */}
-              {/* {renderFileInput("Upload Power of Attorney", "powerOfAttorney")} */}
-              {/* {renderFileInput("Transfer of Ownership", "transferOfOwnership")} */}
+              {renderFileInput(
+                "Upload Account Statement",
+                "statementOfAccounts"
+              )}
+              {renderFileInput("Proof of Ownership", "proofOfOwnership")}
+              {renderFileInput("Power of Attorney", "powerOfAttorney")}
             </div>
 
             <div className="flex items-center gap-5 my-5 md:hidden">
@@ -1574,6 +1580,7 @@ const CreateLoan = () => {
             ))}
         </div>
       </CenterModal>
+      <Loader isOpen={isLoading} />
     </DashboardLayout>
   );
 };

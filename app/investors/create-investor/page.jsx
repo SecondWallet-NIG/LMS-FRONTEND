@@ -175,9 +175,9 @@ const CreateInvestor = () => {
   };
 
   const workStatusOpt = [
-    { label: "Self employed", value: "selfEmployed" },
-    { label: "Government employee", value: "governmentEmployee" },
-    { label: "Pensioneer", value: "pensioneer" },
+    { label: "Self employed", value: "Self employed" },
+    { label: "Government employee", value: "Government employee" },
+    { label: "Pensioner", value: "Pensioner" },
   ];
 
   const verifyBankDetails = async (accountNumber, bankCode) => {
@@ -274,7 +274,7 @@ const CreateInvestor = () => {
     payload.append("bvn", formData.bvn);
     payload.append("country", formData.country);
     payload.append("state", formData.state);
-    payload.append("lga", formData.lga);
+    payload.append("city", formData.lga);
     payload.append("address[houseNumber]", formData.houseNumber);
     payload.append("address[houseLocation]", formData.houseLocation);
     payload.append("phoneNumber", formData.phoneNumber);
@@ -289,7 +289,9 @@ const CreateInvestor = () => {
     payload.append("taxDoc", formData.taxDoc);
     payload.append("bvnDoc", formData.bvnDoc);
     payload.append("ninDoc", formData.ninDoc);
-    payload.append("createdBy", userId?.data?.user?._id);
+    //payload.append("createdBy", userId?.data?.user?._id);
+
+    console.log(...payload);
     dispatch(createInvestor(payload))
       .unwrap()
       .then((response) => {

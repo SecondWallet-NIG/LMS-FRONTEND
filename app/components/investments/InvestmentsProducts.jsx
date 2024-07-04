@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 
 const header = [
   { id: "productName", label: "Product name" },
@@ -37,7 +38,9 @@ const customDataTransformer = (apiData) => {
       </div>
     ),
     dateCreated: (
-      <div className="text-xs font-[500] text-gray-700">Date created</div>
+      <div className="text-xs font-[500] text-gray-700">
+        {format(new Date(item?.createdAt), "PPP")}
+      </div>
     ),
   }));
 };
@@ -48,7 +51,7 @@ export default function InvestmentProducts() {
     <div>
       <ReusableDataTable
         dataTransformer={customDataTransformer}
-        // onClickRow="/expenses/view-expense"
+        onClickRow="/investors/view-investment-product/"
         headers={header}
         initialData={[]}
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/product/all`}

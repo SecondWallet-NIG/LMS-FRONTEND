@@ -121,7 +121,7 @@ const CreateInvestment = () => {
                 </div>
 
                 <div className="flex justify-center gap-2">
-                    <Button className="rounded-md text-swBlue500 bg-white px-5  border-2 border-sky-200">
+                    <Button className="rounded-md text-swBlue500 bg-white px-5 border border-sky-200">
                         Preview ROI
                     </Button>
 
@@ -130,7 +130,6 @@ const CreateInvestment = () => {
                     </Button>
                 </div>
             </div>
-
         </DashboardLayout>
     );
 };
