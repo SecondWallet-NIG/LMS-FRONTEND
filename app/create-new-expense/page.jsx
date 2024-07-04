@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import {
+  createBulkExpenses,
   createExpense,
   getAllExpenseCategories,
 } from "@/redux/slices/expenseManagementSlice";
@@ -23,6 +24,7 @@ const CreateNewExpense = () => {
   const [expenseUploadType, setExpenseUploadType] = useState("Single expense");
   const [userId, setUserId] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [fileError, setFileError] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const [formData, setFormData] = useState({
@@ -91,20 +93,24 @@ const CreateNewExpense = () => {
   };
 
   const hundleBulkExpenseSubmit = (e) => {
+    setLoading(true);
     const payload = new FormData();
     payload.append("bulkExpenseCsv", selectedFiles[0]);
     payload.append("createdBy", userId?.data?.user?._id);
     e.preventDefault();
-    // dispatch(createBulkCustomer(payload))
-    //   .unwrap()
-    //   .then((response) => {
-    //     toast.success(
-    //       "Upload in progress, you will be notified when this is complete"
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     toast.error(`An error occured`);
-    //   });
+    dispatch(createBulkExpenses(payload))
+      .unwrap()
+      .then((response) => {
+        toast.success(
+          "Upload in progress, you will be notified when this is complete"
+        );
+        setSelectedFiles([]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(`An error occured`);
+        setLoading(false);
+      });
   };
 
   const handleFileDelete = (index) => {
@@ -377,8 +383,8 @@ const CreateNewExpense = () => {
             <div className="flex justify-center mt-5">
               <EditableButton
                 onClick={hundleBulkExpenseSubmit}
-                disabled={selectedFiles.length > 0 ? false : true}
-                label={"Create borrower profiles"}
+                disabled={selectedFiles.length > 0 ? false : true || loading}
+                label={"Create bulk expenses"}
                 blueBtn={true}
               />
             </div>

@@ -25,6 +25,28 @@ export const createExpense = createAsyncThunk(
   }
 );
 
+export const createBulkExpenses = createAsyncThunk(
+  "expense/bulk/create",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/expense/bulkUpload`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getAllExpenses = createAsyncThunk("expense", async () => {
   const response = await axios.get(`${API_URL}/expense`, {
     headers: {
