@@ -8,7 +8,7 @@ import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { useParams } from "next/navigation";
 import { getAllExpenseCategories } from "@/redux/slices/expenseManagementSlice";
 
-const DeleteAssetCategoryModal = ({ open, onClose }) => {
+const DeleteAssetCategoryModal = ({ open, onClose, type }) => {
   const dispatch = useDispatch();
   const [assetTypeOptions, setAssetTypeOptions] = useState([]);
   const [formData, setFormData] = useState({ category: "" });
