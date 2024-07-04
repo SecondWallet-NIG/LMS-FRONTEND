@@ -123,6 +123,28 @@ export const createNewAsset = createAsyncThunk(
   }
 );
 
+export const createBulkAssets = createAsyncThunk(
+  "/asset/bulk/create",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/asset/bulkUpload`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const assetManagementSlice = createSlice({
   name: "asset",
   initialState: {

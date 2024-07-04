@@ -9,6 +9,7 @@ import { DayPicker } from "react-day-picker";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import {
+  createBulkAssets,
   createNewAsset,
   getAllAssetCategories,
 } from "@/redux/slices/assetManagementSlice";
@@ -21,6 +22,8 @@ const CreateNewAsset = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [userId, setUserId] = useState("");
+  const [fileError, setFileError] = useState("");
   const [assetUploadType, setAssetUploadType] = useState("Single asset");
   const [openDate, setOpenDate] = useState(false);
   const [assetTypeOptions, setAssetTypeOptions] = useState([]);
@@ -98,20 +101,24 @@ const CreateNewAsset = () => {
   };
 
   const hundleBulkAssetSubmit = (e) => {
+    setLoading(true);
     const payload = new FormData();
-    payload.append("bulkExpenseCsv", selectedFiles[0]);
+    payload.append("bulkAssetCsv", selectedFiles[0]);
     payload.append("createdBy", userId?.data?.user?._id);
     e.preventDefault();
-    // dispatch(createBulkCustomer(payload))
-    //   .unwrap()
-    //   .then((response) => {
-    //     toast.success(
-    //       "Upload in progress, you will be notified when this is complete"
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     toast.error(`An error occured`);
-    //   });
+    dispatch(createBulkAssets(payload))
+      .unwrap()
+      .then((response) => {
+        toast.success(
+          "Upload in progress, you will be notified when this is complete"
+        );
+        setSelectedFiles([]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(`An error occured`);
+        setLoading(false);
+      });
   };
 
   const handleFileDelete = (index) => {
@@ -161,6 +168,11 @@ const CreateNewAsset = () => {
       .unwrap()
       .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
+  }, []);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUserId(user);
   }, []);
   console.log({ formData });
   return (
@@ -370,8 +382,8 @@ const CreateNewAsset = () => {
             <div className="flex justify-center mt-5">
               <EditableButton
                 onClick={hundleBulkAssetSubmit}
-                disabled={selectedFiles.length > 0 ? false : true}
-                label={"Create borrower profiles"}
+                disabled={selectedFiles.length > 0 ? false : true || loading}
+                label={"Create bulk assets"}
                 blueBtn={true}
               />
             </div>
