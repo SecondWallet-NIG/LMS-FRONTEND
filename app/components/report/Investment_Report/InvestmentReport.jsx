@@ -6,12 +6,13 @@ import { PiCalendarBlankLight } from "react-icons/pi";
 import CenterModal from "../../modals/CenterModal";
 import { DateRange } from "react-date-range";
 import Button from "../../shared/buttonComponent/Button";
-import ExpenseReportCards from "./ExpenseReportsCards";
-import ExpenseReportTable from "./ExpenseReportTable";
 import { useSelector } from "react-redux";
+import AssetReportCards from "./InvestmentReportsCards";
+import AssetReportTable from "./InvestmentReportTable";
+import InvestmentReportCards from "./InvestmentReportsCards";
+import InvestmentReportTable from "./InvestmentReportTable";
 
-export default function ExpenseReport() {
-  const expenseReport = useSelector((state) => state.report);
+export default function InvestmentReport() {
   const [loading, setLoading] = useState(false);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [dateRange, setDateRange] = useState([
@@ -22,13 +23,14 @@ export default function ExpenseReport() {
     },
   ]);
   const cards = [
-    { title: "Total Number of Expenses", value: "10" },
-    { title: "Total Expense Value", value: "1,285,358,256.29" },
-    { title: "Total Number of Expense Categories", value: "5" },
+    { title: "Total Number of Investors", value: "10" },
+    { title: "Total Investment", value: "1,285,358,256.29" },
+    { title: "Total Number ", value: "10" },
+    { title: "Total Payout Amount", value: "1,285,358,256.29" },
   ];
 
   const handleCapture = () => {
-    handleCaptureClick(setLoading, "captureDiv", `Expenses report`);
+    handleCaptureClick(setLoading, "captureDiv", `Asset report`);
   };
 
   const toggleDateFilter = () => {
@@ -57,7 +59,7 @@ export default function ExpenseReport() {
     <main className="w-full">
       <div className="flex justify-between p-5">
         <p className="text-xl sm:text-2xl font-semibold text-black">
-          Expense Report
+          Asset Report
         </p>
         <EditableButton
           blueBtn={true}
@@ -90,11 +92,11 @@ export default function ExpenseReport() {
         </div> */}
 
         {/* Cards */}
-        <ExpenseReportCards cards={cards} />
+        <InvestmentReportCards cards={cards} />
 
         {/* Table */}
         <div className="rounded-xl overflow-hidden border mt-10 bg-white">
-          <ExpenseReportTable />
+          <InvestmentReportTable />
         </div>
 
         {/* Modal */}
