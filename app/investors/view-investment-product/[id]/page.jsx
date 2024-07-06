@@ -35,8 +35,8 @@ export default function ViewInvestmentProducts() {
     { name: productTimeframe, value: `Daily` },
     { name: minInRate, value: `${interestRange?.daily?.min}% per annum` },
     { name: maxInRate, value: `${interestRange?.daily?.max}% per annum` },
-    { name: minInAm, value: `${investmentRanges?.daily?.min}` },
-    { name: maxInAm, value: `${investmentRanges?.daily?.max}` },
+    { name: minInAm, value: `${investmentRanges?.daily?.min?.toLocaleString()}}` },
+    { name: maxInAm, value: `${investmentRanges?.daily?.max?.toLocaleString()}}` },
   ]
 
   const monthlyProductData = [
