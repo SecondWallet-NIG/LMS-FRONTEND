@@ -104,7 +104,7 @@ const CreateInvestmentProduct = () => {
     return numberString.replace(/,/g, "");
   };
 
-  console.log({ formData });
+  // console.log({ formData });
 
   return (
     <DashboardLayout
@@ -162,32 +162,6 @@ const CreateInvestmentProduct = () => {
             </div>
           </div>
 
-          {/* Invest method */}
-          <div>
-            <SelectField
-              name={"interestMethod"}
-              label={"Interest method"}
-              required={true}
-              placeholder={"Select method"}
-              optionValue={investOptions}
-              value={investOptions.find(
-                (e) => e.value === formData.interestMethod
-              )}
-              onChange={(e) =>
-                setFormData({ ...formData, interestMethod: e.value })
-              }
-            />
-            <div className="mt-2 text-sm leading-5">
-              <p className="font-normal">
-                <b className="font-medium">Last Investor account balance:</b>{" "}
-                Will calculate the interest on the last balance
-              </p>
-              <p className="font-normal">
-                <b className="font-medium">Pro-Rata Basis:</b> Will look at the
-                balance for each day and calculate interest for those days only
-              </p>
-            </div>
-          </div>
 
           {/* investment amount range */}
           <div className="my-10 flex justify-between gap-4">
@@ -219,7 +193,7 @@ const CreateInvestmentProduct = () => {
                 endIcon={"NGN"}
                 // value={formData.maxInterestRange}
                 placeholder={"Minimum amount"}
-                // onChange={handleInputChange}
+              // onChange={handleInputChange}
               />
             </div>
           </div>
