@@ -13,23 +13,56 @@ export default function ViewInvestmentProducts() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [deleteModal, setDeleteModal] = useState(false);
-  const btnClass =
-    "rounded-md flex justify-center items-center py-2 px-3 font-medium text-swTextColor border hover:shadow-md";
-
+  const btnClass = "rounded-md flex justify-center items-center py-2 px-3 font-medium text-swTextColor border hover:shadow-md";
   const { data } = useSelector((state) => state.investment);
+
+  // console.log(data?.data)
 
   useEffect(() => {
     dispatch(getSingleInvestmentProduct(id));
   }, []);
 
-  console.log("invdata", data);
+  // console.log("invdata", data);
+  const productName = 'Product Name'; const productTimeframe = 'Product Timeframe';
+  const minInRate = 'Minimum Interest rate'; const maxInRate = 'Maximum Interest rate'
+  const minInAm = 'Minimum investment amount'; const maxInAm = 'Maximum investment amount'
+  const interestRange = data?.data?.interestRateRanges
+  const investmentRanges = data?.data?.investmentAmountRanges
+
+
+  const dailyProductData = [
+    { name: productName, value: `${data?.data.name}` },
+    { name: productTimeframe, value: `Daily` },
+    { name: minInRate, value: `${interestRange?.daily?.min}% per annum` },
+    { name: maxInRate, value: `${interestRange?.daily?.max}% per annum` },
+    { name: minInAm, value: `${investmentRanges?.daily?.min}` },
+    { name: maxInAm, value: `${investmentRanges?.daily?.max}` },
+  ]
+
+  const monthlyProductData = [
+    { name: productTimeframe, value: `Monthly` },
+    { name: minInRate, value: `${interestRange?.monthly?.min}% per annum` },
+    { name: maxInRate, value: `${interestRange?.monthly?.max}% per annum` },
+    { name: minInAm, value: `${investmentRanges?.monthly?.min}` },
+    { name: maxInAm, value: `${investmentRanges?.monthly?.max}` },
+  ]
+
+  const annualProductData = [
+    { name: productTimeframe, value: `Anually` },
+    { name: minInRate, value: `${interestRange?.annually?.min}% per annum` },
+    { name: maxInRate, value: `${interestRange?.annually?.max}% per annum` },
+    { name: minInAm, value: `${investmentRanges?.annually?.min}` },
+    { name: maxInAm, value: `${investmentRanges?.annually?.max}` },
+  ]
+
+
   return (
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "View investment products"]}
     >
       <div className="mx-auto max-w-4xl py-10 px-5">
-        <div className="flex gap-4 justify-end mb-10">
+        <div className="flex gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-end mb-10">
           <Link
             href="/investors/create-investment-product"
             className={`${btnClass}`}
@@ -50,39 +83,56 @@ export default function ViewInvestmentProducts() {
           </Link>
         </div>
 
-        <div className="flex justify-between border-b pb-5 mb-5">
-          <h1 className="font-semibold text-2xl leading-8 text-black">
-            Investment Product Details
-          </h1>
-        </div>
+        {/* Investment product details */}
+        <div className="px-5 lg:px-0">
+          <div className="flex justify-between border-b pb-5 mb-5">
+            <h1 className="font-semibold text-2xl leading-8 text-black">
+              Investment Product Details
+            </h1>
+          </div>
 
-        <div className="flex flex-col gap-5">
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium">Product name</p>
-            <p>{data?.data?.name}</p>
+          {/* Daily */}
+          <div className="flex flex-col gap-5 mb-5">
+            {dailyProductData.map((product, index) => {
+              return (
+                <div key={index} className="flex py-1">
+                  <p className="min-w-[15rem] text-sm leading-5 font-medium text-swGrey400">{product?.name}</p>
+                  <p className="text-swGrey500 text-sm">{product?.value}</p>
+                </div>
+              )
+            })}
           </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium">Minimum interest rate</p>
-            <p>{data?.data?.interestRateRange?.min}% per annum</p>
+
+          {/* Monthly */}
+          <div className="flex flex-col gap-5 border-t py-5">
+            {interestRange?.monthly && <>
+              {monthlyProductData.map((product, index) => {
+                return (
+                  <div key={index} className="flex py-1">
+                    <p className="min-w-[15rem] text-sm leading-5 font-medium text-swGrey400">{product?.name}</p>
+                    <p className="text-swGrey500 text-sm">{product?.value}</p>
+                  </div>
+                )
+              })}
+            </>}
           </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium">Maximum interest rate</p>
-            <p>{data?.data?.interestRateRange?.max}% per annum</p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium">Interest method</p>
-            <p>{data?.data?.interestMethod?.name}</p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium">Minimum interest amount</p>
-            <p>{data?.data?.minimumInvestmentAmount?.toLocaleString()}</p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium">Maximum interest amount</p>
-            <p>{data?.data?.maximumInvestmentAmount?.toLocaleString()}</p>
+
+          {/* Anually */}
+          <div className="flex flex-col gap-5 border-t py-5">
+            {interestRange?.annually && <>
+              {annualProductData.map((product, index) => {
+                return (
+                  <div key={index} className="flex py-1">
+                    <p className="min-w-[15rem] text-sm leading-5 font-medium text-swGrey400">{product?.name}</p>
+                    <p className="text-swGrey500 text-sm">{product?.value}</p>
+                  </div>
+                )
+              })}
+            </>}
           </div>
         </div>
       </div>
+
       <DeleteInvesmentProductModal
         open={deleteModal}
         onClose={setDeleteModal}
