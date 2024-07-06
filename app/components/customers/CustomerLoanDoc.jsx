@@ -5,7 +5,7 @@ import LoanDocsUpload from "../modals/loans/LoanDocsUpload";
 import PreviewLoanDocs from "./PreviewLoanDocs";
 import { handleFileExtention } from "../helpers/utils";
 import { IoMdClose } from "react-icons/io";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 // import ImageViewer from 'react-simple-image-viewer';
 
 // import Viewer from "react-viewer";
@@ -21,11 +21,13 @@ const CustomerLoanDoc = (data) => {
   const [openFileModal, setOpenFileModal] = useState(false);
   const [fieldType, setFieldType] = useState("");
 
+  console.log("docs", data);
+
   const handleSetUrl = (content) => {
     setUrl(content);
     setIsOpen(true);
   };
- 
+
   return (
     <main>
       <div className="pt-4 font-semibold text-md text-swBlue pl-4">
@@ -235,7 +237,7 @@ const CustomerLoanDoc = (data) => {
           Collateral Form
         </div>
         <div>
-          {data?.data?.loanApplication?.collaterals?.length != null  ? (
+          {data?.data?.loanApplication?.collaterals?.length != null ? (
             <div>
               <button
                 onClick={() => {
@@ -286,6 +288,203 @@ const CustomerLoanDoc = (data) => {
             <button
               onClick={() => {
                 setFieldType("collaterals");
+                setUploadModalOpen(!uploadModalOpen);
+              }}
+              className="text-sm text-swBlue underline"
+            >
+              Upload File
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="flex justify-between pl-4">
+        <div className="pt-4 font-semibold text-xs text-swGray">
+          Power of attorney
+        </div>
+        <div>
+          {data?.data?.loanApplication?.powerOfAttorney != null ? (
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(data?.data?.loanApplication?.powerOfAttorney);
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setFieldType("powerOfAttorney");
+                setUploadModalOpen(!uploadModalOpen);
+              }}
+              className="text-sm text-swBlue underline"
+            >
+              Upload File
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="flex justify-between pl-4">
+        <div className="pt-4 font-semibold text-xs text-swGray">
+          Proof of ownership
+        </div>
+        <div>
+          {data?.data?.loanApplication?.proofOfOwnership != null ? (
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(data?.data?.loanApplication?.proofOfOwnership);
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setFieldType("proofOfOwnership");
+                setUploadModalOpen(!uploadModalOpen);
+              }}
+              className="text-sm text-swBlue underline"
+            >
+              Upload File
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="flex justify-between pl-4">
+        <div className="pt-4 font-semibold text-xs text-swGray">
+          Statement of account
+        </div>
+        <div>
+          {data?.data?.loanApplication?.statementOfAccounts != null ? (
+            <div>
+              <button
+                onClick={() => {
+                  handleSetUrl(
+                    data?.data?.loanApplication?.statementOfAccounts
+                  );
+                  setOpenFileModal(true);
+                }}
+                className="text-sm text-swGray underline"
+              >
+                View Docs
+              </button>
+              {handleFileExtention(url) === "pdf" ? (
+                <div
+                  className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                    openFileModal ? "flex" : "hidden"
+                  } justify-center items-center text-white z-[110]`}
+                >
+                  <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                    <div className="flex justify-end">
+                      <IoMdClose
+                        size={20}
+                        className="cursor-pointer text-swBlack"
+                        onClick={() => setOpenFileModal(false)}
+                      />
+                    </div>
+                    <iframe src={url} className="h-full w-full"></iframe>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {typeof window !== "undefined" ? (
+                    <>
+                      <Viewer
+                        visible={openFileModal}
+                        onClose={() => {
+                          setOpenFileModal(false);
+                        }}
+                        images={[url].map((item) => ({
+                          src: item,
+                          key: item,
+                        }))}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setFieldType("statementOfAccounts");
                 setUploadModalOpen(!uploadModalOpen);
               }}
               className="text-sm text-swBlue underline"
