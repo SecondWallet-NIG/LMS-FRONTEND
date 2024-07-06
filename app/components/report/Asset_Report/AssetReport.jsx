@@ -6,12 +6,11 @@ import { PiCalendarBlankLight } from "react-icons/pi";
 import CenterModal from "../../modals/CenterModal";
 import { DateRange } from "react-date-range";
 import Button from "../../shared/buttonComponent/Button";
-import ExpenseReportCards from "./ExpenseReportsCards";
-import ExpenseReportTable from "./ExpenseReportTable";
 import { useSelector } from "react-redux";
+import AssetReportCards from "./AssetReportsCards";
+import AssetReportTable from "./AssetReportTable";
 
-export default function ExpenseReport() {
-  const expenseReport = useSelector((state) => state.report);
+export default function AssetReport() {
   const [loading, setLoading] = useState(false);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const [dateRange, setDateRange] = useState([
@@ -22,13 +21,13 @@ export default function ExpenseReport() {
     },
   ]);
   const cards = [
-    { title: "Total Number of Expenses", value: "10" },
-    { title: "Total Expense Value", value: "1,285,358,256.29" },
-    { title: "Total Number of Expense Categories", value: "5" },
+    { title: "Total Number of Assets", value: "10" },
+    { title: "Total Number of Asset", value: "1,285,358,256.29" },
+    { title: "Total Number of Asset Categories", value: "5" },
   ];
 
   const handleCapture = () => {
-    handleCaptureClick(setLoading, "captureDiv", `Expenses report`);
+    handleCaptureClick(setLoading, "captureDiv", `Asset report`);
   };
 
   const toggleDateFilter = () => {
@@ -57,7 +56,7 @@ export default function ExpenseReport() {
     <main className="w-full">
       <div className="flex justify-between p-5">
         <p className="text-xl sm:text-2xl font-semibold text-black">
-          Expense Report
+          Asset Report
         </p>
         <EditableButton
           blueBtn={true}
@@ -90,11 +89,11 @@ export default function ExpenseReport() {
         </div> */}
 
         {/* Cards */}
-        <ExpenseReportCards cards={cards} />
+        <AssetReportCards cards={cards} />
 
         {/* Table */}
         <div className="rounded-xl overflow-hidden border mt-10 bg-white">
-          <ExpenseReportTable />
+          <AssetReportTable />
         </div>
 
         {/* Modal */}

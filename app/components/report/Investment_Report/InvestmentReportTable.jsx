@@ -4,20 +4,22 @@ import ReusableDataTable from "../../shared/tables/ReusableDataTable";
 import { format } from "date-fns";
 
 const header = [
-  { id: "date", label: "Date" },
+  { id: "asset", label: "Asset" },
+  { id: "category", label: "Category" },
   { id: "description", label: "Description" },
-  { id: "category", label: "Expense Category" },
-  { id: "amount", label: "Amount" },
-  { id: "status", label: "Status" },
+  { id: "acquisitionDate", label: "Acquisition Date" },
+  { id: "value", label: "Value" },
+  // { id: "action", label: "Action" },
 ];
 
 const customDataTransformer = (apiData) => {
   console.log({ apiData });
-  return apiData?.expenses?.map((item, i) => ({
+  return apiData?.results?.map((item, i) => ({
     id: item?._id,
-    date: (
+    asset: <div className="text-md font-[500] text-gray-700">{item?.name}</div>,
+    category: (
       <div className="text-md font-[500] text-gray-700">
-        {format(new Date(item?.date), "PPP")}
+        {item?.category?.name}
       </div>
     ),
     description: (
@@ -25,40 +27,41 @@ const customDataTransformer = (apiData) => {
         {item?.description}
       </div>
     ),
-    category: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.category?.name}
-      </div>
-    ),
-    amount: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.amount?.toLocaleString()}
-      </div>
-    ),
-    status: (
-      <div className="text-xs font-[500] text-gray-700">
-        <div className="py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1">
-          <div
-            className={`h-1 w-1 rounded-full ${
-              item?.status === "New" ? "bg-green-500" : "bg-red-500"
-            }`}
-          />
-          {item?.status}
+    acquisitionDate: (
+      <div>
+        <div className="text-md font-[500] text-gray-700">
+          {item?.acquisitionDate &&
+            format(new Date(item?.acquisitionDate), "PPP")}
         </div>
       </div>
     ),
+    value: (
+      <div className="text-md font-[500] text-gray-700">
+        {item?.value?.toLocaleString()}
+      </div>
+    ),
+    // action: (
+    //   <div className="text-md font-[500] text-gray-700">
+    //     <Link
+    //       href={`/asset-management/${item?._id}/view-asset`}
+    //       className="border rounded p-2"
+    //     >
+    //       View details
+    //     </Link>
+    //   </div>
+    // ),
   }));
 };
 
-export default function ExpenseReportTable() {
+export default function InvestmentReportTable() {
   return (
     <>
       <ReusableDataTable
         dataTransformer={customDataTransformer}
-        onClickRow="/expenses/view-expense"
+        onClickRow={`/asset-management/view-asset`}
         headers={header}
         initialData={[]}
-        apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/expense`}
+        apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/asset/all`}
         // btnText={
         //   <div className="flex gap-1 items-center p-1">
         //     <AiOutlinePlus size={15} />
