@@ -43,16 +43,16 @@ export default function ViewInvestmentProducts() {
     { name: productTimeframe, value: `Monthly` },
     { name: minInRate, value: `${interestRange?.monthly?.min}% per annum` },
     { name: maxInRate, value: `${interestRange?.monthly?.max}% per annum` },
-    { name: minInAm, value: `${investmentRanges?.monthly?.min}` },
-    { name: maxInAm, value: `${investmentRanges?.monthly?.max}` },
+    { name: minInAm, value: `${investmentRanges?.monthly?.min?.toLocaleString()}` },
+    { name: maxInAm, value: `${investmentRanges?.monthly?.max?.toLocaleString()}` },
   ]
 
   const annualProductData = [
     { name: productTimeframe, value: `Anually` },
     { name: minInRate, value: `${interestRange?.annually?.min}% per annum` },
     { name: maxInRate, value: `${interestRange?.annually?.max}% per annum` },
-    { name: minInAm, value: `${investmentRanges?.annually?.min}` },
-    { name: maxInAm, value: `${investmentRanges?.annually?.max}` },
+    { name: minInAm, value: `${investmentRanges?.annually?.min?.toLocaleString()}` },
+    { name: maxInAm, value: `${investmentRanges?.annually?.max?.toLocaleString()}` },
   ]
 
 
