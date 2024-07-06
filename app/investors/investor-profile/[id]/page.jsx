@@ -28,6 +28,7 @@ import BorrowerOptions from "@/app/components/customers/BorrowerOptions";
 import { getSingleInvestor } from "@/redux/slices/investmentSlice";
 import { format } from "date-fns";
 import InvestorSummary from "@/app/components/investments/InvestorSummary";
+import InvestorProfileDocs from "@/app/components/investor-profile/InvestorProfileDocs";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -519,8 +520,8 @@ const InvestorProfile = () => {
               </div>
             )}
             {activeButton == "document" && (
-              <div className="pt-20 pb-24">
-                {data?.identityVerification === null ? (
+              <div className="py-5">
+                {/* {data?.identityVerification === null ? (
                   <div className="pt-8 text-center mr-auto ml-auto mt-4">
                     <p> No document uploaded yet</p>
                     <div className="flex justify-center">
@@ -538,9 +539,10 @@ const InvestorProfile = () => {
                     <div className="pt-4 font-semibold text-md text-swBlue pl-4">
                       Identification verification/Document
                     </div>
-                    <CustomerProfileDocs data={data} />
+                    
                   </div>
-                )}
+                )} */}
+                <InvestorProfileDocs data={data} />
               </div>
             )}
           </div>
@@ -628,11 +630,11 @@ const InvestorProfile = () => {
         {/*  */}
       </div>
       <div>
-        <EmploymentDetailsModal
+        {/* <EmploymentDetailsModal
           isOpen={isEmploymentDetailsModalOpen}
           onClose={closeModal}
           getCustomer={getCustomerById}
-        />
+        /> */}
         <UploadDocumentsModal
           isOpen={isUploadDocumentsModalOpen}
           onClose={closeModal}
