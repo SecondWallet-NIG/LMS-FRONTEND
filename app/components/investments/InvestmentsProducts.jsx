@@ -5,10 +5,9 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 
 const header = [
-  { id: "productName", label: "Product name" },
-  { id: "investorsUsingProduct", label: "Investors using product" },
-  { id: "roi", label: "ROI" },
-  { id: "amountPaidOut", label: "Amount paid out" },
+  { id: "productName", label: "Product Name" },
+  { id: "totalInvestments", label: "Total Investments Count" },
+  { id: "totalInvestmentAmount", label: "Total Investment Amount" },
   { id: "dateCreated", label: "Date created" },
 ];
 
@@ -17,24 +16,16 @@ const customDataTransformer = (apiData) => {
   return apiData?.investmentProducts?.map((item, i) => ({
     id: item?._id,
     productName: (
+      <div className="text-md font-[500] text-gray-700">{item?.name}</div>
+    ),
+    totalInvestments: (
       <div className="text-md font-[500] text-gray-700">
-        {/* {format(new Date(item?.date), "PPP")} */} Product name
-        {item?.name}
+        {item?.totalInvestments.toLocaleString()}
       </div>
     ),
-    investorsUsingProduct: (
+    totalInvestmentAmount: (
       <div className="text-md font-[500] text-gray-700">
-        {/* {item?.description} */} Investors using product
-      </div>
-    ),
-    roi: (
-      <div className="text-md font-[500] text-gray-700">
-        {/* {item?.category?.name} */} ROI
-      </div>
-    ),
-    amountPaidOut: (
-      <div className="text-md font-[500] text-gray-700">
-        {/* {item?.amount} */} Amount paid out
+        N{item?.totalInvestmentsAmount.toLocaleString()}
       </div>
     ),
     dateCreated: (

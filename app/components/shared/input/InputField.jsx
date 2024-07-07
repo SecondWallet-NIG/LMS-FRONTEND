@@ -19,6 +19,7 @@ const InputField = ({
   onKeyPress, // Add maxLength prop
   onWheel,
   ariaLabel,
+
 }) => {
   return (
     <div className="">

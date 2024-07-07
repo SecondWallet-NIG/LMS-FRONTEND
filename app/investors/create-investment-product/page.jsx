@@ -15,30 +15,42 @@ const CreateInvestmentProduct = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [displayDailyForm, setDisplayDailyForm] = useState(false);
+  const [displayMonthlyForm, setDisplayMonthlyForm] = useState(false);
+  const [displayYearlyForm, setDisplayYearlyForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    minInterestRange: "",
-    maxInterestRange: "",
-    interestMethod: "",
-    minimumInvestmentAmount: "",
+    minInterestRangeDaily: "",
+    maxInterestRangeDaily: "",
+    minimumInvestmentAmountDaily: "",
+    maximumInvestmentAmountDaily: "",
+    minInterestRangeMonthly: "",
+    maxInterestRangeMonthly: "",
+    minimumInvestmentAmountMonthly: "",
+    maximumInvestmentAmountMonthly: "",
+    minInterestRangeYearly: "",
+    maxInterestRangeYearly: "",
+    minimumInvestmentAmountYearly: "",
+    maximumInvestmentAmountYearly: "",
   });
 
   const resetForm = () => {
     setFormData({
       name: "",
-      minInterestRange: "",
-      maxInterestRange: "",
-      interestMethod: "",
-      minimumInvestmentAmount: "",
+      minInterestRangeDaily: "",
+      maxInterestRangeDaily: "",
+      minimumInvestmentAmountDaily: "",
+      maximumInvestmentAmountDaily: "",
+      minInterestRangeDaily: "",
+      maxInterestRangeDaily: "",
+      minimumInvestmentAmountDaily: "",
+      maximumInvestmentAmountDaily: "",
+      minInterestRangeDaily: "",
+      maxInterestRangeDaily: "",
+      minimumInvestmentAmountDaily: "",
+      maximumInvestmentAmountDaily: "",
     });
   };
-  const investOptions = [
-    {
-      value: "LIAB",
-      label: "Last investor account balance",
-    },
-    { value: "PRB", label: "Pro-Rata basis" },
-  ];
 
   const handleInputChange = async (e) => {
     const { name, value } = e.target;
@@ -70,15 +82,37 @@ const CreateInvestmentProduct = () => {
 
     let payload = {
       name: formData.name,
-      interestRateRange: {
-        min: Number(formData.minInterestRange),
-        max: Number(formData.maxInterestRange),
+      interestRateRanges: {
+        annually: {
+          min: formData.minInterestRangeDaily,
+          max: formData.maxInterestRangeDaily,
+        },
+        monthly: {
+          min: formData.minInterestRangeMonthly,
+          max: formData.maxInterestRangeMonthly,
+        },
+        daily: {
+          min: formData.minInterestRangeYearly,
+          max: formData.maxInterestRangeYearly,
+        },
       },
-      interestMethod: formData.interestMethod,
-      minimumInvestmentAmount: Number(
-        removeCommasFromNumber(formData.minimumInvestmentAmount)
-      ),
+      investmentAmountRanges: {
+        annually: {
+          min: formData.minimumInvestmentAmountDaily,
+          max: formData.maximumInvestmentAmountDaily,
+        },
+        monthly: {
+          min: formData.minimumInvestmentAmountMonthly,
+          max: formData.maximumInvestmentAmountMonthly,
+        },
+        daily: {
+          min: formData.minimumInvestmentAmountYearly,
+          max: formData.maximumInvestmentAmountYearly,
+        },
+      },
     };
+
+    console.log({payload});
 
     dispatch(createInvestmentProduct(payload))
       .unwrap()
@@ -98,24 +132,67 @@ const CreateInvestmentProduct = () => {
 
   const removeCommasFromNumber = (numberString) => {
     if (typeof numberString !== "string") {
-      // Convert to string or handle the case appropriately
       numberString = String(numberString);
     }
     return numberString.replace(/,/g, "");
   };
 
-  console.log({ formData });
-
   return (
     <DashboardLayout
       isBackNav={true}
-      paths={["Investors", "Create investment product"]}
+      paths={["Investors", "Create Investment Product"]}
     >
       <ToastContainer />
       <div className="mx-auto w-3/5">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
-          Create investment product
+          Create Investment Product
         </h1>
+        <div>
+          <div className="w-full">
+            <div className="flex gap-3">
+              <InputField
+                required={true}
+                name="minInterestRange"
+                inputType="checkbox"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
+                value={formData.minInterestRange}
+                placeholder={"Minimum rate"}
+                onChange={() => setDisplayDailyForm(!displayDailyForm)}
+              />
+              <div className="mt-2">Daily</div>
+            </div>
+            <div className="flex gap-3">
+              <InputField
+                required={true}
+                name="minInterestRange"
+                inputType="checkbox"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
+                value={formData.m}
+                placeholder={"Minimum rate"}
+                onChange={() => setDisplayMonthlyForm(!displayMonthlyForm)}
+              />
+              <div className="mt-2">Monthly</div>
+            </div>
+            <div className="flex gap-3">
+              <InputField
+                required={true}
+                name="minInterestRange"
+                inputType="checkbox"
+                onKeyPress={preventMinus}
+                onWheel={() => document.activeElement.blur()}
+                activeBorderColor="border-swBlue"
+                value={formData.minInterestRange}
+                placeholder={"Minimum rate"}
+                onChange={() => setDisplayYearlyForm(!displayYearlyForm)}
+              />
+              <div className="mt-2">Yearly</div>
+            </div>
+          </div>
+        </div>
         <div>
           <div className="mt-5">
             <InputField
@@ -127,102 +204,222 @@ const CreateInvestmentProduct = () => {
               onChange={handleInputChange}
             />
           </div>
+          {displayDailyForm === true && (
+            <div>
+              <p className="mt-8 text-black">Daily</p>
 
-          {/* Interest rate range */}
-          <div className="my-10 flex justify-between gap-4">
-            <div className="w-full">
-              <InputField
-                required={true}
-                name="minInterestRange"
-                inputType="number"
-                onKeyPress={preventMinus}
-                onWheel={() => document.activeElement.blur()}
-                activeBorderColor="border-swBlue"
-                label={"Interest rate range"}
-                value={formData.minInterestRange}
-                placeholder={"Minimum rate"}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mt-10">
-              <AiOutlineMinus className="text-swGray" size={20} />
-            </div>
-            <div className="w-full mt-7">
-              <InputField
-                required={true}
-                name="maxInterestRange"
-                inputType="number"
-                onKeyPress={preventMinus}
-                onWheel={() => document.activeElement.blur()}
-                activeBorderColor="border-swBlue"
-                value={formData.maxInterestRange}
-                placeholder={"Maximum rate"}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
+              <div className="my-5 flex justify-between gap-4">
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="minInterestRangeDaily"
+                    inputType="number"
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    label={"Interest rate range"}
+                    value={formData.minInterestRangeDaily}
+                    placeholder={"Minimum rate"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mt-10">
+                  <AiOutlineMinus className="text-swGray" size={20} />
+                </div>
+                <div className="w-full mt-7">
+                  <InputField
+                    required={true}
+                    name="maxInterestRangeDaily"
+                    inputType="number"
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    value={formData.maxInterestRangeDaily}
+                    placeholder={"Maximum rate"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
 
-          {/* Invest method */}
-          <div>
-            <SelectField
-              name={"interestMethod"}
-              label={"Interest method"}
-              required={true}
-              placeholder={"Select method"}
-              optionValue={investOptions}
-              value={investOptions.find(
-                (e) => e.value === formData.interestMethod
-              )}
-              onChange={(e) =>
-                setFormData({ ...formData, interestMethod: e.value })
-              }
-            />
-            <div className="mt-2 text-sm leading-5">
-              <p className="font-normal">
-                <b className="font-medium">Last Investor account balance:</b>{" "}
-                Will calculate the interest on the last balance
-              </p>
-              <p className="font-normal">
-                <b className="font-medium">Pro-Rata Basis:</b> Will look at the
-                balance for each day and calculate interest for those days only
-              </p>
+              <div className="my-5 flex justify-between gap-4">
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="minimumInvestmentAmountDaily"
+                    label={"Investment amount range"}
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    endIcon={"NGN"}
+                    value={formData.minimumInvestmentAmountDaily}
+                    placeholder={"Minimum amount"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mt-10">
+                  <AiOutlineMinus className="text-swGray" size={20} />
+                </div>
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="maximumInvestmentAmountDaily"
+                    label={"Investment amount range"}
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    endIcon={"NGN"}
+                    value={formData.maximumInvestmentAmountDaily}
+                    placeholder={"Minimum amount"}
+                     onChange={handleInputChange}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
+          )}
+          {displayMonthlyForm === true && (
+            <div>
+              <p className="mt-8 text-black">Monthly</p>
 
-          {/* investment amount range */}
-          <div className="my-10 flex justify-between gap-4">
-            <div className="w-full">
-              <InputField
-                required={true}
-                name={"minimumInvestmentAmount"}
-                label={"Investment amount range"}
-                onKeyPress={preventMinus}
-                onWheel={() => document.activeElement.blur()}
-                activeBorderColor="border-swBlue"
-                endIcon={"NGN"}
-                value={formData.minimumInvestmentAmount}
-                placeholder={"Minimum amount"}
-                onChange={handleInputChange}
-              />
+              <div className="my-5 flex justify-between gap-4">
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="minInterestRangeMonthly"
+                    inputType="number"
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    label={"Interest rate range"}
+                    value={formData.minInterestRangeMonthly}
+                    placeholder={"Minimum rate"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mt-10">
+                  <AiOutlineMinus className="text-swGray" size={20} />
+                </div>
+                <div className="w-full mt-7">
+                  <InputField
+                    required={true}
+                    name="maxInterestRangeMonthly"
+                    inputType="number"
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    value={formData.maxInterestRangeMonthly}
+                    placeholder={"Maximum rate"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+
+              <div className="my-5 flex justify-between gap-4">
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="minimumInvestmentAmountMonthly"
+                    label={"Investment amount range"}
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    endIcon={"NGN"}
+                    value={formData.minimumInvestmentAmountMonthly}
+                    placeholder={"Minimum amount"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mt-10">
+                  <AiOutlineMinus className="text-swGray" size={20} />
+                </div>
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="maximumInvestmentAmountMonthly"
+                    label={"Investment amount range"}
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    endIcon={"NGN"}
+                    value={formData.maximumInvestmentAmountMonthly}
+                    placeholder={"Minimum amount"}
+                     onChange={handleInputChange}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="mt-10">
-              <AiOutlineMinus className="text-swGray" size={20} />
+          )}
+          {displayYearlyForm === true && (
+            <div>
+              <p className="mt-8 text-black">Yearly</p>
+
+              <div className="my-5 flex justify-between gap-4">
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="minInterestRangeYearly"
+                    inputType="number"
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    label={"Interest rate range"}
+                    value={formData.minInterestRangeYearly}
+                    placeholder={"Minimum rate"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mt-10">
+                  <AiOutlineMinus className="text-swGray" size={20} />
+                </div>
+                <div className="w-full mt-7">
+                  <InputField
+                    required={true}
+                    name="maxInterestRangeYearly"
+                    inputType="number"
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    value={formData.maxInterestRangeYearly}
+                    placeholder={"Maximum rate"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+
+              <div className="my-5 flex justify-between gap-4">
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="minimumInvestmentAmountYearly"
+                    label={"Investment amount range"}
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    endIcon={"NGN"}
+                    value={formData.minimumInvestmentAmountYearly}
+                    placeholder={"Minimum amount"}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mt-10">
+                  <AiOutlineMinus className="text-swGray" size={20} />
+                </div>
+                <div className="w-full">
+                  <InputField
+                    required={true}
+                    name="maximumInvestmentAmountYearly"
+                    label={"Investment amount range"}
+                    onKeyPress={preventMinus}
+                    onWheel={() => document.activeElement.blur()}
+                    activeBorderColor="border-swBlue"
+                    endIcon={"NGN"}
+                    value={formData.maximumInvestmentAmountYearly}
+                    placeholder={"Minimum amount"}
+                     onChange={handleInputChange}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="w-full">
-              <InputField
-                required={true}
-                name={"minimumInvestmentAmount"}
-                label={"Investment amount range"}
-                onKeyPress={preventMinus}
-                onWheel={() => document.activeElement.blur()}
-                activeBorderColor="border-swBlue"
-                endIcon={"NGN"}
-                // value={formData.maxInterestRange}
-                placeholder={"Minimum amount"}
-                // onChange={handleInputChange}
-              />
-            </div>
-          </div>
+          )}
 
           <div className="flex justify-center my-20">
             <EditableButton
