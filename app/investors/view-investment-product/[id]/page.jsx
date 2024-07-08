@@ -84,7 +84,7 @@ export default function ViewInvestmentProducts() {
         </div>
 
         {/* Investment product details */}
-        <div className="px-5 lg:px-0">
+        <div className="px-5 lg:px-0 mb-20">
           <div className="flex justify-between border-b pb-5 mb-5">
             <h1 className="font-semibold text-2xl leading-8 text-black">
               Investment Product Details
