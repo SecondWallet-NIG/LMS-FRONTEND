@@ -57,8 +57,8 @@ export default function ViewInvestmentProducts() {
         </div>
 
         {/* Investment product details */}
-        <div className="px-5 lg:px-0">
-          <div className="flex justify-between pb-5 mb-5">
+        <div className="px-5 lg:px-0 mb-20">
+          <div className="flex justify-between border-b pb-5 mb-5">
             <h1 className="font-semibold text-2xl leading-8 text-black">
               Investment Product Details
             </h1>
@@ -76,9 +76,9 @@ export default function ViewInvestmentProducts() {
                   return 0; // maintain original order for other elements
                 })
                 .map((type, i) => (
-                  <div key={type} className="border-t flex flex-col gap-5 pt-5">
+                  <div key={type} className={`${i === 0 ? "": "border-t"} flex flex-col gap-5 pt-5`}>
                     {i === 0 && (
-                      <div className="flex py-1">
+                      <div className="flex py-1 gap-10">
                         <p className="min-w-[15rem] leading-5 font-medium text-swGrey400">
                           Product Name
                         </p>
@@ -87,7 +87,7 @@ export default function ViewInvestmentProducts() {
                         </p>
                       </div>
                     )}
-                    <div className="flex py-1">
+                    <div className="flex py-1 gap-10">
                       <p className="min-w-[15rem] leading-5 font-medium text-swGrey400">
                         Product Timeframe
                       </p>
@@ -95,7 +95,7 @@ export default function ViewInvestmentProducts() {
                         {type}
                       </p>
                     </div>
-                    <div className="flex py-1">
+                    <div className="flex py-1 gap-10">
                       <p className="min-w-[15rem] leading-5 font-medium text-swGrey400">
                         Minimum Interest rate
                       </p>
@@ -108,7 +108,7 @@ export default function ViewInvestmentProducts() {
                           : "per annum"}
                       </p>
                     </div>
-                    <div className="flex py-1">
+                    <div className="flex py-1 gap-10">
                       <p className="min-w-[15rem] leading-5 font-medium text-swGrey400">
                         Maximum Interest rate
                       </p>
@@ -121,7 +121,7 @@ export default function ViewInvestmentProducts() {
                           : "per annum"}
                       </p>
                     </div>
-                    <div className="flex py-1">
+                    <div className="flex py-1 gap-10">
                       <p className="min-w-[15rem] leading-5 font-medium text-swGrey400">
                         Minimum Investment amount
                       </p>
@@ -132,7 +132,7 @@ export default function ViewInvestmentProducts() {
                         ]?.min.toLocaleString()}
                       </p>
                     </div>
-                    <div className="flex py-1">
+                    <div className="flex py-1 gap-10">
                       <p className="min-w-[15rem] leading-5 font-medium text-swGrey400">
                         Maximum Investment amount
                       </p>

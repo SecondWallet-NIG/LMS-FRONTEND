@@ -9,6 +9,7 @@ import Button from "../../shared/buttonComponent/Button";
 import ExpenseReportCards from "./ExpenseReportsCards";
 import ExpenseReportTable from "./ExpenseReportTable";
 import { useSelector } from "react-redux";
+import SelectField from "../../shared/input/SelectField";
 
 export default function ExpenseReport() {
   const expenseReport = useSelector((state) => state.report);
@@ -26,6 +27,12 @@ export default function ExpenseReport() {
     { title: "Total Expense Value", value: "1,285,358,256.29" },
     { title: "Total Number of Expense Categories", value: "5" },
   ];
+  
+  const filterOpt = [
+    { value: '', label: 'Daily' },
+    { value: '', label: 'Monthly' },
+    { value: '', label: 'Annually' }
+]
 
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Expenses report`);
@@ -75,7 +82,7 @@ export default function ExpenseReport() {
         <div className="p-2">
           <div className="flex sm:justify-end gap-5 items-center ">
             <p className="font-semibold text-black">Filter report</p>
-            <div className="flex gap-3">
+            {/* <div className="flex gap-3">
               <button
                 onClick={toggleDateFilter}
                 className={
@@ -85,6 +92,13 @@ export default function ExpenseReport() {
                 <PiCalendarBlankLight size={20} />
                 Select date range
               </button>
+            </div> */}
+            <div>
+              <SelectField
+                name={"filter"}
+                placeholder={"Month"}
+                optionValue={filterOpt}
+              />
             </div>
           </div>
         </div>

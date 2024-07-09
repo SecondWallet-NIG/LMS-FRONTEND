@@ -64,9 +64,9 @@ const customDataTransformer = (apiData) => {
 export default function InvestorsRecords() {
   const router = useRouter();
   const cards = [
-    { title: "Number of investors", value: "12,820,382.36" },
-    { title: "Current pending payments", value: "20" },
-    { title: "Returns earned", value: "25,256,259.68" },
+    { title: "Total Number of Investors", value: "22" },
+    { title: "Active investors", value: "20" },
+    { title: "Returns earned", value: "25256259.68" },
   ];
 
   return (

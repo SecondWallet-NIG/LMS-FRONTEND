@@ -47,12 +47,12 @@ export default function InvestmentsRecords() {
 
   const cards = [
     { title: "Number of investors", value: "22" },
-    { title: "Amount invested", value: "123,368,937.03" },
-    { title: "Returns earned", value: "25,256,259.68" },
+    { title: "Amount invested", value: "123368937.03" },
+    { title: "Returns earned", value: "25256259.68" },
   ];
 
   return (
-    <div>
+    <div className="flex flex-col gap-5">
       <InvestmentsCards cards={cards} />
       <ReusableDataTable
         dataTransformer={customDataTransformer}
