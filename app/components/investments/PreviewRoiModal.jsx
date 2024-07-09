@@ -11,7 +11,7 @@ export default function PreviewRoiModal({
     return (
         <main className="fixed h-full w-full top-0 left-0 bg-black bg-opacity-25 p-5 flex justify-center items-center z-[110]">
             <div className="max-w-sm w-full bg-white rounded-3xl">
-                <div className="flex justify-between items-center gap-5 p-6 py-6">
+                <div className="flex justify-between items-center gap-5 p-6">
                     <p className="text-xl font-semibold text-swBlack">Preview ROI</p>
                     <IoClose
                         size={20}
@@ -22,7 +22,7 @@ export default function PreviewRoiModal({
                     />
                 </div>
 
-                <div className="p-5 pb-10">
+                <div className="px-5 pb-10">
                     <InputField
                         required={true}
                         disabled={true}
