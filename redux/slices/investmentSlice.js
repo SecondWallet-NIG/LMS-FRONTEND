@@ -158,7 +158,27 @@ export const getSingleInvestor = createAsyncThunk(
   }
 );
 
-// investmentProducts
+export const updateInvestor = createAsyncThunk(
+  "investment/investor/investorProfileId/update",
+  async ({ id, payload }) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/investment/investor/${id}/update`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
 
 const investmentSlice = createSlice({
   name: "investment",
