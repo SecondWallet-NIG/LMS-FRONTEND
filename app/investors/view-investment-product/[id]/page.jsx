@@ -48,12 +48,12 @@ export default function ViewInvestmentProducts() {
           >
             Edit
           </Link>
-          <button
+          {/* <button
             className={`rounded-md flex justify-center items-center py-2 px-3 font-medium text-swTextColor border hover:shadow-md hover:shadow-red-100`}
             onClick={() => setDeleteModal(true)}
           >
             Delete
-          </button>
+          </button> */}
         </div>
 
         {/* Investment product details */}
@@ -76,7 +76,12 @@ export default function ViewInvestmentProducts() {
                   return 0; // maintain original order for other elements
                 })
                 .map((type, i) => (
-                  <div key={type} className={`${i === 0 ? "": "border-t"} flex flex-col gap-5 pt-5`}>
+                  <div
+                    key={type}
+                    className={`${
+                      i === 0 ? "" : "border-t"
+                    } flex flex-col gap-5 pt-5`}
+                  >
                     {i === 0 && (
                       <div className="flex py-1 gap-10">
                         <p className="min-w-[15rem] leading-5 font-medium text-swGrey400">
