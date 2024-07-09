@@ -220,13 +220,20 @@ const Expenses = () => {
                 <IoMdAdd size={20} />
                 <p>Add expense category</p>
               </div>
-              {/* <div
+              <button
+                onClick={() => setOpenDeleteModal(!openDeleteAssetModal)}
+                className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
+              >
+                <IoMdAdd size={20} />
+                <p>Edit expense category</p>
+              </button>
+              {/* <button
                 onClick={() => setOpenDeleteModal(!openDeleteAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
                 <p>Delete expense category</p>
-              </div> */}
+              </button> */}
             </div>
             <p className="text-xl font-semibold">
               Available expense categories

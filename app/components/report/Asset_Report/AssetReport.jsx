@@ -71,7 +71,7 @@ export default function AssetReport() {
         className="rounded-lg bg-swLightGray p-5 shadow-xl mt-5"
       >
         {/* Filter */}
-        {/* <div className="p-2">
+        <div className="p-2">
           <div className="flex sm:justify-end gap-5 items-center ">
             <p className="font-semibold text-black">Filter report</p>
             <div className="flex gap-3">
@@ -86,7 +86,7 @@ export default function AssetReport() {
               </button>
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* Cards */}
         <AssetReportCards cards={cards} />
