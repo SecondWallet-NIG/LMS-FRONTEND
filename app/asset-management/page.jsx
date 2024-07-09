@@ -147,7 +147,8 @@ const AssetManagement = () => {
         <div className="pt-5 pl-5 flex items-centers">
           <p
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
-              pageState === "asset" && "border-b-swBlue text-swBlue font-semibold"
+              pageState === "asset" &&
+              "border-b-swBlue text-swBlue font-semibold"
             }`}
             onClick={() => setPageState("asset")}
           >
@@ -155,7 +156,8 @@ const AssetManagement = () => {
           </p>
           <p
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
-              pageState === "asset category" && "border-b-swBlue text-swBlue font-semibold"
+              pageState === "asset category" &&
+              "border-b-swBlue text-swBlue font-semibold"
             }`}
             onClick={() => setPageState("asset category")}
           >
@@ -216,14 +218,15 @@ const AssetManagement = () => {
                 <IoMdAdd size={20} />
                 <p>Add asset category</p>
               </div>
-              {/* <div
+                
+              {/* <button
                 aria-disabled="true"
                 onClick={() => setOpenDeleteModal(!openDeleteAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
                 <p>Delete asset category</p>
-              </div> */}
+              </button> */}
             </div>
             <p className="text-xl font-semibold">Available asset categories</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">

@@ -44,6 +44,8 @@ const CreateNewAsset = () => {
     label: option?.name,
   }));
 
+  console.log({ transformedOptions });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "value") {
@@ -170,6 +172,8 @@ const CreateNewAsset = () => {
       .catch((err) => console.log({ err }));
   }, []);
 
+  console.log({ formData });
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUserId(user);
@@ -262,9 +266,13 @@ const CreateNewAsset = () => {
                 required={true}
                 optionValue={transformedOptions}
                 name="category"
-                value={transformedOptions.find(
-                  (option) => option.value === formData.category
-                )}
+                value={
+                  formData.category === ""
+                    ? null // or another appropriate default value
+                    : transformedOptions.find(
+                        (option) => option.value === formData.category
+                      )
+                }
                 onChange={(selectedOption) =>
                   setFormData((prev) => ({
                     ...prev,
