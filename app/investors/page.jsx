@@ -17,9 +17,9 @@ const Investors = () => {
   })
   const { selectedNav } = state
   const navs = [
-    { name: 'Investment products', selOption: 'inPro' },
-    { name: 'Investors records', selOption: 'intRec' },
-    { name: 'Investment records', selOption: 'inRec' }
+    { name: 'Investment Products', selOption: 'inPro' },
+    { name: 'Investors Records', selOption: 'intRec' },
+    { name: 'Investment Records', selOption: 'inRec' }
   ]
 
   function handleNav(selOption) {

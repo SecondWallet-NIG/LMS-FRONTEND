@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "@/constant";
+import { format } from "date-fns";
 
 let user;
 if (typeof window !== "undefined") {
@@ -145,6 +146,22 @@ export const createBulkAssets = createAsyncThunk(
   }
 );
 
+export const getAssetReportCards = createAsyncThunk(
+  "/asset/assetReport",
+  async ({ startDate, endDate }) => {
+    const response = await axios.get(`${API_URL}/asset/assetReport`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`,
+      },
+      params: {
+        startDate,
+        endDate,
+      },
+    });
+    return response.data;
+  }
+);
+
 const assetManagementSlice = createSlice({
   name: "asset",
   initialState: {
@@ -210,6 +227,19 @@ const assetManagementSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(createNewAsset.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getAssetReportCards.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getAssetReportCards.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getAssetReportCards.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

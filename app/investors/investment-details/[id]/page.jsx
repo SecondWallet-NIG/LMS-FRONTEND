@@ -16,7 +16,7 @@ export default function InvestmentDetails() {
         >
             <div>
                 {/* Header */}
-                <div className="border-b pb-5 mb-5">
+                <div className="border-b-2 pb-5 mb-5">
                     <div className="flex justify-between mt-10 px-5">
                         <div className="flex w-2/5 gap-4 relative">
                             <div className="rounded-full border-2 border-swYellow600 overflow-hidden h-[3.5rem] w-[3.5rem]">

@@ -48,7 +48,7 @@ export default function InvestmentProducts() {
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/product/all`}
         btnText={
           <div className="flex gap-1 items-center p-1">
-            <p className="">create investment product</p>
+            <p className="">Create Investment Product</p>
           </div>
         }
         btnTextClick={() => {
