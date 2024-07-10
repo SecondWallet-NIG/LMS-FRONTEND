@@ -6,13 +6,17 @@ import { PiCalendarBlankLight } from "react-icons/pi";
 import CenterModal from "../../modals/CenterModal";
 import { DateRange } from "react-date-range";
 import Button from "../../shared/buttonComponent/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AssetReportCards from "./AssetReportsCards";
 import AssetReportTable from "./AssetReportTable";
+import { getAssetReportCards } from "@/redux/slices/assetManagementSlice";
+import { format } from "date-fns";
 
 export default function AssetReport() {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
+  const [assetReports, setAssetReports] = useState({});
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -20,15 +24,29 @@ export default function AssetReport() {
       key: "selection",
     },
   ]);
-  const cards = [
-    { title: "Total Number of Assets", value: "10" },
-    { title: "Total Number of Asset", value: "1,285,358,256.29" },
-    { title: "Total Number of Asset Categories", value: "5" },
-  ];
+  const [cards, setCards] = useState([
+    { title: "Total Number of Assets", value: 0 },
+    {
+      title: "Total Number of Asset Categories",
+      value: 0,
+    },
+    {
+      title: "Total Asset Value",
+      value: "0",
+    },
+  ]);
+  const { data } = useSelector((state) => state.asset);
+
+  // const cards = [
+  //   { title: "Total Number of Assets", value: "10" },
+  //   { title: "Total Number of Asset Categories", value: "5" },
+  //   { title: "Total Number of Asset", value: "1,285,358,256.29" },
+  // ];
 
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Asset report`);
   };
+  // console.log("assetReportCards", data);
 
   const toggleDateFilter = () => {
     setDateFilterOpen(!dateFilterOpen);
@@ -43,14 +61,42 @@ export default function AssetReport() {
         const startDate = dateRange[0].startDate.toISOString();
         const endDate = dateRange[0].endDate.toISOString();
         const data = {
-          startDate,
-          endDate,
+          startDate: format(new Date(startDate), "yyyy-MM-dd"),
+          endDate: format(new Date(endDate), "yyyy-MM-dd"),
         };
-        // dispatch(getLoanApplicationSummary(data));
+        dispatch(
+          getAssetReportCards({
+            startDate: data.startDate,
+            endDate: data.endDate,
+          })
+        );
         setDateFilterOpen(false);
       }
     }
   };
+
+  useEffect(() => {
+    dispatch(getAssetReportCards({ startDate: "", endDate: "" }));
+  }, []);
+
+  useEffect(() => {
+    console.log("assetdata", data);
+    if (data) {
+      setCards([
+        { title: "Total Number of Assets", value: data?.totalAssets },
+        {
+          title: "Total Number of Asset Categories",
+          value: data?.totalAssetCategory,
+        },
+        {
+          title: "Total Asset Value",
+          value: data?.totalAssetValue.toLocaleString(),
+        },
+      ]);
+    }
+  }, [data]);
+
+  console.log("assetReportCards", assetReports);
 
   return (
     <main className="w-full">
@@ -95,7 +141,6 @@ export default function AssetReport() {
         <div className="rounded-xl overflow-hidden border mt-10 bg-white">
           <AssetReportTable />
         </div>
-
         {/* Modal */}
         <CenterModal
           isOpen={dateFilterOpen}

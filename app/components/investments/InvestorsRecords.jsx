@@ -80,7 +80,7 @@ export default function InvestorsRecords() {
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/investor/all`}
         btnText={
           <div className="flex gap-1 items-center p-1">
-            <p className="">create investor</p>
+            <p className="">Create Investor</p>
           </div>
         }
         btnTextClick={() => {
