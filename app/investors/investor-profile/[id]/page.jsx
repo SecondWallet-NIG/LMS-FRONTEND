@@ -195,9 +195,8 @@ const InvestorProfile = () => {
               <p className="text-sm mb-2">
                 Investor onboarded by: <br />
                 <span className="font-semibold text-swGreen">
-                  {data?.data?.createdBy?.email} on{" "}
-                  {data?.data?.createdAt &&
-                    format(new Date(data?.data?.createdAt), "PPP")}
+                  {data?.data?.createdBy?.firstName}{" "}
+                  {data?.data?.createdBy?.firstName}
                 </span>
               </p>
               <div className="flex items-center">

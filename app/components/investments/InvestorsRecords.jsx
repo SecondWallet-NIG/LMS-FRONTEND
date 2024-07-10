@@ -64,9 +64,9 @@ const customDataTransformer = (apiData) => {
 export default function InvestorsRecords() {
   const router = useRouter();
   const cards = [
-    { title: "Number of investors", value: "12,820,382.36" },
-    { title: "Current pending payments", value: "20" },
-    { title: "Returns earned", value: "25,256,259.68" },
+    { title: "Total Number of Investors", value: "22" },
+    { title: "Active investors", value: "20" },
+    { title: "Returns earned", value: "25256259.68" },
   ];
 
   return (
@@ -80,7 +80,7 @@ export default function InvestorsRecords() {
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/investor/all`}
         btnText={
           <div className="flex gap-1 items-center p-1">
-            <p className="">create investor</p>
+            <p className="">Create Investor</p>
           </div>
         }
         btnTextClick={() => {

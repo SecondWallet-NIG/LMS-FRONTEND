@@ -20,11 +20,11 @@ const Report = () => {
   const selected = "text-swBlue border-b-swBlue font-semibold";
   const navs = [
     { name: "Loan Reports", selOption: "loan" },
-    { name: "Summary Reports", selOption: "summary" },
-    { name: "Management Reports", selOption: "management" },
-    { name: "Asset Reports", selOption: "asset" },
-    { name: "Expense Reports", selOption: "expense" },
-    { name: "Investment Reports", selOption: "investment" },
+    { name: "Summary Report", selOption: "summary" },
+    { name: "Management Report", selOption: "management" },
+    { name: "Expense Report", selOption: "expense" },
+    { name: "Asset Report", selOption: "asset" },
+    { name: "Investment Report", selOption: "investment" },
   ];
 
   const handleReports = (id) => {
@@ -57,12 +57,12 @@ const Report = () => {
           </div>
         </section>
 
-        <section className="my-8 md:mx-5">
+        <section className="my-2 md:mx-5">
           {reportToggle === "loan" && <LoanReports />}
           {reportToggle === "summary" && <SummaryReport />}
           {reportToggle === "management" && <ManagementReport />}
-          {reportToggle === "asset" && <AssetReport />}
           {reportToggle === "expense" && <ExpenseReport />}
+          {reportToggle === "asset" && <AssetReport />}
           {reportToggle === "investment" && <InvestmentReport />}
         </section>
       </main>

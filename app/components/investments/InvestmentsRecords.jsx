@@ -5,16 +5,19 @@ import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useRouter } from "next/navigation";
 
 const header = [
-  { id: "productName", label: "Product name" },
-  { id: "investorsUsingProduct", label: "Investors using product" },
+  { id: "investorName", label: "Investor name" },
+  { id: "id", label: "ID" },
+  { id: "investmentType", label: "Investment type" },
   { id: "roi", label: "ROI" },
-  { id: "amountPaidOut", label: "Amount paid out" },
-  { id: "dateCreated", label: "Date created" },
+  { id: "startDate", label: "Start date" },
+  { id: "endDate", label: "End date" },
+  { id: "investmentDuration", label: "Investment duration" },
+  { id: "investmentStatus", label: "Investment status" },
 ];
 
 const customDataTransformer = (apiData) => {
   console.log({ apiData });
-  return apiData?.expenses?.map((item, i) => ({
+  return apiData?.investments?.map((item, i) => ({
     id: item?._id,
     productName: (
       <div className="text-md font-[500] text-gray-700">
@@ -47,22 +50,22 @@ export default function InvestmentsRecords() {
 
   const cards = [
     { title: "Number of investors", value: "22" },
-    { title: "Amount invested", value: "123,368,937.03" },
-    { title: "Returns earned", value: "25,256,259.68" },
+    { title: "Amount invested", value: "123368937.03" },
+    { title: "Returns earned", value: "25256259.68" },
   ];
 
   return (
-    <div>
+    <div className="flex flex-col gap-5">
       <InvestmentsCards cards={cards} />
       <ReusableDataTable
         dataTransformer={customDataTransformer}
         onClickRow="/investors/view-investment-product"
         headers={header}
         initialData={[]}
-        apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/product/all`}
+        apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/all`}
         btnText={
           <div className="flex gap-1 items-center p-1">
-            <p className="">create investment</p>
+            <p className="">Create Investment</p>
           </div>
         }
         btnTextClick={() => {

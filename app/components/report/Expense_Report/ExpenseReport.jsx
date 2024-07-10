@@ -8,12 +8,20 @@ import { DateRange } from "react-date-range";
 import Button from "../../shared/buttonComponent/Button";
 import ExpenseReportCards from "./ExpenseReportsCards";
 import ExpenseReportTable from "./ExpenseReportTable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import SelectField from "../../shared/input/SelectField";
+import { getExpenseReportCards } from "@/redux/slices/expenseManagementSlice";
+import { format } from "date-fns";
 
 export default function ExpenseReport() {
-  const expenseReport = useSelector((state) => state.report);
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
+  const [cards, setCards] = useState([
+    { title: "Total Number of Expenses", value: 0 },
+    { title: "Total Number of Expense Categories", value: 0 },
+    { title: "Total Expense Value", value: "0" },
+  ]);
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -21,11 +29,13 @@ export default function ExpenseReport() {
       key: "selection",
     },
   ]);
-  const cards = [
-    { title: "Total Number of Expenses", value: "10" },
-    { title: "Total Expense Value", value: "1,285,358,256.29" },
-    { title: "Total Number of Expense Categories", value: "5" },
-  ];
+  const { data } = useSelector((state) => state.expense);
+
+  // const filterOpt = [
+  //   { value: "", label: "Daily" },
+  //   { value: "", label: "Monthly" },
+  //   { value: "", label: "Annually" },
+  // ];
 
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Expenses report`);
@@ -44,14 +54,40 @@ export default function ExpenseReport() {
         const startDate = dateRange[0].startDate.toISOString();
         const endDate = dateRange[0].endDate.toISOString();
         const data = {
-          startDate,
-          endDate,
+          startDate: format(new Date(startDate), "yyyy-MM-dd"),
+          endDate: format(new Date(endDate), "yyyy-MM-dd"),
         };
-        // dispatch(getLoanApplicationSummary(data));
+        dispatch(
+          getExpenseReportCards({
+            startDate: data.startDate,
+            endDate: data.endDate,
+          })
+        );
         setDateFilterOpen(false);
       }
     }
   };
+
+  useEffect(() => {
+    dispatch(getExpenseReportCards({ startDate: "", endDate: "" }));
+  }, []);
+
+  useEffect(() => {
+    console.log("assetdata", data);
+    if (data) {
+      setCards([
+        { title: "Total Number of Expenses", value: data?.totalExpenses },
+        {
+          title: "Total Number of Expense Categories",
+          value: data?.totalExpenseCategories,
+        },
+        {
+          title: "Total Expense Value",
+          value: data?.totalExpenseValue.toLocaleString(),
+        },
+      ]);
+    }
+  }, [data]);
 
   return (
     <main className="w-full">
@@ -86,6 +122,13 @@ export default function ExpenseReport() {
                 Select date range
               </button>
             </div>
+            {/* <div>
+              <SelectField
+                name={"filter"}
+                placeholder={"Month"}
+                optionValue={filterOpt}
+              />
+            </div> */}
           </div>
         </div>
 
