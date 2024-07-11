@@ -16,6 +16,8 @@ import {
 } from "@/redux/slices/expenseManagementSlice";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import { FiTrash } from "react-icons/fi";
+import SuccessModal from "../components/modals/SuccessModal";
+import CancelModal from "../components/modals/CancelModal";
 
 const CreateNewExpense = () => {
   const dispatch = useDispatch();
@@ -23,6 +25,8 @@ const CreateNewExpense = () => {
   const [loading, setLoading] = useState(false);
   const [expenseUploadType, setExpenseUploadType] = useState("Single expense");
   const [userId, setUserId] = useState("");
+  const [successModal, setSuccessModal] = useState(false);
+  const [failedModal, setFailedModal] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileError, setFileError] = useState("");
   const [openDate, setOpenDate] = useState(false);
@@ -101,14 +105,13 @@ const CreateNewExpense = () => {
     dispatch(createBulkExpenses(payload))
       .unwrap()
       .then((response) => {
-        toast.success(
-          "Upload in progress, you will be notified when this is complete"
-        );
+        setSuccessModal(true);
         setSelectedFiles([]);
         setLoading(false);
       })
       .catch((error) => {
-        toast.error(`An error occured`);
+        // toast.error(`An error occured`);
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -332,14 +335,14 @@ const CreateNewExpense = () => {
                   type="file"
                   id="fileInput"
                   className="hidden"
-                  accept=".csv,.xlsx"
+                  accept=".csv"
                   onChange={handleFileInputChange}
                 />
 
                 <p className="mt-10 text-lg font-medium">
                   Drag and drop a file to upload
                 </p>
-                <p className="textxs">File types: .xlsx, .csv</p>
+                <p className="textxs">File types: .csv</p>
                 <p className="textxs">Max file size: 3mb</p>
 
                 <label
@@ -391,6 +394,25 @@ const CreateNewExpense = () => {
           </div>
         )}
       </main>
+      <SuccessModal
+        isOpen={successModal}
+        title={"Bulk Expenses Upload Successful"}
+        description={`Upload in progress, you will be notified when this is complete`}
+        // noButtons={true}
+        btnLeft={"View Expenses"}
+        btnLeftFunc={() => router.push("/expenses")}
+        btnRight={"Upload Bulk Expenses"}
+        btnRightFunc={() => setSuccessModal(false)}
+        onClose={() => setSuccessModal(false)}
+      />
+      <CancelModal
+        isOpen={failedModal}
+        title={"Bulk Expenses Upload Failed"}
+        description={`An error occured`}
+        // noButtons={true}
+        noButtons={true}
+        onClose={() => setFailedModal(false)}
+      />
     </DashboardLayout>
   );
 };
