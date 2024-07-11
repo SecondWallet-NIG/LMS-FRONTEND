@@ -152,7 +152,7 @@ export default function InvestmentDetails() {
                         {renderTable({
                             tableHeader: tableOneHeader,
                             tableContent: <>
-                                <p className={`pl-10 py-3`}>15th Aug, 2023</p>
+                                <p className={`pl-10 py-3 text-swBlack`}>15th Aug, 2023</p>
                                 <p>
                                     <p className={`${tableDataClass}`}>INVPRODUCT-1837993</p>
                                     <p className="text-swGray text-sm leading-5 -mt-3 -ml-1 mb-2">Package 1</p>
@@ -173,7 +173,7 @@ export default function InvestmentDetails() {
                         {renderTable({
                             tableHeader: tableTwoHeader,
                             tableContent: <>
-                                <p className={`pl-10 py-3`}>300,000.00</p>
+                                <p className={`pl-10 py-3 text-swBlack`}>300,000.00</p>
                                 <p className={`${tableDataClass}`}>3 months</p>
                                 <p className={`${tableDataClass}`}>3,300,000</p>
                                 <p className={`${tableDataClass}`}>16/10/2023</p>
