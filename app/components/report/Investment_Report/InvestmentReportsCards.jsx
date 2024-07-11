@@ -20,8 +20,9 @@ export default function InvestmentReportCards({ cards }) {
               </div>
             </div>
             <p className="leading-8 text-swTextColor font-bold text-2xl mt-auto">
-              {card.title === "Total Investment" || "Total Payout Amount"
-                ? "N"
+              {card.title === "Total Investment" ||
+              card.title === "Total Payout Amount"
+                ? " ₦"
                 : ""}
               {card.value}
             </p>
