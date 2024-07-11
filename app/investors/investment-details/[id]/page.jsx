@@ -7,12 +7,16 @@ import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable"
 import Image from "next/image"
 import React, { useState, useEffect } from "react"
 import { FiCalendar, FiCopy, FiPlus } from "react-icons/fi"
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
 
 
 export default function InvestmentDetails() {
     const [isModalOpen, setModal] = useState(false)
     const headClass = 'text-lg font-semibold leading-7 text-swBlack mb-5'
     const tableDataClass = ' py-3 text-sm leading-6 text-swBlack -ml-1'
+    const { id } = useParams()
     const tableOneHeader = [
         { label: 'Start Date' },
         { label: 'Investment Product ID & Package' },
@@ -102,10 +106,13 @@ export default function InvestmentDetails() {
                                 <p className="text-sm leading-5 text-swGray">INV-1837993</p>
 
                                 <div className="flex justify-between gap-4 mt-5 text-sm">
-                                    <Button className="rounded-md flex gap-2">
-                                        <FiPlus size={20} />
-                                        View profile
-                                    </Button>
+
+                                    <Link href={`/investors/investor-profile/${id}`}>
+                                        <Button className="rounded-md flex gap-2">
+                                            <FiPlus size={20} />
+                                            View profile
+                                        </Button>
+                                    </Link>
                                     <span onClick={() => setModal(true)}
                                         className="rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer">
                                         Close investment
