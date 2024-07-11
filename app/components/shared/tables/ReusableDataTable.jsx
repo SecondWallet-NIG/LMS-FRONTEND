@@ -111,6 +111,7 @@ function ReusableDataTable({
       x += `&userId=${userId}`;
     }
     setLoading(true);
+    console.log({ x });
     axios
       .get(x, {
         headers: {
@@ -118,7 +119,15 @@ function ReusableDataTable({
         },
       })
       .then((data) => {
-        const allData = data?.data.results || data?.data?.data;
+        console.log("data tab", data);
+        const allData =
+          data?.data?.data?.expenses ||
+          data?.data?.data?.results ||
+          data?.data?.data?.investmentProducts ||
+          data?.data?.data?.investorProfiles ||
+          data?.data?.data?.investments ||
+          data?.data.results ||
+          data?.data?.data;
         const nestedJsonData = allData;
 
         function flattenData(data, parentKey = "") {

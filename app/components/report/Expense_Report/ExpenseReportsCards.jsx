@@ -19,8 +19,8 @@ export default function ExpenseReportCards({ cards }) {
                 <FiPrinter size={20} />
               </div>
             </div>
-            <p className="leading-8 text-swTextColor font-semibold text-2xl mt-auto">
-              {card.title === "Total Expense Value" ? "N" : ""}
+            <p className="leading-8 text-swTextColor font-bold text-2xl mt-auto">
+              {card.title === "Total Expense Value" ? " ₦" : ""}
               {card.value}
             </p>
           </div>

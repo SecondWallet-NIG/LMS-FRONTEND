@@ -15,6 +15,7 @@ module.exports = {
         swGrey10: "#FAFAFA",
         swGrey25: "#F4F4F4",
         swGrey50: "#EAEAEA",
+        swGrey100: "#BEBEBE",
         swGrey200: "#9F9F9F",
         swGrey400: "#585858",
         swGrey500: "#2E2E2E",

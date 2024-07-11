@@ -1,13 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Button from "@/app/components/shared/buttonComponent/Button";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
-import { AiOutlinePercentage } from "react-icons/ai";
+import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
 
 const CreateInvestment = () => {
+    const [isPreviewOpen, setPreview] = useState(false)
     const selInvestorsOPt = [
         { value: '', label: '' }
     ]
@@ -25,6 +26,17 @@ const CreateInvestment = () => {
         { value: '', label: 'Quarterly' },
         { value: '', label: 'Annually' }
     ]
+
+    const modalChildren = <>
+        <div className="px-5 pb-10">
+            <InputField
+                required={true}
+                disabled={true}
+                label={'ROI'}
+                placeholder={'System returns the roi'}
+            />
+        </div>
+    </>
 
     return (
         <DashboardLayout
@@ -116,7 +128,10 @@ const CreateInvestment = () => {
                 </div>
 
                 <div className="flex justify-center gap-2">
-                    <span className="py-2 px-12 text-swBlue font-semibold rounded-md outline outline-1 hover:outline-gray-200 flex gap-2 border w-fit cursor-pointer">
+                    <span onClick={() => setPreview(true)}
+                        className={`py-2 px-12 text-swBlue font-semibold rounded-md outline outline-1 
+                        hover:outline-gray-200 flex gap-2 border w-fit cursor-pointer
+                    `}>
                         Preview ROI
                     </span>
 
@@ -125,6 +140,14 @@ const CreateInvestment = () => {
                     </Button>
                 </div>
             </div>
+
+            <SharedInvestmentModal
+                css={'max-w-sm'}
+                header={'Preview ROI'}
+                children={modalChildren}
+                isOpen={isPreviewOpen}
+                onClose={setPreview}
+            />
         </DashboardLayout>
     );
 };
