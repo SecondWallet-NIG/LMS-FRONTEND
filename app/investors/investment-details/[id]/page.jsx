@@ -92,8 +92,8 @@ export default function InvestmentDetails() {
             <div>
                 {/* Header */}
                 <div className="border-b-2 pb-5 mb-5">
-                    <div className="flex justify-between mt-10 px-5">
-                        <div className="flex w-2/5 gap-4 relative">
+                    <div className="block lg:flex justify-between mt-10 px-5">
+                        <div className="block lg:flex lg:w-2/5 gap-4 relative">
                             <div className="rounded-full border-2 border-swYellow600 overflow-hidden h-[3.5rem] w-[3.5rem]">
                                 <img
                                     src={"/images/inv-pfp.png"}
@@ -105,8 +105,7 @@ export default function InvestmentDetails() {
                                 <p className="font-semibold text-xl text-swGold leading-7">Melondez Verz</p>
                                 <p className="text-sm leading-5 text-swGray">INV-1837993</p>
 
-                                <div className="flex justify-between gap-4 mt-5 text-sm">
-
+                                <div className="flex justify-between gap-4 mt-5 text-sm mb-10 lg:mb-1">
                                     <Link href={`/investors/investor-profile/${id}`}>
                                         <Button className="rounded-md flex gap-2">
                                             <FiPlus size={20} />
@@ -120,18 +119,18 @@ export default function InvestmentDetails() {
                                 </div>
                             </div>
                             <span className={`bg-swLightBlue text-xs text-white leading-4 h-5 rounded-full 
-                        py-0.5 px-3 absolute left-64 top-4`
+                        py-0.5 px-3 absolute left-24 lg:left-64 top-4`
                             }>
                                 Inprogress
                             </span>
                         </div>
 
-                        <div className="flex justify-between w-3/5 gap-6 text-swTextColor pl-10">
-                            <div className="bg-swGrey25 rounded-lg p-2 w-2/5 h-fit">
+                        <div className="lg:flex justify-between w-full lg:w-3/5 gap-6 text-swTextColor lg:pl-10">
+                            <div className="bg-swGrey25 rounded-lg p-2 lg:w-2/5 h-fit mb-5 lg:mb-1">
                                 <p className="mb-3 text-base font-medium leading-6">Investment ID:</p>
                                 <h2 className="font-bold leading-8 text-2xl">GCL389281</h2>
                             </div>
-                            <div className="bg-swGrey25 w-3/5 p-2 rounded-lg h-fit">
+                            <div className="bg-swGrey25 lg:w-3/5 p-2 rounded-lg h-fit">
                                 <p className="mb-3 text-base font-medium leading-6">Investment amount:</p>
                                 <div className="flex justify-between">
                                     <h2 className="font-bold leading-8 text-2xl">150,000,000.56</h2>
