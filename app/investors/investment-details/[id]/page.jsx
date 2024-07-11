@@ -1,14 +1,85 @@
 "use client"
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout"
+import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal"
 import Button from "@/app/components/shared/buttonComponent/Button"
+import InputField from "@/app/components/shared/input/InputField"
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable"
+import Image from "next/image"
 import React, { useState, useEffect } from "react"
-import { FiCopy, FiPlus } from "react-icons/fi"
+import { FiCalendar, FiCopy, FiPlus } from "react-icons/fi"
 
 
 export default function InvestmentDetails() {
+    const [isModalOpen, setModal] = useState(false)
     const headClass = 'text-lg font-semibold leading-7 text-swBlack mb-5'
-    
+    const tableDataClass = ' py-3 text-sm leading-6 text-swBlack -ml-1'
+    const tableOneHeader = [
+        { label: 'Start Date' },
+        { label: 'Investment Product ID & Package' },
+        { label: 'Investment Amount & ROI' },
+        { label: 'Investment Status' }
+    ]
+
+    const tableTwoHeader = [
+        { label: 'Interest on investment' },
+        { label: 'Duration' },
+        { label: 'Maturity Amount' },
+        { label: 'Maturity Date' }
+    ]
+    const modalChildren = <>
+        <div>
+            <div className="mx-auto w-fit p-6">
+                <Image src={'/images/warning_sign.svg'} width={42} height={42} />
+            </div>
+            <p className="text-sm leading-5 text-center text-swBlack gap-2 p-6">
+                You are trying to close this investment for this customer. Kindly input the date
+            </p>
+            <div className="gap-2 px-6">
+                <InputField
+                    name={"date"}
+                    label={"Date"}
+                    placeholder={"mm/dd/yyyy"}
+                    required={true}
+                    endIcon={<FiCalendar />}
+                />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-10 px-6">
+                <span onClick={() => setModal(false)}
+                    className={`py-2 px-12 flex justify-center text-swTextColor font-semibold rounded-md outline outline-1 
+                     outline-gray-200 flex gap-2 border w-full cursor-pointer hover:shadow-lg
+                    `}>
+                    Cancel
+                </span>
+
+                <Button className="rounded-md font-semibold w-full">
+                    Close Investment
+                </Button>
+            </div>
+        </div>
+    </>
+
+    const renderTable = ({ tableHeader, tableContent }) => (
+        <div className="border rounded-2xl overflow-x-auto">
+            <div className="grid grid-cols-4 border-b py-2 bg-swLightGray rounded-t-2xl">
+                {tableHeader.map((header, index) => {
+                    return (
+                        <h6 key={index} className={`${index !== 0 ? 'flex justify-between' : 'pl-10'}
+                            leading-6 font-medium text-sm text-swBlack
+                        `}>
+                            {header.label}
+                        </h6>
+                    )
+                })}
+            </div>
+
+            <div className="grid grid-cols-4 gap-4">
+                {tableContent}
+            </div>
+        </div>
+    );
+
+
     return (
         <DashboardLayout
             isBackNav={true}
@@ -35,7 +106,8 @@ export default function InvestmentDetails() {
                                         <FiPlus size={20} />
                                         View profile
                                     </Button>
-                                    <span className="rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer">
+                                    <span onClick={() => setModal(true)}
+                                        className="rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer">
                                         Close investment
                                     </span>
                                 </div>
@@ -66,16 +138,56 @@ export default function InvestmentDetails() {
                     </div>
                 </div>
 
-                {/* Investment details */}
-                <div className="px-5">
-                    <h1 className={`${headClass}`}>Investment Details</h1>
-                </div>
+                <div className="gap-8">
+                    {/* Investment details */}
+                    <div className="px-5 gap-4 py-3">
+                        <h1 className={`${headClass}`}>Investment Details</h1>
+                        {renderTable({
+                            tableHeader: tableOneHeader,
+                            tableContent: <>
+                                <p className={`pl-10 py-3`}>15th Aug, 2023</p>
+                                <p>
+                                    <p className={`${tableDataClass}`}>INVPRODUCT-1837993</p>
+                                    <p className="text-swGray text-sm leading-5 -mt-3 -ml-1 mb-2">Package 1</p>
+                                </p>
+                                <p>
+                                    <p className={`${tableDataClass}`}>5,000,000</p>
+                                    <p className="text-swGray text-sm leading-5 -mt-3 -ml-1 mb-2">10% (Monthly)</p>
+                                </p>
+                                <p className={`-ml-1 mt-2 p-1 bg-swGreen200 text-xs text-swGreen700 leading-4 h-6 rounded-full w-fit`}>
+                                    Payout Completed
+                                </p>
+                            </>,
+                        })}
+                    </div>
 
-                {/* ROI Breakdown */}
-                <div className="px-5">
-                    <h1 className={`${headClass}`}>ROI Breakdown</h1>
+                    {/* Table 2 */}
+                    <div className="px-5 py-5">
+                        {renderTable({
+                            tableHeader: tableTwoHeader,
+                            tableContent: <>
+                                <p className={`pl-10 py-3`}>300,000.00</p>
+                                <p className={`${tableDataClass}`}>3 months</p>
+                                <p className={`${tableDataClass}`}>3,300,000</p>
+                                <p className={`${tableDataClass}`}>16/10/2023</p>
+                            </>,
+                        })}
+                    </div>
+
+                    {/* Transaction History */}
+                    <div className="px-5 py-5">
+                        <h1 className={`${headClass}`}>Transaction History</h1>
+                    </div>
                 </div>
             </div>
+
+            <SharedInvestmentModal
+                css={'max-w-lg'}
+                header={'Close Investment'}
+                isOpen={isModalOpen}
+                onClose={setModal}
+                children={modalChildren}
+            />
         </DashboardLayout>
     )
 }
