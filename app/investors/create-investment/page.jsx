@@ -5,8 +5,7 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
-import PreviewRoiModal from "@/app/components/investments/PreviewRoiModal";
-
+import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
 
 const CreateInvestment = () => {
     const [isPreviewOpen, setPreview] = useState(false)
@@ -27,6 +26,17 @@ const CreateInvestment = () => {
         { value: '', label: 'Quarterly' },
         { value: '', label: 'Annually' }
     ]
+
+    const modalChildren = <>
+        <div className="px-5 pb-10">
+            <InputField
+                required={true}
+                disabled={true}
+                label={'ROI'}
+                placeholder={'System returns the roi'}
+            />
+        </div>
+    </>
 
     return (
         <DashboardLayout
@@ -131,7 +141,10 @@ const CreateInvestment = () => {
                 </div>
             </div>
 
-            <PreviewRoiModal
+            <SharedInvestmentModal
+                css={'max-w-sm'}
+                header={'Preview ROI'}
+                children={modalChildren}
                 isOpen={isPreviewOpen}
                 onClose={setPreview}
             />

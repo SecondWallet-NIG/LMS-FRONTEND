@@ -19,8 +19,8 @@ export default function AssetReportCards({ cards }) {
                 <FiPrinter size={20} />
               </div>
             </div>
-            <p className="leading-8 text-swTextColor font-bold text-2xl mt-auto">
-              {card.title === "Total Assets Value" ? "N" : ""}
+            <p className="leading-8 text-swTextColor font-semibold text-2xl mt-auto">
+              {card.title === "Total Asset Value" ? "N" : ""}
               {card.value}
             </p>
           </div>
