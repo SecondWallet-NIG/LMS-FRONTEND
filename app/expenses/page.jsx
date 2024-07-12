@@ -21,7 +21,6 @@ import {
 
 const header = [
   { id: "date", label: "Date" },
-  { id: "description", label: "Description" },
   { id: "category", label: "Expense Category" },
   { id: "amount", label: "Amount" },
   { id: "status", label: "Status" },
@@ -32,25 +31,20 @@ const customDataTransformer = (apiData) => {
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
     date: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-lg font-[500] text-gray-700 font-light">
         {format(new Date(item?.date), "PPP")}
       </div>
     ),
-    description: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.description}
-      </div>
-    ),
     category: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-lg font-[500] text-gray-700 font-light">
         {item?.category?.name}
       </div>
     ),
     amount: (
-      <div className="text-md font-[500] text-gray-700">{item?.amount}</div>
+      <div className="text-lg font-[500] text-gray-700 font-light">{item?.amount}</div>
     ),
     status: (
-      <div className="text-xs font-[500] text-gray-700">
+      <div className="text-md font-[500] text-gray-700">
         <div className="py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1">
           <div
             className={`h-1 w-1 rounded-full ${

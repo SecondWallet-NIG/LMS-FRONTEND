@@ -18,50 +18,62 @@ import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryMo
 const header = [
   { id: "asset", label: "Asset" },
   { id: "category", label: "Category" },
-  { id: "description", label: "Description" },
   { id: "acquisitionDate", label: "Acquisition Date" },
   { id: "value", label: "Value" },
-  // { id: "action", label: "Action" },
+];
+
+const headerAssetCategory = [
+  { id: "name", label: "Asset Category Name" },
+  { id: "createdAt", label: "Date Created" },
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.results?.map((item, i) => ({
     id: item?._id,
-    asset: <div className="text-md font-[500] text-gray-700">{item?.name}</div>,
-    category: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.category?.name}
+    asset: (
+      <div className="text-lg font-[500] text-gray-700 font-light">
+        {item?.name}
       </div>
     ),
-    description: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.description}
+    category: (
+      <div className="text-lg font-[500] text-gray-700 font-light">
+        {item?.category?.name}
       </div>
     ),
     acquisitionDate: (
       <div>
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-lg font-[500] text-gray-700 font-light">
           {item?.acquisitionDate &&
             format(new Date(item?.acquisitionDate), "PPP")}
         </div>
       </div>
     ),
     value: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-lg font-[500] text-gray-700 font-light">
         {item?.value?.toLocaleString()}
       </div>
+    )
+  }));
+};
+const customDataTransformerAssetCategory = (apiData) => {
+  return apiData?.map((item, i) => ({
+    asset: (
+      <div className="text-lg font-[500] text-gray-700 font-light">
+        {item?.name}
+      </div>
     ),
-    // action: (
-    //   <div className="text-md font-[500] text-gray-700">
-    //     <Link
-    //       href={`/asset-management/${item?._id}/view-asset`}
-    //       className="border rounded p-2"
-    //     >
-    //       View details
-    //     </Link>
-    //   </div>
-    // ),
+    name: (
+      <div className="text-lg font-[500] text-gray-700 font-light">
+        {item?.name}
+      </div>
+    ),
+    createdAt: (
+      <div>
+        <div className="text-lg font-[500] text-gray-700 font-light">
+          {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
+        </div>
+      </div>
+    ),
   }));
 };
 
@@ -140,9 +152,6 @@ const AssetManagement = () => {
   console.log({ assetTypeOptions });
   return (
     <>
-      {/* {loading ? (
-        <div>Loading...</div>
-      ) : ( */}
       <DashboardLayout isBackNav={true} paths={["Asset Management"]}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
@@ -178,13 +187,7 @@ const AssetManagement = () => {
                   <IoMdAdd size={20} />
                   <p>New asset</p>
                 </Link>
-                {/* <div
-                  onClick={() => setOpenCreateModal(!openCreateAssetModal)}
-                  className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
-                >
-                  <IoMdAdd size={20} />
-                  <p>Asset category</p>
-                </div> */}
+  
               </div>
             </div>
 
@@ -210,42 +213,32 @@ const AssetManagement = () => {
         )}
         {pageState === "asset category" && (
           <div className="p-10 text-black">
-            <div className="flex justify-end items-center gap-5">
+            <div className="flex justify-end items-center gap-5 mb-4">
               <div
                 onClick={() => setOpenCreateModal(!openCreateAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
-                <p>Add asset category</p>
+                <p>Add Asset Category</p>
               </div>
-                
-              {/* <button
-                aria-disabled="true"
-                onClick={() => setOpenDeleteModal(!openDeleteAssetModal)}
-                className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
-              >
-                <IoMdAdd size={20} />
-                <p>Delete asset category</p>
-              </button> */}
             </div>
-            <p className="text-xl font-semibold">Available asset categories</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">
-              {assetTypeOptions.length > 0 &&
-                assetTypeOptions?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="border rounded-xl p-4 flex flex-col gap-1"
-                  >
-                    <div className="">
-                      <p className="font-semibold  text-sm">{item?.name}</p>
-                      <p className="font-medium text-swGray text-xs mt-2">
-                        {item?.description}
-                        {/* HEllo there */}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-            </div>
+
+            <ReusableDataTable
+              dataTransformer={customDataTransformerAssetCategory}
+              headers={headerAssetCategory}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/asset-category`}
+              filters={false}
+              pagination={false}
+              btnText={
+                <div className="flex gap-1 items-center p-1">
+                  <p className="">Add Asset Category</p>
+                </div>
+              }
+              btnTextClick={() => {
+                setOpenCreateModal(!openCreateAssetModal)
+              }}
+            />
             <CreateAssetModal
               open={openCreateAssetModal}
               onClose={setOpenCreateModal}

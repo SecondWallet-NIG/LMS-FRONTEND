@@ -215,7 +215,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 />
               }
               pathname={pathname}
-              text="Create loan"
+              text="Create Loan"
               link={`${
                 user?.data?.user?.role?.tag === "LO"
                   ? "/create-loan"
@@ -726,7 +726,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 />
               }
               pathname={pathname}
-              text="Create loan"
+              text="Create Loan"
               link={`${
                 user?.data?.user?.role?.tag === "LO"
                   ? "/create-loan"
