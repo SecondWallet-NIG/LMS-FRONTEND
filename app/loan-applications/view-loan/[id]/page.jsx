@@ -755,23 +755,23 @@ const ViewLoan = () => {
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
                   <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       Loan Package
                     </th>
 
-                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Maturity Amount</h1>
                     </th>
-                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Loan Period</h1>
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Maturity Date</h1>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="text-start text-xs">
+                  <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>{data?.data?.loanPackageDetails?.name} </p>
@@ -835,22 +835,22 @@ const ViewLoan = () => {
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
                   <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       Monthly Interest Rate
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Repayment Type</h1>
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Loan Frequency</h1>
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Number of Repayments</h1>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="text-start text-xs">
+                  <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>
@@ -937,18 +937,18 @@ const ViewLoan = () => {
                 <table className=" w-full ">
                   <thead className="bg-swLightGray ">
                     <tr>
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                         ID
                       </th>
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                         Action
                       </th>
 
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                         <h1>Approval Status</h1>
                       </th>
 
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                         <h1>Action</h1>
                       </th>
                     </tr>
@@ -1033,19 +1033,19 @@ const ViewLoan = () => {
                     <table className=" w-full ">
                       <thead className="bg-swLightGray ">
                         <tr>
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                             <h1>Action Task</h1>
                           </th>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                             <h1>Assigned To</h1>
                           </th>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                             <h1>Status</h1>
                           </th>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                             <h1>Approve/Decline</h1>
                           </th>
                         </tr>

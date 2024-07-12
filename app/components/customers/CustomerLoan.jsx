@@ -66,7 +66,7 @@ const CustomerLoan = () => {
         btnText={
           <div className="flex gap-1 items-center p-1">
             <AiOutlinePlus size={15} />
-            <p className="">create borrower</p>
+            <p className="">Add Borrower</p>
           </div>
         }
         btnTextClick={() => {

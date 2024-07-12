@@ -28,38 +28,38 @@ const Repayment = () => {
     return apiData?.map((item) => ({
       id: item?.loanApplication?._id,
       loanId: (
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-[300] text-gray-700">
           SWL - {item?.loanApplication?.loanId}
         </div>
       ),
       borrower: (
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-light font-[500] text-gray-700">
           {item?.loanApplication?.customerId?.firstName}{" "}
           {item?.loanApplication?.customerId?.lastName}
         </div>
       ),
       repaymentNumber: (
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-light font-[500] text-gray-700">
           {item?.repaymentNumber}
         </div>
       ),
       dueDate: (
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-light font-[500] text-gray-700">
           {formatDate(item?.dueDate?.slice(0, 10))}
         </div>
       ),
       amountDue: (
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-light font-[500] text-gray-700">
           ₦ {item?.amountDue?.toLocaleString() || 0}
         </div>
       ),
       amountPaid: (
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-light font-[500] text-gray-700">
           ₦ {item?.amountPaid?.toLocaleString() || 0}
         </div>
       ),
       balanceToPay: (
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-light font-[500] text-gray-700">
           ₦ {item?.balanceToPay?.toLocaleString() || 0}
         </div>
       ),

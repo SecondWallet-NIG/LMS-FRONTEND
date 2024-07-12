@@ -5,42 +5,59 @@ import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useRouter } from "next/navigation";
 
 const header = [
-  { id: "investorName", label: "Investor name" },
-  { id: "id", label: "ID" },
-  { id: "investmentType", label: "Investment type" },
+  { id: "investorName", label: "Investor Name" },
+ { id: "id", label: "Investment ID" },
+  { id: "packageName", label: "Investment Type" },
   { id: "roi", label: "ROI" },
-  { id: "startDate", label: "Start date" },
-  { id: "endDate", label: "End date" },
-  { id: "investmentDuration", label: "Investment duration" },
-  { id: "investmentStatus", label: "Investment status" },
+  { id: "startDate", label: "Start Date" },
+  { id: "endDate", label: "End Date" },
+  { id: "amountInvested", label: "Amount Invested" },
+  { id: "status", label: "Investment Status" },
 ];
 
 const customDataTransformer = (apiData) => {
   console.log({ apiData });
   return apiData?.investments?.map((item, i) => ({
-    id: item?._id,
-    productName: (
-      <div className="text-md font-[500] text-gray-700">
-        {/* {format(new Date(item?.date), "PPP")} */} Product name
+    id:(
+      <div className="text-[15px] font-light text-gray-700">
+       {item.investmentId}
       </div>
     ),
-    investorsUsingProduct: (
-      <div className="text-md font-[500] text-gray-700">
-        {/* {item?.description} */} Investors using product
+    packageName:(
+      <div className="text-[15px] font-light text-gray-700">
+       {item.investmentProduct.name}
+      </div>
+    ),
+    investorName: (
+      <div className="text-[15px] font-light font-[500] text-gray-700">
+       {item.investorProfile.firstName} {item.investorProfile.lastName} 
+      </div>
+    ),
+    amountInvested: (
+      <div className="text-[15px] font-light  font-[500] text-gray-700">
+       ₦ {item?.initialInvestmentPrincipal} 
       </div>
     ),
     roi: (
-      <div className="text-md font-[500] text-gray-700">
-        {/* {item?.category?.name} */} ROI
+      <div className="text-[15px] font-light font-[500] text-gray-700">
+        ₦ {item?.expectedInterest} 
       </div>
     ),
-    amountPaidOut: (
-      <div className="text-md font-[500] text-gray-700">
-        {/* {item?.amount} */} Amount paid out
-      </div>
+    status: (
+      <button
+        className={`${
+          item.status === "Pending"
+            ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+            : item.status === "Approved"
+            ? "bg-green-50 text-swGreen"
+            : "text-red-400 bg-red-100"
+        } px-2 py-1 rounded-full`}
+      >
+        {item?.status}
+      </button>
     ),
     dateCreated: (
-      <div className="text-xs font-[500] text-gray-700">Date created</div>
+      <div className="text-[15px] font-light  font-[500] text-gray-700">Date created</div>
     ),
   }));
 };
