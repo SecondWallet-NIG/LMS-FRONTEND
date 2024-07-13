@@ -163,7 +163,7 @@ export default function InvestmentDetails() {
                 </p>
                 <div className="flex justify-between">
                   <h2 className="font-bold leading-8 text-2xl">
-                    {data?.data?.currentInvestmentPrincipal.toLocaleString()}
+                    {data?.data?.currentInvestmentPrincipal?.toLocaleString()}
                   </h2>
                   <span className="flex gap-2 border text-sm px-3 py-2 font-semibold rounded-md cursor-pointer">
                     <FiCopy className="" size={16} />
@@ -219,11 +219,11 @@ export default function InvestmentDetails() {
               tableContent: (
                 <>
                   <p className={`pl-10 py-3 text-swBlack`}>
-                    {data?.data?.expectedInterest.toLocaleString()}
+                    {data?.data?.expectedInterest?.toLocaleString()}
                   </p>
                   <p className={`${tableDataClass}`}>3 months</p>
                   <p className={`${tableDataClass}`}>
-                    {data?.data?.maturityAmount.toLocaleString()}
+                    {data?.data?.maturityAmount?.toLocaleString()}
                   </p>
                   <p className={`${tableDataClass}`}>
                     {data?.data?.maturityDate &&
