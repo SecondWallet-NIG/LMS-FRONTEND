@@ -15,9 +15,11 @@ import {
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
+import { useRouter } from "next/navigation";
 
 const CreateInvestment = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [isPreviewOpen, setPreview] = useState(false);
   const [investors, setInvestors] = useState([]);
   const [investmentPlans, setInvestmentPlans] = useState([]);
@@ -52,11 +54,7 @@ const CreateInvestment = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    // Remove all non-numeric characters except for a dot
     const numericValue = value.replace(/[^0-9.]/g, "");
-
-    // Format the value with commas
     const formattedValue = Number(numericValue).toLocaleString();
 
     setFormData((prevFormData) => ({
@@ -122,14 +120,13 @@ const CreateInvestment = () => {
     dispatch(createInvestment(payload))
       .unwrap()
       .then((res) => {
-        console.log(res);
         setSuccessModalMessage(res?.message);
         setSuccessModal(true);
         resetFormField();
         setLoading(false);
+        console.log({data});
       })
       .catch((err) => {
-        console.log(err);
         setFailedModalMessage(err?.message);
         setFailedModal(true);
         setLoading(false);

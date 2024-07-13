@@ -1,12 +1,9 @@
-import { BsFillStarFill, BsPentagonFill, BsTriangleFill } from "react-icons/bs";
-import { FaCircle, FaSquareFull } from "react-icons/fa";
-import { PiDiamondFill } from "react-icons/pi";
+
 
 const Card = ({ value, title, extraVal }) => {
-  console.log(extraVal)
   return (
     <div>
-      <div className="p-3 bg-gray-100 text-base rounded-xl">
+      <div className="p-5 bg-gray-100 text-base rounded-xl">
         <div className="flex gap-2 text-red items-center">
           <div className="text-base leading-6 text-swTextColor font-medium">
             {title}
