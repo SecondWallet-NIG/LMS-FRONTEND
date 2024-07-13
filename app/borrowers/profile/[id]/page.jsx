@@ -248,7 +248,7 @@ const CustomerProfile = () => {
                         : router.push("/create-loan");
                     }}
                   >
-                    Create loan
+                    Create Loan
                   </Link>
                   <div className="relative">
                     <div

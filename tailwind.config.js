@@ -22,6 +22,7 @@ module.exports = {
         swLightGray: "#f5f5f5",
         swBlue: "#2769B3",
         swBlue500: "#9CBADC",
+        swBlue700: "#0088B5",
         swBlueActiveStateBg: "#E9F0F7",
         swDarkBlue: "#2360A3",
         swDarkBlueOutline: "#1C4B7F",
