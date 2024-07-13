@@ -274,7 +274,7 @@ const CreateInvestor = () => {
     payload.append("bvn", formData.bvn);
     payload.append("country", formData.country);
     payload.append("state", formData.state);
-    payload.append("city", formData.lga);
+    payload.append("lga", formData.lga);
     payload.append("address[houseNumber]", formData.houseNumber);
     payload.append("address[houseLocation]", formData.houseLocation);
     payload.append("phoneNumber", formData.phoneNumber);
