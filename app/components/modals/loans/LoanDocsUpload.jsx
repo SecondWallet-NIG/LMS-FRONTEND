@@ -72,11 +72,11 @@ const LoanDocsUpload = ({ onClose, fieldType, customerId }) => {
     fieldType == "collaterals" &&
       payload.append("collaterals", formData.collaterals);
     fieldType == "powerOfAttorney" &&
-      payload.append("powerOfAttorney", formData.collaterals);
+      payload.append("powerOfAttorney", formData.powerOfAttorney);
     fieldType == "proofOfOwnership" &&
-      payload.append("proofOfOwnership", formData.collaterals);
+      payload.append("proofOfOwnership", formData.proofOfOwnership);
     fieldType == "statementOfAccounts" &&
-      payload.append("statementOfAccounts", formData.collaterals);
+      payload.append("statementOfAccounts", formData.statementOfAccounts);
 
     dispatch(updateLoanApplication({ loanId: id, payload }))
       .unwrap()

@@ -3,7 +3,6 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
-import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FiCalendar, FiCopy, FiPlus } from "react-icons/fi";
@@ -95,7 +94,7 @@ export default function InvestmentDetails() {
   useEffect(() => {
     dispatch(getSingleInvestment(id));
   }, []);
-  console.log("single investment", data);
+ 
 
   return (
     <DashboardLayout

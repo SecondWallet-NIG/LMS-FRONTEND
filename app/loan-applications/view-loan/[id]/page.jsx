@@ -82,8 +82,6 @@ const ViewLoan = () => {
     docs: null,
   });
 
-  console.log({ file: formData.docs });
-
   const handleFileChange = (e) => {
     setFileError("");
     let { name, files } = e.target;
@@ -171,9 +169,7 @@ const ViewLoan = () => {
     setActivityButton(buttonId);
   };
 
-  const handleLogSearch = (state) => {
-    state === "open" ? setLogSearch(true) : setLogSearch(false);
-  };
+
   const preventMinus = (e) => {
     if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
@@ -686,9 +682,9 @@ const ViewLoan = () => {
             <div className="w-full md:w-[70%]">
               <div className="flex md:justify-end">
                 <div>
-                  <div className="text-xs  font-semibold">
+                  <div className="text-sm  font-medium">
                     {" "}
-                    Loan created by :
+ Loan Creator
                   </div>
                   <button
                     onClick={() => {
@@ -706,15 +702,15 @@ const ViewLoan = () => {
               </div>
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Loan ID:</p>
+                  <p className="text-sm font-medium">Loan ID</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swBlue font-semibold mt-4">
+                    <p className="text-md text-swBlue font-semibold mt-4 text-end">
                       {data?.data?.loanApplication?.loanId}
                     </p>
                   </div>
                 </div>
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Loan Amount:</p>
+                  <p className="text-sm font-medium">Loan Amount</p>
 
                   <div className="flex justify-between items-center">
                     <p className="text-md text-swBlue font-semibold mt-4">
@@ -1130,17 +1126,17 @@ const ViewLoan = () => {
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
                   <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swDarkRed text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swDarkRed text-[14px] font-medium border-0 text-start">
                       Number of Overdue days
                     </th>
 
-                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swDarkRed text-xs border-0 text-start">
+                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swDarkRed text-[14px] font-medium border-0 text-start">
                       <h1>Overdue Period Amount</h1>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="text-start text-xs">
+                  <tr className="text-start text-[14px] font-medium">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center text-swDarkRed font-semibold">
                         <p>
@@ -1154,7 +1150,7 @@ const ViewLoan = () => {
 
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        <p className="text-swDarkRed font-semibold">
+                        <p className="text-swDarkRed text-[14px] font-medium">
                           ₦{" "}
                           {data?.data?.loanApplication?.amountAccruedForcurrentOverdue?.toLocaleString() ||
                             0}

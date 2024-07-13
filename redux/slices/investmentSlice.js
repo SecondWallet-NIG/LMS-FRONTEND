@@ -13,6 +13,11 @@ export const createInvestmentProduct = createAsyncThunk(
   "investment/product/create",
   async (payload) => {
     try {
+      let user;
+if (typeof window !== "undefined") {
+  user = JSON.parse(localStorage.getItem("user"));
+  console.log({user: user?.data?.token});
+}
       const response = await axios.post(
         `${API_URL}/investment/product/create`,
         payload,
