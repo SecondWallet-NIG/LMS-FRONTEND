@@ -289,9 +289,7 @@ const CreateInvestor = () => {
     payload.append("taxDoc", formData.taxDoc);
     payload.append("bvnDoc", formData.bvnDoc);
     payload.append("ninDoc", formData.ninDoc);
-    //payload.append("createdBy", userId?.data?.user?._id);
-
-    console.log(...payload);
+ 
     dispatch(createInvestor(payload))
       .unwrap()
       .then((response) => {
@@ -349,9 +347,6 @@ const CreateInvestor = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUserId(user);
   }, []);
-
-  console.log({ formData });
-  console.log(profileImg);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]}>
       <ToastContainer />
