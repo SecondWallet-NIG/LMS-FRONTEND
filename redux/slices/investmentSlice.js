@@ -49,6 +49,24 @@ export const getSingleInvestmentProduct = createAsyncThunk(
   }
 );
 
+export const getAllInvestmentProducts = createAsyncThunk(
+  "investment/product/all",
+  async () => {
+    try {
+      const response = await axios.get(`${API_URL}/investment/product/all`, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const deleteSingleInvestmentProduct = createAsyncThunk(
   "investment/product/investmentProductId/delete",
   async (id) => {
@@ -116,6 +134,24 @@ export const createInvestment = createAsyncThunk(
   }
 );
 
+export const getSingleInvestment = createAsyncThunk(
+  "investment/investmentId",
+  async (id) => {
+    try {
+      const response = await axios.get(`${API_URL}/investment/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 // InvestorRecords
 
 export const createInvestor = createAsyncThunk(
@@ -145,6 +181,24 @@ export const getSingleInvestor = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.get(`${API_URL}/investment/investor/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const getAllInvestors = createAsyncThunk(
+  "investment/investor/all",
+  async () => {
+    try {
+      const response = await axios.get(`${API_URL}/investment/investor/all`, {
         headers: {
           Authorization: `Bearer ${user?.data?.token}`,
         },
@@ -210,6 +264,19 @@ const investmentSlice = createSlice({
         state.loading = "failed";
         state.error = action.error.message;
       })
+      .addCase(getAllInvestors.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getAllInvestors.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getAllInvestors.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
       .addCase(getSingleInvestmentProduct.pending, (state) => {
         state.loading = "pending";
         state.error = null;
@@ -219,6 +286,32 @@ const investmentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getSingleInvestmentProduct.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getSingleInvestment.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getSingleInvestment.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getSingleInvestment.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getAllInvestmentProducts.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getAllInvestmentProducts.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getAllInvestmentProducts.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;
