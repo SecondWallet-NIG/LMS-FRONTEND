@@ -60,7 +60,7 @@ const CustomizeTableModal = ({
         <div className="my-5 flex flex-col gap-2 font-normal">
           {headers.length > 0 &&
             headers.map((header) => (
-              <div key={header.id} className="flex items-center">
+              <div key={header.id} className="flex items-center capitalize">
                 <input
                   type="checkbox"
                   id={header.id}

@@ -183,17 +183,23 @@ export default function InvestmentDetails() {
               tableHeader: tableOneHeader,
               tableContent: (
                 <>
-                  <p className={`pl-10 py-3 text-swBlack`}>15th Aug, 2023</p>
+                  <p className={`pl-10 py-3 text-swBlack`}>
+                    {data?.data?.createdAt &&
+                      format(new Date(data?.data?.createdAt), "PPP")}
+                  </p>
                   <p>
-                    <p className={`${tableDataClass}`}>INVPRODUCT-1837993</p>
+                    <p className={`${tableDataClass}`}>
+                      {data?.data?.investmentProduct?.investmentProductId}
+                    </p>
                     <p className="text-swGray text-sm leading-5 -mt-3 -ml-1 mb-2">
-                      Package 1
+                      {data?.data?.investmentProduct?.name}
                     </p>
                   </p>
                   <p>
                     <p className={`${tableDataClass}`}>5,000,000</p>
                     <p className="text-swGray text-sm leading-5 -mt-3 -ml-1 mb-2">
-                      10% (Monthly)
+                      {data?.data?.interestRate?.value}% (
+                      {data?.data?.interestRate?.metric})
                     </p>
                   </p>
                   <p
@@ -212,7 +218,9 @@ export default function InvestmentDetails() {
               tableHeader: tableTwoHeader,
               tableContent: (
                 <>
-                  <p className={`pl-10 py-3 text-swBlack`}>300,000.00</p>
+                  <p className={`pl-10 py-3 text-swBlack`}>
+                    {data?.data?.expectedInterest.toLocaleString()}
+                  </p>
                   <p className={`${tableDataClass}`}>3 months</p>
                   <p className={`${tableDataClass}`}>
                     {data?.data?.maturityAmount.toLocaleString()}
