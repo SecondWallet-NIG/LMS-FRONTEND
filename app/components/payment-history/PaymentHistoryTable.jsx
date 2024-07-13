@@ -64,21 +64,20 @@ const PaymentHistoryTable = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({apiData});
     return apiData?.map((item) => ({
       id: item._id,
       createdAt: (
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-light font-[500] text-gray-700">
           {formatDate(item?.createdAt?.slice(0, 10))}
         </div>
       ),
       loggedBy: (
         <div>
-          <div className="text-md font-[500] text-gray-700">
+          <div className="text-[15px] font-light font-[500] text-gray-700">
             {item?.loggedBy === null ? "NIL" : item?.loggedBy?.firstName}{" "}
             {item?.loggedBy === null ? "NIL" : item?.loggedBy?.lastName}
           </div>
-          <div className="text-sm font-[500] text-gray-700">
+          <div className="text-[14px] font-light pt-2 font-[500] text-gray-700">
             {" "}
             {item?.loggedBy === null ? "NIL" : item?.loggedBy?.email}
           </div>
@@ -86,11 +85,11 @@ const PaymentHistoryTable = () => {
       ),
       customerInfo: (
         <div className="">
-          <div className="text-md font-[500] text-gray-700">
+          <div className="text-[15px] font-light font-[500] text-gray-700">
             {item?.loanApplication?.customerId?.firstName}{" "}
             {item?.loanApplication?.customerId?.lastName}
           </div>
-          <div className="text-md font-[500] text-gray-700">
+          <div className="text-[14px] pt-2 font-[500] text-gray-700">
             ₦ {item?.amountLogged.toLocaleString()}
           </div>
         </div>
@@ -98,22 +97,22 @@ const PaymentHistoryTable = () => {
       
       amountLogged: (
    <div>
-         <div className="text-md font-[500] text-gray-700">
+         <div className="text-[15px] font-light font-[500] text-gray-700">
             {item?.loanApplication?.customerId?.firstName}{" "}
             {item?.loanApplication?.customerId?.lastName}
           </div>
-          <div className="text-md font-[500] text-gray-700">
+          <div className="text-[14px] font-[500] text-gray-700">
             ₦ {item?.amountLogged.toLocaleString()}
           </div>
    </div>
       ),
       repaymentMethod: (
         <div>
-          <div className="text-md font-[500] text-gray-700">
+          <div className={ `${item?.repaymentMethod === "Bank transfer" ? "text-swDarkRed" : "text-swIndicatorPurple"} text-[15px]  font-[500] `}>
             {item?.repaymentMethod}
           </div>
           <div
-            className="text-md font-[500] text-swBlue underline z-20"
+            className={"text-[14px] mt-2 font-[500] text-swBlue underline z-20"}
             onClick={() => {
               router.push(
                 `/loan-applications/view-loan/${item?.loanApplication._id}`

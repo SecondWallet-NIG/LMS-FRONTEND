@@ -113,7 +113,7 @@ const ActiveLoanTable = () => {
           apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/all`}
           btnText={
             <div className="flex gap-1 items-center p-1">
-              <p className="hidden lg:block">create loan</p>
+              <p className="hidden lg:block">Create Loan</p>
             </div>
           }
           btnTextClick={() => {
