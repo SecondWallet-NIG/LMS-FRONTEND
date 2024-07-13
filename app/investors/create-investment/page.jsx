@@ -1,155 +1,355 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createInvestment,
+  getAllInvestmentProducts,
+  getAllInvestors,
+} from "@/redux/slices/investmentSlice";
+import SuccessModal from "@/app/components/modals/SuccessModal";
+import CancelModal from "@/app/components/modals/CancelModal";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 
 const CreateInvestment = () => {
-    const [isPreviewOpen, setPreview] = useState(false)
-    const selInvestorsOPt = [
-        { value: '', label: '' }
-    ]
+  const dispatch = useDispatch();
+  const [isPreviewOpen, setPreview] = useState(false);
+  const [investors, setInvestors] = useState([]);
+  const [investmentPlans, setInvestmentPlans] = useState([]);
+  const [successModal, setSuccessModal] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState("");
+  const [failedModal, setFailedModal] = useState(false);
+  const [failedModalMessage, setFailedModalMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [payloadData, setPayloadData] = useState({});
+  const [formData, setFormData] = useState({
+    investorProfile: "",
+    investmentProduct: "",
+    durationMetric: "",
+    durationValue: "",
+    initialInvestmentPrincipal: "",
+    interestRateMetric: "",
+    interestRateValue: "",
+  });
+  const { data } = useSelector((state) => state.investment);
 
-    const investPlanOpt = [{ value: "", label: "" }];
+  const interestDurationOpt = [
+    { value: "Daily", label: "Daily" },
+    { value: "Monthly", label: "Monthly" },
+    { value: "Annually", label: "Annually" },
+  ];
 
-    const interestDurationOpt = [
-        { value: '', label: 'Daily' },
-        { value: '', label: 'Monthly' },
-        { value: '', label: 'Yearly' }
-    ]
+  const durationOpt = [
+    { value: "Month", label: "Month" },
+    { value: "Quarter", label: "Quarter" },
+    { value: "Annual", label: "Annual" },
+  ];
 
-    const durationOpt = [
-        { value: '', label: 'Monthly' },
-        { value: '', label: 'Quarterly' },
-        { value: '', label: 'Annually' }
-    ]
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
 
-    const modalChildren = <>
-        <div className="px-5 pb-10">
-            <InputField
-                required={true}
-                disabled={true}
-                label={'ROI'}
-                placeholder={'System returns the roi'}
-            />
-        </div>
+    // Remove all non-numeric characters except for a dot
+    const numericValue = value.replace(/[^0-9.]/g, "");
+
+    // Format the value with commas
+    const formattedValue = Number(numericValue).toLocaleString();
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: formattedValue,
+    }));
+    setPayloadData((prevFormData) => ({
+      ...prevFormData,
+      [name]: removeCommasFromNumber(value),
+    }));
+  };
+
+  const resetFormField = () => {
+    setFormData({
+      investorProfile: "",
+      investmentProduct: "",
+      durationMetric: "",
+      durationValue: "",
+      initialInvestmentPrincipal: "",
+      interestRateMetric: "",
+      interestRateValue: "",
+    });
+    setPayloadData({});
+  };
+
+  const handleSelectChange = (selectedOption, name) => {
+    setFormData({
+      ...formData,
+      [name]: selectedOption.value,
+    });
+    setPayloadData({
+      ...formData,
+      [name]: selectedOption.value,
+    });
+  };
+
+  const removeCommasFromNumber = (numberString) => {
+    if (typeof numberString !== "string") {
+      // Convert to string or handle the case appropriately
+      numberString = String(numberString);
+    }
+    return numberString.replace(/,/g, "");
+  };
+
+  const handleSubmit = () => {
+    setLoading(true);
+    const payload = {
+      investorProfile: payloadData.investorProfile,
+      investmentProduct: payloadData.investmentProduct,
+      duration: {
+        metric: payloadData.durationMetric,
+        value: Number(payloadData.durationValue),
+      },
+      initialInvestmentPrincipal: Number(
+        payloadData.initialInvestmentPrincipal
+      ),
+      interestRate: {
+        metric: payloadData.interestRateMetric,
+        value: Number(payloadData.interestRateValue),
+      },
+    };
+
+    dispatch(createInvestment(payload))
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        setSuccessModalMessage(res?.message);
+        setSuccessModal(true);
+        resetFormField();
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setFailedModalMessage(err?.message);
+        setFailedModal(true);
+        setLoading(false);
+      });
+  };
+
+  const modalChildren = (
+    <>
+      <div className="px-5 pb-10">
+        <InputField
+          required={true}
+          disabled={true}
+          label={"ROI"}
+          placeholder={"System returns the roi"}
+        />
+      </div>
     </>
+  );
 
-    return (
-        <DashboardLayout
-            isBackNav={true}
-            paths={["Investors", "New investment"]}
-        >
-            <div className="mx-auto w-3/5 mb-28">
-                <h1 className="font-medium text-xl leading-7 text-black py-5">
-                    Create New Investment
-                </h1>
-                <h5 className="font-medium leading-5 text-sm text-swBlack mt-5 mb-8">Enter investment details</h5>
+  //   console.log("investment Data", data);
 
-                <div>
-                    <SelectField
-                        name={"selectInvestor"}
-                        label={"Select investor"}
-                        required={true}
-                        placeholder={"Select from list"}
-                        optionValue={selInvestorsOPt}
-                    />
-                </div>
-                <div className="my-6">
-                    <SelectField
-                        name={"investPlan"}
-                        label={"Investment Plan"}
-                        required={true}
-                        placeholder={"Select plan"}
-                        optionValue={investPlanOpt}
-                    />
-                </div>
+  useEffect(() => {
+    dispatch(getAllInvestors())
+      .unwrap()
+      .then((res) => {
+        // console.log("investors", res);
+        const data = res?.data?.investorProfiles.map((item) => ({
+          label: `${item?.firstName} ${item?.lastName} ${item?.investorId} `,
+          value: item?._id,
+        }));
+        setInvestors(data);
+      })
+      .catch((err) => console.log(err));
+    dispatch(getAllInvestmentProducts())
+      .unwrap()
+      .then((res) => {
+        // console.log("investments", res);
+        const data = res?.data?.investmentProducts.map((item) => ({
+          label: item?.name,
+          value: item?._id,
+        }));
+        setInvestmentPlans(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
-                <div className="flex justify-between gap-4 my-7">
-                    <div className="w-1/2">
-                        <SelectField
-                            name={"interestRateMetrics"}
-                            label={"Interest rate metrics"}
-                            required={true}
-                            placeholder={"Month"}
-                            optionValue={interestDurationOpt}
-                        />
-                    </div>
-                    <div className="w-full mt-7">
-                        <InputField
-                            name={"interestRateMetrics"}
-                            placeholder={"Enter number"}
-                            required={true}
-                            inputType={'number'}
-                        />
-                    </div>
-                </div>
+  //   console.log({ investmentPlans });
+  //   console.log({ investors });
+  console.log("payloadData", payloadData, formData);
 
-                <div className="flex justify-between gap-4 my-7">
-                    <div className="w-1/2">
-                        <SelectField
-                            name={"duration"}
-                            label={"Duration"}
-                            required={true}
-                            placeholder={"Month"}
-                            optionValue={durationOpt}
-                        />
-                    </div>
-                    <div className="w-full mt-7">
-                        <InputField
-                            name={"interestRate"}
-                            placeholder={"Enter number"}
-                            required={true}
-                            inputType={"number"}
-                        />
-                    </div>
-                </div>
+  return (
+    <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
+      <div className="mx-auto w-3/5 mb-28">
+        <h1 className="font-medium text-xl leading-7 text-black py-5">
+          Create New Investment
+        </h1>
+        <h5 className="font-medium leading-5 text-sm text-swBlack mt-5 mb-8">
+          Enter investment details
+        </h5>
 
-                <div className="my-7">
-                    <InputField
-                        name={"investAmount"}
-                        label={'Investment amount'}
-                        placeholder={"Enter amount invested"}
-                        required={true}
-                    />
-                </div>
+        <div>
+          <SelectField
+            name={"investorProfile"}
+            label={"Select investor"}
+            required={true}
+            value={
+              investors.find(
+                (item) => item.value === formData.investorProfile
+              ) || ""
+            }
+            placeholder={"Select from list"}
+            optionValue={investors}
+            onChange={(e) => handleSelectChange(e, "investorProfile")}
+          />
+        </div>
+        <div className="my-6">
+          <SelectField
+            name={"investmentProduct"}
+            label={"Investment Plan"}
+            required={true}
+            value={
+              investmentPlans.find(
+                (item) => item.value === formData.investmentProduct
+              ) || ""
+            }
+            placeholder={"Select plan"}
+            optionValue={investmentPlans}
+            onChange={(e) => handleSelectChange(e, "investmentProduct")}
+          />
+        </div>
 
-                <div className="mb-20">
-                    <InputField
-                        disabled={true}
-                        name={"roiEstimate"}
-                        label={'ROI Estimate'}
-                        placeholder={"System generated"}
-                        required={true}
-                    />
-                </div>
-
-                <div className="flex justify-center gap-2">
-                    <span onClick={() => setPreview(true)}
-                        className={`py-2 px-12 text-swBlue font-semibold rounded-md outline outline-1 
-                        hover:outline-gray-200 flex gap-2 border w-fit cursor-pointer
-                    `}>
-                        Preview ROI
-                    </span>
-
-                    <Button className="rounded-md font-semibold">
-                        Create Investment
-                    </Button>
-                </div>
-            </div>
-
-            <SharedInvestmentModal
-                css={'max-w-sm'}
-                header={'Preview ROI'}
-                children={modalChildren}
-                isOpen={isPreviewOpen}
-                onClose={setPreview}
+        <div className="flex justify-between gap-4 my-7">
+          <div className="w-1/2">
+            <SelectField
+              name={"interestRateMetric"}
+              label={"Interest rate metrics"}
+              required={true}
+              value={
+                interestDurationOpt.find(
+                  (item) => item.value === formData.interestRateMetric
+                ) || ""
+              }
+              //   placeholder={"Month"}
+              optionValue={interestDurationOpt}
+              onChange={(e) => handleSelectChange(e, "interestRateMetric")}
             />
-        </DashboardLayout>
-    );
+          </div>
+          <div className="w-full mt-7">
+            <InputField
+              name={"interestRateValue"}
+              value={formData?.interestRateValue}
+              placeholder={"Enter number"}
+              required={true}
+              //   endIcon={"₦"}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-between gap-4 my-7">
+          <div className="w-1/2">
+            <SelectField
+              name={"durationMetric"}
+              label={"Duration"}
+              required={true}
+              value={
+                durationOpt.find(
+                  (item) => item.value === formData.durationMetric
+                ) || ""
+              }
+              //   placeholder={"Month"}
+              optionValue={durationOpt}
+              onChange={(e) => handleSelectChange(e, "durationMetric")}
+            />
+          </div>
+          <div className="w-full mt-7">
+            <InputField
+              name={"durationValue"}
+              value={formData?.durationValue}
+              placeholder={"Enter number"}
+              required={true}
+              //   endIcon={"₦"}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        <div className="my-7">
+          <InputField
+            name={"initialInvestmentPrincipal"}
+            value={formData?.initialInvestmentPrincipal}
+            label={"Investment amount"}
+            placeholder={"Enter amount invested"}
+            required={true}
+            endIcon={"₦"}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className="mb-20">
+          <InputField
+            disabled={true}
+            name={"roiEstimate"}
+            label={"ROI Estimate"}
+            placeholder={"System generated"}
+            required={true}
+          />
+        </div>
+
+        <div className="flex justify-center gap-2">
+          {/* <span
+            onClick={() => setPreview(true)}
+            className={`py-2 px-12 text-swBlue font-semibold rounded-md outline outline-1 
+                        hover:outline-gray-200 flex gap-2 border w-fit cursor-pointer
+                    `}
+          >
+            Preview ROI
+          </span> */}
+          {/* <div className="w-fit" onClick={handleSubmit}>
+            <Button className="rounded-md font-semibold">
+              Create Investment
+            </Button>
+          </div> */}
+          <EditableButton
+            label={"Create Investment"}
+            blueBtn={true}
+            onClick={handleSubmit}
+            disabled={Object.values(formData).some((e) => e === "") || loading}
+          />
+        </div>
+      </div>
+
+      <SharedInvestmentModal
+        css={"max-w-sm"}
+        header={"Preview ROI"}
+        children={modalChildren}
+        isOpen={isPreviewOpen}
+        onClose={setPreview}
+      />
+      <SuccessModal
+        isOpen={successModal}
+        description={successModalMessage}
+        title={"Investment Created Successfully"}
+        // noButtons={true}
+        btnLeft={"View Investments"}
+        btnLeftFunc={() => router.push("/investors")}
+        btnRight={"Edit"}
+        btnRightFunc={() => setSuccessModal(false)}
+        onClose={() => setSuccessModal(false)}
+      />
+      <CancelModal
+        isOpen={failedModal}
+        description={`${failedModalMessage}`}
+        title={"Investment Creation Failed"}
+        // noButtons={true}
+        noButtons={true}
+        onClose={() => setFailedModal(false)}
+      />
+    </DashboardLayout>
+  );
 };
 
 export default CreateInvestment;

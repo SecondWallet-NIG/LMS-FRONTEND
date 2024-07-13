@@ -2,56 +2,47 @@ import { BsFillStarFill, BsPentagonFill, BsTriangleFill } from "react-icons/bs";
 import { FaCircle, FaSquareFull } from "react-icons/fa";
 import { PiDiamondFill } from "react-icons/pi";
 
-const Card = ({ value, title }) => {
+const Card = ({ value, title, extraVal }) => {
+  console.log(extraVal)
   return (
     <div>
       <div className="p-3 bg-gray-100 text-base rounded-xl">
         <div className="flex gap-2 text-red items-center">
-          <div className="text-sm text-swGray font-semibold">
+          <div className="text-base leading-6 text-swTextColor font-medium">
             {title}
           </div>
         </div>
         <div className="flex items-center justify-between font-semibold mt-5">
-          <p className="text-xl text-swBlue"><span>{title === "Total Loan Amount"  || title === "Total Commitment Fee"  ? '₦ ' : null}</span>{value}</p>
-          {/* <p className="text-sm text-swGray font-light">500 NGN</p> */}
+          <p className="text-4xl leading-10 text-swBlue700">
+            {value}
+          </p>
+          {extraVal && <p className={`text-base text-swBlack font-medium leading-6 ${!value ? "mx-auto" : ""}`}>{extraVal}NGN</p>}
         </div>
       </div>
     </div>
   );
 };
-// {
-//   "totalLoanAmount": 0,
-//   "totalCommitmentTotal": 0,
-//   "count": 0,
-//   "pendingLoanCount": 0,
-//   "ApprovedLoanCount": 0,
-//   "DeclinedLoanCount": 0,
-//   "repaymentTypes": [],
-//   "interestRates": [],
-//   "loanDurationMetrics": [],
-//   "noOfInstallmentRepayment": 0,
-//   "noOfBulletRepayment": 0,
-//   "noOfInterestServicingRepayment": 0
-// }
-const CustomerSummaryCard = ({ data }) => {
+
+const CustomerSummaryCard = ({ data, financialCards }) => {
   return (
-    <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <Card title="Total Loan Amount" value={data?.totalLoanAmount?.toLocaleString()} />
-      <Card title="Total Loan Count" value={data?.count} />
-      <Card title="Total Commitment Fee" value={data?.totalCommitmentTotal?.toLocaleString()} />
-      <Card title="Total Approved Loans" value={data?.ApprovedLoanCount} />
-      <Card title="Total Declined Loans" value={data?.DeclinedLoanCount} />
-      <Card title="Total Pending Loans" value={data?.pendingLoanCount} />
-      <Card
-        title="No of Installment Repayments"
-        value={data?.noOfInstallmentRepayment}
-      />
-      <Card title="No of Bullet Repayments" value={data?.noOfBulletRepayment} />
-      <Card
-        title="No of Interest Servicing Repayments"
-        value={data?.noOfInterestServicingRepayment}
-      />
-    </main>
+    <>
+      {!financialCards && (
+        <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card title="Total Investments" value={3} extraVal={35837828.93} />
+          <Card title="Average ROI" value={`${32}%`} />
+          <Card title="Maturity Amount" value={3} extraVal={35837828.93} />
+          <Card title="Withdrawals" value={5} extraVal={35837828.93} />
+        </main>
+      )}
+  
+      {financialCards && (
+        <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card title="Annual Income" extraVal={35837828.93} />
+          <Card title="Networth" extraVal={35837828.93} />
+          <Card title="Source of Income" extraVal={35837828.93} />
+        </main>
+      )}
+    </>
   );
 };
 
