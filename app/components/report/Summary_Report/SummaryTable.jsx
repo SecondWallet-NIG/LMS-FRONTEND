@@ -38,10 +38,8 @@ const SummaryTable = () => {
       try {
         if (typeof window !== "undefined") {
           const storedUser = JSON.parse(localStorage.getItem("user"));
-          console.log("Stored User:", storedUser);
           setUserId(storedUser?.data?.user?._id || "");
           setRole(storedUser?.data?.user?.role?.name || "");
-          console.log("user data", storedUser?.data?.token);
           setToken(storedUser?.data?.token || "");
         }
       } catch (error) {
@@ -50,41 +48,6 @@ const SummaryTable = () => {
     };
 
     fetchUserData();
-
-    // const tableData = async () => {
-    //   // try {
-    //   //   const response = await axios.get(
-    //   //     `${process.env.NEXT_PUBLIC_API_URL}/report/summary/table-data`,
-    //   //     {
-    //   //       headers: {
-    //   //         Authorization: `Bearer ${token}`,
-    //   //       },
-    //   //     }
-    //   //   );
-
-    //   //   console.log({ response });
-    //   // } catch (error) {
-    //   //   console.log({ error });
-    //   // }
-
-    //   try {
-    //     const response = await axios.get(
-    //       `${process.env.NEXT_PUBLIC_API_URL}/api/report/summary/table-data`,
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       }
-    //     );
-    //     console.log({ response });
-    //   } catch (error) {
-    //     console.log({ error });
-    //     // if (error.response.data.error) {
-    //     //   throw new Error(error.response.data.error);
-    //     // }
-    //   }
-    // };
-    // tableData();
   }, [router.pathname]);
 
   console;

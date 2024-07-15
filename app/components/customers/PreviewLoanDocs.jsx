@@ -19,7 +19,6 @@ import React from "react";
 
 
 const PreviewLoanDocs = (_url) => {
-  console.log({ _url });
 
   return (
     <div>

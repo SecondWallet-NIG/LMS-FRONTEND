@@ -46,7 +46,6 @@ export default function AssetReport() {
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Asset report`);
   };
-  // console.log("assetReportCards", data);
 
   const toggleDateFilter = () => {
     setDateFilterOpen(!dateFilterOpen);
@@ -80,7 +79,6 @@ export default function AssetReport() {
   }, []);
 
   useEffect(() => {
-    console.log("assetdata", data);
     if (data) {
       setCards([
         { title: "Total Number of Assets", value: data?.totalAssets },
@@ -90,13 +88,13 @@ export default function AssetReport() {
         },
         {
           title: "Total Asset Value",
-          value: data?.totalAssetValue.toLocaleString(),
+          value: data?.totalAssetValue?.toLocaleString(),
         },
       ]);
     }
   }, [data]);
 
-  console.log("assetReportCards", assetReports);
+
 
   return (
     <main className="w-full">

@@ -22,8 +22,6 @@ const SavedLoans = () => {
     getAllSavedLoans();
   }, []);
 
-  console.log(allSavedLoans);
-
   const handleCheckAll = () => {
     if (checkedLoans.length === allSavedLoans.length) {
       setCheckedLoans([]);
@@ -54,7 +52,6 @@ const SavedLoans = () => {
     localStorage.setItem("savedLoans", JSON.stringify(newSavedLoans));
     getAllSavedLoans();
   };
-  console.log(checkedLoans);
 
   return (
     <DashboardLayout paths={["Saved Loans"]}>

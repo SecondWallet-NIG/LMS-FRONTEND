@@ -17,8 +17,6 @@ const ViewExpense = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  // const { data } = useSelector((state) => state.expense);
-  console.log("aseet data", data);
 
   useEffect(() => {
     dispatch(getSingleExpense(id))

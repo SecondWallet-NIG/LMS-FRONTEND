@@ -107,7 +107,6 @@ const EditAsset = () => {
     dispatch(getSingleAsset(id))
       .unwrap()
       .then((res) => {
-        console.log("hiiii", res?.data);
         setFormData({
           name: res?.data?.name,
           category: res?.data?.category?._id,
@@ -122,7 +121,6 @@ const EditAsset = () => {
       .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
   }, []);
-  console.log({ formData });
 
   return (
     <DashboardLayout

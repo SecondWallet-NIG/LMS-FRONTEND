@@ -22,7 +22,6 @@ const PreviewInterest = ({
   selectedCustomer,
   setCurrentStep,
 }) => {
-  console.log({ data });
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const formatNumberWithCommas = (number) => {

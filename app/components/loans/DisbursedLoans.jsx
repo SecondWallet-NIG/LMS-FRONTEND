@@ -21,18 +21,20 @@ const DisbursedLoans = () => {
       id: item._id,
       disbursedAt: (
         <div>
-        <div className="text-[13px] font-[500] text-gray-700">
-          {formatDate(item.createdAt?.slice(0, 10))}
+          <div className="text-[13px] font-[500] text-gray-700">
+            {formatDate(item.createdAt?.slice(0, 10))}
+          </div>
+          <div className="text-[13px] font-light text-gray-500 pt-2">
+            {formatTimeToAMPM(item.createdAt)}
+          </div>
         </div>
-        <div className="text-[13px] font-light text-gray-500 pt-2">
-          {formatTimeToAMPM(item.createdAt)}
-        </div>
-      </div>
       ),
       name: (
         <div>
           <div className="text-md font-[500] text-gray-700">{`${item?.customerId?.firstName} ${item?.customerId?.lastName}`}</div>
-          <div className="text-xs text-gray-500">{item?.customerId?.customerId}</div>
+          <div className="text-xs text-gray-500">
+            {item?.customerId?.customerId}
+          </div>
         </div>
       ),
       loanPackageId: (
@@ -74,7 +76,7 @@ const DisbursedLoans = () => {
       try {
         if (typeof window !== "undefined") {
           const storedUser = JSON.parse(localStorage.getItem("user"));
-          console.log("Stored User:", storedUser); 
+
           setUserId(storedUser?.data?.user?._id || "");
           setRole(storedUser?.data?.user?.role?.name || "");
         }
@@ -97,7 +99,7 @@ const DisbursedLoans = () => {
           apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/disbursement`}
           filters={true}
           pagination={true}
-        //  userId={userId}
+          //  userId={userId}
           role="report"
         />
       )}

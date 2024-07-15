@@ -112,19 +112,15 @@ const CreateInvestmentProduct = () => {
       },
     };
 
-    console.log({payload});
 
     dispatch(createInvestmentProduct(payload))
       .unwrap()
       .then((response) => {
         toast.success(response?.message);
-        console.log(response);
         resetForm();
         router.push("/investors");
-        // setNewUserId(response?.data?._id);
       })
       .catch((error) => {
-        console.log({ error });
         toast.error(error?.message);
         setLoading(false);
       });

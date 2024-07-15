@@ -46,7 +46,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -144,7 +143,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
       //  payload.append("tag", formData.tag);
       payload.append("isRoleAdmin", formData.isRoleAdmin);
 
-      console.log({ payload });
       dispatch(createUser(payload))
         .unwrap()
         .then(() => {
@@ -159,7 +157,6 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
           toast.error(error?.message);
           setProfileImg(null);
         });
-      console.log(...payload);
     }
   };
 

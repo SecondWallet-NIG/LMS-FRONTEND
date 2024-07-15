@@ -20,7 +20,6 @@ const CustomerPaymentHistory = ({ loanId }) => {
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({ apiData });
     if (apiData?.length > 0) {
       setEnableLogRepayment(false);
     }

@@ -36,7 +36,6 @@ const CreateAssetModal = ({
         .then((res) => {
           if (res.success === true) {
             toast.success(res.message);
-            console.log("success", res);
             setTimeout(() => {
               dispatch(getAllAssetCategories())
                 .unwrap()
@@ -58,7 +57,6 @@ const CreateAssetModal = ({
         .then((res) => {
           if (res.success === true) {
             toast.success(res.message);
-            console.log("success", res);
 
             setTimeout(() => {
               dispatch(getAllExpenseCategories())
@@ -78,7 +76,6 @@ const CreateAssetModal = ({
     }
   };
 
-  console.log({ formData });
   if (!open) return null;
   return (
     <main className="fixed h-full w-full top-0 left-0 bg-black bg-opacity-25 p-5 flex justify-center items-center z-[110]">

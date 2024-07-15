@@ -73,7 +73,6 @@ export default function ExpenseReport() {
   }, []);
 
   useEffect(() => {
-    console.log("assetdata", data);
     if (data) {
       setCards([
         { title: "Total Number of Expenses", value: data?.totalExpenses },

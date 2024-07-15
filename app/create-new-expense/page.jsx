@@ -72,7 +72,6 @@ const CreateNewExpense = () => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -180,7 +179,7 @@ const CreateNewExpense = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUserId(user);
   }, []);
-  console.log({ formData });
+
   return (
     <DashboardLayout isBackNav={true} paths={["Expenses", "Add new expense"]}>
       <ToastContainer />
