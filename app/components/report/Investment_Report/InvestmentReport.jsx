@@ -6,15 +6,23 @@ import { PiCalendarBlankLight } from "react-icons/pi";
 import CenterModal from "../../modals/CenterModal";
 import { DateRange } from "react-date-range";
 import Button from "../../shared/buttonComponent/Button";
-import { useSelector } from "react-redux";
-import AssetReportCards from "./InvestmentReportsCards";
-import AssetReportTable from "./InvestmentReportTable";
+import { useSelector, useDispatch } from "react-redux";
 import InvestmentReportCards from "./InvestmentReportsCards";
 import InvestmentReportTable from "./InvestmentReportTable";
+import { getInvestmentReport } from "@/redux/slices/investmentSlice";
+import { useImmer } from "use-immer";
 
 export default function InvestmentReport() {
   const [loading, setLoading] = useState(false);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { data } = useSelector(state => state.investment);
+  const [state, setState] = useImmer({
+    totalInvestors: "",
+    totalInvestments: "",
+    totalNumber: "",
+    totalPayout: ""
+  })
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -22,15 +30,33 @@ export default function InvestmentReport() {
       key: "selection",
     },
   ]);
+
+  useEffect(() => {
+    dispatch(getInvestmentReport());
+  }, []);
+
+  useEffect(() => {
+    if (data?.data) {
+      const totalInvestors = Object.keys(data?.data?.investmentsByCategory).length
+      setState(draft => {
+        draft.totalInvestments = data?.data?.totalInvestmentAmount
+        draft.totalInvestors = totalInvestors
+        draft.totalNumber = data?.data?.totalInvestments
+        draft.totalPayout = data?.data?.totalROI
+      })
+    }
+  }, [data?.data])
+
+
   const cards = [
-    { title: "Total Number of Investors", value: "10" },
-    { title: "Total Investment", value: "1,285,358,256.29" },
-    { title: "Total Number ", value: "10" },
-    { title: "Total Payout Amount", value: "1,285,358,256.29" },
+    { title: "Total Number of Investors", value: state.totalInvestors },
+    { title: "Total Investment", value: state.totalInvestments.toLocaleString() },
+    { title: "Total Number of Investment Product", value: state.totalNumber },
+    { title: "Total Payout Amount", value: state.totalPayout.toLocaleString() },
   ];
 
   const handleCapture = () => {
-    handleCaptureClick(setLoading, "captureDiv", `Asset report`);
+    handleCaptureClick(setLoading, "captureDiv", `Investment report`);
   };
 
   const toggleDateFilter = () => {
@@ -55,11 +81,13 @@ export default function InvestmentReport() {
     }
   };
 
+
+
   return (
     <main className="w-full">
       <div className="flex justify-between p-5">
         <p className="text-xl sm:text-2xl font-semibold text-black">
-          Asset Report
+          Investment Report
         </p>
         <EditableButton
           blueBtn={true}
