@@ -21,16 +21,14 @@ const PaymentHistoryTable = () => {
       ?.role?.tag;
 
     if (userRoleTag) {
-      console.log("hello");
       setUser(userRoleTag);
     }
   }, []);
 
   const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role
     ?.tag;
-  console.log({ userRoleTag });
   if (userRoleTag) {
-    console.log("hello");
+    // console.log("hello");
   }
 
   const router = useRouter();
@@ -94,21 +92,27 @@ const PaymentHistoryTable = () => {
           </div>
         </div>
       ),
-      
+
       amountLogged: (
-   <div>
-         <div className="text-[15px] font-light font-[500] text-gray-700">
+        <div>
+          <div className="text-[15px] font-light font-[500] text-gray-700">
             {item?.loanApplication?.customerId?.firstName}{" "}
             {item?.loanApplication?.customerId?.lastName}
           </div>
           <div className="text-[14px] font-[500] text-gray-700">
             ₦ {item?.amountLogged.toLocaleString()}
           </div>
-   </div>
+        </div>
       ),
       repaymentMethod: (
         <div>
-          <div className={ `${item?.repaymentMethod === "Bank transfer" ? "text-swDarkRed" : "text-swIndicatorPurple"} text-[15px]  font-[500] `}>
+          <div
+            className={`${
+              item?.repaymentMethod === "Bank transfer"
+                ? "text-swDarkRed"
+                : "text-swIndicatorPurple"
+            } text-[15px]  font-[500] `}
+          >
             {item?.repaymentMethod}
           </div>
           <div

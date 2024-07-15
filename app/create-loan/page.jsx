@@ -83,7 +83,6 @@ const CreateLoan = () => {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  // console.log(selectedCustomer);
   const assetTypeData = [
     { value: 100, label: "Investment" },
     { value: 200, label: "Building" },
@@ -112,7 +111,6 @@ const CreateLoan = () => {
     { value: "Yearly", label: "Yearly" },
   ];
 
-  console.log({ formData });
   const validateFormData = (formData) => {
     for (const key in formData) {
       if (formData[key] === null || formData[key] === 0) {
@@ -298,10 +296,9 @@ const CreateLoan = () => {
       ...prev,
       [name]: "",
     }));
-    // console.log({ name, files });
+
     const file = files[0];
     const fileExtension = file.name.split(".").pop().toLowerCase();
-    console.log(fileExtension);
 
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     if (!allowedExtensions.includes(fileExtension)) {
@@ -325,7 +322,6 @@ const CreateLoan = () => {
           ...prevFormData,
           [name]: files[0],
         }));
-    // console.log(formData);
   };
 
   const deleteFile = (name, inputName) => {
@@ -423,8 +419,6 @@ const CreateLoan = () => {
     payload.append("createdBy", userId?._id);
     payload.append("tag", userId?.role.tag);
 
-    console.log({ ...payload });
-
     setLoading(true);
     e.preventDefault();
     dispatch(createLoanApplication(payload))
@@ -478,8 +472,6 @@ const CreateLoan = () => {
         savedAt: new Date(),
         id: loansLength,
       };
-      console.log({ formData });
-      console.log({ newFormData });
       loans.push(newFormData);
       localStorage.setItem("savedLoans", JSON.stringify(loans));
       toast.success("Your partly created loan has been successfully saved");
@@ -577,10 +569,6 @@ const CreateLoan = () => {
     );
     setLoanPackageInterestRate(loanpackage);
   }, [formData.loanPackage]);
-  console.log({ loanPackageInterestRate });
-
-  // console.log("loanPackage", loanPackageInterestRate);
-  console.log("loanPackage", formData.loanAmount);
 
   if (roleTag && roleTag !== "LO") {
     return <Unauthorized />;
@@ -1545,7 +1533,6 @@ const CreateLoan = () => {
               <div
                 key={item._id}
                 onClick={() => {
-                  console.log({ item });
                   setFormData({
                     ...formData,
                     customerId: item._id,

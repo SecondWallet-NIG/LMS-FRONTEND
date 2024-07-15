@@ -19,14 +19,12 @@ const LoanPackages = () => {
   const [showCreatePlan, setShowCreatePlan] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-  console.log(showCreatePlan);
 
   const loanPackage =
     useSelector((state) => {
       return state?.loanPackage?.data?.data;
     }) || [];
 
-  // console.log(data);
   const handleSearch = (state) => {
     setSearchOpen(state);
   };

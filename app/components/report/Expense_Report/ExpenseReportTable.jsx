@@ -12,27 +12,26 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
     date: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {format(new Date(item?.date), "PPP")}
       </div>
     ),
     description: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.description}
       </div>
     ),
     category: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.category?.name}
       </div>
     ),
     amount: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.amount?.toLocaleString()}
+      <div className="text-[15px] font-light text-gray-700">
+        ₦ {item?.amount?.toLocaleString()}
       </div>
     ),
     status: (

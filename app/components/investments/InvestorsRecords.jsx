@@ -18,43 +18,46 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log("record", apiData);
   return apiData?.investorProfiles?.map((item) => ({
     id: item?._id,
     investorName: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.firstName} {item?.lastName}
       </div>
     ),
     investorId: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">{item?.investorId}</div>
+      <div className="text-[15px] font-light text-gray-700">
+        {item?.investorId}
+      </div>
     ),
     dateOfBirth: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.dateOfBirth && format(new Date(item?.dateOfBirth), "PPP")}
       </div>
     ),
     gender: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">{item?.gender}</div>
+      <div className="text-[15px] font-light text-gray-700">{item?.gender}</div>
     ),
     state: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">{item?.state}</div>
+      <div className="text-[15px] font-light text-gray-700">{item?.state}</div>
     ),
     phone: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.phoneNumber}
       </div>
     ),
     annualIncome: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">
-        {item?.annualIncome.toLocaleString()}
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+        ₦ {item?.annualIncome.toLocaleString()}
       </div>
     ),
     workStatus: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">{item?.workStatus}</div>
+      <div className="text-[15px] font-light text-gray-700">
+        {item?.workStatus}
+      </div>
     ),
     investorStatus: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.investorStatus || "status"}
       </div>
     ),

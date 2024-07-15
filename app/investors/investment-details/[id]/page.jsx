@@ -95,7 +95,6 @@ export default function InvestmentDetails() {
   useEffect(() => {
     dispatch(getSingleInvestment(id));
   }, []);
-  console.log("single investment", data);
 
   return (
     <DashboardLayout
@@ -197,13 +196,13 @@ export default function InvestmentDetails() {
                   </p>
                   <p>
                     <p className={`${tableDataClass}`}>5,000,000</p>
-                    <p className="text-swGray text-sm leading-5 -mt-3 -ml-1 mb-2">
+                    <p className="text-swGray text-sm leading-5 -mt-3 -ml-1 mb-2 capitalize">
                       {data?.data?.interestRate?.value}% (
                       {data?.data?.interestRate?.metric})
                     </p>
                   </p>
                   <p
-                    className={`-ml-1 mt-2 p-1 bg-swGreen200 text-xs text-swGreen700 leading-4 h-6 rounded-full w-fit`}
+                    className={`-ml-1 mt-2 py-1 px-4 border border-swGreen bg-green-100 text-xs text-swGreen leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
                   >
                     Payout Completed
                   </p>
@@ -221,7 +220,14 @@ export default function InvestmentDetails() {
                   <p className={`pl-10 py-3 text-swBlack`}>
                     {data?.data?.expectedInterest?.toLocaleString()}
                   </p>
-                  <p className={`${tableDataClass}`}>3 months</p>
+                  <p className={`${tableDataClass}`}>
+                    {data?.data?.duration?.value}{" "}
+                    {data?.data?.duration?.metric === "Month"
+                      ? "Months"
+                      : data?.data?.duration?.metric === "Quarter"
+                      ? "Quarters"
+                      : "Years"}
+                  </p>
                   <p className={`${tableDataClass}`}>
                     {data?.data?.maturityAmount?.toLocaleString()}
                   </p>

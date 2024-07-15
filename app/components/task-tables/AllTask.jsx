@@ -16,7 +16,6 @@ const AllTasks = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({ apiData });
     return apiData?.data?.results.map((item) => ({
       id: item?.loanApplication?._id,
       taskId: item?._id,

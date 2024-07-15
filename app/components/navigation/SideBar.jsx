@@ -36,12 +36,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const x = useSelector((state) => state.approvalAssignee);
   const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role
     ?.tag;
-  console.log({ userRoleTag });
+
   const handleSidebarOpen = (state) => {
     setSideBarOpen(state);
   };
-
-  // console.log("sidbarState", sideBarState);
 
   useEffect(() => {
     // setSideBarOpen(true);
@@ -57,15 +55,11 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
 
   useEffect(() => {
     dispatch(getApprovalAssignee(user?.data?.user?._id));
-
-    // // console.log({ x });
   }, []);
 
   useEffect(() => {
     sideBarState ? handleSidebarOpen(true) : handleSidebarOpen(false);
   }, [sideBarState]);
-
-  console.log("sidbarState", sideBarOpen);
 
   return (
     <main>

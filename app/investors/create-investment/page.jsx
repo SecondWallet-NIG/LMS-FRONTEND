@@ -11,6 +11,7 @@ import {
   createInvestment,
   getAllInvestmentProducts,
   getAllInvestors,
+  getROI,
 } from "@/redux/slices/investmentSlice";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
@@ -39,9 +40,9 @@ const CreateInvestment = () => {
   const { data } = useSelector((state) => state.investment);
 
   const interestDurationOpt = [
-    { value: "Daily", label: "Daily" },
-    { value: "Monthly", label: "Monthly" },
-    { value: "Annually", label: "Annually" },
+    { value: "daily", label: "Daily" },
+    { value: "monthly", label: "Monthly" },
+    { value: "annually", label: "Annually" },
   ];
 
   const durationOpt = [
@@ -122,14 +123,12 @@ const CreateInvestment = () => {
     dispatch(createInvestment(payload))
       .unwrap()
       .then((res) => {
-        console.log(res);
         setSuccessModalMessage(res?.message);
         setSuccessModal(true);
         resetFormField();
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         setFailedModalMessage(err?.message);
         setFailedModal(true);
         setLoading(false);
@@ -149,13 +148,11 @@ const CreateInvestment = () => {
     </>
   );
 
-  //   console.log("investment Data", data);
 
   useEffect(() => {
     dispatch(getAllInvestors())
       .unwrap()
       .then((res) => {
-        // console.log("investors", res);
         const data = res?.data?.investorProfiles.map((item) => ({
           label: `${item?.firstName} ${item?.lastName} ${item?.investorId} `,
           value: item?._id,
@@ -166,7 +163,6 @@ const CreateInvestment = () => {
     dispatch(getAllInvestmentProducts())
       .unwrap()
       .then((res) => {
-        // console.log("investments", res);
         const data = res?.data?.investmentProducts.map((item) => ({
           label: item?.name,
           value: item?._id,
@@ -176,10 +172,39 @@ const CreateInvestment = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  //   console.log({ investmentPlans });
-  //   console.log({ investors });
-  console.log("payloadData", payloadData, formData);
+  useEffect(() => {
+    if (payloadData?.initialInvestmentPrincipal?.length > 3) {
+      const payload = {
+        duration: {
+          metric: payloadData.durationMetric,
+          value: Number(payloadData.durationValue),
+        },
+        initialInvestmentPrincipal: Number(
+          payloadData.initialInvestmentPrincipal
+        ),
+        interestRate: {
+          metric: payloadData.interestRateMetric,
+          value: Number(payloadData.interestRateValue),
+        },
+      };
 
+      dispatch(getROI(payload))
+        .unwrap()
+        .then((res) => {
+          // setSuccessModalMessage(res?.message);
+          // setSuccessModal(true);
+          // resetFormField();
+          // setLoading(false);
+          console.log("roi", res);
+        })
+        .catch((err) => {
+          console.log("roi", err);
+          // setFailedModalMessage(err?.message);
+          // setFailedModal(true);
+          // setLoading(false);
+        });
+    }
+  }, [payloadData?.initialInvestmentPrincipal]);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
       <div className="mx-auto w-3/5 mb-28">

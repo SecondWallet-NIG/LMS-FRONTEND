@@ -14,7 +14,6 @@ const Viewer = dynamic(
 );
 
 const CustomerProfileDocs = (data) => {
-  console.log({data});
 
   const [url, setUrl] = useState("");
   const [isOpen, setIsOpen] = useState(false);

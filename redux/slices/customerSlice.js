@@ -75,7 +75,6 @@ export const createEmployment = createAsyncThunk(
   "employment/create",
   async (payload) => {
     try {
-      console.log(".....", user?.data?.token);
       const response = await axios.post(
         API_URL + "/employment/create",
         payload,
@@ -149,7 +148,7 @@ export const getCustomers = createAsyncThunk(
           },
         }
       );
-      console.log({ response });
+
       return response.data;
     } catch (error) {
       if (error.response.data.error) {

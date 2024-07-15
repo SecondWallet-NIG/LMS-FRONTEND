@@ -234,6 +234,28 @@ export const updateInvestor = createAsyncThunk(
   }
 );
 
+export const getROI = createAsyncThunk(
+  "investment/preview/roi-details",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/investment/preview/roi-details`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const investmentSlice = createSlice({
   name: "investment",
   initialState: {

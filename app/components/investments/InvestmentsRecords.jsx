@@ -16,7 +16,6 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.investments?.map((item, i) => ({
     id: item._id,
     investmentId: (
@@ -30,18 +29,18 @@ const customDataTransformer = (apiData) => {
       </div>
     ),
     investorName: (
-      <div className="text-[15px] font-light font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item.investorProfile.firstName} {item.investorProfile.lastName}
       </div>
     ),
     amountInvested: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">
-        ₦ {item?.initialInvestmentPrincipal}
+      <div className="text-[15px] font-light  whitespace-nowrap text-gray-700">
+        ₦ {item?.initialInvestmentPrincipal?.toLocaleString()}
       </div>
     ),
     roi: (
-      <div className="text-[15px] font-light font-[500] text-gray-700">
-        ₦ {item?.expectedInterest}
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+        ₦ {item?.expectedInterest?.toLocaleString()}
       </div>
     ),
     status: (
@@ -58,9 +57,7 @@ const customDataTransformer = (apiData) => {
       </button>
     ),
     dateCreated: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">
-        Date created
-      </div>
+      <div className="text-[15px] font-light text-gray-700">Date created</div>
     ),
   }));
 };

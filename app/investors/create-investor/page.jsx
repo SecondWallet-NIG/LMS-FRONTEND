@@ -133,7 +133,6 @@ const CreateInvestor = () => {
       ...prev,
       [name]: "",
     }));
-    // console.log({ name, files });
     const file = files[0];
     const fileExtension = file.name.split(".").pop().toLowerCase();
 
@@ -290,20 +289,17 @@ const CreateInvestor = () => {
     payload.append("bvnDoc", formData.bvnDoc);
     payload.append("ninDoc", formData.ninDoc);
     //payload.append("createdBy", userId?.data?.user?._id);
-
-    console.log(...payload);
+s
     dispatch(createInvestor(payload))
       .unwrap()
       .then((response) => {
         toast.success(response?.message);
-        console.log(response);
         resetForm();
         setProfileImg(null);
         router.push("/investors");
         // setNewUserId(response?.data?._id);
       })
       .catch((error) => {
-        console.log({ error });
         toast.error(error?.message);
         setLoading(false);
       });
@@ -314,7 +310,6 @@ const CreateInvestor = () => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -350,8 +345,6 @@ const CreateInvestor = () => {
     setUserId(user);
   }, []);
 
-  console.log({ formData });
-  console.log(profileImg);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]}>
       <ToastContainer />

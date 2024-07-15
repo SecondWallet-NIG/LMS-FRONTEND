@@ -78,7 +78,6 @@ const SavedLoan = () => {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  // console.log(selectedCustomer);
   const assetTypeData = [
     { value: 100, label: "Investment" },
     { value: 200, label: "Building" },
@@ -107,7 +106,6 @@ const SavedLoan = () => {
     { value: "Yearly", label: "Yearly" },
   ];
 
-  console.log({ formData });
   const validateFormData = (formData) => {
     for (const key in formData) {
       if (formData[key] === null || formData[key] === 0) {
@@ -292,10 +290,9 @@ const SavedLoan = () => {
       ...prev,
       [name]: "",
     }));
-    // console.log({ name, files });
+
     const file = files[0];
     const fileExtension = file.name.split(".").pop().toLowerCase();
-    console.log(fileExtension);
 
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     if (!allowedExtensions.includes(fileExtension)) {
@@ -313,7 +310,6 @@ const SavedLoan = () => {
       ...prevFormData,
       [name]: files[0],
     }));
-    // console.log(formData);
   };
 
   const deleteFile = (name) => {
@@ -421,8 +417,6 @@ const SavedLoan = () => {
       toast.success("Your partly created loan has been successfully saved");
       router.push("/saved-loans");
     }
-
-    console.log("Save loan");
   };
 
   useEffect(() => {
@@ -432,10 +426,6 @@ const SavedLoan = () => {
     if (savedLoans) {
       setFormData(savedLoans[param.id].formData);
       setSelectedCustomer(savedLoans[param.id].selectedCustomer);
-      console.log(
-        "profilePic",
-        savedLoans[param.id].selectedCustomer.profilePicture
-      );
     }
   }, []);
 
@@ -444,14 +434,11 @@ const SavedLoan = () => {
     const savedLoans = saved ? JSON.parse(saved) : null;
 
     if (loanPackage.loading === "succeeded") {
-      console.log("savedLoans", savedLoans[param.id].formData.loanPackage);
-      console.log("loanPackage", loanPackage?.data?.data);
       const loanPackageData = loanPackage?.data?.data;
 
       const loanPackageDataId = loanPackageData.find(
         (item) => item._id === savedLoans[param.id].formData.loanPackage
       );
-      console.log("loanPackageDataId", loanPackageDataId);
       setLoanPackageText(loanPackageDataId.name);
       setLoanPackageRate(loanPackageDataId?.interestRate?.rate);
     }
@@ -1494,7 +1481,6 @@ const SavedLoan = () => {
               <div
                 key={item._id}
                 onClick={() => {
-                  console.log({ item });
                   setFormData({
                     ...formData,
                     customerId: item._id,

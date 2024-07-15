@@ -48,8 +48,6 @@ const CreateNewAsset = () => {
     label: option?.name,
   }));
 
-  console.log({ transformedOptions });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "value") {
@@ -82,7 +80,6 @@ const CreateNewAsset = () => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -178,13 +175,10 @@ const CreateNewAsset = () => {
       .catch((err) => console.log({ err }));
   }, []);
 
-  console.log({ formData });
-
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUserId(user);
   }, []);
-  console.log({ formData });
   return (
     <DashboardLayout
       isBackNav={true}

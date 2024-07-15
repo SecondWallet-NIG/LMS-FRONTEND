@@ -12,7 +12,6 @@ import CustomerProfileDocs from "../customers/CustomerProfileDocs";
 
 const ProfileDocuments = ({userData}) => {
 
-  console.log(">>>>>>>>>", userData?.identityVerification);
   const {id} = useParams()
   const dispatch = useDispatch();
   const [selectedFilesArr, setSelectedFilesArr] = useState([]);

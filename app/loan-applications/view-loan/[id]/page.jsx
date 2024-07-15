@@ -81,15 +81,13 @@ const ViewLoan = () => {
     disbursementDate: new Date(),
     docs: null,
   });
-
-  console.log({ file: formData.docs });
+                                                                                                                    
 
   const handleFileChange = (e) => {
     setFileError("");
     let { name, files } = e.target;
     const file = files[0];
     const fileExtension = file.name.split(".").pop().toLowerCase();
-    console.log(fileExtension);
 
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     if (!allowedExtensions.includes(fileExtension)) {
@@ -491,8 +489,6 @@ const ViewLoan = () => {
       format(formData.disbursementDate, "yyyy-MM-dd")
     );
 
-    console.log([...payload]);
-
     setLoading(true);
     e.preventDefault();
     dispatch(disburseLoan({ loanId: id, payload: payload }))
@@ -511,11 +507,10 @@ const ViewLoan = () => {
   };
 
   const modifyUsersToApprove = () => {
-    console.log({ user });
-    console.log("hello");
+
     if (Array.isArray(user)) {
       const users = user.filter((item) => item?.role?.tag === "LO");
-      console.log({ users });
+ 
       setUsersToApprove(
         users.map((item) => ({
           label: item.firstName + " " + item.lastName,
@@ -574,7 +569,7 @@ const ViewLoan = () => {
   // };
 
   if (loanApprovals?.data?.data) {
-    console.log(">>>>>>>", loanApprovals?.data?.data);
+
     hasDecline = hasDeclineStatus();
   }
 

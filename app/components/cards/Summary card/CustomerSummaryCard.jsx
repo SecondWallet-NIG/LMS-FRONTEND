@@ -3,7 +3,6 @@ import { FaCircle, FaSquareFull } from "react-icons/fa";
 import { PiDiamondFill } from "react-icons/pi";
 
 const Card = ({ value, title, extraVal }) => {
-  console.log(extraVal)
   return (
     <div>
       <div className="p-3 bg-gray-100 text-base rounded-xl">
