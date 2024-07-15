@@ -21,8 +21,6 @@ const CustomerLoanDoc = (data) => {
   const [openFileModal, setOpenFileModal] = useState(false);
   const [fieldType, setFieldType] = useState("");
 
-  console.log("docs", data);
-
   const handleSetUrl = (content) => {
     setUrl(content);
     setIsOpen(true);

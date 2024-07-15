@@ -182,22 +182,22 @@ const InvestorProfile = () => {
           </div>
 
           {/* Top Cards */}
-          <div className="w-full flex justify-between gap-4 my-5 lg:px-10">
-            <div className="bg-swGrey25 rounded-lg p-2 w-full h-fit mb-5 lg:mb-1 text-swTextColor">
+          {/* <div className="w-full flex justify-between gap-4 my-5 lg:px-10">
+            <div className="bg-swGrey25 rounded-lg p-4 w-full h-fit mb-5 lg:mb-1 text-swTextColor">
               <p className="mb-3 text-base font-medium leading-6">Portfolio Value</p>
               <h2 className="font-bold leading-8 text-2xl">58,259,256.58</h2>
             </div>
-            <div className="bg-swGrey25 rounded-lg p-2 w-full h-fit mb-5 lg:mb-1 text-swTextColor">
+            <div className="bg-swGrey25 rounded-lg p-4 w-full h-fit mb-5 lg:mb-1 text-swTextColor">
               <p className="mb-3 text-base font-medium leading-6">Active investments</p>
               <h2 className="font-bold leading-8 text-2xl">3</h2>
             </div>
-          </div>
+          </div> */}
 
           {/* Create investment */}
           <div className="w-full lg:w-1/2 sm:text-end">
             <div className="sm:ml-4 flex flex-col justify-between  sm:items-end">
               <p className="text-sm mb-5">
-                Investor onboarded by: <br />
+                Investor Onboarded By: <br />
                 <span className="font-medium text-swTextColor leading-6">
                   {data?.data?.createdBy?.firstName}{" "}
                   {data?.data?.createdBy?.lastName}
@@ -207,17 +207,9 @@ const InvestorProfile = () => {
                 <div className="flex gap-5">
                   <Link
                     href={"/investors/create-investment"}
-                    // variant={"primary"}
                     className="text-center rounded-md py-[0.4rem] px-3 bg-swBlue text-white border-2 border-white hover:border-blue-100"
-                  // onClick={() => {
-                  //   localStorage.setItem("borrower", JSON.stringify(data));
-                  //   router.push("/create-loan");
-                  //   roleTag !== "LO"
-                  //     ? router.push("/unauthorized")
-                  //     : router.push("/create-loan");
-                  // }}
                   >
-                    Create investment
+                    Create Investment
                   </Link>
                 </div>
               </div>
