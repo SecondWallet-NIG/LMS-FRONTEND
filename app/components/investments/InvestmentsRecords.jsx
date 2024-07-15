@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 const header = [
   { id: "investorName", label: "Investor Name" },
- { id: "id", label: "Investment ID" },
+  { id: "investmentId", label: "Investment ID" },
   { id: "packageName", label: "Investment Type" },
   { id: "roi", label: "ROI" },
   { id: "startDate", label: "Start Date" },
@@ -18,29 +18,30 @@ const header = [
 const customDataTransformer = (apiData) => {
   console.log({ apiData });
   return apiData?.investments?.map((item, i) => ({
-    id:(
+    id: item._id,
+    investmentId: (
       <div className="text-[15px] font-light text-gray-700">
-       {item.investmentId}
+        {item.investmentId}
       </div>
     ),
-    packageName:(
+    packageName: (
       <div className="text-[15px] font-light text-gray-700">
-       {item.investmentProduct.name}
+        {item.investmentProduct.name}
       </div>
     ),
     investorName: (
       <div className="text-[15px] font-light font-[500] text-gray-700">
-       {item.investorProfile.firstName} {item.investorProfile.lastName} 
+        {item.investorProfile.firstName} {item.investorProfile.lastName}
       </div>
     ),
     amountInvested: (
       <div className="text-[15px] font-light  font-[500] text-gray-700">
-       ₦ {item?.initialInvestmentPrincipal} 
+        ₦ {item?.initialInvestmentPrincipal}
       </div>
     ),
     roi: (
       <div className="text-[15px] font-light font-[500] text-gray-700">
-        ₦ {item?.expectedInterest} 
+        ₦ {item?.expectedInterest}
       </div>
     ),
     status: (
@@ -57,7 +58,9 @@ const customDataTransformer = (apiData) => {
       </button>
     ),
     dateCreated: (
-      <div className="text-[15px] font-light  font-[500] text-gray-700">Date created</div>
+      <div className="text-[15px] font-light  font-[500] text-gray-700">
+        Date created
+      </div>
     ),
   }));
 };
@@ -76,7 +79,7 @@ export default function InvestmentsRecords() {
       <InvestmentsCards cards={cards} />
       <ReusableDataTable
         dataTransformer={customDataTransformer}
-        onClickRow="/investors/view-investment-product"
+        onClickRow="/investors/investment-details"
         headers={header}
         initialData={[]}
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/all`}

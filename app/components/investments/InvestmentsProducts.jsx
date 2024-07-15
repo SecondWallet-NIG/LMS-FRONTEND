@@ -25,7 +25,7 @@ const customDataTransformer = (apiData) => {
     ),
     totalInvestmentAmount: (
       <div className="text-[15px] font-light font-[500] text-gray-700">
-        N{item?.totalInvestmentsAmount.toLocaleString()}
+        ₦ {item?.totalInvestmentsAmount.toLocaleString()}
       </div>
     ),
     dateCreated: (
