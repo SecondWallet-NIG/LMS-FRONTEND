@@ -217,6 +217,7 @@ export const getAllInvestors = createAsyncThunk(
   }
 );
 
+
 export const updateInvestor = createAsyncThunk(
   "investment/investor/investorProfileId/update",
   async ({ id, payload }) => {
@@ -230,6 +231,25 @@ export const updateInvestor = createAsyncThunk(
           },
         }
       );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+
+export const getInvestmentReport = createAsyncThunk(
+  "investment/report",
+  async () => {
+    try {
+      const response = await axios.get(`${API_URL}/investment/report`, {
+        headers: {
+          Authorization: `Bearer ${user?.data?.token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       if (error.response.data.error) {
@@ -318,6 +338,18 @@ const investmentSlice = createSlice({
       })
       .addCase(getAllInvestmentProducts.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getInvestmentReport.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getInvestmentReport.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getInvestmentReport.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });
