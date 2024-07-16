@@ -29,6 +29,7 @@ const CreateInvestment = () => {
   const [failedModal, setFailedModal] = useState(false);
   const [failedModalMessage, setFailedModalMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [expectedROI, setExpectedROI] = useState(null);
   const [payloadData, setPayloadData] = useState({});
   const [formData, setFormData] = useState({
     investorProfile: "",
@@ -125,7 +126,7 @@ const CreateInvestment = () => {
         setSuccessModal(true);
         resetFormField();
         setLoading(false);
-        console.log({data});
+        console.log({ data });
       })
       .catch((err) => {
         setFailedModalMessage(err?.message);
@@ -146,7 +147,6 @@ const CreateInvestment = () => {
       </div>
     </>
   );
-
 
   useEffect(() => {
     dispatch(getAllInvestors())
@@ -190,20 +190,20 @@ const CreateInvestment = () => {
       dispatch(getROI(payload))
         .unwrap()
         .then((res) => {
-          // setSuccessModalMessage(res?.message);
-          // setSuccessModal(true);
-          // resetFormField();
-          // setLoading(false);
           console.log("roi", res);
+          setExpectedROI(Number(res?.data?.expectedInterest).toLocaleString());
         })
         .catch((err) => {
           console.log("roi", err);
-          // setFailedModalMessage(err?.message);
-          // setFailedModal(true);
-          // setLoading(false);
         });
+    } else {
+      setExpectedROI(null);
     }
-  }, [payloadData?.initialInvestmentPrincipal]);
+  }, [
+    payloadData?.initialInvestmentPrincipal,
+    payloadData?.durationValue,
+    payloadData?.interestRateValue,
+  ]);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
       <div className="mx-auto w-3/5 mb-28">
@@ -318,6 +318,7 @@ const CreateInvestment = () => {
             disabled={true}
             name={"roiEstimate"}
             label={"ROI Estimate"}
+            value={expectedROI || ""}
             placeholder={"System generated"}
             required={true}
           />
