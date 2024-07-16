@@ -32,7 +32,7 @@ const CreateNewExpense = () => {
   const [openDate, setOpenDate] = useState(false);
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const [formData, setFormData] = useState({
-    date: new Date(),
+    expenseDate: new Date(),
     category: "",
     description: "",
     amount: "",
@@ -42,6 +42,8 @@ const CreateNewExpense = () => {
     { value: "Bulk expenses", label: "Bulk expenses" },
   ];
 
+  const [successModalData, setSuccessModalData] = useState({});
+  const [errorModalData, setErrorModalData] = useState({});
   const transformedOptions = expenseTypeOptions.map((option) => ({
     value: option?._id,
     label: option?.name,
@@ -104,13 +106,21 @@ const CreateNewExpense = () => {
     dispatch(createBulkExpenses(payload))
       .unwrap()
       .then((response) => {
+        setSuccessModalData({
+          title: "Bulk Expenses Upload Successful",
+          description:
+            "Upload in progress, you will be notified when this is complete",
+          btnLeft: "View Expenses",
+          btnRight: "Upload Bulk Expenses",
+        });
         setSuccessModal(true);
         setSelectedFiles([]);
         setLoading(false);
       })
       .catch((error) => {
-        // toast.error(`An error occured`);
-        setFailedModal(true);
+        setErrorModalData({
+          description: "An error has occured",
+        });
         setLoading(false);
       });
   };
@@ -136,34 +146,44 @@ const CreateNewExpense = () => {
 
   const handleAddAsset = () => {
     setLoading(true);
-    const newDate = format(formData.date, "yyyy-MM-dd");
+    const newDate = format(formData.expenseDate, "yyyy-MM-dd");
     const newAmount = parseInt(removeCommasFromNumber(formData.amount));
     dispatch(
       createExpense({
         ...formData,
-        date: newDate,
+        expenseDate: newDate,
         amount: newAmount,
       })
     )
       .unwrap()
       .then((res) => {
         if (res?.success === true) {
-          toast.success(res?.message);
+          setSuccessModal(true);
+          setSuccessModalData({
+            title: "Expenses Uploaded Successfully",
+            description: "",
+            btnLeft: "View Expenses",
+            btnRight: "Add Expense",
+          });
           setFormData({
-            date: new Date(),
+            expenseDate: new Date(),
             category: "",
             description: "",
             amount: "",
           });
-          router.push("/expenses");
           setLoading(false);
         } else {
-          toast.error(res.message);
+          setErrorModalData({
+            description: res.message,
+          });
           setLoading(false);
         }
       })
       .catch((err) => {
-        toast.error(err?.message);
+        setErrorModalData({
+          description: err.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -229,7 +249,7 @@ const CreateNewExpense = () => {
                   onClick={() => setOpenDate(!openDate)}
                 >
                   <LuCalendar size={22} className="text-swTextColor" />
-                  {format(formData.date, "PPP")}
+                  {format(formData.expenseDate, "PPP")}
                 </div>
                 {openDate && (
                   <div className="absolute w-fit right-0  -mb-5 bg-white border rounded-md z-50">
@@ -238,7 +258,7 @@ const CreateNewExpense = () => {
                         caption: { color: "#2769b3" },
                       }}
                       modifiers={{
-                        selected: formData.date,
+                        selected: formData.expenseDate,
                       }}
                       modifiersClassNames={{
                         selected: "my-selected",
@@ -246,7 +266,7 @@ const CreateNewExpense = () => {
                       onDayClick={(value) => {
                         setFormData((prev) => ({
                           ...prev,
-                          date: value > new Date() ? new Date() : value,
+                          expenseDate: value > new Date() ? new Date() : value,
                         }));
                       }}
                       className="w-full"
@@ -395,20 +415,18 @@ const CreateNewExpense = () => {
       </main>
       <SuccessModal
         isOpen={successModal}
-        title={"Bulk Expenses Upload Successful"}
-        description={`Upload in progress, you will be notified when this is complete`}
-        // noButtons={true}
-        btnLeft={"View Expenses"}
+        title={successModalData.title}
+        description={successModalData.description}
+        btnLeft={successModalData.btnLeft}
         btnLeftFunc={() => router.push("/expenses")}
-        btnRight={"Upload Bulk Expenses"}
+        btnRight={successModalData.btnRight}
         btnRightFunc={() => setSuccessModal(false)}
         onClose={() => setSuccessModal(false)}
       />
       <CancelModal
         isOpen={failedModal}
-        title={"Bulk Expenses Upload Failed"}
-        description={`An error occured`}
-        // noButtons={true}
+        title={"An error has occured"}
+        description={errorModalData?.description}
         noButtons={true}
         onClose={() => setFailedModal(false)}
       />

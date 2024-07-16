@@ -112,15 +112,11 @@ const CreateNewAsset = () => {
     dispatch(createBulkAssets(payload))
       .unwrap()
       .then((response) => {
-        // toast.success(
-        //   "Upload in progress, you will be notified when this is complete"
-        // );
         setSuccessModal(true);
         setSelectedFiles([]);
         setLoading(false);
       })
       .catch((error) => {
-        // toast.error(`An error occured`);
         setFailedModal(true);
         setLoading(false);
       });

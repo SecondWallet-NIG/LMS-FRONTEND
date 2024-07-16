@@ -10,6 +10,10 @@ if (typeof window !== "undefined") {
 export const createExpense = createAsyncThunk(
   "expense/create",
   async (payload) => {
+    let user;
+    if (typeof window !== "undefined") {
+      user = JSON.parse(localStorage.getItem("user"));
+    }
     try {
       const response = await axios.post(`${API_URL}/expense/create`, payload, {
         headers: {
