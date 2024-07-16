@@ -35,7 +35,6 @@ const LoanProductsReport = () => {
   ]);
   const { data } = useSelector((state) => state.user);
 
-  console.log({ ppp: data?.data?.loanPackagesCards });
   const fetchSummaryByDate = () => {
     if (dateRange && dateRange.length > 0) {
       if (

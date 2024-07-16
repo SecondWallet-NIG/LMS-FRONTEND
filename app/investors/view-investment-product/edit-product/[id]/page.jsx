@@ -151,7 +151,6 @@ const EditInvestmentProduct = () => {
           }),
       },
     };
-    console.log({ data });
 
     // setPayload(payload);
 
@@ -164,7 +163,6 @@ const EditInvestmentProduct = () => {
         // setNewUserId(response?.data?._id);
       })
       .catch((error) => {
-        console.log({ error });
         setFailedModal(true);
         setFailedModalMessage(error?.message);
         setLoading(false);
@@ -173,7 +171,6 @@ const EditInvestmentProduct = () => {
     // setLoading(false);
   };
 
-  console.log({ payload });
 
   const handleFormDisplay = (e, metric, btn) => {
     let isChecked = e.target.checked
@@ -253,13 +250,6 @@ const EditInvestmentProduct = () => {
   useEffect(() => {
     dispatch(getSingleInvestmentProduct(id));
   }, []);
-
-  console.log(
-    "display form",
-    displayDailyForm,
-    displayMonthlyForm,
-    displayYearlyForm
-  );
 
   useEffect(() => {
     if (data) {

@@ -50,7 +50,6 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     // Dispatch the loginUser async thunk with the loginData
-    console.log(loginData);
     dispatch(loginUser(loginData))
       .unwrap()
       .then((res) => {
@@ -90,7 +89,6 @@ const LoginScreen = () => {
 
   useEffect(() => {
     const keyDownHandler = (event) => {
-      console.log("User pressed: ", event.key);
 
       if (event.key === "Enter") {
         event.preventDefault();

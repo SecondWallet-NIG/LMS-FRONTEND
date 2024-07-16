@@ -56,7 +56,6 @@ const BlackListedCustomers = () => {
             className="text-md font-[500] text-white bg-swBlue w-fit py-2 px-4 rounded-lg"
             onClick={() => {
               setOpenWhitelistModal(true);
-              console.log(item?.customerProfileInformation?._id);
               setBorrowerId(item?.customerProfileInformation?._id);
             }}
           >

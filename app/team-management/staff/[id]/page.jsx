@@ -20,13 +20,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getStaffTasks } from "@/redux/slices/userTaskSlice";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
-  () => import('react-viewer'),
+  () => import("react-viewer"),
   { ssr: false } // This line is important
- );
+);
 
 const StaffPage = () => {
   const { id } = useParams();
@@ -40,7 +40,7 @@ const StaffPage = () => {
   const [profileImg, setProfileImg] = useState(null);
   const [openProfilePic, setOpenProfilePic] = useState(false);
   const [formData, setFormData] = useState({
-     profilePicture: null,
+    profilePicture: null,
     firstName: "",
     lastName: "",
     email: "",
@@ -78,7 +78,6 @@ const StaffPage = () => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -123,27 +122,17 @@ const StaffPage = () => {
     payload.append("role", formData.role);
     payload.append("profilePicture", formData.profilePicture);
 
-    console.log({payload});
-    // const payload = {
-    //   firstName: formData.firstName,
-    //   lastName: formData.lastName,
-    //   email: formData.email,
-    //   phoneNumber: formData.phoneNumber,
-    //   role: formData.role,
-    //   status: formData.status,
-    // };
     dispatch(updateUser({ userId: data?._id, updatedData: payload }))
       .unwrap()
       .then((res) => {
         toast.success("Profile updated successfully");
         getUserById(data?._id);
         setIsOpen(false);
-      //  window.location.reload();
+        //  window.location.reload();
       })
       .catch((error) => {
         toast.error("An error occured");
       });
-    // console.log(...payload);
   };
 
   useEffect(() => {
@@ -157,7 +146,7 @@ const StaffPage = () => {
       tag: data?.role?.tag,
       status: data?.status,
       isRoleAdmin: false,
-      profilePicture: data?.profilePicture
+      profilePicture: data?.profilePicture,
     });
   }, [data]);
 

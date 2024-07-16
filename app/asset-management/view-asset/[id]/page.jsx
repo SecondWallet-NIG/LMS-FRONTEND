@@ -16,7 +16,6 @@ const ViewAsset = () => {
   const [loading, setLoading] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { data } = useSelector((state) => state.asset);
-  console.log("aseet data", data);
 
   useEffect(() => {
     dispatch(getSingleAsset(id));

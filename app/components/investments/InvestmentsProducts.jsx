@@ -12,24 +12,23 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.investmentProducts?.map((item, i) => ({
     id: item?._id,
     productName: (
-      <div className="text-[15px] font-light font-[500] text-gray-700">{item?.name}</div>
+      <div className="text-[15px] font-light text-gray-700">{item?.name}</div>
     ),
     totalInvestments: (
-      <div className="text-[15px] font-light font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.totalInvestments.toLocaleString()}
       </div>
     ),
     totalInvestmentAmount: (
-      <div className="text-[15px] font-light font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
         ₦ {item?.totalInvestmentsAmount.toLocaleString()}
       </div>
     ),
     dateCreated: (
-      <div className="text-[15px] font-light font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {format(new Date(item?.createdAt), "PPP")}
       </div>
     ),

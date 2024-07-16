@@ -28,7 +28,7 @@ const DeclineModal = ({
   approvalLevel,
 }) => {
   const dispatch = useDispatch();
-  console.log({approvalId, approvalLevel});
+
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
@@ -79,7 +79,6 @@ const DeclineModal = ({
         closeModal(false);
       })
       .catch((error) => {
-        console.log({ error });
         toast.error(`${error?.message}`);
         setLoading(false);
       });

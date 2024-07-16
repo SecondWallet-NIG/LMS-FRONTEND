@@ -35,11 +35,10 @@ const OnboardingScreen = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form data submitted:", formData);
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
     }
   }, []);

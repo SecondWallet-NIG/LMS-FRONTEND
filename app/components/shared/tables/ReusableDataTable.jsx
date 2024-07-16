@@ -71,11 +71,9 @@ function ReusableDataTable({
     setDateFilterOpen(!dateFilterOpen);
   };
 
-  console.log({ filteredData });
-
   const handleDownload = () => {
     let x = `${apiEndpoint}?page=${1}&per_page=${downloadData}`;
-    console.log({ dateRange });
+
     if (dateRange && dateRange.length > 0) {
       if (
         dateRange[0].startDate instanceof Date &&
@@ -111,7 +109,7 @@ function ReusableDataTable({
       x += `&userId=${userId}`;
     }
     setLoading(true);
-    console.log({ x });
+
     axios
       .get(x, {
         headers: {
@@ -119,7 +117,6 @@ function ReusableDataTable({
         },
       })
       .then((data) => {
-        console.log("data tab", data);
         const allData =
           data?.data?.data?.expenses ||
           data?.data?.data?.results ||
@@ -166,7 +163,6 @@ function ReusableDataTable({
         setLoading(false);
       })
       .catch((error) => {
-        console.log({ error });
         toast.error("An error occurred while fetching data for download.");
         setLoading(false);
       });
@@ -258,6 +254,7 @@ function ReusableDataTable({
               data?.data?.data?.repayments ||
                 data?.data?.results ||
                 data?.data?.expenses ||
+                data?.data?.assets ||
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
                 data?.results ||
@@ -266,7 +263,7 @@ function ReusableDataTable({
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
-            // console.log(data?.data.links);
+
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -281,7 +278,7 @@ function ReusableDataTable({
                 data?.data?.data ||
                 data.results
             );
-            // console.log(data?.data.links.totalDocuments);
+
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -292,7 +289,6 @@ function ReusableDataTable({
         })
         .catch(() => {});
     } else {
-      // console.log({ dateRange });
       setIsLoading(true);
       if (dateRange && dateRange.length > 0) {
         if (
@@ -373,7 +369,6 @@ function ReusableDataTable({
           },
         })
         .then((data) => {
-          // console.log({ data });
           setDataCheck(data);
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
@@ -395,7 +390,7 @@ function ReusableDataTable({
                 data?.data?.data?.links ||
                 data?.data?.data?.data?.links
             );
-            // console.log(data?.data?.links?.totalDocuments);
+
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -416,7 +411,7 @@ function ReusableDataTable({
                 data?.data?.data?.links ||
                 data?.data?.data?.data?.links
             );
-            // console.log(data?.data.links.totalDocuments);
+
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments

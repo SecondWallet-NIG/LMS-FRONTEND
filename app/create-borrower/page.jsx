@@ -133,7 +133,6 @@ const CreateCustomer = () => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -255,7 +254,6 @@ const CreateCustomer = () => {
     dispatch(createCustomer(payload))
       .unwrap()
       .then((response) => {
-        console.log(response);
         document.getElementById("add-customer-form").reset();
         resetForm();
         openModal();
@@ -263,7 +261,6 @@ const CreateCustomer = () => {
         setProfileImg(null);
       })
       .catch((error) => {
-        console.log({ error });
         toast.error(error?.message);
       });
   };

@@ -88,7 +88,6 @@ const WorkInformation = ({ userData, loading }) => {
       createdBy: "650f659167a782d8868b76ee",
     };
 
-    console.log({payload});
 
 
     dispatch(updateEmployment({id: userData?.employmentInformation?._id, payload}))
@@ -104,7 +103,6 @@ const WorkInformation = ({ userData, loading }) => {
 
   useEffect(() => {
     if (userData?.employmentInformation !== "null") {
-      console.log(",,,,,,", userData?.employmentInformation?.incomePeriod);
       setFormData({
         employerName:
           userData?.employmentInformation?.employerInformation?.name,

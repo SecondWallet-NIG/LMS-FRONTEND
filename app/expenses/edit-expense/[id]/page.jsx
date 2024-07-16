@@ -91,8 +91,7 @@ const EditAsset = () => {
       date: newDate,
       amount: newValue,
     };
-    // delete payload.category;
-    // console.log(payload);
+
     dispatch(updateSingleExpense({ id, payload }))
       .unwrap()
       .then((res) => {
@@ -111,13 +110,6 @@ const EditAsset = () => {
     dispatch(getSingleExpense(id))
       .unwrap()
       .then((res) => {
-        console.log("hiiii", res?.data);
-        // {
-        //   category: "",
-        //   description: "",
-        //   date: new Date(),
-        //   amount: "",
-        // }
         setFormData({
           category: res?.data?.category?._id,
           description: res?.data?.description,
@@ -131,7 +123,6 @@ const EditAsset = () => {
       .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
   }, []);
-  console.log(formData);
 
   return (
     <DashboardLayout isBackNav={true} paths={["Expense", "Edit expense"]}>

@@ -21,10 +21,8 @@ const Disbursement = () => {
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
-  console.log({ data: data?.data });
 
   useEffect(() => {
-    console.log("hello");
     dispatch(getDisbursementById(id));
   }, []);
 
@@ -152,9 +150,8 @@ const Disbursement = () => {
               >
                 View receipt
               </p>
-              {handleFileExtention(
-                data?.data?.disbursementReceipt
-              ) === "pdf" ? (
+              {handleFileExtention(data?.data?.disbursementReceipt) ===
+              "pdf" ? (
                 // <p>It's a pdf</p>
                 <div
                   className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
@@ -177,7 +174,6 @@ const Disbursement = () => {
                 </div>
               ) : (
                 <>
-                  
                   {typeof window !== "undefined" ? (
                     <>
                       <Viewer

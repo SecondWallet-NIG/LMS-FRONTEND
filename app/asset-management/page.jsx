@@ -28,48 +28,36 @@ const headerAssetCategory = [
 ];
 
 const customDataTransformer = (apiData) => {
-  return apiData?.results?.map((item, i) => ({
+  return apiData?.assets?.map((item, i) => ({
     id: item?._id,
-    asset: (
-      <div className="text-lg font-[500] text-gray-700 font-light">
-        {item?.name}
-      </div>
-    ),
+    asset: <div className="text-lg text-gray-700 font-light">{item?.name}</div>,
     category: (
-      <div className="text-lg font-[500] text-gray-700 font-light">
+      <div className="text-lg text-gray-700 font-light">
         {item?.category?.name}
       </div>
     ),
     acquisitionDate: (
       <div>
-        <div className="text-lg font-[500] text-gray-700 font-light">
+        <div className="text-lg text-gray-700 font-light">
           {item?.acquisitionDate &&
             format(new Date(item?.acquisitionDate), "PPP")}
         </div>
       </div>
     ),
     value: (
-      <div className="text-lg font-[500] text-gray-700 font-light">
-        {item?.value?.toLocaleString()}
+      <div className="text-lg text-gray-700 font-light whitespace-nowrap">
+        ₦ {item?.value?.toLocaleString()}
       </div>
-    )
+    ),
   }));
 };
 const customDataTransformerAssetCategory = (apiData) => {
   return apiData?.map((item, i) => ({
-    asset: (
-      <div className="text-lg font-[500] text-gray-700 font-light">
-        {item?.name}
-      </div>
-    ),
-    name: (
-      <div className="text-lg font-[500] text-gray-700 font-light">
-        {item?.name}
-      </div>
-    ),
+    asset: <div className="text-lg text-gray-700 font-light">{item?.name}</div>,
+    name: <div className="text-lg text-gray-700 font-light">{item?.name}</div>,
     createdAt: (
       <div>
-        <div className="text-lg font-[500] text-gray-700 font-light">
+        <div className="text-lg text-gray-700 font-light">
           {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
         </div>
       </div>
@@ -136,7 +124,7 @@ const AssetManagement = () => {
     ],
   };
 
-  // revenue.map((data) => console.log(data.label));
+
   useEffect(() => {
     dispatch(getAllAssets());
     dispatch(getAllAssetCategories())
@@ -146,10 +134,9 @@ const AssetManagement = () => {
     setLoading(false);
   }, []);
   useEffect(() => {
-    setAssets(data?.data?.results);
+    setAssets(data?.data?.assets);
   }, [data]);
 
-  console.log({ assetTypeOptions });
   return (
     <>
       <DashboardLayout isBackNav={true} paths={["Asset Management"]}>
@@ -187,7 +174,6 @@ const AssetManagement = () => {
                   <IoMdAdd size={20} />
                   <p>New asset</p>
                 </Link>
-  
               </div>
             </div>
 
@@ -236,7 +222,7 @@ const AssetManagement = () => {
                 </div>
               }
               btnTextClick={() => {
-                setOpenCreateModal(!openCreateAssetModal)
+                setOpenCreateModal(!openCreateAssetModal);
               }}
             />
             <CreateAssetModal

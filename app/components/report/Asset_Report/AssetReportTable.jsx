@@ -13,43 +13,34 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
-  return apiData?.results?.map((item, i) => ({
+  return apiData?.assets?.map((item, i) => ({
     id: item?._id,
-    asset: <div className="text-md font-[500] text-gray-700">{item?.name}</div>,
+    asset: (
+      <div className="text-[15px] font-light text-gray-700">{item?.name}</div>
+    ),
     category: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.category?.name}
       </div>
     ),
     description: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.description}
       </div>
     ),
     acquisitionDate: (
       <div>
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-[15px] font-light text-gray-700">
           {item?.acquisitionDate &&
             format(new Date(item?.acquisitionDate), "PPP")}
         </div>
       </div>
     ),
     value: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.value?.toLocaleString()}
+      <div className="text-[15px] font-light text-gray-700">
+        ₦ {item?.value?.toLocaleString()}
       </div>
     ),
-    // action: (
-    //   <div className="text-md font-[500] text-gray-700">
-    //     <Link
-    //       href={`/asset-management/${item?._id}/view-asset`}
-    //       className="border rounded p-2"
-    //     >
-    //       View details
-    //     </Link>
-    //   </div>
-    // ),
   }));
 };
 

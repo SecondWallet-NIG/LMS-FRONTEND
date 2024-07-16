@@ -27,21 +27,22 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
     date: (
-      <div className="text-lg font-[500] text-gray-700 font-light">
+      <div className="text-lg text-gray-700 font-light">
         {format(new Date(item?.date), "PPP")}
       </div>
     ),
     category: (
-      <div className="text-lg font-[500] text-gray-700 font-light">
+      <div className="text-lg text-gray-700 font-light">
         {item?.category?.name}
       </div>
     ),
     amount: (
-      <div className="text-lg font-[500] text-gray-700 font-light">{item?.amount}</div>
+      <div className="text-lg text-gray-700 font-light whitespace-nowrap">
+        ₦ {item?.amount?.toLocaleString()}
+      </div>
     ),
     status: (
       <div className="text-md font-[500] text-gray-700">
@@ -117,13 +118,11 @@ const Expenses = () => {
     ],
   };
 
-  // revenue.map((data) => console.log(data.label));
   useEffect(() => {
     dispatch(getAllExpenses());
     dispatch(getAllExpenseCategories())
       .unwrap()
       .then((res) => {
-        // console.log("categories", res?.data);
         setExpenseTypeOptions(res?.data);
       })
       .catch((err) => console.log({ err }));
@@ -133,7 +132,6 @@ const Expenses = () => {
     setExpenses(data?.data?.expenses);
   }, [data]);
 
-  console.log("categories", expenseTypeOptions);
   return (
     <>
       {/* {loading ? (

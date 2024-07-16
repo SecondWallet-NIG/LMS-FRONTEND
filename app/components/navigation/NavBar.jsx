@@ -32,8 +32,6 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      console.log({ storedUser });
-
       setUser(storedUser?.data?.user);
       dispatch(getApprovalAssignee(storedUser?.data?.user?._id));
     }

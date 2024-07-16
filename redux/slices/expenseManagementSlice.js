@@ -81,7 +81,6 @@ export const getSingleExpense = createAsyncThunk(
 export const updateSingleExpense = createAsyncThunk(
   "expense/expenseId",
   async ({ id, payload }) => {
-    console.log("payloaad", payload);
     try {
       const response = await axios.put(
         `${API_URL}/expense/update/${id}`,

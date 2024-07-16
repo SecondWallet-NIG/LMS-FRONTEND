@@ -26,23 +26,6 @@ export const getLoanApprovals = createAsyncThunk('loanApproval/approval', async 
   }
 });
 
-// export const getApprovalAssignee = createAsyncThunk('loan-Approval/assignee', async (assigneeId) => {
-//   try {
-//     const response = await axios.get(`${API_URL}/loan-application/task/${assigneeId}`, {
-//       headers: {
-//         Authorization: `Bearer ${user?.data?.token}`
-//       }
-//     });
-//     console.log("response");
-//     console.log(response.data?.data?.data);
-//     return response.data?.data?.data;
-//   } catch (error) {
-//     if (error.response.data.error) {
-//       throw new Error(error.response.data.error)
-//     }
-//     else throw new Error("An error occured, please try again later")
-//   }
-// });
 
 export const requestLoanApproval = createAsyncThunk('loanApproval/request-approval', async (payload) => {
   try {

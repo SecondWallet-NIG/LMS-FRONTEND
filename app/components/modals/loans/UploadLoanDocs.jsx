@@ -20,10 +20,6 @@ import {
 import { useRouter } from "next/navigation";
 
 const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
-
-  console.log({fieldType});
-
-  console.log({ fieldType, customerId });
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
@@ -75,8 +71,8 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
     fieldType == "powerOfAttorney" &&
       payload.append("powerOfAttorney", formData.powerOfAttorney);
     fieldType == "transferOfOwnership" &&
-      payload.append("transferOfOwnership", formData.transferOfOwnership)
-      fieldType == "statementOfAccount" &&
+      payload.append("transferOfOwnership", formData.transferOfOwnership);
+    fieldType == "statementOfAccount" &&
       payload.append("statementOfAccount", formData.statementOfAccount);
 
     dispatch(updateIdentityVerification({ id: customerId, payload }))
@@ -351,7 +347,7 @@ const UploadLoanDocs = ({ onClose, fieldType, customerId }) => {
                 </div>
               </div>
             ) : null}
-                 {fieldType == "statementOfAccount" ? (
+            {fieldType == "statementOfAccount" ? (
               <div className="flex flex-col gap-2 mt-5">
                 <p className="font-semibold">Statement of Account</p>
                 {fileError && (

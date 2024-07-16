@@ -20,7 +20,6 @@ const AccountPage = () => {
   const [email, setEmail] = useState(userDetails?.email);
   const [profileImg, setProfileImg] = useState(null);
   const [loading, setLoading] = useState(false);
-  console.log(userDetails);
   const [formData, setFormData] = useState({
     profilePicture: null,
     firstName: "",
@@ -33,7 +32,6 @@ const AccountPage = () => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -45,7 +43,6 @@ const AccountPage = () => {
       setSelectedFiles(files);
     }
   };
-  // console.log(userDetails);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -62,7 +59,6 @@ const AccountPage = () => {
         toast.success("Profile updated successfully");
         getUserById(userDetails?._id);
         setLoading(false);
-        console.log(res);
       })
       .catch((error) => {
         toast.error("An error occured");
@@ -74,7 +70,6 @@ const AccountPage = () => {
     if (typeof window !== "undefined") {
       const user = JSON.parse(localStorage.getItem("user"));
       setUserDetails(user?.data?.user);
-      console.log(user);
     }
   }, []);
 
