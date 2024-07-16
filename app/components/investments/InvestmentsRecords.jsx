@@ -12,6 +12,7 @@ const header = [
   { id: "startDate", label: "Start Date" },
   { id: "endDate", label: "End Date" },
   { id: "amountInvested", label: "Amount Invested" },
+  { id: "duration", label: "Investment Duration" },
   { id: "status", label: "Investment Status" },
 ];
 
@@ -43,6 +44,16 @@ const customDataTransformer = (apiData) => {
         ₦ {item?.expectedInterest?.toLocaleString()}
       </div>
     ),
+    duration: (
+      <div className="text-[15px] font-light text-gray-700">
+        {item?.duration?.value}{" "}
+        {item?.duration?.metric === "Month"
+          ? "Months"
+          : data?.data?.duration?.metric === "Quarter"
+          ? "Quarters"
+          : "Years"}
+      </div>
+    ),
     status: (
       <button
         className={`${
@@ -51,7 +62,7 @@ const customDataTransformer = (apiData) => {
             : item.status === "Approved"
             ? "bg-green-50 text-swGreen"
             : "text-red-400 bg-red-100"
-        } px-2 py-1 rounded-full`}
+        } px-2 py-1 rounded-full whitespace-nowrap`}
       >
         {item?.status}
       </button>

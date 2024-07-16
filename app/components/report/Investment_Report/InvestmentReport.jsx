@@ -37,7 +37,7 @@ export default function InvestmentReport() {
 
   useEffect(() => {
     if (data?.data) {
-      const totalInvestors = Object.keys(data?.data?.investmentsByCategory).length
+      const totalInvestors = Object?.keys(data?.data?.investmentsByCategory).length
       setState(draft => {
         draft.totalInvestments = data?.data?.totalInvestmentAmount
         draft.totalInvestors = totalInvestors
