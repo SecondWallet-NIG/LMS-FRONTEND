@@ -15,7 +15,7 @@ const poppins = Poppins({
 });
 
 const Report = () => {
-  const [reportToggle, setReportToggle] = useState("investment");
+  const [reportToggle, setReportToggle] = useState("loan");
   const [searchBtn, setSearchBtn] = useState(false);
   const selected = "text-swBlue border-b-swBlue font-semibold";
   const navs = [

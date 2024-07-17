@@ -206,7 +206,7 @@ const CreateInvestment = () => {
   ]);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
-      <div className="mx-auto w-3/5 mb-28">
+      <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create New Investment
         </h1>
