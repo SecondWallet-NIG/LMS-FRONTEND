@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleInvestment } from "@/redux/slices/investmentSlice";
 import { format } from "date-fns";
+import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
 
 export default function InvestmentDetails() {
   const { id } = useParams();
@@ -19,6 +20,7 @@ export default function InvestmentDetails() {
   const { data } = useSelector((state) => state.investment);
   const headClass = "text-lg font-semibold leading-7 text-swBlack mb-5";
   const tableDataClass = " py-3 text-sm leading-6 text-swBlack -ml-1";
+  const lastTableClass = 'text-[15px] font-light whitespace-nowrap text-gray-700'
   const tableOneHeader = [
     { label: "Start Date" },
     { label: "Investment Product ID & Package" },
@@ -69,6 +71,45 @@ export default function InvestmentDetails() {
       </div>
     </>
   );
+
+  const header = [
+    { id: "dueDate", label: "Due Date" },
+    { id: "datePaid", label: "Date Paid" },
+    { id: "amountDue", label: "Amount Due" },
+    { id: "roi", label: "ROI" },
+    { id: "transactionType", label: "Transaction Type" }
+  ];
+
+  const customDataTransformer = (apiData) => {
+    return apiData?.investments?.map((item, i) => ({
+      id: item._id,
+      dueDate: (
+        <div className={`${lastTableClass}`}>
+          13/07/2024
+        </div>
+      ),
+      datePaid: (
+        <div className={`${lastTableClass}`}>
+          Nil
+        </div>
+      ),
+      amountDue: (
+        <div className={`${lastTableClass}`}>
+          50,000
+        </div>
+      ),
+      roi: (
+        <div className={`${lastTableClass}`}>
+          10%
+        </div>
+      ),
+      transactionType: (
+        <div className={`${lastTableClass}`}>
+          Debit
+        </div>
+      ),
+    }));
+  };
 
   const renderTable = ({ tableHeader, tableContent }) => (
     <div className="border rounded-2xl overflow-x-auto">
@@ -140,7 +181,7 @@ export default function InvestmentDetails() {
               </div>
               <span
                 className={`bg-swLightBlue text-xs text-white leading-4 h-5 rounded-full 
-                        py-0.5 px-3 absolute left-24 lg:left-64 top-4`}
+                        py-0.5 px-3 absolute left-24 lg:left-[60%] top-7`}
               >
                 {data?.data?.status}
               </span>
@@ -161,7 +202,7 @@ export default function InvestmentDetails() {
                 </p>
                 <div className="flex justify-between">
                   <h2 className="font-medium leading-8 text-2xl">
-                  ₦ {data?.data?.currentInvestmentPrincipal?.toLocaleString()}
+                    ₦ {data?.data?.currentInvestmentPrincipal?.toLocaleString()}
                   </h2>
                   <span className="flex gap-2 border text-sm px-3 py-2 font-semibold rounded-md cursor-pointer">
                     <FiCopy className="" size={16} />
@@ -223,8 +264,8 @@ export default function InvestmentDetails() {
                     {data?.data?.duration?.metric === "Month"
                       ? "Months"
                       : data?.data?.duration?.metric === "Quarter"
-                      ? "Quarters"
-                      : "Years"}
+                        ? "Quarters"
+                        : "Years"}
                   </p>
                   <p className={`${tableDataClass}`}>
                     {data?.data?.maturityAmount?.toLocaleString()}
@@ -241,6 +282,13 @@ export default function InvestmentDetails() {
           {/* Transaction History */}
           <div className="px-5 py-5">
             <h1 className={`${headClass}`}>Transaction History</h1>
+            <ReusableDataTable
+              dataTransformer={customDataTransformer}
+              headers={header}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/all`}
+              pagination={true}
+            />
           </div>
         </div>
       </div>

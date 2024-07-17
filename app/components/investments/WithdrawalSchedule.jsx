@@ -35,16 +35,6 @@ export default function WithdrawalSchedule() {
         { title: 'Total Number of Unpaid Requests', value: '10', extraVal: "35837828.93" }
     ]
 
-    const header = [
-        { id: "dateLogged", label: "Date Logged" },
-        { id: "investmentId", label: "Investor Name & ID" },
-        { id: "datePaid", label: "Date Paid" },
-        { id: "amountRequested", label: "Amount Requested" },
-        { id: "disbursedBy", label: "Disbursed By" },
-        { id: "status", label: "Status" },
-        { id: "action", label: "Action" }
-    ];
-
     const modalChildren = <div className="px-6 pb-10">
         <div className="flex gap-10 my-5">
             <h6 className="font-medium text-base leading-6 text-swBlack">Bank details</h6>
@@ -95,6 +85,16 @@ export default function WithdrawalSchedule() {
             </Button>
         </div>
     </div>
+
+    const header = [
+        { id: "dateLogged", label: "Date Logged" },
+        { id: "investmentId", label: "Investor Name & ID" },
+        { id: "datePaid", label: "Date Paid" },
+        { id: "amountRequested", label: "Amount Requested" },
+        { id: "disbursedBy", label: "Disbursed By" },
+        { id: "status", label: "Status" },
+        { id: "action", label: "Action" }
+    ];
 
     const customDataTransformer = (apiData) => {
         return apiData?.investments?.map((item, i) => ({
