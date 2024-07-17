@@ -51,23 +51,21 @@ const ViewExpense = () => {
         </div>
 
         <div className="p-5 flex flex-col gap-5 font-500">
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Date</p>
-            <p>{data?.date && format(new Date(data?.date), "PPP")}</p>
+            <p>
+              {data?.expenseDate && format(new Date(data?.expenseDate), "PPP")}
+            </p>
           </div>
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Expense category</p>
             <p>{data?.category?.name}</p>
           </div>
-          <div className="flex">
-            <p className="min-w-[15rem]">Description</p>
-            <p>{data?.description}</p>
-          </div>
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Amount</p>
             <p>{data?.amount?.toLocaleString()}</p>
           </div>
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Status</p>
             <div className="py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1">
               <div
@@ -77,6 +75,10 @@ const ViewExpense = () => {
               />
               {data?.status}
             </div>
+          </div>
+          <div className="flex flex-col sm:flex-row">
+            <p className="min-w-[15rem]">Description</p>
+            <p>{data?.description}</p>
           </div>
         </div>
       </main>

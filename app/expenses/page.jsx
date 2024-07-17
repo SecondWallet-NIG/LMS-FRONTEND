@@ -27,11 +27,12 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
+  console.log({ apiData });
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
     date: (
       <div className="text-lg text-gray-700 font-light">
-        {format(new Date(item?.date), "PPP")}
+        {item?.expenseDate && format(new Date(item?.expenseDate), "PPP")}
       </div>
     ),
     category: (

@@ -16,7 +16,7 @@ const customDataTransformer = (apiData) => {
     id: item?._id,
     date: (
       <div className="text-[15px] font-light text-gray-700">
-        {format(new Date(item?.date), "PPP")}
+        {item?.expenseDate && format(new Date(item?.expenseDate), "PPP")}
       </div>
     ),
     description: (
