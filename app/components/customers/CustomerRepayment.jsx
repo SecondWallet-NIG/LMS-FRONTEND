@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState} from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,7 +12,6 @@ import { AiOutlinePaperClip } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import { logRepaymentFunc } from "@/redux/slices/loanRepaymentSlice";
 import { useDispatch } from "react-redux";
-import { clearUserState } from "@/redux/slices/loanPackageSlice";
 import { format, isValid } from "date-fns";
 import { FaRegCalendar } from "react-icons/fa";
 import { DayPicker } from "react-day-picker";

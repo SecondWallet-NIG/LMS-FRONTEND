@@ -1,5 +1,4 @@
 import Link from "next/link";
-import navPatternBg from "../../../../public/images/navPatterns.png";
 const DashboardCard = ({
   cardIcon,
   iconBg,

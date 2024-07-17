@@ -2,10 +2,8 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import Button from "../shared/buttonComponent/Button";
 //icons
 import { RiBox3Line } from "react-icons/ri";
-import { BsPeopleFill, BsCalculator } from "react-icons/bs";
 import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
 import { AiFillMoneyCollect, AiOutlineSetting } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
@@ -28,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import Link from "next/link";
 import { LuArrowUpRight } from "react-icons/lu";
+
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();

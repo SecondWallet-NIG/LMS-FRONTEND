@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
-import CustomerLoan from "../components/customers/CustomerLoan";
 import { format } from "date-fns";
 import BorrowerOptions from "../components/customers/BorrowerOptions";
 

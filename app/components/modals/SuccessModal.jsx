@@ -1,12 +1,5 @@
 import React from "react";
-import { BiCheckCircle } from "react-icons/bi";
-import {
-  BsCheck,
-  BsCheckCircle,
-  BsCheckCircleFill,
-  BsMarkdown,
-  BsXLg,
-} from "react-icons/bs";
+import { BsCheckCircleFill, BsXLg } from "react-icons/bs";
 import Button from "../shared/buttonComponent/Button";
 
 const SuccessModal = ({

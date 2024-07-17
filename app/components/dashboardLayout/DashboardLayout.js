@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "../../globals.css";
-import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
 import NavBar from "../navigation/NavBar";
 import Sidebar from "../navigation/SideBar";

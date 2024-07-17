@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../../../components/dashboardLayout/DashboardLayout";
-import EditableButton from "../../../../components/shared/editableButtonComponent/EditableButton";
 import PersonalInformation from "../../../../components/editBorrowerProfile/PersonalInformation";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerById } from "@/redux/slices/customerSlice";

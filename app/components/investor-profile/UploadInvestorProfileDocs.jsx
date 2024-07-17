@@ -1,24 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
-import { approveLoanRequest } from "@/redux/slices/loanApprovalSlice";
-import {
-  getSingleLoan,
-  updateLoanApplication,
-} from "@/redux/slices/loanApplicationSlice";
-import {
-  getCustomerById,
-  updateEmployment,
-  updateIdentityVerification,
-} from "@/redux/slices/customerSlice";
-import { useRouter } from "next/navigation";
 import Button from "../shared/buttonComponent/Button";
-import { getSingleInvestor, updateInvestor } from "@/redux/slices/investmentSlice";
+import {
+  getSingleInvestor,
+  updateInvestor,
+} from "@/redux/slices/investmentSlice";
 
 const UploadInvestorProfileDocs = ({ onClose, fieldType }) => {
   const dispatch = useDispatch();

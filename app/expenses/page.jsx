@@ -5,10 +5,6 @@ import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllAssetCategories,
-  getAllAssets,
-} from "@/redux/slices/assetManagementSlice";
 import { IoMdAdd } from "react-icons/io";
 import Link from "next/link";
 import CreateAssetModal from "../components/modals/CreateAssetModal";

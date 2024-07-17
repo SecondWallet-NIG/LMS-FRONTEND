@@ -1,15 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
-import { BsBack, BsBackspace } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
-import Button from "../shared/buttonComponent/Button";
-import { toast, ToastContainer } from "react-toastify";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { createLoanApplication } from "@/redux/slices/loanApplicationSlice";
-import { FiPhone, FiUser } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 import Image from "next/image";
-import { MdOutlineEmail } from "react-icons/md";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { handleCaptureClick } from "../helpers/utils";
 // import html2canvas from "html2canvas";
