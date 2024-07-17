@@ -135,6 +135,12 @@ const CreateInvestment = () => {
       });
   };
 
+  const preventMinus = (e) => {
+    if (/[^0-9,.]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const modalChildren = (
     <>
       <div className="px-5 pb-10">
@@ -227,6 +233,7 @@ const CreateInvestment = () => {
             placeholder={"Select from list"}
             optionValue={investors}
             onChange={(e) => handleSelectChange(e, "investorProfile")}
+            isSearchable={true}
           />
         </div>
         <div className="my-6">
@@ -267,7 +274,8 @@ const CreateInvestment = () => {
               value={formData?.interestRateValue}
               placeholder={"Enter number"}
               required={true}
-              //   endIcon={"₦"}
+              inputType="number"
+              onKeyPress={preventMinus}
               onChange={handleInputChange}
             />
           </div>

@@ -22,12 +22,12 @@ export default function InvestmentDetails() {
   const tableOneHeader = [
     { label: "Start Date" },
     { label: "Investment Product ID & Package" },
-    { label: "Investment Amount & ROI" },
+    { label: "Interest Rate" },
     { label: "Investment Status" },
   ];
 
   const tableTwoHeader = [
-    { label: "Interest on investment" },
+    { label: "Interest on Investment" },
     { label: "Duration" },
     { label: "Maturity Amount" },
     { label: "Maturity Date" },
@@ -147,21 +147,21 @@ export default function InvestmentDetails() {
             </div>
 
             <div className="lg:flex justify-between w-full lg:w-3/5 gap-6 text-swTextColor lg:pl-10">
-              <div className="bg-swGrey25 rounded-lg p-2 lg:w-2/5 h-fit mb-5 lg:mb-1">
-                <p className="mb-3 text-base font-medium leading-6">
-                  Investment ID:
+              <div className="bg-swGrey10 rounded-lg p-4 lg:w-2/5 h-fit mb-5 lg:mb-1 ">
+                <p className="mb-3 text-base font-medium leading-6 text-swBlue">
+                  Investment ID
                 </p>
-                <h2 className="font-bold leading-8 text-2xl">
+                <h2 className="font-medium leading-8 text-2xl">
                   {data?.data?.investmentId}
                 </h2>
               </div>
-              <div className="bg-swGrey25 lg:w-3/5 p-2 rounded-lg h-fit">
-                <p className="mb-3 text-base font-medium leading-6">
-                  Investment amount:
+              <div className="bg-swGrey25 lg:w-3/5 p-4 rounded-lg h-fit">
+                <p className="mb-3 text-base font-medium leading-6 text-swBlue">
+                  Investment Amount
                 </p>
                 <div className="flex justify-between">
-                  <h2 className="font-bold leading-8 text-2xl">
-                    {data?.data?.currentInvestmentPrincipal?.toLocaleString()}
+                  <h2 className="font-medium leading-8 text-2xl">
+                  ₦ {data?.data?.currentInvestmentPrincipal?.toLocaleString()}
                   </h2>
                   <span className="flex gap-2 border text-sm px-3 py-2 font-semibold rounded-md cursor-pointer">
                     <FiCopy className="" size={16} />
@@ -181,7 +181,7 @@ export default function InvestmentDetails() {
               tableHeader: tableOneHeader,
               tableContent: (
                 <>
-                  <p className={`pl-10 py-3 text-swBlack`}>
+                  <p className={`pl-10 py-3 text-swBlack text-sm `}>
                     {data?.data?.createdAt &&
                       format(new Date(data?.data?.createdAt), "PPP")}
                   </p>
@@ -194,8 +194,7 @@ export default function InvestmentDetails() {
                     </p>
                   </p>
                   <p>
-                    <p className={`${tableDataClass}`}>5,000,000</p>
-                    <p className="text-swGray text-sm leading-5 -mt-3 -ml-1 mb-2 capitalize">
+                    <p className="text-swGray text-sm leading-5 mt-4 -ml-1 mb-2 capitalize">
                       {data?.data?.interestRate?.value}% (
                       {data?.data?.interestRate?.metric})
                     </p>
@@ -216,7 +215,7 @@ export default function InvestmentDetails() {
               tableHeader: tableTwoHeader,
               tableContent: (
                 <>
-                  <p className={`pl-10 py-3 text-swBlack`}>
+                  <p className={`pl-10 py-3 text-swBlack text-sm `}>
                     {data?.data?.expectedInterest?.toLocaleString()}
                   </p>
                   <p className={`${tableDataClass}`}>

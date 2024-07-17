@@ -93,7 +93,7 @@ const EditInvestmentProduct = () => {
   };
 
   const preventMinus = (e) => {
-    if (/[^0-9,]/g.test(e.key)) {
+    if (/[^0-9,.]/g.test(e.key)) {
       e.preventDefault();
     }
   };
@@ -451,7 +451,7 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeDaily"
-                    // inputType="number"
+                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -469,7 +469,7 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeDaily"
-                    // inputType="number"
+                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -532,7 +532,7 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeMonthly"
-                    // inputType="number"
+                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -550,7 +550,7 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeMonthly"
-                    // inputType="number"
+                    inputType="number"
                     onKeyPress={preventMinus}
                     endIcon={"%"}
                     onWheel={() => document.activeElement.blur()}
@@ -613,7 +613,7 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeYearly"
-                    // inputType="number"
+                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -631,7 +631,7 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeYearly"
-                    // inputType="number"
+                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
