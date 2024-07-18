@@ -131,7 +131,7 @@ const EditAsset = () => {
 
         <div className="flex flex-col gap-5">
           <p className="text-lg font-semibold text-swBlack mt-10">
-            Expense details
+            Expense Details
           </p>
 
           {/* <InputField
@@ -144,7 +144,7 @@ const EditAsset = () => {
           /> */}
           <div className="relative">
             <div className="block text-gray-700 text-sm mb-2">
-              Date of expense
+              Date of Expense
               <span className="text-red-600 ml-1">*</span>
             </div>
             <div
@@ -184,7 +184,7 @@ const EditAsset = () => {
             )}
           </div>
           <SelectField
-            label={"Expense category"}
+            label={"Expense Category"}
             required={true}
             optionValue={transformedOptions}
             name="category"
@@ -199,11 +199,11 @@ const EditAsset = () => {
             }
           />
           <InputField
-            label={"Describe expense"}
+            label={"Description"}
             required={true}
             name="description"
             value={formData.description}
-            placeholder={"Cleaning tools"}
+            placeholder={"Enter description"}
             onChange={handleChange}
           />
           <InputField
@@ -213,9 +213,9 @@ const EditAsset = () => {
             onKeyPress={preventMinus}
             onWheel={() => document.activeElement.blur()}
             endIcon={<p className="text-swGray">NGN &#8358;</p>}
-            label="Total amount"
+            label="Total Amount"
             value={formData?.amount?.toLocaleString()}
-            placeholder="Enter loan amount"
+            placeholder="Enter amount"
             onChange={handleChange}
           />
         </div>

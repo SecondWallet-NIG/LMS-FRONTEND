@@ -28,6 +28,7 @@ const CreateNewExpense = () => {
   const [successModal, setSuccessModal] = useState(false);
   const [failedModal, setFailedModal] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [proofOfPayment, setProofOfPayment] = useState([]);
   const [fileError, setFileError] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
@@ -97,6 +98,35 @@ const CreateNewExpense = () => {
     }
   };
 
+  const uploadProofOfPayment = (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length <= 2) {
+      setProofOfPayment(files);
+    } else {
+      alert("You can only upload a maximum of 2 files.");
+    }
+  };
+
+  const handleUploadProofOfPayment = (e) => {
+    setFileError("");
+    const files = Array.from(e.target.files);
+    if (e.target.id === "profilePicture" && e.target.files.length > 0) {
+      const fileExtension = files[0].name.split(".").pop().toLowerCase();
+
+      const allowedExtensions = ["jpg", "jpeg", "png"];
+      if (!allowedExtensions.includes(fileExtension)) {
+        setFileError(
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png)."
+        );
+        return;
+      }
+      setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
+    } else {
+      setProofOfPayment(files);
+    }
+  };
+
   const hundleBulkExpenseSubmit = (e) => {
     setLoading(true);
     const payload = new FormData();
@@ -128,6 +158,7 @@ const CreateNewExpense = () => {
   const handleFileDelete = (index) => {
     selectedFiles.splice(index, 1);
     setSelectedFiles([...selectedFiles]);
+    setProofOfPayment([]);
   };
 
   const preventMinus = (e) => {
@@ -147,14 +178,15 @@ const CreateNewExpense = () => {
   const handleAddAsset = () => {
     setLoading(true);
     const newDate = format(formData.expenseDate, "yyyy-MM-dd");
-    const newAmount = parseInt(removeCommasFromNumber(formData.amount));
-    dispatch(
-      createExpense({
-        ...formData,
-        expenseDate: newDate,
-        amount: newAmount,
-      })
-    )
+    const _formData = new FormData();
+    const newAmount = parseFloat(removeCommasFromNumber(formData.amount));
+
+    _formData.append("expenseDate", newDate);
+    _formData.append("amount", newAmount);
+    _formData.append("category", formData.category);
+    _formData.append("description", formData.description);
+    _formData.append("file", proofOfPayment[0]);
+    dispatch(createExpense(_formData))
       .unwrap()
       .then((res) => {
         if (res?.success === true) {
@@ -201,14 +233,16 @@ const CreateNewExpense = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Expenses", "Add new expense"]}>
+    <DashboardLayout isBackNav={true} paths={["Expenses", "Add New Expense"]}>
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         <div className="flex justify-between items-center">
-          <p className="text-xl font-semibold text-swBlack">Add new expense</p>
+          <p className="md:text-xl text-md font-semibold text-swBlack">
+            Add New Expense
+          </p>
           <div className="w-60">
             <SelectField
               value={options.find(
@@ -228,20 +262,12 @@ const CreateNewExpense = () => {
           <div>
             <div className="flex flex-col gap-5">
               <p className="text-lg font-semibold text-swBlack mt-10">
-                Expense details
+                Expense Details
               </p>
 
-              {/* <InputField
-            label={"Expense name"}
-            required={true}
-            name="name"
-            placeholder={"Enter asset name"}
-            value={formData.name}
-            onChange={handleChange}
-            /> */}
               <div className="relative">
                 <div className="block text-gray-700 text-sm mb-2">
-                  Date of expense
+                  Date of Expense
                   <span className="text-red-600 ml-1">*</span>
                 </div>
                 <div
@@ -281,7 +307,7 @@ const CreateNewExpense = () => {
                 )}
               </div>
               <SelectField
-                label={"Expense category"}
+                label={"Expense Category"}
                 required={true}
                 optionValue={transformedOptions}
                 name="category"
@@ -296,7 +322,7 @@ const CreateNewExpense = () => {
                 }
               />
               <InputField
-                label={"Expense description"}
+                label={"Expense Description"}
                 required={true}
                 name="description"
                 value={formData.description}
@@ -310,12 +336,70 @@ const CreateNewExpense = () => {
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
                 endIcon={<p className="text-swGray">NGN &#8358;</p>}
-                label="Total amount"
+                label="Total Amount"
                 value={formData?.amount?.toLocaleString()}
-                placeholder="Enter loan amount"
+                placeholder="Enter amount"
                 onChange={handleChange}
               />
+
+              <div
+                className="text-center w-full"
+                onDrop={uploadProofOfPayment}
+                onDragOver={(e) => e.preventDefault()}
+              >
+                <div className="w-full border-dotted border-[2px] rounded-3xl bg-pharmaGray pt-2 pb-2 text-swBlack">
+                  <input
+                    type="file"
+                    id="fileInput"
+                    className="hidden"
+                    accept=".pdf, .jpg, .png, .jpeg"
+                    onChange={handleUploadProofOfPayment}
+                  />
+
+                  <p className="mt-10 text-sm font-medium">
+                    Upload Proof of Payment(Optional)
+                  </p>
+
+                  <p className="text-xs">Max file size: 3mb</p>
+
+                  <label
+                    htmlFor="fileInput"
+                    className="cursor-pointer flex gap-2 itwms-center p-2 rounded-md bg-swBlue text-white font-medium w-fit mx-auto mt-5 mb-3 text-sm"
+                  >
+                    <LuPaperclip size={16} />
+                    {proofOfPayment.length > 0 ? "Change file" : "Upload file"}
+                  </label>
+                </div>
+              </div>
             </div>
+            {proofOfPayment.length > 0 && (
+              <div className="mt-5">
+                <ul className="">
+                  {proofOfPayment.map((file, index) => (
+                    <li
+                      key={index}
+                      className="my-2 bg-white flex rounded-md border"
+                    >
+                      <div className="flex gap-3 items-center p-2 pl-2 text-sm">
+                        {/* <FiFileText size={20} /> */}
+                        {file.name}
+                      </div>
+                      <div
+                        className="flex gap-4 items-center ml-auto p-2 border-l cursor-pointer"
+                        onClick={() => {
+                          handleFileDelete(index);
+                        }}
+                      >
+                        <FiTrash
+                          className=" text-swIndicatorLightRed"
+                          size={15}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div className="flex items-center justify-between gap-5 mt-20">
               <div
