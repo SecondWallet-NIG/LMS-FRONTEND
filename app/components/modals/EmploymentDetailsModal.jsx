@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
-import { FiUser } from "react-icons/fi";
+import { AiOutlineClose } from "react-icons/ai";
 import InputField from "../shared/input/InputField";
 import SelectField from "../shared/input/SelectField";
 import { useDispatch, useSelector } from "react-redux";

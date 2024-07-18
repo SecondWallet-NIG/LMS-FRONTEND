@@ -8,12 +8,6 @@ import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
-import {
-  createNewAsset,
-  getAllAssetCategories,
-  getSingleAsset,
-  updateSingleAsset,
-} from "@/redux/slices/assetManagementSlice";
 import { useParams, useRouter } from "next/navigation";
 import {
   getAllExpenseCategories,

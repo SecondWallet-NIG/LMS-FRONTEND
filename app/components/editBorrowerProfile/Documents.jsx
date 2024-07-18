@@ -1,13 +1,11 @@
 "use client"
 import { useState } from "react";
-import { FiTrash } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { updateIdentityVerification } from "@/redux/slices/customerSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
-import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
 import CustomerProfileDocs from "../customers/CustomerProfileDocs";
 
 const ProfileDocuments = ({userData}) => {

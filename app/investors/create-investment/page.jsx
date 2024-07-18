@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
@@ -212,7 +211,7 @@ const CreateInvestment = () => {
   ]);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
-      <div className="mx-auto w-3/5 mb-28">
+      <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create New Investment
         </h1>

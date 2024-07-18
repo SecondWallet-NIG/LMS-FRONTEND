@@ -1,7 +1,6 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import { handleFileExtention } from "@/app/components/helpers/utils";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { formatDate } from "@/helpers";
 import { getDisbursementById } from "@/redux/slices/loanApplicationSlice";
 import Link from "next/link";

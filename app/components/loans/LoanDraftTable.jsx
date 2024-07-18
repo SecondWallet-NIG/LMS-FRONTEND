@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
 import Link from "next/link";
-import Button from "../shared/buttonComponent/Button";
-import EditableButton from "../shared/editableButtonComponent/EditableButton";
 
 const LoanDraftTable = () => {
   const [userId, setUserId] = useState("");

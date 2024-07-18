@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import InvestmentsCards from "../cards/InvestmentsCard/InvestmentsCards";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useRouter } from "next/navigation";

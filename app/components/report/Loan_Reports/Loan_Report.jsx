@@ -9,7 +9,6 @@ import Button from "../../shared/buttonComponent/Button";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { exportToPDF } from "@/helpers";
 import { handleCaptureClick } from "../../helpers/utils";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 

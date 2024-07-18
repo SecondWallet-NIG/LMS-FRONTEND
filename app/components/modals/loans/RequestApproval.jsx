@@ -1,14 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
-import { FiUser } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
-import InputField from "../../shared/input/InputField--";
-import Button from "../../shared/buttonComponent/Button";
 import SelectField from "../../shared/input/SelectField";
 import { requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
 

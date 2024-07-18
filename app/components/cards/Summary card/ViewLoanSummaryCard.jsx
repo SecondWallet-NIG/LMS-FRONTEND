@@ -1,7 +1,3 @@
-import { BsFillStarFill, BsPentagonFill, BsTriangleFill } from "react-icons/bs";
-import { FaCircle, FaSquareFull } from "react-icons/fa";
-import { PiDiamondFill } from "react-icons/pi";
-
 const ViewLoanSummaryCard = ({ data }) => {
   return (
     <main className="grid grid-cols-3 gap-4">

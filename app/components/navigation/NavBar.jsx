@@ -1,7 +1,5 @@
 "use client";
-import { CiSearch } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
-import { HiMiniUserCircle } from "react-icons/hi2";
 import PagePath from "./PagePath";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";

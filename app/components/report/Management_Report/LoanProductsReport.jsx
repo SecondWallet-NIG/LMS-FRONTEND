@@ -4,7 +4,6 @@ import CenterModal from "../../modals/CenterModal";
 import { DateRange } from "react-date-range";
 import Button from "../../shared/buttonComponent/Button";
 import { useState, useEffect } from "react";
-import LoanProductsTable from "./Tables/LoanProductsTable";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 import { handleCaptureClick } from "../../helpers/utils";
 import { getLoanProductsCardsData } from "@/redux/slices/userSlice";

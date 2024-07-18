@@ -6,7 +6,6 @@ import { MdOutlineEmail, MdKey } from "react-icons/md";
 import InputField from "../shared/input/InputField";
 import Button from "../shared/buttonComponent/Button";
 import Link from "next/link";
-import axios from "axios";
 import Image from "next/image";
 import companyLogo from "../../../public/images/Logo.png";
 import { toast, ToastContainer } from "react-toastify";

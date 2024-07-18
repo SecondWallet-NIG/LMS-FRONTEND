@@ -5,7 +5,6 @@ import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
 import InputField from "../../shared/input/InputField";
 import SelectField from "../../shared/input/SelectField";
 import { createUser } from "@/redux/slices/userSlice";
-import Button from "../../shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Image from "next/image";
