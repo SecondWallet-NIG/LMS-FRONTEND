@@ -32,7 +32,7 @@ const EditAsset = () => {
   const [formData, setFormData] = useState({
     category: "",
     description: "",
-    date: new Date(),
+    expenseDate: new Date(),
     amount: "",
   });
   // const { data } = useSelector((state) => state.asset);
@@ -84,11 +84,11 @@ const EditAsset = () => {
 
   const handleUpdateExpense = async () => {
     setLoading(true);
-    const newDate = format(formData.date, "yyyy-MM-dd");
+    const newDate = format(formData.expenseDate, "yyyy-MM-dd");
     const newValue = parseInt(removeCommasFromNumber(formData.amount));
     const payload = {
       ...formData,
-      date: newDate,
+      expenseDate: newDate,
       amount: newValue,
     };
 
@@ -113,7 +113,7 @@ const EditAsset = () => {
         setFormData({
           category: res?.data?.category?._id,
           description: res?.data?.description,
-          date: new Date(res?.data?.date),
+          expenseDate: new Date(res?.data?.expenseDate),
           amount: res?.data?.amount,
         });
       })
@@ -158,7 +158,7 @@ const EditAsset = () => {
               onClick={() => setOpenDate(!openDate)}
             >
               <LuCalendar size={22} className="text-swTextColor" />
-              {format(formData?.date, "PPP")}
+              {format(formData?.expenseDate, "PPP")}
             </div>
             {openDate && (
               <div className="absolute w-fit right-0  -mb-5 bg-white border rounded-md z-50">
@@ -167,7 +167,7 @@ const EditAsset = () => {
                     caption: { color: "#2769b3" },
                   }}
                   modifiers={{
-                    selected: formData.date,
+                    selected: formData.expenseDate,
                   }}
                   modifiersClassNames={{
                     selected: "my-selected",
@@ -175,7 +175,7 @@ const EditAsset = () => {
                   onDayClick={(value) => {
                     setFormData((prev) => ({
                       ...prev,
-                      date: value > new Date() ? new Date() : value,
+                      expenseDate: value > new Date() ? new Date() : value,
                     }));
                   }}
                   className="w-full"

@@ -139,7 +139,7 @@ const EditPlansAndPackages = () => {
   }, []);
 
   const preventMinus = (e) => {
-    if (/[^0-9,]/g.test(e.key)) {
+    if (/[^0-9,.]/g.test(e.key)) {
       e.preventDefault();
     }
   };

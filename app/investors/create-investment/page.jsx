@@ -135,6 +135,12 @@ const CreateInvestment = () => {
       });
   };
 
+  const preventMinus = (e) => {
+    if (/[^0-9,.]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const modalChildren = (
     <>
       <div className="px-5 pb-10">
@@ -206,7 +212,7 @@ const CreateInvestment = () => {
   ]);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
-      <div className="mx-auto w-3/5 mb-28">
+      <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create New Investment
         </h1>
@@ -227,6 +233,7 @@ const CreateInvestment = () => {
             placeholder={"Select from list"}
             optionValue={investors}
             onChange={(e) => handleSelectChange(e, "investorProfile")}
+            isSearchable={true}
           />
         </div>
         <div className="my-6">
@@ -267,7 +274,8 @@ const CreateInvestment = () => {
               value={formData?.interestRateValue}
               placeholder={"Enter number"}
               required={true}
-              //   endIcon={"₦"}
+              inputType="number"
+              onKeyPress={preventMinus}
               onChange={handleInputChange}
             />
           </div>

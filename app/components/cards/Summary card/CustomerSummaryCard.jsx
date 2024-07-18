@@ -13,7 +13,7 @@ const Card = ({ value, title, extraVal }) => {
           <p className="text-4xl leading-10 text-swBlue700">
             {value}
           </p>
-          {extraVal && <p className={`text-base text-swBlack font-medium leading-6 ${!value ? "mx-auto" : ""}`}>{extraVal}NGN</p>}
+          {extraVal && <p className={`text-base text-swBlack font-medium leading-6 ${!value ? "mx-auto" : ""}`}>{extraVal} NGN</p>}
         </div>
       </div>
     </div>
