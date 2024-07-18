@@ -39,7 +39,7 @@ const Report = () => {
           className={`text-xs sm:text-base flex justify-between items-center font-medium ${poppins.className}`}
         >
           <div className="flex flex-wrap p-5">
-            {navs.map((nav) => {
+            {navs?.map((nav) => {
               return (
                 <div
                   key={nav.selOption}

@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoMdArrowDropright } from "react-icons/io";
 import LoanOfficerReport from "./LoanOfficerReport";
 import LoanProductsReport from "./LoanProductsReport";
 import FeeReport from "./FeeReport";
-import { useDispatch } from "react-redux";
 
 const ManagementReport = () => {
   const [dateFilterOpen, setDateFilterOpen] = useState(false);

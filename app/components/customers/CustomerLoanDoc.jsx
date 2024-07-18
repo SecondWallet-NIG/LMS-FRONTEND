@@ -2,7 +2,6 @@
 import { useState } from "react";
 import CenterModal from "../modals/CenterModal";
 import LoanDocsUpload from "../modals/loans/LoanDocsUpload";
-import PreviewLoanDocs from "./PreviewLoanDocs";
 import { handleFileExtention } from "../helpers/utils";
 import { IoMdClose } from "react-icons/io";
 import dynamic from "next/dynamic";

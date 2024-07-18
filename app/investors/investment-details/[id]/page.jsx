@@ -9,18 +9,72 @@ import { FiCalendar, FiCopy, FiPlus } from "react-icons/fi";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleInvestment } from "@/redux/slices/investmentSlice";
+import {
+  closeInvestment,
+  getSingleInvestment,
+  getTransactionHistory,
+  topUpInvestment,
+} from "@/redux/slices/investmentSlice";
 import { format } from "date-fns";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
+import { toast, ToastContainer } from "react-toastify";
+import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
+
+const header = [
+  { id: "dueDate", label: "Due Date" },
+  { id: "datePaid", label: "Date Paid" },
+  { id: "amountDue", label: "Amount Due" },
+  { id: "roi", label: "ROI" },
+  { id: "tranactionType", label: "TransactionType" },
+];
+
+const customDataTransformer = (apiData) => {
+  console.log({ apiData });
+  return apiData?.map((item) => ({
+    id: item?._id,
+    dueDate: (
+      <div className="text-[15px] font-light text-gray-700">
+        {/* {item?.firstName} {item?.lastName} */}
+        Due Date
+      </div>
+    ),
+    datePaid: (
+      <div className="text-[15px] font-light text-gray-700">
+        {/* {item?.investorId} */}
+        Date Paid
+      </div>
+    ),
+    amountDue: (
+      <div className="text-[15px] font-light text-gray-700">
+        {/* {item?.dateOfBirth && format(new Date(item?.dateOfBirth), "PPP")} */}
+        Amount Due
+      </div>
+    ),
+    roi: <div className="text-[15px] font-light text-gray-700">hello</div>,
+    tranactionType: (
+      <div className="text-[15px] font-light text-gray-700">
+        {item?.transactionType}
+      </div>
+    ),
+  }));
+};
 
 export default function InvestmentDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [isModalOpen, setModal] = useState(false);
+  const [openTopUp, setOpenTopUp] = useState(false);
   const { data } = useSelector((state) => state.investment);
   const headClass = "text-lg font-semibold leading-7 text-swBlack mb-5";
   const tableDataClass = " py-3 text-sm leading-6 text-swBlack -ml-1";
-  const lastTableClass = 'text-[15px] font-light whitespace-nowrap text-gray-700'
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({ closeInvestmentReason: "" });
+  const [fileError, setFileError] = useState("");
+  const [topUpData, setTopUpData] = useState({
+    amount: "",
+    paymentReceipt: null,
+  });
+
   const tableOneHeader = [
     { label: "Start Date" },
     { label: "Investment Product ID & Package" },
@@ -34,6 +88,24 @@ export default function InvestmentDetails() {
     { label: "Maturity Amount" },
     { label: "Maturity Date" },
   ];
+
+  const handleCloseInvestment = () => {
+    setLoading(true);
+    dispatch(closeInvestment({ id, payload: formData }))
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        setFormData({ closeInvestmentReason: "" });
+        dispatch(getSingleInvestment(id));
+        setModal(false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        toast.success(err?.message);
+        setLoading(false);
+      });
+  };
+
   const modalChildren = (
     <>
       <div>
@@ -42,21 +114,24 @@ export default function InvestmentDetails() {
         </div>
         <p className="text-sm leading-5 text-center text-swBlack gap-2 p-6">
           You are trying to close this investment for this customer. Kindly
-          input the date
+          input the reason.
         </p>
         <div className="gap-2 px-6">
           <InputField
-            name={"date"}
-            label={"Date"}
-            placeholder={"mm/dd/yyyy"}
-            required={true}
-            endIcon={<FiCalendar />}
+            placeholder={"Enter reason for closing investment"}
+            value={formData.closeInvestmentReason}
+            onChange={(e) =>
+              setFormData({ closeInvestmentReason: e.target.value })
+            }
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-10 px-6">
           <span
-            onClick={() => setModal(false)}
+            onClick={() => {
+              setCloseInvestmentReason("");
+              setModal(false);
+            }}
             className={`py-2 px-12 justify-center text-swTextColor font-semibold rounded-md outline outline-1 
                      outline-gray-200 flex gap-2 border w-full cursor-pointer hover:shadow-lg
                     `}
@@ -64,9 +139,179 @@ export default function InvestmentDetails() {
             Cancel
           </span>
 
-          <Button className="rounded-md font-semibold w-full">
+          {/* <div  className="w-fit"> */}
+          <Button
+            onClick={handleCloseInvestment}
+            disabled={loading}
+            className="rounded-md font-semibold w-full"
+          >
             Close Investment
           </Button>
+          {/* </div> */}
+        </div>
+      </div>
+    </>
+  );
+
+  const preventMinus = (e) => {
+    if (/[^0-9,]/g.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const removeCommasFromNumber = (numberString) => {
+    if (typeof numberString !== "string") {
+      // Convert to string or handle the case appropriately
+      numberString = String(numberString);
+    }
+    return numberString.replace(/,/g, "");
+  };
+
+  const handleTopUp = () => {
+    setLoading(true);
+    const payload = new FormData();
+
+    payload.append("amount", Number(removeCommasFromNumber(topUpData.amount)));
+    payload.append("paymentReceipt", topUpData.paymentReceipt);
+
+    console.log("payload", ...payload);
+    dispatch(topUpInvestment({ id, payload }))
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        dispatch(getSingleInvestment(id));
+        setTopUpData({ amount: "", paymentReceipt: null });
+        setOpenTopUp(false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        toast.error(err?.message);
+        setLoading(false);
+      });
+  };
+
+  const handleFileChange = (e) => {
+    setFileError("");
+    let { name, files } = e.target;
+    const file = files[0];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    if (!allowedExtensions.includes(fileExtension)) {
+      setFileError(
+        "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+      );
+      return;
+    }
+    setTopUpData((prevFormData) => ({
+      ...prevFormData,
+      [name]: file,
+    }));
+  };
+
+  const deleteFile = (name) => {
+    setTopUpData((prevFormData) => ({
+      ...prevFormData,
+      [name]: null,
+    }));
+  };
+
+  const resetTopUpField = () => {
+    setTopUpData({ amount: "", paymentReceipt: null });
+  };
+
+  console.log({ topUpData });
+
+  const topUpChildren = (
+    <>
+      <div>
+        <div className="gap-2 px-6">
+          <InputField
+            // placeholder={"Enter reason for closing investment"}
+            label={"Amount"}
+            required={true}
+            value={topUpData.amount}
+            onKeyPress={preventMinus}
+            onChange={(e) =>
+              setTopUpData((prev) => ({
+                ...prev,
+                amount: Number(
+                  e.target.value.replace(/[^0-9.]/g, "")
+                ).toLocaleString(),
+              }))
+            }
+          />
+
+          <div className="pt-4">
+            <p className="font-semibold pt-2 text-sm">Upload payment receipt</p>
+            <p className="text-xs pt-2">
+              Document types uploaded should be JPEGS, PNG or PDF and should not
+              exceed 4mb
+            </p>
+            {fileError && <p className="text-red-500 text-sm">{fileError}</p>}
+            <div className="relative">
+              <input
+                name="paymentReceipt"
+                type="file"
+                id="fileInput"
+                className="absolute w-0 h-0 opacity-0"
+                onChange={handleFileChange}
+                onClick={(e) => (e.target.value = null)}
+              />
+              <label
+                htmlFor="fileInput"
+                className="px-4 py-2 text-white rounded-md cursor-pointer"
+              >
+                <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                  <AiOutlinePaperClip color="black" size={20} />
+                  <p className="font-semibold text-black">
+                    {topUpData?.paymentReceipt ? "Change file" : "Select file"}
+                  </p>
+                </span>
+              </label>
+              {topUpData?.paymentReceipt != null ? (
+                <div
+                  id="fileLabel"
+                  className="bg-swLightGray p-2 flex justify-between"
+                >
+                  <div className="text-xs">
+                    {topUpData?.paymentReceipt?.name}
+                  </div>
+                  <div
+                    onClick={() => {
+                      deleteFile("paymentReceipt");
+                    }}
+                  >
+                    <AiOutlineDelete color="red" size={20} />
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-10 px-6">
+          <span
+            onClick={() => {
+              resetTopUpField();
+              setOpenTopUp(false);
+            }}
+            className={`py-2 px-12 justify-center text-swTextColor font-semibold rounded-md outline outline-1 
+                     outline-gray-200 flex gap-2 border w-full cursor-pointer hover:shadow-lg
+                    `}
+          >
+            Cancel
+          </span>
+
+          {/* <div  className="w-fit"> */}
+          <Button
+            onClick={handleTopUp}
+            disabled={loading}
+            className="rounded-md font-semibold w-full"
+          >
+            Confirm
+          </Button>
+          {/* </div> */}
         </div>
       </div>
     </>
@@ -141,6 +386,7 @@ export default function InvestmentDetails() {
       isBackNav={true}
       paths={["Investors", "Investment details"]}
     >
+      <ToastContainer />
       <div>
         {/* Header */}
         <div className="border-b-2 pb-5 mb-5">
@@ -171,17 +417,26 @@ export default function InvestmentDetails() {
                       View profile
                     </Button>
                   </Link>
-                  <span
+                  <button
                     onClick={() => setModal(true)}
-                    className="rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer"
+                    disabled={data?.data?.status === "Closed"}
+                    className={`${
+                      data?.data?.status === "Closed"
+                        ? "cursor-not-allowed"
+                        : ""
+                    } rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer`}
                   >
                     Close investment
-                  </span>
+                  </button>
                 </div>
               </div>
               <span
-                className={`bg-swLightBlue text-xs text-white leading-4 h-5 rounded-full 
-                        py-0.5 px-3 absolute left-24 lg:left-[60%] top-7`}
+                className={`${
+                  data?.data?.status === "Closed"
+                    ? "bg-red-500"
+                    : "bg-swLightBlue"
+                } text-xs text-white leading-4 h-5 rounded-full 
+                        py-0.5 px-3 absolute left-24 lg:left-64 top-4`}
               >
                 {data?.data?.status}
               </span>
@@ -204,7 +459,10 @@ export default function InvestmentDetails() {
                   <h2 className="font-medium leading-8 text-2xl">
                     ₦ {data?.data?.currentInvestmentPrincipal?.toLocaleString()}
                   </h2>
-                  <span className="flex gap-2 border text-sm px-3 py-2 font-semibold rounded-md cursor-pointer">
+                  <span
+                    className="flex gap-2 border text-sm px-3 py-2 font-semibold rounded-md cursor-pointer bg-white"
+                    onClick={() => setOpenTopUp(true)}
+                  >
                     <FiCopy className="" size={16} />
                     <p className="-mt-0.5 ">Top up</p>
                   </span>
@@ -282,13 +540,17 @@ export default function InvestmentDetails() {
           {/* Transaction History */}
           <div className="px-5 py-5">
             <h1 className={`${headClass}`}>Transaction History</h1>
-            <ReusableDataTable
-              dataTransformer={customDataTransformer}
-              headers={header}
-              initialData={[]}
-              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/all`}
-              pagination={true}
-            />
+            <div className="border rounded-2xl overflow-x-auto">
+              <ReusableDataTable
+                dataTransformer={customDataTransformer}
+                onClickRow="/investors/investor-profile/"
+                headers={header}
+                initialData={[]}
+                apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/transactions/${id}`}
+                // filters={true}
+                pagination={true}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -299,6 +561,13 @@ export default function InvestmentDetails() {
         isOpen={isModalOpen}
         onClose={setModal}
         children={modalChildren}
+      />
+      <SharedInvestmentModal
+        css={"max-w-lg"}
+        header={"Topup"}
+        isOpen={openTopUp}
+        onClose={setOpenTopUp}
+        children={topUpChildren}
       />
     </DashboardLayout>
   );

@@ -14,10 +14,10 @@ export const createInvestmentProduct = createAsyncThunk(
   async (payload) => {
     try {
       let user;
-if (typeof window !== "undefined") {
-  user = JSON.parse(localStorage.getItem("user"));
-  console.log({user: user?.data?.token});
-}
+      if (typeof window !== "undefined") {
+        user = JSON.parse(localStorage.getItem("user"));
+        console.log({ user: user?.data?.token });
+      }
       const response = await axios.post(
         `${API_URL}/investment/product/create`,
         payload,
@@ -157,6 +157,71 @@ export const getSingleInvestment = createAsyncThunk(
   }
 );
 
+export const getTransactionHistory = createAsyncThunk(
+  "/investment/transactions/nvestmentId",
+  async (id) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/investment/transactions/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const closeInvestment = createAsyncThunk(
+  "investment/investmentId/close",
+  async ({ id, payload }) => {
+    try {
+      const response = await axios.patch(
+        `${API_URL}/investment/${id}/close`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const topUpInvestment = createAsyncThunk(
+  "investment/investmentId/topup",
+  async ({ id, payload }) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/investment/${id}/topup`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 // InvestorRecords
 
 export const createInvestor = createAsyncThunk(
@@ -217,7 +282,6 @@ export const getAllInvestors = createAsyncThunk(
   }
 );
 
-
 export const updateInvestor = createAsyncThunk(
   "investment/investor/investorProfileId/update",
   async ({ id, payload }) => {
@@ -239,7 +303,6 @@ export const updateInvestor = createAsyncThunk(
     }
   }
 );
-
 
 export const getInvestmentReport = createAsyncThunk(
   "investment/report",

@@ -5,10 +5,6 @@ import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllAssetCategories,
-  getAllAssets,
-} from "@/redux/slices/assetManagementSlice";
 import { IoMdAdd } from "react-icons/io";
 import Link from "next/link";
 import CreateAssetModal from "../components/modals/CreateAssetModal";
@@ -22,6 +18,7 @@ import {
 const header = [
   { id: "date", label: "Date" },
   { id: "category", label: "Expense Category" },
+  { id: "description", label: "Description" },
   { id: "amount", label: "Amount" },
   { id: "status", label: "Status" },
 ];
@@ -31,8 +28,13 @@ const customDataTransformer = (apiData) => {
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
     date: (
-      <div className="text-lg text-gray-700 font-light">
+      <div className="text-lg text-gray-700 font-light whitespace-nowrap">
         {item?.expenseDate && format(new Date(item?.expenseDate), "PPP")}
+      </div>
+    ),
+    description: (
+      <div className="text-[15px] font-light text-gray-700">
+        {item?.description}
       </div>
     ),
     category: (

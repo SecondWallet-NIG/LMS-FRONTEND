@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
 import Button from "../../shared/buttonComponent/Button";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
-import { approveLoanRequest } from "@/redux/slices/loanApprovalSlice";
 import {
   getSingleLoan,
   updateLoanApplication,

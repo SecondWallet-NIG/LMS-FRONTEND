@@ -1,12 +1,9 @@
 import { IoClose } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
-import SelectField from "../shared/input/SelectField";
-import { getAllAssetCategories } from "@/redux/slices/assetManagementSlice";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { useParams, useRouter } from "next/navigation";
-import { getAllExpenseCategories } from "@/redux/slices/expenseManagementSlice";
 import Image from "next/image";
 import { deleteSingleInvestmentProduct } from "@/redux/slices/investmentSlice";
 

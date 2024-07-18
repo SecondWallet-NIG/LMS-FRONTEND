@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import ReusableDataTable from "../../shared/tables/ReusableDataTable";
-import { format } from "date-fns";
 
 const header = [
   { id: "investorName", label: "Investor Name" },

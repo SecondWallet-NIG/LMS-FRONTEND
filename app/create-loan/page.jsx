@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
 import { useState } from "react";
@@ -17,11 +17,9 @@ import CenterModal from "../components/modals/CenterModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PreviewInterest from "../components/modals/PreviewInterest";
-import { FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import Link from "next/link";
-import Image from "next/image";
 import { Rings } from "react-loader-spinner";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Unauthorized from "../unauthorized/page";

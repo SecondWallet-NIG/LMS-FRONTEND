@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { formatDate } from "@/helpers";
 const UnpaidRepaymentTable = () => {

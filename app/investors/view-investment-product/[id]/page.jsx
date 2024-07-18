@@ -1,8 +1,6 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import DeleteInvesmentProductModal from "@/app/components/investments/DeleteInvesmentProductModal";
-import DeleteAssetCategoryModal from "@/app/components/modals/DeleteAssetCategoryModal";
-import Button from "@/app/components/shared/buttonComponent/Button";
 import { getSingleInvestmentProduct } from "@/redux/slices/investmentSlice";
 import Link from "next/link";
 import { useParams } from "next/navigation";

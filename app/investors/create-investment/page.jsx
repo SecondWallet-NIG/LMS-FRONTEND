@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";

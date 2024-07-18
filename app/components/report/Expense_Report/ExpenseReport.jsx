@@ -9,7 +9,6 @@ import Button from "../../shared/buttonComponent/Button";
 import ExpenseReportCards from "./ExpenseReportsCards";
 import ExpenseReportTable from "./ExpenseReportTable";
 import { useDispatch, useSelector } from "react-redux";
-import SelectField from "../../shared/input/SelectField";
 import { getExpenseReportCards } from "@/redux/slices/expenseManagementSlice";
 import { format } from "date-fns";
 
@@ -46,21 +45,21 @@ export default function ExpenseReport() {
   };
 
   const fetchSummaryByDate = () => {
-    if (dateRange && dateRange.length > 0) {
+    if (dateRange && dateRange?.length > 0) {
       if (
-        dateRange[0].startDate instanceof Date &&
-        dateRange[0].endDate instanceof Date
+        dateRange[0]?.startDate instanceof Date &&
+        dateRange[0]?.endDate instanceof Date
       ) {
-        const startDate = dateRange[0].startDate.toISOString();
-        const endDate = dateRange[0].endDate.toISOString();
+        const startDate = dateRange[0]?.startDate?.toISOString();
+        const endDate = dateRange[0]?.endDate?.toISOString();
         const data = {
           startDate: format(new Date(startDate), "yyyy-MM-dd"),
           endDate: format(new Date(endDate), "yyyy-MM-dd"),
         };
         dispatch(
           getExpenseReportCards({
-            startDate: data.startDate,
-            endDate: data.endDate,
+            startDate: data?.startDate,
+            endDate: data?.endDate,
           })
         );
         setDateFilterOpen(false);
@@ -82,7 +81,7 @@ export default function ExpenseReport() {
         },
         {
           title: "Total Expense Value",
-          value: data?.totalExpenseValue.toLocaleString(),
+          value: data?.totalExpenseValue?.toLocaleString(),
         },
       ]);
     }
@@ -154,7 +153,7 @@ export default function ExpenseReport() {
             <div className="flex gap-2 items-center">
               <DateRange
                 editableDateInputs={true}
-                onChange={(item) => setDateRange([item.selection])}
+                onChange={(item) => setDateRange([item?.selection])}
                 moveRangeOnFirstSelection={false}
                 ranges={dateRange}
               />

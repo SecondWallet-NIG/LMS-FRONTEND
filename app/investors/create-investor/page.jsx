@@ -1,21 +1,10 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { useEffect, useState } from "react";
-import {
-  FiUser,
-  FiCalendar,
-  FiMapPin,
-  FiMail,
-  FiPaperclip,
-} from "react-icons/fi";
-import {
-  genderOptions,
-  countryOptions,
-  createBorrowerType,
-} from "../../components/helpers/utils";
+import { FiUser, FiMapPin, FiMail } from "react-icons/fi";
+import { genderOptions, countryOptions } from "../../components/helpers/utils";
 import { bankArr, statesAndLgas } from "@/constant";
 import { createInvestor } from "@/redux/slices/investmentSlice";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";

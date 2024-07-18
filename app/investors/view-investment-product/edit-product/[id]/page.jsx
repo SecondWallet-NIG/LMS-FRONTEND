@@ -1,14 +1,11 @@
 "use client";
 import DashboardLayout from "../../../../components/dashboardLayout/DashboardLayout";
 import InputField from "../../../../components/shared/input/InputField";
-import { AiOutlinePercentage, AiOutlineMinus } from "react-icons/ai";
-import SelectField from "../../../../components/shared/input/SelectField";
-import Button from "../../../../components/shared/buttonComponent/Button";
+import { AiOutlineMinus } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import {
-  createInvestmentProduct,
   getSingleInvestmentProduct,
   updateProduct,
 } from "@/redux/slices/investmentSlice";
@@ -170,7 +167,6 @@ const EditInvestmentProduct = () => {
 
     // setLoading(false);
   };
-
 
   const handleFormDisplay = (e, metric, btn) => {
     let isChecked = e.target.checked

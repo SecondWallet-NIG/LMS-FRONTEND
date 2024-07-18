@@ -2,14 +2,13 @@
 import { useState, useEffect } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { formatDate } from "@/helpers";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   approveLoggedPayment,
   declineLoggedPayment,
 } from "@/redux/slices/loanRepaymentSlice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "../shared/buttonComponent/Button";
 import { useRouter } from "next/navigation";
 
 const PaymentHistoryTable = () => {

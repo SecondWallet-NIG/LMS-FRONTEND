@@ -15,7 +15,7 @@ const customDataTransformer = (apiData) => {
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
     date: (
-      <div className="text-[15px] font-light text-gray-700">
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
         {item?.expenseDate && format(new Date(item?.expenseDate), "PPP")}
       </div>
     ),
@@ -30,7 +30,7 @@ const customDataTransformer = (apiData) => {
       </div>
     ),
     amount: (
-      <div className="text-[15px] font-light text-gray-700">
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
         ₦ {item?.amount?.toLocaleString()}
       </div>
     ),

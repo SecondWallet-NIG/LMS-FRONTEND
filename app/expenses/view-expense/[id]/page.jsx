@@ -1,12 +1,11 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Loader from "@/app/components/shared/Loader";
-import { getSingleAsset } from "@/redux/slices/assetManagementSlice";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiEdit2, FiTrash } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { format } from "date-fns";
 import DeleteAssetModal from "@/app/components/modals/DeleteAssetModal";
 import { getSingleExpense } from "@/redux/slices/expenseManagementSlice";
