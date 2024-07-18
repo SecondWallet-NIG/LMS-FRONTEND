@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
 import { toast, ToastContainer } from "react-toastify";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
+import { getDefaultReferenceDate } from "@mui/x-date-pickers/internals";
 
 const header = [
   { id: "dueDate", label: "Due Date" },
@@ -322,35 +323,25 @@ export default function InvestmentDetails() {
     { id: "datePaid", label: "Date Paid" },
     { id: "amountDue", label: "Amount Due" },
     { id: "roi", label: "ROI" },
-    { id: "transactionType", label: "Transaction Type" }
+    { id: "transactionType", label: "Transaction Type" },
   ];
 
   const customDataTransformer = (apiData) => {
-    return apiData?.investments?.map((item, i) => ({
-      id: item._id,
+    return apiData?.map((item) => ({
+      id: item?._id,
       dueDate: (
-        <div className={`${lastTableClass}`}>
-          13/07/2024
-        </div>
+        <div className="text-[15px] font-light text-gray-700">Due Date</div>
       ),
       datePaid: (
-        <div className={`${lastTableClass}`}>
-          Nil
-        </div>
+        <div className="text-[15px] font-light text-gray-700">Date Paid</div>
       ),
       amountDue: (
-        <div className={`${lastTableClass}`}>
-          50,000
-        </div>
+        <div className="text-[15px] font-light text-gray-700">Amount Due</div>
       ),
-      roi: (
-        <div className={`${lastTableClass}`}>
-          10%
-        </div>
-      ),
+      roi: <div className="text-[15px] font-light text-gray-700">ROI</div>,
       transactionType: (
-        <div className={`${lastTableClass}`}>
-          Debit
+        <div className="text-[15px] font-light text-gray-700">
+          {item?.transactionType}
         </div>
       ),
     }));
@@ -522,8 +513,8 @@ export default function InvestmentDetails() {
                     {data?.data?.duration?.metric === "Month"
                       ? "Months"
                       : data?.data?.duration?.metric === "Quarter"
-                        ? "Quarters"
-                        : "Years"}
+                      ? "Quarters"
+                      : "Years"}
                   </p>
                   <p className={`${tableDataClass}`}>
                     {data?.data?.maturityAmount?.toLocaleString()}
@@ -543,7 +534,7 @@ export default function InvestmentDetails() {
             <div className="border rounded-2xl overflow-x-auto">
               <ReusableDataTable
                 dataTransformer={customDataTransformer}
-                onClickRow="/investors/investor-profile/"
+                // onClickRow="/investors/investor-profile/"
                 headers={header}
                 initialData={[]}
                 apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/transactions/${id}`}
