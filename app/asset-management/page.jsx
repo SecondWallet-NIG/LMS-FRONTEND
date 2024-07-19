@@ -51,6 +51,7 @@ const customDataTransformer = (apiData) => {
     ),
   }));
 };
+
 const customDataTransformerAssetCategory = (apiData) => {
   return apiData?.map((item, i) => ({
     asset: <div className="text-lg text-gray-700 font-light">{item?.name}</div>,
