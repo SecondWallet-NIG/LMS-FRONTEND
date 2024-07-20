@@ -24,7 +24,7 @@ const CustomerSummaryCard = ({ data, financialCards }) => {
   return (
     <>
       {!financialCards && (
-        <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <main className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card title="Total Investments" value={3} extraVal={35837828.93} />
           <Card title="Average ROI" value={`${32}%`} />
           <Card title="Maturity Amount" value={3} extraVal={35837828.93} />
@@ -33,7 +33,7 @@ const CustomerSummaryCard = ({ data, financialCards }) => {
       )}
   
       {financialCards && (
-        <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <main className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card title="Annual Income" extraVal={35837828.93} />
           <Card title="Networth" extraVal={35837828.93} />
           <Card title="Source of Income" extraVal={35837828.93} />

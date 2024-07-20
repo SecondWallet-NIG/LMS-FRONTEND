@@ -427,7 +427,7 @@ export default function InvestmentDetails() {
                     ? "bg-red-500"
                     : "bg-swLightBlue"
                 } text-xs text-white leading-4 h-5 rounded-full 
-                        py-0.5 px-3 absolute left-24 lg:left-64 top-4`}
+                        py-0.5 px-3 absolute left-24 lg:left-64 top-7`}
               >
                 {data?.data?.status}
               </span>

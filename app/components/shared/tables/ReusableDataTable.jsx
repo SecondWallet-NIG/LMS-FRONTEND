@@ -750,10 +750,10 @@ function ReusableDataTable({
             </table>
           </div>
         ) : data?.length == 0 && !isLoading ? (
-          <div class="min-h-500 flex items-center justify-center">
-            <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
+          <div className="min-h-500 flex items-center justify-center">
+            <div className="rounded-lg p-8 w-[400px] flex flex-col items-center">
               <Image src={sketch} alt="company logo" />
-              <p class="text-center text-md">This list is empty</p>
+              <p className="text-center text-md">This list is empty</p>
             </div>
           </div>
         ) : null}
