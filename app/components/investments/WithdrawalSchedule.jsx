@@ -7,26 +7,66 @@ import SharedInvestmentModal from "../modals/Investments/SharedInvestmentModal";
 import InputField from "../shared/input/InputField";
 import SelectField from "../shared/input/SelectField";
 import Button from "../shared/buttonComponent/Button";
+import { format } from "date-fns";
+import { bankArr } from "@/constant";
+import { useDispatch, useSelector } from "react-redux";
+import { disburseROI } from "@/redux/slices/investmentSlice";
+import { toast, ToastContainer } from "react-toastify";
+
 
 export default function WithdrawalSchedule() {
-    const tableDataClass = 'text-[15px] font-light whitespace-nowrap text-gray-700'
+    const tableDataClass = 'text-[12px] md:text-[15px] font-light whitespace-nowrap text-gray-700'
     const mtHeadClass = 'flex justify-between gap-12 mb-1'
     const mHeadClass = 'text-swTextColor leading-5 text-sm'
-    const mClass = 'text-swBlack leading-5 text-sm font-medium item-center'
+    const mClass = 'text-swBlack leading-5 text-sm font-medium'
     const lightBtn = `py-2 px-3 text-swTextColor rounded-md outline outline-1 
     outline-gray-100 flex gap-2 border w-fit cursor-pointer text-sm hover:shadow-xl`
-    const [isModalOpen, setModal] = useState(false)
+    const dispatch = useDispatch()
+    const [isModalOpen, setModal] = useState(false  )
+    const [loading, setLoading] = useState(false)
     const [state, setState] = useImmer({
         bankDetails: {
             name: "",
             accNumber: "",
             beneficiary: "",
-            bvn: ""
-        }
+            bvn: "",
+        },
+        investmentId: "",
+        amountDue: "",
+        paymentMethod: ""
     })
+
+
+    const handleDisburseROI = () => {
+        setLoading(true);
+        dispatch(disburseROI(
+            {
+                id: investmentId,
+                payload: {
+                    withdrawalAmount: Number(state.amountDue),
+                    paymentMethod: state.paymentMethod
+                }
+            })
+        )
+            .unwrap()
+            .then((res) => {
+                toast.success(res?.message);
+                setState(draft => {
+                    draft.amountDue = ""
+                    draft.paymentMethod = ""
+                });
+                setModal(false);
+                setLoading(false);
+            })
+            .catch((err) => {
+                toast.success(err?.message);
+                setLoading(false);
+            });
+    };
+
     const paymentMethod = [
-        { value: "cash", label: "Cash" },
-        { value: "bankTransfer", label: "Bank Transfer" },
+        { value: "Cash", label: "Cash" },
+        { value: "Bank Transfer", label: "Bank Transfer" },
     ]
 
     const cards = [
@@ -62,7 +102,7 @@ export default function WithdrawalSchedule() {
                 disabled={true}
                 name={"amountDue"}
                 label={"Amount Due"}
-                placeholder={"50,000"}
+                placeholder={state.amountDue}
                 required={true}
             />
         </div>
@@ -73,14 +113,19 @@ export default function WithdrawalSchedule() {
                 required={true}
                 placeholder={"Enter amount"}
                 optionValue={paymentMethod}
+                onChange={e => {
+                    setState(draft => {
+                        draft.paymentMethod = e.value
+                    })
+                }}
             />
         </div>
 
-        <div onClick={() => setModal(false)} className="flex justify-end gap-4">
-            <div className={`${lightBtn}`}>
-                Cancel
-            </div>
-            <Button className="rounded-md text-sm">
+        <div className="flex justify-end gap-4">
+            <div onClick={() => setModal(false)} className={`${lightBtn}` }>Cancel</div>
+            <Button onClick={handleDisburseROI}
+                disabled={state.amountDue === '' || state.paymentMethod === '' || loading ? true : false}
+                className="rounded-md text-sm">
                 Confirm
             </Button>
         </div>
@@ -97,11 +142,11 @@ export default function WithdrawalSchedule() {
     ];
 
     const customDataTransformer = (apiData) => {
-        return apiData?.investments?.map((item, i) => ({
+        return apiData?.withdrawalRequests?.map((item, i) => ({
             id: item._id,
             dateLogged: (
                 <div className={`${tableDataClass}`}>
-                    13/07/2024
+                    {format(new Date(item?.createdAt), 'dd/MM/yyyy')}
                 </div>
             ),
             investmentId: (
@@ -119,8 +164,14 @@ export default function WithdrawalSchedule() {
                         />
                     </div>
                     <div>
-                        <p className="text-[15px] mb-1">Melondez Verx</p>
-                        <p className={`${tableDataClass}`}>INVPROFILE-183799</p>
+                        <p className="text-[12px] md:text-[15px] mb-2">
+                            {item?.investment?.investorProfile?.firstName} {" "}
+                            {item?.investment?.investorProfile?.middleName} {""}
+                            {item?.investment?.investorProfile?.lastName}
+                        </p>
+                        <p className={`${tableDataClass}`}>
+                            {item?.investment?.investmentId}
+                        </p>
                     </div>
                 </div>
             ),
@@ -131,20 +182,30 @@ export default function WithdrawalSchedule() {
             ),
             amountRequested: (
                 <div>
-                    <p className="text-[15px] mb-1">50,000</p>
-                    <p className={`${tableDataClass}`}>10% Monthly</p>
+                    <p className="text-[12px] md:text-[15px] mb-1"> {item?.withdrawalAmount}</p>
+                    <p className={`${tableDataClass}`}>
+                        {item?.investment?.interestRate?.value}% (
+                        {item?.investment?.interestRate?.metric})
+                    </p>
                 </div>
             ),
             disbursedBy: (
                 <div className={`${tableDataClass}`}>
-                    Adekunle Shina
+                    {item?.approvedBy && (
+                        <>
+                            {item?.approvedBy?.firstName} {" "}
+                            {item?.approvedBy?.middleName} {" "}
+                            {item?.approvedBy?.lastName}
+                        </>
+                    )}
+                    {item?.approvedBy ? '' : 'Nil'}
                 </div>
             ),
             status: (
                 <button
                     className={`${item.status === "Pending"
                         ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-                        : item.status === "Approved"
+                        : item.status === "Paid"
                             ? "bg-green-50 text-swGreen"
                             : "text-red-400 bg-red-100"
                         } px-2 py-1 rounded-full`}
@@ -153,30 +214,39 @@ export default function WithdrawalSchedule() {
                 </button>
             ),
             action: (
-                <div onClick={() => {
+                <button onClick={() => {
                     setState(draft => {
-                        draft.bankDetails.name = item?.status
-                        draft.bankDetails.accNumber = item?.status
-                        draft.bankDetails.beneficiary = item?.status
-                        draft.bankDetails.bvn = item?.status
+                        draft.bankDetails.name = bankArr.find(
+                            (option) =>
+                                option.value ===
+                                item?.investment?.investorProfile?.bankAccount?.bankName
+                        )?.label
+                        draft.investmentId = item?.investment?.investmentId
+                        draft.bankDetails.accNumber = item?.investment?.investorProfile?.bankAccount?.accountNumber
+                        draft.bankDetails.beneficiary = item?.investment?.investorProfile?.bankAccount?.accountName
+                        draft.bankDetails.bvn = "00000000"
+                        draft.amountDue = item?.withdrawalAmount
+
                     })
                     setModal(true)
                 }}
-                    className={`${lightBtn}`}>
+                    className={`${lightBtn} ${item?.status === 'Paid' ? 'hover:shadow-none outline-none text-gray-300 bg-gray-100' : ''} `}
+                    disabled={item?.status === 'Paid' ? true : false}>
                     Disburse ROI
-                </div>
+                </button>
             )
         }));
     };
 
     return (
         <div className="flex flex-col gap-5">
+            <ToastContainer />
             <InvestmentsCards cards={cards} hasIcon={true} />
             <ReusableDataTable
                 dataTransformer={customDataTransformer}
                 headers={header}
                 initialData={[]}
-                apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/all`}
+                apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/withdrawal-request/all`}
                 filters={true}
                 pagination={true}
             />
