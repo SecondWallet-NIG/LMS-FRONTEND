@@ -60,15 +60,19 @@ const CreateInvestment = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const numericValue = value.replace(/[^0-9.]/g, "");
-    const formattedValue = Number(numericValue).toLocaleString();
+    // const formattedValue = Number(numericValue).toLocaleString();
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: formattedValue,
+      [name]:
+        name === "interestRateValue"
+          ? value
+          : Number(numericValue).toLocaleString(),
     }));
     setPayloadData((prevFormData) => ({
       ...prevFormData,
-      [name]: removeCommasFromNumber(value),
+      [name]:
+        name === "interestRateValue" ? value : removeCommasFromNumber(value),
     }));
   };
 
@@ -105,12 +109,11 @@ const CreateInvestment = () => {
   };
 
   const handleSubmit = () => {
-
     const x = JSON.stringify({
       metric: payloadData.interestRateMetric,
       value: Number(payloadData.interestRateValue),
     });
-  
+
     const y = JSON.stringify({
       metric: payloadData.durationMetric,
       value: Number(payloadData.durationValue),
@@ -120,14 +123,15 @@ const CreateInvestment = () => {
     console.log(y);
 
     const _formData = new FormData();
-    _formData.append("investorProfile", payloadData.investorProfile)
-    _formData.append("investmentProduct", payloadData.investmentProduct)
-    _formData.append("duration", y)
-    _formData.append("initialInvestmentPrincipal", Number(
-      payloadData.initialInvestmentPrincipal
-    ))
-    _formData.append("interestRate", x)
-    _formData.append("paymentReceipt",proofOfPayment[0])
+    _formData.append("investorProfile", payloadData.investorProfile);
+    _formData.append("investmentProduct", payloadData.investmentProduct);
+    _formData.append("duration", y);
+    _formData.append(
+      "initialInvestmentPrincipal",
+      Number(payloadData.initialInvestmentPrincipal)
+    );
+    _formData.append("interestRate", x);
+    _formData.append("paymentReceipt", proofOfPayment[0]);
 
     setLoading(true);
     // const payload = {
@@ -156,7 +160,7 @@ const CreateInvestment = () => {
         console.log({ data });
       })
       .catch((err) => {
-        setFailedModalMessage(err?.message);
+        setFailedModalMessage(err?.message || err?.error);
         setFailedModal(true);
         setLoading(false);
       });
@@ -416,33 +420,33 @@ const CreateInvestment = () => {
             </div>
           </div>
           {proofOfPayment.length > 0 && (
-              <div className="mt-5">
-                <ul className="">
-                  {proofOfPayment.map((file, index) => (
-                    <li
-                      key={index}
-                      className="my-2 bg-white flex rounded-md border"
+            <div className="mt-5">
+              <ul className="">
+                {proofOfPayment.map((file, index) => (
+                  <li
+                    key={index}
+                    className="my-2 bg-white flex rounded-md border"
+                  >
+                    <div className="flex gap-3 items-center p-2 pl-2 text-sm">
+                      {/* <FiFileText size={20} /> */}
+                      {file.name}
+                    </div>
+                    <div
+                      className="flex gap-4 items-center ml-auto p-2 border-l cursor-pointer"
+                      onClick={() => {
+                        handleFileDelete(index);
+                      }}
                     >
-                      <div className="flex gap-3 items-center p-2 pl-2 text-sm">
-                        {/* <FiFileText size={20} /> */}
-                        {file.name}
-                      </div>
-                      <div
-                        className="flex gap-4 items-center ml-auto p-2 border-l cursor-pointer"
-                        onClick={() => {
-                          handleFileDelete(index);
-                        }}
-                      >
-                        <FiTrash
-                          className=" text-swIndicatorLightRed"
-                          size={15}
-                        />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+                      <FiTrash
+                        className=" text-swIndicatorLightRed"
+                        size={15}
+                      />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-center gap-2">
