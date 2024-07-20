@@ -24,16 +24,15 @@ const CustomerSummaryCard = ({ data, financialCards }) => {
   return (
     <>
       {!financialCards && (
-        <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <main className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card title="Total Investments" value={3} extraVal={35837828.93} />
           <Card title="Average ROI" value={`${32}%`} />
           <Card title="Maturity Amount" value={3} extraVal={35837828.93} />
           <Card title="Withdrawals" value={5} extraVal={35837828.93} />
         </main>
       )}
-  
 
-  <p className="font-semibold text-xl text-black my-4">Financials</p>
+      <p className="font-semibold text-xl text-black my-4">Financials</p>
       {data && (
         <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card title="Annual Income" extraVal={data?.annualIncome?.toLocaleString()} currency={"₦"} />

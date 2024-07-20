@@ -206,8 +206,8 @@ const InvestorProfile = () => {
         </div>
 
         {/* Profile Details */}
-        <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-[30%] h-full p-2 md:p-4">
+        <div className="flex flex-col lg:flex-row px-2 lg:px-0">
+          <div className="w-full lg:w-[30%] h-full p-2 lg:p-4">
             <div className="flex gap-2 text-xs lg:text-sm  items-center flex-wrap">
               {activeButton !== "bio-data" ? activeIcon : ""}
               <button
@@ -250,7 +250,7 @@ const InvestorProfile = () => {
             )}
           </div>
 
-          <div className="w-full mt-10 md:mt-0 md:w-[70%] md:border-l-2 border-gray-300 relative pb-20">
+          <div className="w-full mt-10 md:mt-0 lg:w-[70%] md:border-l-2 border-gray-300 relative pb-20">
             <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap bg-white">
               <div className="flex gap-2 text-xs lg:text-sm">
                 <button
