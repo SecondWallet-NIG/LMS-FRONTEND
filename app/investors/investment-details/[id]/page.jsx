@@ -35,21 +35,17 @@ const customDataTransformer = (apiData) => {
     id: item?._id,
     dueDate: (
       <div className="text-[15px] font-light text-gray-700">
-        {/* {item?.firstName} {item?.lastName} */}
-        Due Date
+        {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
       </div>
     ),
     datePaid: (
       <div className="text-[15px] font-light text-gray-700">
-        {/* {item?.investorId} */}
+        {item?.investorId}
         Date Paid
       </div>
     ),
     amountDue: (
-      <div className="text-[15px] font-light text-gray-700">
-        {/* {item?.dateOfBirth && format(new Date(item?.dateOfBirth), "PPP")} */}
-        Amount Due
-      </div>
+      <div className="text-[15px] font-light text-gray-700">Amount Due</div>
     ),
     roi: <div className="text-[15px] font-light text-gray-700">hello</div>,
     tranactionType: (
@@ -175,7 +171,6 @@ export default function InvestmentDetails() {
     payload.append("amount", Number(removeCommasFromNumber(topUpData.amount)));
     payload.append("paymentReceipt", topUpData.paymentReceipt);
 
-    console.log("payload", ...payload);
     dispatch(topUpInvestment({ id, payload }))
       .unwrap()
       .then((res) => {
@@ -244,13 +239,13 @@ export default function InvestmentDetails() {
           />
 
           <div className="pt-4">
-            <p className="font-semibold pt-2 text-sm">Upload payment receipt</p>
+            <p className="font-medium pt-2 text-sm">Upload Payment Receipt</p>
             <p className="text-xs pt-2">
               Document types uploaded should be JPEGS, PNG or PDF and should not
               exceed 4mb
             </p>
             {fileError && <p className="text-red-500 text-sm">{fileError}</p>}
-            <div className="relative">
+            <div className="relative w-full">
               <input
                 name="paymentReceipt"
                 type="file"
@@ -263,7 +258,7 @@ export default function InvestmentDetails() {
                 htmlFor="fileInput"
                 className="px-4 py-2 text-white rounded-md cursor-pointer"
               >
-                <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
+                <span className="py-2 px-6 rounded-md flex gap-2 border w-full justify-center">
                   <AiOutlinePaperClip color="black" size={20} />
                   <p className="font-semibold text-black">
                     {topUpData?.paymentReceipt ? "Change file" : "Select file"}
@@ -303,8 +298,6 @@ export default function InvestmentDetails() {
           >
             Cancel
           </span>
-
-          {/* <div  className="w-fit"> */}
           <Button
             onClick={handleTopUp}
             disabled={loading}
@@ -319,29 +312,59 @@ export default function InvestmentDetails() {
   );
 
   const header = [
-    { id: "dueDate", label: "Due Date" },
-    { id: "datePaid", label: "Date Paid" },
-    { id: "amountDue", label: "Amount Due" },
-    { id: "roi", label: "ROI" },
+    { id: "dueDate", label: "Date Transaction" },
+    { id: "amountDue", label: "Amount" },
+    { id: "previousBalance", label: "Previous Principal" },
+    { id: "currentBalance", label: "New Principal" },
     { id: "transactionType", label: "Transaction Type" },
+    { id: "initiatedBy", label: "Initiated By" },
   ];
 
   const customDataTransformer = (apiData) => {
     return apiData?.map((item) => ({
       id: item?._id,
       dueDate: (
-        <div className="text-[15px] font-light text-gray-700">Due Date</div>
+        <div className="text-[15px] font-light text-gray-700">
+          {" "}
+          {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
+        </div>
       ),
       datePaid: (
-        <div className="text-[15px] font-light text-gray-700">Date Paid</div>
+        <div className="text-[15px] font-light text-gray-700">
+          {item.transactionType}
+        </div>
       ),
       amountDue: (
-        <div className="text-[15px] font-light text-gray-700">Amount Due</div>
-      ),
-      roi: <div className="text-[15px] font-light text-gray-700">ROI</div>,
-      transactionType: (
         <div className="text-[15px] font-light text-gray-700">
-          {item?.transactionType}
+          ₦ {item.amount.toLocaleString()}
+        </div>
+      ),
+      previousBalance: (
+        <div className="text-[15px] font-light text-red-700">
+          ₦ {item.previousBalance.toLocaleString()}
+        </div>
+      ),
+      currentBalance: (
+        <div className="text-[15px] font-light text-green-700">
+          ₦ {item.currentBalance.toLocaleString()}
+        </div>
+      ),
+      transactionType: (
+        <button
+          className={`${
+            item.transactionStatment === ""
+              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              : item.transactionStatment === "Top Up"
+              ? "bg-green-50 text-swGreen"
+              : "text-red-400 bg-red-100"
+          } px-2 py-1 rounded-full`}
+        >
+          {item?.transactionStatment}
+        </button>
+      ),
+      initiatedBy: (
+        <div className="text-[13px] font-medium text-gray-700">
+          {item?.createdBy?.email}
         </div>
       ),
     }));
@@ -354,7 +377,7 @@ export default function InvestmentDetails() {
           return (
             <h6
               key={index}
-              className={`${index !== 0 ? "flex justify-between" : "pl-10"}
+              className={`${index !== 0 ? "flex justify-between" : "pl-5"}
                             leading-6 font-medium text-sm text-swBlack
                         `}
             >
@@ -377,7 +400,6 @@ export default function InvestmentDetails() {
       isBackNav={true}
       paths={["Investors", "Investment details"]}
     >
-      <ToastContainer />
       <div>
         {/* Header */}
         <div className="border-b-2 pb-5 mb-5">
@@ -405,7 +427,7 @@ export default function InvestmentDetails() {
                   >
                     <Button className="rounded-md flex gap-2">
                       <FiPlus size={20} />
-                      View profile
+                      View Profile
                     </Button>
                   </Link>
                   <button
@@ -421,7 +443,7 @@ export default function InvestmentDetails() {
                   </button>
                 </div>
               </div>
-              <span
+              {/* <span
                 className={`${
                   data?.data?.status === "Closed"
                     ? "bg-red-500"
@@ -430,11 +452,11 @@ export default function InvestmentDetails() {
                         py-0.5 px-3 absolute left-24 lg:left-64 top-7`}
               >
                 {data?.data?.status}
-              </span>
+              </span> */}
             </div>
 
             <div className="lg:flex justify-between w-full lg:w-3/5 gap-6 text-swTextColor lg:pl-10">
-              <div className="bg-swGrey10 rounded-lg p-4 lg:w-2/5 h-fit mb-5 lg:mb-1 ">
+              <div className="bg-swLightGray rounded-lg p-4 lg:w-2/5 h-30 mb-5 lg:mb-1 ">
                 <p className="mb-3 text-base font-medium leading-6 text-swBlue">
                   Investment ID
                 </p>
@@ -442,7 +464,7 @@ export default function InvestmentDetails() {
                   {data?.data?.investmentId}
                 </h2>
               </div>
-              <div className="bg-swGrey25 lg:w-3/5 p-4 rounded-lg h-fit">
+              <div className="bg-swLightGray lg:w-3/5 p-4 rounded-lg h-30 mb-5 lg:mb-1 ">
                 <p className="mb-3 text-base font-medium leading-6 text-swBlue">
                   Investment Amount
                 </p>
@@ -464,14 +486,13 @@ export default function InvestmentDetails() {
         </div>
 
         <div className="gap-8">
-          {/* Investment details */}
           <div className="px-5 gap-4 py-3">
             <h1 className={`${headClass}`}>Investment Details</h1>
             {renderTable({
               tableHeader: tableOneHeader,
               tableContent: (
                 <>
-                  <p className={`pl-10 py-3 text-swBlack text-sm `}>
+                  <p className={`pl-5 py-3 text-swBlack text-sm `}>
                     {data?.data?.createdAt &&
                       format(new Date(data?.data?.createdAt), "PPP")}
                   </p>
@@ -490,9 +511,9 @@ export default function InvestmentDetails() {
                     </p>
                   </p>
                   <p
-                    className={`-ml-1 mt-2 py-1 px-4 border border-swGreen bg-green-100 text-xs text-swGreen leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
+                    className={`-ml-1 mt-2 py-3 px-6 border border-swGreen bg-green-100 text-sm text-swGreen leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
                   >
-                    Payout Completed
+                    {data?.data.status}
                   </p>
                 </>
               ),
@@ -505,7 +526,7 @@ export default function InvestmentDetails() {
               tableHeader: tableTwoHeader,
               tableContent: (
                 <>
-                  <p className={`pl-10 py-3 text-swBlack text-sm `}>
+                  <p className={`pl-5 py-3 text-swBlack text-sm `}>
                     {data?.data?.expectedInterest?.toLocaleString()}
                   </p>
                   <p className={`${tableDataClass}`}>
@@ -517,7 +538,7 @@ export default function InvestmentDetails() {
                       : "Years"}
                   </p>
                   <p className={`${tableDataClass}`}>
-                    {data?.data?.maturityAmount?.toLocaleString()}
+                    ₦ {data?.data?.maturityAmount?.toLocaleString()}
                   </p>
                   <p className={`${tableDataClass}`}>
                     {data?.data?.maturityDate &&
@@ -528,17 +549,14 @@ export default function InvestmentDetails() {
             })}
           </div>
 
-          {/* Transaction History */}
           <div className="px-5 py-5">
             <h1 className={`${headClass}`}>Transaction History</h1>
             <div className="border rounded-2xl overflow-x-auto">
               <ReusableDataTable
                 dataTransformer={customDataTransformer}
-                // onClickRow="/investors/investor-profile/"
                 headers={header}
                 initialData={[]}
                 apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/transactions/${id}`}
-                // filters={true}
                 pagination={true}
               />
             </div>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 const Unauthorized = () => {
   const router = useRouter();
   const [counter, setCounter] = useState(5);
+  const [roleTag, setRoleTag] = useState("");
 
   if (counter > 0) {
     setInterval(() => {
@@ -14,7 +15,14 @@ const Unauthorized = () => {
 
   useEffect(() => {
     if (counter === 0) {
-      router.back();
+      if (typeof window !== "undefined") {
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        if (storedUser?.data?.user?.role.tag == "OFA") {
+          router.push("/expenses");
+        } else {
+          router.back();
+        }
+      }
     }
   }, [counter]);
 

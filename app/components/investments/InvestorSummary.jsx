@@ -3,20 +3,18 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomerLoanApplicationSummary } from "@/redux/slices/loanApplicationSlice";
 import { useParams } from "next/navigation";
+import { getSingleInvestment } from "@/redux/slices/investmentSlice";
 
 const InvestorSummary = () => {
   const dispatch = useDispatch();
   const { loading, error, data } = useSelector(
-    (state) => state.loanApplication
+    (state) => state.investment
   );
   const { id } = useParams();
 
   const fetchSummary = () => {
     if (id) {
-      const payload = {
-        customerId: id,
-      };
-      dispatch(getCustomerLoanApplicationSummary(payload));
+      dispatch(getSingleInvestment(id));
     }
   };
 
@@ -27,11 +25,11 @@ const InvestorSummary = () => {
   return (
     <main>
       <p className="font-semibold text-xl mb-4 text-black mt-3">
-        Porfolio health
+        Portfolio Health
       </p>
       <CustomerSummaryCard data={data?.data} />
-      <p className="font-semibold text-xl text-black my-4">Financials</p>
-      <CustomerSummaryCard data={data?.data} financialCards={true} />
+
+      {/* <CustomerSummaryCard data={data?.data} financialCards={data?.data} /> */}
     </main>
   );
 };

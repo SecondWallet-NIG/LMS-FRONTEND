@@ -57,6 +57,8 @@ const LoginScreen = () => {
         toast.success("Login successful");
         if (res?.data?.user?.firstLogin === true) {
           router.push("/onboarding");
+        } else if (res?.data?.user?.role.tag === "OFA") {
+          router.push("/expenses");
         } else {
           router.push("/dashboard");
         }

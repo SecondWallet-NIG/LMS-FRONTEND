@@ -10,9 +10,14 @@ import Link from "next/link";
 import CreateAssetModal from "../components/modals/CreateAssetModal";
 import Loader from "../components/shared/Loader";
 import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
-import { getAllExpenseCategories, getAllExpenses } from "@/redux/slices/expenseManagementSlice";
+import {
+  getAllExpenseCategories,
+  getAllExpenses,
+} from "@/redux/slices/expenseManagementSlice";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useRouter } from "next/navigation";
+import InvestmentsCards from "../components/cards/InvestmentsCard/InvestmentsCards";
+import { getExpenseReportGraph } from "@/redux/slices/reportSlice";
 const header = [
   { id: "date", label: "Date" },
   { id: "category", label: "Expense Category" },
@@ -22,7 +27,6 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
     date: (
@@ -60,6 +64,26 @@ const customDataTransformer = (apiData) => {
   }));
 };
 
+const headerExpenseCategory = [
+  { id: "name", label: "Expense Category Name" },
+  { id: "description", label: "Description" },
+];
+
+const customDataTransformerExpenseCategory = (apiData) => {
+  return apiData?.map((item, i) => ({
+    name: (
+      <div className="text-lg text-gray-700 font-light whitespace-nowrap w-full">
+        {item?.name}
+      </div>
+    ),
+    description: (
+      <div className="text-lg text-gray-700 font-light max-w-2xl">
+        {item?.description}
+      </div>
+    ),
+  }));
+};
+
 const Expenses = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -69,7 +93,17 @@ const Expenses = () => {
   const [openDeleteAssetModal, setOpenDeleteModal] = useState(false);
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.expense);
-const router = useRouter();
+  const  expenseGraph  = useSelector((state) => state.report);
+console.log(expenseGraph?.data?.data);
+ 
+  const router = useRouter();
+
+  const cards = [
+    { title: "Total Number of Expenses", value: expenseGraph?.data?.data.totalExpenseCount},
+    { title: "Total Expenses Value", value: expenseGraph?.data?.data.totalApprovedExpense },
+    { title: "Approved Expenses", value: expenseGraph?.data?.data.totalApprovedExpense },
+  ];
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -91,20 +125,32 @@ const router = useRouter();
     },
   };
 
+  const labels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const dataValuesExpenses = Array(12).fill(0);
+  expenseGraph?.data?.data?.monthlyExpenses.forEach((entry) => {
+    const index = entry.month - 1 
+    dataValuesExpenses[index] = entry?.totalExpenses;
+  });
   const chartData = {
-    labels:
-      expenses?.length > 0
-        ? expenses.map(
-            (data) =>
-              data?.expenseDate &&
-              // format(new Date(data?.acquisitionDate), "PPP")
-              format(new Date(data?.expenseDate), "d MMM yy")
-          )
-        : [],
+    labels,
     datasets: [
       {
-        label: "Expense View",
-        data: expenses?.map((data) => data?.amount) ?? [],
+        label: "Expenses Incurred",
+        data: dataValuesExpenses,
         backgroundColor: "#3562a1",
         barThickness: 10,
         borderRadius: 8,
@@ -113,6 +159,7 @@ const router = useRouter();
   };
 
   useEffect(() => {
+    dispatch(getExpenseReportGraph());
     dispatch(getAllExpenses());
     dispatch(getAllExpenseCategories())
       .unwrap()
@@ -128,7 +175,6 @@ const router = useRouter();
 
   return (
     <>
-   
       <DashboardLayout isBackNav={true} paths={["Expenses"]}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
@@ -153,6 +199,7 @@ const router = useRouter();
         {pageState === "expenses" && (
           <>
             <div className="p-5">
+            <InvestmentsCards cards={cards} />
               <div className="w-full text-white rounded-3xl">
                 <BarChart options={options} data={chartData} />
               </div>
@@ -195,26 +242,18 @@ const router = useRouter();
                 <p>Delete expense category</p>
               </button> */}
             </div>
-            <p className="text-xl font-semibold">
+            <p className="text-xl font-semibold mb-5">
               Available Expense Categories
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">
-              {expenseTypeOptions.length > 0 &&
-                expenseTypeOptions?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="border rounded-xl p-4 flex flex-col gap-1"
-                  >
-                    <div className="">
-                      <p className="font-semibold  text-sm">{item?.name}</p>
-                      <p className="font-medium text-swGray text-xs mt-2">
-                        {item?.description}
-                        {/* HEllo there */}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-            </div>
+ 
+            <ReusableDataTable
+              dataTransformer={customDataTransformerExpenseCategory}
+              headers={headerExpenseCategory}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/expense-category`}
+              filters={false}
+              pagination={false}
+            />
             <CreateAssetModal
               open={openCreateAssetModal}
               onClose={setOpenCreateModal}
