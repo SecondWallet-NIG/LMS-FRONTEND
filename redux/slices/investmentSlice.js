@@ -345,11 +345,11 @@ export const getROI = createAsyncThunk(
 );
 
 export const disburseROI = createAsyncThunk(
-  "/investment/investmentId/...",
+  "investment/withdrawal-request/withdrawalRequestId/approve",
   async ({ id, payload }) => {
     try {
       const response = await axios.patch(
-        `${API_URL}/investment/${id}/...`,
+        `${API_URL}/investment/withdrawal-request/${id}/approve`,
         payload,
         {
           headers: {
