@@ -122,7 +122,15 @@ export default function WithdrawalSchedule() {
         </div>
 
         <div className="flex justify-end gap-4">
-            <div onClick={() => setModal(false)} className={`${lightBtn}` }>Cancel</div>
+            <div onClick={() => {
+                setModal(false) 
+                setState(draft => {
+                    draft.paymentMethod = ''
+                })
+            }} 
+            className={`${lightBtn}`}>
+                Cancel
+                </div>
             <Button onClick={handleDisburseROI}
                 disabled={state.amountDue === '' || state.paymentMethod === '' || loading ? true : false}
                 className="rounded-md text-sm">
