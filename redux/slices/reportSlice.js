@@ -19,6 +19,18 @@ export const getSummaryReport = createAsyncThunk(
   }
 );
 
+export const getExpenseReportGraph = createAsyncThunk(
+  "expense/graph",
+  async () => {
+    const response = await axios.get(`${API_URL}/report/expense/table-data`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`,
+      },
+    });
+    return response.data;
+  }
+);
+
 const reportSlice = createSlice({
   name: "report",
   initialState: {
@@ -45,6 +57,19 @@ const reportSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getSummaryReport.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getExpenseReportGraph.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getExpenseReportGraph.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getExpenseReportGraph.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

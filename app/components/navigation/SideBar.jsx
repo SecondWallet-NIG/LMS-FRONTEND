@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { RiBox3Line } from "react-icons/ri";
 import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
 import { AiFillMoneyCollect, AiOutlineSetting } from "react-icons/ai";
-import { BiMapAlt } from "react-icons/bi";
+import { BiMapAlt, BiSolidBuilding } from "react-icons/bi";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
@@ -26,6 +26,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import Link from "next/link";
 import { LuArrowUpRight } from "react-icons/lu";
+import { PiCurrencyNgn } from "react-icons/pi";
+import { IoBuild } from "react-icons/io5";
 
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
@@ -345,6 +347,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   size={20}
                 />
               }
+              
               pathname={pathname}
               text="Repayment"
               link="/repayment"
@@ -459,11 +462,12 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "CT0",
+                "OFA",
                 "Dir",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
-              icon={<FaInbox size={20} />}
+              icon={<BiSolidBuilding size={20} />}
               text="Asset management"
               link="/asset-management"
               sideBarOpen={sideBarOpen}
@@ -476,10 +480,11 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "CT0",
                 "Dir",
+                "OFA",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
-              icon={<LuArrowUpRight size={20} />}
+              icon={<PiCurrencyNgn size={20} />}
               text="Expenses"
               link="/expenses"
               sideBarOpen={sideBarOpen}
@@ -540,6 +545,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CT0",
                 "LR0",
                 "Dir",
+                "OFA",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
@@ -567,6 +573,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "LR0",
                 "CT0",
                 "Dir",
+                "OFA",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}

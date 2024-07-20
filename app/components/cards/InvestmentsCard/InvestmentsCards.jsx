@@ -22,8 +22,8 @@ export default function InvestmentsCards({ cards, hasIcon }) {
               )}
             </div>
             <div className="flex justify-between items-center">
-              <p className="leading-relaxed text-swDarkBlue font-bold text-4xl mt-auto">
-                {Number(card.value).toLocaleString()}
+              <p className="leading-relaxed text-swDarkBlue font-bold text-3xl mt-auto">
+               {Number(card.value).toLocaleString()}
               </p>
               {card?.extraVal && (
                 <p className="font-medium text-sm text-swBlack leading-6">
