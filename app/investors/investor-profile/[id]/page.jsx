@@ -291,24 +291,7 @@ const InvestorProfile = () => {
                   `}
                   borderColor="bg-gray-200 "
                 />
-                <div
-                  className={`${logSearch ? "opacity-0" : "opacity-1"
-                    } transition-all ease-in-out p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex`}
-                >
-                  <div
-                    className="bg-white border border-gray-300 w-fit p-2 rounded-md cursor-pointer"
-                    onClick={() => {
-                      handleLogSearch("open");
-                    }}
-                  >
-                    <FiSearch size={20} />
-                  </div>
-                </div>
-                {/* <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex cursor-pointer">
-                  <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
-                    <BsThreeDotsVertical size={20} />
-                  </div>
-                </div> */}
+        
               </div>
             </div>
             <div className="p-2">

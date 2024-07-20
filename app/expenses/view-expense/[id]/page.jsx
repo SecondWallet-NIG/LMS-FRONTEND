@@ -11,6 +11,7 @@ import DeleteAssetModal from "@/app/components/modals/DeleteAssetModal";
 import { getSingleExpense } from "@/redux/slices/expenseManagementSlice";
 import { handleFileExtention } from "@/app/components/helpers/utils";
 import Viewer from "react-viewer";
+import { IoMdClose } from "react-icons/io";
 
 const ViewExpense = () => {
   const dispatch = useDispatch();
@@ -63,17 +64,17 @@ const ViewExpense = () => {
         <div className="p-5 flex flex-col gap-5 font-500">
           <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Date</p>
-            <p>
+            <p className="text-swBlue">
               {data?.expenseDate && format(new Date(data?.expenseDate), "PPP")}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Expense category</p>
-            <p>{data?.category?.name}</p>
+            <p className="text-swBlue" >{data?.category?.name}</p>
           </div>
           <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Amount</p>
-            <p>{data?.amount?.toLocaleString()}</p>
+            <p className="text-swBlue">{data?.amount?.toLocaleString()}</p>
           </div>
           <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Status</p>
@@ -97,7 +98,7 @@ const ViewExpense = () => {
                       handleSetUrl(data?.file);
                       setOpenFileModal(true);
                     }}
-                    className="underline"
+                    className="underline text-swBlue"
                   >
                     View Document
                   </button>
@@ -139,13 +140,13 @@ const ViewExpense = () => {
                   )}
                 </div>
               ) : (
-                <p>No Document</p>
+                <p className="text-swBlue">No Document</p>
               )}
             </div>
           </div>
           <div className="flex flex-col sm:flex-row">
             <p className="min-w-[15rem]">Description</p>
-            <p>{data?.description}</p>
+            <p className="text-swBlue">{data?.description}</p>
           </div>
         </div>
       </main>
