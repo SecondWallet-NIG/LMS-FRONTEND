@@ -181,19 +181,7 @@ const InvestorProfile = () => {
             </div>
           </div>
 
-          {/* Top Cards */}
-          {/* <div className="w-full flex justify-between gap-4 my-5 lg:px-10">
-            <div className="bg-swGrey25 rounded-lg p-4 w-full h-fit mb-5 lg:mb-1 text-swTextColor">
-              <p className="mb-3 text-base font-medium leading-6">Portfolio Value</p>
-              <h2 className="font-bold leading-8 text-2xl">58,259,256.58</h2>
-            </div>
-            <div className="bg-swGrey25 rounded-lg p-4 w-full h-fit mb-5 lg:mb-1 text-swTextColor">
-              <p className="mb-3 text-base font-medium leading-6">Active investments</p>
-              <h2 className="font-bold leading-8 text-2xl">3</h2>
-            </div>
-          </div> */}
 
-          {/* Create investment */}
           <div className="w-full lg:w-1/2 sm:text-end">
             <div className="sm:ml-4 flex flex-col justify-between  sm:items-end">
               <p className="text-sm mb-5">
@@ -228,17 +216,9 @@ const InvestorProfile = () => {
                   "font-semibold text-swBlue bg-blue-50"
                   } p-2 rounded-md cursor-pointer whitespace-nowrap`}
               >
-                Personal Info
+                Personal Informatiom
               </button>
-              {activeButton !== "work" ? activeIcon : ""}
-              <button
-                onClick={() => handleInfoToggle("work")}
-                className={`${activeButton === "work" &&
-                  "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md cursor-pointer`}
-              >
-                Work
-              </button>
+        
               {activeButton !== "document" ? activeIcon : ""}
               <button
                 onClick={() => handleInfoToggle("document")}
@@ -260,18 +240,7 @@ const InvestorProfile = () => {
                 detailsHeader={detailsHeader}
               />
             )}
-            {activeButton == "work" && (
-              <InvestorWorkData
-                handleInfoHoverIn={handleInfoHoverIn}
-                data={data}
-                openModal={openModal}
-                editButton={editButton}
-                dataClass={dataClass}
-                labelClass={labelClass}
-                valueClass={valueClass}
-                detailsHeader={detailsHeader}
-              />
-            )}
+       
             {activeButton == "document" && (
               <InvestorProfileDocs
                 data={data} openModal={openModal}

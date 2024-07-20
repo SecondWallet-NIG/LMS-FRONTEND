@@ -26,7 +26,7 @@ export default function InvestorBioData({
         { label: 'Address', value: data?.data?.address?.houseLocation },
     ]
     const pageBankData = [
-        { label: 'Name', value: bankArr.find(option => option.value === data?.data?.bankAccount?.bankName)?.label },
+        { label: 'Name', value: data?.data?.bankAccount?.bankName},
         { label: 'Acc Number', value: data?.data?.bankAccount?.accountNumber },
         { label: 'Beneficiary', value: data?.data?.bankAccount?.accountName },
         { label: 'BVN', value: data?.data?.bvn },
@@ -56,13 +56,7 @@ export default function InvestorBioData({
                 </div>
                 <div className="">
                     {pageDetailsData.map((d, index) => <div key={index}>{renderPageData(d.label, d.value)}</div>)}
-                    <Link
-                        href={'/investors/create-investor'}
-                        className={`py-1 px-2 text-swTextColor mt-4 mb-2 font-semibold rounded-md outline outline-1 
-                        outline-gray-100 flex gap-2 border w-fit cursor-pointer text-sm
-                    `}>
-                        Add details
-                    </Link>
+                  
                 </div>
             </div>
 
