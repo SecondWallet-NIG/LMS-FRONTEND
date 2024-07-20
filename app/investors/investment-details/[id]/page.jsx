@@ -313,11 +313,11 @@ export default function InvestmentDetails() {
 
   const header = [
     { id: "dueDate", label: "Date Transaction" },
-    { id: "datePaid", label: "Transaction Type" },
     { id: "amountDue", label: "Amount" },
     { id: "previousBalance", label: "Previous Principal" },
     { id: "currentBalance", label: "New Principal" },
     { id: "transactionType", label: "Transaction Type" },
+    { id: "initiatedBy", label: "Initiated By" },
   ];
 
   const customDataTransformer = (apiData) => {
@@ -330,24 +330,42 @@ export default function InvestmentDetails() {
         </div>
       ),
       datePaid: (
-        <div className="text-[15px] font-light text-gray-700">{item.transactionType}</div>
+        <div className="text-[15px] font-light text-gray-700">
+          {item.transactionType}
+        </div>
       ),
       amountDue: (
-        <div className="text-[15px] font-light text-gray-700">₦ {item.amount.toLocaleString()}</div>
+        <div className="text-[15px] font-light text-gray-700">
+          ₦ {item.amount.toLocaleString()}
+        </div>
       ),
-      previousBalance: <div className="text-[15px] font-light text-red-700">₦ {item.previousBalance.toLocaleString()}</div>,
-      currentBalance: <div className="text-[15px] font-light text-green-700">₦ {item.currentBalance.toLocaleString()}</div>,
+      previousBalance: (
+        <div className="text-[15px] font-light text-red-700">
+          ₦ {item.previousBalance.toLocaleString()}
+        </div>
+      ),
+      currentBalance: (
+        <div className="text-[15px] font-light text-green-700">
+          ₦ {item.currentBalance.toLocaleString()}
+        </div>
+      ),
       transactionType: (
         <button
-                    className={`${item.transactionStatment === ""
-                        ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-                        : item.transactionStatment === "Top Up"
-                            ? "bg-green-50 text-swGreen"
-                            : "text-red-400 bg-red-100"
-                        } px-2 py-1 rounded-full`}
-                >
-                    {item?.transactionStatment}
-                </button>
+          className={`${
+            item.transactionStatment === ""
+              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              : item.transactionStatment === "Top Up"
+              ? "bg-green-50 text-swGreen"
+              : "text-red-400 bg-red-100"
+          } px-2 py-1 rounded-full`}
+        >
+          {item?.transactionStatment}
+        </button>
+      ),
+      initiatedBy: (
+        <div className="text-[13px] font-medium text-gray-700">
+          {item?.createdBy?.email}
+        </div>
       ),
     }));
   };
@@ -359,7 +377,7 @@ export default function InvestmentDetails() {
           return (
             <h6
               key={index}
-              className={`${index !== 0 ? "flex justify-between" : "pl-10"}
+              className={`${index !== 0 ? "flex justify-between" : "pl-5"}
                             leading-6 font-medium text-sm text-swBlack
                         `}
             >
@@ -409,7 +427,7 @@ export default function InvestmentDetails() {
                   >
                     <Button className="rounded-md flex gap-2">
                       <FiPlus size={20} />
-                      View profile
+                      View Profile
                     </Button>
                   </Link>
                   <button
@@ -425,7 +443,7 @@ export default function InvestmentDetails() {
                   </button>
                 </div>
               </div>
-              <span
+              {/* <span
                 className={`${
                   data?.data?.status === "Closed"
                     ? "bg-red-500"
@@ -434,7 +452,7 @@ export default function InvestmentDetails() {
                         py-0.5 px-3 absolute left-24 lg:left-64 top-4`}
               >
                 {data?.data?.status}
-              </span>
+              </span> */}
             </div>
 
             <div className="lg:flex justify-between w-full lg:w-3/5 gap-6 text-swTextColor lg:pl-10">
@@ -468,14 +486,13 @@ export default function InvestmentDetails() {
         </div>
 
         <div className="gap-8">
-          {/* Investment details */}
           <div className="px-5 gap-4 py-3">
             <h1 className={`${headClass}`}>Investment Details</h1>
             {renderTable({
               tableHeader: tableOneHeader,
               tableContent: (
                 <>
-                  <p className={`pl-10 py-3 text-swBlack text-sm `}>
+                  <p className={`pl-5 py-3 text-swBlack text-sm `}>
                     {data?.data?.createdAt &&
                       format(new Date(data?.data?.createdAt), "PPP")}
                   </p>
@@ -494,9 +511,9 @@ export default function InvestmentDetails() {
                     </p>
                   </p>
                   <p
-                    className={`-ml-1 mt-2 py-1 px-4 border border-swGreen bg-green-100 text-xs text-swGreen leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
+                    className={`-ml-1 mt-2 py-3 px-6 border border-swGreen bg-green-100 text-sm text-swGreen leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
                   >
-                    Payout Completed
+                    {data?.data.status}
                   </p>
                 </>
               ),
@@ -509,7 +526,7 @@ export default function InvestmentDetails() {
               tableHeader: tableTwoHeader,
               tableContent: (
                 <>
-                  <p className={`pl-10 py-3 text-swBlack text-sm `}>
+                  <p className={`pl-5 py-3 text-swBlack text-sm `}>
                     {data?.data?.expectedInterest?.toLocaleString()}
                   </p>
                   <p className={`${tableDataClass}`}>
@@ -521,7 +538,7 @@ export default function InvestmentDetails() {
                       : "Years"}
                   </p>
                   <p className={`${tableDataClass}`}>
-                    {data?.data?.maturityAmount?.toLocaleString()}
+                    ₦ {data?.data?.maturityAmount?.toLocaleString()}
                   </p>
                   <p className={`${tableDataClass}`}>
                     {data?.data?.maturityDate &&
@@ -532,17 +549,14 @@ export default function InvestmentDetails() {
             })}
           </div>
 
-          {/* Transaction History */}
           <div className="px-5 py-5">
             <h1 className={`${headClass}`}>Transaction History</h1>
             <div className="border rounded-2xl overflow-x-auto">
               <ReusableDataTable
                 dataTransformer={customDataTransformer}
-                // onClickRow="/investors/investor-profile/"
                 headers={header}
                 initialData={[]}
                 apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/transactions/${id}`}
-                // filters={true}
                 pagination={true}
               />
             </div>

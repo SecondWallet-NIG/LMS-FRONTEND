@@ -1,29 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "@/constant";
+import { getToken } from "@/helpers";
 
-let user;
-if (typeof window !== "undefined") {
-  user = JSON.parse(localStorage.getItem("user"));
-}
+
+
 
 // investmentProducts
 
 export const createInvestmentProduct = createAsyncThunk(
   "investment/product/create",
   async (payload) => {
-    try {
-      let user;
-      if (typeof window !== "undefined") {
-        user = JSON.parse(localStorage.getItem("user"));
-        console.log({ user: user?.data?.token });
-      }
+    try { let token = getToken();
+    
+     console.log({token});
       const response = await axios.post(
         `${API_URL}/investment/product/create`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -39,10 +35,10 @@ export const createInvestmentProduct = createAsyncThunk(
 export const getSingleInvestmentProduct = createAsyncThunk(
   "investment/product/investmentProductId",
   async (id) => {
-    try {
+    try { let token = getToken();
       const response = await axios.get(`${API_URL}/investment/product/${id}`, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -57,10 +53,10 @@ export const getSingleInvestmentProduct = createAsyncThunk(
 export const getAllInvestmentProducts = createAsyncThunk(
   "investment/product/all",
   async () => {
-    try {
+    try { let token = getToken();
       const response = await axios.get(`${API_URL}/investment/product/all`, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -75,12 +71,12 @@ export const getAllInvestmentProducts = createAsyncThunk(
 export const deleteSingleInvestmentProduct = createAsyncThunk(
   "investment/product/investmentProductId/delete",
   async (id) => {
-    try {
+    try { let token = getToken();
       const response = await axios.delete(
         `${API_URL}/investment/product/${id}/delete`,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -96,13 +92,13 @@ export const deleteSingleInvestmentProduct = createAsyncThunk(
 export const updateProduct = createAsyncThunk(
   "investment/product/investmentProductId/update",
   async ({ id, payload }) => {
-    try {
+    try { let token = getToken();
       const response = await axios.put(
         `${API_URL}/investment/product/${id}/update`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -120,13 +116,13 @@ export const updateProduct = createAsyncThunk(
 export const createInvestment = createAsyncThunk(
   "investment/create",
   async (payload) => {
-    try {
+    try { let token = getToken();
       const response = await axios.post(
         `${API_URL}/investment/create`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -142,10 +138,10 @@ export const createInvestment = createAsyncThunk(
 export const getSingleInvestment = createAsyncThunk(
   "investment/investmentId",
   async (id) => {
-    try {
+    try { let token = getToken();
       const response = await axios.get(`${API_URL}/investment/${id}`, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -160,12 +156,12 @@ export const getSingleInvestment = createAsyncThunk(
 export const getTransactionHistory = createAsyncThunk(
   "/investment/transactions/nvestmentId",
   async (id) => {
-    try {
+    try { let token = getToken();
       const response = await axios.get(
         `${API_URL}/investment/transactions/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -181,13 +177,13 @@ export const getTransactionHistory = createAsyncThunk(
 export const closeInvestment = createAsyncThunk(
   "investment/investmentId/close",
   async ({ id, payload }) => {
-    try {
+    try { let token = getToken();
       const response = await axios.patch(
         `${API_URL}/investment/${id}/close`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -203,13 +199,13 @@ export const closeInvestment = createAsyncThunk(
 export const topUpInvestment = createAsyncThunk(
   "investment/investmentId/topup",
   async ({ id, payload }) => {
-    try {
+    try { let token = getToken();
       const response = await axios.put(
         `${API_URL}/investment/${id}/topup`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -227,13 +223,13 @@ export const topUpInvestment = createAsyncThunk(
 export const createInvestor = createAsyncThunk(
   "investment/investor/create",
   async (payload) => {
-    try {
+    try { let token = getToken();
       const response = await axios.post(
         `${API_URL}/investment/investor/create`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -249,10 +245,10 @@ export const createInvestor = createAsyncThunk(
 export const getSingleInvestor = createAsyncThunk(
   "investment/investor/investorProfileId",
   async (id) => {
-    try {
+    try { let token = getToken();
       const response = await axios.get(`${API_URL}/investment/investor/${id}`, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -267,10 +263,10 @@ export const getSingleInvestor = createAsyncThunk(
 export const getAllInvestors = createAsyncThunk(
   "investment/investor/all",
   async () => {
-    try {
+    try { let token = getToken();
       const response = await axios.get(`${API_URL}/investment/investor/all`, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -285,13 +281,13 @@ export const getAllInvestors = createAsyncThunk(
 export const updateInvestor = createAsyncThunk(
   "investment/investor/investorProfileId/update",
   async ({ id, payload }) => {
-    try {
+    try { let token = getToken();
       const response = await axios.put(
         `${API_URL}/investment/investor/${id}/update`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -307,10 +303,10 @@ export const updateInvestor = createAsyncThunk(
 export const getInvestmentReport = createAsyncThunk(
   "investment/report",
   async () => {
-    try {
+    try { let token = getToken();
       const response = await axios.get(`${API_URL}/investment/report`, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+           Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -325,13 +321,13 @@ export const getInvestmentReport = createAsyncThunk(
 export const getROI = createAsyncThunk(
   "investment/preview/roi-details",
   async (payload) => {
-    try {
+    try { let token = getToken();
       const response = await axios.post(
         `${API_URL}/investment/preview/roi-details`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );

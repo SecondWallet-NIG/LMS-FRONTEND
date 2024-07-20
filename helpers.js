@@ -64,3 +64,13 @@ export const exportToPDF = (id) => {
     console.log("PDF export success");
   });
 };
+
+
+export const getToken = () => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  return user?.data?.token;
+};
