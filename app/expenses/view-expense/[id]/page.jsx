@@ -9,13 +9,22 @@ import { useDispatch } from "react-redux";
 import { format } from "date-fns";
 import DeleteAssetModal from "@/app/components/modals/DeleteAssetModal";
 import { getSingleExpense } from "@/redux/slices/expenseManagementSlice";
+import { handleFileExtention } from "@/app/components/helpers/utils";
+import Viewer from "react-viewer";
 
 const ViewExpense = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openFileModal, setOpenFileModal] = useState(false);
+
+  const handleSetUrl = (content) => {
+    setUrl(content);
+    // setIsOpen(true);
+  };
 
   useEffect(() => {
     dispatch(getSingleExpense(id))
@@ -24,6 +33,8 @@ const ViewExpense = () => {
       .catch((error) => console.log(error.message));
     setLoading(false);
   }, []);
+
+  console.log("expense", data);
 
   return (
     <DashboardLayout isBackNav={true} paths={["Expenses", "View expense"]}>
@@ -73,6 +84,63 @@ const ViewExpense = () => {
                 }`}
               />
               {data?.status}
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row">
+            <p className="min-w-[15rem]">Document</p>
+            {/* {data?.data?.loanApplication?.applicationForm} */}
+            <div>
+              {data?.file != null ? (
+                <div>
+                  <button
+                    onClick={() => {
+                      handleSetUrl(data?.file);
+                      setOpenFileModal(true);
+                    }}
+                    className="underline"
+                  >
+                    View Document
+                  </button>
+                  {handleFileExtention(url) === "pdf" ? (
+                    // <p>It's a pdf</p>
+                    <div
+                      className={`h-full w-full fixed top-0 left-0 bg-black bg-opacity-25 ${
+                        openFileModal ? "flex" : "hidden"
+                      } justify-center items-center text-white z-[110]`}
+                    >
+                      <div className="max-w-3xl w-full h-[70%] m-5 p-5 bg-white">
+                        <div className="flex justify-end">
+                          <IoMdClose
+                            size={20}
+                            className="cursor-pointer text-swBlack"
+                            onClick={() => setOpenFileModal(false)}
+                          />
+                        </div>
+                        <iframe src={url} className="h-full w-full"></iframe>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {typeof window !== "undefined" ? (
+                        <>
+                          <Viewer
+                            visible={openFileModal}
+                            onClose={() => {
+                              setOpenFileModal(false);
+                            }}
+                            images={[url].map((item) => ({
+                              src: item,
+                              key: item,
+                            }))}
+                          />
+                        </>
+                      ) : null}
+                    </>
+                  )}
+                </div>
+              ) : (
+                <p>No Document</p>
+              )}
             </div>
           </div>
           <div className="flex flex-col sm:flex-row">

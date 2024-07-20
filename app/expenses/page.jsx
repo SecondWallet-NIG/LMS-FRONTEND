@@ -10,7 +10,10 @@ import Link from "next/link";
 import CreateAssetModal from "../components/modals/CreateAssetModal";
 import Loader from "../components/shared/Loader";
 import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
-import { getAllExpenseCategories, getAllExpenses } from "@/redux/slices/expenseManagementSlice";
+import {
+  getAllExpenseCategories,
+  getAllExpenses,
+} from "@/redux/slices/expenseManagementSlice";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 const header = [
@@ -22,7 +25,6 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
     date: (
@@ -60,6 +62,26 @@ const customDataTransformer = (apiData) => {
   }));
 };
 
+const headerExpenseCategory = [
+  { id: "name", label: "Expense Category Name" },
+  { id: "description", label: "Description" },
+];
+
+const customDataTransformerExpenseCategory = (apiData) => {
+  return apiData?.map((item, i) => ({
+    name: (
+      <div className="text-lg text-gray-700 font-light whitespace-nowrap w-full">
+        {item?.name}
+      </div>
+    ),
+    description: (
+      <div className="text-lg text-gray-700 font-light max-w-2xl">
+        {item?.description}
+      </div>
+    ),
+  }));
+};
+
 const Expenses = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -69,7 +91,7 @@ const Expenses = () => {
   const [openDeleteAssetModal, setOpenDeleteModal] = useState(false);
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.expense);
-const router = useRouter();
+  const router = useRouter();
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -97,7 +119,6 @@ const router = useRouter();
         ? expenses.map(
             (data) =>
               data?.expenseDate &&
-              // format(new Date(data?.acquisitionDate), "PPP")
               format(new Date(data?.expenseDate), "d MMM yy")
           )
         : [],
@@ -128,7 +149,6 @@ const router = useRouter();
 
   return (
     <>
-   
       <DashboardLayout isBackNav={true} paths={["Expenses"]}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
@@ -195,10 +215,10 @@ const router = useRouter();
                 <p>Delete expense category</p>
               </button> */}
             </div>
-            <p className="text-xl font-semibold">
+            <p className="text-xl font-semibold mb-5">
               Available Expense Categories
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">
               {expenseTypeOptions.length > 0 &&
                 expenseTypeOptions?.map((item, index) => (
                   <div
@@ -209,12 +229,19 @@ const router = useRouter();
                       <p className="font-semibold  text-sm">{item?.name}</p>
                       <p className="font-medium text-swGray text-xs mt-2">
                         {item?.description}
-                        {/* HEllo there */}
                       </p>
                     </div>
                   </div>
                 ))}
-            </div>
+            </div> */}
+            <ReusableDataTable
+              dataTransformer={customDataTransformerExpenseCategory}
+              headers={headerExpenseCategory}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/expense-category`}
+              filters={false}
+              pagination={false}
+            />
             <CreateAssetModal
               open={openCreateAssetModal}
               onClose={setOpenCreateModal}
