@@ -78,28 +78,20 @@ const AssetManagement = () => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Set to false to allow custom height
-    elements: {
-      line: {
-        tension: 0.5,
-      },
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
     },
-    color: "#fff",
     scales: {
       x: {
-        ticks: {
-          color: "#fff",
-        },
         grid: {
-          display: false,
+          display: true,
         },
       },
       y: {
-        ticks: {
-          color: "#fff",
-        },
         grid: {
-          display: false,
+          display: true,
         },
       },
     },
@@ -119,12 +111,15 @@ const AssetManagement = () => {
       {
         label: "Cost",
         data: assets?.map((data) => data?.value) ?? [],
-        backgroundColor: "#fff",
-        borderColor: "#fff",
+        // backgroundColor: "#fff",
+        // borderColor: "#fff",
+        // data: dataValuesExpenses,
+        backgroundColor: "#3562a1",
+        barThickness: 10,
+        borderRadius: 8,
       },
     ],
   };
-
 
   useEffect(() => {
     dispatch(getAllAssets());
@@ -164,9 +159,9 @@ const AssetManagement = () => {
         {pageState === "asset" && (
           <>
             <div className="p-5">
-              <div className="w-full bg-swBlue text-white rounded-3xl">
-                <BarChart options={options} data={chartData} />
-              </div>
+              {/* <div className="w-full bg-swBlue text-white rounded-3xl"> */}
+              <BarChart options={options} data={chartData} />
+              {/* </div> */}
               <div className="flex items-center justify-end gap-5 mt-5">
                 <Link
                   href={"/create-new-asset"}

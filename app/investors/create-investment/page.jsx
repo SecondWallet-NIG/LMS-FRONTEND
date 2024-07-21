@@ -334,6 +334,7 @@ const CreateInvestment = () => {
               placeholder={"Enter number"}
               required={true}
               inputType="number"
+              endIcon={"%"}
               onKeyPress={preventMinus}
               onChange={handleInputChange}
             />

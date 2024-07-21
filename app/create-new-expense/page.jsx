@@ -185,6 +185,7 @@ const CreateNewExpense = () => {
     _formData.append("amount", newAmount);
     _formData.append("category", formData.category);
     _formData.append("description", formData.description);
+    _formData.append("status", "New");
     _formData.append("file", proofOfPayment[0]);
     dispatch(createExpense(_formData))
       .unwrap()
