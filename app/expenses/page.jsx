@@ -19,7 +19,8 @@ import { useRouter } from "next/navigation";
 import InvestmentsCards from "../components/cards/InvestmentsCard/InvestmentsCards";
 import { getExpenseReportGraph } from "@/redux/slices/reportSlice";
 const header = [
-  { id: "date", label: "Date" },
+  { id: "expenseDate", label: "Expense Date" },
+  { id: "dateLogged", label: "Date Logged" },
   { id: "category", label: "Expense Category" },
   { id: "description", label: "Description" },
   { id: "amount", label: "Amount" },
@@ -29,16 +30,16 @@ const header = [
 const customDataTransformer = (apiData) => {
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
-    date: (
-      <div className="text-[15px] text-gray-700 font-light whitespace-nowrap">
+    expenseDate: (
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
         {item?.expenseDate && format(new Date(item?.expenseDate), "PPP")}
       </div>
     ),
-    // description: (
-    //   <div className="text-[13px] font-light text-gray-700">
-    //     {item?.description}
-    //   </div>
-    // ),
+    dateLogged: (
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+        {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
+      </div>
+    ),
     category: (
       <div className="text-[15px] text-gray-700 font-light">
         {item?.category?.name}
