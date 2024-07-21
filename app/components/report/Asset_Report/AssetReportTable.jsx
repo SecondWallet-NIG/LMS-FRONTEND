@@ -6,7 +6,7 @@ import { format } from "date-fns";
 const header = [
   { id: "asset", label: "Asset" },
   { id: "category", label: "Category" },
-  { id: "description", label: "Description" },
+  // { id: "description", label: "Description" },
   { id: "acquisitionDate", label: "Acquisition Date" },
   { id: "value", label: "Value" },
   // { id: "action", label: "Action" },
@@ -23,11 +23,11 @@ const customDataTransformer = (apiData) => {
         {item?.category?.name}
       </div>
     ),
-    description: (
-      <div className="text-[15px] font-light text-gray-700">
-        {item?.description}
-      </div>
-    ),
+    // description: (
+    //   <div className="text-[15px] font-light text-gray-700">
+    //     {item?.description}
+    //   </div>
+    // ),
     acquisitionDate: (
       <div>
         <div className="text-[15px] font-light text-gray-700">

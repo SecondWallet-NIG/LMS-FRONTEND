@@ -4,7 +4,8 @@ import ReusableDataTable from "../../shared/tables/ReusableDataTable";
 import { format } from "date-fns";
 
 const header = [
-  { id: "date", label: "Date" },
+  { id: "expenseDate", label: "Expense Date" },
+  { id: "dateLogged", label: "Date Logged" },
   { id: "description", label: "Description" },
   { id: "category", label: "Expense Category" },
   { id: "amount", label: "Amount" },
@@ -14,9 +15,14 @@ const header = [
 const customDataTransformer = (apiData) => {
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
-    date: (
+    expenseDate: (
       <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
         {item?.expenseDate && format(new Date(item?.expenseDate), "PPP")}
+      </div>
+    ),
+    dateLogged: (
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+        {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
       </div>
     ),
     description: (

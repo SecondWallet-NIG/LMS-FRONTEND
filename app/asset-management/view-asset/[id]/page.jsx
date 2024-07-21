@@ -65,12 +65,12 @@ const ViewAsset = () => {
             </p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Description</p>
-            <p>{data?.data?.description}</p>
-          </div>
-          <div className="flex">
             <p className="min-w-[15rem]">Value</p>
             <p>{data?.data?.value?.toLocaleString()}</p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Description</p>
+            <p>{data?.data?.description}</p>
           </div>
         </div>
       </main>
