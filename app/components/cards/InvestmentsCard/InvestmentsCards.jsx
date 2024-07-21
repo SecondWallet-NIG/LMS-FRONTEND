@@ -7,7 +7,7 @@ export default function InvestmentsCards({ cards, hasIcon }) {
     "flex flex-col rounded-lg bg-swGrey10 w-full gap-3 p-4 border-solid border";
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mb-10 px-10 gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-10 px-10 gap-5">
       {cards.map((card, index) => {
         return (
           <div className={`${cardClass}`} key={index}>
