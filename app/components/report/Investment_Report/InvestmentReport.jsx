@@ -9,20 +9,22 @@ import Button from "../../shared/buttonComponent/Button";
 import { useSelector, useDispatch } from "react-redux";
 import InvestmentReportCards from "./InvestmentReportsCards";
 import InvestmentReportTable from "./InvestmentReportTable";
-import { getInvestmentReport } from "@/redux/slices/investmentSlice";
+import {
+  getInvestmentReportCards,
+} from "@/redux/slices/investmentSlice";
 import { useImmer } from "use-immer";
 
 export default function InvestmentReport() {
   const [loading, setLoading] = useState(false);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
   const dispatch = useDispatch();
-  const { data } = useSelector(state => state.investment);
+  const { data } = useSelector((state) => state.investment);
   const [state, setState] = useImmer({
     totalInvestors: "",
     totalInvestments: "",
     totalNumber: "",
-    totalPayout: ""
-  })
+    totalPayout: "",
+  });
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -31,26 +33,32 @@ export default function InvestmentReport() {
     },
   ]);
 
+  // console.log("card", data);
+
   useEffect(() => {
-    dispatch(getInvestmentReport());
+    dispatch(getInvestmentReportCards({ startDate: "", endDate: "" }));   
   }, []);
 
   useEffect(() => {
     if (data?.data) {
-      const totalInvestors = Object?.keys(data?.data?.investmentsByCategory).length
-      setState(draft => {
-        draft.totalInvestments = data?.data?.totalInvestmentAmount
-        draft.totalInvestors = totalInvestors
-        draft.totalNumber = data?.data?.totalInvestments
-        draft.totalPayout = data?.data?.totalROI
-      })
+      const totalInvestors = Object?.keys(
+        data?.data?.investmentsByCategory
+      ).length;
+      setState((draft) => {
+        draft.totalInvestments = data?.data?.totalInvestmentAmount;
+        draft.totalInvestors = totalInvestors;
+        draft.totalNumber = data?.data?.totalInvestments;
+        draft.totalPayout = data?.data?.totalROI;
+      });
     }
-  }, [data?.data])
-
+  }, [data?.data]);
 
   const cards = [
     { title: "Total Number of Investors", value: state.totalInvestors },
-    { title: "Total Investment", value: state.totalInvestments.toLocaleString() },
+    {
+      title: "Total Investment",
+      value: state.totalInvestments.toLocaleString(),
+    },
     { title: "Total Number of Investment Product", value: state.totalNumber },
     { title: "Total Payout Amount", value: state.totalPayout.toLocaleString() },
   ];
@@ -75,13 +83,11 @@ export default function InvestmentReport() {
           startDate,
           endDate,
         };
-        // dispatch(getLoanApplicationSummary(data));
+        dispatch(getInvestmentReportCards(data));
         setDateFilterOpen(false);
       }
     }
   };
-
-
 
   return (
     <main className="w-full">
