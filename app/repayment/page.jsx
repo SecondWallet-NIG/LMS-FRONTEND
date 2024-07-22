@@ -7,12 +7,12 @@ import { getRepaymentSummary } from "@/redux/slices/loanRepaymentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "@/helpers";
 import RepaymentOverdueTable from "../components/repayment/OverdueTable";
-
+import Unauthorized from "../unauthorized/page";
 const Repayment = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("overdue-repayment");
   const { loading, error, data } = useSelector((state) => state.loanRepayment);
-
+  const [roleTag, setRoleTag] = useState("");
   const header = [
     { id: "loanId", label: "Loan ID" },
     { id: "dueDate", label: "Due Date" },
@@ -81,9 +81,18 @@ const Repayment = () => {
     }));
   };
   useEffect(() => {
+    let userId;
+    if (typeof window !== "undefined") {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      setRoleTag(storedUser?.data?.user?.role.tag);
+    }
     setCurrentPage("overdue-repayment");
     dispatch(getRepaymentSummary());
   }, []);
+
+  if (roleTag && roleTag == "OFA") {
+    return <Unauthorized />;
+  }
 
   return (
     <DashboardLayout>

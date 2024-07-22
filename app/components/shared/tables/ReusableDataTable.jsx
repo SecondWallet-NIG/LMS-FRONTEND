@@ -123,9 +123,10 @@ function ReusableDataTable({
           data?.data?.data?.investmentProducts ||
           data?.data?.data?.investorProfiles ||
           data?.data?.data?.investments ||
+          data?.data?.data?.assets ||
           data?.data.results ||
           data?.data?.data;
-        const nestedJsonData = allData;
+          const nestedJsonData = allData;
 
         function flattenData(data, parentKey = "") {
           let flattened = {};
@@ -163,6 +164,7 @@ function ReusableDataTable({
         setLoading(false);
       })
       .catch((error) => {
+        console.log(error)
         toast.error("An error occurred while fetching data for download.");
         setLoading(false);
       });

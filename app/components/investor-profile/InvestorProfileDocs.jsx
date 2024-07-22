@@ -30,21 +30,13 @@ const InvestorProfileDocs = ({
   };
   return (
     <main className="py-5">
-      <div
-        className="flex justify-between pb-3"
-        onMouseEnter={() => handleInfoHoverIn("bio-data")}
-        onMouseLeave={() => handleInfoHoverIn("close")}
-      >
-        <p className={`${detailsHeader}`}>Investor file upload</p>
-        {editButton}
-      </div>
 
       {/* Tax Identification Number (TIN) */}
       <div className="">
         <div className={`${labelClass}`}>
           Tax Identification Number (TIN)
         </div>
-        {/* {data?.data?.identityVerification?.applicationForm} */}
+    
         <div>
           {data?.data?.taxDoc != null ? (
             <div>
