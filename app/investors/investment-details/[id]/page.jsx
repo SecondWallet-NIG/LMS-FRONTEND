@@ -14,12 +14,15 @@ import {
   getSingleInvestment,
   getTransactionHistory,
   topUpInvestment,
+  createWithdrawalRequest
 } from "@/redux/slices/investmentSlice";
 import { format } from "date-fns";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
 import { toast, ToastContainer } from "react-toastify";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
 import { getDefaultReferenceDate } from "@mui/x-date-pickers/internals";
+import SelectField from "@/app/components/shared/input/SelectField";
+import { useImmer } from "use-immer";
 
 const header = [
   { id: "dueDate", label: "Due Date" },
@@ -30,7 +33,6 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.map((item) => ({
     id: item?._id,
     dueDate: (
@@ -60,6 +62,7 @@ export default function InvestmentDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [isModalOpen, setModal] = useState(false);
+  const [reqWithdrawal, setReqWithdrawal] = useState(false);
   const [openTopUp, setOpenTopUp] = useState(false);
   const { data } = useSelector((state) => state.investment);
   const headClass = "text-lg font-semibold leading-7 text-swBlack mb-5";
@@ -71,7 +74,17 @@ export default function InvestmentDetails() {
     amount: "",
     paymentReceipt: null,
   });
+  const [state, setState] = useImmer({
+    withdrawAmount: "",
+    paymentMethod: ""
+  })
 
+  // console.log("withDetasil", data?.data)
+
+  const paymentMethod = [
+    { value: "Cash", label: "Cash" },
+    { value: "Bank Transfer", label: "Bank Transfer" },
+  ]
   const tableOneHeader = [
     { label: "Start Date" },
     { label: "Investment Product ID & Package" },
@@ -85,6 +98,33 @@ export default function InvestmentDetails() {
     { label: "Maturity Amount" },
     { label: "Maturity Date" },
   ];
+
+
+  const handleWithdrawalReq = async () => {
+    setLoading(true);
+    dispatch(createWithdrawalRequest(
+      {
+        id, payload: {
+          withdrawalAmount: Number(state.withdrawAmount),
+          paymentMethod: state.paymentMethod
+        }
+      })
+    )
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        setState(draft => {
+          draft.withdrawAmount = ""
+          draft.paymentMethod = ""
+        });
+        setReqWithdrawal(false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        toast.success(err?.message);
+        setLoading(false);
+      });
+  };
 
   const handleCloseInvestment = () => {
     setLoading(true);
@@ -103,6 +143,7 @@ export default function InvestmentDetails() {
       });
   };
 
+  // Close investment modal
   const modalChildren = (
     <>
       <div>
@@ -126,7 +167,6 @@ export default function InvestmentDetails() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-10 px-6">
           <span
             onClick={() => {
-              setCloseInvestmentReason("");
               setModal(false);
             }}
             className={`py-2 px-12 justify-center text-swTextColor font-semibold rounded-md outline outline-1 
@@ -216,8 +256,58 @@ export default function InvestmentDetails() {
     setTopUpData({ amount: "", paymentReceipt: null });
   };
 
-  console.log({ topUpData });
 
+  // request withdrawal modal
+  const reqWithChildren = (
+    <>
+      <div className="px-6">
+        <div className="pt-5 pb-10">
+          <InputField
+            placeholder={"Enter amount"}
+            label={"Amount"}
+            required={true}
+            value={state.withdrawAmount}
+            onChange={e => {
+              setState(draft => {
+                draft.withdrawAmount = e.target.value
+              })
+            }}
+          />
+        </div>
+        <div className="mb-10">
+          <SelectField
+            name={"paymentMethod"}
+            label={"Payment method"}
+            required={true}
+            placeholder={"Select Payment Method"}
+            optionValue={paymentMethod}
+            onChange={e => {
+              setState(draft => {
+                draft.paymentMethod = e.value
+              })
+            }}
+          />
+        </div>
+        <div className="flex justify-end gap-3 pb-5">
+          <span
+            onClick={() => setReqWithdrawal(false)}
+            className={`py-2 px-5 justify-center text-swTextColor font-semibold rounded-md outline outline-1 
+              outline-gray-200 flex gap-2 border cursor-pointer hover:shadow-lg
+            `}
+          >
+            Cancel
+          </span>
+          <Button onClick={handleWithdrawalReq}
+            disabled={state.withdrawAmount === '' || state.paymentMethod === '' || loading ? true : false}
+            className="rounded-md font-semibold">
+            Confirm
+          </Button>
+        </div>
+      </div>
+    </>
+  )
+
+  // top up modal
   const topUpChildren = (
     <>
       <div>
@@ -351,13 +441,12 @@ export default function InvestmentDetails() {
       ),
       transactionType: (
         <button
-          className={`${
-            item.transactionStatment === ""
-              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : item.transactionStatment === "Top Up"
+          className={`${item.transactionStatment === ""
+            ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+            : item.transactionStatment === "Top Up"
               ? "bg-green-50 text-swGreen"
               : "text-red-400 bg-red-100"
-          } px-2 py-1 rounded-full`}
+            } px-2 py-1 rounded-full`}
         >
           {item?.transactionStatment}
         </button>
@@ -422,22 +511,18 @@ export default function InvestmentDetails() {
                 </p>
 
                 <div className="flex justify-between gap-4 mt-5 text-sm mb-10 lg:mb-1">
-                  <Link
-                    href={`/investors/investor-profile/${data?.data?.investorProfile?._id}`}
-                  >
+                  <div onClick={() => setReqWithdrawal(true)}>
                     <Button className="rounded-md flex gap-2">
-                      <FiPlus size={20} />
-                      View Profile
+                      Request Withdrawal
                     </Button>
-                  </Link>
+                  </div>
                   <button
                     onClick={() => setModal(true)}
                     disabled={data?.data?.status === "Closed"}
-                    className={`${
-                      data?.data?.status === "Closed"
-                        ? "cursor-not-allowed"
-                        : ""
-                    } rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer`}
+                    className={`${data?.data?.status === "Closed"
+                      ? "cursor-not-allowed"
+                      : ""
+                      } rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer`}
                   >
                     Close investment
                   </button>
@@ -534,8 +619,8 @@ export default function InvestmentDetails() {
                     {data?.data?.duration?.metric === "Month"
                       ? "Months"
                       : data?.data?.duration?.metric === "Quarter"
-                      ? "Quarters"
-                      : "Years"}
+                        ? "Quarters"
+                        : "Years"}
                   </p>
                   <p className={`${tableDataClass}`}>
                     ₦ {data?.data?.maturityAmount?.toLocaleString()}
@@ -577,6 +662,13 @@ export default function InvestmentDetails() {
         isOpen={openTopUp}
         onClose={setOpenTopUp}
         children={topUpChildren}
+      />
+      <SharedInvestmentModal
+        css={"max-w-lg"}
+        header={"Request Withdrawal"}
+        isOpen={reqWithdrawal}
+        onClose={setReqWithdrawal}
+        children={reqWithChildren}
       />
     </DashboardLayout>
   );

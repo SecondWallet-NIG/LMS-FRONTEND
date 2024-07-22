@@ -216,7 +216,7 @@ const InvestorProfile = () => {
                   "font-semibold text-swBlue bg-blue-50"
                   } p-2 rounded-md cursor-pointer whitespace-nowrap`}
               >
-                Personal Informatiom
+                Personal Information
               </button>
         
               {activeButton !== "document" ? activeIcon : ""}
