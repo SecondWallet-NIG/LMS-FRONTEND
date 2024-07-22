@@ -355,12 +355,35 @@ export const disburseROI = createAsyncThunk(
   "investment/withdrawal-request/withdrawalRequestId/approve",
   async ({ id, payload }) => {
     try {
-      const response = await axios.patch(
+      const response = await axios.post(
         `${API_URL}/investment/withdrawal-request/${id}/approve`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const createWithdrawalRequest = createAsyncThunk(
+  "investment/investmentId/withdrawal-request/create",
+  async ({ id, payload }) => {
+    try {
+      let token = getToken();
+      const response = await axios.post(
+        `${API_URL}/investment/${id}/withdrawal-request/create`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
         }
       );
