@@ -269,6 +269,25 @@ export const getSingleInvestor = createAsyncThunk(
   }
 );
 
+export const getPortfolioHealth = createAsyncThunk(
+  "investment/investor/investorProfileId/portfolio-health",
+  async (id) => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/investment/investor/${id}/portfolio-health`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getAllInvestors = createAsyncThunk(
   "investment/investor/all",
   async () => {
@@ -351,6 +370,28 @@ export const getROI = createAsyncThunk(
   }
 );
 
+export const getWithdrawalSummaryCards = createAsyncThunk(
+  "investment/withdrawal-requests/summary",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(
+        `${API_URL}/investment/withdrawal-requests/summary`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const disburseROI = createAsyncThunk(
   "investment/withdrawal-request/withdrawalRequestId/approve",
   async ({ id, payload }) => {
@@ -381,6 +422,28 @@ export const createWithdrawalRequest = createAsyncThunk(
       const response = await axios.post(
         `${API_URL}/investment/${id}/withdrawal-request/create`,
         payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const getSingleWithdrawalRequest = createAsyncThunk(
+  "investment/withdrawal-request/withdrawalRequestId",
+  async (id) => {
+    try {
+      let token = getToken();
+      const response = await axios.get(
+        `${API_URL}/investment/withdrawal-request/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -487,6 +550,42 @@ const investmentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getInvestmentReportCards.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getPortfolioHealth.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getPortfolioHealth.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.healthData = action.payload;
+      })
+      .addCase(getPortfolioHealth.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getWithdrawalSummaryCards.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getWithdrawalSummaryCards.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getWithdrawalSummaryCards.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getSingleWithdrawalRequest.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getSingleWithdrawalRequest.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getSingleWithdrawalRequest.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });
