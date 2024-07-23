@@ -26,11 +26,23 @@ export default function InvestorBioData({
         { label: 'Address', value: data?.data?.address?.houseLocation },
     ]
     const pageBankData = [
-        { label: 'Name', value: data?.data?.bankAccount?.bankName},
+        { label: 'Name', value: bankArr.find(
+            (option) =>
+              option.value ===
+            data?.data?.bankAccount?.bankName
+          )?.label},
         { label: 'Acc Number', value: data?.data?.bankAccount?.accountNumber },
         { label: 'Beneficiary', value: data?.data?.bankAccount?.accountName },
         { label: 'BVN', value: data?.data?.bvn },
     ]
+
+    // {
+    //     bankArr.find(
+    //       (option) =>
+    //         option.value ===
+    //       data?.data?.bankAccount?.bankName
+    //     )?.label
+    //   }
 
     const renderPageData = (label, value) => {
         return (

@@ -54,17 +54,28 @@ const customDataTransformer = (apiData) => {
       </div>
     ),
     status: (
-      <button
-        className={`${
-          item.status === "Pending"
-            ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-            : item.status === "Approved"
-            ? "bg-green-50 text-swGreen"
-            : "text-red-400 bg-red-100"
-        } px-2 py-1 rounded-full whitespace-nowrap`}
-      >
-        {item?.status}
-      </button>
+      <div className="text-[15px] font-light">
+        <div
+          className={`py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1 ${
+            item?.status === "Pending"
+              ? "bg-blue-50 text-blue-500 border-blue-500"
+              : item?.status === "In Progress"
+              ? "bg-green-50 text-green-500 border-green-500"
+              : "bg-red-50 text-red-500 border-red-500"
+          }`}
+        >
+          <div
+            className={`h-1 w-1 rounded-full ${
+              item?.status === "Pending"
+                ? "bg-blue-500"
+                : item?.status === "In Progress"
+                ? "bg-green-500"
+                : "bg-red-500"
+            }`}
+          />
+          {item?.status}
+        </div>
+      </div>
     ),
   }));
 };
