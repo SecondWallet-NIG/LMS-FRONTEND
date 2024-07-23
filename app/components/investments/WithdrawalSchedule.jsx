@@ -1,12 +1,11 @@
-"use client"
-import React, { useState, useEffect } from "react"
-import InvestmentsCards from "../cards/InvestmentsCard/InvestmentsCards"
+"use client";
+import React, { useState, useEffect } from "react";
+import InvestmentsCards from "../cards/InvestmentsCard/InvestmentsCards";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { getWithdrawalSummaryCards } from "@/redux/slices/investmentSlice";
+import { withdrawalSummary } from "@/redux/slices/investmentSlice";
 import { toast, ToastContainer } from "react-toastify";
-
 
 export default function WithdrawalSchedule() {
     const tableDataClass = 'text-[12px] md:text-[15px] font-light whitespace-nowrap text-gray-700'
@@ -14,7 +13,7 @@ export default function WithdrawalSchedule() {
     const { data } = useSelector((state) => state.investment);
     
     useEffect(() => {
-        dispatch(getWithdrawalSummaryCards())
+        dispatch(withdrawalSummary())
     }, [])
 
 
@@ -26,15 +25,15 @@ export default function WithdrawalSchedule() {
     ]
 
 
-    const header = [
-        { id: "dateLogged", label: "Date Logged" },
-        { id: "investmentId", label: "Investor Name & ID" },
-        { id: "datePaid", label: "Date Paid" },
-        { id: "amountRequested", label: "Amount Requested" },
-        { id: "disbursedBy", label: "Disbursed By" },
-        { id: "status", label: "Status" },
-        { id: "action", label: "Action" }
-    ];
+  const header = [
+    { id: "dateLogged", label: "Date Logged" },
+    { id: "investmentId", label: "Investor Name & ID" },
+    { id: "datePaid", label: "Date Paid" },
+    { id: "amountRequested", label: "Amount Requested" },
+    { id: "disbursedBy", label: "Disbursed By" },
+    { id: "status", label: "Status" },
+    { id: "action", label: "Action" },
+  ];
 
     const customDataTransformer = (apiData) => {
         return apiData?.withdrawalRequests?.map((item, i) => ({

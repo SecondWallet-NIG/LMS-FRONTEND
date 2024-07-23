@@ -138,6 +138,25 @@ export const createInvestment = createAsyncThunk(
   }
 );
 
+export const getAllInvestments = createAsyncThunk(
+  "investment/all",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/investment/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getSingleInvestment = createAsyncThunk(
   "investment/investmentId",
   async (id) => {
@@ -370,17 +389,18 @@ export const getROI = createAsyncThunk(
   }
 );
 
-export const getWithdrawalSummaryCards = createAsyncThunk(
-  "investment/withdrawal-requests/summary",
-  async () => {
+
+export const disburseROI = createAsyncThunk(
+  "investment/withdrawal-request/withdrawalRequestId/approve",
+  async ({ id, payload }) => {
     try {
-      let token = getToken();
-      const response = await axios.get(
-        `${API_URL}/investment/withdrawal-requests/summary`,
+      const response = await axios.post(
+        `${API_URL}/investment/withdrawal-request/${id}/approve`,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          }
+          },
         }
       );
       return response.data;
@@ -392,13 +412,15 @@ export const getWithdrawalSummaryCards = createAsyncThunk(
   }
 );
 
-export const disburseROI = createAsyncThunk(
-  "investment/withdrawal-request/withdrawalRequestId/approve",
-  async ({ id, payload }) => {
+// Withdrawal
+
+export const withdrawalSummary = createAsyncThunk(
+  "investment/withdrawal-requests/summary",
+  async () => {
     try {
-      const response = await axios.post(
-        `${API_URL}/investment/withdrawal-request/${id}/approve`,
-        payload,
+      let token = getToken();
+      const response = await axios.get(
+        `${API_URL}/investment/withdrawal-requests/summary`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -547,7 +569,7 @@ const investmentSlice = createSlice({
       })
       .addCase(getInvestmentReportCards.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.data = action.payload;
+        state.getInvestmentReportCardsData = action.payload;
       })
       .addCase(getInvestmentReportCards.rejected, (state, action) => {
         state.loading = "failed";
@@ -565,18 +587,6 @@ const investmentSlice = createSlice({
         state.loading = "failed";
         state.error = action.error.message;
       })
-      .addCase(getWithdrawalSummaryCards.pending, (state) => {
-        state.loading = "pending";
-        state.error = null;
-      })
-      .addCase(getWithdrawalSummaryCards.fulfilled, (state, action) => {
-        state.loading = "succeeded";
-        state.data = action.payload;
-      })
-      .addCase(getWithdrawalSummaryCards.rejected, (state, action) => {
-        state.loading = "failed";
-        state.error = action.error.message;
-      })
       .addCase(getSingleWithdrawalRequest.pending, (state) => {
         state.loading = "pending";
         state.error = null;
@@ -586,6 +596,30 @@ const investmentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getSingleWithdrawalRequest.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getAllInvestments.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getAllInvestments.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getAllInvestments.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(withdrawalSummary.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(withdrawalSummary.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(withdrawalSummary.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

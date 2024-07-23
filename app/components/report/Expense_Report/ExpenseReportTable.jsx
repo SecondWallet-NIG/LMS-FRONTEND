@@ -6,7 +6,7 @@ import { format } from "date-fns";
 const header = [
   { id: "expenseDate", label: "Expense Date" },
   { id: "dateLogged", label: "Date Logged" },
-  { id: "description", label: "Description" },
+  // { id: "description", label: "Description" },
   { id: "category", label: "Expense Category" },
   { id: "amount", label: "Amount" },
   { id: "status", label: "Status" },
@@ -25,11 +25,11 @@ const customDataTransformer = (apiData) => {
         {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
       </div>
     ),
-    description: (
-      <div className="text-[15px] font-light text-gray-700">
-        {item?.description}
-      </div>
-    ),
+    // description: (
+    //   <div className="text-[15px] font-light text-gray-700">
+    //     {item?.description}
+    //   </div>
+    // ),
     category: (
       <div className="text-[15px] font-light text-gray-700">
         {item?.category?.name}
