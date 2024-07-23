@@ -138,6 +138,25 @@ export const createInvestment = createAsyncThunk(
   }
 );
 
+export const getAllInvestments = createAsyncThunk(
+  "investment/all",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/investment/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getSingleInvestment = createAsyncThunk(
   "investment/investmentId",
   async (id) => {
@@ -373,6 +392,30 @@ export const disburseROI = createAsyncThunk(
   }
 );
 
+// Withdrawal
+
+export const withdrawalSummary = createAsyncThunk(
+  "investment/withdrawal-requests/summary",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(
+        `${API_URL}/investment/withdrawal-requests/summary`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const createWithdrawalRequest = createAsyncThunk(
   "investment/investmentId/withdrawal-request/create",
   async ({ id, payload }) => {
@@ -484,9 +527,33 @@ const investmentSlice = createSlice({
       })
       .addCase(getInvestmentReportCards.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.data = action.payload;
+        state.getInvestmentReportCardsData = action.payload;
       })
       .addCase(getInvestmentReportCards.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getAllInvestments.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getAllInvestments.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getAllInvestments.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(withdrawalSummary.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(withdrawalSummary.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(withdrawalSummary.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

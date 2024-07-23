@@ -201,6 +201,11 @@ const CreateInvestment = () => {
     }
   };
 
+  const handleFileDelete = (index) => {
+    proofOfPayment.splice(index, 1);
+    setProofOfPayment([...proofOfPayment]);
+  };
+
   const modalChildren = (
     <>
       <div className="px-5 pb-10">
@@ -334,6 +339,7 @@ const CreateInvestment = () => {
               placeholder={"Enter number"}
               required={true}
               inputType="number"
+              onWheel={() => document.activeElement.blur()}
               endIcon={"%"}
               onKeyPress={preventMinus}
               onChange={handleInputChange}

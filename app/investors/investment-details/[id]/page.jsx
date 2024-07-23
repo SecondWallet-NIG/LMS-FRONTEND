@@ -167,6 +167,7 @@ export default function InvestmentDetails() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-10 px-6">
           <span
             onClick={() => {
+              setFormData({ closeInvestmentReason: "" });
               setModal(false);
             }}
             className={`py-2 px-12 justify-center text-swTextColor font-semibold rounded-md outline outline-1 
