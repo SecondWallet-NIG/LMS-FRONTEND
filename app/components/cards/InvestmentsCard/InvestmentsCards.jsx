@@ -27,7 +27,7 @@ export default function InvestmentsCards({ cards, hasIcon }) {
               </p>
               {card?.extraVal && (
                 <p className="font-medium text-sm text-swBlack leading-6">
-                  {Number(card?.extraVal).toLocaleString()} NGN
+                  ₦{Number(card?.extraVal).toLocaleString()}
                 </p>
               )}
             </div>

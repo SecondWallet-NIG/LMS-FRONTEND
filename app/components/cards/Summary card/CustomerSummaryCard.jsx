@@ -20,15 +20,15 @@ const Card = ({ value, title, extraVal, currency }) => {
   );
 };
 
-const CustomerSummaryCard = ({ data, financialCards }) => {
+const CustomerSummaryCard = ({ data, financialCards, healthData }) => {
   return (
     <>
       {!financialCards && (
         <main className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card title="Total Investments" value={3} extraVal={35837828.93} />
+          <Card title="Total Investments" value={healthData?.totalInvestments?.count} extraVal={healthData?.totalInvestments?.amount} />
           <Card title="Average ROI" value={`${32}%`} />
-          <Card title="Maturity Amount" value={3} extraVal={35837828.93} />
-          <Card title="Withdrawals" value={5} extraVal={35837828.93} />
+          <Card title="Maturity Amount" value={healthData?.maturityAmount?.count} extraVal={healthData?.maturityAmount?.amount} />
+          <Card title="Withdrawals" value={healthData?.withdrawals?.count} extraVal={healthData?.withdrawals?.amount} />
         </main>
       )}
 

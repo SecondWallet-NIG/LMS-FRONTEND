@@ -3,9 +3,6 @@ import axios from "axios";
 import { API_URL } from "@/constant";
 import { getToken } from "@/helpers";
 
-
-
-
 // investmentProducts
 
 export const createInvestmentProduct = createAsyncThunk(
@@ -132,6 +129,25 @@ export const createInvestment = createAsyncThunk(
           },
         }
       );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const getAllInvestments = createAsyncThunk(
+  "investment/all",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/investment/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       if (error.response.data.error) {
@@ -272,6 +288,25 @@ export const getSingleInvestor = createAsyncThunk(
   }
 );
 
+export const getPortfolioHealth = createAsyncThunk(
+  "investment/investor/investorProfileId/portfolio-health",
+  async (id) => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/investment/investor/${id}/portfolio-health`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getAllInvestors = createAsyncThunk(
   "investment/investor/all",
   async () => {
@@ -314,22 +349,20 @@ export const updateInvestor = createAsyncThunk(
   }
 );
 
-export const getInvestmentReport = createAsyncThunk(
+export const getInvestmentReportCards = createAsyncThunk(
   "investment/report",
-  async () => {
-    try {
-      let token = getToken();
-      const response = await axios.get(`${API_URL}/investment/report`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      if (error.response.data.error) {
-        throw new Error(error.response.data.error);
-      } else throw new Error("An error occured, please try again later");
-    }
+  async ({ startDate, endDate }) => {
+    let token = getToken();
+    const response = await axios.get(`${API_URL}/investment/report`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        startDate,
+        endDate,
+      },
+    });
+    return response.data;
   }
 );
 
@@ -356,6 +389,7 @@ export const getROI = createAsyncThunk(
   }
 );
 
+
 export const disburseROI = createAsyncThunk(
   "investment/withdrawal-request/withdrawalRequestId/approve",
   async ({ id, payload }) => {
@@ -363,6 +397,30 @@ export const disburseROI = createAsyncThunk(
       const response = await axios.post(
         `${API_URL}/investment/withdrawal-request/${id}/approve`,
         payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+// Withdrawal
+
+export const withdrawalSummary = createAsyncThunk(
+  "investment/withdrawal-requests/summary",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(
+        `${API_URL}/investment/withdrawal-requests/summary`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -401,6 +459,27 @@ export const createWithdrawalRequest = createAsyncThunk(
   }
 );
 
+export const getSingleWithdrawalRequest = createAsyncThunk(
+  "investment/withdrawal-request/withdrawalRequestId",
+  async (id) => {
+    try {
+      let token = getToken();
+      const response = await axios.get(
+        `${API_URL}/investment/withdrawal-request/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
 
 const investmentSlice = createSlice({
   name: "investment",
@@ -484,15 +563,63 @@ const investmentSlice = createSlice({
         state.loading = "failed";
         state.error = action.error.message;
       })
-      .addCase(getInvestmentReport.pending, (state) => {
+      .addCase(getInvestmentReportCards.pending, (state) => {
         state.loading = "pending";
         state.error = null;
       })
-      .addCase(getInvestmentReport.fulfilled, (state, action) => {
+      .addCase(getInvestmentReportCards.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.getInvestmentReportCardsData = action.payload;
+      })
+      .addCase(getInvestmentReportCards.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getPortfolioHealth.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getPortfolioHealth.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.healthData = action.payload;
+      })
+      .addCase(getPortfolioHealth.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getSingleWithdrawalRequest.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getSingleWithdrawalRequest.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.data = action.payload;
       })
-      .addCase(getInvestmentReport.rejected, (state, action) => {
+      .addCase(getSingleWithdrawalRequest.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getAllInvestments.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getAllInvestments.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getAllInvestments.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(withdrawalSummary.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(withdrawalSummary.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(withdrawalSummary.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

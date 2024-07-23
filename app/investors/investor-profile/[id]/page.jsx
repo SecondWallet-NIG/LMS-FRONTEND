@@ -63,6 +63,7 @@ const InvestorProfile = () => {
     </Link>
   </div>
 
+
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
   };
@@ -112,7 +113,7 @@ const InvestorProfile = () => {
     };
   }, [borrowerOptions]);
 
-  
+
   return (
     <DashboardLayout isBackNav={true} paths={paths}>
       <div className="overflow-x-hidden">
@@ -218,7 +219,7 @@ const InvestorProfile = () => {
               >
                 Personal Information
               </button>
-        
+
               {activeButton !== "document" ? activeIcon : ""}
               <button
                 onClick={() => handleInfoToggle("document")}
@@ -240,7 +241,7 @@ const InvestorProfile = () => {
                 detailsHeader={detailsHeader}
               />
             )}
-       
+
             {activeButton == "document" && (
               <InvestorProfileDocs
                 data={data} openModal={openModal}
@@ -291,7 +292,6 @@ const InvestorProfile = () => {
                   `}
                   borderColor="bg-gray-200 "
                 />
-        
               </div>
             </div>
             <div className="p-2">
