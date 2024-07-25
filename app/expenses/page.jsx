@@ -100,9 +100,9 @@ console.log(expenseGraph?.data?.data);
   const router = useRouter();
 
   const cards = [
-    { title: "Total Number of Expenses", value: expenseGraph?.data?.data.totalExpenseCount},
-    { title: "Total Expenses Value", value: expenseGraph?.data?.data.totalApprovedExpense },
-    { title: "Approved Expenses", value: expenseGraph?.data?.data.totalApprovedExpense },
+    { title: "Total Number of Expenses", value: expenseGraph?.data?.data.totalExpenseCount || 0},
+    { title: "Total Expenses Value", value: expenseGraph?.data?.data.totalApprovedExpense || 0 },
+    { title: "Approved Expenses", value: expenseGraph?.data?.data.totalApprovedExpense || 0 },
   ];
 
   const options = {

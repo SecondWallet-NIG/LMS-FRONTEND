@@ -21,6 +21,7 @@ const ViewExpense = () => {
   const [data, setData] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openFileModal, setOpenFileModal] = useState(false);
+  const [updateBtns, setUpdateBtns] = useState(false);
 
   const handleSetUrl = (content) => {
     setUrl(content);
@@ -28,6 +29,14 @@ const ViewExpense = () => {
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = JSON.parse(localStorage.getItem("user"));
+      console.log("user", user?.data?.user?.role?.tag);
+      if (user?.data?.user?.role?.tag === "CFO") {
+        setUpdateBtns(true);
+      }
+    }
+
     dispatch(getSingleExpense(id))
       .unwrap()
       .then((res) => setData(res?.data))
@@ -35,27 +44,29 @@ const ViewExpense = () => {
     setLoading(false);
   }, []);
 
-  console.log("expense", data);
+  // console.log("expense", data);
 
   return (
     <DashboardLayout isBackNav={true} paths={["Expenses", "View expense"]}>
       <main className="mx-auto max-w-4xl py-10 px-5">
-        <div className="ml-auto flex gap-2 justify-end font-semibold">
-          <Link
-            href={`/expenses/edit-expense/${id}`}
-            className="border py-2 px-3 flex gap-2 items-center rounded-lg"
-          >
-            Edit
-            <FiEdit2 size={20} />
-          </Link>
-          <p
-            className="border py-2 px-3 flex gap-2 items-center rounded-lg cursor-pointer"
-            onClick={() => setOpenDeleteModal(true)}
-          >
-            Delete
-            <FiTrash size={20} />
-          </p>
-        </div>
+        {updateBtns && (
+          <div className="ml-auto flex gap-2 justify-end font-semibold">
+            <Link
+              href={`/expenses/edit-expense/${id}`}
+              className="border py-2 px-3 flex gap-2 items-center rounded-lg"
+            >
+              Edit
+              <FiEdit2 size={20} />
+            </Link>
+            <p
+              className="border py-2 px-3 flex gap-2 items-center rounded-lg cursor-pointer"
+              onClick={() => setOpenDeleteModal(true)}
+            >
+              Delete
+              <FiTrash size={20} />
+            </p>
+          </div>
+        )}
 
         <div className="flex justify-between mt-5 p-5 border-b">
           <p className="font-semibold text-xl">Expense Details</p>
