@@ -14,7 +14,7 @@ import {
   getSingleInvestment,
   getTransactionHistory,
   topUpInvestment,
-  createWithdrawalRequest
+  createWithdrawalRequest,
 } from "@/redux/slices/investmentSlice";
 import { format } from "date-fns";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
@@ -80,18 +80,18 @@ export default function InvestmentDetails() {
   const [state, setState] = useImmer({
     withdrawAmount: "",
     paymentMethod: "",
-    successModal: false,
-    successMessage: "",
-    failedModal: false,
-    failedMessage: ""
-  })
+  });
+  const [successModal, setSuccessModal] = useState(false);
+  const [failedModal, setFailedModal] = useState(false);
+  const [successModalData, setSuccessModalData] = useState({});
+  const [errorModalData, setErrorModalData] = useState({});
 
   // console.log("withDetasil", data?.data)
 
   const paymentMethod = [
     { value: "Cash", label: "Cash" },
     { value: "Bank Transfer", label: "Bank Transfer" },
-  ]
+  ];
   const tableOneHeader = [
     { label: "Start Date" },
     { label: "Investment Product ID & Package" },
@@ -106,36 +106,43 @@ export default function InvestmentDetails() {
     { label: "Maturity Date" },
   ];
 
-
   const handleWithdrawalReq = async () => {
     setLoading(true);
-    dispatch(createWithdrawalRequest(
-      {
-        id, payload: {
+    dispatch(
+      createWithdrawalRequest({
+        id,
+        payload: {
           withdrawalAmount: Number(removeCommasFromNumber(state.withdrawAmount)),
-          paymentMethod: state.paymentMethod
-        }
+          paymentMethod: state.paymentMethod,
+        },
       })
     )
       .unwrap()
       .then((res) => {
-        // toast.success(res?.message);
         setReqWithdrawal(false);
-        setState(draft => {
-          draft.withdrawAmount = ""
-          draft.paymentMethod = ""
-          draft.successMessage = res?.message
-          draft.successModal = true
+        setSuccessModalData({
+          title: "Withdrawal Request successful",
+          description: res?.message,
+          btnLeft: "View investments",
+          btnRight: "Close",
+          btnRightFunc: () => {
+            setSuccessModalData({});
+            setSuccessModal(false);
+          },
+        });
+        setSuccessModal(true);
+        setState((draft) => {
+          draft.withdrawAmount = "";
+          draft.paymentMethod = "";
         });
         setLoading(false);
       })
       .catch((err) => {
-        // toast.success(err?.message);
         setReqWithdrawal(false);
-        setState(draft => {
-          draft.failedMessage = err?.message
-          draft.failedModal = true
-        })
+        setErrorModalData({
+          description: err?.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -145,14 +152,29 @@ export default function InvestmentDetails() {
     dispatch(closeInvestment({ id, payload: formData }))
       .unwrap()
       .then((res) => {
-        toast.success(res?.message);
+        
+        setSuccessModalData({
+          title: "Investment Closed Successfully",
+          description: res?.message,
+          btnLeft: "View investments",
+          btnRight: "Close",
+          btnRightFunc: () => {
+            setSuccessModalData({});
+            setSuccessModal(false);
+          },
+        });
+        setSuccessModal(true);
         setFormData({ closeInvestmentReason: "" });
         dispatch(getSingleInvestment(id));
         setModal(false);
         setLoading(false);
       })
       .catch((err) => {
-        toast.success(err?.message);
+        setModal(false);
+        setErrorModalData({
+          description: err?.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -229,14 +251,31 @@ export default function InvestmentDetails() {
     dispatch(topUpInvestment({ id, payload }))
       .unwrap()
       .then((res) => {
-        toast.success(res?.message);
+        const newAmount = topUpData.amount;
+
+        setSuccessModalData({
+          title: "Topup Successful",
+          description: `Topup of ₦${newAmount} was successful`,
+          btnLeft: "View investments",
+          btnRight: "Top up",
+          btnRightFunc: () => {
+            setSuccessModalData({});
+            setSuccessModal(false);
+            setOpenTopUp(true);
+          },
+        });
+        setSuccessModal(true);
         dispatch(getSingleInvestment(id));
         setTopUpData({ amount: "", paymentReceipt: null });
         setOpenTopUp(false);
         setLoading(false);
       })
       .catch((err) => {
-        toast.error(err?.message);
+        setOpenTopUp(false);
+        setErrorModalData({
+          description: err?.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -271,7 +310,6 @@ export default function InvestmentDetails() {
     setTopUpData({ amount: "", paymentReceipt: null });
   };
 
-
   // request withdrawal modal
   const reqWithChildren = (
     <>
@@ -283,12 +321,12 @@ export default function InvestmentDetails() {
             required={true}
             onKeyPress={preventMinus}
             value={state.withdrawAmount}
-            onChange={e => {
-              setState(draft => {
+            onChange={(e) => {
+              setState((draft) => {
                 draft.withdrawAmount = Number(
                   e.target.value.replace(/[^0-9.]/g, "")
-                ).toLocaleString()
-              })
+                ).toLocaleString();
+              });
             }}
           />
         </div>
@@ -299,10 +337,10 @@ export default function InvestmentDetails() {
             required={true}
             placeholder={"Select Payment Method"}
             optionValue={paymentMethod}
-            onChange={e => {
-              setState(draft => {
-                draft.paymentMethod = e.value
-              })
+            onChange={(e) => {
+              setState((draft) => {
+                draft.paymentMethod = e.value;
+              });
             }}
           />
         </div>
@@ -315,15 +353,23 @@ export default function InvestmentDetails() {
           >
             Cancel
           </span>
-          <Button onClick={handleWithdrawalReq}
-            disabled={state.withdrawAmount === '' || state.paymentMethod === '' || loading ? true : false}
-            className="rounded-md font-semibold">
+          <Button
+            onClick={handleWithdrawalReq}
+            disabled={
+              state.withdrawAmount === "" ||
+              state.paymentMethod === "" ||
+              loading
+                ? true
+                : false
+            }
+            className="rounded-md font-semibold"
+          >
             Confirm
           </Button>
         </div>
       </div>
     </>
-  )
+  );
 
   // top up modal
   const topUpChildren = (
@@ -459,12 +505,13 @@ export default function InvestmentDetails() {
       ),
       transactionType: (
         <button
-          className={`${item.transactionStatment === ""
-            ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-            : item.transactionStatment === "Top Up"
+          className={`${
+            item.transactionStatment === ""
+              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              : item.transactionStatment === "Top Up"
               ? "bg-green-50 text-swGreen"
               : "text-red-400 bg-red-100"
-            } px-2 py-1 rounded-full`}
+          } px-2 py-1 rounded-full`}
         >
           {item?.transactionStatment}
         </button>
@@ -537,10 +584,11 @@ export default function InvestmentDetails() {
                   <button
                     onClick={() => setModal(true)}
                     disabled={data?.data?.status === "Closed"}
-                    className={`${data?.data?.status === "Closed"
-                      ? "cursor-not-allowed"
-                      : ""
-                      } rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer`}
+                    className={`${
+                      data?.data?.status === "Closed"
+                        ? "cursor-not-allowed"
+                        : ""
+                    } rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer`}
                   >
                     Close investment
                   </button>
@@ -637,8 +685,8 @@ export default function InvestmentDetails() {
                     {data?.data?.duration?.metric === "Month"
                       ? "Months"
                       : data?.data?.duration?.metric === "Quarter"
-                        ? "Quarters"
-                        : "Years"}
+                      ? "Quarters"
+                      : "Years"}
                   </p>
                   <p className={`${tableDataClass}`}>
                     ₦ {data?.data?.maturityAmount?.toLocaleString()}
@@ -688,29 +736,28 @@ export default function InvestmentDetails() {
         onClose={setReqWithdrawal}
         children={reqWithChildren}
       />
-
       <SuccessModal
-        isOpen={state.successModal}
-        description={state.successMessage}
-        title={"Withdrawal Request"}
-        btnLeft={"Investment products"}
+        isOpen={successModal}
+        title={successModalData.title}
+        description={successModalData.description}
+        btnLeft={successModalData.btnLeft}
         btnLeftFunc={() => router.push("/investors")}
-        btnRight={"Done"}
-        btnRightFunc={() => setState(draft => {
-          draft.successModal = false
-        })}
-        onClose={() => setState(draft => {
-          draft.successModal = false
-        })}
+        btnRight={successModalData.btnRight}
+        btnRightFunc={successModalData.btnRightFunc}
+        onClose={() => {
+          setSuccessModalData({});
+          setSuccessModal(false);
+        }}
       />
       <CancelModal
-        isOpen={state.failedModal}
-        description={state.failedMessage}
-        title={"Withdrawal Request"}
+        isOpen={failedModal}
+        title={"An error has occured"}
+        description={errorModalData?.description}
         noButtons={true}
-        onClose={() => setState(draft => {
-          draft.failedModal = false
-        })}
+        onClose={() => {
+          setErrorModalData({});
+          setFailedModal(false);
+        }}
       />
     </DashboardLayout>
   );

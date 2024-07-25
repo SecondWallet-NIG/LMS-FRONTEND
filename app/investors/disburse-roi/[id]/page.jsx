@@ -25,6 +25,7 @@ export default function DisburseROI() {
     const bankDetails = data?.data?.investment?.investorProfile
     const [fileError, setFileError] = useState("");
     const [loading, setLoading] = useState(false)
+    const [disburseRoiBtn, setDisburseRoiBtn] = useState(false);
     const [state, setState] = useImmer({
         bankDetails: {
             name: "",
@@ -43,9 +44,14 @@ export default function DisburseROI() {
     )?.label
 
     useEffect(() => {
-        dispatch(getSingleWithdrawalRequest(id))
-    }, [])
-
+        if (typeof window !== "undefined") {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user?.data?.user?.role?.tag === "CFO") {
+                setDisburseRoiBtn(true);
+            }
+        }
+        dispatch(getSingleWithdrawalRequest(id));
+    }, []);
 
     const handleFileChange = (e) => {
         setFileError("");
@@ -152,6 +158,7 @@ export default function DisburseROI() {
                             {fileError && <p className="text-red-500 text-sm">{fileError}</p>}
                             <div className="relative w-full">
                                 <input
+                                    disabled={!disburseRoiBtn}
                                     name="paymentReceipt"
                                     type="file"
                                     id="fileInput"
@@ -193,14 +200,16 @@ export default function DisburseROI() {
                         </div>
                     )}
 
-                    <div className="flex justify-end gap-4">
-                        <Button onClick={handleDisburseROI}
-                            disabled={loading ? true : false || data?.data?.status === "Paid"
-                                || !state.paymentReceipt && data?.data?.paymentMethod === "Bank Transfer"}
-                            className="rounded-md text-md">
-                            {data?.data?.status === "Paid" ? "Already Disbursed" : "Confirm"}
-                        </Button>
-                    </div>
+                    {!disburseRoiBtn && (
+                        <div className="flex justify-end gap-4">
+                            <Button onClick={handleDisburseROI}
+                                disabled={loading ? true : false || data?.data?.status === "Paid"
+                                    || !state.paymentReceipt && data?.data?.paymentMethod === "Bank Transfer"}
+                                className="rounded-md text-md">
+                                {data?.data?.status === "Paid" ? "Already Disbursed" : "Confirm"}
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
             <SuccessModal
