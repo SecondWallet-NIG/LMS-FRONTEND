@@ -14,7 +14,7 @@ const Investors = () => {
   const navClass = 'gap-2 py-2 px-6 hover:text-swBlue'
   const selected = 'font-semibold text-swBlue gap-2 border-solid border-b-2 border-sky-700'
   const [state, setState] = useImmer({
-    selectedNav: 'withSch'
+    selectedNav: 'inPro'
   })
   const { selectedNav } = state
   const navs = [

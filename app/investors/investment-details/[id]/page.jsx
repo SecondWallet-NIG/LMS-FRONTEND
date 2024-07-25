@@ -7,7 +7,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FiCalendar, FiCopy, FiPlus } from "react-icons/fi";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeInvestment,
@@ -63,6 +63,7 @@ const customDataTransformer = (apiData) => {
 export default function InvestmentDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const router = useRouter()
   const [isModalOpen, setModal] = useState(false);
   const [reqWithdrawal, setReqWithdrawal] = useState(false);
   const [openTopUp, setOpenTopUp] = useState(false);
@@ -111,14 +112,14 @@ export default function InvestmentDetails() {
       createWithdrawalRequest({
         id,
         payload: {
-          withdrawalAmount: Number(state.withdrawAmount),
+          withdrawalAmount: Number(removeCommasFromNumber(state.withdrawAmount)),
           paymentMethod: state.paymentMethod,
         },
       })
     )
       .unwrap()
       .then((res) => {
-        // toast.success(res?.message);
+        setReqWithdrawal(false);
         setSuccessModalData({
           title: "Withdrawal Request successful",
           description: res?.message,
@@ -134,12 +135,10 @@ export default function InvestmentDetails() {
           draft.withdrawAmount = "";
           draft.paymentMethod = "";
         });
-        setReqWithdrawal(false);
         setLoading(false);
       })
       .catch((err) => {
         setReqWithdrawal(false);
-        // toast.success(err?.message);
         setErrorModalData({
           description: err?.message,
         });
@@ -153,7 +152,7 @@ export default function InvestmentDetails() {
     dispatch(closeInvestment({ id, payload: formData }))
       .unwrap()
       .then((res) => {
-        // toast.success(res?.message);
+        
         setSuccessModalData({
           title: "Investment Closed Successfully",
           description: res?.message,
@@ -171,7 +170,6 @@ export default function InvestmentDetails() {
         setLoading(false);
       })
       .catch((err) => {
-        // toast.success(err?.message);
         setModal(false);
         setErrorModalData({
           description: err?.message,
@@ -253,7 +251,6 @@ export default function InvestmentDetails() {
     dispatch(topUpInvestment({ id, payload }))
       .unwrap()
       .then((res) => {
-        // toast.success(res?.message);
         const newAmount = topUpData.amount;
 
         setSuccessModalData({
@@ -274,7 +271,6 @@ export default function InvestmentDetails() {
         setLoading(false);
       })
       .catch((err) => {
-        // toast.error(err?.message);
         setOpenTopUp(false);
         setErrorModalData({
           description: err?.message,
@@ -323,10 +319,13 @@ export default function InvestmentDetails() {
             placeholder={"Enter amount"}
             label={"Amount"}
             required={true}
+            onKeyPress={preventMinus}
             value={state.withdrawAmount}
             onChange={(e) => {
               setState((draft) => {
-                draft.withdrawAmount = e.target.value;
+                draft.withdrawAmount = Number(
+                  e.target.value.replace(/[^0-9.]/g, "")
+                ).toLocaleString();
               });
             }}
           />
