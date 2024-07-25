@@ -13,6 +13,8 @@ import EditableButton from "@/app/components/shared/editableButtonComponent/Edit
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import SuccessModal from "@/app/components/modals/SuccessModal";
+import CancelModal from "@/app/components/modals/CancelModal";
 
 const CreateInvestor = () => {
   const headerClass = "font-medium text-sm leading-5 text-swBlack";
@@ -24,6 +26,10 @@ const CreateInvestor = () => {
   const [bankNameVal, setBankNameVal] = useState("");
   const [loading, setLoading] = useState(false);
   const [verificationResponse, setVerificationResponse] = useState(null);
+  const [successModal, setSuccessModal] = useState(false);
+  const [failedModal, setFailedModal] = useState(false);
+  const [successModalData, setSuccessModalData] = useState({});
+  const [errorModalData, setErrorModalData] = useState({});
   const [formData, setFormData] = useState({
     profilePicture: null,
     firstName: "",
@@ -281,14 +287,29 @@ const CreateInvestor = () => {
     dispatch(createInvestor(payload))
       .unwrap()
       .then((response) => {
-        toast.success(response?.message);
+        // toast.success(response?.message);
+        setSuccessModalData({
+          title: "Investor created Successfully",
+          description: response?.message,
+          btnLeft: "View investors",
+          btnRight: "Close",
+          btnRightFunc: () => {
+            setSuccessModalData({});
+            setSuccessModal(false);
+          },
+        });
+        setSuccessModal(true);
         resetForm();
         setProfileImg(null);
-        router.push("/investors");
+        // router.push("/investors");
         // setNewUserId(response?.data?._id);
       })
       .catch((error) => {
-        toast.error(error?.message);
+        // toast.error(error?.message);
+        setErrorModalData({
+          description: error?.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -453,6 +474,7 @@ const CreateInvestor = () => {
                 name="nin"
                 activeBorderColor="border-swBlue"
                 onKeyPress={preventMinus}
+                value={formData.nin}
                 onWheel={() => document.activeElement.blur()}
                 label="NIN"
                 placeholder="NIN"
@@ -473,6 +495,7 @@ const CreateInvestor = () => {
                 name="bvn"
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
+                value={formData.bvn}
                 activeBorderColor="border-swBlue"
                 label="BVN"
                 placeholder="Bank Verification Number"
@@ -497,6 +520,9 @@ const CreateInvestor = () => {
               <SelectField
                 name="country"
                 label={"Country"}
+                value={
+                  countryOptions.find((e) => e.value === formData.country) || ""
+                }
                 optionValue={countryOptions}
                 required={true}
                 placeholder={"Select country"}
@@ -514,6 +540,9 @@ const CreateInvestor = () => {
                 required={true}
                 placeholder={"Select state"}
                 isSearchable={true}
+                value={
+                  states.find((e) => e.value === formData.state)
+                }
                 onChange={(selectedOption) => {
                   handleStateChange(selectedOption);
                   handleSelectChange(selectedOption, "state");
@@ -526,6 +555,9 @@ const CreateInvestor = () => {
                 label={"LGA"}
                 required={true}
                 optionValue={lga}
+                value={
+                  lga.find((e) => e.value === formData.lga)
+                }
                 placeholder={"Select lga"}
                 isSearchable={true}
                 onChange={(selectedOption) =>
@@ -650,6 +682,7 @@ const CreateInvestor = () => {
               onWheel={() => document.activeElement.blur()}
               required={true}
               activeBorderColor="border-swBlue"
+              // value={formData.accountNumber}
               label="Account Number"
               onChange={handleInputChange}
               disabled={!formData.bankName} // Disable if bankName is not selected
@@ -717,6 +750,29 @@ const CreateInvestor = () => {
           />
         </div>
       </div>
+      <SuccessModal
+        isOpen={successModal}
+        title={successModalData.title}
+        description={successModalData.description}
+        btnLeft={successModalData.btnLeft}
+        btnLeftFunc={() => router.push("/investors")}
+        btnRight={successModalData.btnRight}
+        btnRightFunc={successModalData.btnRightFunc}
+        onClose={() => {
+          setSuccessModalData({});
+          setSuccessModal(false);
+        }}
+      />
+      <CancelModal
+        isOpen={failedModal}
+        title={"An error has occured"}
+        description={errorModalData?.description}
+        noButtons={true}
+        onClose={() => {
+          setErrorModalData({});
+          setFailedModal(false);
+        }}
+      />
     </DashboardLayout>
   );
 };

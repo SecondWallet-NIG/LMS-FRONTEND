@@ -7,14 +7,14 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FiCalendar, FiCopy, FiPlus } from "react-icons/fi";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeInvestment,
   getSingleInvestment,
   getTransactionHistory,
   topUpInvestment,
-  createWithdrawalRequest
+  createWithdrawalRequest,
 } from "@/redux/slices/investmentSlice";
 import { format } from "date-fns";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
@@ -23,6 +23,8 @@ import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
 import { getDefaultReferenceDate } from "@mui/x-date-pickers/internals";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { useImmer } from "use-immer";
+import SuccessModal from "@/app/components/modals/SuccessModal";
+import CancelModal from "@/app/components/modals/CancelModal";
 
 const header = [
   { id: "dueDate", label: "Due Date" },
@@ -61,6 +63,7 @@ const customDataTransformer = (apiData) => {
 export default function InvestmentDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const router = useRouter()
   const [isModalOpen, setModal] = useState(false);
   const [reqWithdrawal, setReqWithdrawal] = useState(false);
   const [openTopUp, setOpenTopUp] = useState(false);
@@ -76,15 +79,19 @@ export default function InvestmentDetails() {
   });
   const [state, setState] = useImmer({
     withdrawAmount: "",
-    paymentMethod: ""
-  })
+    paymentMethod: "",
+  });
+  const [successModal, setSuccessModal] = useState(false);
+  const [failedModal, setFailedModal] = useState(false);
+  const [successModalData, setSuccessModalData] = useState({});
+  const [errorModalData, setErrorModalData] = useState({});
 
   // console.log("withDetasil", data?.data)
 
   const paymentMethod = [
     { value: "Cash", label: "Cash" },
     { value: "Bank Transfer", label: "Bank Transfer" },
-  ]
+  ];
   const tableOneHeader = [
     { label: "Start Date" },
     { label: "Investment Product ID & Package" },
@@ -99,29 +106,43 @@ export default function InvestmentDetails() {
     { label: "Maturity Date" },
   ];
 
-
   const handleWithdrawalReq = async () => {
     setLoading(true);
-    dispatch(createWithdrawalRequest(
-      {
-        id, payload: {
-          withdrawalAmount: Number(state.withdrawAmount),
-          paymentMethod: state.paymentMethod
-        }
+    dispatch(
+      createWithdrawalRequest({
+        id,
+        payload: {
+          withdrawalAmount: Number(removeCommasFromNumber(state.withdrawAmount)),
+          paymentMethod: state.paymentMethod,
+        },
       })
     )
       .unwrap()
       .then((res) => {
-        toast.success(res?.message);
-        setState(draft => {
-          draft.withdrawAmount = ""
-          draft.paymentMethod = ""
-        });
         setReqWithdrawal(false);
+        setSuccessModalData({
+          title: "Withdrawal Request successful",
+          description: res?.message,
+          btnLeft: "View investments",
+          btnRight: "Close",
+          btnRightFunc: () => {
+            setSuccessModalData({});
+            setSuccessModal(false);
+          },
+        });
+        setSuccessModal(true);
+        setState((draft) => {
+          draft.withdrawAmount = "";
+          draft.paymentMethod = "";
+        });
         setLoading(false);
       })
       .catch((err) => {
-        toast.success(err?.message);
+        setReqWithdrawal(false);
+        setErrorModalData({
+          description: err?.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -131,14 +152,29 @@ export default function InvestmentDetails() {
     dispatch(closeInvestment({ id, payload: formData }))
       .unwrap()
       .then((res) => {
-        toast.success(res?.message);
+        
+        setSuccessModalData({
+          title: "Investment Closed Successfully",
+          description: res?.message,
+          btnLeft: "View investments",
+          btnRight: "Close",
+          btnRightFunc: () => {
+            setSuccessModalData({});
+            setSuccessModal(false);
+          },
+        });
+        setSuccessModal(true);
         setFormData({ closeInvestmentReason: "" });
         dispatch(getSingleInvestment(id));
         setModal(false);
         setLoading(false);
       })
       .catch((err) => {
-        toast.success(err?.message);
+        setModal(false);
+        setErrorModalData({
+          description: err?.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -215,14 +251,31 @@ export default function InvestmentDetails() {
     dispatch(topUpInvestment({ id, payload }))
       .unwrap()
       .then((res) => {
-        toast.success(res?.message);
+        const newAmount = topUpData.amount;
+
+        setSuccessModalData({
+          title: "Topup Successful",
+          description: `Topup of ₦${newAmount} was successful`,
+          btnLeft: "View investments",
+          btnRight: "Top up",
+          btnRightFunc: () => {
+            setSuccessModalData({});
+            setSuccessModal(false);
+            setOpenTopUp(true);
+          },
+        });
+        setSuccessModal(true);
         dispatch(getSingleInvestment(id));
         setTopUpData({ amount: "", paymentReceipt: null });
         setOpenTopUp(false);
         setLoading(false);
       })
       .catch((err) => {
-        toast.error(err?.message);
+        setOpenTopUp(false);
+        setErrorModalData({
+          description: err?.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -257,7 +310,6 @@ export default function InvestmentDetails() {
     setTopUpData({ amount: "", paymentReceipt: null });
   };
 
-
   // request withdrawal modal
   const reqWithChildren = (
     <>
@@ -267,11 +319,14 @@ export default function InvestmentDetails() {
             placeholder={"Enter amount"}
             label={"Amount"}
             required={true}
+            onKeyPress={preventMinus}
             value={state.withdrawAmount}
-            onChange={e => {
-              setState(draft => {
-                draft.withdrawAmount = e.target.value
-              })
+            onChange={(e) => {
+              setState((draft) => {
+                draft.withdrawAmount = Number(
+                  e.target.value.replace(/[^0-9.]/g, "")
+                ).toLocaleString();
+              });
             }}
           />
         </div>
@@ -282,10 +337,10 @@ export default function InvestmentDetails() {
             required={true}
             placeholder={"Select Payment Method"}
             optionValue={paymentMethod}
-            onChange={e => {
-              setState(draft => {
-                draft.paymentMethod = e.value
-              })
+            onChange={(e) => {
+              setState((draft) => {
+                draft.paymentMethod = e.value;
+              });
             }}
           />
         </div>
@@ -298,15 +353,23 @@ export default function InvestmentDetails() {
           >
             Cancel
           </span>
-          <Button onClick={handleWithdrawalReq}
-            disabled={state.withdrawAmount === '' || state.paymentMethod === '' || loading ? true : false}
-            className="rounded-md font-semibold">
+          <Button
+            onClick={handleWithdrawalReq}
+            disabled={
+              state.withdrawAmount === "" ||
+              state.paymentMethod === "" ||
+              loading
+                ? true
+                : false
+            }
+            className="rounded-md font-semibold"
+          >
             Confirm
           </Button>
         </div>
       </div>
     </>
-  )
+  );
 
   // top up modal
   const topUpChildren = (
@@ -442,12 +505,13 @@ export default function InvestmentDetails() {
       ),
       transactionType: (
         <button
-          className={`${item.transactionStatment === ""
-            ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-            : item.transactionStatment === "Top Up"
+          className={`${
+            item.transactionStatment === ""
+              ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
+              : item.transactionStatment === "Top Up"
               ? "bg-green-50 text-swGreen"
               : "text-red-400 bg-red-100"
-            } px-2 py-1 rounded-full`}
+          } px-2 py-1 rounded-full`}
         >
           {item?.transactionStatment}
         </button>
@@ -520,10 +584,11 @@ export default function InvestmentDetails() {
                   <button
                     onClick={() => setModal(true)}
                     disabled={data?.data?.status === "Closed"}
-                    className={`${data?.data?.status === "Closed"
-                      ? "cursor-not-allowed"
-                      : ""
-                      } rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer`}
+                    className={`${
+                      data?.data?.status === "Closed"
+                        ? "cursor-not-allowed"
+                        : ""
+                    } rounded-md py-2 px-3 font-medium text-swBlue border border-sky-500 hover:shadow-lg cursor-pointer`}
                   >
                     Close investment
                   </button>
@@ -620,8 +685,8 @@ export default function InvestmentDetails() {
                     {data?.data?.duration?.metric === "Month"
                       ? "Months"
                       : data?.data?.duration?.metric === "Quarter"
-                        ? "Quarters"
-                        : "Years"}
+                      ? "Quarters"
+                      : "Years"}
                   </p>
                   <p className={`${tableDataClass}`}>
                     ₦ {data?.data?.maturityAmount?.toLocaleString()}
@@ -670,6 +735,29 @@ export default function InvestmentDetails() {
         isOpen={reqWithdrawal}
         onClose={setReqWithdrawal}
         children={reqWithChildren}
+      />
+      <SuccessModal
+        isOpen={successModal}
+        title={successModalData.title}
+        description={successModalData.description}
+        btnLeft={successModalData.btnLeft}
+        btnLeftFunc={() => router.push("/investors")}
+        btnRight={successModalData.btnRight}
+        btnRightFunc={successModalData.btnRightFunc}
+        onClose={() => {
+          setSuccessModalData({});
+          setSuccessModal(false);
+        }}
+      />
+      <CancelModal
+        isOpen={failedModal}
+        title={"An error has occured"}
+        description={errorModalData?.description}
+        noButtons={true}
+        onClose={() => {
+          setErrorModalData({});
+          setFailedModal(false);
+        }}
       />
     </DashboardLayout>
   );

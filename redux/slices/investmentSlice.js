@@ -394,7 +394,8 @@ export const disburseROI = createAsyncThunk(
   "investment/withdrawal-request/withdrawalRequestId/approve",
   async ({ id, payload }) => {
     try {
-      const response = await axios.post(
+      let token = getToken();
+      const response = await axios.patch(
         `${API_URL}/investment/withdrawal-request/${id}/approve`,
         payload,
         {

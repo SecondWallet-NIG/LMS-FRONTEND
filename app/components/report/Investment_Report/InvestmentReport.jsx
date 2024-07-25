@@ -66,15 +66,18 @@ export default function InvestmentReport() {
   console.log("investment cards", getInvestmentReportCardsData);
 
   const cards = [
-    { title: "Total Number of Investors", value: state?.totalInvestors },
+    { title: "Total Number of Investors", value: state?.totalInvestors || 0 },
     {
       title: "Total Investment",
-      value: state?.totalInvestments?.toLocaleString(),
+      value: state?.totalInvestments?.toLocaleString() || 0,
     },
-    { title: "Total Number of Investment Product", value: state?.totalNumber },
+    {
+      title: "Total Number of Investment Product",
+      value: state?.totalNumber || 0,
+    },
     {
       title: "Total Payout Amount",
-      value: state?.totalPayout?.toLocaleString(),
+      value: state?.totalPayout?.toLocaleString() || 0,
     },
   ];
 
