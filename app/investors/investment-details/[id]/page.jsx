@@ -7,7 +7,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FiCalendar, FiCopy, FiPlus } from "react-icons/fi";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeInvestment,
@@ -23,6 +23,8 @@ import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
 import { getDefaultReferenceDate } from "@mui/x-date-pickers/internals";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { useImmer } from "use-immer";
+import SuccessModal from "@/app/components/modals/SuccessModal";
+import CancelModal from "@/app/components/modals/CancelModal";
 
 const header = [
   { id: "dueDate", label: "Due Date" },
@@ -61,6 +63,7 @@ const customDataTransformer = (apiData) => {
 export default function InvestmentDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const router = useRouter()
   const [isModalOpen, setModal] = useState(false);
   const [reqWithdrawal, setReqWithdrawal] = useState(false);
   const [openTopUp, setOpenTopUp] = useState(false);
@@ -76,7 +79,11 @@ export default function InvestmentDetails() {
   });
   const [state, setState] = useImmer({
     withdrawAmount: "",
-    paymentMethod: ""
+    paymentMethod: "",
+    successModal: false,
+    successMessage: "",
+    failedModal: false,
+    failedMessage: ""
   })
 
   // console.log("withDetasil", data?.data)
@@ -105,23 +112,30 @@ export default function InvestmentDetails() {
     dispatch(createWithdrawalRequest(
       {
         id, payload: {
-          withdrawalAmount: Number(state.withdrawAmount),
+          withdrawalAmount: Number(removeCommasFromNumber(state.withdrawAmount)),
           paymentMethod: state.paymentMethod
         }
       })
     )
       .unwrap()
       .then((res) => {
-        toast.success(res?.message);
+        // toast.success(res?.message);
+        setReqWithdrawal(false);
         setState(draft => {
           draft.withdrawAmount = ""
           draft.paymentMethod = ""
+          draft.successMessage = res?.message
+          draft.successModal = true
         });
-        setReqWithdrawal(false);
         setLoading(false);
       })
       .catch((err) => {
-        toast.success(err?.message);
+        // toast.success(err?.message);
+        setReqWithdrawal(false);
+        setState(draft => {
+          draft.failedMessage = err?.message
+          draft.failedModal = true
+        })
         setLoading(false);
       });
   };
@@ -267,10 +281,13 @@ export default function InvestmentDetails() {
             placeholder={"Enter amount"}
             label={"Amount"}
             required={true}
+            onKeyPress={preventMinus}
             value={state.withdrawAmount}
             onChange={e => {
               setState(draft => {
-                draft.withdrawAmount = e.target.value
+                draft.withdrawAmount = Number(
+                  e.target.value.replace(/[^0-9.]/g, "")
+                ).toLocaleString()
               })
             }}
           />
@@ -670,6 +687,30 @@ export default function InvestmentDetails() {
         isOpen={reqWithdrawal}
         onClose={setReqWithdrawal}
         children={reqWithChildren}
+      />
+
+      <SuccessModal
+        isOpen={state.successModal}
+        description={state.successMessage}
+        title={"Withdrawal Request"}
+        btnLeft={"Investment products"}
+        btnLeftFunc={() => router.push("/investors")}
+        btnRight={"Done"}
+        btnRightFunc={() => setState(draft => {
+          draft.successModal = false
+        })}
+        onClose={() => setState(draft => {
+          draft.successModal = false
+        })}
+      />
+      <CancelModal
+        isOpen={state.failedModal}
+        description={state.failedMessage}
+        title={"Withdrawal Request"}
+        noButtons={true}
+        onClose={() => setState(draft => {
+          draft.failedModal = false
+        })}
       />
     </DashboardLayout>
   );
