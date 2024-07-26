@@ -127,7 +127,7 @@ const CreateInvestment = () => {
   const handleSubmit = () => {
     if (
       formData?.interestRateValue < prodRange?.min ||
-      formData?.interestRateValue > prodRange?.min
+      formData?.interestRateValue > prodRange?.max
     ) {
       setFailedModalMessage(
         `Interest rate cannot be less than ${prodRange?.min}% or more than ${prodRange?.max}%`
@@ -369,7 +369,7 @@ const CreateInvestment = () => {
           <p
             className={`${
               (formData?.interestRateValue < prodRange?.min ||
-                formData?.interestRateValue > prodRange?.min) &&
+                formData?.interestRateValue > prodRange?.max) &&
               "text-red-500"
             } text-xs`}
           >
