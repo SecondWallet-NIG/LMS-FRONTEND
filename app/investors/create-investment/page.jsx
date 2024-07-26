@@ -34,6 +34,9 @@ const CreateInvestment = () => {
   const [expectedROI, setExpectedROI] = useState(null);
   const [payloadData, setPayloadData] = useState({});
   const [proofOfPayment, setProofOfPayment] = useState([]);
+  const [investmentProducts, setInvestmentProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState({});
+  const [prodRange, setProdRange] = useState({ min: 0, max: 0 });
   const [formData, setFormData] = useState({
     investorProfile: "",
     investmentProduct: "",
@@ -45,11 +48,17 @@ const CreateInvestment = () => {
   });
   const { data } = useSelector((state) => state.investment);
 
-  const interestDurationOpt = [
-    { value: "daily", label: "Daily" },
-    { value: "monthly", label: "Monthly" },
-    { value: "annually", label: "Annually" },
-  ];
+  // const interestDurationOpt = [
+  //   { value: "daily", label: "Daily" },
+  //   { value: "monthly", label: "Monthly" },
+  //   { value: "annually", label: "Annually" },
+  // ];
+  const interestDurationOpt = selectedProduct?.interestRateRanges
+    ? Object.keys(selectedProduct.interestRateRanges).map((key) => ({
+        value: key,
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+      }))
+    : [];
 
   const durationOpt = [
     { value: "Month", label: "Month" },
@@ -98,6 +107,13 @@ const CreateInvestment = () => {
       ...formData,
       [name]: selectedOption.value,
     });
+
+    if (name === "investmentProduct") {
+      const selected = investmentProducts.find(
+        (e) => e._id === selectedOption.value
+      );
+      setSelectedProduct(selected);
+    }
   };
 
   const removeCommasFromNumber = (numberString) => {
@@ -109,6 +125,16 @@ const CreateInvestment = () => {
   };
 
   const handleSubmit = () => {
+    if (
+      formData?.interestRateValue < prodRange?.min ||
+      formData?.interestRateValue > prodRange?.max
+    ) {
+      setFailedModalMessage(
+        `Interest rate cannot be less than ${prodRange?.min}% or more than ${prodRange?.max}%`
+      );
+      setFailedModal(true);
+      return null;
+    }
     const x = JSON.stringify({
       metric: payloadData.interestRateMetric,
       value: Number(payloadData.interestRateValue),
@@ -119,8 +145,8 @@ const CreateInvestment = () => {
       value: Number(payloadData.durationValue),
     });
 
-    console.log(x);
-    console.log(y);
+    // console.log(x);
+    // console.log(y);
 
     const _formData = new FormData();
     _formData.append("investorProfile", payloadData.investorProfile);
@@ -134,21 +160,6 @@ const CreateInvestment = () => {
     _formData.append("paymentReceipt", proofOfPayment[0]);
 
     setLoading(true);
-    // const payload = {
-    //   investorProfile: payloadData.investorProfile,
-    //   investmentProduct: payloadData.investmentProduct,
-    //   duration: {
-    //     metric: payloadData.durationMetric,
-    //     value: Number(payloadData.durationValue),
-    //   },
-    //   initialInvestmentPrincipal: Number(
-    //     payloadData.initialInvestmentPrincipal
-    //   ),
-    //   interestRate: {
-    //     metric: payloadData.interestRateMetric,
-    //     value: Number(payloadData.interestRateValue),
-    //   },
-    // };
 
     dispatch(createInvestment(_formData))
       .unwrap()
@@ -157,7 +168,6 @@ const CreateInvestment = () => {
         setSuccessModal(true);
         resetFormField();
         setLoading(false);
-        console.log({ data });
       })
       .catch((err) => {
         setFailedModalMessage(err?.message || err?.error);
@@ -238,6 +248,7 @@ const CreateInvestment = () => {
           value: item?._id,
         }));
         setInvestmentPlans(data);
+        setInvestmentProducts(res?.data?.investmentProducts);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -261,7 +272,6 @@ const CreateInvestment = () => {
       dispatch(getROI(payload))
         .unwrap()
         .then((res) => {
-          console.log("roi", res);
           setExpectedROI(Number(res?.data?.expectedInterest).toLocaleString());
         })
         .catch((err) => {
@@ -275,6 +285,16 @@ const CreateInvestment = () => {
     payloadData?.durationValue,
     payloadData?.interestRateValue,
   ]);
+
+  useEffect(() => {
+    setProdRange({
+      min: selectedProduct?.interestRateRanges?.[formData?.interestRateMetric]
+        ?.min,
+      max: selectedProduct?.interestRateRanges?.[formData?.interestRateMetric]
+        ?.max,
+    });
+  }, [formData?.interestRateMetric, formData?.investmentProduct]);
+
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 mb-28">
@@ -316,35 +336,51 @@ const CreateInvestment = () => {
             onChange={(e) => handleSelectChange(e, "investmentProduct")}
           />
         </div>
-
-        <div className="flex justify-between gap-4 my-7">
-          <div className="w-1/2">
-            <SelectField
-              name={"interestRateMetric"}
-              label={"Interest rate metrics"}
-              required={true}
-              value={
-                interestDurationOpt.find(
-                  (item) => item.value === formData.interestRateMetric
-                ) || ""
-              }
-              optionValue={interestDurationOpt}
-              onChange={(e) => handleSelectChange(e, "interestRateMetric")}
-            />
+        <div>
+          <div className="flex justify-between gap-4 mt-7">
+            <div className="w-1/2">
+              <SelectField
+                name={"interestRateMetric"}
+                label={"Interest rate metrics"}
+                required={true}
+                value={
+                  interestDurationOpt.find(
+                    (item) => item.value === formData.interestRateMetric
+                  ) || ""
+                }
+                optionValue={interestDurationOpt}
+                onChange={(e) => handleSelectChange(e, "interestRateMetric")}
+              />
+            </div>
+            <div className="w-full mt-7">
+              <InputField
+                name={"interestRateValue"}
+                value={formData?.interestRateValue}
+                placeholder={"Enter number"}
+                required={true}
+                inputType="number"
+                onWheel={() => document.activeElement.blur()}
+                endIcon={"%"}
+                onKeyPress={preventMinus}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
-          <div className="w-full mt-7">
-            <InputField
-              name={"interestRateValue"}
-              value={formData?.interestRateValue}
-              placeholder={"Enter number"}
-              required={true}
-              inputType="number"
-              onWheel={() => document.activeElement.blur()}
-              endIcon={"%"}
-              onKeyPress={preventMinus}
-              onChange={handleInputChange}
-            />
-          </div>
+          <p
+            className={`${
+              (formData?.interestRateValue < prodRange?.min ||
+                formData?.interestRateValue > prodRange?.max) &&
+              "text-red-500"
+            } text-xs`}
+          >
+            {formData?.interestRateValue < prodRange?.min
+              ? `Interest rate cannot be less than ${prodRange?.min}%`
+              : formData?.interestRateValue > prodRange?.max
+              ? `Interest rate cannot be more than ${prodRange?.max}%`
+              : `min = ${prodRange?.min || 0}% and max = ${
+                  prodRange?.max || 0
+                }%`}
+          </p>
         </div>
 
         <div className="flex justify-between gap-4 my-7">
