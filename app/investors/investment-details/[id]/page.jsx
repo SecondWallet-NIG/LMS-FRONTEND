@@ -63,7 +63,7 @@ const customDataTransformer = (apiData) => {
 export default function InvestmentDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
   const [isModalOpen, setModal] = useState(false);
   const [reqWithdrawal, setReqWithdrawal] = useState(false);
   const [openTopUp, setOpenTopUp] = useState(false);
@@ -112,7 +112,9 @@ export default function InvestmentDetails() {
       createWithdrawalRequest({
         id,
         payload: {
-          withdrawalAmount: Number(removeCommasFromNumber(state.withdrawAmount)),
+          withdrawalAmount: Number(
+            removeCommasFromNumber(state.withdrawAmount)
+          ),
           paymentMethod: state.paymentMethod,
         },
       })
@@ -121,8 +123,8 @@ export default function InvestmentDetails() {
       .then((res) => {
         setReqWithdrawal(false);
         setSuccessModalData({
-          title: "Withdrawal Request successful",
-          description: res?.message,
+          title: "Withdrawal Request Successful",
+          description: "Withdrawal Request Placed Successfully",
           btnLeft: "View investments",
           btnRight: "Close",
           btnRightFunc: () => {
@@ -152,7 +154,6 @@ export default function InvestmentDetails() {
     dispatch(closeInvestment({ id, payload: formData }))
       .unwrap()
       .then((res) => {
-        
         setSuccessModalData({
           title: "Investment Closed Successfully",
           description: res?.message,
