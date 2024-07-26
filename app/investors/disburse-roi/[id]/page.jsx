@@ -200,7 +200,7 @@ export default function DisburseROI() {
                         </div>
                     )}
 
-                    {!disburseRoiBtn && (
+                    {disburseRoiBtn && (
                         <div className="flex justify-end gap-4">
                             <Button onClick={handleDisburseROI}
                                 disabled={loading ? true : false || data?.data?.status === "Paid"
