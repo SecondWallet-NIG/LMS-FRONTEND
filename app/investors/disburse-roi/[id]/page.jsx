@@ -100,10 +100,10 @@ export default function DisburseROI() {
   };
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Investors", "Disburse ROI"]}>
+    <DashboardLayout isBackNav={true} paths={["Investors", "Withdrawal"]}>
       <div className="px-6 lg:w-1/2 mx-auto mt-20 pb-10">
         <h1 className="font-semibold text-2xl leading-8 text-black mb-16">
-          Disburse ROI
+          Withdrawal
         </h1>
         <div className="gap-44 my-5">
           <h6 className="font-medium text-base leading-6 text-swBlack">
