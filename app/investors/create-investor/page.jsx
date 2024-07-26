@@ -95,7 +95,13 @@ const CreateInvestor = () => {
   }));
 
   const handleInputChange = async (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    const reqComma = ['annualIncome', 'networth']
+
+    if (reqComma.includes(name)) {
+      const numericValue = value.replace(/[^0-9.]/g, "");
+      value = Number(numericValue).toLocaleString();
+    }
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (name === "accountNumber" && value.length === 10) {
@@ -110,7 +116,7 @@ const CreateInvestor = () => {
             accountName: response.data.account_name,
           }));
           setBankNameVal(response.data.account_name);
-        } catch (error) {}
+        } catch (error) { }
       }
     }
   };
@@ -253,6 +259,14 @@ const CreateInvestor = () => {
     );
   };
 
+  const removeCommasFromNumber = (numberString) => {
+    if (typeof numberString !== "string") {
+      numberString = String(numberString);
+    }
+    return numberString.replace(/,/g, "");
+  };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -276,8 +290,8 @@ const CreateInvestor = () => {
     payload.append("bankAccount[accountNumber]", formData.accountNumber);
     payload.append("bankAccount[accountName]", formData.accountName);
     payload.append("bankAccount[bankName]", formData.bankName);
-    payload.append("annualIncome", formData.annualIncome);
-    payload.append("networth", formData.networth);
+    payload.append("annualIncome", removeCommasFromNumber(formData.annualIncome));
+    payload.append("networth", removeCommasFromNumber(formData.networth));
     payload.append("sourceOfIncome", formData.sourceOfIncome);
     payload.append("workStatus", formData.workStatus);
     payload.append("taxDoc", formData.taxDoc);
@@ -356,7 +370,7 @@ const CreateInvestor = () => {
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]}>
       <ToastContainer />
-      <div className="mx-auto w-3/5 mb-28">
+      <div className="mx-auto w-full px-10 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create investor profile
         </h1>
@@ -429,7 +443,7 @@ const CreateInvestor = () => {
             </div>
           </div>
 
-          <div className="flex justify-between gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="w-full">
               {/* <InputField
                 name={"dateOfBirth"}
@@ -467,7 +481,7 @@ const CreateInvestor = () => {
             </div>
           </div>
 
-          <div className="flex justify-between mt-5 mb-10 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 mt-5 mb-10 gap-6">
             <div className="w-full">
               <InputField
                 required={true}
@@ -515,7 +529,7 @@ const CreateInvestor = () => {
         {/* Contact information */}
         <div>
           <h6 className={`${headerClass}`}>Contact information</h6>
-          <div className="my-5 flex justify-between gap-6">
+          <div className="my-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="w-full">
               <SelectField
                 name="country"
@@ -730,7 +744,7 @@ const CreateInvestor = () => {
             exceed 4mb
           </p>
 
-          <div className="flex justify-between gap-6 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
             {renderFileInput(
               "Upload Tax Identification Number (TIN)",
               "taxDoc"
