@@ -99,64 +99,64 @@ export default function DisburseROI() {
             });
     };
 
-    return (
-        <DashboardLayout isBackNav={true} paths={["Investors", "Disburse ROI"]}>
-            <div className="px-6 lg:w-1/2 mx-auto mt-20 pb-10">
-                <h1 className="font-semibold text-2xl leading-8 text-black mb-16">
-                    Disburse ROI
-                </h1>
-                <div className="gap-44 my-5">
-                    <h6 className="font-medium text-base leading-6 text-swBlack">
-                        Bank details
-                    </h6>
-                    <div className="mt-5 max-w-xs flex flex-col gap-1">
-                        <div className={`${mtHeadClass}`}>
-                            <p className={`${mHeadClass} whitespace-nowrap`}>Name:</p>
-                            {/* <div className="border-b border-dashed w-full" /> */}
-                            <p className={`${mClass} whitespace-nowrap`}>
-                                {bankName ? bankName : bankDetails?.bankAccount?.bankName}
-                            </p>
-                        </div>
-                        <div className={`${mtHeadClass}`}>
-                            <p className={`${mHeadClass} whitespace-nowrap`}>Acc number:</p>
-                            {/* <div className="border-b border-dashed w-full" /> */}
-                            <p className={`${mClass} whitespace-nowrap`}>
-                                {bankDetails?.bankAccount?.accountNumber}
-                            </p>
-                        </div>
-                        <div className={`${mtHeadClass}`}>
-                            <p className={`${mHeadClass} whitespace-nowrap`}>Beneficiary:</p>
-                            {/* <div className="border-b border-dashed w-full" /> */}
-                            <p className={`${mClass} whitespace-nowrap`}>
-                                {bankDetails?.bankAccount?.accountName}
-                            </p>
-                        </div>
-                        <div className={`${mtHeadClass}`}>
-                            <p className={`${mHeadClass} whitespace-nowrap`}>BVN:</p>
-                            {/* <div className="border-b border-dashed w-full" /> */}
-                            <p className={`${mClass} whitespace-nowrap`}>
-                                {bankDetails?.bvn}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="lg:pr-20">
-                    <div className="mb-5">
-                        <InputField
-                            disabled={true}
-                            name={"amountDue"}
-                            label={"Amount Due"}
-                            placeholder={data?.data?.withdrawalAmount}
-                        />
-                    </div>
-                    <div className="mb-5">
-                        <InputField
-                            disabled={true}
-                            name={"paymentMethod"}
-                            label={"Payment Method"}
-                            placeholder={data?.data?.paymentMethod}
-                        />
-                    </div>
+  return (
+    <DashboardLayout isBackNav={true} paths={["Investors", "Withdrawal"]}>
+      <div className="px-6 lg:w-1/2 mx-auto mt-20 pb-10">
+        <h1 className="font-semibold text-2xl leading-8 text-black mb-16">
+          Withdrawal
+        </h1>
+        <div className="gap-44 my-5">
+          <h6 className="font-medium text-base leading-6 text-swBlack">
+            Bank details
+          </h6>
+          <div className="mt-5 max-w-xs flex flex-col gap-1">
+            <div className={`${mtHeadClass}`}>
+              <p className={`${mHeadClass} whitespace-nowrap`}>Name:</p>
+              {/* <div className="border-b border-dashed w-full" /> */}
+              <p className={`${mClass} whitespace-nowrap`}>
+                {bankName ? bankName : bankDetails?.bankAccount?.bankName}
+              </p>
+            </div>
+            <div className={`${mtHeadClass}`}>
+              <p className={`${mHeadClass} whitespace-nowrap`}>Acc number:</p>
+              {/* <div className="border-b border-dashed w-full" /> */}
+              <p className={`${mClass} whitespace-nowrap`}>
+                {bankDetails?.bankAccount?.accountNumber}
+              </p>
+            </div>
+            <div className={`${mtHeadClass}`}>
+              <p className={`${mHeadClass} whitespace-nowrap`}>Beneficiary:</p>
+              {/* <div className="border-b border-dashed w-full" /> */}
+              <p className={`${mClass} whitespace-nowrap`}>
+                {bankDetails?.bankAccount?.accountName}
+              </p>
+            </div>
+            <div className={`${mtHeadClass}`}>
+              <p className={`${mHeadClass} whitespace-nowrap`}>BVN:</p>
+              {/* <div className="border-b border-dashed w-full" /> */}
+              <p className={`${mClass} whitespace-nowrap`}>
+                {bankDetails?.bvn}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="lg:pr-20">
+          <div className="mb-5">
+            <InputField
+              disabled={true}
+              name={"amountDue"}
+              label={"Amount Due"}
+              placeholder={data?.data?.withdrawalAmount}
+            />
+          </div>
+          <div className="mb-5">
+            <InputField
+              disabled={true}
+              name={"paymentMethod"}
+              label={"Payment Method"}
+              placeholder={data?.data?.paymentMethod}
+            />
+          </div>
 
                     {/* Requesting receipt if it is transfer */}
                     {data?.data?.paymentMethod === "Bank Transfer" && (
