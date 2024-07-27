@@ -447,7 +447,6 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeDaily"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -465,7 +464,6 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeDaily"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -505,7 +503,7 @@ const EditInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountDaily}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -528,7 +526,6 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeMonthly"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -546,7 +543,6 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeMonthly"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     endIcon={"%"}
                     onWheel={() => document.activeElement.blur()}
@@ -586,7 +582,7 @@ const EditInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountMonthly}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -609,7 +605,6 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeYearly"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -627,7 +622,6 @@ const EditInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeYearly"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -667,7 +661,7 @@ const EditInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountYearly}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>

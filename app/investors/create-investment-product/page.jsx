@@ -58,21 +58,15 @@ const CreateInvestmentProduct = () => {
 
   const handleInputChange = async (e) => {
     const { name, value } = e.target;
-    if (name === "minimumInvestmentAmount") {
-      // Remove all non-numeric characters except for a dot
-      const numericValue = value.replace(/[^0-9.]/g, "");
+    const numericValue = value.replace(/[^0-9.]/g, "");   // Remove all non-numeric characters except for a dot
+    const formattedValue = Number(numericValue).toLocaleString();
 
-      // Format the value with commas
-      const formattedValue = Number(numericValue).toLocaleString();
-
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: formattedValue,
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: formattedValue,
+    }));
   };
+
 
   const preventMinus = (e) => {
     if (/[^0-9,.]/g.test(e.key)) {
@@ -83,56 +77,53 @@ const CreateInvestmentProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log({ formData });
 
     let payload = {
       name: formData.name,
       interestRateRanges: {
         ...(displayYearlyForm && {
           daily: {
-            min: Number(formData.minInterestRangeDaily),
-            max: Number(formData.maxInterestRangeDaily),
+            min: Number(removeCommasFromNumber(formData.minInterestRangeDaily)),
+            max: Number(removeCommasFromNumber(formData.maxInterestRangeDaily)),
           },
         }),
         ...(displayMonthlyForm && {
           monthly: {
-            min: Number(formData.minInterestRangeMonthly),
-            max: Number(formData.maxInterestRangeMonthly),
+            min: Number(removeCommasFromNumber(formData.minInterestRangeMonthly)),
+            max: Number(removeCommasFromNumber(formData.maxInterestRangeMonthly)),
           },
         }),
         ...(displayDailyForm && {
           annually: {
-            min: Number(formData.minInterestRangeYearly),
-            max: Number(formData.maxInterestRangeYearly),
+            min: Number(removeCommasFromNumber(formData.minInterestRangeYearly)),
+            max: Number(removeCommasFromNumber(formData.maxInterestRangeYearly)),
           },
         }),
       },
       investmentAmountRanges: {
         ...(displayDailyForm && {
           daily: {
-            min: Number(formData.minimumInvestmentAmountDaily),
-            max: Number(formData.maximumInvestmentAmountDaily),
+            min: Number(removeCommasFromNumber(formData.minimumInvestmentAmountDaily)),
+            max: Number(removeCommasFromNumber(formData.maximumInvestmentAmountDaily)),
           },
         }),
         ...(displayMonthlyForm && {
           monthly: {
-            min: Number(formData.minimumInvestmentAmountMonthly),
-            max: Number(formData.maximumInvestmentAmountMonthly),
+            min: Number(removeCommasFromNumber(formData.minimumInvestmentAmountMonthly)),
+            max: Number(removeCommasFromNumber(formData.maximumInvestmentAmountMonthly)),
           },
         }),
         ...(displayYearlyForm && {
           annually: {
-            min: Number(formData.minimumInvestmentAmountYearly),
-            max: Number(formData.maximumInvestmentAmountYearly),
+            min: Number(removeCommasFromNumber(formData.minimumInvestmentAmountYearly)),
+            max: Number(removeCommasFromNumber(formData.maximumInvestmentAmountYearly)),
           },
         }),
       },
     };
-
     dispatch(createInvestmentProduct(payload))
       .unwrap()
       .then((response) => {
-        // toast.success(response?.message);
         setSuccessModalData({
           title: "Investment Product Created Successfully",
           description: response?.message,
@@ -148,7 +139,6 @@ const CreateInvestmentProduct = () => {
     dispatch(createInvestmentProduct(payload))
       .unwrap()
       .then((response) => {
-        // toast.success(response?.message);
         setSuccessModalData({
           title: "Investor created Successfully",
           description: response?.message,
@@ -161,10 +151,8 @@ const CreateInvestmentProduct = () => {
         });
         setSuccessModal(true);
         resetForm();
-        // router.push("/investors");
       })
       .catch((error) => {
-        // toast.error(error?.message);
         setErrorModalData({
           description: error?.message,
         });
@@ -244,7 +232,7 @@ const CreateInvestmentProduct = () => {
               placeholder={"Enter product name"}
               required={true}
               value={formData.name}
-              onChange={handleInputChange}
+              onChange={e => setFormData((prev) => ({ ...prev, ["name"]: e.target.value }))}
             />
           </div>
           {displayDailyForm === true && (
@@ -256,7 +244,6 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeDaily"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -273,7 +260,6 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeDaily"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -312,7 +298,7 @@ const CreateInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountDaily}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -328,7 +314,6 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeMonthly"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -345,7 +330,6 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeMonthly"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -384,7 +368,7 @@ const CreateInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountMonthly}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -400,7 +384,6 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeYearly"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -417,7 +400,6 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeYearly"
-                    inputType="number"
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -456,7 +438,7 @@ const CreateInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountYearly}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>

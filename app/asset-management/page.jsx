@@ -14,6 +14,7 @@ import Link from "next/link";
 import CreateAssetModal from "../components/modals/CreateAssetModal";
 import Loader from "../components/shared/Loader";
 import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
+import { useRouter } from "next/navigation";
 
 const header = [
   { id: "asset", label: "Asset" },
@@ -67,6 +68,7 @@ const customDataTransformerAssetCategory = (apiData) => {
 };
 
 const AssetManagement = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [pageState, setPageState] = useState("asset");
@@ -123,10 +125,6 @@ const AssetManagement = () => {
 
   useEffect(() => {
     dispatch(getAllAssets());
-    dispatch(getAllAssetCategories())
-      .unwrap()
-      .then((res) => setAssetTypeOptions(res?.data))
-      .catch((err) => console.log({ err }));
     setLoading(false);
   }, []);
   useEffect(() => {
@@ -162,15 +160,15 @@ const AssetManagement = () => {
               {/* <div className="w-full bg-swBlue text-white rounded-3xl"> */}
               <BarChart options={options} data={chartData} />
               {/* </div> */}
-              <div className="flex items-center justify-end gap-5 mt-5">
+              {/* <div className="flex items-center justify-end gap-5 mt-5">
                 <Link
-                  href={"/create-new-asset"}
+                  href={"/"}
                   className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
                 >
-                  <IoMdAdd size={20} />
-                  <p>New asset</p>
+                  
+                  
                 </Link>
-              </div>
+              </div> */}
             </div>
 
             <ReusableDataTable
@@ -179,15 +177,15 @@ const AssetManagement = () => {
               headers={header}
               initialData={[]}
               apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/asset/all`}
-              // btnText={
-              //   <div className="flex gap-1 items-center p-1">
-              //     <AiOutlinePlus size={15} />
-              //     <p className="">create borrower</p>
-              //   </div>
-              // }
-              // btnTextClick={() => {
-              //   router.push("/create-borrower");
-              // }}
+              btnText={
+                <div className="flex gap-1 items-center p-1">
+                  <IoMdAdd size={20} />
+                  <p>New asset</p>
+                </div>
+              }
+              btnTextClick={() => {
+                router.push("/create-new-asset");
+              }}
               filters={true}
               pagination={true}
             />
