@@ -97,7 +97,7 @@ const EditInvestmentProduct = () => {
     e.preventDefault();
     setLoading(true);
 
-    let data = {
+    let payload = {
       name: formData?.name,
       interestRateRanges: {
         ...(formData?.minInterestRangeDaily > 0 &&
@@ -159,7 +159,7 @@ const EditInvestmentProduct = () => {
       },
     };
 
-    dispatch(updateProduct({ id, formData: data }))
+    dispatch(updateProduct({ id, payload }))
       .unwrap()
       .then((response) => {
         resetForm();
