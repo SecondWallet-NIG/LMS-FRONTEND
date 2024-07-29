@@ -23,22 +23,21 @@ const EditInvestmentProduct = () => {
   const [displayDailyForm, setDisplayDailyForm] = useState(false);
   const [displayMonthlyForm, setDisplayMonthlyForm] = useState(false);
   const [displayYearlyForm, setDisplayYearlyForm] = useState(false);
-  const [payload, setPayload] = useState({});
   const [successModal, setSuccessModal] = useState(false);
   const [failedModal, setFailedModal] = useState(false);
   const [failedModalMessage, setFailedModalMessage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    minInterestRangeDaily: "",
-    maxInterestRangeDaily: "",
+    minInterestRangeDaily: 0,
+    maxInterestRangeDaily: 0,
     minimumInvestmentAmountDaily: "",
     maximumInvestmentAmountDaily: "",
-    minInterestRangeMonthly: "",
-    maxInterestRangeMonthly: "",
+    minInterestRangeMonthly: 0,
+    maxInterestRangeMonthly: 0,
     minimumInvestmentAmountMonthly: "",
     maximumInvestmentAmountMonthly: "",
-    minInterestRangeYearly: "",
-    maxInterestRangeYearly: "",
+    minInterestRangeYearly: 0,
+    maxInterestRangeYearly: 0,
     minimumInvestmentAmountYearly: "",
     maximumInvestmentAmountYearly: "",
   });
@@ -47,25 +46,32 @@ const EditInvestmentProduct = () => {
   const resetForm = () => {
     setFormData({
       name: "",
-      minInterestRangeDaily: "",
-      maxInterestRangeDaily: "",
+      minInterestRangeDaily: 0,
+      maxInterestRangeDaily: 0,
       minimumInvestmentAmountDaily: "",
       maximumInvestmentAmountDaily: "",
-      minInterestRangeMonthly: "",
-      maxInterestRangeMonthly: "",
+      minInterestRangeMonthly: 0,
+      maxInterestRangeMonthly: 0,
       minimumInvestmentAmountMonthly: "",
       maximumInvestmentAmountMonthly: "",
-      minInterestRangeYearly: "",
-      maxInterestRangeYearly: "",
+      minInterestRangeYearly: 0,
+      maxInterestRangeYearly: 0,
       minimumInvestmentAmountYearly: "",
       maximumInvestmentAmountYearly: "",
     });
-    setPayload({});
   };
 
   const handleInputChange = async (e) => {
     const { name, value } = e.target;
-    if (name !== "name") {
+    if (
+      name !== "name" &&
+      name !== "minInterestRangeDaily" &&
+      name !== "maxInterestRangeDaily" &&
+      name !== "minInterestRangeMonthly" &&
+      name !== "maxInterestRangeMonthly" &&
+      name !== "minInterestRangeYearly" &&
+      name !== "maxInterestRangeYearly"
+    ) {
       // Remove all non-numeric characters except for a dot
       const numericValue = value.replace(/[^0-9.]/g, "");
 
@@ -76,16 +82,8 @@ const EditInvestmentProduct = () => {
         ...prevFormData,
         [name]: formattedValue,
       }));
-      setPayload((prev) => ({
-        ...prev,
-        [name]: removeCommasFromNumber(value),
-      }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
-      setPayload((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
     }
   };
 
@@ -100,72 +98,79 @@ const EditInvestmentProduct = () => {
     setLoading(true);
 
     let data = {
-      name: payload?.name,
+      name: formData?.name,
       interestRateRanges: {
-        ...(payload?.minInterestRangeDaily?.length > 0 &&
-          payload?.minimumInvestmentAmountDaily?.length > 0 && {
+        ...(formData?.minInterestRangeDaily > 0 &&
+          formData?.minimumInvestmentAmountDaily?.length > 0 && {
             daily: {
-              min: payload?.minInterestRangeDaily,
-              max: payload?.maxInterestRangeDaily,
+              min: Number(formData?.minInterestRangeDaily),
+              max: Number(formData?.maxInterestRangeDaily),
             },
           }),
-        ...(payload?.minInterestRangeMonthly?.length > 0 &&
-          payload?.minimumInvestmentAmountMonthly?.length > 0 && {
+        ...(formData?.minInterestRangeMonthly > 0 &&
+          formData?.minimumInvestmentAmountMonthly?.length > 0 && {
             monthly: {
-              min: payload?.minInterestRangeMonthly,
-              max: payload?.maxInterestRangeMonthly,
+              min: Number(formData?.minInterestRangeMonthly),
+              max: Number(formData?.maxInterestRangeMonthly),
             },
           }),
-        ...(payload?.minInterestRangeYearly?.length > 0 &&
-          payload?.minimumInvestmentAmountYearly?.length > 0 && {
+        ...(formData?.minInterestRangeYearly > 0 &&
+          formData?.minimumInvestmentAmountYearly?.length > 0 && {
             annually: {
-              min: payload?.minInterestRangeYearly,
-              max: payload?.maxInterestRangeYearly,
+              min: Number(formData?.minInterestRangeYearly),
+              max: Number(formData?.maxInterestRangeYearly),
             },
           }),
       },
       investmentAmountRanges: {
-        ...(payload?.minimumInvestmentAmountDaily?.length > 0 &&
-          payload?.minInterestRangeDaily?.length > 0 && {
+        ...(formData?.minimumInvestmentAmountDaily?.length > 0 &&
+          formData?.minInterestRangeDaily > 0 && {
             daily: {
-              min: payload?.minimumInvestmentAmountDaily,
-              max: payload?.maximumInvestmentAmountDaily,
+              min: Number(
+                removeCommasFromNumber(formData?.minimumInvestmentAmountDaily)
+              ),
+              max: Number(
+                removeCommasFromNumber(formData?.maximumInvestmentAmountDaily)
+              ),
             },
           }),
-        ...(payload?.minimumInvestmentAmountMonthly?.length > 0 &&
-          payload?.minInterestRangeMonthly?.length > 0 && {
+        ...(formData?.minimumInvestmentAmountMonthly?.length > 0 &&
+          formData?.minInterestRangeMonthly > 0 && {
             monthly: {
-              min: payload?.minimumInvestmentAmountMonthly,
-              max: payload?.maximumInvestmentAmountMonthly,
+              min: Number(
+                removeCommasFromNumber(formData?.minimumInvestmentAmountMonthly)
+              ),
+              max: Number(
+                removeCommasFromNumber(formData?.maximumInvestmentAmountMonthly)
+              ),
             },
           }),
-        ...(payload?.minimumInvestmentAmountYearly?.length > 0 &&
-          payload?.minInterestRangeYearly?.length > 0 && {
+        ...(formData?.minimumInvestmentAmountYearly?.length > 0 &&
+          formData?.minInterestRangeYearly > 0 && {
             annually: {
-              min: payload?.minimumInvestmentAmountYearly,
-              max: payload?.maximumInvestmentAmountYearly,
+              min: Number(
+                removeCommasFromNumber(formData?.minimumInvestmentAmountYearly)
+              ),
+              max: Number(
+                removeCommasFromNumber(formData?.maximumInvestmentAmountYearly)
+              ),
             },
           }),
       },
     };
 
-    // setPayload(payload);
-
-    dispatch(updateProduct({ id, payload: data }))
+    dispatch(updateProduct({ id, formData: data }))
       .unwrap()
       .then((response) => {
         resetForm();
         setSuccessModal(true);
         dispatch(getSingleInvestmentProduct(id));
-        // setNewUserId(response?.data?._id);
       })
       .catch((error) => {
         setFailedModal(true);
         setFailedModalMessage(error?.message);
         setLoading(false);
       });
-
-    // setLoading(false);
   };
 
   const handleFormDisplay = (e, metric, btn) => {
@@ -186,27 +191,12 @@ const EditInvestmentProduct = () => {
           minimumInvestmentAmountDaily: "",
           maximumInvestmentAmountDaily: "",
         }));
-        setPayload((prev) => ({
-          ...prev,
-          minInterestRangeDaily: "",
-          maxInterestRangeDaily: "",
-          minimumInvestmentAmountDaily: "",
-          maximumInvestmentAmountDaily: "",
-        }));
       }
-      // alert(e.target.checked);
     } else if (metric === "monthly") {
       setDisplayMonthlyForm(isChecked);
       if (!isChecked) {
         e.target.checked = false;
         setFormData((prev) => ({
-          ...prev,
-          minInterestRangeMonthly: "",
-          maxInterestRangeMonthly: "",
-          minimumInvestmentAmountMonthly: "",
-          maximumInvestmentAmountMonthly: "",
-        }));
-        setPayload((prev) => ({
           ...prev,
           minInterestRangeMonthly: "",
           maxInterestRangeMonthly: "",
@@ -219,13 +209,6 @@ const EditInvestmentProduct = () => {
       if (!isChecked) {
         e.target.checked = false;
         setFormData((prev) => ({
-          ...prev,
-          minInterestRangeYearly: "",
-          maxInterestRangeYearly: "",
-          minimumInvestmentAmountYearly: "",
-          maximumInvestmentAmountYearly: "",
-        }));
-        setPayload((prev) => ({
           ...prev,
           minInterestRangeYearly: "",
           maxInterestRangeYearly: "",
@@ -299,70 +282,6 @@ const EditInvestmentProduct = () => {
         ...(data?.data?.investmentAmountRanges?.annually?.max && {
           maximumInvestmentAmountYearly:
             data?.data?.investmentAmountRanges?.annually?.max?.toLocaleString(),
-        }),
-      }));
-      setPayload((prev) => ({
-        ...prev,
-        name: data?.data?.name,
-        ...(data?.data?.interestRateRanges?.daily?.min && {
-          minInterestRangeDaily: String(
-            data?.data?.interestRateRanges?.daily?.min
-          ),
-        }),
-        ...(data?.data?.interestRateRanges?.daily?.max && {
-          maxInterestRangeDaily: String(
-            data?.data?.interestRateRanges?.daily?.max
-          ),
-        }),
-        ...(data?.data?.interestRateRanges?.monthly?.min && {
-          minInterestRangeMonthly: String(
-            data?.data?.interestRateRanges?.monthly?.min
-          ),
-        }),
-        ...(data?.data?.interestRateRanges?.monthly?.max && {
-          maxInterestRangeMonthly: String(
-            data?.data?.interestRateRanges?.monthly?.max
-          ),
-        }),
-        ...(data?.data?.interestRateRanges?.annually?.min && {
-          minInterestRangeYearly: String(
-            data?.data?.interestRateRanges?.annually?.min
-          ),
-        }),
-        ...(data?.data?.interestRateRanges?.annually?.max && {
-          maxInterestRangeYearly: String(
-            data?.data?.interestRateRanges?.annually?.max
-          ),
-        }),
-        ...(data?.data?.investmentAmountRanges?.daily?.min && {
-          minimumInvestmentAmountDaily: String(
-            data?.data?.investmentAmountRanges?.daily?.min
-          ),
-        }),
-        ...(data?.data?.investmentAmountRanges?.daily?.max && {
-          maximumInvestmentAmountDaily: String(
-            data?.data?.investmentAmountRanges?.daily?.max
-          ),
-        }),
-        ...(data?.data?.investmentAmountRanges?.monthly?.min && {
-          minimumInvestmentAmountMonthly: String(
-            data?.data?.investmentAmountRanges?.monthly?.min
-          ),
-        }),
-        ...(data?.data?.investmentAmountRanges?.monthly?.max && {
-          maximumInvestmentAmountMonthly: String(
-            data?.data?.investmentAmountRanges?.monthly?.max
-          ),
-        }),
-        ...(data?.data?.investmentAmountRanges?.annually?.min && {
-          minimumInvestmentAmountYearly: String(
-            data?.data?.investmentAmountRanges?.annually?.min
-          ),
-        }),
-        ...(data?.data?.investmentAmountRanges?.annually?.max && {
-          maximumInvestmentAmountYearly: String(
-            data?.data?.investmentAmountRanges?.annually?.max
-          ),
         }),
       }));
     }
@@ -448,6 +367,7 @@ const EditInvestmentProduct = () => {
                     required={true}
                     name="minInterestRangeDaily"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     label={"Interest rate range"}
@@ -465,6 +385,7 @@ const EditInvestmentProduct = () => {
                     required={true}
                     name="maxInterestRangeDaily"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     endIcon={"%"}
@@ -527,6 +448,7 @@ const EditInvestmentProduct = () => {
                     required={true}
                     name="minInterestRangeMonthly"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     label={"Interest rate range"}
@@ -544,6 +466,7 @@ const EditInvestmentProduct = () => {
                     required={true}
                     name="maxInterestRangeMonthly"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     endIcon={"%"}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
@@ -606,6 +529,7 @@ const EditInvestmentProduct = () => {
                     required={true}
                     name="minInterestRangeYearly"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     label={"Interest rate range"}
@@ -623,6 +547,7 @@ const EditInvestmentProduct = () => {
                     required={true}
                     name="maxInterestRangeYearly"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     value={formData.maxInterestRangeYearly}

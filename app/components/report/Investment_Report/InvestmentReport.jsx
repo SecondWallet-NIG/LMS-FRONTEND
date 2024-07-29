@@ -40,13 +40,14 @@ export default function InvestmentReport() {
   // console.log("card", data);
   useEffect(() => {
     if (getInvestmentReportCardsData?.data) {
+      console.log(getInvestmentReportCardsData?.data);
       // const totalInvestors =
       //   Object?.keys(data?.data?.investmentsByCategory).length || [];
       setState((draft) => ({
         ...draft,
         ["totalInvestments"]:
           getInvestmentReportCardsData?.data?.totalInvestmentAmount,
-        ["totalInvestors"]: investors,
+        ["totalInvestors"]: getInvestmentReportCardsData?.data?.totalInvestors,
         ["totalNumber"]: getInvestmentReportCardsData?.data?.totalInvestments,
         ["totalPayout"]: getInvestmentReportCardsData?.data?.totalROI,
       }));
@@ -55,12 +56,12 @@ export default function InvestmentReport() {
 
   useEffect(() => {
     dispatch(getInvestmentReportCards({ startDate: "", endDate: "" }));
-    dispatch(getAllInvestors())
-      .unwrap()
-      .then((res) => {
-        setInvestors(res?.data?.investorProfiles?.length);
-      })
-      .catch((err) => console.log(err));
+    // dispatch(getAllInvestors())
+    //   .unwrap()
+    //   .then((res) => {
+    //     setInvestors(res?.data?.investorProfiles?.length);
+    //   })
+    //   .catch((err) => console.log(err));
   }, []);
 
   console.log("investment cards", getInvestmentReportCardsData);
