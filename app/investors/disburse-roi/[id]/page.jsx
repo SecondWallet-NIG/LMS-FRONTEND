@@ -17,7 +17,6 @@ import CancelModal from "@/app/components/modals/CancelModal";
 import { useRouter } from "next/navigation";
 
 export default function DisburseROI() {
-    //   const mtHeadClass = "flex justify-between gap-32 mb-1";
     const mtHeadClass = "flex gap-1";
     const mHeadClass = "text-swTextColor leading-5 text-sm";
     const mClass = "text-swBlack leading-5 text-sm font-medium";
@@ -26,6 +25,7 @@ export default function DisburseROI() {
     const dispatch = useDispatch();
     const { data } = useSelector((state) => state.investment);
     const bankDetails = data?.data?.investment?.investorProfile;
+    const withdrawaAmount = data?.data?.withdrawalAmount || 0
     const [fileError, setFileError] = useState("");
     const [loading, setLoading] = useState(false);
     const [disburseRoiBtn, setDisburseRoiBtn] = useState(false);
@@ -99,67 +99,67 @@ export default function DisburseROI() {
             });
     };
 
-  return (
-    <DashboardLayout isBackNav={true} paths={["Investors", "Withdrawal"]}>
-      <div className="px-6 lg:w-1/2 mx-auto mt-20 pb-10">
-        <h1 className="font-semibold text-2xl leading-8 text-black mb-16">
-          Withdrawal
-        </h1>
-        <div className="gap-44 my-5">
-          <h6 className="font-medium text-base leading-6 text-swBlack">
-            Bank details
-          </h6>
-          <div className="mt-5 max-w-xs flex flex-col gap-1">
-            <div className={`${mtHeadClass}`}>
-              <p className={`${mHeadClass} whitespace-nowrap`}>Name:</p>
-              {/* <div className="border-b border-dashed w-full" /> */}
-              <p className={`${mClass} whitespace-nowrap`}>
-                {bankName ? bankName : bankDetails?.bankAccount?.bankName}
-              </p>
-            </div>
-            <div className={`${mtHeadClass}`}>
-              <p className={`${mHeadClass} whitespace-nowrap`}>Acc number:</p>
-              {/* <div className="border-b border-dashed w-full" /> */}
-              <p className={`${mClass} whitespace-nowrap`}>
-                {bankDetails?.bankAccount?.accountNumber}
-              </p>
-            </div>
-            <div className={`${mtHeadClass}`}>
-              <p className={`${mHeadClass} whitespace-nowrap`}>Beneficiary:</p>
-              {/* <div className="border-b border-dashed w-full" /> */}
-              <p className={`${mClass} whitespace-nowrap`}>
-                {bankDetails?.bankAccount?.accountName}
-              </p>
-            </div>
-            <div className={`${mtHeadClass}`}>
-              <p className={`${mHeadClass} whitespace-nowrap`}>BVN:</p>
-              {/* <div className="border-b border-dashed w-full" /> */}
-              <p className={`${mClass} whitespace-nowrap`}>
-                {bankDetails?.bvn}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="lg:pr-20">
-          <div className="mb-5">
-            <InputField
-              disabled={true}
-              name={"amountDue"}
-              label={"Amount Due"}
-              placeholder={data?.data?.withdrawalAmount}
-            />
-          </div>
-          <div className="mb-5">
-            <InputField
-              disabled={true}
-              name={"paymentMethod"}
-              label={"Payment Method"}
-              placeholder={data?.data?.paymentMethod}
-            />
-          </div>
+    return (
+        <DashboardLayout isBackNav={true} paths={["Investors", "Withdrawal"]}>
+            <div className="px-6 lg:w-1/2 mx-auto mt-20 pb-10">
+                <h1 className="font-semibold text-2xl leading-8 text-black mb-16">
+                    Withdrawal
+                </h1>
+                <div className="gap-44 my-5">
+                    <h6 className="font-medium text-base leading-6 text-swBlack">
+                        Bank details
+                    </h6>
+                    <div className="mt-5 max-w-xs flex flex-col gap-1">
+                        <div className={`${mtHeadClass}`}>
+                            <p className={`${mHeadClass} whitespace-nowrap`}>Name:</p>
+                            {/* <div className="border-b border-dashed w-full" /> */}
+                            <p className={`${mClass} whitespace-nowrap`}>
+                                {bankName ? bankName : bankDetails?.bankAccount?.bankName}
+                            </p>
+                        </div>
+                        <div className={`${mtHeadClass}`}>
+                            <p className={`${mHeadClass} whitespace-nowrap`}>Acc number:</p>
+                            {/* <div className="border-b border-dashed w-full" /> */}
+                            <p className={`${mClass} whitespace-nowrap`}>
+                                {bankDetails?.bankAccount?.accountNumber}
+                            </p>
+                        </div>
+                        <div className={`${mtHeadClass}`}>
+                            <p className={`${mHeadClass} whitespace-nowrap`}>Beneficiary:</p>
+                            {/* <div className="border-b border-dashed w-full" /> */}
+                            <p className={`${mClass} whitespace-nowrap`}>
+                                {bankDetails?.bankAccount?.accountName}
+                            </p>
+                        </div>
+                        <div className={`${mtHeadClass}`}>
+                            <p className={`${mHeadClass} whitespace-nowrap`}>BVN:</p>
+                            {/* <div className="border-b border-dashed w-full" /> */}
+                            <p className={`${mClass} whitespace-nowrap`}>
+                                {bankDetails?.bvn}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div className="lg:pr-20">
+                    <div className="mb-5">
+                        <InputField
+                            disabled={true}
+                            name={"amountDue"}
+                            label={"Amount Due"}
+                            placeholder={withdrawaAmount.toLocaleString()}
+                        />
+                    </div>
+                    <div className="mb-5">
+                        <InputField
+                            disabled={true}
+                            name={"paymentMethod"}
+                            label={"Payment Method"}
+                            placeholder={data?.data?.paymentMethod}
+                        />
+                    </div>
 
                     {/* Requesting receipt if it is transfer */}
-                    {data?.data?.paymentMethod === "Bank Transfer" && (
+                    {data?.data?.paymentMethod === "Bank Transfer" && data?.data?.status !== "Paid" && (
                         <div className="pt-4">
                             <p className="font-medium pt-2 text-sm">Upload Payment Receipt</p>
                             <p className="text-xs pt-2">

@@ -68,6 +68,28 @@ export const getAllInvestmentProducts = createAsyncThunk(
   }
 );
 
+export const getInvestmentProductsCards = createAsyncThunk(
+  "investment/product/cards-data",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(
+        `${API_URL}/investment/product/cards-data`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const deleteSingleInvestmentProduct = createAsyncThunk(
   "investment/product/investmentProductId/delete",
   async (id) => {
@@ -288,16 +310,41 @@ export const getSingleInvestor = createAsyncThunk(
   }
 );
 
+export const getInvestorCards = createAsyncThunk(
+  "investment/investor/cards-data",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(
+        `${API_URL}/investment/investor/cards-data`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getPortfolioHealth = createAsyncThunk(
   "investment/investor/investorProfileId/portfolio-health",
   async (id) => {
     try {
       let token = getToken();
-      const response = await axios.get(`${API_URL}/investment/investor/${id}/portfolio-health`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${API_URL}/investment/investor/${id}/portfolio-health`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       if (error.response.data.error) {
@@ -388,7 +435,6 @@ export const getROI = createAsyncThunk(
     }
   }
 );
-
 
 export const disburseROI = createAsyncThunk(
   "investment/withdrawal-request/withdrawalRequestId/approve",
@@ -609,6 +655,30 @@ const investmentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getAllInvestments.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getInvestmentProductsCards.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getInvestmentProductsCards.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.investmentProductCards = action.payload;
+      })
+      .addCase(getInvestmentProductsCards.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getInvestorCards.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getInvestorCards.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.investorCards = action.payload;
+      })
+      .addCase(getInvestorCards.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       })

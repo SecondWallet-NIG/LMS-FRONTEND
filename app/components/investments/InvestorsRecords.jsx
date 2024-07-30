@@ -5,7 +5,11 @@ import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllInvestments, getAllInvestors } from "@/redux/slices/investmentSlice";
+import {
+  getAllInvestments,
+  getAllInvestors,
+  getInvestorCards,
+} from "@/redux/slices/investmentSlice";
 
 const header = [
   { id: "investorName", label: "Investor name" },
@@ -82,37 +86,30 @@ const customDataTransformer = (apiData) => {
 export default function InvestorsRecords() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.investment);
+  const { investorCards } = useSelector((state) => state.investment);
   const [investorsData, setInvestorsData] = useState({
     total: 0,
     active: 0,
     returns: 0,
   });
   const cards = [
-    { title: "Total Number of Investors", value: investorsData.total || 0 },
-    { title: "Active investors", value: investorsData.active || 0 },
-    { title: "Returns earned", value: investorsData.returns || 0 },
+    {
+      title: "Total Number of Investors",
+      value: investorCards?.data?.totalInvestors || 0,
+    },
+    {
+      title: "Active investors",
+      value: investorCards?.data?.totalActiveInvestors || 0,
+    },
+    {
+      title: "Returns earned",
+      value: investorCards?.data?.totalAmountEarned || 0,
+    },
   ];
 
   useEffect(() => {
-    dispatch(getAllInvestors());
+    dispatch(getInvestorCards());
   }, []);
-
-  useEffect(() => {
-    setInvestorsData({
-      ...investorsData,
-      total: data?.data?.investorProfiles?.length,
-      active: data?.data?.investorProfiles?.filter(
-        (item) => item.status === "Active"
-      ).length,
-      returns: data?.data?.investorProfiles?.reduce(
-        (acc, item) => acc + item?.returnsEarned,
-        0
-      ),
-    });
-  }, [data?.data?.investorProfiles]);
-
-  
 
   return (
     <div className="flex flex-col gap-5">

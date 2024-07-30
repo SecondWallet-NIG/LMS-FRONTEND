@@ -90,7 +90,7 @@ export default function WithdrawalSchedule() {
                 <div>
                     <p className="text-[12px] md:text-[15px] mb-1">
                         {" "}
-                        {item?.withdrawalAmount}
+                        {item?.withdrawalAmount.toLocaleString()}
                     </p>
                     <p className={`${tableDataClass}`}>
                         {item?.investment?.interestRate?.value}% (
