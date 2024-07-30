@@ -1,8 +1,11 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { getInvestmentProductsCards } from "@/redux/slices/investmentSlice";
+import InvestmentsCards from "../cards/InvestmentsCard/InvestmentsCards";
 
 const header = [
   { id: "productName", label: "Product Name" },
@@ -37,8 +40,32 @@ const customDataTransformer = (apiData) => {
 
 export default function InvestmentProducts() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { investmentProductCards } = useSelector((state) => state.investment);
+
+  const cards = [
+    {
+      title: "Total Investment Products",
+      value: investmentProductCards?.data?.numberOfInvestmentProducts || 0,
+    },
+    {
+      title: "Total Amount Investment ",
+      value: investmentProductCards?.data?.totalAmountInvested || 0,
+    },
+    {
+      title: "Total Accrued Interest",
+      value: investmentProductCards?.data?.totalAccruedInterest || 0,
+    },
+  ];
+
+  console.log(investmentProductCards);
+
+  useEffect(() => {
+    dispatch(getInvestmentProductsCards());
+  }, []);
   return (
-    <div>
+    <div className="flex flex-col gap-5">
+      <InvestmentsCards cards={cards} />
       <ReusableDataTable
         dataTransformer={customDataTransformer}
         onClickRow="/investors/view-investment-product/"

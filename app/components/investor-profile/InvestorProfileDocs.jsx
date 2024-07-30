@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import CenterModal from "../modals/CenterModal";
-import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
-import PreviewLoanDocs from "../customers/PreviewLoanDocs";
 import { handleFileExtention } from "../helpers/utils";
 import dynamic from "next/dynamic";
 import { IoMdClose } from "react-icons/io";
 import UploadInvestorProfileDocs from "./UploadInvestorProfileDocs";
-import Button from "../shared/buttonComponent/Button";
+import SuccessModal from "../modals/SuccessModal";
+import CancelModal from "../modals/CancelModal";
+import { useImmer } from "use-immer";
 
 const Viewer = dynamic(() => import("react-viewer"), { ssr: false });
 
@@ -23,11 +23,18 @@ const InvestorProfileDocs = ({
   const [openFileModal, setOpenFileModal] = useState(false);
   const docButton = `py-1 px-2 text-swTextColor mt-2 mb-4 rounded-md outline outline-1 
   outline-gray-100 flex gap-2 border w-fit cursor-pointer text-sm`
+  const [state, setState] = useImmer({
+    successModal: false,
+    successMessage: "",
+    failedModal: false,
+    failedMessage: ""
+  })
 
   const handleSetUrl = (content) => {
     setUrl(content);
     setIsOpen(true);
   };
+  
   return (
     <main className="py-5">
 
@@ -36,7 +43,7 @@ const InvestorProfileDocs = ({
         <div className={`${labelClass}`}>
           Tax Identification Number (TIN)
         </div>
-    
+
         <div>
           {data?.data?.taxDoc != null ? (
             <div>
@@ -233,7 +240,6 @@ const InvestorProfileDocs = ({
 
 
       <CenterModal
-        width={"35%"}
         isOpen={uploadModalOpen}
         onClose={() => {
           setUploadModalOpen(!uploadModalOpen);
@@ -244,10 +250,30 @@ const InvestorProfileDocs = ({
           onClose={() => {
             setUploadModalOpen(!uploadModalOpen);
           }}
+          setState={setState}
           fieldType={fieldType}
           customerId={data?.data?.identityVerification?._id}
         />
       </CenterModal>
+
+      <SuccessModal
+        isOpen={state.successModal}
+        description={state.successMessage}
+        title={"Upload Successful"}
+        noButtons={true}
+        onClose={() => setState(draft => {
+          draft.successModal = false
+        })}
+      />
+      <CancelModal
+        isOpen={state.failedModal}
+        description={state.failedMessage}
+        title={"Upload Failed"}
+        noButtons={true}
+        onClose={() => setState(draft => {
+          draft.failedModal = false
+        })}
+      />
     </main>
   );
 };
