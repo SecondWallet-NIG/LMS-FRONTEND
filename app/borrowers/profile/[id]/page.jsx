@@ -25,6 +25,7 @@ import dynamic from "next/dynamic";
 import { bankArr } from "@/constant";
 import { formatDate } from "@/helpers";
 import BorrowerOptions from "@/app/components/customers/BorrowerOptions";
+import BorrowerSummary from "@/app/components/customers/BorrowerSummary";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -52,7 +53,6 @@ const CustomerProfile = () => {
   const [borrowerOptions, setBorrowerOptions] = useState(false);
   const [openProfilePic, setOpenProfilePic] = useState(false);
   const buttonRef = useRef(null);
-
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -679,7 +679,7 @@ const CustomerProfile = () => {
               </div>
             </div>
             <div className="p-2">
-              {activityButton === "summary" && <CustomerSummary />}
+              {activityButton === "summary" && <BorrowerSummary />}
               {activityButton === "loans" && (
                 <CustomerLoanTable id={data?.profileInfo?._id} />
               )}
