@@ -1,19 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "@/constant";
-
-let user;
-if (typeof window !== "undefined") {
-  user = JSON.parse(localStorage.getItem("user"));
-}
+import { getToken } from "@/helpers"
 
 export const createExpense = createAsyncThunk(
   "expense/create",
   async (payload) => {
+
     try {
+      let token = getToken()
       const response = await axios.post(`${API_URL}/expense/create`, payload, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -29,12 +27,13 @@ export const createBulkExpenses = createAsyncThunk(
   "expense/bulk/create",
   async (payload) => {
     try {
+      let token = getToken();
       const response = await axios.post(
         `${API_URL}/expense/bulkUpload`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -48,21 +47,27 @@ export const createBulkExpenses = createAsyncThunk(
 );
 
 export const getAllExpenses = createAsyncThunk("expense", async () => {
-  const response = await axios.get(`${API_URL}/expense`, {
-    headers: {
-      Authorization: `Bearer ${user?.data?.token}`,
-    },
-  });
-  return response.data;
+  try {
+    let token = getToken();
+    const response = await axios.get(`${API_URL}/expense`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+
+  } return error
 });
 
 export const getSingleExpense = createAsyncThunk(
   "/expense/assetId",
   async (id) => {
     try {
+      let token = getToken();
       const response = await axios.get(`${API_URL}/expense/${id}`, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -77,14 +82,14 @@ export const getSingleExpense = createAsyncThunk(
 export const updateSingleExpense = createAsyncThunk(
   "expense/expenseId",
   async ({ id, payload }) => {
-    console.log("payloaad", payload);
     try {
+      let token = getToken();
       const response = await axios.put(
         `${API_URL}/expense/update/${id}`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -101,9 +106,10 @@ export const deleteSingleExpense = createAsyncThunk(
   "/expense/delete/assetId",
   async (id) => {
     try {
+      let token = getToken();
       const response = await axios.delete(`${API_URL}/expense/delete/${id}`, {
         headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -119,12 +125,13 @@ export const createExpenseCategory = createAsyncThunk(
   "/expense-category/create",
   async (payload) => {
     try {
+      let token = getToken();
       const response = await axios.post(
         `${API_URL}/expense-category/create`,
         payload,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -140,12 +147,38 @@ export const createExpenseCategory = createAsyncThunk(
 export const getAllExpenseCategories = createAsyncThunk(
   "expense/category",
   async () => {
+   try {
+    let token = getToken();
     const response = await axios.get(`${API_URL}/expense-category`, {
       headers: {
-        Authorization: `Bearer ${user?.data?.token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
+   } catch (error) {
+    return error
+   }
+  }
+);
+
+export const getExpenseReportCards = createAsyncThunk(
+  "/expense/report",
+  async ({ startDate, endDate }) => {
+  try {
+    let token = getToken();
+    const response = await axios.get(`${API_URL}/expense/report`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        startDate,
+        endDate,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return error;
+  }
   }
 );
 
@@ -188,6 +221,19 @@ const expenseManagementSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(createExpense.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getExpenseReportCards.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getExpenseReportCards.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getExpenseReportCards.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

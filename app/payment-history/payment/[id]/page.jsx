@@ -42,14 +42,7 @@ const PaymentPage = () => {
   const [disableApprovalBtn, setDisableApprovalBtn] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-  // console.log({ repaymentData: data });
-  console.log({ repaymentData });
 
-  // console.log(
-  //   handleFileExtention(
-  //     "https://res.cloudinary.com/drzkozm7j/image/upload/v1705177607/staging/jm2ykhblngemsjt7txdk.pdf"
-  //   )
-  // );
 
   const approvePayment = async (loanId, repaymentId) => {
     setDisableApprovalBtn(true);

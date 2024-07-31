@@ -37,7 +37,6 @@ const EditPlansAndPackages = () => {
     useSelector((state) => {
       return state?.loanPackage?.data?.data;
     }) || [];
-  console.log({ loanPackage });
   const [editPlan, setEditPlan] = useState({
     name: "",
     minAmount: "",
@@ -49,8 +48,6 @@ const EditPlansAndPackages = () => {
     status: "Active",
     createdBy: "",
   });
-
-  // console.log(user?.data?.token);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
@@ -109,7 +106,6 @@ const EditPlansAndPackages = () => {
         setSuccessModal(true);
         resetForm();
         setLoading(false);
-        console.log({ response });
         dispatch(getSingleLoanPackage(plan_id));
       })
       .catch((error) => {
@@ -117,7 +113,6 @@ const EditPlansAndPackages = () => {
         setLoading(false);
         // toast.error;
       });
-    // console.log(payload);
   };
 
   const interestTypeOptions = [
@@ -143,20 +138,11 @@ const EditPlansAndPackages = () => {
     }
   }, []);
 
-  // console.log(
-  //   "type",
-  //   // interestTypeOptions.find(
-  //   //   (option) => option?.value === editPlan?.interestRateType
-  //   // )
-  //   editPlan?.interestRateType
-  // );
-  // console.log(editPlan);
   const preventMinus = (e) => {
-    if (/[^0-9,]/g.test(e.key)) {
+    if (/[^0-9,.]/g.test(e.key)) {
       e.preventDefault();
     }
   };
-  console.log(editPlan?.interestRateType);
 
   useEffect(() => {
     setEditPlan({

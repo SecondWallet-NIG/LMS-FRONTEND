@@ -81,15 +81,13 @@ const ViewLoan = () => {
     disbursementDate: new Date(),
     docs: null,
   });
-
-  console.log({ file: formData.docs });
+                                                                                                                    
 
   const handleFileChange = (e) => {
     setFileError("");
     let { name, files } = e.target;
     const file = files[0];
     const fileExtension = file.name.split(".").pop().toLowerCase();
-    console.log(fileExtension);
 
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     if (!allowedExtensions.includes(fileExtension)) {
@@ -171,9 +169,7 @@ const ViewLoan = () => {
     setActivityButton(buttonId);
   };
 
-  const handleLogSearch = (state) => {
-    state === "open" ? setLogSearch(true) : setLogSearch(false);
-  };
+
   const preventMinus = (e) => {
     if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
@@ -491,8 +487,6 @@ const ViewLoan = () => {
       format(formData.disbursementDate, "yyyy-MM-dd")
     );
 
-    console.log([...payload]);
-
     setLoading(true);
     e.preventDefault();
     dispatch(disburseLoan({ loanId: id, payload: payload }))
@@ -511,11 +505,10 @@ const ViewLoan = () => {
   };
 
   const modifyUsersToApprove = () => {
-    console.log({ user });
-    console.log("hello");
+
     if (Array.isArray(user)) {
       const users = user.filter((item) => item?.role?.tag === "LO");
-      console.log({ users });
+ 
       setUsersToApprove(
         users.map((item) => ({
           label: item.firstName + " " + item.lastName,
@@ -574,7 +567,7 @@ const ViewLoan = () => {
   // };
 
   if (loanApprovals?.data?.data) {
-    console.log(">>>>>>>", loanApprovals?.data?.data);
+
     hasDecline = hasDeclineStatus();
   }
 
@@ -686,9 +679,9 @@ const ViewLoan = () => {
             <div className="w-full md:w-[70%]">
               <div className="flex md:justify-end">
                 <div>
-                  <div className="text-xs  font-semibold">
+                  <div className="text-sm  font-medium">
                     {" "}
-                    Loan created by :
+ Loan Creator
                   </div>
                   <button
                     onClick={() => {
@@ -706,15 +699,15 @@ const ViewLoan = () => {
               </div>
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Loan ID:</p>
+                  <p className="text-sm font-medium">Loan ID</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swBlue font-semibold mt-4">
+                    <p className="text-md text-swBlue font-semibold mt-4 text-end">
                       {data?.data?.loanApplication?.loanId}
                     </p>
                   </div>
                 </div>
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Loan Amount:</p>
+                  <p className="text-sm font-medium">Loan Amount</p>
 
                   <div className="flex justify-between items-center">
                     <p className="text-md text-swBlue font-semibold mt-4">
@@ -755,23 +748,23 @@ const ViewLoan = () => {
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
                   <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       Loan Package
                     </th>
 
-                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Maturity Amount</h1>
                     </th>
-                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Loan Period</h1>
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Maturity Date</h1>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="text-start text-xs">
+                  <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>{data?.data?.loanPackageDetails?.name} </p>
@@ -835,22 +828,22 @@ const ViewLoan = () => {
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
                   <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       Monthly Interest Rate
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Repayment Type</h1>
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Loan Frequency</h1>
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Number of Repayments</h1>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="text-start text-xs">
+                  <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
                         <p>
@@ -937,18 +930,18 @@ const ViewLoan = () => {
                 <table className=" w-full ">
                   <thead className="bg-swLightGray ">
                     <tr>
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                         ID
                       </th>
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                         Action
                       </th>
 
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                         <h1>Approval Status</h1>
                       </th>
 
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                         <h1>Action</h1>
                       </th>
                     </tr>
@@ -1033,19 +1026,19 @@ const ViewLoan = () => {
                     <table className=" w-full ">
                       <thead className="bg-swLightGray ">
                         <tr>
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                             <h1>Action Task</h1>
                           </th>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                             <h1>Assigned To</h1>
                           </th>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                             <h1>Status</h1>
                           </th>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-xs border-0 text-start">
+                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
                             <h1>Approve/Decline</h1>
                           </th>
                         </tr>
@@ -1130,17 +1123,17 @@ const ViewLoan = () => {
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
                   <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swDarkRed text-xs border-0 text-start">
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swDarkRed text-[14px] font-medium border-0 text-start">
                       Number of Overdue days
                     </th>
 
-                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swDarkRed text-xs border-0 text-start">
+                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swDarkRed text-[14px] font-medium border-0 text-start">
                       <h1>Overdue Period Amount</h1>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="text-start text-xs">
+                  <tr className="text-start text-[14px] font-medium">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center text-swDarkRed font-semibold">
                         <p>
@@ -1154,7 +1147,7 @@ const ViewLoan = () => {
 
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        <p className="text-swDarkRed font-semibold">
+                        <p className="text-swDarkRed text-[14px] font-medium">
                           ₦{" "}
                           {data?.data?.loanApplication?.amountAccruedForcurrentOverdue?.toLocaleString() ||
                             0}

@@ -14,11 +14,11 @@ const PagePath = ({ paths }) => {
           Loan applications
         </p>
       ) : pathname === "/create-loan" ? (
-        <p className="text-swBlue text-xs sm:text-sm sm:pb-1.5">Create loan</p>
+        <p className="text-swBlue text-xs sm:text-sm sm:pb-1.5">Create Loan</p>
       ) : pathname === "/report" ? (
         <p className="text-swBlue text-xs sm:text-sm sm:pb-1.5">Report</p>
       ) : pathname === "/team-management" ? (
-        <p className="text-swBlue text-xs sm:text-sm sm:pb-1.5">Team management</p>
+        <p className="text-swBlue text-xs sm:text-sm sm:pb-1.5">Team Management</p>
       ) : pathname === "/settings" ? (
         <p className="text-swBlue text-xs sm:text-sm sm:pb-1.5">Settings</p>
       ) : pathname === "/borrowers" ? (

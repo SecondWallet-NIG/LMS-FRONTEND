@@ -27,9 +27,8 @@ const ApprovalModal = ({
   closeModal,
   approvalId,
   approvalLevel,
-  currentTaskId
+  currentTaskId,
 }) => {
-  console.log({currentTaskId});
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -39,8 +38,6 @@ const ApprovalModal = ({
     approvalLevel: approvalId,
     approvalNote: "",
   });
-  console.log("here",{  approvalId,
-    approvalLevel,});
 
   // const modalStyles = {
   //   width: width || "90%",
@@ -67,18 +64,15 @@ const ApprovalModal = ({
     }));
   };
 
-
   const submitLoan = (e) => {
     setLoading(true);
     let _formData = {
       approvalLevel: approvalId,
       approvalNote: formData?.approvalNote,
-      taskId : currentTaskId
+      taskId: currentTaskId,
     };
 
-   // console.log({taskId});
     const payload = { id, _formData };
-    console.log({ payload });
     e.preventDefault();
     dispatch(approveLoanRequest(payload))
       .unwrap()
@@ -88,21 +82,17 @@ const ApprovalModal = ({
         dispatch(getLoanApprovals(id));
         setLoading(false);
         closeModal(false);
-     
       })
       .catch((error) => {
         toast.error(`${error?.message}`);
         dispatch(getSingleLoan(id));
         dispatch(getLoanApprovals(id));
         setLoading(false);
-     
       });
   };
   //let taskId;
   useEffect(() => {
     modifyUsersToApprove(data);
-
-   
   }, [data]);
 
   return (

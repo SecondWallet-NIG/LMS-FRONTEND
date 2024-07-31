@@ -5,7 +5,6 @@ import { getAllAssetCategories } from "@/redux/slices/assetManagementSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import EditableButton from "../shared/editableButtonComponent/EditableButton";
-import { useParams } from "next/navigation";
 import { getAllExpenseCategories } from "@/redux/slices/expenseManagementSlice";
 
 const DeleteAssetCategoryModal = ({ open, onClose, type }) => {

@@ -14,13 +14,11 @@ const ViewPlan = () => {
   const { plan_id } = useParams();
   const [userRole, setUserRole] = useState(false);
   const [showEditBtn, setShowEditBtn] = useState(false);
-  // console.log({ plan_id });
   const dispatch = useDispatch();
   const loanPackage =
     useSelector((state) => {
       return state?.loanPackage?.data?.data;
     }) || [];
-  // console.log({ loanPackage });
 
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));

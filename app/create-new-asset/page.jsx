@@ -16,6 +16,8 @@ import {
 import { useRouter } from "next/navigation";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import { FiTrash } from "react-icons/fi";
+import SuccessModal from "../components/modals/SuccessModal";
+import CancelModal from "../components/modals/CancelModal";
 
 const CreateNewAsset = () => {
   const dispatch = useDispatch();
@@ -23,6 +25,8 @@ const CreateNewAsset = () => {
   const [loading, setLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [userId, setUserId] = useState("");
+  const [successModal, setSuccessModal] = useState(false);
+  const [failedModal, setFailedModal] = useState(false);
   const [fileError, setFileError] = useState("");
   const [assetUploadType, setAssetUploadType] = useState("Single asset");
   const [openDate, setOpenDate] = useState(false);
@@ -76,7 +80,6 @@ const CreateNewAsset = () => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -109,14 +112,12 @@ const CreateNewAsset = () => {
     dispatch(createBulkAssets(payload))
       .unwrap()
       .then((response) => {
-        toast.success(
-          "Upload in progress, you will be notified when this is complete"
-        );
+        setSuccessModal(true);
         setSelectedFiles([]);
         setLoading(false);
       })
       .catch((error) => {
-        toast.error(`An error occured`);
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -174,7 +175,6 @@ const CreateNewAsset = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUserId(user);
   }, []);
-  console.log({ formData });
   return (
     <DashboardLayout
       isBackNav={true}
@@ -262,9 +262,13 @@ const CreateNewAsset = () => {
                 required={true}
                 optionValue={transformedOptions}
                 name="category"
-                value={transformedOptions.find(
-                  (option) => option.value === formData.category
-                )}
+                value={
+                  formData.category === ""
+                    ? null // or another appropriate default value
+                    : transformedOptions.find(
+                        (option) => option.value === formData.category
+                      )
+                }
                 onChange={(selectedOption) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -331,14 +335,14 @@ const CreateNewAsset = () => {
                   type="file"
                   id="fileInput"
                   className="hidden"
-                  accept=".csv,.xlsx"
+                  accept=".csv"
                   onChange={handleFileInputChange}
                 />
 
                 <p className="mt-10 text-lg font-medium">
                   Drag and drop a file to upload
                 </p>
-                <p className="textxs">File types: .xlsx, .csv</p>
+                <p className="textxs">File types: .csv</p>
                 <p className="textxs">Max file size: 3mb</p>
 
                 <label
@@ -390,6 +394,25 @@ const CreateNewAsset = () => {
           </div>
         )}
       </main>
+      <SuccessModal
+        isOpen={successModal}
+        title={"Bulk Assets Upload Successful"}
+        description={`Upload in progress, you will be notified when this is complete`}
+        // noButtons={true}
+        btnLeft={"View Assets"}
+        btnLeftFunc={() => router.push("/asset-management")}
+        btnRight={"Upload Bulk Assets"}
+        btnRightFunc={() => setSuccessModal(false)}
+        onClose={() => setSuccessModal(false)}
+      />
+      <CancelModal
+        isOpen={failedModal}
+        title={"Bulk Assets Upload Failed"}
+        description={`An error occured`}
+        // noButtons={true}
+        noButtons={true}
+        onClose={() => setFailedModal(false)}
+      />
     </DashboardLayout>
   );
 };

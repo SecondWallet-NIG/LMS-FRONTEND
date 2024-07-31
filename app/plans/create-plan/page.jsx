@@ -51,7 +51,6 @@ const CreatePlansAndPackages = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
-    console.log({ value });
     //  const ariaLabel = e.target.getAttribute("aria-label");
     setCreatePlan((prev) => ({
       ...prev,
@@ -115,7 +114,6 @@ const CreatePlansAndPackages = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("submit pressed");
     const isValid = validateForm();
     if (isValid) {
       const payload = {
@@ -164,12 +162,10 @@ const CreatePlansAndPackages = () => {
   ];
 
   const preventMinus = (e) => {
-    if (/[^0-9,]/g.test(e.key)) {
+    if (/[^0-9,.]/g.test(e.key)) {
       e.preventDefault();
     }
   };
-
-  console.log({ createPlan });
 
   useEffect(() => {
     if (typeof window !== "undefined") {

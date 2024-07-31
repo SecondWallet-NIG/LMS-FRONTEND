@@ -18,7 +18,6 @@ const LoanOfficerTable = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({apiData});
     return apiData?.loanOfficers?.map((item) => ({
       staffId: (
         <div>
@@ -56,7 +55,7 @@ const LoanOfficerTable = () => {
       try {
         if (typeof window !== "undefined") {
           const storedUser = JSON.parse(localStorage.getItem("user"));
-          console.log("Stored User:", storedUser);
+
           setUserId(storedUser?.data?.user?._id || "");
           setRole(storedUser?.data?.user?.role?.name || "");
         }

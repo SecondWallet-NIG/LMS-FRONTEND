@@ -11,8 +11,6 @@ if (typeof window !== "undefined") {
 export const createLoanApplication = createAsyncThunk(
   "LoanApplication/create",
   async (payload) => {
-    console.log({ user: user?.data?.token });
-
     try {
       const response = await axios.post(
         API_URL + "/loan-application/create",
@@ -72,12 +70,11 @@ export const getSingleLoan = createAsyncThunk(
 
 export const disburseLoan = createAsyncThunk(
   "loanApplication/disburse",
-  async ({loanId, payload}) => {
+  async ({ loanId, payload }) => {
     try {
-
-      console.log("mmmmmmmm", {loanId, payload});
       const response = await axios.post(
-        `${API_URL}/loan-application/${loanId}/approve-for-disbursal`, payload,
+        `${API_URL}/loan-application/${loanId}/approve-for-disbursal`,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${user?.data?.token}`,

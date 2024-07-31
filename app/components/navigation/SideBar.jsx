@@ -2,13 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import Button from "../shared/buttonComponent/Button";
 //icons
 import { RiBox3Line } from "react-icons/ri";
-import { BsPeopleFill, BsCalculator } from "react-icons/bs";
 import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
 import { AiFillMoneyCollect, AiOutlineSetting } from "react-icons/ai";
-import { BiMapAlt } from "react-icons/bi";
+import { BiMapAlt, BiSolidBuilding } from "react-icons/bi";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
@@ -28,6 +26,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import Link from "next/link";
 import { LuArrowUpRight } from "react-icons/lu";
+import { PiCurrencyNgn } from "react-icons/pi";
+import { IoBuild } from "react-icons/io5";
+
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -36,12 +37,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const x = useSelector((state) => state.approvalAssignee);
   const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role
     ?.tag;
-  console.log({ userRoleTag });
+
   const handleSidebarOpen = (state) => {
     setSideBarOpen(state);
   };
-
-  // console.log("sidbarState", sideBarState);
 
   useEffect(() => {
     // setSideBarOpen(true);
@@ -57,15 +56,11 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
 
   useEffect(() => {
     dispatch(getApprovalAssignee(user?.data?.user?._id));
-
-    // // console.log({ x });
   }, []);
 
   useEffect(() => {
     sideBarState ? handleSidebarOpen(true) : handleSidebarOpen(false);
   }, [sideBarState]);
-
-  console.log("sidbarState", sideBarOpen);
 
   return (
     <main>
@@ -215,7 +210,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 />
               }
               pathname={pathname}
-              text="Create loan"
+              text="Create Loan"
               link={`${
                 user?.data?.user?.role?.tag === "LO"
                   ? "/create-loan"
@@ -352,6 +347,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   size={20}
                 />
               }
+              
               pathname={pathname}
               text="Repayment"
               link="/repayment"
@@ -466,11 +462,12 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "CT0",
+                "OFA",
                 "Dir",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
-              icon={<FaInbox size={20} />}
+              icon={<BiSolidBuilding size={20} />}
               text="Asset management"
               link="/asset-management"
               sideBarOpen={sideBarOpen}
@@ -483,10 +480,11 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "CT0",
                 "Dir",
+                "OFA",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
-              icon={<LuArrowUpRight size={20} />}
+              icon={<PiCurrencyNgn size={20} />}
               text="Expenses"
               link="/expenses"
               sideBarOpen={sideBarOpen}
@@ -547,6 +545,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CT0",
                 "LR0",
                 "Dir",
+                "OFA",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
@@ -574,6 +573,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "LR0",
                 "CT0",
                 "Dir",
+                "OFA",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
@@ -726,7 +726,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 />
               }
               pathname={pathname}
-              text="Create loan"
+              text="Create Loan"
               link={`${
                 user?.data?.user?.role?.tag === "LO"
                   ? "/create-loan"

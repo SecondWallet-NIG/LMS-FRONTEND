@@ -1,7 +1,5 @@
 "use client";
-import { CiSearch } from "react-icons/ci";
 import { FaBell } from "react-icons/fa";
-import { HiMiniUserCircle } from "react-icons/hi2";
 import PagePath from "./PagePath";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -32,8 +30,6 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      console.log({ storedUser });
-
       setUser(storedUser?.data?.user);
       dispatch(getApprovalAssignee(storedUser?.data?.user?._id));
     }

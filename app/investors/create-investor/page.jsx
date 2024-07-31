@@ -1,21 +1,10 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { useEffect, useState } from "react";
-import {
-  FiUser,
-  FiCalendar,
-  FiMapPin,
-  FiMail,
-  FiPaperclip,
-} from "react-icons/fi";
-import {
-  genderOptions,
-  countryOptions,
-  createBorrowerType,
-} from "../../components/helpers/utils";
+import { FiUser, FiMapPin, FiMail } from "react-icons/fi";
+import { genderOptions, countryOptions } from "../../components/helpers/utils";
 import { bankArr, statesAndLgas } from "@/constant";
 import { createInvestor } from "@/redux/slices/investmentSlice";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
@@ -24,6 +13,8 @@ import EditableButton from "@/app/components/shared/editableButtonComponent/Edit
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import SuccessModal from "@/app/components/modals/SuccessModal";
+import CancelModal from "@/app/components/modals/CancelModal";
 
 const CreateInvestor = () => {
   const headerClass = "font-medium text-sm leading-5 text-swBlack";
@@ -35,6 +26,10 @@ const CreateInvestor = () => {
   const [bankNameVal, setBankNameVal] = useState("");
   const [loading, setLoading] = useState(false);
   const [verificationResponse, setVerificationResponse] = useState(null);
+  const [successModal, setSuccessModal] = useState(false);
+  const [failedModal, setFailedModal] = useState(false);
+  const [successModalData, setSuccessModalData] = useState({});
+  const [errorModalData, setErrorModalData] = useState({});
   const [formData, setFormData] = useState({
     profilePicture: null,
     firstName: "",
@@ -100,7 +95,13 @@ const CreateInvestor = () => {
   }));
 
   const handleInputChange = async (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    const reqComma = ['annualIncome', 'networth']
+
+    if (reqComma.includes(name)) {
+      const numericValue = value.replace(/[^0-9.]/g, "");
+      value = Number(numericValue).toLocaleString();
+    }
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (name === "accountNumber" && value.length === 10) {
@@ -115,7 +116,7 @@ const CreateInvestor = () => {
             accountName: response.data.account_name,
           }));
           setBankNameVal(response.data.account_name);
-        } catch (error) {}
+        } catch (error) { }
       }
     }
   };
@@ -133,7 +134,6 @@ const CreateInvestor = () => {
       ...prev,
       [name]: "",
     }));
-    // console.log({ name, files });
     const file = files[0];
     const fileExtension = file.name.split(".").pop().toLowerCase();
 
@@ -259,6 +259,14 @@ const CreateInvestor = () => {
     );
   };
 
+  const removeCommasFromNumber = (numberString) => {
+    if (typeof numberString !== "string") {
+      numberString = String(numberString);
+    }
+    return numberString.replace(/,/g, "");
+  };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -274,7 +282,7 @@ const CreateInvestor = () => {
     payload.append("bvn", formData.bvn);
     payload.append("country", formData.country);
     payload.append("state", formData.state);
-    payload.append("city", formData.lga);
+    payload.append("lga", formData.lga);
     payload.append("address[houseNumber]", formData.houseNumber);
     payload.append("address[houseLocation]", formData.houseLocation);
     payload.append("phoneNumber", formData.phoneNumber);
@@ -282,29 +290,40 @@ const CreateInvestor = () => {
     payload.append("bankAccount[accountNumber]", formData.accountNumber);
     payload.append("bankAccount[accountName]", formData.accountName);
     payload.append("bankAccount[bankName]", formData.bankName);
-    payload.append("annualIncome", formData.annualIncome);
-    payload.append("networth", formData.networth);
+    payload.append("annualIncome", removeCommasFromNumber(formData.annualIncome));
+    payload.append("networth", removeCommasFromNumber(formData.networth));
     payload.append("sourceOfIncome", formData.sourceOfIncome);
     payload.append("workStatus", formData.workStatus);
     payload.append("taxDoc", formData.taxDoc);
     payload.append("bvnDoc", formData.bvnDoc);
     payload.append("ninDoc", formData.ninDoc);
-    //payload.append("createdBy", userId?.data?.user?._id);
 
-    console.log(...payload);
     dispatch(createInvestor(payload))
       .unwrap()
       .then((response) => {
-        toast.success(response?.message);
-        console.log(response);
+        // toast.success(response?.message);
+        setSuccessModalData({
+          title: "Investor created Successfully",
+          description: response?.message,
+          btnLeft: "View investors",
+          btnRight: "Close",
+          btnRightFunc: () => {
+            setSuccessModalData({});
+            setSuccessModal(false);
+          },
+        });
+        setSuccessModal(true);
         resetForm();
         setProfileImg(null);
-        router.push("/investors");
+        // router.push("/investors");
         // setNewUserId(response?.data?._id);
       })
       .catch((error) => {
-        console.log({ error });
-        toast.error(error?.message);
+        // toast.error(error?.message);
+        setErrorModalData({
+          description: error?.message,
+        });
+        setFailedModal(true);
         setLoading(false);
       });
   };
@@ -314,7 +333,6 @@ const CreateInvestor = () => {
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
       const fileExtension = files[0].name.split(".").pop().toLowerCase();
-      console.log(fileExtension);
 
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
@@ -349,13 +367,10 @@ const CreateInvestor = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUserId(user);
   }, []);
-
-  console.log({ formData });
-  console.log(profileImg);
   return (
     <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]}>
       <ToastContainer />
-      <div className="mx-auto w-3/5 mb-28">
+      <div className="mx-auto w-full px-10 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create investor profile
         </h1>
@@ -428,7 +443,7 @@ const CreateInvestor = () => {
             </div>
           </div>
 
-          <div className="flex justify-between gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="w-full">
               {/* <InputField
                 name={"dateOfBirth"}
@@ -466,13 +481,14 @@ const CreateInvestor = () => {
             </div>
           </div>
 
-          <div className="flex justify-between mt-5 mb-10 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 mt-5 mb-10 gap-6">
             <div className="w-full">
               <InputField
                 required={true}
                 name="nin"
                 activeBorderColor="border-swBlue"
                 onKeyPress={preventMinus}
+                value={formData.nin}
                 onWheel={() => document.activeElement.blur()}
                 label="NIN"
                 placeholder="NIN"
@@ -493,6 +509,7 @@ const CreateInvestor = () => {
                 name="bvn"
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
+                value={formData.bvn}
                 activeBorderColor="border-swBlue"
                 label="BVN"
                 placeholder="Bank Verification Number"
@@ -512,11 +529,14 @@ const CreateInvestor = () => {
         {/* Contact information */}
         <div>
           <h6 className={`${headerClass}`}>Contact information</h6>
-          <div className="my-5 flex justify-between gap-6">
+          <div className="my-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="w-full">
               <SelectField
                 name="country"
                 label={"Country"}
+                value={
+                  countryOptions.find((e) => e.value === formData.country) || ""
+                }
                 optionValue={countryOptions}
                 required={true}
                 placeholder={"Select country"}
@@ -534,6 +554,9 @@ const CreateInvestor = () => {
                 required={true}
                 placeholder={"Select state"}
                 isSearchable={true}
+                value={
+                  states.find((e) => e.value === formData.state)
+                }
                 onChange={(selectedOption) => {
                   handleStateChange(selectedOption);
                   handleSelectChange(selectedOption, "state");
@@ -546,6 +569,9 @@ const CreateInvestor = () => {
                 label={"LGA"}
                 required={true}
                 optionValue={lga}
+                value={
+                  lga.find((e) => e.value === formData.lga)
+                }
                 placeholder={"Select lga"}
                 isSearchable={true}
                 onChange={(selectedOption) =>
@@ -670,6 +696,7 @@ const CreateInvestor = () => {
               onWheel={() => document.activeElement.blur()}
               required={true}
               activeBorderColor="border-swBlue"
+              // value={formData.accountNumber}
               label="Account Number"
               onChange={handleInputChange}
               disabled={!formData.bankName} // Disable if bankName is not selected
@@ -717,7 +744,7 @@ const CreateInvestor = () => {
             exceed 4mb
           </p>
 
-          <div className="flex justify-between gap-6 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
             {renderFileInput(
               "Upload Tax Identification Number (TIN)",
               "taxDoc"
@@ -737,6 +764,29 @@ const CreateInvestor = () => {
           />
         </div>
       </div>
+      <SuccessModal
+        isOpen={successModal}
+        title={successModalData.title}
+        description={successModalData.description}
+        btnLeft={successModalData.btnLeft}
+        btnLeftFunc={() => router.push("/investors")}
+        btnRight={successModalData.btnRight}
+        btnRightFunc={successModalData.btnRightFunc}
+        onClose={() => {
+          setSuccessModalData({});
+          setSuccessModal(false);
+        }}
+      />
+      <CancelModal
+        isOpen={failedModal}
+        title={"An error has occured"}
+        description={errorModalData?.description}
+        noButtons={true}
+        onClose={() => {
+          setErrorModalData({});
+          setFailedModal(false);
+        }}
+      />
     </DashboardLayout>
   );
 };

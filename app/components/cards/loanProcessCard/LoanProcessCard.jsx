@@ -9,7 +9,6 @@ import { FaUserCircle } from "react-icons/fa";
 
 const LoanProcessCard = ({ data }) => {
   const _data = data?.data?.data;
-  console.log({ _data });
   const [commentOpen, setCommentOpen] = useState(false);
   const [approvalMsg, setApprovalMsg] = useState({});
 

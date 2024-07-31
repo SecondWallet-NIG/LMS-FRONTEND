@@ -3,7 +3,6 @@
 import { useState } from "react";
 import CenterModal from "../modals/CenterModal";
 import UploadLoanDocs from "../modals/loans/UploadLoanDocs";
-import PreviewLoanDocs from "./PreviewLoanDocs";
 import { handleFileExtention } from "../helpers/utils";
 import dynamic from "next/dynamic";
 import { IoMdClose } from "react-icons/io";
@@ -14,7 +13,6 @@ const Viewer = dynamic(
 );
 
 const CustomerProfileDocs = (data) => {
-  console.log({data});
 
   const [url, setUrl] = useState("");
   const [isOpen, setIsOpen] = useState(false);

@@ -5,6 +5,7 @@ import InvestmentProducts from "../components/investments/InvestmentsProducts";
 import { useImmer } from "use-immer";
 import InvestorsRecords from "../components/investments/InvestorsRecords";
 import InvestmentsRecords from "../components/investments/InvestmentsRecords";
+import WithdrawalSchedule from "../components/investments/WithdrawalSchedule";
 
 const poppins = Poppins({ weight: '500', subsets: ["latin"] });
 
@@ -17,9 +18,10 @@ const Investors = () => {
   })
   const { selectedNav } = state
   const navs = [
-    { name: 'Investment products', selOption: 'inPro' },
-    { name: 'Investors records', selOption: 'intRec' },
-    { name: 'Investment records', selOption: 'inRec' }
+    { name: 'Investment Products', selOption: 'inPro' },
+    { name: 'Investors Records', selOption: 'intRec' },
+    { name: 'Investment Records', selOption: 'inRec' },
+    { name: 'Withdrawal Schedule', selOption: 'withSch' }
   ]
 
   function handleNav(selOption) {
@@ -53,6 +55,7 @@ const Investors = () => {
           {selectedNav === 'inPro' && <InvestmentProducts />}
           {selectedNav === 'intRec' && <InvestorsRecords />}
           {selectedNav === 'inRec' && <InvestmentsRecords />}
+          {selectedNav === 'withSch' && <WithdrawalSchedule />}
         </div>
       </div>
     </DashboardLayout>

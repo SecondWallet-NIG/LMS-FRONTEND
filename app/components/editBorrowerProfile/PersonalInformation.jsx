@@ -5,7 +5,7 @@ import SelectField from "../shared/input/SelectField";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -48,9 +48,6 @@ const PersonalInformation = ({ userData, loading }) => {
     createdBy: "",
   });
 
-  // console.log({ useData: userData?.profileInfo });
-  console.log({ formData });
-
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
 
@@ -72,17 +69,15 @@ const PersonalInformation = ({ userData, loading }) => {
           }));
           setBankNameVal(response.data.account_name);
         } catch (error) {
-          // console.error("Error verifying bank details:", error);
+          console.log(error);
         }
       }
     }
   };
 
   const handleFileInputChange = (e) => {
-    // console.log(e.target.id);
     const files = Array.from(e.target.files);
     if (e.target.id === "profilePicture" && e.target.files.length > 0) {
-      // console.log(files[0])
       setFormData((prev) => ({ ...prev, [e.target.id]: files[0] }));
     } else {
       setSelectedFiles(files);
@@ -251,7 +246,6 @@ const PersonalInformation = ({ userData, loading }) => {
             userData?.profileInfo?.bankAccount?.bankName
           );
           setVerificationResponse(response);
-          console.log("useEffect resp", response);
           setBankNameVal(response?.data?.account_name);
         } catch (error) {
           // console.error("Error verifying bank details:", error);
@@ -260,7 +254,7 @@ const PersonalInformation = ({ userData, loading }) => {
     };
     getBankName();
     const _user = JSON.parse(localStorage.getItem("user"));
-    console.log({ _user });
+
     if (_user) {
       setUserId(_user?.data?.user);
     }

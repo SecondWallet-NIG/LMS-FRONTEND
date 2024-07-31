@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
 import Link from "next/link";
-import Button from "../shared/buttonComponent/Button";
-import EditableButton from "../shared/editableButtonComponent/EditableButton";
 
 const LoanDraftTable = () => {
   const [userId, setUserId] = useState("");
@@ -31,33 +29,33 @@ const LoanDraftTable = () => {
       id: item._id,
       createdAt: (
         <div>
-          <div className="text-md font-[500] text-gray-700">
+          <div className="text-[13px] font-[500] text-gray-700">
             {formatDate(item.createdAt?.slice(0, 10))}
           </div>
-          <div className="text-xs font-light text-gray-500 pt-2">
+          <div className="text-[13px] font-light text-gray-500 pt-2">
             {formatTimeToAMPM(item.createdAt)}
           </div>
         </div>
       ),
       name: (
         <div>
-          <div className="text-md font-[500] text-gray-700">{`${item?.customer?.firstName} ${item?.customer?.lastName}`}</div>
-          <div className="text-xs text-gray-500 font-light pt-2">
+          <div className="text-[14px] font-[500] text-gray-700">{`${item?.customer?.firstName} ${item?.customer?.lastName}`}</div>
+          <div className="text-[13px] text-gray-500 font-light pt-2">
             {item?.customer?.customerId}
           </div>
         </div>
       ),
       loanPackageId: (
         <div>
-          <div className="text-md font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
-          <div className="text-xs text-gray-500 pt-2">
+          <div className="text-[13px] font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
+          <div className="text-[15px] text-gray-500 pt-2 font-light">
             SWL-{`${item?.loanId}`}
           </div>
         </div>
       ),
       loanAmount: (
         <div>
-          <div className="text-md font-[500] text-gray-700">
+          <div className="text-[15px] font-[500] text-gray-700 font-light">
             ₦ {item?.loanAmount.toLocaleString()}
           </div>
         </div>
@@ -85,10 +83,10 @@ const LoanDraftTable = () => {
       ),
       createdBy: (
         <div>
-          <div className="text-md font-[500] text-swDarkGreen">
+          <div className="text-[13px] font-[500] text-swDarkGreen">
             {item?.createdBy?.firstName} {item?.createdBy?.lastName}
           </div>
-          <div className="text-md font-[500] text-gray-700">
+          <div className="text-[13px] font-light font-[500] text-gray-700">
             <Link
               className="underline"
               href={`/team-management/staff/${item?.createdBy?._id}`}
@@ -134,7 +132,7 @@ const LoanDraftTable = () => {
           apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/draft`}
           btnText={
             <div className="flex gap-1 items-center p-1">
-              <p className="">create loan</p>
+              <p className="">Create Loan</p>
             </div>
           }
           btnTextClick={() => {

@@ -5,10 +5,6 @@ import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllAssetCategories,
-  getAllAssets,
-} from "@/redux/slices/assetManagementSlice";
 import { IoMdAdd } from "react-icons/io";
 import Link from "next/link";
 import CreateAssetModal from "../components/modals/CreateAssetModal";
@@ -18,39 +14,44 @@ import {
   getAllExpenseCategories,
   getAllExpenses,
 } from "@/redux/slices/expenseManagementSlice";
-
+import { AiOutlinePlus } from "react-icons/ai";
+import { useRouter } from "next/navigation";
+import InvestmentsCards from "../components/cards/InvestmentsCard/InvestmentsCards";
+import { getExpenseReportGraph } from "@/redux/slices/reportSlice";
 const header = [
-  { id: "date", label: "Date" },
-  { id: "description", label: "Description" },
+  { id: "expenseDate", label: "Expense Date" },
+  { id: "dateLogged", label: "Date Logged" },
   { id: "category", label: "Expense Category" },
+  { id: "description", label: "Description" },
   { id: "amount", label: "Amount" },
   { id: "status", label: "Status" },
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.expenses?.map((item, i) => ({
     id: item?._id,
-    date: (
-      <div className="text-md font-[500] text-gray-700">
-        {format(new Date(item?.date), "PPP")}
+    expenseDate: (
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+        {item?.expenseDate && format(new Date(item?.expenseDate), "PPP")}
       </div>
     ),
-    description: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.description}
+    dateLogged: (
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+        {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
       </div>
     ),
     category: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-[15px] text-gray-700 font-light">
         {item?.category?.name}
       </div>
     ),
     amount: (
-      <div className="text-md font-[500] text-gray-700">{item?.amount}</div>
+      <div className="text-[15px] text-gray-700 font-light whitespace-nowrap">
+        ₦ {item?.amount?.toLocaleString()}
+      </div>
     ),
     status: (
-      <div className="text-xs font-[500] text-gray-700">
+      <div className="text-[15px] font-[500] text-gray-700">
         <div className="py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1">
           <div
             className={`h-1 w-1 rounded-full ${
@@ -59,6 +60,26 @@ const customDataTransformer = (apiData) => {
           />
           {item?.status}
         </div>
+      </div>
+    ),
+  }));
+};
+
+const headerExpenseCategory = [
+  { id: "name", label: "Expense Category Name" },
+  { id: "description", label: "Description" },
+];
+
+const customDataTransformerExpenseCategory = (apiData) => {
+  return apiData?.map((item, i) => ({
+    name: (
+      <div className="text-lg text-gray-700 font-light whitespace-nowrap w-full">
+        {item?.name}
+      </div>
+    ),
+    description: (
+      <div className="text-lg text-gray-700 font-light max-w-2xl">
+        {item?.description}
       </div>
     ),
   }));
@@ -73,63 +94,77 @@ const Expenses = () => {
   const [openDeleteAssetModal, setOpenDeleteModal] = useState(false);
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.expense);
+  const  expenseGraph  = useSelector((state) => state.report);
+console.log(expenseGraph?.data?.data);
+ 
+  const router = useRouter();
+
+  const cards = [
+    { title: "Total Number of Expenses", value: expenseGraph?.data?.data.totalExpenseCount || 0},
+    { title: "Total Expenses Value", value: expenseGraph?.data?.data.totalApprovedExpense || 0 },
+    { title: "Approved Expenses", value: expenseGraph?.data?.data.totalApprovedExpense || 0 },
+  ];
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Set to false to allow custom height
-    elements: {
-      line: {
-        tension: 0.5,
-      },
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
     },
-    color: "#fff",
     scales: {
       x: {
-        ticks: {
-          color: "#fff",
-        },
         grid: {
-          display: false,
+          display: true,
         },
       },
       y: {
-        ticks: {
-          color: "#fff",
-        },
         grid: {
-          display: false,
+          display: true,
         },
       },
     },
   };
 
+  const labels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const dataValuesExpenses = Array(12).fill(0);
+  expenseGraph?.data?.data?.monthlyExpenses.forEach((entry) => {
+    const index = entry.month - 1 
+    dataValuesExpenses[index] = entry?.totalExpenses;
+  });
   const chartData = {
-    labels:
-      expenses?.length > 0
-        ? expenses.map(
-            (data) =>
-              data?.date &&
-              // format(new Date(data?.acquisitionDate), "PPP")
-              format(new Date(data?.date), "d MMM yy")
-          )
-        : [],
+    labels,
     datasets: [
       {
-        label: "Cost",
-        data: expenses?.map((data) => data?.amount) ?? [],
-        backgroundColor: "#fff",
-        borderColor: "#fff",
+        label: "Expenses Incurred",
+        data: dataValuesExpenses,
+        backgroundColor: "#3562a1",
+        barThickness: 10,
+        borderRadius: 8,
       },
     ],
   };
 
-  // revenue.map((data) => console.log(data.label));
   useEffect(() => {
+    dispatch(getExpenseReportGraph());
     dispatch(getAllExpenses());
     dispatch(getAllExpenseCategories())
       .unwrap()
       .then((res) => {
-        // console.log("categories", res?.data);
         setExpenseTypeOptions(res?.data);
       })
       .catch((err) => console.log({ err }));
@@ -139,12 +174,8 @@ const Expenses = () => {
     setExpenses(data?.data?.expenses);
   }, [data]);
 
-  console.log("categories", expenseTypeOptions);
   return (
     <>
-      {/* {loading ? (
-        <div>Loading...</div>
-      ) : (*/}
       <DashboardLayout isBackNav={true} paths={["Expenses"]}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
@@ -169,24 +200,9 @@ const Expenses = () => {
         {pageState === "expenses" && (
           <>
             <div className="p-5">
-              <div className="w-full bg-swBlue text-white rounded-3xl">
+            <InvestmentsCards cards={cards} />
+              <div className="w-full text-white rounded-3xl">
                 <BarChart options={options} data={chartData} />
-              </div>
-              <div className="flex items-center justify-end gap-5 mt-5">
-                <Link
-                  href={"/create-new-expense"}
-                  className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
-                >
-                  <IoMdAdd size={20} />
-                  <p>New expenses</p>
-                </Link>
-                {/* <div
-              // onClick={savedLoans}
-              className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
-            >
-              <IoMdAdd size={20} />
-              <p>Asset category</p>
-            </div> */}
               </div>
             </div>
 
@@ -196,15 +212,15 @@ const Expenses = () => {
               headers={header}
               initialData={[]}
               apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/expense`}
-              // btnText={
-              //   <div className="flex gap-1 items-center p-1">
-              //     <AiOutlinePlus size={15} />
-              //     <p className="">create borrower</p>
-              //   </div>
-              // }
-              // btnTextClick={() => {
-              //   router.push("/create-borrower");
-              // }}
+              btnText={
+                <div className="flex gap-1 items-center p-1">
+                  <AiOutlinePlus size={15} />
+                  <p className="">Add Expense</p>
+                </div>
+              }
+              btnTextClick={() => {
+                router.push("/create-new-expense");
+              }}
               filters={true}
               pagination={true}
             />
@@ -213,41 +229,32 @@ const Expenses = () => {
         {pageState === "expenses category" && (
           <div className="p-10 text-black">
             <div className="flex justify-end items-center gap-5">
-              <div
+              <button
                 onClick={() => setOpenCreateModal(!openCreateAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
-                <p>Add expense category</p>
-              </div>
-              {/* <div
+                <p>Add Expense Category</p>
+              </button>
+              {/* <button
                 onClick={() => setOpenDeleteModal(!openDeleteAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
-                <IoMdAdd size={20} />
                 <p>Delete expense category</p>
-              </div> */}
+              </button> */}
             </div>
-            <p className="text-xl font-semibold">
-              Available expense categories
+            <p className="text-xl font-semibold mb-5">
+              Available Expense Categories
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">
-              {expenseTypeOptions.length > 0 &&
-                expenseTypeOptions?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="border rounded-xl p-4 flex flex-col gap-1"
-                  >
-                    <div className="">
-                      <p className="font-semibold  text-sm">{item?.name}</p>
-                      <p className="font-medium text-swGray text-xs mt-2">
-                        {item?.description}
-                        {/* HEllo there */}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-            </div>
+ 
+            <ReusableDataTable
+              dataTransformer={customDataTransformerExpenseCategory}
+              headers={headerExpenseCategory}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/expense-category`}
+              filters={false}
+              pagination={false}
+            />
             <CreateAssetModal
               open={openCreateAssetModal}
               onClose={setOpenCreateModal}

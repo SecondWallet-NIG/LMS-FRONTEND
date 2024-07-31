@@ -17,7 +17,6 @@ const BorrowersReport = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const customerSummary = useSelector((state) => state.customer);
-  console.log({ customerSummary });
 
   const handleCapture = () => {
     handleCaptureClick(setLoading, "captureDiv", `Borrowers report`);

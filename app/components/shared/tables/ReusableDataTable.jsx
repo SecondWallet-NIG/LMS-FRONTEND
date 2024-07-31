@@ -71,11 +71,9 @@ function ReusableDataTable({
     setDateFilterOpen(!dateFilterOpen);
   };
 
-  console.log({ filteredData });
-
   const handleDownload = () => {
     let x = `${apiEndpoint}?page=${1}&per_page=${downloadData}`;
-    console.log({ dateRange });
+
     if (dateRange && dateRange.length > 0) {
       if (
         dateRange[0].startDate instanceof Date &&
@@ -111,6 +109,7 @@ function ReusableDataTable({
       x += `&userId=${userId}`;
     }
     setLoading(true);
+
     axios
       .get(x, {
         headers: {
@@ -118,8 +117,16 @@ function ReusableDataTable({
         },
       })
       .then((data) => {
-        const allData = data?.data.results || data?.data?.data;
-        const nestedJsonData = allData;
+        const allData =
+          data?.data?.data?.expenses ||
+          data?.data?.data?.results ||
+          data?.data?.data?.investmentProducts ||
+          data?.data?.data?.investorProfiles ||
+          data?.data?.data?.investments ||
+          data?.data?.data?.assets ||
+          data?.data.results ||
+          data?.data?.data;
+          const nestedJsonData = allData;
 
         function flattenData(data, parentKey = "") {
           let flattened = {};
@@ -157,7 +164,7 @@ function ReusableDataTable({
         setLoading(false);
       })
       .catch((error) => {
-        console.log({ error });
+        console.log(error)
         toast.error("An error occurred while fetching data for download.");
         setLoading(false);
       });
@@ -249,6 +256,7 @@ function ReusableDataTable({
               data?.data?.data?.repayments ||
                 data?.data?.results ||
                 data?.data?.expenses ||
+                data?.data?.assets ||
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
                 data?.results ||
@@ -257,7 +265,7 @@ function ReusableDataTable({
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
-            // console.log(data?.data.links);
+
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -272,7 +280,7 @@ function ReusableDataTable({
                 data?.data?.data ||
                 data.results
             );
-            // console.log(data?.data.links.totalDocuments);
+
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -283,7 +291,6 @@ function ReusableDataTable({
         })
         .catch(() => {});
     } else {
-      // console.log({ dateRange });
       setIsLoading(true);
       if (dateRange && dateRange.length > 0) {
         if (
@@ -364,7 +371,6 @@ function ReusableDataTable({
           },
         })
         .then((data) => {
-          // console.log({ data });
           setDataCheck(data);
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
@@ -386,7 +392,7 @@ function ReusableDataTable({
                 data?.data?.data?.links ||
                 data?.data?.data?.data?.links
             );
-            // console.log(data?.data?.links?.totalDocuments);
+
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -407,7 +413,7 @@ function ReusableDataTable({
                 data?.data?.data?.links ||
                 data?.data?.data?.data?.links
             );
-            // console.log(data?.data.links.totalDocuments);
+
             setDownloadData(
               data?.data?.links?.totalDocuments ||
                 data?.data?.data?.links?.totalDocuments
@@ -699,7 +705,7 @@ function ReusableDataTable({
                     .map((header) => (
                       <th
                         key={header.id}
-                        className={`px-5 py-4 bg-swLightGray text-swGray border-0 font-[500] cursor-pointer text-start ${
+                        className={`capitalize text-md px-4 py-6 bg-gray-50 text-black border-0 font-[500] cursor-pointer text-start ${
                           header.id === sortField ? "" : ""
                         }`}
                         onClick={() => handleSort(header.id)}
@@ -746,10 +752,10 @@ function ReusableDataTable({
             </table>
           </div>
         ) : data?.length == 0 && !isLoading ? (
-          <div class="min-h-500 flex items-center justify-center">
-            <div class="rounded-lg p-8 w-[400px] flex flex-col items-center">
+          <div className="min-h-500 flex items-center justify-center">
+            <div className="rounded-lg p-8 w-[400px] flex flex-col items-center">
               <Image src={sketch} alt="company logo" />
-              <p class="text-center text-md">This list is empty</p>
+              <p className="text-center text-md">This list is empty</p>
             </div>
           </div>
         ) : null}

@@ -4,9 +4,8 @@ import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { IoMdCheckmark } from "react-icons/io";
 import InputField from "../shared/input/InputField";
 import SelectField from "../shared/input/SelectField";
-import { AiOutlineClose } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { createEmployment, updateEmployment } from "@/redux/slices/customerSlice";
+import { updateEmployment } from "@/redux/slices/customerSlice";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -88,7 +87,6 @@ const WorkInformation = ({ userData, loading }) => {
       createdBy: "650f659167a782d8868b76ee",
     };
 
-    console.log({payload});
 
 
     dispatch(updateEmployment({id: userData?.employmentInformation?._id, payload}))
@@ -104,7 +102,6 @@ const WorkInformation = ({ userData, loading }) => {
 
   useEffect(() => {
     if (userData?.employmentInformation !== "null") {
-      console.log(",,,,,,", userData?.employmentInformation?.incomePeriod);
       setFormData({
         employerName:
           userData?.employmentInformation?.employerInformation?.name,

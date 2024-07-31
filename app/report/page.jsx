@@ -5,6 +5,9 @@ import LoanReports from "../components/report/Loan_Reports/Loan_Reports";
 import SummaryReport from "../components/report/Summary_Report/SummaryReport";
 import { Poppins } from "next/font/google";
 import ManagementReport from "../components/report/Management_Report/MangementReport";
+import ExpenseReport from "../components/report/Expense_Report/ExpenseReport";
+import AssetReport from "../components/report/Asset_Report/AssetReport";
+import InvestmentReport from "../components/report/Investment_Report/InvestmentReport";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -14,10 +17,20 @@ const poppins = Poppins({
 const Report = () => {
   const [reportToggle, setReportToggle] = useState("loan");
   const [searchBtn, setSearchBtn] = useState(false);
+  const selected = "text-swBlue border-b-swBlue font-semibold";
+  const navs = [
+    { name: "Loan Reports", selOption: "loan" },
+    { name: "Summary Report", selOption: "summary" },
+    { name: "Management Report", selOption: "management" },
+    { name: "Expense Report", selOption: "expense" },
+    { name: "Asset Report", selOption: "asset" },
+    { name: "Investment Report", selOption: "investment" },
+  ];
 
   const handleReports = (id) => {
     setReportToggle(id);
   };
+
   return (
     <DashboardLayout>
       <main className="">
@@ -25,50 +38,32 @@ const Report = () => {
           aria-label="Report toggles"
           className={`text-xs sm:text-base flex justify-between items-center font-medium ${poppins.className}`}
         >
-          <div className="flex px-5">
-            <div
-              className={`cursor-pointer py-1 px-4 border-b-2 border-transparent ${
-                reportToggle === "loan"
-                  ? "text-swBlue border-b-swBlue font-semibold"
-                  : "text-swGray"
-              }`}
-              onClick={() => {
-                handleReports("loan");
-              }}
-            >
-              Loan Reports
-            </div>
-            <div
-              className={`cursor-pointer py-1 px-4 border-b-2 border-transparent ${
-                reportToggle === "summary"
-                  ? "text-swBlue border-b-swBlue font-semibold"
-                  : "text-swGray"
-              }`}
-              onClick={() => {
-                handleReports("summary");
-              }}
-            >
-              Summary Reports
-            </div>
-            <div
-              className={`cursor-pointer py-1 px-4 border-b-2 border-transparent ${
-                reportToggle === "management"
-                  ? "text-swBlue border-b-swBlue font-semibold"
-                  : "text-swGray"
-              }`}
-              onClick={() => {
-                handleReports("management");
-              }}
-            >
-              Management Reports
-            </div>
+          <div className="flex flex-wrap p-5">
+            {navs?.map((nav) => {
+              return (
+                <div
+                  key={nav.selOption}
+                  className={`cursor-pointer py-1 px-4 border-b-2 border-transparent ${
+                    reportToggle === nav.selOption ? selected : "text-swGray"
+                  }`}
+                  onClick={() => {
+                    handleReports(nav.selOption);
+                  }}
+                >
+                  {nav.name}
+                </div>
+              );
+            })}
           </div>
         </section>
 
-        <section className="my-8 md:mx-5">
+        <section className="my-2 md:mx-5">
           {reportToggle === "loan" && <LoanReports />}
           {reportToggle === "summary" && <SummaryReport />}
           {reportToggle === "management" && <ManagementReport />}
+          {reportToggle === "expense" && <ExpenseReport />}
+          {reportToggle === "asset" && <AssetReport />}
+          {reportToggle === "investment" && <InvestmentReport />}
         </section>
       </main>
     </DashboardLayout>

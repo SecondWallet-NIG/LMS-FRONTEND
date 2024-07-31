@@ -6,7 +6,6 @@ import { MdOutlineEmail, MdKey } from "react-icons/md";
 import InputField from "../shared/input/InputField";
 import Button from "../shared/buttonComponent/Button";
 import Link from "next/link";
-import axios from "axios";
 import Image from "next/image";
 import companyLogo from "../../../public/images/Logo.png";
 import { toast, ToastContainer } from "react-toastify";
@@ -50,7 +49,6 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     // Dispatch the loginUser async thunk with the loginData
-    console.log(loginData);
     dispatch(loginUser(loginData))
       .unwrap()
       .then((res) => {
@@ -59,6 +57,8 @@ const LoginScreen = () => {
         toast.success("Login successful");
         if (res?.data?.user?.firstLogin === true) {
           router.push("/onboarding");
+        } else if (res?.data?.user?.role.tag === "OFA") {
+          router.push("/expenses");
         } else {
           router.push("/dashboard");
         }
@@ -90,7 +90,6 @@ const LoginScreen = () => {
 
   useEffect(() => {
     const keyDownHandler = (event) => {
-      console.log("User pressed: ", event.key);
 
       if (event.key === "Enter") {
         event.preventDefault();

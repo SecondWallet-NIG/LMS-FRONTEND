@@ -1,25 +1,21 @@
 import CustomerSummaryCard from "../cards/Summary card/CustomerSummaryCard";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getLoanApplicationSummary,
-  getCustomerLoanApplicationSummary,
-} from "@/redux/slices/loanApplicationSlice";
+import { getCustomerLoanApplicationSummary } from "@/redux/slices/loanApplicationSlice";
 import { useParams } from "next/navigation";
+import { getPortfolioHealth, getSingleInvestment } from "@/redux/slices/investmentSlice";
 
 const InvestorSummary = () => {
   const dispatch = useDispatch();
-  const { loading, error, data } = useSelector(
-    (state) => state.loanApplication
+  const { loading, error, data, healthData } = useSelector(
+    (state) => state.investment
   );
   const { id } = useParams();
 
   const fetchSummary = () => {
     if (id) {
-      const payload = {
-        customerId: id,
-      };
-      dispatch(getCustomerLoanApplicationSummary(payload));
+      dispatch(getPortfolioHealth(id));
+      dispatch(getSingleInvestment(id));
     }
   };
 
@@ -27,12 +23,15 @@ const InvestorSummary = () => {
     fetchSummary();
   }, []);
 
+
   return (
     <main>
-      <p className="font-semibold text-md mb-4">Porfolio health</p>
-      <CustomerSummaryCard data={data?.data} />
-      {/* <p className="font-semibold  text-md my-4">Financials</p>
-      <CustomerSummaryCard data={FinancialsData} /> */}
+      <p className="font-semibold text-xl mb-4 text-black mt-3">
+        Portfolio Health
+      </p>
+      <CustomerSummaryCard data={data?.data} healthData={healthData?.data} />
+
+      {/* <CustomerSummaryCard data={data?.data} financialCards={data?.data} /> */}
     </main>
   );
 };

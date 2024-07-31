@@ -14,58 +14,61 @@ import Link from "next/link";
 import CreateAssetModal from "../components/modals/CreateAssetModal";
 import Loader from "../components/shared/Loader";
 import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
+import { useRouter } from "next/navigation";
 
 const header = [
   { id: "asset", label: "Asset" },
   { id: "category", label: "Category" },
-  { id: "description", label: "Description" },
   { id: "acquisitionDate", label: "Acquisition Date" },
   { id: "value", label: "Value" },
-  // { id: "action", label: "Action" },
+];
+
+const headerAssetCategory = [
+  { id: "name", label: "Asset Category Name" },
+  { id: "createdAt", label: "Date Created" },
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
-  return apiData?.results?.map((item, i) => ({
+  return apiData?.assets?.map((item, i) => ({
     id: item?._id,
-    asset: <div className="text-md font-[500] text-gray-700">{item?.name}</div>,
+    asset: <div className="text-lg text-gray-700 font-light">{item?.name}</div>,
     category: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-lg text-gray-700 font-light">
         {item?.category?.name}
-      </div>
-    ),
-    description: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.description}
       </div>
     ),
     acquisitionDate: (
       <div>
-        <div className="text-md font-[500] text-gray-700">
+        <div className="text-lg text-gray-700 font-light">
           {item?.acquisitionDate &&
             format(new Date(item?.acquisitionDate), "PPP")}
         </div>
       </div>
     ),
     value: (
-      <div className="text-md font-[500] text-gray-700">
-        {item?.value?.toLocaleString()}
+      <div className="text-lg text-gray-700 font-light whitespace-nowrap">
+        ₦ {item?.value?.toLocaleString()}
       </div>
     ),
-    // action: (
-    //   <div className="text-md font-[500] text-gray-700">
-    //     <Link
-    //       href={`/asset-management/${item?._id}/view-asset`}
-    //       className="border rounded p-2"
-    //     >
-    //       View details
-    //     </Link>
-    //   </div>
-    // ),
+  }));
+};
+
+const customDataTransformerAssetCategory = (apiData) => {
+  return apiData?.map((item, i) => ({
+    asset: <div className="text-lg text-gray-700 font-light">{item?.name}</div>,
+    name: <div className="text-lg text-gray-700 font-light">{item?.name}</div>,
+    createdAt: (
+      <div>
+        <div className="text-lg text-gray-700 font-light">
+          {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
+        </div>
+      </div>
+    ),
   }));
 };
 
 const AssetManagement = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [pageState, setPageState] = useState("asset");
@@ -77,28 +80,20 @@ const AssetManagement = () => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Set to false to allow custom height
-    elements: {
-      line: {
-        tension: 0.5,
-      },
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
     },
-    color: "#fff",
     scales: {
       x: {
-        ticks: {
-          color: "#fff",
-        },
         grid: {
-          display: false,
+          display: true,
         },
       },
       y: {
-        ticks: {
-          color: "#fff",
-        },
         grid: {
-          display: false,
+          display: true,
         },
       },
     },
@@ -118,36 +113,32 @@ const AssetManagement = () => {
       {
         label: "Cost",
         data: assets?.map((data) => data?.value) ?? [],
-        backgroundColor: "#fff",
-        borderColor: "#fff",
+        // backgroundColor: "#fff",
+        // borderColor: "#fff",
+        // data: dataValuesExpenses,
+        backgroundColor: "#3562a1",
+        barThickness: 10,
+        borderRadius: 8,
       },
     ],
   };
 
-  // revenue.map((data) => console.log(data.label));
   useEffect(() => {
     dispatch(getAllAssets());
-    dispatch(getAllAssetCategories())
-      .unwrap()
-      .then((res) => setAssetTypeOptions(res?.data))
-      .catch((err) => console.log({ err }));
     setLoading(false);
   }, []);
   useEffect(() => {
-    setAssets(data?.data?.results);
+    setAssets(data?.data?.assets);
   }, [data]);
 
-  console.log({ assetTypeOptions });
   return (
     <>
-      {/* {loading ? (
-        <div>Loading...</div>
-      ) : ( */}
       <DashboardLayout isBackNav={true} paths={["Asset Management"]}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
-              pageState === "asset" && "border-b-swBlue text-swBlue font-semibold"
+              pageState === "asset" &&
+              "border-b-swBlue text-swBlue font-semibold"
             }`}
             onClick={() => setPageState("asset")}
           >
@@ -155,7 +146,8 @@ const AssetManagement = () => {
           </p>
           <p
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
-              pageState === "asset category" && "border-b-swBlue text-swBlue font-semibold"
+              pageState === "asset category" &&
+              "border-b-swBlue text-swBlue font-semibold"
             }`}
             onClick={() => setPageState("asset category")}
           >
@@ -165,25 +157,18 @@ const AssetManagement = () => {
         {pageState === "asset" && (
           <>
             <div className="p-5">
-              <div className="w-full bg-swBlue text-white rounded-3xl">
-                <BarChart options={options} data={chartData} />
-              </div>
-              <div className="flex items-center justify-end gap-5 mt-5">
+              {/* <div className="w-full bg-swBlue text-white rounded-3xl"> */}
+              <BarChart options={options} data={chartData} />
+              {/* </div> */}
+              {/* <div className="flex items-center justify-end gap-5 mt-5">
                 <Link
-                  href={"/create-new-asset"}
+                  href={"/"}
                   className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
                 >
-                  <IoMdAdd size={20} />
-                  <p>New asset</p>
+                  
+                  
                 </Link>
-                {/* <div
-                  onClick={() => setOpenCreateModal(!openCreateAssetModal)}
-                  className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
-                >
-                  <IoMdAdd size={20} />
-                  <p>Asset category</p>
-                </div> */}
-              </div>
+              </div> */}
             </div>
 
             <ReusableDataTable
@@ -192,15 +177,15 @@ const AssetManagement = () => {
               headers={header}
               initialData={[]}
               apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/asset/all`}
-              // btnText={
-              //   <div className="flex gap-1 items-center p-1">
-              //     <AiOutlinePlus size={15} />
-              //     <p className="">create borrower</p>
-              //   </div>
-              // }
-              // btnTextClick={() => {
-              //   router.push("/create-borrower");
-              // }}
+              btnText={
+                <div className="flex gap-1 items-center p-1">
+                  <IoMdAdd size={20} />
+                  <p>New asset</p>
+                </div>
+              }
+              btnTextClick={() => {
+                router.push("/create-new-asset");
+              }}
               filters={true}
               pagination={true}
             />
@@ -208,41 +193,32 @@ const AssetManagement = () => {
         )}
         {pageState === "asset category" && (
           <div className="p-10 text-black">
-            <div className="flex justify-end items-center gap-5">
+            <div className="flex justify-end items-center gap-5 mb-4">
               <div
                 onClick={() => setOpenCreateModal(!openCreateAssetModal)}
                 className="flex gap-1 items-center py-2 px-3 cursor-pointer border text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
               >
                 <IoMdAdd size={20} />
-                <p>Add asset category</p>
+                <p>Add Asset Category</p>
               </div>
-              {/* <div
-                aria-disabled="true"
-                onClick={() => setOpenDeleteModal(!openDeleteAssetModal)}
-                className="flex gap-1 items-center py-2 px-3 cursor-pointer border  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
-              >
-                <IoMdAdd size={20} />
-                <p>Delete asset category</p>
-              </div> */}
             </div>
-            <p className="text-xl font-semibold">Available asset categories</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-5">
-              {assetTypeOptions.length > 0 &&
-                assetTypeOptions?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="border rounded-xl p-4 flex flex-col gap-1"
-                  >
-                    <div className="">
-                      <p className="font-semibold  text-sm">{item?.name}</p>
-                      <p className="font-medium text-swGray text-xs mt-2">
-                        {item?.description}
-                        {/* HEllo there */}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-            </div>
+
+            <ReusableDataTable
+              dataTransformer={customDataTransformerAssetCategory}
+              headers={headerAssetCategory}
+              initialData={[]}
+              apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/asset-category`}
+              filters={false}
+              pagination={false}
+              btnText={
+                <div className="flex gap-1 items-center p-1">
+                  <p className="">Add Asset Category</p>
+                </div>
+              }
+              btnTextClick={() => {
+                setOpenCreateModal(!openCreateAssetModal);
+              }}
+            />
             <CreateAssetModal
               open={openCreateAssetModal}
               onClose={setOpenCreateModal}

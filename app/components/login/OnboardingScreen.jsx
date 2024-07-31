@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Button from "../shared/buttonComponent/Button";
-import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import companyLogo from "../../../public/images/Logo.png";
 import ResetPasswordScreen from "../reset-password/ResetPasswordScreen";
@@ -35,11 +34,10 @@ const OnboardingScreen = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form data submitted:", formData);
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       setUser(JSON.parse(localStorage.getItem("user")));
     }
   }, []);

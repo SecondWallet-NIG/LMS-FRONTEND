@@ -3,31 +3,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import Button from "@/app/components/shared/buttonComponent/Button";
-import EmploymentDetailsModal from "@/app/components/modals/EmploymentDetailsModal";
-import Image from "next/image";
 import Link from "next/link";
-import { AiOutlineMail, AiOutlinePlus } from "react-icons/ai";
-import { FiDatabase, FiEdit2, FiPhone, FiSearch } from "react-icons/fi";
-import { LuCalendar } from "react-icons/lu";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { AiOutlineMail } from "react-icons/ai";
+import { FiEdit2, FiSearch } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
 import InputField from "@/app/components/shared/input/InputField";
 import { IoIosClose } from "react-icons/io";
-import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
-import CustomerSummary from "@/app/components/customers/CustomerSummary";
 import CustomerLoanTable from "@/app/components/loans/CustomerLoanTable";
 import UploadDocumentsModal from "@/app/components/modals/UploadDocumentsModal";
-import CustomerProfileDocs from "@/app/components/customers/CustomerProfileDocs";
 import dynamic from "next/dynamic";
-import { bankArr } from "@/constant";
-import { formatDate } from "@/helpers";
 import BorrowerOptions from "@/app/components/customers/BorrowerOptions";
 import { getSingleInvestor } from "@/redux/slices/investmentSlice";
-import { format } from "date-fns";
 import InvestorSummary from "@/app/components/investments/InvestorSummary";
+import InvestorProfileDocs from "@/app/components/investor-profile/InvestorProfileDocs";
+import InvestorBioData from "@/app/components/investor-profile/InvestorBioData";
+import InvestorWorkData from "@/app/components/investor-profile/InvestorWorkData";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -41,22 +32,37 @@ const InvestorProfile = () => {
   const { id } = useParams();
   const paths = ["Investors", "Investor profile"];
   const [roleTag, setRoleTag] = useState("");
-
   const { loading, error, data } = useSelector((state) => state.investment);
-
-  const [isEmploymentDetailsModalOpen, setIsEmploymentDetailsModalOpen] =
-    useState(false);
-  const [isUploadDocumentsModalOpen, setIsUploadDocumentsModalOpen] =
-    useState(false);
+  const [isEmploymentDetailsModalOpen, setIsEmploymentDetailsModalOpen] = useState(false);
+  const [isUploadDocumentsModalOpen, setIsUploadDocumentsModalOpen] = useState(false);
   const [activeButton, setActiveButton] = useState("bio-data");
   const [activityButton, setActivityButton] = useState("summary");
   const [infoHover, setInfoHover] = useState("");
   const [logSearch, setLogSearch] = useState(false);
   const [borrowerOptions, setBorrowerOptions] = useState(false);
   const [openProfilePic, setOpenProfilePic] = useState(false);
+  const [user, setUser] = useState(null);
+  const [openedMessages, setOpenedMessages] = useState("unread");
   const buttonRef = useRef(null);
+  const activeIcon = <div className="bg-swGreen p-0.5 rounded-full -mr-2 ml-2"></div>
+  const dataClass = 'pt-3 grid grid-cols-2'
+  const labelClass = 'text-sm text-swGray leading-5 flex gap-2'
+  const valueClass = 'font-medium text-sm leading-5 text-swBlack -ml-8 w-fit'
+  const detailsHeader = 'text-swBlack text-lg leading-7 my-1 font-semibold'
+  const editButton = <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit rounded-md flex">
+    <Link
+      href={"#"}
+      className="bg-white w-fit p-2 rounded-md"
+    >
+      {infoHover === "bio-data" && (
+        <FiEdit2
+          size={16}
+          className="text-swGray hover:text-black"
+        />
+      )}
+    </Link>
+  </div>
 
-  console.log({ data });
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -85,15 +91,9 @@ const InvestorProfile = () => {
     state === "open" ? setLogSearch(true) : setLogSearch(false);
   };
 
-  const [user, setUser] = useState(null);
-  const [openedMessages, setOpenedMessages] = useState("unread");
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      // console.log({ storedUser });
-      console.log({ localStorage });
-
       setUser(storedUser?.data?.user);
       setRoleTag(storedUser?.data?.user?.role?.tag);
     }
@@ -108,19 +108,20 @@ const InvestorProfile = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [borrowerOptions]);
 
+
   return (
     <DashboardLayout isBackNav={true} paths={paths}>
       <div className="overflow-x-hidden">
-        <div className="flex flex-col sm:flex-row gap-2 border-b border-gray-300 items-end py-4 px-8">
-          <div className="w-full sm:w-1/2">
+        <div className="flex flex-col justify-between lg:flex-row gap-2 border-b border-gray-300 items-end py-4 px-8">
+          {/* Profile header */}
+          <div className="w-full lg:w-1/2">
             <div className="flex items-start">
-              <div className="rounded-full border-2 border-swGold overflow-hidden h-[4.7rem] w-[4.7rem] relative">
+              <div className="rounded-full border-2 border-swGold overflow-hidden h-[58px] w-[58px] relative">
                 <img
                   src={
                     data?.data?.profilePicture
@@ -128,6 +129,8 @@ const InvestorProfile = () => {
                       : "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                   }
                   alt="user"
+                  width={58}
+                  height={58}
                   className="cursor-pointer"
                   onClick={() =>
                     data?.data?.profilePicture && setOpenProfilePic(true)
@@ -154,15 +157,14 @@ const InvestorProfile = () => {
                     {data?.data?.firstName} {data?.data?.middleName}{" "}
                     {data?.data?.lastName}
                   </p>
-                  <div
-                    className={`${
-                      data?.data?.investorStatus === "Active"
-                        ? "bg-blue-50 text-swBlue"
-                        : "bg-red-50 text-red-500"
-                    } text-xs font-normal px-2 py-1 rounded-full`}
+                  {/* <div
+                    className={`${data?.data?.investorStatus === "Active"
+                      ? "bg-blue-50 text-swBlue"
+                      : "bg-red-50 text-red-500"
+                      } text-xs font-normal px-2 py-1 rounded-full`}
                   >
                     {data?.data?.investorStatus}
-                  </div>
+                  </div> */}
                 </div>
                 <p className="text-xs"> {data?.data?.investorId}</p>
 
@@ -175,402 +177,96 @@ const InvestorProfile = () => {
                       <AiOutlineMail size={15} />
                     </Link>
                   </div>
-                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
-                    <Link
-                      // href={`/borrowers/profile/${id}/edit-borrower-profile`}
-                      href={"#"}
-                      className="bg-white border border-gray-300 w-fit p-2 rounded-md"
-                    >
-                      <FiEdit2 size={15} />
-                      {/* <FiPhone size={15} /> */}
-                    </Link>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-full sm:w-1/2 sm:text-end">
+
+
+          <div className="w-full lg:w-1/2 sm:text-end">
             <div className="sm:ml-4 flex flex-col justify-between  sm:items-end">
-              <p className="text-sm mb-2">
-                Investor onboarded by: <br />
-                <span className="font-semibold text-swGreen">
-                  {data?.data?.createdBy?.email} on{" "}
-                  {data?.data?.createdAt &&
-                    format(new Date(data?.data?.createdAt), "PPP")}
+              <p className="text-sm mb-5">
+                Investor Onboarded By: <br />
+                <span className="font-medium text-swTextColor leading-6">
+                  {data?.data?.createdBy?.firstName}{" "}
+                  {data?.data?.createdBy?.lastName}
                 </span>
               </p>
               <div className="flex items-center">
                 <div className="flex gap-5">
                   <Link
                     href={"/investors/create-investment"}
-                    // variant={"primary"}
                     className="text-center rounded-md py-[0.4rem] px-3 bg-swBlue text-white border-2 border-white hover:border-blue-100"
-                    // onClick={() => {
-                    //   localStorage.setItem("borrower", JSON.stringify(data));
-                    //   router.push("/create-loan");
-                    //   roleTag !== "LO"
-                    //     ? router.push("/unauthorized")
-                    //     : router.push("/create-loan");
-                    // }}
                   >
-                    Create investment
+                    Create Investment
                   </Link>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-[30%] h-full p-2 md:p-4">
+
+        {/* Profile Details */}
+        <div className="flex flex-col lg:flex-row px-2 lg:px-0">
+          <div className="w-full lg:w-[30%] h-full p-2 lg:p-4">
             <div className="flex gap-2 text-xs lg:text-sm  items-center flex-wrap">
+              {activeButton !== "bio-data" ? activeIcon : ""}
               <button
                 onClick={() => handleInfoToggle("bio-data")}
-                className={`${
-                  activeButton === "bio-data" &&
+                className={`${activeButton === "bio-data" &&
                   "font-semibold text-swBlue bg-blue-50"
-                } p-2 rounded-md cursor-pointer whitespace-nowrap`}
+                  } p-2 rounded-md cursor-pointer whitespace-nowrap`}
               >
-                Personal Info
+                Personal Information
               </button>
-              <button
-                onClick={() => handleInfoToggle("work")}
-                className={`${
-                  activeButton === "work" &&
-                  "font-semibold text-swBlue bg-blue-50"
-                } p-2 rounded-md cursor-pointer`}
-              >
-                Work
-              </button>
+
+              {activeButton !== "document" ? activeIcon : ""}
               <button
                 onClick={() => handleInfoToggle("document")}
-                className={`${
-                  activeButton === "document" &&
+                className={`${activeButton === "document" &&
                   "font-semibold text-swBlue bg-blue-50"
-                } p-2 rounded-md cursor-pointer`}
+                  } p-2 rounded-md cursor-pointer`}
               >
                 Documents
               </button>
             </div>
             {activeButton == "bio-data" && (
-              <div>
-                <div className="p-2">
-                  <div
-                    className="text-sm font-semibold flex justify-between"
-                    onMouseEnter={() => handleInfoHoverIn("bio-data")}
-                    onMouseLeave={() => handleInfoHoverIn("close")}
-                  >
-                    <p>Bio Data</p>
-                  </div>
-
-                  <div className=" text-xs  text-swGray">
-                    <div className="pt-3 flex items-center gap-1">
-                      <p className="">D.O.B: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold text-swBlue whitespace-nowrap">
-                        {data?.data?.dateOfBirth &&
-                          format(new Date(data?.data?.dateOfBirth), "PPP")}
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">Gender: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold text-swBlue">
-                        {data?.data?.gender}
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">NIN/SSN: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold text-swBlue">
-                        {data?.data?.nin}
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">Phone: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold text-swBlue">
-                        {data?.data?.phoneNumber}
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">Email: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold cursor-copy text-swBlue">
-                        {data?.data?.email}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-2 border-t border-text-300">
-                  <div
-                    className="text-sm font-semibold flex justify-between "
-                    onMouseEnter={() => handleInfoHoverIn("address")}
-                    onMouseLeave={() => handleInfoHoverIn("close")}
-                  >
-                    <p>Address</p>
-                  </div>
-                  <div className="mt-2 text-xs text-swGray">
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">Country: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className=" font-semibold text-swBlue"> Nigeria</p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">State: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className=" font-semibold text-swBlue">
-                        {data?.data?.state}
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">Lga: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold text-swBlue">
-                        {data?.data?.lga}
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">Address: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold text-swBlue">
-                        {data?.data?.address?.houseNumber},{" "}
-                        {data?.data?.address?.houseLocation}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-2 border-t border-gray-300">
-                  <div
-                    className="text-sm font-semibold flex justify-between"
-                    onMouseEnter={() => handleInfoHoverIn("bank")}
-                    onMouseLeave={() => handleInfoHoverIn("close")}
-                  >
-                    <p>Bank Details</p>
-                  </div>
-                  <div className="text-xs text-swGray">
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="whitespace-nowrap">Bank Name: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="whitespace-nowrap font-semibold text-swBlue">
-                        {
-                          bankArr.find(
-                            (option) =>
-                              option.value === data?.data?.bankAccount?.bankName
-                          )?.label
-                        }
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="whitespace-nowrap">Account Number: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold text-swBlue">
-                        {data?.data?.bankAccount?.accountNumber}
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="whitespace-nowrap">Account Name: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="whitespace-nowrap font-semibold text-swBlue">
-                        {data?.data?.bankAccount?.accountName}
-                      </p>
-                    </div>
-                    <div className="pt-3 flex gap-1 items-center">
-                      <p className="">Bvn: </p>
-                      <div className="w-full border-t border-dashed" />
-                      <p className="font-semibold text-swBlue">
-                        {data?.data?.bvn}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <InvestorBioData
+                handleInfoHoverIn={handleInfoHoverIn}
+                data={data}
+                editButton={editButton}
+                dataClass={dataClass}
+                labelClass={labelClass}
+                valueClass={valueClass}
+                detailsHeader={detailsHeader}
+              />
             )}
-            {activeButton == "work" && (
-              <div className="">
-                <div className="text-center mr-auto ml-auto mt-4">
-                  {data?.employmentInformation === null ? (
-                    <div className="pt-20 pb-24">
-                      <p> No work experience provided</p>
-                      <Button
-                        onClick={() => openModal("employmentDetails")}
-                        variant="primary"
-                        className="py-1.5 px-3 rounded-md mx-auto flex gap-2 border w-fit mt-5"
-                      >
-                        update work details
-                      </Button>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="p-2">
-                        <div
-                          className="text-sm font-semibold flex justify-between"
-                          onMouseEnter={() => handleInfoHoverIn("bio-data")}
-                          onMouseLeave={() => handleInfoHoverIn("close")}
-                        >
-                          <p>Employment details</p>
-                          {infoHover === "bio-data" && (
-                            <FiEdit2
-                              size={15}
-                              className="text-swGray hover:text-black"
-                            />
-                          )}
-                        </div>
 
-                        <div className=" text-xs  text-swGray">
-                          <div className="pt-3 flex items-center">
-                            <p className="">Status: </p>
-                            <div className="w-full border-t border-dashed" />
-                            <p className="font-semibold text-swBlue">
-                              {
-                                data?.employmentInformation
-                                  ?.currentEmploymentStatus
-                              }
-                            </p>
-                          </div>
-                          <div className="pt-3 flex gap-1 items-center">
-                            <p className="whitespace-nowrap ">
-                              Employer Name:{" "}
-                            </p>
-                            <div className="w-full border-t border-dashed" />
-                            <p className="whitespace-nowrap font-semibold text-swBlue">
-                              {
-                                data?.employmentInformation?.employerInformation
-                                  ?.name
-                              }
-                            </p>
-                          </div>
-                          <div className="pt-3 flex gap-1 items-center">
-                            <p className="whitespace-nowrap ">
-                              Employer Phone:{" "}
-                            </p>
-                            <div className="w-full border-t border-dashed" />
-                            <p className="font-semibold text-swBlue">
-                              {
-                                data?.employmentInformation?.employerInformation
-                                  ?.contact
-                              }
-                            </p>
-                          </div>
-                          <div className="pt-3 flex gap-1 items-center">
-                            <p className="whitespace-nowrap ">Job Title: </p>
-                            <div className="w-full border-t border-dashed" />
-                            <p className="whitespace-nowrap font-semibold text-swBlue">
-                              {data?.employmentInformation?.jobTitle}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-2 border-t border-text-300">
-                        <div
-                          className="text-sm font-semibold flex justify-between "
-                          onMouseEnter={() => handleInfoHoverIn("address")}
-                          onMouseLeave={() => handleInfoHoverIn("close")}
-                        >
-                          <p>Income details</p>
-                          {infoHover === "address" && (
-                            <FiEdit2
-                              size={15}
-                              className="text-swGray hover:text-black"
-                            />
-                          )}
-                        </div>
-                        <div className="mt-2 text-xs text-swGray">
-                          <div className="pt-3 flex gap-1 items-center">
-                            <p className="whitespace-nowrap">Income Period: </p>
-                            <div className="w-full border-t border-dashed" />
-                            <p className="whitespace-nowrap font-semibold text-swBlue">
-                              {" "}
-                              {data?.employmentInformation?.incomePeriod}
-                            </p>
-                          </div>
-                          <div className="pt-3 flex gap-1 items-center">
-                            <p className="whitespace-nowrap">Amount Earned: </p>
-                            <div className="w-full border-t border-dashed" />
-                            <p className="whitespace-nowrap font-semibold text-swBlue">
-                              {/* {" "}
-                              ₦{" "}
-                              {Number(
-                                data?.employmentInformation?.monthlyIncome
-                              ).toLocaleString()} */}
-                            </p>
-                          </div>
-                          <div className="pt-3 flex gap-1 items-center">
-                            <p className="whitespace-nowrap">Annual Income: </p>
-                            <div className="w-full border-t border-dashed" />
-                            <p className="whitespace-nowrap font-semibold text-swBlue">
-                              ₦{" "}
-                              {Number(
-                                data?.data?.annualIncome
-                              ).toLocaleString()}
-                            </p>
-                          </div>
-                          <div className="pt-3 flex gap-1 items-center">
-                            <p className="whitespace-nowrap">Income Source: </p>
-                            <div className="w-full border-t border-dashed" />
-                            <p className="whitespace-nowrap font-semibold text-swBlue">
-                              {data?.employmentInformation?.incomeSource}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
             {activeButton == "document" && (
-              <div className="pt-20 pb-24">
-                {data?.identityVerification === null ? (
-                  <div className="pt-8 text-center mr-auto ml-auto mt-4">
-                    <p> No document uploaded yet</p>
-                    <div className="flex justify-center">
-                      <Button
-                        onClick={() => openModal("uploadDocuments")}
-                        variant="primary"
-                        className="py-1.5 px-3 rounded-md flex gap-2 border w-fit mt-5"
-                      >
-                        Upload documents
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="-mt-20">
-                    <div className="pt-4 font-semibold text-md text-swBlue pl-4">
-                      Identification verification/Document
-                    </div>
-                    <CustomerProfileDocs data={data} />
-                  </div>
-                )}
-              </div>
+              <InvestorProfileDocs
+                data={data} openModal={openModal}
+                labelClass={labelClass} handleInfoHoverIn={handleInfoHoverIn}
+                detailsHeader={detailsHeader} editButton={editButton}
+              />
             )}
           </div>
-          <div className="w-full mt-10 md:mt-0 md:w-[70%] md:border-l h-screen border-gray-300 relative">
+
+          <div className="w-full mt-10 md:mt-0 lg:w-[70%] md:border-l-2 border-gray-300 relative pb-20">
             <div className="py-2 px-4 flex items-center justify-between border-b border-gray-300 flex-wrap bg-white">
               <div className="flex gap-2 text-xs lg:text-sm">
-                {/* <button
-                  onClick={() => handleActivityToggle("activity-logs")}
-                  className={`${
-                    activityButton === "activity-logs" &&
-                    "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md cursor-pointer whitespace-nowrap`}
-                >
-                  Activity logs
-                </button> */}
                 <button
                   onClick={() => handleActivityToggle("summary")}
-                  className={`${
-                    activityButton === "summary" &&
+                  className={`${activityButton === "summary" &&
                     "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md cursor-pointer`}
+                    } p-2 rounded-md cursor-pointer`}
                 >
                   Summary
                 </button>
                 <button
                   onClick={() => handleActivityToggle("investments")}
-                  className={`${
-                    activityButton === "investments" &&
+                  className={`${activityButton === "investments" &&
                     "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md cursor-pointer`}
+                    } p-2 rounded-md cursor-pointer`}
                 >
                   Investment
                 </button>
@@ -596,43 +292,16 @@ const InvestorProfile = () => {
                   `}
                   borderColor="bg-gray-200 "
                 />
-                <div
-                  className={`${
-                    logSearch ? "opacity-0" : "opacity-1"
-                  } transition-all ease-in-out p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex`}
-                >
-                  <div
-                    className="bg-white border border-gray-300 w-fit p-2 rounded-md cursor-pointer"
-                    onClick={() => {
-                      handleLogSearch("open");
-                    }}
-                  >
-                    <FiSearch size={20} />
-                  </div>
-                </div>
-                {/* <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex cursor-pointer">
-                  <div className="bg-white border border-gray-300 w-fit p-2 rounded-md ">
-                    <BsThreeDotsVertical size={20} />
-                  </div>
-                </div> */}
               </div>
             </div>
             <div className="p-2">
               {activityButton === "summary" && <InvestorSummary />}
-              {activityButton === "investments" && (
-                <CustomerLoanTable id={data?.data?._id} />
-              )}
+              {activityButton === "investments" && <CustomerLoanTable id={data?.data?._id} />}
             </div>
           </div>
         </div>
-        {/*  */}
       </div>
       <div>
-        <EmploymentDetailsModal
-          isOpen={isEmploymentDetailsModalOpen}
-          onClose={closeModal}
-          getCustomer={getCustomerById}
-        />
         <UploadDocumentsModal
           isOpen={isUploadDocumentsModalOpen}
           onClose={closeModal}

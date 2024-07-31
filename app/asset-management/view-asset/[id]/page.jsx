@@ -16,7 +16,6 @@ const ViewAsset = () => {
   const [loading, setLoading] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { data } = useSelector((state) => state.asset);
-  console.log("aseet data", data);
 
   useEffect(() => {
     dispatch(getSingleAsset(id));
@@ -66,12 +65,12 @@ const ViewAsset = () => {
             </p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Description</p>
-            <p>{data?.data?.description}</p>
-          </div>
-          <div className="flex">
             <p className="min-w-[15rem]">Value</p>
             <p>{data?.data?.value?.toLocaleString()}</p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Description</p>
+            <p>{data?.data?.description}</p>
           </div>
         </div>
       </main>

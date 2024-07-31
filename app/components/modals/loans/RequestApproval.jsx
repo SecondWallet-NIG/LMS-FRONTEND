@@ -1,23 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
-import { FiUser } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
-import InputField from "../../shared/input/InputField--";
-import Button from "../../shared/buttonComponent/Button";
 import SelectField from "../../shared/input/SelectField";
 import { requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
+import Button from "../../shared/buttonComponent/Button";
 
-const RequestApproval = ({
-  data,
-  approvalId,
-  approvalLevel,
-  onClose,
-}) => {
+const RequestApproval = ({ data, approvalId, approvalLevel, onClose }) => {
   const dispatch = useDispatch();
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,7 +22,6 @@ const RequestApproval = ({
 
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
-      console.log({ approvalLevel });
       const users = user.filter((item) => item?.role?.name === approvalLevel);
 
       setUsersToApprove(
@@ -69,7 +60,6 @@ const RequestApproval = ({
         toast.success("Loan approval request successful");
       })
       .catch((error) => {
-        console.log({ error });
         if (error?.message == '"assignee" is not allowed to be empty') {
           toast.error("Please select an assignee");
           setLoading(false);
@@ -98,7 +88,9 @@ const RequestApproval = ({
                 Request Approval
               </p>
             </div>
-            <button className="text-black" onClick={onClose}>x</button>
+            <button className="text-black" onClick={onClose}>
+              x
+            </button>
           </div>
           <div className="p-4">
             <div className="w-full pb-4">

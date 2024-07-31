@@ -8,12 +8,6 @@ import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
-import {
-  createNewAsset,
-  getAllAssetCategories,
-  getSingleAsset,
-  updateSingleAsset,
-} from "@/redux/slices/assetManagementSlice";
 import { useParams, useRouter } from "next/navigation";
 import {
   getAllExpenseCategories,
@@ -32,7 +26,7 @@ const EditAsset = () => {
   const [formData, setFormData] = useState({
     category: "",
     description: "",
-    date: new Date(),
+    expenseDate: new Date(),
     amount: "",
   });
   // const { data } = useSelector((state) => state.asset);
@@ -84,15 +78,14 @@ const EditAsset = () => {
 
   const handleUpdateExpense = async () => {
     setLoading(true);
-    const newDate = format(formData.date, "yyyy-MM-dd");
+    const newDate = format(formData.expenseDate, "yyyy-MM-dd");
     const newValue = parseInt(removeCommasFromNumber(formData.amount));
     const payload = {
       ...formData,
-      date: newDate,
+      expenseDate: newDate,
       amount: newValue,
     };
-    // delete payload.category;
-    // console.log(payload);
+
     dispatch(updateSingleExpense({ id, payload }))
       .unwrap()
       .then((res) => {
@@ -111,17 +104,10 @@ const EditAsset = () => {
     dispatch(getSingleExpense(id))
       .unwrap()
       .then((res) => {
-        console.log("hiiii", res?.data);
-        // {
-        //   category: "",
-        //   description: "",
-        //   date: new Date(),
-        //   amount: "",
-        // }
         setFormData({
           category: res?.data?.category?._id,
           description: res?.data?.description,
-          date: new Date(res?.data?.date),
+          expenseDate: new Date(res?.data?.expenseDate),
           amount: res?.data?.amount,
         });
       })
@@ -131,7 +117,6 @@ const EditAsset = () => {
       .then((res) => setAssetTypeOptions(res?.data))
       .catch((err) => console.log({ err }));
   }, []);
-  console.log(formData);
 
   return (
     <DashboardLayout isBackNav={true} paths={["Expense", "Edit expense"]}>
@@ -146,7 +131,7 @@ const EditAsset = () => {
 
         <div className="flex flex-col gap-5">
           <p className="text-lg font-semibold text-swBlack mt-10">
-            Expense details
+            Expense Details
           </p>
 
           {/* <InputField
@@ -159,7 +144,7 @@ const EditAsset = () => {
           /> */}
           <div className="relative">
             <div className="block text-gray-700 text-sm mb-2">
-              Date of expense
+              Date of Expense
               <span className="text-red-600 ml-1">*</span>
             </div>
             <div
@@ -167,7 +152,7 @@ const EditAsset = () => {
               onClick={() => setOpenDate(!openDate)}
             >
               <LuCalendar size={22} className="text-swTextColor" />
-              {format(formData?.date, "PPP")}
+              {format(formData?.expenseDate, "PPP")}
             </div>
             {openDate && (
               <div className="absolute w-fit right-0  -mb-5 bg-white border rounded-md z-50">
@@ -176,7 +161,7 @@ const EditAsset = () => {
                     caption: { color: "#2769b3" },
                   }}
                   modifiers={{
-                    selected: formData.date,
+                    selected: formData.expenseDate,
                   }}
                   modifiersClassNames={{
                     selected: "my-selected",
@@ -184,7 +169,7 @@ const EditAsset = () => {
                   onDayClick={(value) => {
                     setFormData((prev) => ({
                       ...prev,
-                      date: value > new Date() ? new Date() : value,
+                      expenseDate: value > new Date() ? new Date() : value,
                     }));
                   }}
                   className="w-full"
@@ -199,7 +184,7 @@ const EditAsset = () => {
             )}
           </div>
           <SelectField
-            label={"Expense category"}
+            label={"Expense Category"}
             required={true}
             optionValue={transformedOptions}
             name="category"
@@ -214,11 +199,11 @@ const EditAsset = () => {
             }
           />
           <InputField
-            label={"Describe expense"}
+            label={"Description"}
             required={true}
             name="description"
             value={formData.description}
-            placeholder={"Cleaning tools"}
+            placeholder={"Enter description"}
             onChange={handleChange}
           />
           <InputField
@@ -228,9 +213,9 @@ const EditAsset = () => {
             onKeyPress={preventMinus}
             onWheel={() => document.activeElement.blur()}
             endIcon={<p className="text-swGray">NGN &#8358;</p>}
-            label="Total amount"
+            label="Total Amount"
             value={formData?.amount?.toLocaleString()}
-            placeholder="Enter loan amount"
+            placeholder="Enter amount"
             onChange={handleChange}
           />
         </div>

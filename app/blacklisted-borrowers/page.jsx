@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
-import CustomerLoan from "../components/customers/CustomerLoan";
 import { format } from "date-fns";
 import BorrowerOptions from "../components/customers/BorrowerOptions";
 
@@ -56,7 +55,6 @@ const BlackListedCustomers = () => {
             className="text-md font-[500] text-white bg-swBlue w-fit py-2 px-4 rounded-lg"
             onClick={() => {
               setOpenWhitelistModal(true);
-              console.log(item?.customerProfileInformation?._id);
               setBorrowerId(item?.customerProfileInformation?._id);
             }}
           >

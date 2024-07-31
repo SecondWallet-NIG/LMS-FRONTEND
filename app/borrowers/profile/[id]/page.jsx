@@ -53,7 +53,6 @@ const CustomerProfile = () => {
   const [openProfilePic, setOpenProfilePic] = useState(false);
   const buttonRef = useRef(null);
 
-  console.log({ data });
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -88,8 +87,6 @@ const CustomerProfile = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      // console.log({ storedUser });
-      console.log({ localStorage });
 
       setUser(storedUser?.data?.user);
       setRoleTag(storedUser?.data?.user?.role?.tag);
@@ -248,7 +245,7 @@ const CustomerProfile = () => {
                         : router.push("/create-loan");
                     }}
                   >
-                    Create loan
+                    Create Loan
                   </Link>
                   <div className="relative">
                     <div

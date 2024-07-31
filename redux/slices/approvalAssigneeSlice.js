@@ -15,11 +15,11 @@ export const getApprovalAssignee = createAsyncThunk(
         `${API_URL}/loan-application/task/${assigneeId}`,
         {
           headers: {
-            Authorization: `Bearer ${user?.data?.token}`,
+             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log("",response.data?.data?.data);
+
       return response.data?.data?.data;
     } catch (error) {
       if (error.response.data.error) {

@@ -1,9 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import InvestmentsCards from "../cards/InvestmentsCard/InvestmentsCards";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllInvestments,
+  getAllInvestors,
+  getInvestorCards,
+} from "@/redux/slices/investmentSlice";
 
 const header = [
   { id: "investorName", label: "Investor name" },
@@ -14,48 +20,64 @@ const header = [
   { id: "phone", label: "Phone no" },
   { id: "annualIncome", label: "Annual income" },
   { id: "workStatus", label: "Work status" },
-  { id: "investorStatus", label: "Investor status" },
+  { id: "status", label: "Investor status" },
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log("record", apiData);
   return apiData?.investorProfiles?.map((item) => ({
     id: item?._id,
     investorName: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.firstName} {item?.lastName}
       </div>
     ),
     investorId: (
-      <div className="text-md font-[500] text-gray-700">{item?.investorId}</div>
+      <div className="text-[15px] font-light text-gray-700">
+        {item?.investorId}
+      </div>
     ),
     dateOfBirth: (
-      <div className="text-md font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.dateOfBirth && format(new Date(item?.dateOfBirth), "PPP")}
       </div>
     ),
     gender: (
-      <div className="text-md font-[500] text-gray-700">{item?.gender}</div>
+      <div className="text-[15px] font-light text-gray-700">{item?.gender}</div>
     ),
     state: (
-      <div className="text-md font-[500] text-gray-700">{item?.state}</div>
+      <div className="text-[15px] font-light text-gray-700">{item?.state}</div>
     ),
     phone: (
-      <div className="text-xs font-[500] text-gray-700">
+      <div className="text-[15px] font-light text-gray-700">
         {item?.phoneNumber}
       </div>
     ),
     annualIncome: (
-      <div className="text-xs font-[500] text-gray-700">
-        {item?.annualIncome.toLocaleString()}
+      <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+        ₦ {item?.annualIncome.toLocaleString()}
       </div>
     ),
     workStatus: (
-      <div className="text-xs font-[500] text-gray-700">{item?.workStatus}</div>
+      <div className="text-[15px] font-light text-gray-700">
+        {item?.workStatus}
+      </div>
     ),
-    investorStatus: (
-      <div className="text-xs font-[500] text-gray-700">
-        {item?.investorStatus || "status"}
+    status: (
+      <div className="text-[15px] font-light">
+        <div
+          className={`py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1 ${
+            item?.status === "Active"
+              ? "bg-green-50 text-green-500 border-green-500"
+              : "bg-gray-50 text-gray-500 border-gray-500"
+          }`}
+        >
+          <div
+            className={`h-1 w-1 rounded-full ${
+              item?.status === "Active" ? "bg-green-500" : "bg-gray-500"
+            }`}
+          />
+          {item?.status}
+        </div>
       </div>
     ),
   }));
@@ -63,11 +85,31 @@ const customDataTransformer = (apiData) => {
 
 export default function InvestorsRecords() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { investorCards } = useSelector((state) => state.investment);
+  const [investorsData, setInvestorsData] = useState({
+    total: 0,
+    active: 0,
+    returns: 0,
+  });
   const cards = [
-    { title: "Number of investors", value: "12,820,382.36" },
-    { title: "Current pending payments", value: "20" },
-    { title: "Returns earned", value: "25,256,259.68" },
+    {
+      title: "Total Number of Investors",
+      value: investorCards?.data?.totalInvestors || 0,
+    },
+    {
+      title: "Active investors",
+      value: investorCards?.data?.totalActiveInvestors || 0,
+    },
+    {
+      title: "Returns earned",
+      value: investorCards?.data?.totalAmountEarned || 0,
+    },
   ];
+
+  useEffect(() => {
+    dispatch(getInvestorCards());
+  }, []);
 
   return (
     <div className="flex flex-col gap-5">
@@ -80,7 +122,7 @@ export default function InvestorsRecords() {
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/investment/investor/all`}
         btnText={
           <div className="flex gap-1 items-center p-1">
-            <p className="">create investor</p>
+            <p className="">Create Investor</p>
           </div>
         }
         btnTextClick={() => {

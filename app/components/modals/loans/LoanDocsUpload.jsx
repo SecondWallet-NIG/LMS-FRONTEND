@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
 import Button from "../../shared/buttonComponent/Button";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
-import { approveLoanRequest } from "@/redux/slices/loanApprovalSlice";
 import {
   getSingleLoan,
   updateLoanApplication,
@@ -24,6 +23,9 @@ const LoanDocsUpload = ({ onClose, fieldType, customerId }) => {
     collaterals: "",
     guarantorForm: null,
     loanAffidavit: null,
+    powerOfAttorney: null,
+    proofOfOwnership: null,
+    statementOfAccounts: null,
     customerId: customerId,
   });
   const handleFileChange = (e) => {
@@ -68,6 +70,12 @@ const LoanDocsUpload = ({ onClose, fieldType, customerId }) => {
       payload.append("guarantorForm", formData.guarantorForm);
     fieldType == "collaterals" &&
       payload.append("collaterals", formData.collaterals);
+    fieldType == "powerOfAttorney" &&
+      payload.append("powerOfAttorney", formData.powerOfAttorney);
+    fieldType == "proofOfOwnership" &&
+      payload.append("proofOfOwnership", formData.proofOfOwnership);
+    fieldType == "statementOfAccounts" &&
+      payload.append("statementOfAccounts", formData.statementOfAccounts);
 
     dispatch(updateLoanApplication({ loanId: id, payload }))
       .unwrap()
@@ -289,6 +297,153 @@ const LoanDocsUpload = ({ onClose, fieldType, customerId }) => {
                       <div
                         onClick={() => {
                           deleteFile("collaterals");
+                        }}
+                      >
+                        <AiOutlineDelete color="red" size={20} />
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+            {fieldType == "powerOfAttorney" ? (
+              <div className="flex flex-col gap-2 mt-5">
+                <p className="font-semibold">Upload Power of Attorney</p>
+                {fileError && (
+                  <p className="text-red-500 text-sm">{fileError}</p>
+                )}
+                <div className="relative">
+                  <input
+                    name="powerOfAttorney"
+                    type="file"
+                    id="fileInput1"
+                    className="absolute w-0 h-0 opacity-0"
+                    onChange={handleFileChange}
+                    onClick={(e) => (e.target.value = null)}
+                  />
+                  <label
+                    htmlFor="fileInput1"
+                    className="px-4 py-2 text-white rounded-md cursor-pointer"
+                  >
+                    <span className="py-2 px-6 rounded-md flex gap-2 border w-full justify-center">
+                      <AiOutlinePaperClip color="black" size={20} />
+                      <p className="font-semibold text-black">
+                        {" "}
+                        {formData?.powerOfAttorney?.name
+                          ? "Change file"
+                          : "Select file"}
+                      </p>
+                    </span>
+                  </label>
+                  {formData?.powerOfAttorney?.name ? (
+                    <div
+                      id="fileLabel1"
+                      className="bg-swLightGray p-2 flex justify-between"
+                    >
+                      <div className="text-xs">
+                        {formData?.powerOfAttorney?.name}
+                      </div>
+                      <div
+                        onClick={() => {
+                          deleteFile("powerOfAttorney");
+                        }}
+                      >
+                        <AiOutlineDelete color="red" size={20} />
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+            {fieldType == "proofOfOwnership" ? (
+              <div className="flex flex-col gap-2 mt-5">
+                <p className="font-semibold">Upload Proof of Ownership</p>
+                {fileError && (
+                  <p className="text-red-500 text-sm">{fileError}</p>
+                )}
+                <div className="relative">
+                  <input
+                    name="proofOfOwnership"
+                    type="file"
+                    id="fileInput1"
+                    className="absolute w-0 h-0 opacity-0"
+                    onChange={handleFileChange}
+                    onClick={(e) => (e.target.value = null)}
+                  />
+                  <label
+                    htmlFor="fileInput1"
+                    className="px-4 py-2 text-white rounded-md cursor-pointer"
+                  >
+                    <span className="py-2 px-6 rounded-md flex gap-2 border w-full justify-center">
+                      <AiOutlinePaperClip color="black" size={20} />
+                      <p className="font-semibold text-black">
+                        {" "}
+                        {formData?.proofOfOwnership?.name
+                          ? "Change file"
+                          : "Select file"}
+                      </p>
+                    </span>
+                  </label>
+                  {formData?.proofOfOwnership?.name ? (
+                    <div
+                      id="fileLabel1"
+                      className="bg-swLightGray p-2 flex justify-between"
+                    >
+                      <div className="text-xs">
+                        {formData?.proofOfOwnership?.name}
+                      </div>
+                      <div
+                        onClick={() => {
+                          deleteFile("proofOfOwnership");
+                        }}
+                      >
+                        <AiOutlineDelete color="red" size={20} />
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+            {fieldType == "statementOfAccounts" ? (
+              <div className="flex flex-col gap-2 mt-5">
+                <p className="font-semibold">Upload Statement of Account</p>
+                {fileError && (
+                  <p className="text-red-500 text-sm">{fileError}</p>
+                )}
+                <div className="relative">
+                  <input
+                    name="statementOfAccounts"
+                    type="file"
+                    id="fileInput1"
+                    className="absolute w-0 h-0 opacity-0"
+                    onChange={handleFileChange}
+                    onClick={(e) => (e.target.value = null)}
+                  />
+                  <label
+                    htmlFor="fileInput1"
+                    className="px-4 py-2 text-white rounded-md cursor-pointer"
+                  >
+                    <span className="py-2 px-6 rounded-md flex gap-2 border w-full justify-center">
+                      <AiOutlinePaperClip color="black" size={20} />
+                      <p className="font-semibold text-black">
+                        {" "}
+                        {formData?.statementOfAccounts?.name
+                          ? "Change file"
+                          : "Select file"}
+                      </p>
+                    </span>
+                  </label>
+                  {formData?.statementOfAccounts?.name ? (
+                    <div
+                      id="fileLabel1"
+                      className="bg-swLightGray p-2 flex justify-between"
+                    >
+                      <div className="text-xs">
+                        {formData?.statementOfAccounts?.name}
+                      </div>
+                      <div
+                        onClick={() => {
+                          deleteFile("statementOfAccounts");
                         }}
                       >
                         <AiOutlineDelete color="red" size={20} />

@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { IoMdArrowDown, IoMdArrowUp } from "react-icons/io";
 import { LuUsers } from "react-icons/lu";
 
