@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
@@ -12,24 +11,25 @@ import {
   updateInvestor,
 } from "@/redux/slices/investmentSlice";
 
-const UploadInvestorProfileDocs = ({ onClose, fieldType }) => {
+const UploadInvestorProfileDocs = ({ onClose, fieldType, setState }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [fileError, setFileError] = useState("");
-
   const [formData, setFormData] = useState({
     ninDoc: null || "null",
     taxDoc: null || "null",
     bvnDoc: null || "null",
   });
+  
+
   const handleFileChange = (e) => {
     setFileError("");
     let { name, files } = e.target;
     const file = files[0];
     const fileExtension = file.name.split(".").pop().toLowerCase();
-
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+
     if (!allowedExtensions.includes(fileExtension)) {
       setFileError(
         "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
@@ -54,24 +54,39 @@ const UploadInvestorProfileDocs = ({ onClose, fieldType }) => {
     e.preventDefault();
 
     const payload = new FormData();
+    let responseType;
 
-    fieldType === "ninDoc" && payload.append("ninDoc", formData.ninDoc);
-    fieldType == "bvnDoc" && payload.append("taxDoc", formData.taxDoc);
-    fieldType == "ninDoc" && payload.append("ninDoc", formData.ninDoc);
+    fieldType === "ninDoc" && (
+      payload.append("ninDoc", formData.ninDoc),
+      responseType = "NIN"
+    )
+    fieldType == "bvnDoc" && (
+      payload.append("bvnDoc", formData.bvnDoc),
+      responseType = "BVN"
+    );
+    fieldType == "taxDoc" && (
+      payload.append("taxDoc", formData.taxDoc),
+      responseType = "TIN"
+    );
+
 
     dispatch(updateInvestor({ id, payload }))
       .unwrap()
-      .then(() => {
-        toast.success("Document uploaded");
+      .then((res) => {
+        setState(draft => {
+          draft.successMessage = `${responseType} document uploaded successfully.`
+          draft.successModal = true
+        })
         dispatch(getSingleInvestor(id));
-        window.location.reload();
         setLoading(false);
         onClose(false);
       })
       .catch((error) => {
-        toast.error(`${error?.message}`);
+        setState(draft => {
+          draft.failedMessage = `${responseType} document upload failed.`
+          draft.failedModal = true
+        })
         dispatch(getSingleInvestor(id));
-        // window.location.reload();
         setLoading(false);
         onClose(false);
       });
@@ -85,9 +100,7 @@ const UploadInvestorProfileDocs = ({ onClose, fieldType }) => {
   };
   return (
     <main>
-      <ToastContainer />
       <form
-        //  style={modalStyles}
         className="w-full"
         id="add-user-form"
       >
