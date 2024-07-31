@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
 import SelectField from "../../shared/input/SelectField";
 import { requestLoanApproval } from "@/redux/slices/loanApprovalSlice";
+import Button from "../../shared/buttonComponent/Button";
 
 const RequestApproval = ({ data, approvalId, approvalLevel, onClose }) => {
   const dispatch = useDispatch();
