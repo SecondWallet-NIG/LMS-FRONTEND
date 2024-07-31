@@ -4,36 +4,39 @@ import InputField from "../../components/shared/input/InputField";
 import { AiOutlineMinus } from "react-icons/ai";
 import { useState } from "react";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
-import { createInvestmentProduct } from "@/redux/slices/investmentSlice";
-import { useDispatch } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import SuccessModal from "@/app/components/modals/SuccessModal";
+import { createInvestmentProduct } from "@/redux/slices/investmentSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import { useParams, useRouter } from "next/navigation";
+import { FaRegTrashAlt } from "react-icons/fa";
 import CancelModal from "@/app/components/modals/CancelModal";
 
 const CreateInvestmentProduct = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [displayDailyForm, setDisplayDailyForm] = useState(false);
   const [displayMonthlyForm, setDisplayMonthlyForm] = useState(false);
   const [displayYearlyForm, setDisplayYearlyForm] = useState(false);
+  // const [formData, setPayload] = useState({});
   const [successModal, setSuccessModal] = useState(false);
   const [failedModal, setFailedModal] = useState(false);
   const [successModalData, setSuccessModalData] = useState({});
   const [errorModalData, setErrorModalData] = useState({});
   const [formData, setFormData] = useState({
     name: "",
-    minInterestRangeDaily: "",
-    maxInterestRangeDaily: "",
+    minInterestRangeDaily: 0,
+    maxInterestRangeDaily: 0,
     minimumInvestmentAmountDaily: "",
     maximumInvestmentAmountDaily: "",
-    minInterestRangeMonthly: "",
-    maxInterestRangeMonthly: "",
+    minInterestRangeMonthly: 0,
+    maxInterestRangeMonthly: 0,
     minimumInvestmentAmountMonthly: "",
     maximumInvestmentAmountMonthly: "",
-    minInterestRangeYearly: "",
-    maxInterestRangeYearly: "",
+    minInterestRangeYearly: 0,
+    maxInterestRangeYearly: 0,
     minimumInvestmentAmountYearly: "",
     maximumInvestmentAmountYearly: "",
   });
@@ -41,24 +44,32 @@ const CreateInvestmentProduct = () => {
   const resetForm = () => {
     setFormData({
       name: "",
-      minInterestRangeDaily: "",
-      maxInterestRangeDaily: "",
+      minInterestRangeDaily: 0,
+      maxInterestRangeDaily: 0,
       minimumInvestmentAmountDaily: "",
       maximumInvestmentAmountDaily: "",
-      minInterestRangeDaily: "",
-      maxInterestRangeDaily: "",
-      minimumInvestmentAmountDaily: "",
-      maximumInvestmentAmountDaily: "",
-      minInterestRangeDaily: "",
-      maxInterestRangeDaily: "",
-      minimumInvestmentAmountDaily: "",
-      maximumInvestmentAmountDaily: "",
+      minInterestRangeMonthly: 0,
+      maxInterestRangeMonthly: 0,
+      minimumInvestmentAmountMonthly: "",
+      maximumInvestmentAmountMonthly: "",
+      minInterestRangeYearly: 0,
+      maxInterestRangeYearly: 0,
+      minimumInvestmentAmountYearly: "",
+      maximumInvestmentAmountYearly: "",
     });
   };
 
   const handleInputChange = async (e) => {
     const { name, value } = e.target;
-    if (name === "minimumInvestmentAmount") {
+    if (
+      name !== "name" &&
+      name !== "minInterestRangeDaily" &&
+      name !== "maxInterestRangeDaily" &&
+      name !== "minInterestRangeMonthly" &&
+      name !== "maxInterestRangeMonthly" &&
+      name !== "minInterestRangeYearly" &&
+      name !== "maxInterestRangeYearly"
+    ) {
       // Remove all non-numeric characters except for a dot
       const numericValue = value.replace(/[^0-9.]/g, "");
 
@@ -83,72 +94,72 @@ const CreateInvestmentProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log({ formData });
 
-    let payload = {
-      name: formData.name,
+    let data = {
+      name: formData?.name,
       interestRateRanges: {
-        ...(displayYearlyForm && {
-          daily: {
-            min: Number(formData.minInterestRangeDaily),
-            max: Number(formData.maxInterestRangeDaily),
-          },
-        }),
-        ...(displayMonthlyForm && {
-          monthly: {
-            min: Number(formData.minInterestRangeMonthly),
-            max: Number(formData.maxInterestRangeMonthly),
-          },
-        }),
-        ...(displayDailyForm && {
-          annually: {
-            min: Number(formData.minInterestRangeYearly),
-            max: Number(formData.maxInterestRangeYearly),
-          },
-        }),
+        ...(formData?.minInterestRangeDaily > 0 &&
+          formData?.minimumInvestmentAmountDaily?.length > 0 && {
+            daily: {
+              min: Number(formData?.minInterestRangeDaily),
+              max: Number(formData?.maxInterestRangeDaily),
+            },
+          }),
+        ...(formData?.minInterestRangeMonthly > 0 &&
+          formData?.minimumInvestmentAmountMonthly?.length > 0 && {
+            monthly: {
+              min: Number(formData?.minInterestRangeMonthly),
+              max: Number(formData?.maxInterestRangeMonthly),
+            },
+          }),
+        ...(formData?.minInterestRangeYearly > 0 &&
+          formData?.minimumInvestmentAmountYearly?.length > 0 && {
+            annually: {
+              min: Number(formData?.minInterestRangeYearly),
+              max: Number(formData?.maxInterestRangeYearly),
+            },
+          }),
       },
       investmentAmountRanges: {
-        ...(displayDailyForm && {
-          daily: {
-            min: Number(formData.minimumInvestmentAmountDaily),
-            max: Number(formData.maximumInvestmentAmountDaily),
-          },
-        }),
-        ...(displayMonthlyForm && {
-          monthly: {
-            min: Number(formData.minimumInvestmentAmountMonthly),
-            max: Number(formData.maximumInvestmentAmountMonthly),
-          },
-        }),
-        ...(displayYearlyForm && {
-          annually: {
-            min: Number(formData.minimumInvestmentAmountYearly),
-            max: Number(formData.maximumInvestmentAmountYearly),
-          },
-        }),
+        ...(formData?.minimumInvestmentAmountDaily?.length > 0 &&
+          formData?.minInterestRangeDaily > 0 && {
+            daily: {
+              min: Number(
+                removeCommasFromNumber(formData?.minimumInvestmentAmountDaily)
+              ),
+              max: Number(
+                removeCommasFromNumber(formData?.maximumInvestmentAmountDaily)
+              ),
+            },
+          }),
+        ...(formData?.minimumInvestmentAmountMonthly?.length > 0 &&
+          formData?.minInterestRangeMonthly > 0 && {
+            monthly: {
+              min: Number(
+                removeCommasFromNumber(formData?.minimumInvestmentAmountMonthly)
+              ),
+              max: Number(
+                removeCommasFromNumber(formData?.maximumInvestmentAmountMonthly)
+              ),
+            },
+          }),
+        ...(formData?.minimumInvestmentAmountYearly?.length > 0 &&
+          formData?.minInterestRangeYearly > 0 && {
+            annually: {
+              min: Number(
+                removeCommasFromNumber(formData?.minimumInvestmentAmountYearly)
+              ),
+              max: Number(
+                removeCommasFromNumber(formData?.maximumInvestmentAmountYearly)
+              ),
+            },
+          }),
       },
     };
 
-    dispatch(createInvestmentProduct(payload))
+    dispatch(createInvestmentProduct(data))
       .unwrap()
       .then((response) => {
-        // toast.success(response?.message);
-        setSuccessModalData({
-          title: "Investment Product Created Successfully",
-          description: response?.message,
-          btnLeft: "View Products",
-          btnRight: "Close",
-          btnRightFunc: () => {
-            setSuccessModalData({});
-            setSuccessModal(false);
-          },
-        });
-      });
-
-    dispatch(createInvestmentProduct(payload))
-      .unwrap()
-      .then((response) => {
-        // toast.success(response?.message);
         setSuccessModalData({
           title: "Investor created Successfully",
           description: response?.message,
@@ -161,16 +172,60 @@ const CreateInvestmentProduct = () => {
         });
         setSuccessModal(true);
         resetForm();
-        // router.push("/investors");
       })
       .catch((error) => {
-        // toast.error(error?.message);
         setErrorModalData({
           description: error?.message,
         });
         setFailedModal(true);
         setLoading(false);
       });
+  };
+
+  const handleFormDisplay = (e, metric, btn) => {
+    let isChecked = e.target.checked
+      ? e.target.checked
+      : e.target.checked === undefined
+      ? btn
+      : false;
+
+    if (metric === "daily") {
+      setDisplayDailyForm(isChecked);
+      if (!isChecked) {
+        e.target.checked = false;
+        setFormData((prev) => ({
+          ...prev,
+          minInterestRangeDaily: "",
+          maxInterestRangeDaily: "",
+          minimumInvestmentAmountDaily: "",
+          maximumInvestmentAmountDaily: "",
+        }));
+      }
+    } else if (metric === "monthly") {
+      setDisplayMonthlyForm(isChecked);
+      if (!isChecked) {
+        e.target.checked = false;
+        setFormData((prev) => ({
+          ...prev,
+          minInterestRangeMonthly: "",
+          maxInterestRangeMonthly: "",
+          minimumInvestmentAmountMonthly: "",
+          maximumInvestmentAmountMonthly: "",
+        }));
+      }
+    } else {
+      setDisplayYearlyForm(isChecked);
+      if (!isChecked) {
+        e.target.checked = false;
+        setFormData((prev) => ({
+          ...prev,
+          minInterestRangeYearly: "",
+          maxInterestRangeYearly: "",
+          minimumInvestmentAmountYearly: "",
+          maximumInvestmentAmountYearly: "",
+        }));
+      }
+    }
   };
 
   const removeCommasFromNumber = (numberString) => {
@@ -192,47 +247,32 @@ const CreateInvestmentProduct = () => {
         </h1>
         <div>
           <div className="w-full">
-            <div className="flex gap-3">
-              <InputField
-                required={true}
-                // name="minInterestRange"
-                inputType="checkbox"
-                // onKeyPress={preventMinus}
-                // onWheel={() => document.activeElement.blur()}
-                activeBorderColor="border-swBlue"
-                // value={formData.minInterestRange}
-                // placeholder={"Minimum rate"}
-                onChange={() => setDisplayDailyForm(!displayDailyForm)}
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                checked={displayDailyForm}
+                className={"h-5 w-5"}
+                onChange={(e) => handleFormDisplay(e, "daily")}
               />
-              <div className="mt-2">Daily</div>
+              <div className="">Daily</div>
             </div>
-            <div className="flex gap-3">
-              <InputField
-                required={true}
-                // name="minInterestRange"
-                inputType="checkbox"
-                // onKeyPress={preventMinus}
-                // onWheel={() => document.activeElement.blur()}
-                // activeBorderColor="border-swBlue"
-                // value={formData.}
-                // placeholder={"Minimum rate"}
-                onChange={() => setDisplayMonthlyForm(!displayMonthlyForm)}
+            <div className="flex items-center gap-3 mt-1">
+              <input
+                type="checkbox"
+                className={"h-5 w-5"}
+                checked={displayMonthlyForm}
+                onChange={(e) => handleFormDisplay(e, "monthly")}
               />
-              <div className="mt-2">Monthly</div>
+              <div className="">Monthly</div>
             </div>
-            <div className="flex gap-3">
-              <InputField
-                required={true}
-                // name="minInterestRange"
-                inputType="checkbox"
-                // onKeyPress={preventMinus}
-                // onWheel={() => document.activeElement.blur()}
-                // activeBorderColor="border-swBlue"
-                // value={formData.minInterestRange}
-                // placeholder={"Minimum rate"}
-                onChange={() => setDisplayYearlyForm(!displayYearlyForm)}
+            <div className="flex items-center gap-3 mt-1">
+              <input
+                type="checkbox"
+                className={"h-5 w-5"}
+                checked={displayYearlyForm}
+                onChange={(e) => handleFormDisplay(e, "yearly")}
               />
-              <div className="mt-2">Yearly</div>
+              <div className="">Yearly</div>
             </div>
           </div>
         </div>
@@ -261,6 +301,7 @@ const CreateInvestmentProduct = () => {
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     label={"Interest rate range"}
+                    endIcon={"%"}
                     value={formData.minInterestRangeDaily}
                     placeholder={"Minimum rate"}
                     onChange={handleInputChange}
@@ -277,6 +318,7 @@ const CreateInvestmentProduct = () => {
                     onKeyPress={preventMinus}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
+                    endIcon={"%"}
                     value={formData.maxInterestRangeDaily}
                     placeholder={"Maximum rate"}
                     onChange={handleInputChange}
@@ -312,10 +354,17 @@ const CreateInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountDaily}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>
+              </div>
+              <div className="flex justify-end">
+                <FaRegTrashAlt
+                  size={20}
+                  className="cursor-pointer"
+                  onClick={(e) => handleFormDisplay(e, "daily", false)}
+                />
               </div>
             </div>
           )}
@@ -328,11 +377,12 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeMonthly"
-                    inputType="number"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     label={"Interest rate range"}
+                    endIcon={"%"}
                     value={formData.minInterestRangeMonthly}
                     placeholder={"Minimum rate"}
                     onChange={handleInputChange}
@@ -345,8 +395,9 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeMonthly"
-                    inputType="number"
                     onKeyPress={preventMinus}
+                    inputType="number"
+                    endIcon={"%"}
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     value={formData.maxInterestRangeMonthly}
@@ -384,10 +435,17 @@ const CreateInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountMonthly}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>
+              </div>
+              <div className="flex justify-end">
+                <FaRegTrashAlt
+                  size={20}
+                  className="cursor-pointer"
+                  onClick={(e) => handleFormDisplay(e, "monthly", false)}
+                />
               </div>
             </div>
           )}
@@ -400,13 +458,14 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="minInterestRangeYearly"
-                    inputType="number"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     label={"Interest rate range"}
                     value={formData.minInterestRangeYearly}
                     placeholder={"Minimum rate"}
+                    endIcon={"%"}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -417,12 +476,13 @@ const CreateInvestmentProduct = () => {
                   <InputField
                     required={true}
                     name="maxInterestRangeYearly"
-                    inputType="number"
                     onKeyPress={preventMinus}
+                    inputType="number"
                     onWheel={() => document.activeElement.blur()}
                     activeBorderColor="border-swBlue"
                     value={formData.maxInterestRangeYearly}
                     placeholder={"Maximum rate"}
+                    endIcon={"%"}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -456,10 +516,17 @@ const CreateInvestmentProduct = () => {
                     activeBorderColor="border-swBlue"
                     endIcon={"NGN"}
                     value={formData.maximumInvestmentAmountYearly}
-                    placeholder={"Minimum amount"}
+                    placeholder={"Maximum amount"}
                     onChange={handleInputChange}
                   />
                 </div>
+              </div>
+              <div className="flex justify-end">
+                <FaRegTrashAlt
+                  size={20}
+                  className="cursor-pointer"
+                  onClick={(e) => handleFormDisplay(e, "yearly", false)}
+                />
               </div>
             </div>
           )}
