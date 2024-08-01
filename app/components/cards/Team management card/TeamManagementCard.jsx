@@ -1,32 +1,59 @@
-const TeamManagementCard = ({ data }) => {
-  data = [
+import Link from "next/link";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { FiUser } from "react-icons/fi";
+import { RiBox3Line } from "react-icons/ri";
+import { TbReportMoney } from "react-icons/tb";
+
+const TeamManagementCard = () => {
+  const data = [
     {
-      staff_type: "Total staffs",
-      staff_no: 16,
+      label: "Department",
+      icon: <FaPeopleGroup className="font-light" size={22} />,
+      viewLink: "/team-management/department"
     },
     {
-      staff_type: "Active staffs",
-      staff_no: 4,
+      label: "Staff",
+      icon: <FiUser className="font-light" size={22} />,
+      viewLink: "/team-management/staff"
     },
     {
-      staff_type: "Archived staffs",
-      staff_no: 2,
+      label: "Role",
+      icon: <RiBox3Line className="font-light" size={22} />,
+      viewLink: "/team-management/role"
     },
+    {
+      label: "Financial Year",
+      icon: <TbReportMoney className="font-light" size={22} />,
+      viewLink: "/team-management/financial-year"
+    }
   ];
+
   return (
-    <main className="grid grid-cols-1 sm:grid-cols-3 gap-2  px-6 py-8">
-      {data.map((item, index) => (
-        <div
-          key={index}
-          className={`w-full rounded-lg p-3 border border-swGray }`}
-        >
-          <p className="text-swBlue font-semibold">{item.staff_type}</p>
-          <p className="font-semibold text-swGray text-3xl mt-4">
-            {item.staff_no}
-          </p>
-        </div>
-      ))}
-    </main>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mx-5 mt-10 mb-12">
+      {data.map((d, index) => {
+        return (
+          <Link key={index} href={d.viewLink}>
+            <div className="flex flex-col border hover:border-sky-500 bg-swGrey10 px-5 py-6 gap-7 rounded-xl">
+              <div className="flex justify-between cursor-pointer">
+                <div className="flex gap-2">
+                  {d.icon}
+                  <p className="text-md font-semibold text-swGray">{d.label}</p>
+                </div>
+                <Link href={d.viewLink}>
+                  <span className="hover:bg-swLightGray hover:text-swGray text-[0.5rem] xs:text-[0.6rem] lg:text-xs font-semibold  border py-2 px-4 rounded-lg whitespace-nowrap">
+                    view
+                  </span>
+                </Link>
+              </div>
+              <div className="flex-col text-sm gap-10 mx-auto">
+                <p>Total</p>
+                <p className="flex justify-center font-medium">20</p>
+              </div>
+            </div>
+          </Link>
+        )
+      })}
+    </div>
   );
 };
 
