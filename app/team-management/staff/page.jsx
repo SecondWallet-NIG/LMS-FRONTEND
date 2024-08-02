@@ -77,7 +77,7 @@ const StaffDataPage = () => {
 
     return (
         <DashboardLayout isBackNav={true} paths={["Team Management", "Staff"]}>
-            <div>
+            <div className="mt-5">
                 <ToastContainer />
                 <div className="py-2">
                     <div className="flex justify-between items-center">
