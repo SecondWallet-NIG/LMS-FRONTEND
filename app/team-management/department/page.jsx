@@ -1,11 +1,60 @@
 "use client"
-import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout"
 import React, { useState, useEffect } from "react"
+import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout"
+import { useRouter } from "next/navigation";
+import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
+import { AiOutlinePlus } from "react-icons/ai";
 
-export default function DepartmentPage () {
+export default function DepartmentPage() {
+    const router = useRouter()
+    const headers = [
+        { id: "name", label: "Department Name" },
+        { id: "description", label: "Description" },
+        { id: "createdAt", label: "Date Added" },
+    ];
+
+
+    const customDataTransformer = (apiData) => {
+        return apiData?.departments?.map((item) => ({
+            name: (
+                <div>
+                    <div className="text-md font-semibold text-gray-700">{item.departmentName}</div>
+                </div>
+            ),
+            description: (
+                <div className="text-md font-semibold text-gray-700">
+                    {item.description}
+                </div>
+            ),
+            createdAt: (
+                <div className="text-md font-semibold text-gray-700">
+                    {item.createdAt?.slice(0, 10)}
+                </div>
+            ),
+        }));
+    };
+
     return (
-        <DashboardLayout>
-            Department
+        <DashboardLayout isBackNav={true} paths={["Team Management", "Department"]}>
+            <div className=" py-2 mt-5">
+                <ReusableDataTable
+                    dataTransformer={customDataTransformer}
+                    apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/department`}
+                    initialData={[]}
+                    headers={headers}
+                    filters={true}
+                    pagination={true}
+                    btnText={
+                        <div
+                            className="flex gap-1 items-center p-1"
+                            onClick={() => { router.push('/team-management/department/add-new') }}
+                        >
+                            <AiOutlinePlus size={15} />
+                            <p className="hidden lg:block">Add department</p>
+                        </div>
+                    }
+                />
+            </div>
         </DashboardLayout>
-    )
+    );
 }
