@@ -1,5 +1,4 @@
 "use client"
-import { useState } from "react";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
@@ -41,7 +40,6 @@ const RolePage = () => {
     return (
         <DashboardLayout isBackNav={true} paths={["Team Management", "Roles"]}>
             <div className=" py-2 mt-5">
-                {/* <p className="px-6 text-lg font-semibold">Role list</p> */}
                 <ReusableDataTable
                     dataTransformer={customDataTransformer}
                     apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/role/all`}
@@ -55,7 +53,7 @@ const RolePage = () => {
                             onClick={() => {router.push('/team-management/role/add-new')}}
                         >
                             <AiOutlinePlus size={15} />
-                            <p className="hidden lg:block">Add New role</p>
+                            <p className="hidden lg:block">Add new role</p>
                         </div>
                     }
                 />

@@ -12,6 +12,9 @@ import { Rings } from "react-loader-spinner";
 import { IoMdCheckmark } from "react-icons/io";
 import { getRoles } from "@/redux/slices/roleSlice";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
+import SuccessModal from "@/app/components/modals/SuccessModal";
+import CancelModal from "@/app/components/modals/CancelModal";
+import { useImmer } from "use-immer";
 
 const NewStaffPage = () => {
     const dispatch = useDispatch();
@@ -20,7 +23,13 @@ const NewStaffPage = () => {
     const [profileImg, setProfileImg] = useState(null);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [fileError, setFileError] = useState("");
-
+    const [isLoading, setLoading] = useState(false)
+    const [state, setState]= useImmer({
+        successModal: false,
+        successMessage: "",
+        failedModal: false,
+        failedMessage: ""
+    })
 
     const [formData, setFormData] = useState({
         profilePicture: null,
@@ -106,8 +115,8 @@ const NewStaffPage = () => {
             newErrors.email = "Email address is required";
             isValid = false;
         }
+        
         setErrors(newErrors);
-
         return isValid;
     };
     const resetForm = () => {
@@ -123,6 +132,7 @@ const NewStaffPage = () => {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true)
         const isValid = validateForm();
         if (isValid) {
             const payload = new FormData();
@@ -137,15 +147,24 @@ const NewStaffPage = () => {
 
             dispatch(createUser(payload))
                 .unwrap()
-                .then(() => {
+                .then((res) => {
                     dispatch(getRoles());
                     document.getElementById("add-user-form").reset();
                     resetForm();
+                    setLoading(false)
+                    setState(draft => {
+                        draft.successMessage = res?.message
+                        draft.successModal = true
+                    })
                     // setProfileImg(null);
                 })
-                .catch((error) => {
-                    toast.error(error?.message);
+                .catch((err) => {
                     setProfileImg(null);
+                    setLoading(false)
+                    setState(draft => {
+                        draft.failedMessage = err?.message
+                        draft.failedModal = true
+                    })
                 });
         }
     };
@@ -188,7 +207,7 @@ const NewStaffPage = () => {
                                 <p className="text-sm mt-1">Staff information</p>
                             </div>
                         </div>
-                        <div className="pt-8 px-5 pb-16">
+                        <div className="pt-8 pb-16">
                             <div className="flex">
                                 <p className="font-semibold my-5 w-1/4">Profile picture</p>
                                 <div>
@@ -352,6 +371,25 @@ const NewStaffPage = () => {
                     </div>
                 </form>
             </main>
+
+            <SuccessModal
+                isOpen={state.successModal}
+                description={state.successMessage}
+                title={"Staff Created Successfully"}
+                noButtons={true}
+                onClose={() => setState(draft => {
+                    draft.successModal = false
+                })}
+            />
+            <CancelModal
+                isOpen={state.failedModal}
+                description={state.failedMessage}
+                title={"Staff Creation Failed"}
+                noButtons={true}
+                onClose={() => setState(draft => {
+                    draft.failedModal = false
+                })}
+            />
         </DashboardLayout>
     );
 };
