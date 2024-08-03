@@ -378,21 +378,19 @@ const DashboardPage = () => {
             {/* <div className="w-full sm:w-1/2">
               <BarChart options={options} data={dataDisbursements} />
             </div> */}
-          
 
             <div className="w-full">
               <BarChart options={options} data={dataLoans} />
             </div>
           </div>
           <div className="flex flex-col sm:flex-row">
-          <div className="w-full sm:w-1/2">
+            <div className="w-full sm:w-1/2">
               <BarChart options={options} data={dataRepayments} />
             </div>
             <div className="w-full sm:w-1/2">
               <BarChart options={_options} data={dataFees} />
             </div>
           </div>
- 
         </main>
       )}
     </DashboardLayout>
