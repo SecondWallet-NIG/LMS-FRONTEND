@@ -45,7 +45,7 @@ export const createRole = createAsyncThunk(
     try {
       let token = getToken();
       const response = await axios.post(
-        `${API_URL}/role/create`,
+        `${API_URL}/role`,
         payload,
         {
           headers: {
