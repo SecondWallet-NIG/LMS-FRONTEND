@@ -17,7 +17,7 @@ const RolePage = () => {
         return apiData?.map((item) => ({
             name: (
                 <div>
-                    <div className="text-md font-semibold text-gray-700">{item.name}</div>
+                    <div className="text-md font-semibold text-gray-700 capitalize">{item.name}</div>
                 </div>
             ),
             permissions: (

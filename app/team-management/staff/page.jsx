@@ -1,9 +1,4 @@
 "use client";
-import { useState, useEffect } from "react";
-import StaffsModal from "@/app/components/modals/teamManagement/StaffsModal";
-import { useDispatch, useSelector } from "react-redux";
-import { getRoles } from "@/redux/slices/roleSlice";
-import SuccessModal from "@/app/components/modals/SuccessModal";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
 import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -12,11 +7,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 
 const StaffDataPage = () => {
-    const [isModal, setIsModal] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const dispatch = useDispatch();
     const router = useRouter();
-    const { loading, error, data } = useSelector((state) => state?.role);
 
     const headers = [
         { id: "name", label: "Name and Staff ID" },
@@ -25,13 +16,6 @@ const StaffDataPage = () => {
         { id: "status", label: "Status" },
         { id: "createdAt", label: "Date Added" },
     ];
-    const handleOpenModal = () => {
-        setIsModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModal(false);
-    };
 
     const customDataTransformer = (apiData) => {
         return apiData?.results.map((item) => ({
@@ -71,10 +55,6 @@ const StaffDataPage = () => {
         }));
     };
 
-    useEffect(() => {
-        dispatch(getRoles());
-    }, []);
-
     return (
         <DashboardLayout isBackNav={true} paths={["Team Management", "Staff"]}>
             <div className="mt-5">
@@ -99,24 +79,6 @@ const StaffDataPage = () => {
                                 </div>
                             }
                         />
-                        <div className="flex gap-3 mt-3 items-center">
-                            <StaffsModal
-                                data={data}
-                                isOpen={isModal}
-                                onClose={handleCloseModal}
-                                selected={setIsSuccess}
-                            />
-                            <SuccessModal
-                                isOpen={isSuccess}
-                                onClose={() => setIsSuccess(false)}
-                                btnLeft="Cancel"
-                                btnRight="Add Staff"
-                                description="Staff has been created and an email notification has been sent to the recipent email"
-                                title="Successfully created"
-                                btnLeftFunc={() => setIsSuccess(false)}
-                                btnRightFunc={() => setIsSuccess(false)}
-                            />
-                        </div>
                     </div>
                 </div>
             </div>

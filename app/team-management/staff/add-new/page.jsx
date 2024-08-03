@@ -24,7 +24,7 @@ const NewStaffPage = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [fileError, setFileError] = useState("");
     const [isLoading, setLoading] = useState(false)
-    const [state, setState]= useImmer({
+    const [state, setState] = useImmer({
         successModal: false,
         successMessage: "",
         failedModal: false,
@@ -47,6 +47,22 @@ const NewStaffPage = () => {
         lastName: "",
         email: "",
     });
+
+    const rings = <Rings
+        height="20"
+        width="20"
+        color="#ffffff"
+        radius="2"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+        ariaLabel="rings-loading"
+    />
+
+    useEffect(() => {
+        dispatch(getRoles());
+    }, []);
+
     const handleFileInputChange = (e) => {
         const files = Array.from(e.target.files);
         if (e.target.id === "profilePicture" && e.target.files.length > 0) {
@@ -115,7 +131,7 @@ const NewStaffPage = () => {
             newErrors.email = "Email address is required";
             isValid = false;
         }
-        
+
         setErrors(newErrors);
         return isValid;
     };
@@ -275,6 +291,7 @@ const NewStaffPage = () => {
                                     <div className="flex gap-3 items-end">
                                         <div className="w-full ">
                                             <InputField
+                                                required={true}
                                                 label="Phone number"
                                                 name="phoneNumber"
                                                 onKeyPress={preventMinus}
@@ -327,44 +344,12 @@ const NewStaffPage = () => {
                         </div>
 
                         <div className="p-3 border-t flex items-center justify-end gap-2 bg-white">
-                            {/* <button
-              type="button"
-              className="border text-swGray font-semibold p-2 px-16 rounded-md"
-            >
-              Cancel
-            </button> */}
-                            {/* <Button
-              disabled={loading === "pending" ? true : false}
-              onClick={handleSubmit}
-              className="block  rounded-full"
-            >
-              {loading === "pending" ? "Processing" : " Create User"}
-            </Button> */}
-                            <EditableButton
-                                whiteBtn={true}
-                                label={"Cancel"}
-                            />
                             <EditableButton
                                 blueBtn={true}
-                                disabled={loading === "pending" || formData.firstName === "" ||
-                                    formData.lastName === "" || formData.email === ""
-                                    ? true : false}
-                                startIcon={
-                                    loading === "pending" && (
-                                        <Rings
-                                            height="20"
-                                            width="20"
-                                            color="#ffffff"
-                                            radius="2"
-                                            wrapperStyle={{}}
-                                            wrapperClass=""
-                                            visible={true}
-                                            ariaLabel="rings-loading"
-                                        />
-                                    )
-                                }
+                                disabled={loading === "pending" || !formData.firstName || !formData.lastName || 
+                                    !formData.email || !formData.role ? true : false}
+                                startIcon={isLoading ? rings : state.successModal ? <IoMdCheckmark size={20} /> : ""}
                                 label={"Create user"}
-                                endIcon={<IoMdCheckmark size={20} />}
                                 onClick={handleSubmit}
                             />
                         </div>
