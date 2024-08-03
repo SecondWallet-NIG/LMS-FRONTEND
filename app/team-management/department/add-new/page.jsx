@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import SelectField from "@/app/components/shared/input/SelectField";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import { useSelector, useDispatch } from "react-redux";
-import { createDepartment, createRole, getDepartments } from "@/redux/slices/roleSlice";
+import { createDepartment } from "@/redux/slices/roleSlice";
 import { useImmer } from "use-immer";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
