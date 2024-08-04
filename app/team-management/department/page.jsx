@@ -18,7 +18,7 @@ export default function DepartmentPage() {
         return apiData?.departments?.map((item) => ({
             name: (
                 <div>
-                    <div className="text-md font-semibold text-gray-700">{item.departmentName}</div>
+                    <div className="text-md font-semibold text-gray-700 capitalize">{item.departmentName}</div>
                 </div>
             ),
             description: (

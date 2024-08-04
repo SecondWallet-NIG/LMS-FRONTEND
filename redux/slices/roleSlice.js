@@ -53,15 +53,37 @@ export const createRole = createAsyncThunk(
           },
         }
       );
-      return response.data;
+      return response?.data || response;
     } catch (error) {
-      if (error.response.data.error) {
+      if (error?.response?.data?.error) {
         throw new Error(error.response.data.error);
       } else throw new Error("An error occured, please try again later");
     }
   }
 );
 
+export const createDepartment = createAsyncThunk(
+  "department/create",
+  async ({ payload }) => {
+    try {
+      let token = getToken();
+      const response = await axios.post(
+        `${API_URL}/department`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data || response;
+    } catch (error) {
+      if (error?.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
 
 
 
