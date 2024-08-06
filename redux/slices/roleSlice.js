@@ -31,7 +31,7 @@ export const getRoles = createAsyncThunk('role/getRoles', async () => {
 });
 
 export const getDepartments = createAsyncThunk('department', async () => {
-  const response = await axios.get(`${API_URL}/department`, {
+  const response = await axios.get(`${API_URL}/department?page=1&per_page=100&sortedBy=-createdAt`, {
     headers: {
       Authorization: `Bearer ${user?.data?.token}`
     }

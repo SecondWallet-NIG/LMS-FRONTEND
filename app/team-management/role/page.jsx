@@ -12,16 +12,15 @@ const RolePage = () => {
         { id: "createdAt", label: "Date Added" },
     ];
 
-
     const customDataTransformer = (apiData) => {
         return apiData?.map((item) => ({
             name: (
                 <div>
-                    <div className="text-md font-semibold text-gray-700 capitalize">{item.name}</div>
+                    <div className="text-lg font-light text-gray-700 capitalize">{item.name}</div>
                 </div>
             ),
             permissions: (
-                <div className="text-md font-semibold text-gray-700">
+                <div className="text-lg font-light text-gray-700">
                     {item.permissions.map((x) => (
                         <div className="capitalize" key={x}>
                             {x}
@@ -30,7 +29,7 @@ const RolePage = () => {
                 </div>
             ),
             createdAt: (
-                <div className="text-md font-semibold text-gray-700">
+                <div className="text-lg font-light text-gray-700">
                     {item.createdAt?.slice(0, 10)}
                 </div>
             ),
@@ -53,7 +52,7 @@ const RolePage = () => {
                             onClick={() => {router.push('/team-management/role/add-new')}}
                         >
                             <AiOutlinePlus size={15} />
-                            <p className="hidden lg:block">Add new role</p>
+                            <p className="hidden lg:block">Add New Role</p>
                         </div>
                     }
                 />

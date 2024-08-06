@@ -4,7 +4,6 @@ import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { createUser } from "@/redux/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import Image from "next/image";
 import { FiUser } from "react-icons/fi";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
@@ -219,13 +218,13 @@ const NewStaffPage = () => {
                     <div className="">
                         <div className="flex justify-between items-center p-3">
                             <div>
-                                <p className="text-2xl lg:text-3xl font-bold text-swBlack">Add a new staff</p>
-                                <p className="text-sm mt-1">Staff information</p>
+                                <p className="text-2xl lg:text-3xl font-bold text-swBlack">Add New Staff</p>
+                                <p className="text-sm mt-1">Staff Information</p>
                             </div>
                         </div>
                         <div className="pt-8 pb-16">
                             <div className="flex">
-                                <p className="font-semibold my-5 w-1/4">Profile picture</p>
+                                <p className="font-semibold my-5 w-1/4">Profile Picture</p>
                                 <div>
                                     <div className="flex gap-5 items-center">
                                         {profileImg !== null ? (
@@ -262,7 +261,7 @@ const NewStaffPage = () => {
                                 </div>
                             </div>
                             <div className="flex justify-between mt-7">
-                                <p className="w-1/4 font-semibold mr-2">Personal information</p>
+                                <p className="w-1/4 font-semibold mr-2">Personal Information</p>
                                 <div className="w-3/4 flex flex-col gap-5">
                                     <InputField
                                         name="firstName"
@@ -318,7 +317,7 @@ const NewStaffPage = () => {
                                 <div className="w-3/4 flex flex-col gap-3">
                                     <SelectField
                                         name="role"
-                                        label={"Select User Role"}
+                                        label={"Select user role"}
                                         required={true}
                                         isSearchable={false}
                                         optionValue={modifyObjects(data?.data)}
@@ -349,7 +348,7 @@ const NewStaffPage = () => {
                                 disabled={loading === "pending" || !formData.firstName || !formData.lastName || 
                                     !formData.email || !formData.role ? true : false}
                                 startIcon={isLoading ? rings : state.successModal ? <IoMdCheckmark size={20} /> : ""}
-                                label={"Create user"}
+                                label={"Create User"}
                                 onClick={handleSubmit}
                             />
                         </div>

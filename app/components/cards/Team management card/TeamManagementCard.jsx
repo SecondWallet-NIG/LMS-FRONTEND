@@ -33,9 +33,9 @@ const TeamManagementCard = () => {
       {data.map((d, index) => {
         return (
           <Link key={index} href={d.viewLink}>
-          <div className="flex flex-col border border-gray-200 hover:border-sky-500 bg-swLightGray px-6 py-4 gap-6 rounded-xl shadow-sm transition-transform transform hover:scale-105">
+          <div className="flex flex-col border border-gray-200 hover:border-sky-500 bg-swLightGray px-5 py-4 gap-6 rounded-xl shadow-sm transition-transform transform hover:scale-105">
             <div className="flex justify-between items-center cursor-pointer">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 {d.icon}
                 <p className="text-lg font-semibold text-swDarkBlue">{d.label}</p>
               </div>
@@ -46,12 +46,10 @@ const TeamManagementCard = () => {
               </Link>
             </div>
             <div className="flex flex-col items-end text-sm mt-4">
-              {/* <p className="text-gray-500">Total</p> */}
               <p className="text-lg font-semibold text-swDarkBlue">20</p>
             </div>
           </div>
         </Link>
-        
         )
       })}
     </div>

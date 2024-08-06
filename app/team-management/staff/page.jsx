@@ -8,28 +8,33 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 
 const StaffDataPage = () => {
     const router = useRouter();
-
     const headers = [
         { id: "name", label: "Name and Staff ID" },
         { id: "email", label: "Email" },
+        { id: "department", label: "Department" },
         { id: "role", label: "Staff Role" },
         { id: "status", label: "Status" },
         { id: "createdAt", label: "Date Added" },
     ];
 
     const customDataTransformer = (apiData) => {
+        console.log('staffffff', apiData.results)
         return apiData?.results.map((item) => ({
             id: item._id,
             name: (
                 <div>
-                    <div className="text-md font-semibold text-gray-700">{`${item.firstName} ${item.lastName}`}</div>
-                    <div className="text-xs text-gray-500">{`SWS-${item.staffId}`}</div>
+                    <div className="font-semibold text-gray-700 text-lg">{`${item.firstName} ${item.lastName}`}</div>
+                    <div className="text-gray-500 text-sm font-light ">{`SWS-${item.staffId}`}</div>
                 </div>
             ),
             email: (
                 <div>
-                    <div className="text-md underline text-swBlue">{item.email}</div>
-
+                    <div className="text-lg font-light underline text-swBlue">{item.email}</div>
+                </div>
+            ),
+            department: (
+                <div>
+                    <div className="text-lg font-light text-gray-700">{item?.role?.department?.departmentName}</div>
                 </div>
             ),
             status: (
@@ -43,12 +48,12 @@ const StaffDataPage = () => {
                 </button>
             ),
             role: (
-                <div className="text-md font-semibold text-gray-700">
+                <div className="text-lg font-light text-gray-700">
                     {item?.role?.name}
                 </div>
             ),
             createdAt: (
-                <div className="text-md font-semibold text-gray-700">
+                <div className="text-lg font-light text-gray-700">
                     {item.createdAt?.slice(0, 10)}
                 </div>
             ),
@@ -75,7 +80,7 @@ const StaffDataPage = () => {
                                     onClick={() => {router.push('/team-management/staff/add-new')}}
                                 >
                                     <AiOutlinePlus size={15} />
-                                    <p className="hidden lg:block">Add New staff</p>
+                                    <p className="hidden lg:block">Add New Staff</p>
                                 </div>
                             }
                         />

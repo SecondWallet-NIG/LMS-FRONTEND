@@ -102,8 +102,8 @@ const AddRolePage = () => {
             <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
                 <div className="flex justify-between items-center p-3">
                     <div>
-                        <p className="text-2xl lg:text-3xl font-bold text-swBlack">Add new role</p>
-                        <p className="text-sm mt-1">Role information</p>
+                        <p className="text-2xl lg:text-3xl font-bold text-swBlack">Add New Role</p>
+                        <p className="text-sm mt-1">Role Information</p>
                     </div>
                 </div>
 
@@ -128,7 +128,6 @@ const AddRolePage = () => {
                         <p className="w-1/4 font-semibold mr-2">Tag</p>
                         <div className="w-3/4 flex flex-col gap-5">
                             <InputField
-                                css={'uppercase'}
                                 value={state.tag}
                                 required={true}
                                 name={"tag"}
@@ -185,7 +184,7 @@ const AddRolePage = () => {
                         onClick={handleSubmit}
                         className={`text-white font-semibold p-2 px-16 bg-swBlue 
                         hover:bg-swBluee500 rounded-md flex items-center gap-2`}>
-                        Add role
+                        Add Role
                     </Button>
                 </div>
             </div>
