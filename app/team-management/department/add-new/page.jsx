@@ -87,8 +87,8 @@ const AddDepartmentPage = () => {
             <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
                 <div className="flex justify-between items-center p-3">
                     <div>
-                        <p className="text-2xl lg:text-3xl font-bold text-swBlack">Add new department</p>
-                        <p className="text-sm mt-1">Department information</p>
+                        <p className="text-2xl lg:text-3xl font-bold text-swBlack">Add New Department</p>
+                        <p className="text-sm mt-1">Department Information</p>
                     </div>
                 </div>
 
