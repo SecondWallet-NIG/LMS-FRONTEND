@@ -160,6 +160,25 @@ export const createInvestment = createAsyncThunk(
   }
 );
 
+export const getInvestmentRecordCards = createAsyncThunk(
+  "investment/cards-data",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/investment/cards-data`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getAllInvestments = createAsyncThunk(
   "investment/all",
   async () => {
@@ -593,6 +612,19 @@ const investmentSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getSingleInvestment.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getInvestmentRecordCards.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getInvestmentRecordCards.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getInvestmentRecordCards.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

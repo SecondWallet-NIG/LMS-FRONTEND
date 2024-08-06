@@ -22,9 +22,9 @@ const TeamManagementCard = () => {
       viewLink: "/team-management/role"
     },
     {
-      label: "Financial Year",
+      label: "Operations",
       icon: <TbReportMoney className="font-light text-swDarkBlue" size={22}  />,
-      viewLink: "/team-management/financial-year"
+      viewLink: "/team-management/operations"
     }
   ];
 

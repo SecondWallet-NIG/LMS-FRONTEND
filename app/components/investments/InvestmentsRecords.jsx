@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllInvestments,
   getAllInvestors,
+  getInvestmentRecordCards,
 } from "@/redux/slices/investmentSlice";
 
 const header = [
@@ -91,53 +92,16 @@ export default function InvestmentsRecords() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.investment);
-  const [investorsData, setInvestorsData] = useState({
-    total: 0,
-    invested: 0,
-    returns: 0,
-  });
+
   const cards = [
-    { title: "Number of investors", value: investorsData.total || 0 },
-    { title: "Amount invested", value: investorsData.invested || 0 },
-    { title: "Returns earned", value: investorsData.returns || 0 },
+    { title: "Total Investments", value: data?.data?.totalInvestments || 0 },
+    { title: "Amount invested", value: data?.data?.totalAmountInvested || 0 },
+    { title: "Returns earned", value: data?.data?.totalReturnsEarned || 0 },
   ];
 
   useEffect(() => {
-    dispatch(getAllInvestments());
-    // dispatch(getAllInvestors());
+    dispatch(getInvestmentRecordCards());
   }, []);
-
-  useEffect(() => {
-    const calculateTotal = () => {
-      const uniqueInvestorProfiles = new Set();
-      data?.data?.investments?.forEach((investment) => {
-        const investorId = investment?.investorProfile?._id;
-        if (investorId) {
-          uniqueInvestorProfiles.add(investorId);
-        }
-      });
-      return uniqueInvestorProfiles.size;
-    };
-
-    setInvestorsData({
-      ...investorsData,
-      total: calculateTotal(),
-      invested: data?.data?.investments?.reduce(
-        (acc, item) => acc + item?.currentInvestmentPrincipal,
-        0
-      ),
-      returns: data?.data?.investments?.reduce(
-        (acc, item) => acc + item?.withdrawableBalance,
-        0
-      ),
-    });
-  }, [data?.data?.investments]);
-  // useEffect(() => {
-  //   setInvestorsData({
-  //     ...investorsData,
-  //     total: data?.data?.investors?.length,
-  //   });
-  // }, [data?.data?.investors]);
 
   console.log("apiInvestment", data);
 
