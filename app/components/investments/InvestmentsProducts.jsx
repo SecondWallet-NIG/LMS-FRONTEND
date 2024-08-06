@@ -46,7 +46,7 @@ export default function InvestmentProducts() {
   const cards = [
     {
       title: "Total Investment Products",
-      value: investmentProductCards?.data?.numberOfInvestmentProducts || 0,
+      value: investmentProductCards?.data?.totalInvestmentProducts || 0,
     },
     {
       title: "Total Amount Investment ",
@@ -54,7 +54,7 @@ export default function InvestmentProducts() {
     },
     {
       title: "Total Accrued Interest",
-      value: investmentProductCards?.data?.totalAccruedInterest || 0,
+      value: investmentProductCards?.data?.totalAmountEarned || 0,
     },
   ];
 
