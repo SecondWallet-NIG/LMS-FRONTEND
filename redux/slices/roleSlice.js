@@ -122,7 +122,7 @@ const roleSlice = createSlice({
       })
       .addCase(getDepartments.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        state.data = action.payload;
+        state.deptData = action.payload;
       })
       .addCase(getDepartments.rejected, (state, action) => {
         state.loading = 'failed';

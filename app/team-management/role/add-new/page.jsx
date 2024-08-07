@@ -15,7 +15,8 @@ import InputField from "@/app/components/shared/input/InputField";
 const AddRolePage = () => {
     const dispatch = useDispatch()
     const router = useRouter()
-    const { data } = useSelector(state => state?.role);
+    const { deptData } = useSelector(state => state?.role);
+    const data = deptData
     const [state, setState] = useImmer({
         role: "",
         department: "",
@@ -152,7 +153,8 @@ const AddRolePage = () => {
                                     draft.department = e.value
                                 })}
                                 optionValue={state.departments}
-                            /></div>
+                            />
+                        </div>
                     </div>
 
                     <div className="flex justify-between mt-6 gap-5">

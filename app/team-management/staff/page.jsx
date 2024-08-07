@@ -18,7 +18,6 @@ const StaffDataPage = () => {
     ];
 
     const customDataTransformer = (apiData) => {
-        console.log('staffffff', apiData.results)
         return apiData?.results.map((item) => ({
             id: item._id,
             name: (
@@ -29,12 +28,12 @@ const StaffDataPage = () => {
             ),
             email: (
                 <div>
-                    <div className="text-lg font-light underline text-swBlue">{item.email}</div>
+                    <div className="text-[15px] font-light text-gray-700 underline text-swBlue">{item.email}</div>
                 </div>
             ),
             department: (
                 <div>
-                    <div className="text-lg font-light text-gray-700">{item?.role?.department?.departmentName}</div>
+                    <div className="text-[15px] font-light text-gray-700">{item?.role?.department?.departmentName}</div>
                 </div>
             ),
             status: (
@@ -48,12 +47,12 @@ const StaffDataPage = () => {
                 </button>
             ),
             role: (
-                <div className="text-lg font-light text-gray-700">
+                <div className="text-[15px] font-light text-gray-700">
                     {item?.role?.name}
                 </div>
             ),
             createdAt: (
-                <div className="text-lg font-light text-gray-700">
+                <div className="text-[15px] font-light text-gray-700">
                     {item.createdAt?.slice(0, 10)}
                 </div>
             ),

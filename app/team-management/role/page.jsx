@@ -16,20 +16,20 @@ const RolePage = () => {
         return apiData?.map((item) => ({
             name: (
                 <div>
-                    <div className="text-lg font-light text-gray-700 capitalize">{item.name}</div>
+                    <div className="text-[15px] font-light text-gray-700 capitalize">{item.name}</div>
                 </div>
             ),
             permissions: (
-                <div className="text-lg font-light text-gray-700">
+                <div className="text-[15px] font-light text-gray-700">
                     {item.permissions.map((x) => (
-                        <div className="capitalize" key={x}>
+                        <div className="capitalize mb-1" key={x}>
                             {x}
                         </div>
                     ))}
                 </div>
             ),
             createdAt: (
-                <div className="text-lg font-light text-gray-700">
+                <div className="text-[15px] font-light text-gray-700">
                     {item.createdAt?.slice(0, 10)}
                 </div>
             ),
