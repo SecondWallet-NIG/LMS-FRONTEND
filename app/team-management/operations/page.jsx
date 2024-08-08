@@ -43,7 +43,7 @@ export default function OperationsPage() {
     <DashboardLayout isBackNav={true} paths={["Team management", "Operations"]}>
       <div className="">
         <div className="p-5 flex items-centers">
-          <p
+          <button
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
               pageState === "benefit-types" &&
               "border-b-swBlue text-swBlue font-semibold"
@@ -51,8 +51,8 @@ export default function OperationsPage() {
             onClick={() => setPageState("benefit-types")}
           >
             Benefit Types
-          </p>
-          <p
+          </button>
+          {/* <button
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
               pageState === "employee-benefits" &&
               "border-b-swBlue text-swBlue font-semibold"
@@ -60,8 +60,8 @@ export default function OperationsPage() {
             onClick={() => setPageState("employee-benefits")}
           >
             Employee Benefits
-          </p>
-          <p
+          </button> */}
+          <button
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
               pageState === "financial-year" &&
               "border-b-swBlue text-swBlue font-semibold"
@@ -69,7 +69,7 @@ export default function OperationsPage() {
             onClick={() => setPageState("financial-year")}
           >
             Financial year
-          </p>
+          </button>
         </div>
 
         <div className="mt-10">
@@ -110,12 +110,12 @@ export default function OperationsPage() {
                   className="flex gap-1 items-center p-1"
                   onClick={() => {
                     router.push(
-                      "/team-management/operations/employee-benefit/add-new"
+                      "/team-management/operations/financial-year/add-new"
                     );
                   }}
                 >
                   <AiOutlinePlus size={15} />
-                  <p className="block">Add Benefit Type</p>
+                  <p className="block">Add Financial Year</p>
                 </div>
               }
             />

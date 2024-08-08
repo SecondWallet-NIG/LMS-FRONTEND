@@ -72,8 +72,8 @@ const AddBenefitTypesPage = () => {
           draft.successModal = true;
           draft.loading = false;
           draft.successMessage = "Benefit type has been created successfully.";
-          reset();
         });
+        reset();
       })
       .catch((err) => {
         setState((draft) => {
@@ -119,7 +119,7 @@ const AddBenefitTypesPage = () => {
           </div>
 
           <div className="flex justify-between mt-6 gap-5">
-            <p className="w-1/4 font-semibold mr-2">Benefit Type</p>
+            <p className="w-1/4 font-semibold mr-2">Benefit Category</p>
             <div className="w-3/4">
               <SelectField
                 label={"Select Benefit Category"}
@@ -136,18 +136,20 @@ const AddBenefitTypesPage = () => {
             </div>
           </div>
 
-          <div className="flex justify-between mt-5 gap-5">
-            <p className="w-1/4 font-semibold mr-2">Salary</p>
-            <div className="w-3/4 flex flex-col gap-5">
-              <InputField
+          <div className="flex justify-between mt-6 gap-5">
+            <p className="w-1/4 font-semibold mr-2">Benefit Type</p>
+            <div className="w-3/4">
+              <SelectField
+                label={"Select Benefit Category"}
                 required={true}
-                value={state.salary}
-                name={"sickLeave"}
-                label={"Enter Days For Sick Leave"}
-                placeholder={"Sick Level"}
-                onChange={handleInputChange}
-                onKeyPress={preventMinus}
-                onWheel={() => document.activeElement.blur()}
+                isSearchable={true}
+                // placeholder={data?.data ? "Select..." : "Loading..."}
+                onChange={(e) =>
+                  setState((draft) => {
+                    draft.category = e.value;
+                  })
+                }
+                optionValue={state.users}
               />
             </div>
           </div>
@@ -206,7 +208,7 @@ const AddBenefitTypesPage = () => {
       <CancelModal
         isOpen={state.failedModal}
         description={state.failedMessage}
-        title={"Benefit Type Creation Creation Failed"}
+        title={"Benefit Type Creation Failed"}
         noButtons={true}
         onClose={() =>
           setState((draft) => {
