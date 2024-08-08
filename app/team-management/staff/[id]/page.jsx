@@ -51,6 +51,8 @@ const StaffPage = () => {
     isRoleAdmin: false,
   });
 
+  console.log({ data });
+
   const adminOptions = [
     { value: "CEO", label: "CEO" },
     { value: "CFO", label: "CFO" },
@@ -122,11 +124,13 @@ const StaffPage = () => {
     payload.append("role", formData.role);
     payload.append("profilePicture", formData.profilePicture);
 
-    dispatch(updateUser({ userId: data?._id, updatedData: payload }))
+    dispatch(
+      updateUser({ userId: data?.data?.user?._id, updatedData: payload })
+    )
       .unwrap()
       .then((res) => {
         toast.success("Profile updated successfully");
-        getUserById(data?._id);
+        getUserById(data?.data?.user?._id);
         setIsOpen(false);
         //  window.location.reload();
       })
@@ -138,15 +142,15 @@ const StaffPage = () => {
   useEffect(() => {
     setFormData({
       profilePicture: null,
-      firstName: data?.firstName,
-      lastName: data?.lastName,
-      email: data?.email,
-      phoneNumber: data?.phoneNumber,
-      role: data?.role?._id,
-      tag: data?.role?.tag,
-      status: data?.status,
+      firstName: data?.data?.user?.firstName,
+      lastName: data?.data?.user?.lastName,
+      email: data?.data?.user?.email,
+      phoneNumber: data?.data?.user?.phoneNumber,
+      role: data?.data?.user?.role?._id,
+      tag: data?.data?.user?.role?.tag,
+      status: data?.data?.user?.status,
       isRoleAdmin: false,
-      profilePicture: data?.profilePicture,
+      profilePicture: data?.data?.user?.profilePicture,
     });
   }, [data]);
 
@@ -181,19 +185,22 @@ const StaffPage = () => {
       <ToastContainer />
       <main>
         <div className="p-5">
-          <div className="bg-swBlue rounded-2xl p-10 text-white">
-            <div className="flex justify-between items-center">
-              <div className="flex gap-5 items-start">
-                {data?.profilePicture ? (
-                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+          <div className="bg-swBlue rounded-2xl p-5 sm:p-10">
+            <div className="grid grid-cols-1 md:flex justify-between items-center gap-10">
+              <div className="flex flex-col items-center gap-5">
+                {data?.data?.user?.profilePicture &&
+                data?.data?.user?.profilePicture !== "null" &&
+                data?.data?.user?.profilePicture !== "undefined" ? (
+                  <div className="h-[8rem] w-[8rem] border-2 rounded-md relative overflow-hidden">
                     <Image
-                      src={data?.profilePicture}
+                      src={data?.data?.user?.profilePicture}
                       alt="profile"
                       fill
                       sizes="100%"
                       className="cursor-pointer"
                       onClick={() =>
-                        data?.profilePicture && setOpenProfilePic(true)
+                        data?.data?.user?.profilePicture &&
+                        setOpenProfilePic(true)
                       }
                     />
                     {typeof window !== "undefined" ? (
@@ -203,72 +210,155 @@ const StaffPage = () => {
                           onClose={() => {
                             setOpenProfilePic(false);
                           }}
-                          images={[data?.profilePicture].map((item) => ({
-                            src: item,
-                            key: item,
-                          }))}
+                          images={[data?.data?.user?.profilePicture].map(
+                            (item) => ({
+                              src: item,
+                              key: item,
+                            })
+                          )}
                         />
                       </>
                     ) : null}
                   </div>
                 ) : (
-                  <div className="border-2 p-4 rounded-full">
+                  <div className="h-[8rem] w-[8rem] roundeed-md border-2 flex justify-center items-center">
                     <FiUser size={40} color="white" />
                   </div>
                 )}
-                <div>
+                <div className="text-center  text-white">
                   <div className="flex gap-3 items-end">
-                    <p className="font-medium text-2xl">
-                      {data?.firstName} {data?.lastName}
+                    <p className="font-medium text-2xl whitespace-nowrap">
+                      {data?.data?.user?.firstName} {data?.data?.user?.lastName}
                     </p>
                     <p
                       className={`${
-                        data?.status === "Active"
+                        data?.data?.user?.status === "Active"
                           ? "bg-[#E7F1FE] text-swBlue"
                           : "bg-[#F8A9A3] text-white"
                       } text-xs px-2 py-1 rounded-full text-swBlue`}
                     >
-                      {data?.status}
+                      {data?.data?.user?.status}
                     </p>
                   </div>
-                  <p className="font-light">{data?.email}</p>
-                  <p className="font-light">SWL-{data?.staffId}</p>
-                  <div className="flex gap-5 items-center mt-5">
+                  <p className="font-light">{data?.data?.user?.email}</p>
+                  <p className="font-light">SWL-{data?.data?.user?.staffId}</p>
+                  <div className="flex gap-5 items-center justify-center mt-5">
                     <Link
-                      href={`mailto:${data?.email}`}
+                      href={`mailto:${data?.data?.user?.email}`}
                       target="_blank"
                       className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer"
                     >
                       <MdOutlineEmail size="22" />
                     </Link>
                     <Link
-                      href={`tel:${data?.phoneNumber}`}
+                      href={`tel:${data?.data?.user?.phoneNumber}`}
                       className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer"
                     >
                       <FiPhone size="20" />
                     </Link>
-                    <div
+                    <Link
+                      href={`/team-management/staff/update/${data?.data?.user?._id}`}
                       className="hover:bg-white hover:text-swBlue p-2 rounded-md cursor-pointer"
-                      onClick={() => setIsOpen(true)}
+                      // onClick={() => setIsOpen(true)}
                     >
                       <FiEdit2 size="20" />
-                    </div>
+                    </Link>
                   </div>
                 </div>
               </div>
-              <div>
+              <div className="bg-white rounded-md p-5 w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div className="">
+                  <p className="text-xl font-semibold mb-2">Tasks</p>
+                  <div className="w-full flex flex-col sm:flex-row gap-3">
+                    <TasksCard
+                      taskName={"Total tasks"}
+                      taskAmount={tasks?.data?.totalCount || 0}
+                    />
+                    <TasksCard
+                      taskName={"Pending tasks"}
+                      taskAmount={tasks?.data?.pendingCount || 0}
+                    />
+                    <TasksCard
+                      taskName={"Completed tasks"}
+                      taskAmount={tasks?.data?.doneCount || 0}
+                    />
+                  </div>
+                </div>
+                <div className="">
+                  <p className="text-xl font-semibold mb-2">
+                    Available Leave Days
+                  </p>
+                  <div>
+                    <div className="flex justify-between">
+                      <p>Annual Leave</p>
+                      <p>
+                        {data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                          ?.annualLeave || 0}{" "}
+                        days
+                      </p>
+                    </div>
+                    <div className="bg-swBlue w-full p-1 rounded-md" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between">
+                      <p>Sick Leave</p>
+                      <p>
+                        {data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                          ?.sickLeave || 0}{" "}
+                        days
+                      </p>
+                    </div>
+                    <div className="bg-swBlue w-full p-1 rounded-md" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between">
+                      <p>Paternity Leave</p>
+                      <p>
+                        {data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                          ?.paternityLeave || 0}{" "}
+                        days
+                      </p>
+                    </div>
+                    <div className="bg-swBlue w-full p-1 rounded-md" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between">
+                      <p>Maternity Leave</p>
+                      <p>
+                        {data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                          ?.maternityLeave || 0}{" "}
+                        days
+                      </p>
+                    </div>
+                    <div className="bg-swBlue w-full p-1 rounded-md" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between">
+                      <p>Unpaid Leave</p>
+                      <p>
+                        {data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                          ?.unpaidLeave || 0}{" "}
+                        days
+                      </p>
+                    </div>
+                    <div className="bg-swBlue w-full p-1 rounded-md" />
+                  </div>
+                </div>
+              </div>
+              {/*<div>
                 <div className="flex w-80 items-center justify-between text-lg">
                   <p>Role:</p>
-                  <p className="">{data?.role?.name}</p>
+                  <p className="">{data?.data?.user?.role?.name}</p>
                 </div>
                 <div className="flex w-80 items-center justify-between text-lg mt-5">
                   <p>Permissions:</p>
                   <div className="flex">
-                    {data?.role?.permissions.map((item, index) => (
+                    {data?.data?.user?.role?.permissions.map((item, index) => (
                       <div className="flex" key={index}>
                         <span>
                           {item}
-                          {index < data?.role?.permissions.length - 1
+                          {index <
+                          data?.data?.user?.role?.permissions.length - 1
                             ? ","
                             : ""}
                         </span>
@@ -276,10 +366,10 @@ const StaffPage = () => {
                     ))}
                   </div>
                 </div>
-              </div>
+              </div>*/}
             </div>
 
-            <div className="mt-10 grid grid-cols-3 gap-5">
+            {/* <div className="mt-10 grid grid-cols-3 gap-5">
               <TasksCard
                 taskName={"Total tasks"}
                 taskAmount={tasks?.data?.totalCount}
@@ -292,10 +382,10 @@ const StaffPage = () => {
                 taskName={"Completed tasks"}
                 taskAmount={tasks?.data?.doneCount}
               />
-            </div>
+            </div> */}
           </div>
         </div>
-        <div>
+        {/* <div>
           <div className="border-b p-2 flex">
             <p
               className={`p-2 ${
@@ -316,7 +406,34 @@ const StaffPage = () => {
             </div>
             <div className="flex ">
               <p className="w-60 font-medium">Role</p>
-              <p>{data?.role?.name}</p>
+              <p>{data?.data?.user?.role?.name}</p>
+            </div>
+          </div>
+        </div> */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 p-5">
+          <div className="flex flex-col gap-5">
+            <p className="text-xl font-semibold mb-2">Department</p>
+            <div className="flex gap-5">
+              <p>Department Name:</p>
+              <p>{data?.data?.user?.role?.department?.departmentName}</p>
+            </div>
+            <div className="flex gap-5">
+              <p>Department Code :</p>
+              <p>{data?.data?.user?.role?.department?.departmentCode}</p>
+            </div>
+            <div className="flex gap-5">
+              <p>Role:</p>
+              <p>{data?.data?.user?.role?.name}</p>
+            </div>
+            <div className="flex gap-5">
+              <p>Department Head:</p>
+              <p>
+                {data?.data?.user?.role?.department?.departmentHead || "..."}
+              </p>
+            </div>
+            <div className="flex gap-5">
+              <p>Salart:</p>
+              <p>₦ {data?.data?.employeeBenefit?.salary?.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -343,7 +460,7 @@ const StaffPage = () => {
               <div>
                 {/* <p className="text-base font-semibold">Add a new staff</p> */}
                 <p className="text-base font-semibold">
-                  {data?.firstName} {data?.lastName}
+                  {data?.data?.user?.firstName} {data?.data?.user?.lastName}
                 </p>
                 <p className="text-xs">Staff information</p>
               </div>
@@ -360,7 +477,7 @@ const StaffPage = () => {
                 <div className="flex flex-col">
                   <div className="flex gap-5 items-center">
                     {profileImg !== null ? (
-                      <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                      <div className="h-[8rem] w-[8rem] border-2 rounded-md relative overflow-hidden">
                         <Image
                           src={profileImg !== null && profileImg}
                           alt="profile"
