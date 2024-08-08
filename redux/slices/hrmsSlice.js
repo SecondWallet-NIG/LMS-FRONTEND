@@ -79,6 +79,25 @@ export const addNewFinancialYear = createAsyncThunk(
   }
 );
 
+export const getFinancialYear = createAsyncThunk(
+  "financial-year/active",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/financial-year/active`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const hrmsSlice = createSlice({
   name: "hrms",
   initialState: {
@@ -132,6 +151,18 @@ const hrmsSlice = createSlice({
       })
       .addCase(addNewFinancialYear.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getFinancialYear.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getFinancialYear.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getFinancialYear.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });
