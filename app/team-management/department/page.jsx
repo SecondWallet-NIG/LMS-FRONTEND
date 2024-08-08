@@ -18,16 +18,16 @@ export default function DepartmentPage() {
         return apiData?.departments?.map((item) => ({
             name: (
                 <div>
-                    <div className="text-md text-gray-700 capitalize text-lg font-light">{item.departmentName}</div>
+                    <div className="text-[15px] font-light text-gray-700 capitalize ">{item.departmentName}</div>
                 </div>
             ),
             description: (
-                <div className="text-md text-lg font-light text-gray-700">
+                <div className="text-[15px] font-light text-gray-700">
                     {item.description}
                 </div>
             ),
             createdAt: (
-                <div className="text-md text-lg font-light text-gray-700">
+                <div className="text-[15px] font-light text-gray-700">
                     {item.createdAt?.slice(0, 10)}
                 </div>
             ),

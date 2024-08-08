@@ -55,7 +55,7 @@ const SelectField = ({
 
   return (
     <div>
-      <label className="block text-gray-700 text-sm mb-2">
+      <label className="block text-gray-700 text-sm mb-2 capitalize">
         {label}
         {required && <span className="text-red-600 ml-1">*</span>}
       </label>

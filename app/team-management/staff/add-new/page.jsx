@@ -9,7 +9,7 @@ import { FiUser } from "react-icons/fi";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { Rings } from "react-loader-spinner";
 import { IoMdCheckmark } from "react-icons/io";
-import { getRoles } from "@/redux/slices/roleSlice";
+import { getRoles, getDepartments } from "@/redux/slices/roleSlice";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
@@ -18,7 +18,7 @@ import { useImmer } from "use-immer";
 const NewStaffPage = () => {
     const dispatch = useDispatch();
     const { loading } = useSelector((state) => state.user);
-    const { data } = useSelector((state) => state?.role);
+    const { data, deptData } = useSelector((state) => state?.role);
     const [profileImg, setProfileImg] = useState(null);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [fileError, setFileError] = useState("");
@@ -27,7 +27,9 @@ const NewStaffPage = () => {
         successModal: false,
         successMessage: "",
         failedModal: false,
-        failedMessage: ""
+        failedMessage: "",
+        department: "",
+        departments: []
     })
 
     const [formData, setFormData] = useState({
@@ -60,6 +62,7 @@ const NewStaffPage = () => {
 
     useEffect(() => {
         dispatch(getRoles());
+        dispatch(getDepartments());
     }, []);
 
     const handleFileInputChange = (e) => {
@@ -89,6 +92,21 @@ const NewStaffPage = () => {
             : [];
     };
 
+    useEffect(() => {
+        if (deptData?.data) {
+            const departments = []
+            const res = deptData?.data?.departments || []
+
+            for (let i = 0; i < res.length; i++) {
+                const value = res[i]._id;
+                const label = res[i].departmentName;
+                departments.push({ value, label })
+            }
+            setState(draft => {
+                draft.departments = departments
+            })
+        }
+    }, [deptData?.data])
 
     const adminOptions = [
         { value: "CEO", label: "CEO" },
@@ -142,8 +160,11 @@ const NewStaffPage = () => {
             phoneNumber: "",
             role: "",
             tag: null,
-            isRoleAdmin: false,
+            isRoleAdmin: false
         });
+        setState(draft => {
+            draft.department = ""
+        })
     };
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -159,6 +180,7 @@ const NewStaffPage = () => {
             payload.append("role", formData.role);
             //  payload.append("tag", formData.tag);
             payload.append("isRoleAdmin", formData.isRoleAdmin);
+            payload.append("department", state.department);
 
             dispatch(createUser(payload))
                 .unwrap()
@@ -340,13 +362,29 @@ const NewStaffPage = () => {
                                     )}
                                 </div>
                             </div>
+
+                            <div className="flex justify-between mt-5">
+                                <p className="w-1/4 font-semibold mr-2">Departments</p>
+                                <div className="w-3/4 flex flex-col gap-3">
+                                    <SelectField
+                                        label={"Select department"}
+                                        required={true}
+                                        isSearchable={true}
+                                        placeholder={deptData?.data ? 'Select...' : 'Loading...'}
+                                        onChange={e => setState(draft => {
+                                            draft.department = e.value
+                                        })}
+                                        optionValue={state.departments}
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         <div className="p-3 border-t flex items-center justify-end gap-2 bg-white">
                             <EditableButton
                                 blueBtn={true}
-                                disabled={loading === "pending" || !formData.firstName || !formData.lastName || 
-                                    !formData.email || !formData.role ? true : false}
+                                disabled={loading === "pending" || !formData.firstName || !formData.lastName ||
+                                    !formData.email || !formData.role ? true : false || !state.department}
                                 startIcon={isLoading ? rings : state.successModal ? <IoMdCheckmark size={20} /> : ""}
                                 label={"Create User"}
                                 onClick={handleSubmit}
