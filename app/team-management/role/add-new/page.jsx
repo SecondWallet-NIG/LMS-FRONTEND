@@ -3,20 +3,20 @@ import { useEffect } from "react";
 import SelectField from "@/app/components/shared/input/SelectField";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import { useSelector, useDispatch } from "react-redux";
-import { createRole, getDepartments } from "@/redux/slices/roleSlice";
+import { createRole } from "@/redux/slices/roleSlice";
 import { useImmer } from "use-immer";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import { useRouter } from "next/navigation";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
+import { getAllDepartments } from "@/redux/slices/hrmsSlice";
 
 
 const AddRolePage = () => {
     const dispatch = useDispatch()
     const router = useRouter()
-    const { deptData } = useSelector(state => state?.role);
-    const data = deptData
+    const { data } = useSelector(state => state?.hrms);
     const [state, setState] = useImmer({
         role: "",
         department: "",
@@ -32,7 +32,7 @@ const AddRolePage = () => {
 
 
     useEffect(() => {
-        dispatch(getDepartments())
+        dispatch(getAllDepartments())
     }, [])
 
     useEffect(() => {

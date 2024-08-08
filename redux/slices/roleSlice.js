@@ -30,14 +30,6 @@ export const getRoles = createAsyncThunk('role/getRoles', async () => {
   return response.data;
 });
 
-export const getDepartments = createAsyncThunk('department', async () => {
-  const response = await axios.get(`${API_URL}/department?page=1&per_page=100&sortedBy=-createdAt`, {
-    headers: {
-      Authorization: `Bearer ${user?.data?.token}`
-    }
-  });
-  return response.data;
-});
 
 export const createRole = createAsyncThunk(
   "role/create",
@@ -115,19 +107,7 @@ const roleSlice = createSlice({
       .addCase(getRoles.rejected, (state, action,) => {
         state.loading = 'failed';
         state.error = action.error.message;
-      })
-      .addCase(getDepartments.pending, (state) => {
-        state.loading = 'pending';
-        state.error = null;
-      })
-      .addCase(getDepartments.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
-        state.deptData = action.payload;
-      })
-      .addCase(getDepartments.rejected, (state, action) => {
-        state.loading = 'failed';
-        state.error = action.error.message;
-      })
+      });
   },
 });
 
