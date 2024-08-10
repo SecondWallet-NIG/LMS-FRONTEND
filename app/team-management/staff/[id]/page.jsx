@@ -44,8 +44,8 @@ const StaffPage = () => {
   const returnCardDetails = (name, value) => {
     return (
       <div>
-        <p>{name}</p>
-        <p className="text-xl font-semibold">{value}</p>
+        <p className="text-sm font-semibold">{name}</p>
+        <p className="text-sm font-light">{value}</p>
       </div>
     );
   };
@@ -133,26 +133,28 @@ const StaffPage = () => {
                     ) : null}
                   </div>
                 ) : (
-                  <div className="h-[6rem] w-[6rem] rounded-md text-swBlue border-swBlue border-2 flex justify-center items-center">
+                  <div className="h-[4rem] w-[4rem] rounded-md text-swBlue border-swBlue border-2 flex justify-center items-center">
                     <FiUser size={40} />
                   </div>
                 )}
 
                 <div>
                   <div className="flex gap-3 items-end">
-                    <p className="font-medium text-2xl whitespace-nowrap">
+                    <p className="font-medium text-md text-swBlue whitespace-nowrap">
                       {data?.data?.user?.firstName} {data?.data?.user?.lastName}
                     </p>
                   </div>
-                  <p className="font-light">{data?.data?.user?.email}</p>
-                  <p className="font-light">SWL-{data?.data?.user?.staffId}</p>
+                  <div className="flex gap-4">
+                    <p className="font-medium text-sm">{data?.data?.user?.email}</p>
+                    <p className="font-medium">SWL-{data?.data?.user?.staffId}</p>
+                  </div>
                   <div className="flex gap-5 items-center mt-2">
                     <Link
                       href={`mailto:${data?.data?.user?.email}`}
                       target="_blank"
                       className="hover:border-swBlue border-2 border-transparent hover:text-swBlue p-1 rounded-md cursor-pointer"
                     >
-                      <MdOutlineEmail size="22" />
+                      <MdOutlineEmail size="20" />
                     </Link>
                     <Link
                       href={`tel:${data?.data?.user?.phoneNumber}`}
@@ -174,15 +176,7 @@ const StaffPage = () => {
               <div className="grid grid-cols-2 gap-5 mt-10">
                 {returnCardDetails(
                   "Status",
-                  // <span
-                  //   className={`${
-                  //     data?.data?.user?.status === "Active"
-                  //       ? "bg-[#E7F1FE] text-swBlue"
-                  //       : "bg-[#F8A9A3] text-white"
-                  //   } text-xs px-2 py-1 rounded-full text-swBlue`}
-                  // >
-                  //   {data?.data?.user?.status}
-                  // </span>
+
                   <span
                     className={`${data?.data?.user?.status === "Active"
                       ? "text-green-500"
@@ -207,7 +201,7 @@ const StaffPage = () => {
             {/*Leave details */}
             <div className="p-5 border-2 shadow-lg rounded-lg">
               <div className="flex justify-between">
-                <p className="text-2xl font-semibold">Leave Details</p>
+                <p className="text-md font-medium text-swBlue">Leave Details</p>
                 {!data?.data?.employeeBenefit && (
                   <Button className="bg-swBlue hover:bg-swBlue500 text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap">
                     <Link href={`/team-management/operations/employee-benefit/add-new/${id}`}
@@ -255,7 +249,7 @@ const StaffPage = () => {
 
             {/* Department information */}
             <div className="p-5 border-2 shadow-lg rounded-lg">
-              <p className="text-2xl font-semibold">Department Information</p>
+              <p className="text-md text-swBlue font-medium">Department Information</p>
               <div className="grid grid-cols-2 gap-5 mt-10">
                 {returnCardDetails(
                   "Department Name",
