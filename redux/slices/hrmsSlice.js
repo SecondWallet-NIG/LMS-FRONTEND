@@ -60,6 +60,25 @@ export const addNewBenefitTypes = createAsyncThunk(
   }
 );
 
+export const addEmployeeBenefit = createAsyncThunk(
+  "employee-benefit",
+  async (payload) => {
+    try {
+      let token = getToken();
+      const response = await axios.post(`${API_URL}/employee-benefit`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const addNewFinancialYear = createAsyncThunk(
   "financial-year",
   async (payload) => {
@@ -122,6 +141,7 @@ const hrmsSlice = createSlice({
       .addCase(getAllBenefitTypes.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.data = action.payload;
+        state.benData = action.payload;
       })
       .addCase(getAllBenefitTypes.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
@@ -161,6 +181,7 @@ const hrmsSlice = createSlice({
       .addCase(getFinancialYear.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.data = action.payload;
+        state.finData = action.payload;
       })
       .addCase(getFinancialYear.rejected, (state, action) => {
         state.loading = "failed";
