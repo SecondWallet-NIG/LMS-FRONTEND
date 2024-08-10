@@ -25,7 +25,7 @@ const SuccessModal = ({
     <div className="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-[150]">
       <div className="bg-white p-4 rounded-md shadow-md" style={modalStyles}>
         <div className="flex justify-between">
-          <p className="text-lg font-semibold">{title}</p>
+          <p className="text-lg font-semibold capitalize">{title}</p>
 
           <button className="text-swGray pl-2 pr-2" onClick={onClose}>
             <BsXLg fontWeight="500" />

@@ -9,16 +9,18 @@ import { FiUser } from "react-icons/fi";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { Rings } from "react-loader-spinner";
 import { IoMdCheckmark } from "react-icons/io";
-import { getRoles, getDepartments } from "@/redux/slices/roleSlice";
+import { getRoles } from "@/redux/slices/roleSlice";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import { useImmer } from "use-immer";
+import { getAllDepartments } from "@/redux/slices/hrmsSlice";
 
 const NewStaffPage = () => {
     const dispatch = useDispatch();
     const { loading } = useSelector((state) => state.user);
-    const { data, deptData } = useSelector((state) => state?.role);
+    const { data } = useSelector((state) => state?.role);
+    const { data: deptData } = useSelector((state) => state?.hrms);
     const [profileImg, setProfileImg] = useState(null);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [fileError, setFileError] = useState("");
@@ -64,7 +66,7 @@ const NewStaffPage = () => {
 
     useEffect(() => {
         dispatch(getRoles());
-        dispatch(getDepartments());
+        dispatch(getAllDepartments());
     }, []);
 
   const handleFileInputChange = (e) => {

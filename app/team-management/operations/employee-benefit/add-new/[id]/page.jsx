@@ -3,82 +3,106 @@ import { useEffect } from "react";
 import SelectField from "@/app/components/shared/input/SelectField";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import { useSelector, useDispatch } from "react-redux";
-import { createDepartment } from "@/redux/slices/roleSlice";
 import { useImmer } from "use-immer";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
-import { getAllUsers } from "@/redux/slices/userSlice";
-import { addNewBenefitTypes } from "@/redux/slices/hrmsSlice";
+import { addEmployeeBenefit, getAllBenefitTypes, getFinancialYear } from "@/redux/slices/hrmsSlice";
 
 const AddBenefitTypesPage = () => {
   const dispatch = useDispatch();
+  const { benData: data } = useSelector(state => state?.hrms);
+  const { finData } = useSelector(state => state?.hrms);
+  const { id } = useParams();
   const router = useRouter();
   const [state, setState] = useImmer({
-    category: "",
-    annualLeave: "",
-    sickLeave: "",
-    personalLeave: "",
-    maternityLeave: "",
-    paternityLeave: "",
-    unpaidLeave: "",
+    loading: false,
+    salary: "",
+    benefityType: "",
     description: "",
+    benefits: [],
+    createdBy: "",
+    successModal: false,
+    successMessage: "",
+    failedModal: false,
+    failedMessage: ""
   });
 
   const reset = () => {
-    setState({
-      category: "",
-      salary: "",
-      description: "",
-    });
+    setState(draft => {
+      draft.salary = ""
+      draft.benefityType = ""
+      draft.description = ""
+    })
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
-  const preventMinus = (e) => {
-    if (/[^0-9,.]/g.test(e.key)) {
-      e.preventDefault();
+  useEffect(() => {
+    dispatch(getAllBenefitTypes())
+    dispatch(getFinancialYear())
+    if (typeof window !== "undefined") {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = user?.data?.user?._id || ""
+      setState(draft => {
+        draft.createdBy = userId
+      })
     }
+  }, []);
+
+  useEffect(() => {
+    if (data?.data) {
+      const benefits = []
+      const res = data?.data || []
+
+      for (let i = 0; i < res.length; i++) {
+        const value = res[i]._id;
+        const label = res[i].level;
+        benefits.push({ value, label })
+      }
+      setState(draft => {
+        draft.benefits = benefits
+      })
+    }
+  }, [data?.data])
+
+  const removeCommasFromNumber = (numberString) => {
+    if (typeof numberString !== "string") {
+      numberString = String(numberString);
+    }
+    return numberString.replace(/,/g, "");
   };
+
 
   const handleSubmit = () => {
-    setState((draft) => {
+    setState(draft => {
       draft.loading = true;
     });
     const payload = {
-      level: state.level,
-      leaveTypes: {
-        annualLeave: Number(state.annualLeave),
-        sickLeave: Number(state.sickLeave),
-        personalLeave: Number(state.personalLeave),
-        maternityLeave: Number(state.maternityLeave),
-        paternityLeave: Number(state.paternityLeave),
-        unpaidLeave: Number(state.unpaidLeave),
-      },
+      description: state.description,
+      financialYear: finData?.data?._id,
+      salary: Number(removeCommasFromNumber(state.salary)),
+      benefitType: state.benefityType,
+      createdBy: state.createdBy,
+      userId: id
     };
 
-    dispatch(addNewBenefitTypes({ payload }))
+
+    dispatch(addEmployeeBenefit(payload))
       .unwrap()
       .then((res) => {
         setState((draft) => {
           draft.successModal = true;
           draft.loading = false;
-          draft.successMessage = "Benefit type has been created successfully.";
+          draft.successMessage = res?.message || "Employee benefit added successfully.";
         });
         reset();
       })
       .catch((err) => {
         setState((draft) => {
           draft.failedModal = true;
-          draft.failedMessage = err?.message || "Benefit type creation failed.";
+          draft.failedMessage = err?.message || "Employee benefit creation failed.";
           draft.loading = false;
         });
       });
@@ -87,51 +111,33 @@ const AddBenefitTypesPage = () => {
   return (
     <DashboardLayout
       isBackNav={true}
-      paths={["Team Management", "Employee Benefit", "Add New"]}
+      paths={["Team Management", "Employee Benefit"]}
     >
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
         <div className="flex justify-between items-center p-3">
           <div>
             <p className="text-2xl lg:text-3xl font-bold text-swBlack">
-              Add Epmloyee Benefit
+              Add Employee Benefit
             </p>
-            {/* <p className="text-sm mt-1">Department information</p> */}
+            <p className="text-sm mt-1">Benefit Information</p>
           </div>
         </div>
 
         <div className="pt-8 px-5 pb-16 bg-white">
           <div className="flex justify-between mt-6 gap-5">
-            <p className="w-1/4 font-semibold mr-2">Benefit Category</p>
+            <p className="w-1/4 font-semibold mr-2">Salary</p>
             <div className="w-3/4">
-              <SelectField
-                label={"Select Benefit Category"}
+              <InputField
                 required={true}
-                isSearchable={true}
-                // placeholder={data?.data ? "Select..." : "Loading..."}
-                onChange={(e) =>
-                  setState((draft) => {
-                    draft.category = e.value;
-                  })
-                }
-                optionValue={state.users}
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-between mt-6 gap-5">
-            <p className="w-1/4 font-semibold mr-2">Benefit Category</p>
-            <div className="w-3/4">
-              <SelectField
-                label={"Select Benefit Category"}
-                required={true}
-                isSearchable={true}
-                // placeholder={data?.data ? "Select..." : "Loading..."}
-                onChange={(e) =>
-                  setState((draft) => {
-                    draft.category = e.value;
-                  })
-                }
-                optionValue={state.users}
+                value={state.salary}
+                name={"salary"}
+                label={"Enter salary"}
+                placeholder={"0"}
+                onChange={e => setState(draft => {
+                  draft.salary = Number(
+                    e.target.value.replace(/[^0-9.]/g, "")
+                  ).toLocaleString();
+                })}
               />
             </div>
           </div>
@@ -140,16 +146,16 @@ const AddBenefitTypesPage = () => {
             <p className="w-1/4 font-semibold mr-2">Benefit Type</p>
             <div className="w-3/4">
               <SelectField
-                label={"Select Benefit Category"}
+                label={"Select Benefit type"}
                 required={true}
                 isSearchable={true}
-                // placeholder={data?.data ? "Select..." : "Loading..."}
-                onChange={(e) =>
-                  setState((draft) => {
-                    draft.category = e.value;
+                placeholder={data?.data ? "Select..." : "Loading..."}
+                onChange={e =>
+                  setState(draft => {
+                    draft.benefityType = e.value;
                   })
                 }
-                optionValue={state.users}
+                optionValue={state.benefits}
               />
             </div>
           </div>
@@ -164,8 +170,8 @@ const AddBenefitTypesPage = () => {
                 name={"description"}
                 label={"Enter description"}
                 placeholder={"Benefit description"}
-                onChange={(e) =>
-                  setState((draft) => {
+                onChange={e =>
+                  setState(draft => {
                     draft.description = e.target.value;
                   })
                 }
@@ -176,14 +182,14 @@ const AddBenefitTypesPage = () => {
 
         <div className="p-3 border-t flex items-center justify-end gap-2 w-full">
           <Button
-            disabled={
-              Object.values(state).some((item) => item === "") || state.loading
+            disabled={!state.salary || !state.benefityType 
+              || !state.description || state.loading
             }
             onClick={handleSubmit}
             className={`text-white font-semibold p-2 px-16 bg-swBlue 
-                        hover:bg-swBluee500 rounded-md flex items-center gap-2`}
+            hover:bg-swBluee500 rounded-md flex items-center gap-2`}
           >
-            {state.loading ? "Adding..." : "Add Employment Benefit"}
+            {state.loading ? "Adding..." : "Add Benefit"}
           </Button>
         </div>
       </div>
@@ -191,16 +197,16 @@ const AddBenefitTypesPage = () => {
         isOpen={state.successModal}
         description={state.successMessage}
         title={"Benefit Type Creation Successful"}
-        btnLeft={"Operations"}
-        btnLeftFunc={() => router.push("/team-management/operations")}
+        btnLeft={"Staff Profile"}
+        btnLeftFunc={() => router.push(`/team-management/staff/${id}`)}
         btnRight={"Done"}
         btnRightFunc={() =>
-          setState((draft) => {
+          setState(draft => {
             draft.successModal = false;
           })
         }
         onClose={() =>
-          setState((draft) => {
+          setState(draft => {
             draft.successModal = false;
           })
         }
@@ -208,10 +214,10 @@ const AddBenefitTypesPage = () => {
       <CancelModal
         isOpen={state.failedModal}
         description={state.failedMessage}
-        title={"Benefit Type Creation Failed"}
+        title={"Employee Benefit Creation Failed"}
         noButtons={true}
         onClose={() =>
-          setState((draft) => {
+          setState(draft => {
             draft.failedModal = false;
           })
         }

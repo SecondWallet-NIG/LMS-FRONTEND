@@ -60,12 +60,50 @@ export const addNewBenefitTypes = createAsyncThunk(
   }
 );
 
+export const addEmployeeBenefit = createAsyncThunk(
+  "employee-benefit",
+  async (payload) => {
+    try {
+      let token = getToken();
+      const response = await axios.post(`${API_URL}/employee-benefit`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const addNewFinancialYear = createAsyncThunk(
   "financial-year",
   async (payload) => {
     try {
       let token = getToken();
       const response = await axios.post(`${API_URL}/financial-year`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const getFinancialYear = createAsyncThunk(
+  "financial-year/active",
+  async () => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/financial-year/active`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -103,6 +141,7 @@ const hrmsSlice = createSlice({
       .addCase(getAllBenefitTypes.fulfilled, (state, action) => {
         state.loading = "succeeded";
         state.data = action.payload;
+        state.benData = action.payload;
       })
       .addCase(getAllBenefitTypes.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
@@ -132,6 +171,19 @@ const hrmsSlice = createSlice({
       })
       .addCase(addNewFinancialYear.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getFinancialYear.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getFinancialYear.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+        state.finData = action.payload;
+      })
+      .addCase(getFinancialYear.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

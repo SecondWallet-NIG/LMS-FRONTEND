@@ -13,6 +13,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getStaffTasks } from "@/redux/slices/userTaskSlice";
 import dynamic from "next/dynamic";
+import Button from "@/app/components/shared/buttonComponent/Button";
+import { AiOutlinePlus } from "react-icons/ai";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -94,12 +96,13 @@ const StaffPage = () => {
       <ToastContainer />
       <main>
         <div className="p-5 sm:p-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg gap-5">
+            {/* Personal details */}
             <div className="p-5 border-2 shadow-lg rounded-lg">
               <div className="flex items-start gap-5">
                 {data?.data?.user?.profilePicture &&
-                data?.data?.user?.profilePicture !== "null" &&
-                data?.data?.user?.profilePicture !== "undefined" ? (
+                  data?.data?.user?.profilePicture !== "null" &&
+                  data?.data?.user?.profilePicture !== "undefined" ? (
                   <div className="h-[6rem] w-[6rem] rounded-lg text-swBlue border-swBlue relative overflow-hidden">
                     <Image
                       src={data?.data?.user?.profilePicture}
@@ -141,10 +144,10 @@ const StaffPage = () => {
                       {data?.data?.user?.firstName} {data?.data?.user?.lastName}
                     </p>
                   </div>
- <div className="flex gap-4">
- <p className="font-medium text-sm">{data?.data?.user?.email}</p>
-                  <p className="font-medium">SWL-{data?.data?.user?.staffId}</p>
- </div>
+                  <div className="flex gap-4">
+                    <p className="font-medium text-sm">{data?.data?.user?.email}</p>
+                    <p className="font-medium">SWL-{data?.data?.user?.staffId}</p>
+                  </div>
                   <div className="flex gap-5 items-center mt-2">
                     <Link
                       href={`mailto:${data?.data?.user?.email}`}
@@ -162,7 +165,7 @@ const StaffPage = () => {
                     <Link
                       href={`/team-management/staff/update/${data?.data?.user?._id}`}
                       className="hover:border-swBlue border-2 border-transparent hover:text-swBlue p-1 rounded-md cursor-pointer"
-                      // onClick={() => setIsOpen(true)}
+                    // onClick={() => setIsOpen(true)}
                     >
                       <FiEdit2 size="20" />
                     </Link>
@@ -173,13 +176,12 @@ const StaffPage = () => {
               <div className="grid grid-cols-2 gap-5 mt-10">
                 {returnCardDetails(
                   "Status",
-           
+
                   <span
-                    className={`${
-                      data?.data?.user?.status === "Active"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
+                    className={`${data?.data?.user?.status === "Active"
+                      ? "text-green-500"
+                      : "text-red-500"
+                      }`}
                   >
                     {data?.data?.user?.status}
                   </span>
@@ -195,46 +197,57 @@ const StaffPage = () => {
                 )}
               </div>
             </div>
+
+            {/*Leave details */}
             <div className="p-5 border-2 shadow-lg rounded-lg">
-              <p className="text-md font-medium text-swBlue">Leave Details</p>
+              <div className="flex justify-between">
+                <p className="text-md font-medium text-swBlue">Leave Details</p>
+                {!data?.data?.employeeBenefit && (
+                  <Button className="bg-swBlue hover:bg-swBlue500 text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap">
+                    <Link href={`/team-management/operations/employee-benefit/add-new/${id}`}
+                      className="flex gap-1 items-center p-1"
+                    >
+                      <AiOutlinePlus size={15} />
+                      <p className="block">Add Employee Benefit</p>
+                    </Link>
+                  </Button>
+                )}
+              </div>
               <div className="grid grid-cols-2 gap-5 mt-10">
                 {returnCardDetails(
                   "Annual Leave",
-                  `${
-                    data?.data?.employeeBenefit?.benefitType?.leaveTypes
-                      ?.annualLeave || 0
+                  `${data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                    ?.annualLeave || 0
                   } days`
                 )}
                 {returnCardDetails(
                   "Sick Leave",
-                  `${
-                    data?.data?.employeeBenefit?.benefitType?.leaveTypes
-                      ?.sickLeave || 0
+                  `${data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                    ?.sickLeave || 0
                   } days`
                 )}
                 {returnCardDetails(
                   "Maternity Leave",
-                  `${
-                    data?.data?.employeeBenefit?.benefitType?.leaveTypes
-                      ?.maternityLeave || 0
+                  `${data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                    ?.maternityLeave || 0
                   } days`
                 )}
                 {returnCardDetails(
                   "Paternity Leave",
-                  `${
-                    data?.data?.employeeBenefit?.benefitType?.leaveTypes
-                      ?.paternityLeave || 0
+                  `${data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                    ?.paternityLeave || 0
                   } days`
                 )}
                 {returnCardDetails(
                   "Unpaid Leave",
-                  `${
-                    data?.data?.employeeBenefit?.benefitType?.leaveTypes
-                      ?.unpaidLeave || 0
+                  `${data?.data?.employeeBenefit?.benefitType?.leaveTypes
+                    ?.unpaidLeave || 0
                   } days`
                 )}
               </div>
             </div>
+
+            {/* Department information */}
             <div className="p-5 border-2 shadow-lg rounded-lg">
               <p className="text-md text-swBlue font-medium">Department Information</p>
               <div className="grid grid-cols-2 gap-5 mt-10">
@@ -256,8 +269,7 @@ const StaffPage = () => {
                 )}
                 {returnCardDetails(
                   "Salary",
-                  `₦ ${
-                    data?.data?.employeeBenefit?.salary?.toLocaleString() || 0
+                  `₦ ${data?.data?.employeeBenefit?.salary?.toLocaleString() || 0
                   }`
                 )}
               </div>
