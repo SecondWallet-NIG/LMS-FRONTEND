@@ -24,8 +24,10 @@ export const loginUser = createAsyncThunk('user/loginUser', async (loginData) =>
 export const getRoles = createAsyncThunk('role/getRoles', async () => {
   const response = await axios.get(`${API_URL}/role/all`, {
     headers: {
-      Authorization: `Bearer ${user?.data?.token}`
-    }
+      Authorization: `Bearer ${user?.data?.token}`,
+      
+    },
+    responseType: ""
   });
   return response.data;
 });
