@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 //icons
 import { RiBox3Line } from "react-icons/ri";
 import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
-import { AiFillMoneyCollect, AiOutlineSetting } from "react-icons/ai";
+import { AiFillMoneyCollect, AiOutlineSetting, AiFillDashboard } from "react-icons/ai";
 import { BiMapAlt, BiSolidBuilding } from "react-icons/bi";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
@@ -53,9 +53,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   if (typeof window !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
   }
+  const userId = user?.data?.user?._id
 
   useEffect(() => {
-    dispatch(getApprovalAssignee(user?.data?.user?._id));
+    dispatch(getApprovalAssignee(userId));
   }, []);
 
   useEffect(() => {
@@ -65,9 +66,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   return (
     <main>
       <div
-        className={`hidden fixed h-full border-r bg-white border-r-gray-300 md:flex flex-col font-medium z-[102] transition-all ease-in-out duration-1000 ${
-          sideBarOpen ? "w-4/5 sm:w-1/5 z-[200]" : "w-[10%] md:w-[5%]"
-        }`}
+        className={`hidden fixed h-full border-r bg-white border-r-gray-300 md:flex flex-col font-medium z-[102] transition-all ease-in-out duration-1000 ${sideBarOpen ? "w-4/5 sm:w-1/5 z-[200]" : "w-[10%] md:w-[5%]"
+          }`}
         onMouseEnter={() => handleSidebarOpen(true)}
         onMouseLeave={() => handleSidebarOpen(false)}
       >
@@ -202,20 +202,18 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <IoMdAdd
-                  className={`${
-                    (activeLink === "create-loan" || "saved-loans") &&
+                  className={`${(activeLink === "create-loan" || "saved-loans") &&
                     "text-swBlue"
-                  }`}
+                    }`}
                   size={20}
                 />
               }
               pathname={pathname}
               text="Create Loan"
-              link={`${
-                user?.data?.user?.role?.tag === "LO"
+              link={`${user?.data?.user?.role?.tag === "LO"
                   ? "/create-loan"
                   : "/unauthorised"
-              }`}
+                }`}
               isActive={"create-loan"}
               sideBarOpen={sideBarOpen}
               onClick={() => {
@@ -224,11 +222,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               hasDropdown={true}
               dropdownContent={
                 <Link
-                  href={`${
-                    user?.data?.user?.role?.tag === "LO"
+                  href={`${user?.data?.user?.role?.tag === "LO"
                       ? "/saved-loans"
                       : "/unauthorised"
-                  }`}
+                    }`}
                   className="ml-5 text-sm hover:text-swBlue"
                 >
                   Saved Loans
@@ -251,9 +248,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <FiFile
-                  className={`${
-                    activeLink === "loan-applications" && "text-swBlue"
-                  } `}
+                  className={`${activeLink === "loan-applications" && "text-swBlue"
+                    } `}
                   size={20}
                 />
               }
@@ -281,9 +277,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <FiFileText
-                  className={`${
-                    activeLink === "loan-drafts" && "text-swBlue"
-                  } `}
+                  className={`${activeLink === "loan-drafts" && "text-swBlue"
+                    } `}
                   size={20}
                 />
               }
@@ -311,9 +306,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <FiSend
-                  className={`${
-                    activeLink === "disbursement" && "text-swBlue"
-                  }`}
+                  className={`${activeLink === "disbursement" && "text-swBlue"
+                    }`}
                   size={20}
                 />
               }
@@ -347,7 +341,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   size={20}
                 />
               }
-              
+
               pathname={pathname}
               text="Repayment"
               link="/repayment"
@@ -374,9 +368,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <AiFillMoneyCollect
-                  className={`${
-                    activeLink === "payment-history" && "text-swBlue"
-                  }`}
+                  className={`${activeLink === "payment-history" && "text-swBlue"
+                    }`}
                   size={20}
                 />
               }
@@ -428,10 +421,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               sideBarOpen={sideBarOpen}
             />
             {userRoleTag === "System Admin" ||
-            userRoleTag === "CFO" ||
-            userRoleTag === "CTO" ||
-            userRoleTag === "CEO" ||
-            userRoleTag === "Dir" ? (
+              userRoleTag === "CFO" ||
+              userRoleTag === "CTO" ||
+              userRoleTag === "CEO" ||
+              userRoleTag === "Dir" ? (
               <>
                 <SidebarLink
                   allowedRoleTags={["CFO", "CEO", "CT0", "Dir", "System Admin"]}
@@ -534,7 +527,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 setActiveLink("");
               }}
             />
-            <SidebarLink
+            {/* <SidebarLink
               allowedRoleTags={[
                 "LO",
                 "CFO",
@@ -556,13 +549,37 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               onClick={() => {
                 handleSidebarOpen(false);
               }}
+            /> */}
+
+            <SidebarLink
+              allowedRoleTags={[
+                "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "ICO",
+                "COF",
+                "CT0",
+                "LR0",
+                "Dir",
+                "OFA",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<AiFillDashboard size={20} />}
+              text="Employee Dashboard"
+              link={`/employee-dashboard/${userId}`}
+              sideBarOpen={sideBarOpen}
+              onClick={() => {
+                handleSidebarOpen(false);
+              }}
             />
           </div>
         </div>
 
         <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
           <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
-            <SidebarLink
+            {/* <SidebarLink
               allowedRoleTags={[
                 "LO",
                 "CFO",
@@ -587,16 +604,15 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 localStorage.removeItem("email");
                 //localStorage.clear();
               }}
-            />
+            /> */}
           </div>
         </div>
       </div>
 
       {/* Small screens */}
       <div
-        className={`fixed h-full border-r bg-white border-r-gray-300 flex md:flex flex-col font-medium z-[200] transition-all ease-in-out duration-1000 w-[200px] ${
-          sideBarOpen ? "ml-0 z-[1000] sm:-ml-[280px]" : "-ml-[280px]"
-        }`}
+        className={`fixed h-full border-r bg-white border-r-gray-300 flex md:flex flex-col font-medium z-[200] transition-all ease-in-out duration-1000 w-[200px] ${sideBarOpen ? "ml-0 z-[1000] sm:-ml-[280px]" : "-ml-[280px]"
+          }`}
       >
         <div className="flex justify-between items-center p-5 h-[4.55rem] border-b border-b-gray-300">
           <Image src={companyLogo} alt="company logo" priority={true} />
@@ -727,11 +743,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }
               pathname={pathname}
               text="Create Loan"
-              link={`${
-                user?.data?.user?.role?.tag === "LO"
+              link={`${user?.data?.user?.role?.tag === "LO"
                   ? "/create-loan"
                   : "/unauthorised"
-              }`}
+                }`}
               isActive={"create-loan"}
               sideBarOpen={sideBarOpen}
               onClick={() => {
@@ -740,11 +755,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               hasDropdown={true}
               dropdownContent={
                 <Link
-                  href={`${
-                    user?.data?.user?.role?.tag === "LO"
+                  href={`${user?.data?.user?.role?.tag === "LO"
                       ? "/saved-loans"
                       : "/unauthorised"
-                  }`}
+                    }`}
                   className="ml-5 text-sm hover:text-swBlue"
                 >
                   Saved Loans
@@ -767,9 +781,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <FiFile
-                  className={`${
-                    activeLink === "loan-applications" && "text-swBlue"
-                  } `}
+                  className={`${activeLink === "loan-applications" && "text-swBlue"
+                    } `}
                   size={20}
                 />
               }
@@ -797,9 +810,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <FiFile
-                  className={`${
-                    activeLink === "loan-applications" && "text-swBlue"
-                  } `}
+                  className={`${activeLink === "loan-applications" && "text-swBlue"
+                    } `}
                   size={20}
                 />
               }
@@ -827,9 +839,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <FiSend
-                  className={`${
-                    activeLink === "disbursement" && "text-swBlue"
-                  }`}
+                  className={`${activeLink === "disbursement" && "text-swBlue"
+                    }`}
                   size={20}
                 />
               }
@@ -889,9 +900,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <AiFillMoneyCollect
-                  className={`${
-                    activeLink === "payment-history" && "text-swBlue"
-                  }`}
+                  className={`${activeLink === "payment-history" && "text-swBlue"
+                    }`}
                   size={20}
                 />
               }
@@ -942,10 +952,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               sideBarOpen={sideBarOpen}
             />
             {userRoleTag === "System Admin" ||
-            userRoleTag === "CFO" ||
-            userRoleTag === "CTO" ||
-            userRoleTag === "CEO" ||
-            userRoleTag === "Dir" ? (
+              userRoleTag === "CFO" ||
+              userRoleTag === "CTO" ||
+              userRoleTag === "CEO" ||
+              userRoleTag === "Dir" ? (
               <>
                 <SidebarLink
                   allowedRoleTags={["CFO", "CEO", "CT0", "Dir", "System Admin"]}

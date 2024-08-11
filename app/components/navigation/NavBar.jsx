@@ -11,6 +11,9 @@ import Image from "next/image";
 import { formatDate } from "@/helpers";
 import { RxHamburgerMenu } from "react-icons/rx";
 import dynamic from "next/dynamic";
+import { AiOutlineSetting } from "react-icons/ai";
+import Link from "next/link";
+import { GoSignOut } from "react-icons/go";
 
 //import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -23,6 +26,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   const dispatch = useDispatch();
   const x = useSelector((state) => state.approvalAssignee);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isDropDownOpen, setDropDown] = useState(false);
   const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");
   const [openProfilePic, setOpenProfilePic] = useState(false);
@@ -38,6 +42,11 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   const openNotifications = (state) => {
     setIsNotificationsOpen(state);
   };
+
+  const signOut = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("email");
+  }
 
   return (
     <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-full md:w-[95%] px-5 z-[100]">
@@ -85,9 +94,8 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
 
             <div className="flex gap-5 py-3 px-5 border-y fixed top-[9.5rem] w-[25rem] min-w-[18rem] bg-white">
               <button
-                className={`py-2 px-4 rounded-md ${
-                  openedMessages === "unread" && "bg-swLightGray"
-                }`}
+                className={`py-2 px-4 rounded-md ${openedMessages === "unread" && "bg-swLightGray"
+                  }`}
                 onClick={() => {
                   setOpenedMessages("unread");
                 }}
@@ -170,7 +178,6 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
           />
         </div>
       </div>
-
       <Image
         src={navPatternBg}
         alt="nav pattern"
@@ -178,8 +185,24 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
         // width={"50%"}
         // height={"100%"}
         sizes="50%"
-        className="absolute w-1/2 ml-auto"
+        className="absolute w-1/2 ml-auto cursor-pointer"
+        onClick={() => setDropDown(!isDropDownOpen)}
       />
+
+      {isDropDownOpen && (
+        <div className="absolute top-full w-[10rem] min-w-[8rem] px-2 py-4 border bg-white rounded-lg mt-2 shadow-md right-2  h-[7rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray">
+          <div className="flex-col">
+            <Link href={"/settings"} className="flex gap-2 mb-3 hover:text-swBlack">
+              <AiOutlineSetting size={22} />
+              <p>Settings</p>
+            </Link>
+            <Link href={"/"} className="flex gap-2 border-t pt-3 hover:text-swBlack" onClick={signOut}>
+              <GoSignOut size={22} />
+              <p>Sign out</p>
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
