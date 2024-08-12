@@ -91,7 +91,7 @@ const LoanDraftTable = () => {
               className="underline"
               href={`/team-management/staff/${item?.createdBy?._id}`}
             >
-              {item?.createdBy?.email}
+              {item?.createdBy?.user?.email}
             </Link>
           </div>
         </div>

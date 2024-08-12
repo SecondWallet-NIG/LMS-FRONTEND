@@ -41,6 +41,7 @@ import { bankArr } from "@/constant";
 import { format } from "date-fns";
 import { FaRegCalendar } from "react-icons/fa";
 import { DayPicker } from "react-day-picker";
+import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTransactions";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -788,7 +789,7 @@ const ViewLoan = () => {
                       <div>
                         <p>
                           ₦{" "}
-                          {data?.data?.interestCalculation?.totalPayments?.toLocaleString()}
+                          {data?.data?.loanApplication?.loanMaturityAmount?.toLocaleString()}
                         </p>
                       </div>
                     </td>
@@ -1206,6 +1207,15 @@ const ViewLoan = () => {
                   >
                     Payment History
                   </button>
+                  <button
+                    onClick={() => handleActivityToggle("loanTransactions")}
+                    className={`${
+                      activityButton === "loanTransactions" &&
+                      "font-semibold text-swBlue bg-blue-50"
+                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                  >
+                    Loan Transactions
+                  </button>
                 </div>
               </div>
               <div className="p-2">
@@ -1220,6 +1230,9 @@ const ViewLoan = () => {
 
                 {activityButton === "paymentHistory" && (
                   <CustomerPaymentHistory data={data?.data} loanId={id} />
+                )}
+                {activityButton === "loanTransactions" && (
+                  <CustomerLoanTransactions loanId={id} />
                 )}
               </div>
             </section>

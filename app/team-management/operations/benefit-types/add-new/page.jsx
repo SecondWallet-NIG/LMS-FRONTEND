@@ -96,7 +96,7 @@ const AddBenefitTypesPage = () => {
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
         <div className="flex justify-between items-center p-3">
           <div>
-            <p className="text-2xl lg:text-3xl font-bold text-swBlack">
+            <p className="text-2xl font-bold text-swBlack">
               Add New Benefit Type
             </p>
             {/* <p className="text-sm mt-1">Department information</p> */}
@@ -108,11 +108,11 @@ const AddBenefitTypesPage = () => {
             <p className="w-1/4 font-semibold mr-2">Staff Level</p>
             <div className="w-3/4 flex flex-col gap-5">
               <InputField
-                required={true}
+                // required={true}
                 value={state.level}
                 name={"level"}
-                label={"Enter Staff Level"}
-                placeholder={"Staff Level"}
+                // label={"Enter Staff Level"}
+                placeholder={"Enter Staff Level"}
                 onChange={handleInputChange}
               />
             </div>
@@ -122,11 +122,11 @@ const AddBenefitTypesPage = () => {
             <p className="w-1/4 font-semibold mr-2">Anual Leave</p>
             <div className="w-3/4 flex flex-col gap-5">
               <InputField
-                required={true}
+                // required={true}
                 value={state.annualLeave}
                 name={"annualLeave"}
-                label={"Enter Days For Annual Leave"}
-                placeholder={"Annual Level"}
+                // label={"Enter Days For Annual Leave"}
+                placeholder={"Enter Days For Annual Leave"}
                 onChange={handleInputChange}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
@@ -138,11 +138,11 @@ const AddBenefitTypesPage = () => {
             <p className="w-1/4 font-semibold mr-2">Sick Leave</p>
             <div className="w-3/4 flex flex-col gap-5">
               <InputField
-                required={true}
+                // required={true}
                 value={state.sickLeave}
                 name={"sickLeave"}
-                label={"Enter Days For Sick Leave"}
-                placeholder={"Sick Level"}
+                // label={"Enter Days For Sick Leave"}
+                placeholder={"Enter Days For Sick Leave"}
                 onChange={handleInputChange}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
@@ -154,11 +154,11 @@ const AddBenefitTypesPage = () => {
             <p className="w-1/4 font-semibold mr-2">Personal Leave</p>
             <div className="w-3/4 flex flex-col gap-5">
               <InputField
-                required={true}
+                // required={true}
                 value={state.personalLeave}
                 name={"personalLeave"}
-                label={"Enter Days For Personal Leave"}
-                placeholder={"Personal Level"}
+                // label={"Enter Days For Personal Leave"}
+                placeholder={"Enter Days For Personal Leave"}
                 onChange={handleInputChange}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
@@ -170,11 +170,11 @@ const AddBenefitTypesPage = () => {
             <p className="w-1/4 font-semibold mr-2">Maternity Leave</p>
             <div className="w-3/4 flex flex-col gap-5">
               <InputField
-                required={true}
+                // required={true}
                 value={state.maternityLeave}
                 name={"maternityLeave"}
-                label={"Enter Days For Maternity Leave"}
-                placeholder={"Maternity Level"}
+                // label={"Enter Days For Maternity Leave"}
+                placeholder={"Enter Days For Maternity Leave"}
                 onChange={handleInputChange}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
@@ -186,11 +186,11 @@ const AddBenefitTypesPage = () => {
             <p className="w-1/4 font-semibold mr-2">Paternity Leave</p>
             <div className="w-3/4 flex flex-col gap-5">
               <InputField
-                required={true}
+                // required={true}
                 value={state.paternityLeave}
                 name={"paternityLeave"}
-                label={"Enter Days For Paternity Leave"}
-                placeholder={"Paternity Level"}
+                // label={"Enter Days For Paternity Leave"}
+                placeholder={"Enter Days For Paternity Leave"}
                 onChange={handleInputChange}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
@@ -202,11 +202,11 @@ const AddBenefitTypesPage = () => {
             <p className="w-1/4 font-semibold mr-2">Unpaid Leave</p>
             <div className="w-3/4 flex flex-col gap-5">
               <InputField
-                required={true}
+                // required={true}
                 value={state.unpaidLeave}
                 name={"unpaidLeave"}
-                label={"Enter Days For Unpaid Leave"}
-                placeholder={"Unpaid Level"}
+                // label={"Enter Days For Unpaid Leave"}
+                placeholder={"Enter Days For Unpaid Leave"}
                 onChange={handleInputChange}
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}

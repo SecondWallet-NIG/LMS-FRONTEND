@@ -22,7 +22,6 @@ const CustomerLoanDoc = (data) => {
 
   const handleSetUrl = (content) => {
     setUrl(content);
-    setIsOpen(true);
   };
 
   return (
@@ -369,6 +368,7 @@ const CustomerLoanDoc = (data) => {
               <button
                 onClick={() => {
                   handleSetUrl(data?.data?.loanApplication?.proofOfOwnership);
+                  handleFileExtention(url);
                   setOpenFileModal(true);
                 }}
                 className="text-sm text-swGray underline"
