@@ -17,22 +17,22 @@ import { useImmer } from "use-immer";
 import { getAllDepartments } from "@/redux/slices/hrmsSlice";
 
 const NewStaffPage = () => {
-    const dispatch = useDispatch();
-    const { loading } = useSelector((state) => state.user);
-    const { data } = useSelector((state) => state?.role);
-    const { data: deptData } = useSelector((state) => state?.hrms);
-    const [profileImg, setProfileImg] = useState(null);
-    const [selectedFiles, setSelectedFiles] = useState([]);
-    const [fileError, setFileError] = useState("");
-    const [isLoading, setLoading] = useState(false)
-    const [state, setState] = useImmer({
-        successModal: false,
-        successMessage: "",
-        failedModal: false,
-        failedMessage: "",
-        department: "",
-        departments: []
-    })
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
+  const { data } = useSelector((state) => state?.role);
+  const { data: deptData } = useSelector((state) => state?.hrms);
+  const [profileImg, setProfileImg] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [fileError, setFileError] = useState("");
+  const [isLoading, setLoading] = useState(false)
+  const [state, setState] = useImmer({
+    successModal: false,
+    successMessage: "",
+    failedModal: false,
+    failedMessage: "",
+    department: "",
+    departments: []
+  })
 
   const [formData, setFormData] = useState({
     profilePicture: null,
@@ -64,10 +64,10 @@ const NewStaffPage = () => {
     />
   );
 
-    useEffect(() => {
-        dispatch(getRoles());
-        dispatch(getAllDepartments());
-    }, []);
+  useEffect(() => {
+    dispatch(getRoles());
+    dispatch(getAllDepartments());
+  }, []);
 
   const handleFileInputChange = (e) => {
     const files = Array.from(e.target.files);
@@ -87,30 +87,30 @@ const NewStaffPage = () => {
     }
   };
 
-    const modifyObjects = (arr) => {
-        return Array.isArray(arr)
-            ? arr.map((item) => ({
-                label: item.name,
-                value: item._id,
-            }))
-            : [];
-    };
+  const modifyObjects = (arr) => {
+    return Array.isArray(arr)
+      ? arr.map((item) => ({
+        label: item.name,
+        value: item._id,
+      }))
+      : [];
+  };
 
-    useEffect(() => {
-        if (deptData?.data) {
-            const departments = []
-            const res = deptData?.data?.departments || []
+  useEffect(() => {
+    if (deptData?.data) {
+      const departments = []
+      const res = deptData?.data?.departments || []
 
-            for (let i = 0; i < res.length; i++) {
-                const value = res[i]._id;
-                const label = res[i].departmentName;
-                departments.push({ value, label })
-            }
-            setState(draft => {
-                draft.departments = departments
-            })
-        }
-    }, [deptData?.data])
+      for (let i = 0; i < res.length; i++) {
+        const value = res[i]._id;
+        const label = res[i].departmentName;
+        departments.push({ value, label })
+      }
+      setState(draft => {
+        draft.departments = departments
+      })
+    }
+  }, [deptData?.data])
 
   const adminOptions = [
     { value: "CEO", label: "CEO" },
@@ -153,38 +153,38 @@ const NewStaffPage = () => {
       isValid = false;
     }
 
-        setErrors(newErrors);
-        return isValid;
-    };
-    const resetForm = () => {
-        setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            phoneNumber: "",
-            role: "",
-            tag: null,
-            isRoleAdmin: false
-        });
-        setState(draft => {
-            draft.department = ""
-        })
-    };
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setLoading(true)
-        const isValid = validateForm();
-        if (isValid) {
-            const payload = new FormData();
-            payload.append("firstName", formData.firstName);
-            payload.append("profilePicture", formData.profilePicture);
-            payload.append("lastName", formData.lastName);
-            payload.append("email", formData.email);
-            payload.append("phoneNumber", formData.phoneNumber);
-            payload.append("role", formData.role);
-            //  payload.append("tag", formData.tag);
-            payload.append("isRoleAdmin", formData.isRoleAdmin);
-            payload.append("department", state.department);
+    setErrors(newErrors);
+    return isValid;
+  };
+  const resetForm = () => {
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      role: "",
+      tag: null,
+      isRoleAdmin: false
+    });
+    setState(draft => {
+      draft.department = ""
+    })
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true)
+    const isValid = validateForm();
+    if (isValid) {
+      const payload = new FormData();
+      payload.append("firstName", formData.firstName);
+      payload.append("profilePicture", formData.profilePicture);
+      payload.append("lastName", formData.lastName);
+      payload.append("email", formData.email);
+      payload.append("phoneNumber", formData.phoneNumber);
+      payload.append("role", formData.role);
+      //  payload.append("tag", formData.tag);
+      payload.append("isRoleAdmin", formData.isRoleAdmin);
+      payload.append("department", state.department);
 
       dispatch(createUser(payload))
         .unwrap()
@@ -241,7 +241,7 @@ const NewStaffPage = () => {
           <div className="">
             <div className="flex justify-between items-center p-3">
               <div>
-                <p className="text-2xl lg:text-3xl font-bold text-swBlack">
+                <p className="text-xl lg:text-2xl font-bold text-swBlack">
                   Add New Staff
                 </p>
                 <p className="text-sm mt-1">Staff Information</p>
@@ -290,9 +290,9 @@ const NewStaffPage = () => {
                 <div className="w-3/4 flex flex-col gap-5">
                   <InputField
                     name="firstName"
-                    label="First name"
+                    // label="First name"
                     required={true}
-                    placeholder="First name"
+                    placeholder="Enter First Name"
                     onChange={handleInputChange}
                   />
                   {errors.firstName && (
@@ -302,9 +302,9 @@ const NewStaffPage = () => {
                   )}
                   <InputField
                     name="lastName"
-                    label="Last name"
+                    // label="Last name"
                     required={true}
-                    placeholder="Last name"
+                    placeholder="Enter Last Name"
                     onChange={handleInputChange}
                   />
                   {errors.lastName && (
@@ -316,20 +316,20 @@ const NewStaffPage = () => {
                     <div className="w-full ">
                       <InputField
                         required={true}
-                        label="Phone number"
+                        // label="Phone number"
                         name="phoneNumber"
                         onKeyPress={preventMinus}
                         onWheel={() => document.activeElement.blur()}
-                        placeholder="Phone number"
+                        placeholder="Enter Phone Number"
                         onChange={handleInputChange}
                       />
                     </div>
                   </div>
                   <InputField
                     name="email"
-                    label="Email address"
+                    // label="Email address"
                     required={true}
-                    placeholder="Email"
+                    placeholder="Enter Email"
                     onChange={handleInputChange}
                   />
                   {errors.email && (
@@ -342,60 +342,62 @@ const NewStaffPage = () => {
                 <div className="w-3/4 flex flex-col gap-3">
                   <SelectField
                     name="role"
-                    label={"Select user role"}
-                    required={true}
+                    // label={"Select user role"}
+                    // required={true}
                     isSearchable={false}
+                    placeholder={"Select Role..."}
                     optionValue={modifyObjects(data?.data)}
                     onChange={(selectedOption) =>
                       handleSelectChange(selectedOption, "role")
                     }
                   />
 
-                                    {formData?.role === "650f61f89e06e619920a7f4e" && (
-                                        <SelectField
-                                            name="tag"
-                                            label={"Select Admin Tag"}
-                                            required={true}
-                                            isSearchable={false}
-                                            optionValue={adminOptions}
-                                            onChange={(selectedOption) =>
-                                                handleSelectChange(selectedOption, "tag")
-                                            }
-                                        />
-                                    )}
-                                </div>
-                            </div>
+                  {formData?.role === "650f61f89e06e619920a7f4e" && (
+                    <SelectField
+                      name="tag"
+                      // label={"Select Admin Tag"}
+                      placeholder={"Select Tag..."}
+                      // required={true}
+                      isSearchable={false}
+                      optionValue={adminOptions}
+                      onChange={(selectedOption) =>
+                        handleSelectChange(selectedOption, "tag")
+                      }
+                    />
+                  )}
+                </div>
+              </div>
 
-                            <div className="flex justify-between mt-5">
-                                <p className="w-1/4 font-semibold mr-2">Departments</p>
-                                <div className="w-3/4 flex flex-col gap-3">
-                                    <SelectField
-                                        label={"Select department"}
-                                        required={true}
-                                        isSearchable={true}
-                                        placeholder={deptData?.data ? 'Select...' : 'Loading...'}
-                                        onChange={e => setState(draft => {
-                                            draft.department = e.value
-                                        })}
-                                        optionValue={state.departments}
-                                    />
-                                </div>
-                            </div>
-                        </div>
+              <div className="flex justify-between mt-5">
+                <p className="w-1/4 font-semibold mr-2">Departments</p>
+                <div className="w-3/4 flex flex-col gap-3">
+                  <SelectField
+                    // label={"Select department"}
+                    // required={true}
+                    isSearchable={true}
+                    placeholder={deptData?.data ? 'Select Department...' : 'Loading...'}
+                    onChange={e => setState(draft => {
+                      draft.department = e.value
+                    })}
+                    optionValue={state.departments}
+                  />
+                </div>
+              </div>
+            </div>
 
-                        <div className="p-3 border-t flex items-center justify-end gap-2 bg-white">
-                            <EditableButton
-                                blueBtn={true}
-                                disabled={loading === "pending" || !formData.firstName || !formData.lastName ||
-                                    !formData.email || !formData.role ? true : false || !state.department}
-                                startIcon={isLoading ? rings : state.successModal ? <IoMdCheckmark size={20} /> : ""}
-                                label={"Create User"}
-                                onClick={handleSubmit}
-                            />
-                        </div>
-                    </div>
-                </form>
-            </main>
+            <div className="p-3 border-t flex items-center justify-end gap-2 bg-white">
+              <EditableButton
+                blueBtn={true}
+                disabled={loading === "pending" || !formData.firstName || !formData.lastName ||
+                  !formData.email || !formData.role ? true : false || !state.department}
+                startIcon={isLoading ? rings : state.successModal ? <IoMdCheckmark size={20} /> : ""}
+                label={"Create User"}
+                onClick={handleSubmit}
+              />
+            </div>
+          </div>
+        </form>
+      </main>
 
       <SuccessModal
         isOpen={state.successModal}

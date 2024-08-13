@@ -103,7 +103,7 @@ const AddRolePage = () => {
             <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
                 <div className="flex justify-between items-center p-3">
                     <div>
-                        <p className="text-2xl lg:text-3xl font-bold text-swBlack">Add New Role</p>
+                        <p className="text-xl lg:text-2xl font-bold text-swBlack">Add New Role</p>
                         <p className="text-sm mt-1">Role Information</p>
                     </div>
                 </div>
@@ -116,8 +116,8 @@ const AddRolePage = () => {
                                 required={true}
                                 value={state.role}
                                 name={"roleName"}
-                                label={"Enter role name"}
-                                placeholder={'Role name'}
+                                // label={"Enter role name"}
+                                placeholder={'Enter Role Name'}
                                 onChange={e => setState(draft => {
                                     draft.role = e.target.value
                                 })}
@@ -132,8 +132,8 @@ const AddRolePage = () => {
                                 value={state.tag}
                                 required={true}
                                 name={"tag"}
-                                label={"Enter tag"}
-                                placeholder={'Tag name'}
+                                // label={"Enter tag"}
+                                placeholder={'Enter Tag'}
                                 onChange={e => setState(draft => {
                                     draft.tag = e.target.value.toUpperCase()
                                 })}
@@ -145,10 +145,10 @@ const AddRolePage = () => {
                         <p className="w-1/4 font-semibold mr-2">Department</p>
                         <div className="w-3/4">
                             <SelectField
-                                label={"Select department"}
-                                required={true}
+                                // label={"Select department"}
+                                // required={true}
                                 isSearchable={true}
-                                placeholder={data?.data ? 'Select...' : 'Loading...'}
+                                placeholder={data?.data ? 'Select Department...' : 'Loading...'}
                                 onChange={e => setState(draft => {
                                     draft.department = e.value
                                 })}

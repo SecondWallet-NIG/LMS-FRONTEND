@@ -87,7 +87,7 @@ const AddDepartmentPage = () => {
             <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
                 <div className="flex justify-between items-center p-3">
                     <div>
-                        <p className="text-2xl lg:text-3xl font-bold text-swBlack">Add New Department</p>
+                        <p className="text-xl lg:text-2xl font-bold text-swBlack">Add New Department</p>
                         <p className="text-sm mt-1">Department Information</p>
                     </div>
                 </div>
@@ -100,8 +100,8 @@ const AddDepartmentPage = () => {
                                 required={true}
                                 value={state.name}
                                 name={"departmentName"}
-                                label={"Enter department name"}
-                                placeholder={'Department name'}
+                                // label={"Enter department name"}
+                                placeholder={'Enter Department Name'}
                                 onChange={e => setState(draft => {
                                     draft.name = e.target.value
                                 })}
@@ -113,10 +113,10 @@ const AddDepartmentPage = () => {
                         <p className="w-1/4 font-semibold mr-2">Department Head</p>
                         <div className="w-3/4">
                             <SelectField
-                                label={"Select department head"}
-                                required={true}
+                                // label={"Select department head"}
+                                // required={true}
                                 isSearchable={true}
-                                placeholder={data?.data ? 'Select...' : 'Loading...'}
+                                placeholder={data?.data ? 'Select Staff...' : 'Loading Staffs...'}
                                 onChange={e => setState(draft => {
                                     draft.departmentHead = e.value
                                 })}
@@ -132,8 +132,8 @@ const AddDepartmentPage = () => {
                                 required={true}
                                 value={state.description}
                                 name={"description"}
-                                label={"Enter description"}
-                                placeholder={'Department description'}
+                                // label={"Enter description"}
+                                placeholder={'Enter Description'}
                                 onChange={e => setState(draft => {
                                     draft.description = e.target.value
                                 })}
