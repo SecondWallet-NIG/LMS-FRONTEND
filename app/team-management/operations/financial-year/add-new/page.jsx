@@ -55,7 +55,7 @@ const AddNewFinancialYear = () => {
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20 min-h-[80vh]">
         <div className="flex justify-between items-center p-3">
           <div>
-            <p className="text-2xl lg:text-3xl font-bold text-swBlack">
+            <p className="text-xl lg:text-2xl font-bold text-swBlack">
               Add New Financial Year
             </p>
           </div>
@@ -108,8 +108,8 @@ const AddNewFinancialYear = () => {
               required={true}
               value={formData.year}
               name={"Year Description"}
-              label={"Enter Year Description"}
-              placeholder={"Year description"}
+              // label={"Enter Year Description"}
+              placeholder={"Enter Year description"}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, year: e.target.value }))
               }
