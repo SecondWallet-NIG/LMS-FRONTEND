@@ -126,7 +126,7 @@ function ReusableDataTable({
           data?.data?.data?.assets ||
           data?.data.results ||
           data?.data?.data;
-          const nestedJsonData = allData;
+        const nestedJsonData = allData;
 
         function flattenData(data, parentKey = "") {
           let flattened = {};
@@ -164,7 +164,7 @@ function ReusableDataTable({
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         toast.error("An error occurred while fetching data for download.");
         setLoading(false);
       });
@@ -623,6 +623,7 @@ function ReusableDataTable({
                       size={20}
                       className="cursor-pointer"
                       onClick={() => {
+                        setSearchTerm("");
                         handleLogSearch("close");
                       }}
                     />
