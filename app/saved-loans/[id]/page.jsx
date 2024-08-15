@@ -951,7 +951,11 @@ const SavedLoan = () => {
               />
               <EditableButton
                 blueBtn={true}
-                disabled={loading ? true : false}
+                disabled={
+                  formData.repaymentType === null || loading === true
+                    ? true
+                    : false
+                }
                 startIcon={
                   loading && (
                     <Rings
@@ -966,7 +970,7 @@ const SavedLoan = () => {
                     />
                   )
                 }
-                className={"w-full "}
+                className={`w-full ${loading === true && "cursor-not-allowed"}`}
                 label={"Create Loan"}
                 onClick={submitLoan}
               />
@@ -1171,7 +1175,11 @@ const SavedLoan = () => {
 
                   <EditableButton
                     blueBtn={true}
-                    disabled={loading ? true : false}
+                    disabled={
+                      formData.repaymentType === null || loading === true
+                        ? true
+                        : false
+                    }
                     startIcon={
                       loading && (
                         <Rings
@@ -1186,7 +1194,9 @@ const SavedLoan = () => {
                         />
                       )
                     }
-                    className={"w-full "}
+                    className={`w-full ${
+                      loading === true && "cursor-not-allowed"
+                    }`}
                     label={"Create Loan"}
                     onClick={submitLoan}
                   />
@@ -1219,7 +1229,11 @@ const SavedLoan = () => {
               <div className="md:hidden">
                 <EditableButton
                   blueBtn={true}
-                  disabled={loading ? true : false}
+                  disabled={
+                    formData.repaymentType === null || loading === true
+                      ? true
+                      : false
+                  }
                   startIcon={
                     loading && (
                       <Rings
@@ -1234,7 +1248,7 @@ const SavedLoan = () => {
                       />
                     )
                   }
-                  // className={"w-full "}
+                  className={`${loading === true && "cursor-not-allowed"}`}
                   label={"Create Loan"}
                   onClick={submitLoan}
                 />
@@ -1412,7 +1426,11 @@ const SavedLoan = () => {
                 <div className="mb-10 mt-5">
                   <EditableButton
                     blueBtn={true}
-                    disabled={loading ? true : false}
+                    disabled={
+                      formData.repaymentType === null || loading === true
+                        ? true
+                        : false
+                    }
                     startIcon={
                       loading && (
                         <Rings
@@ -1427,7 +1445,9 @@ const SavedLoan = () => {
                         />
                       )
                     }
-                    className={"w-full "}
+                    className={`w-full ${
+                      loading === true && "cursor-not-allowed"
+                    }`}
                     label={"Create Loan"}
                     onClick={submitLoan}
                   />
