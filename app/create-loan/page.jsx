@@ -975,7 +975,7 @@ const CreateLoan = () => {
               <EditableButton
                 blueBtn={true}
                 disabled={
-                  formData.repaymentType === null || isLoading === true
+                  formData.repaymentType === null || loading === true
                     ? true
                     : false
                 }
@@ -986,7 +986,7 @@ const CreateLoan = () => {
               <EditableButton
                 blueBtn={true}
                 disabled={
-                  formData.repaymentType === null || isLoading === true
+                  formData.repaymentType === null || loading === true
                     ? true
                     : false
                 }
@@ -1004,7 +1004,7 @@ const CreateLoan = () => {
                     />
                   )
                 }
-                className={"w-full "}
+                className={`w-full ${loading === true && "cursor-not-allowed"}`}
                 label={"Create Loan"}
                 onClick={submitLoan}
               />
@@ -1210,7 +1210,7 @@ const CreateLoan = () => {
                   <EditableButton
                     blueBtn={true}
                     disabled={
-                      formData.repaymentType === null || isLoading === true
+                      formData.repaymentType === null || loading === true
                         ? true
                         : false
                     }
@@ -1228,7 +1228,7 @@ const CreateLoan = () => {
                         />
                       )
                     }
-                    className={"w-full "}
+                    className={`w-full ${loading === true && "cursor-not-allowed"}`}
                     label={"Create Loan"}
                     onClick={submitLoan}
                   />
@@ -1262,7 +1262,7 @@ const CreateLoan = () => {
                 <EditableButton
                   blueBtn={true}
                   disabled={
-                    formData.repaymentType === null || isLoading === true
+                    formData.repaymentType === null || loading === true
                       ? true
                       : false
                   }
@@ -1281,6 +1281,7 @@ const CreateLoan = () => {
                     )
                   }
                   // className={"w-full "}
+                  className={`${loading === true && "cursor-not-allowed"}`}
                   label={"Create Loan"}
                   onClick={submitLoan}
                 />
@@ -1459,7 +1460,7 @@ const CreateLoan = () => {
                   <EditableButton
                     blueBtn={true}
                     disabled={
-                      formData.repaymentType === null || isLoading === true
+                      formData.repaymentType === null || loading === true
                         ? true
                         : false
                     }
@@ -1477,7 +1478,7 @@ const CreateLoan = () => {
                         />
                       )
                     }
-                    className={"w-full "}
+                    className={`w-full ${loading === true && "cursor-not-allowed"}`}
                     label={"Create Loan"}
                     onClick={submitLoan}
                   />

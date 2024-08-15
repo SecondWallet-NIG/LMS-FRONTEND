@@ -22,7 +22,7 @@ const StaffDataPage = () => {
             id: item._id,
             name: (
                 <div>
-                    <div className="font-semibold text-gray-700 text-lg">{`${item.firstName} ${item.lastName}`}</div>
+                    <div className="font-medium text-gray-700 text-base ">{`${item.firstName} ${item.lastName}`}</div>
                     <div className="text-gray-500 text-sm font-light ">{`SWS-${item.staffId}`}</div>
                 </div>
             ),
@@ -33,7 +33,7 @@ const StaffDataPage = () => {
             ),
             department: (
                 <div>
-                    <div className="text-[15px] font-light text-gray-700">{item?.role?.department?.departmentName}</div>
+                    <div className="text-[15px] font-light text-gray-700">{item?.role?.department?.departmentName || "No assigned department"}</div>
                 </div>
             ),
             status: (
