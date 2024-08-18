@@ -11,8 +11,8 @@ export default function StaffLeaveDetails({
     const returnCardDetails = (name, value) => {
         return (
             <div>
-                <p className="text-sm font-semibold">{name}</p>
-                <p className="text-sm font-light">{value}</p>
+                <p className="text-xs font-medium text-swGrey400">{name}</p>
+                <p className="text-sm font-medium text-swBlack">{value}</p>
             </div>
         );
     };
@@ -29,21 +29,21 @@ export default function StaffLeaveDetails({
 
     return (
         <div>
-            <div className="p-5 border-2 shadow-lg rounded-lg h-full">
+            <div className="p-2 border-2 rounded-lg h-full">
                 <div className="flex justify-between">
-                    <p className="text-md font-medium text-swBlue">Leave Details</p>
+                    <p className="text-md font-medium text-swDarkBlue">Leave Details</p>
                     {(!data?.employeeBenefit || isDashboard) && (
-                        <Button className="bg-swBlue hover:bg-swBlue500 text-sm text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap">
+                        <Button className="bg-white border border-swDarkBlue text-swDarkBlue hover:text-white hover:bg-swDarkBlue text-xs md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap">
                             <Link href={btnLink}
-                                className="flex gap-1 items-center p-1"
+                                className="flex gap-1 items-center p-0.5 text-swDarkBlue"
                             >
                                 {!isDashboard && <AiOutlinePlus size={15} />}
-                                <p className="block">{btnText}</p>
+                                <p className="block text-swDarkBlue hover:text-white">{btnText}</p>
                             </Link>
                         </Button>
                     )}
                 </div>
-                <div className="grid grid-cols-2 gap-5 mt-10">
+                <div className="grid grid-cols-2 gap-5 mt-2">
                     {returnCardDetails(
                         "Annual Leave",
                         `${data?.employeeBenefit?.benefitType?.leaveTypes

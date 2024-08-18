@@ -3,8 +3,9 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react"
-import { FiEdit2, FiPhone, FiUser } from "react-icons/fi";
-import { MdOutlineEmail } from "react-icons/md";
+import { FaCircleUser } from "react-icons/fa6";
+import { FiEdit, FiEdit2, FiPhone, FiPhoneOutgoing, FiUser } from "react-icons/fi";
+import { MdEmail, MdOutlineEmail } from "react-icons/md";
 import { useSelector } from "react-redux";
 
 const Viewer = dynamic(
@@ -17,19 +18,18 @@ export default function StaffPersonalDetails({
 }) {
     const [openProfilePic, setOpenProfilePic] = useState(false);
     const tasks = useSelector((state) => state.UserTasks);
-
     const returnCardDetails = (name, value) => {
         return (
             <div>
-                <p className="text-sm font-semibold">{name}</p>
-                <p className="text-sm font-light">{value}</p>
+                <p className="text-xs font-medium text-swGrey400">{name}</p>
+                <p className="text-sm font-medium text-swBlack">{value}</p>
             </div>
         );
     };
 
     return (
         <div>
-            <div className="p-5 border-2 shadow-lg rounded-lg h-full">
+            <div className="p-2 border-2 rounded-lg h-full">
                 <div className="flex items-start gap-5">
                     {data?.user?.profilePicture &&
                         data?.user?.profilePicture !== "null" &&
@@ -64,57 +64,59 @@ export default function StaffPersonalDetails({
                             ) : null}
                         </div>
                     ) : (
-                        <div className="h-[4rem] w-[4rem] rounded-md text-swBlue border-swBlue border-2 flex justify-center items-center">
-                            <FiUser size={40} />
-                        </div>
+
+                            <FaCircleUser className="text-swDarkBlue" size={40} />
+                      
                     )}
 
-                    <div>
-                        <div className="flex gap-3 items-end">
-                            <p className="font-medium text-md text-swBlue whitespace-nowrap">
+                    <div className="w-full">
+                        <div className="flex justify-between">
+                            <p className="font-medium text-md text-swDarkBlue whitespace-nowrap">
                                 {data?.user?.firstName} {data?.user?.lastName} 
                             </p>
+                         
+
+                        <span
+                            className={`text-white text-xs py-1 px-3 rounded-md ${data?.user?.status === "Active"
+                                ? "bg-swGreen700"
+                                : "bg-red-500"
+                                }`}
+                        >
+                            {data?.user?.status}
+                        </span>
+                    
+                            {/* <p className="font-medium text-sm text-swDarkBlue underline">SWL-{data?.user?.staffId}</p> */}
                         </div>
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 justify-between">
                             <p className="font-medium text-sm">{data?.user?.email}</p>
-                            <p className="font-medium">SWL-{data?.user?.staffId}</p>
                         </div>
                         <div className="flex gap-5 items-center mt-2">
                             <Link
                                 href={`mailto:${data?.user?.email}`}
                                 target="_blank"
-                                className="hover:border-swBlue border-2 border-transparent hover:text-swBlue p-1 rounded-md cursor-pointer"
+                                className="hover:text-swBlue p-1 rounded-md cursor-pointer"
                             >
-                                <MdOutlineEmail size="20" />
+                                <MdEmail className="text-swDarkBlue" size="20" />
                             </Link>
                             <Link
                                 href={`tel:${data?.user?.phoneNumber}`}
-                                className="hover:border-swBlue border-2 border-transparent hover:text-swBlue p-1 rounded-md cursor-pointer"
+                                className="hover:text-swBlue p-1 rounded-md cursor-pointer"
                             >
-                                <FiPhone size="20" />
+                                <FiPhoneOutgoing className="text-swDarkBlue"  size="20" />
                             </Link>
                             <Link
                                 href={`/team-management/staff/update/${data?.user?._id}`}
-                                className="hover:border-swBlue border-2 border-transparent hover:text-swBlue p-1 rounded-md cursor-pointer"
+                                className="hover:text-swBlue p-1 rounded-md cursor-pointer"
                             >
-                                <FiEdit2 size="20" />
+                                <FiEdit className="text-swDarkBlue"  size="20" />
                             </Link>
                         </div>
-                    </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-5 mt-10">
+                <div className="grid grid-cols-2 gap-5 mt-2">
                     {returnCardDetails(
-                        "Status",
+                        "Staff ID",
 
-                        <span
-                            className={`${data?.user?.status === "Active"
-                                ? "text-green-500"
-                                : "text-red-500"
-                                }`}
-                        >
-                            {data?.user?.status}
-                        </span>
+                        <p className="font-medium text-sm text-swDarkBlue underline">SWL-{data?.user?.staffId}</p>
                     )}
                     {returnCardDetails("Total Tasks", tasks?.data?.totalCount || 0)}
                     {returnCardDetails(
@@ -126,6 +128,9 @@ export default function StaffPersonalDetails({
                         tasks?.data?.doneCount || 0
                     )}
                 </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     )
