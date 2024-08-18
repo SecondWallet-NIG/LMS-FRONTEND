@@ -83,7 +83,7 @@ const StaffData = ({ path, isDashboard }) => {
         >
             <ToastContainer />
             <main>
-                <div className="p-5 sm:p-10">
+                <div className="p-2.5 sm:p-2.5">
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg gap-5">
                         {/* Personal details */}
                         <StaffPersonalDetails data={data?.data} />
