@@ -1,5 +1,5 @@
-"use client"
-import React, { useState, useEffect } from "react"
+"use client";
+import React, { useState, useEffect } from "react";
 import Button from "../shared/buttonComponent/Button";
 import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -17,15 +17,13 @@ export default function StaffLeaveDetails({
         );
     };
 
-    if (isDashboard) {
-        btnLink = ""
-        btnText = "Request Leave"
-    } else {
-        btnLink = `/team-management/operations/employee-benefit/add-new/${id}`
-        btnText = "Add Employee Benefit"
-    }
-
-
+  if (isDashboard) {
+    btnLink = `/employee-dashboard/request-leave/${id}`;
+    btnText = "Request Leave";
+  } else {
+    btnLink = `/team-management/operations/employee-benefit/add-new/${id}`;
+    btnText = "Add Employee Benefit";
+  }
 
     return (
         <div>
