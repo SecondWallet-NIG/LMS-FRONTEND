@@ -6,8 +6,9 @@ import EditableButton from "@/app/components/shared/editableButtonComponent/Edit
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { requestLeave } from "@/redux/slices/hrmsSlice";
+import { getUserById } from "@/redux/slices/userSlice";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const EmployeeRequestLeave = () => {
@@ -74,6 +75,12 @@ const EmployeeRequestLeave = () => {
       });
   };
 
+  useEffect(() => {
+    if (id) {
+      dispatch(getUserById(id));
+    }
+  }, [id]);
+
   return (
     <DashboardLayout
       isBackNav={true}
@@ -106,14 +113,12 @@ const EmployeeRequestLeave = () => {
                   {formData.leaveType && type && (
                     <p className="text-sm lower">
                       You have{" "}
-                      {
-                        Object.keys(type).find((key) => {
-                          if (key === formData.leaveType) {
-                            return true; // Find the correct key
-                          }
-                          return false;
-                        }) && type[formData.leaveType] // Display the value associated with the key
-                      }{" "}
+                      {Object.keys(type).find((key) => {
+                        if (key === formData.leaveType) {
+                          return true;
+                        }
+                        return false;
+                      }) && type[formData.leaveType]}{" "}
                       days left for your{" "}
                       <span className="lowercase">
                         {
