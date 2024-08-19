@@ -6,16 +6,15 @@ import EditableButton from "@/app/components/shared/editableButtonComponent/Edit
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { requestLeave } from "@/redux/slices/hrmsSlice";
-import { getUserById } from "@/redux/slices/userSlice";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const EmployeeRequestLeave = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState("");
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState({ state: false, message: "" });
   const [formData, setFormData] = useState({
@@ -60,7 +59,7 @@ const EmployeeRequestLeave = () => {
       leaveType: formData.leaveType,
       leaveDuration: Number(formData.leaveDuration),
       description: formData.description,
-      userId: userId,
+      id: id,
     };
     dispatch(requestLeave(payload))
       .unwrap()
@@ -75,26 +74,6 @@ const EmployeeRequestLeave = () => {
       });
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      setUserId(storedUser?.data?.user?._id);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (userId) {
-      dispatch(getUserById(userId));
-    }
-  }, [userId]);
-
-  // data?.data?.employeeBenefit?.benefitType?.leaveTypes &&
-  //   Object.keys(type).find((e) =>
-  //     console.log(type[e === formData.leaveType && e])
-  //   );
-
-  // console.log("user", data?.data?.employeeBenefit?.benefitType?.leaveTypes);
-
   return (
     <DashboardLayout
       isBackNav={true}
@@ -108,7 +87,6 @@ const EmployeeRequestLeave = () => {
                 <p className="text-xl lg:text-2xl font-bold text-swBlack">
                   Request Leave
                 </p>
-                {/* <p className="text-sm mt-1">Staff Information</p> */}
               </div>
             </div>
             <div className="pt-8 pb-16">
@@ -116,8 +94,6 @@ const EmployeeRequestLeave = () => {
                 <p className="w-1/4 font-semibold mr-2">Leave Type</p>
                 <div className="w-3/4 flex flex-col gap-3">
                   <SelectField
-                    // label={"Select department"}
-                    // required={true}
                     isSearchable={true}
                     value={leaveTypes.find(
                       (e) => e.value === formData.leaveType
@@ -156,8 +132,6 @@ const EmployeeRequestLeave = () => {
                   <div className="flex gap-3 items-end">
                     <div className="w-full ">
                       <InputField
-                        required={true}
-                        // label="Phone number"
                         name="leaveDuration"
                         value={formData.leaveDuration}
                         onKeyPress={preventMinus}
@@ -210,9 +184,7 @@ const EmployeeRequestLeave = () => {
         btnLeft={"Close"}
         btnLeftFunc={() => setSuccessModal(false)}
         btnRight={"Dashboard"}
-        btnRightFunc={() =>
-          router.push(`/employee-dashboard/request-leave/${userId}`)
-        }
+        btnRightFunc={() => router.push(`/employee-dashboard/${id}`)}
         onClose={() => setSuccessModal(false)}
       />
       <CancelModal

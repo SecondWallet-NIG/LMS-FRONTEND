@@ -31,7 +31,7 @@ export default function StaffLeaveDetails({
         <div>
             <div className="p-5 border-2 shadow-lg rounded-lg h-full">
                 <div className="flex justify-between">
-                    <p className="text-md font-medium text-swBlue">Leave Details</p>
+                    <p className="text-xl font-medium text-swBlue">Leave Details</p>
                     {(!data?.employeeBenefit || isDashboard) && (
                         <Button className="bg-swBlue hover:bg-swBlue500 text-sm text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap">
                             <Link href={btnLink}
