@@ -3,10 +3,14 @@ import React, { useState, useEffect } from "react"
 import Button from "../shared/buttonComponent/Button";
 import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
+import CenterModal from "../modals/CenterModal";
+import RequestLeaveModal from "../leaveRequest/requestLeaveModal";
+import RightModal from "../modals/RightModal";
 
 export default function StaffLeaveDetails({
     data, id, isDashboard
 }) {
+    const [openLeaveRequestModal, setOpenLeaveRequestModal] = useState(false)
     let btnLink, btnText;
     const returnCardDetails = (name, value) => {
         return (
@@ -31,15 +35,13 @@ export default function StaffLeaveDetails({
         <div>
             <div className="p-2 border-2 rounded-lg h-full">
                 <div className="flex justify-between">
-                    <p className="text-md font-medium text-swDarkBlue">Leave Details</p>
+                    <p className="text-md font-medium text-swBlue">Leave Details</p>
                     {(!data?.employeeBenefit || isDashboard) && (
-                        <Button className="bg-white border border-swDarkBlue text-swDarkBlue hover:text-white hover:bg-swDarkBlue text-xs md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap">
-                            <Link href={btnLink}
-                                className="flex gap-1 items-center p-0.5 text-swDarkBlue"
-                            >
+                        <Button className="bg-white border border-swBlue text-swBlue hover:text-white hover:bg-swDarkBlue text-xs md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap" onClick={() => setOpenLeaveRequestModal(true) }>
+                          
                                 {!isDashboard && <AiOutlinePlus size={15} />}
-                                <p className="block text-swDarkBlue hover:text-white">{btnText}</p>
-                            </Link>
+                                <p className="block text-swBlue hover:text-white">{btnText}</p>
+                           
                         </Button>
                     )}
                 </div>
@@ -76,6 +78,9 @@ export default function StaffLeaveDetails({
                     )}
                 </div>
             </div>
+            <RightModal isOpen={openLeaveRequestModal} onClose={() => setOpenLeaveRequestModal(false)} className="mt-8">
+                <RequestLeaveModal />
+            </RightModal>
         </div>
     )
 }

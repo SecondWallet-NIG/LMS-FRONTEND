@@ -24,7 +24,7 @@ const InputField = ({
   return (
     <div className="">
       {label && (
-        <label htmlFor={name} className="block text-gray-700 text-sm mb-2 capitalize">
+        <label htmlFor={name} className="block text-swDarkBlue text-sm mb-2 capitalize">
           {label}
           {required ? (
             <span className="text-red-600 ml-1">*</span>
