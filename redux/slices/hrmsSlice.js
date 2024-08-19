@@ -65,11 +65,15 @@ export const addEmployeeBenefit = createAsyncThunk(
   async (payload) => {
     try {
       let token = getToken();
-      const response = await axios.post(`${API_URL}/employee-benefit`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        `${API_URL}/employee-benefit`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       if (error.response.data.error) {
@@ -104,6 +108,25 @@ export const getFinancialYear = createAsyncThunk(
     try {
       let token = getToken();
       const response = await axios.get(`${API_URL}/financial-year/active`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const requestLeave = createAsyncThunk(
+  "request-leave",
+  async (payload) => {
+    try {
+      let token = getToken();
+      const response = await axios.post(`${API_URL}/leave`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -170,6 +193,19 @@ const hrmsSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(addNewFinancialYear.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(requestLeave.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(requestLeave.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(requestLeave.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

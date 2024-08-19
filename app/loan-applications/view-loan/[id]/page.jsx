@@ -42,6 +42,7 @@ import { format } from "date-fns";
 import { FaRegCalendar } from "react-icons/fa";
 import { DayPicker } from "react-day-picker";
 import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTransactions";
+import { formatDate } from "@/helpers";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -82,7 +83,6 @@ const ViewLoan = () => {
     disbursementDate: new Date(),
     docs: null,
   });
-                                                                                                                    
 
   const handleFileChange = (e) => {
     setFileError("");
@@ -169,7 +169,6 @@ const ViewLoan = () => {
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
-
 
   const preventMinus = (e) => {
     if (/[^0-9,]/g.test(e.key)) {
@@ -506,10 +505,9 @@ const ViewLoan = () => {
   };
 
   const modifyUsersToApprove = () => {
-
     if (Array.isArray(user)) {
       const users = user.filter((item) => item?.role?.tag === "LO");
- 
+
       setUsersToApprove(
         users.map((item) => ({
           label: item.firstName + " " + item.lastName,
@@ -568,7 +566,6 @@ const ViewLoan = () => {
   // };
 
   if (loanApprovals?.data?.data) {
-
     hasDecline = hasDeclineStatus();
   }
 
@@ -680,10 +677,7 @@ const ViewLoan = () => {
             <div className="w-full md:w-[70%]">
               <div className="flex md:justify-end">
                 <div>
-                  <div className="text-sm  font-medium">
-                    {" "}
- Loan Creator
-                  </div>
+                  <div className="text-sm  font-medium"> Loan Creator</div>
                   <button
                     onClick={() => {
                       router.push(
@@ -744,6 +738,19 @@ const ViewLoan = () => {
             </div>
           </section>
           <div className="ml-5 mr-5 mt-5">
+            <div className="flex justify-end">
+              <div>
+                <h6 className="font-semibold text-swBlue">
+                  Disbursement Date:
+                </h6>
+                <p>
+                  {data?.data?.loanApplication?.disbursedAt &&
+                    formatDate(
+                      data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
+                    )}
+                </p>
+              </div>
+            </div>
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
@@ -820,7 +827,16 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                       {data?.data?.loanApplication?.disbursedAt === null ? "null" : <p>{data?.data?.loanApplication?.disbursedAt.slice(0, 10)}</p>} 
+                        {data?.data?.loanApplication?.disbursedAt === null ? (
+                          "null"
+                        ) : (
+                          <p>
+                            {data?.data?.loanApplication?.disbursedAt.slice(
+                              0,
+                              10
+                            )}
+                          </p>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -847,9 +863,7 @@ const ViewLoan = () => {
                   <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p>
-                          {data?.data?.loanApplication?.interestRate} %
-                        </p>
+                        <p>{data?.data?.loanApplication?.interestRate} %</p>
                         {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
@@ -1139,8 +1153,7 @@ const ViewLoan = () => {
                       <div className="flex gap-2 items-center text-swDarkRed font-semibold">
                         <p>
                           {data?.data?.loanApplication
-                            ?.currentOverdueDaysCount
-                            || 0}{" "}
+                            ?.currentOverdueDaysCount || 0}{" "}
                           day(s){" "}
                         </p>
                       </div>
