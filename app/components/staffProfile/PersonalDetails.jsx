@@ -65,13 +65,13 @@ export default function StaffPersonalDetails({
                         </div>
                     ) : (
 
-                            <FaCircleUser className="text-swDarkBlue" size={40} />
+                            <FaCircleUser className="text-swBlue " size={40} />
                       
                     )}
 
                     <div className="w-full">
                         <div className="flex justify-between">
-                            <p className="font-medium text-md text-swDarkBlue whitespace-nowrap">
+                            <p className="font-medium text-md text-swBlue  whitespace-nowrap">
                                 {data?.user?.firstName} {data?.user?.lastName} 
                             </p>
                          
@@ -85,7 +85,7 @@ export default function StaffPersonalDetails({
                             {data?.user?.status}
                         </span>
                     
-                            {/* <p className="font-medium text-sm text-swDarkBlue underline">SWL-{data?.user?.staffId}</p> */}
+                            {/* <p className="font-medium text-sm text-swBlue  underline">SWL-{data?.user?.staffId}</p> */}
                         </div>
                         <div className="flex gap-4 justify-between">
                             <p className="font-medium text-sm">{data?.user?.email}</p>
@@ -96,19 +96,19 @@ export default function StaffPersonalDetails({
                                 target="_blank"
                                 className="hover:text-swBlue p-1 rounded-md cursor-pointer"
                             >
-                                <MdEmail className="text-swDarkBlue" size="20" />
+                                <MdEmail className="text-swBlue " size="20" />
                             </Link>
                             <Link
                                 href={`tel:${data?.user?.phoneNumber}`}
                                 className="hover:text-swBlue p-1 rounded-md cursor-pointer"
                             >
-                                <FiPhoneOutgoing className="text-swDarkBlue"  size="20" />
+                                <FiPhoneOutgoing className="text-swBlue "  size="20" />
                             </Link>
                             <Link
                                 href={`/team-management/staff/update/${data?.user?._id}`}
                                 className="hover:text-swBlue p-1 rounded-md cursor-pointer"
                             >
-                                <FiEdit className="text-swDarkBlue"  size="20" />
+                                <FiEdit className="text-swBlue "  size="20" />
                             </Link>
                         </div>
 
@@ -116,7 +116,7 @@ export default function StaffPersonalDetails({
                     {returnCardDetails(
                         "Staff ID",
 
-                        <p className="font-medium text-sm text-swDarkBlue underline">SWL-{data?.user?.staffId}</p>
+                        <p className="font-medium text-sm text-swBlue  underline">SWL-{data?.user?.staffId}</p>
                     )}
                     {returnCardDetails("Total Tasks", tasks?.data?.totalCount || 0)}
                     {returnCardDetails(

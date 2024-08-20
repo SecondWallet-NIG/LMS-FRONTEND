@@ -19,6 +19,7 @@ const customStyles = {
       ? "your-custom-border-color"
       : provided.borderColor,
     boxShadow: state.isFocused ? "none" : provided.boxShadow,
+    fontSize: "14px"
   }),
 
   option: (provided, state) => ({
@@ -31,6 +32,7 @@ const customStyles = {
     "&:hover": {
       backgroundColor: "#f5f5f5",
     },
+    fontSize:"14px"
   }),
 };
 
