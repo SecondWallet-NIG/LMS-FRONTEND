@@ -1,11 +1,12 @@
-"use client"
-import React, { useState, useEffect } from "react"
+"use client";
+import React, { useState, useEffect } from "react";
 import Button from "../shared/buttonComponent/Button";
 import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
 import CenterModal from "../modals/CenterModal";
 import RequestLeaveModal from "../leaveRequest/requestLeaveModal";
 import RightModal from "../modals/RightModal";
+
 
 export default function StaffLeaveDetails({
     data, id, isDashboard
@@ -30,7 +31,13 @@ export default function StaffLeaveDetails({
     }
 
 
-
+  if (isDashboard) {
+    btnLink = `/employee-dashboard/request-leave/${id}`;
+    btnText = "Request Leave";
+  } else {
+    btnLink = `/team-management/operations/employee-benefit/add-new/${id}`;
+    btnText = "Add Employee Benefit";
+  }
     return (
         <div>
             <div className="p-2 border-2 rounded-lg h-full">
@@ -81,6 +88,9 @@ export default function StaffLeaveDetails({
             <RightModal isOpen={openLeaveRequestModal} onClose={() => setOpenLeaveRequestModal(false)} className="mt-8">
                 <RequestLeaveModal />
             </RightModal>
+
         </div>
-    )
+      </div>
+    </div>
+  );
 }
