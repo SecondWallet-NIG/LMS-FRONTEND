@@ -10,6 +10,7 @@ import { getUserById } from "@/redux/slices/userSlice";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { leaveTypes } from "@/app/components/helpers/utils";
 
 const EmployeeRequestLeave = () => {
   const router = useRouter();
@@ -45,14 +46,6 @@ const EmployeeRequestLeave = () => {
 
     setFormData({ ...formData, [name]: value });
   };
-
-  const leaveTypes = [
-    { label: "Annual Leave", value: "annualLeave" },
-    { label: "Sick Leave", value: "sickLeave" },
-    { label: "Maternity Leave", value: "maternityLeave" },
-    { label: "Paternity Leave", value: "paternityLeave" },
-    { label: "Unpaid Leave", value: "unpaidLeave" },
-  ];
 
   const handleSubmit = () => {
     setLoading(true);
