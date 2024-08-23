@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_URL } from "@/constant";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { getToken } from "@/helpers";
 
 let user;
 if (typeof window !== "undefined") {
@@ -100,6 +101,31 @@ export const diosbursementSummary = createAsyncThunk(
         },
       });
       return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const loanStatementOfAccount = createAsyncThunk(
+  "loan-statement-of-account",
+  async (loanId) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/loan-application/${loanId}/statement-of-account`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+            "Content-Type": "application/pdf",
+          },
+          responseType: "blob",
+        }
+      );
+      console.log(response);
+      const url = URL.createObjectURL(response.data);
+      return url;
     } catch (error) {
       if (error.response.data.error) {
         throw new Error(error.response.data.error);
@@ -335,6 +361,18 @@ const LoanApplicationSlice = createSlice({
       .addCase(diosbursementSummary.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
+      })
+      .addCase(loanStatementOfAccount.pending, (state) => {
+        state.loading = "pending";
+        state.statementPending = null;
+      })
+      .addCase(loanStatementOfAccount.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.statementData = action.payload;
+      })
+      .addCase(loanStatementOfAccount.rejected, (state, action) => {
+        state.loading = "failed";
+        state.statementFailed = action.error.message;
       })
       .addCase(getDisbursementById.pending, (state) => {
         state.loading = "pending";

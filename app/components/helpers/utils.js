@@ -1,3 +1,5 @@
+import { getToken } from "@/helpers";
+import axios from "axios";
 import html2canvas from "html2canvas";
 
 export const cls = (input) =>
@@ -53,4 +55,41 @@ export const handleFileExtention = (file) => {
   const fileExtension = file?.split(".").pop().toLowerCase();
   // console.log(fileExtension);
   return fileExtension;
+};
+
+export const leaveTypes = [
+  { id: "annualLeave", label: "Annual Leave" },
+  { id: "maternityLeave", label: "Maternity Leave" },
+  { id: "paternityLeave", label: "Paternity Leave" },
+  { id: "personalLeave", label: "Personal Leave" },
+  { id: "sickLeave", label: "Sick Leave" },
+  { id: "unpaidLeave", label: "Unpaid Leave" },
+];
+
+// export function base64ToBlob(base64, contentType) {
+//   // Decode the Base64 string to binary data
+//   const byteCharacters = atob(base64);
+//   const byteNumbers = new Array(byteCharacters.length);
+
+//   // Create an array of bytes
+//   for (let i = 0; i < byteCharacters.length; i++) {
+//     byteNumbers[i] = byteCharacters.charCodeAt(i);
+//   }
+
+//   // Convert the byte array into a Blob
+//   const byteArray = new Uint8Array(byteNumbers);
+//   return new Blob([byteArray], { type: contentType });
+// }
+
+export const fetchPdf = async (pdfUrl) => {
+  let token = getToken();
+  const response = await axios.get(pdfUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/pdf",
+    },
+    responseType: "blob",
+  });
+  const url = URL.createObjectURL(response.data);
+  return url;
 };

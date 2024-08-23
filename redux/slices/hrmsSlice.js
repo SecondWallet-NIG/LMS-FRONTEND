@@ -140,6 +140,63 @@ export const requestLeave = createAsyncThunk(
   }
 );
 
+export const getSingleLeaveRequest = createAsyncThunk(
+  "get-single-leave-request",
+  async (id) => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/leave/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const approveLeaveRequest = createAsyncThunk(
+  "approve-leave-request",
+  async (payload) => {
+    try {
+      let token = getToken();
+      const response = await axios.post(`${API_URL}/leave/approve`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const declineLeaveRequest = createAsyncThunk(
+  "decline-leave-request",
+  async (payload) => {
+    try {
+      let token = getToken();
+      const response = await axios.post(`${API_URL}/leave/decline`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const hrmsSlice = createSlice({
   name: "hrms",
   initialState: {
@@ -206,6 +263,45 @@ const hrmsSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(requestLeave.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getSingleLeaveRequest.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getSingleLeaveRequest.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getSingleLeaveRequest.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(approveLeaveRequest.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(approveLeaveRequest.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(approveLeaveRequest.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(declineLeaveRequest.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(declineLeaveRequest.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(declineLeaveRequest.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

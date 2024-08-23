@@ -15,6 +15,7 @@ import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import {
   disburseLoan,
   getSingleLoan,
+  loanStatementOfAccount,
 } from "@/redux/slices/loanApplicationSlice";
 import RequestApproval from "@/app/components/modals/loans/RequestApproval";
 import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
@@ -43,6 +44,8 @@ import { FaRegCalendar } from "react-icons/fa";
 import { DayPicker } from "react-day-picker";
 import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTransactions";
 import { formatDate } from "@/helpers";
+import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
+import { base64ToBlob, fetchPdf } from "@/app/components/helpers/utils";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -77,12 +80,21 @@ const ViewLoan = () => {
   const [loading, setLoading] = useState(false);
   const [openDibursementDatePicker, setOpenDisbursementDatePicker] =
     useState(false);
+  const [statementLoad, setStatementLoad] = useState(false);
+  const [loanStatementConvert, setLoanStatementConvert] = useState(null);
+  const [loanStatementModal, setLoanStatementModal] = useState(false);
   const [formData, setFormData] = useState({
     amount: "",
     paymentMethod: "",
     disbursementDate: new Date(),
     docs: null,
   });
+
+  const { statementData, statementPending } = useSelector(
+    (state) => state.loanApplication
+  );
+
+  console.log({ statementData });
 
   const handleFileChange = (e) => {
     setFileError("");
@@ -530,6 +542,7 @@ const ViewLoan = () => {
     dispatch(getSingleLoan(id));
     dispatch(getLoanPackage());
     dispatch(getInterestType());
+    // dispatch(loanStatementOfAccount());
   }, []);
 
   useEffect(() => {
@@ -564,6 +577,17 @@ const ViewLoan = () => {
 
   //   return false;
   // };
+
+  const getLoanStatement = async () => {
+    dispatch(loanStatementOfAccount(id))
+      .unwrap()
+      .then((res) => {
+        setLoanStatementConvert(res);
+        setLoanStatementModal(true);
+      })
+      .catch((err) => console.log(err));
+  };
+  console.log({ loanStatementModal });
 
   if (loanApprovals?.data?.data) {
     hasDecline = hasDeclineStatus();
@@ -738,7 +762,7 @@ const ViewLoan = () => {
             </div>
           </section>
           <div className="ml-5 mr-5 mt-5">
-            <div className="flex justify-end">
+            <div className="flex justify-between flex-wrap gap-5">
               <div>
                 <h6 className="font-semibold text-swBlue">
                   Disbursement Date:
@@ -750,6 +774,12 @@ const ViewLoan = () => {
                     )}
                 </p>
               </div>
+              <EditableButton
+                onClick={() => getLoanStatement()}
+                disabled={statementPending}
+                label={"Generate Statement"}
+                blueBtn={true}
+              />
             </div>
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
@@ -1776,6 +1806,22 @@ const ViewLoan = () => {
           />
         </div>
       </CenterModal>
+      <SharedInvestmentModal
+        isOpen={loanStatementModal}
+        css={"max-w-xl"}
+        header={"Loan Statement"}
+        onClose={() => setLoanStatementModal(false)}
+        children={
+          <div className="p-5">
+            <iframe
+              src={loanStatementConvert}
+              width="100%"
+              height="400px"
+              type="application/pdf"
+            ></iframe>
+          </div>
+        }
+      />
     </DashboardLayout>
   );
 };

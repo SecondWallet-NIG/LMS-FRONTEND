@@ -6,11 +6,12 @@ import EditableButton from "@/app/components/shared/editableButtonComponent/Edit
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import { requestLeave } from "@/redux/slices/hrmsSlice";
-import { getUserById } from "@/redux/slices/userSlice";
+import { getAllUsers, getUserById } from "@/redux/slices/userSlice";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomDatePicker from "../shared/date/CustomDatePicker";
+import { leaveTypes } from "../helpers/utils";
 
 const RequestLeaveModal = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const RequestLeaveModal = () => {
   const [loading, setLoading] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState({ state: false, message: "" });
+  const [allUsers, setAllUsers] = useState([]);
   const [formData, setFormData] = useState({
     leaveType: "",
     leaveDuration: "",
@@ -47,13 +49,13 @@ const RequestLeaveModal = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const leaveTypes = [
-    { label: "Annual Leave", value: "annualLeave" },
-    { label: "Sick Leave", value: "sickLeave" },
-    { label: "Maternity Leave", value: "maternityLeave" },
-    { label: "Paternity Leave", value: "paternityLeave" },
-    { label: "Unpaid Leave", value: "unpaidLeave" },
-  ];
+  // const leaveTypes = [
+  //   { label: "Annual Leave", value: "annualLeave" },
+  //   { label: "Sick Leave", value: "sickLeave" },
+  //   { label: "Maternity Leave", value: "maternityLeave" },
+  //   { label: "Paternity Leave", value: "paternityLeave" },
+  //   { label: "Unpaid Leave", value: "unpaidLeave" },
+  // ];
 
   const handleSubmit = () => {
     setLoading(true);
@@ -77,30 +79,32 @@ const RequestLeaveModal = () => {
   };
 
   useEffect(() => {
+    dispatch(getAllUsers(10000)).unwrap().then((res) => {console.log(res)}).catch(err => console.log(err));
+  }, []);
+
+  useEffect(() => {
     if (id) {
       dispatch(getUserById(id));
     }
   }, [id]);
 
   return (
-
     <div>
-          <main className="mx-auto w-full px-5 my-2">
+      <main className="mx-auto w-full px-5 my-2">
         <form id="add-user-form" className="">
           <div className="">
             <div className="flex justify-between items-center">
               <div>
                 <p className="text-md lg:text-xl font-medium text-swBlue">
-                 Leave Request Form
+                  Leave Request Form
                 </p>
               </div>
             </div>
             <div className="pt-8">
               <div className="flex justify-between mt-5">
-       
                 <div className="w-full flex flex-col gap-3">
                   <SelectField
-                    label={'Select Leave Type'}
+                    label={"Select Leave Type"}
                     isSearchable={true}
                     value={leaveTypes.find(
                       (e) => e.value === formData.leaveType
@@ -133,25 +137,22 @@ const RequestLeaveModal = () => {
                 </div>
               </div>
               <div className="flex justify-between mt-5">
-       
-       <div className="w-full flex flex-col gap-3">
-         <SelectField
-           label={'Choose Reliever'}
-           isSearchable={true}
-           value={leaveTypes.find(
-             (e) => e.value === formData.leaveType
-           )}
-           onChange={(e) =>
-             setFormData({ ...formData, leaveType: e.value })
-           }
-           optionValue={leaveTypes}
-           placeholder={"Select"}
-         />
-   
-       </div>
-     </div>
+                <div className="w-full flex flex-col gap-3">
+                  <SelectField
+                    label={"Choose Reliever"}
+                    isSearchable={true}
+                    value={leaveTypes.find(
+                      (e) => e.value === formData.leaveType
+                    )}
+                    onChange={(e) =>
+                      setFormData({ ...formData, leaveType: e.value })
+                    }
+                    optionValue={leaveTypes}
+                    placeholder={"Select"}
+                  />
+                </div>
+              </div>
               <div className="flex justify-between mt-7">
-           
                 <div className="w-full flex flex-col gap-5">
                   <div className="flex gap-3 items-end">
                     {/* <div className="w-full ">
@@ -171,11 +172,12 @@ const RequestLeaveModal = () => {
                 </div>
               </div>
               <div className="flex justify-between mt-7">
-             
                 <div className="w-full flex flex-col gap-5">
                   <div className="flex gap-3 items-end">
                     <div className="w-full ">
-                        <p className="text-sm text-swDarkBlue mb-4">Enter Additional Message</p>
+                      <p className="text-sm text-swDarkBlue mb-4">
+                        Enter Additional Message
+                      </p>
                       <textarea
                         name="description"
                         value={formData.description}
@@ -223,7 +225,6 @@ const RequestLeaveModal = () => {
         onClose={() => setErrorModal({ state: false, message: "" })}
       />
     </div>
-  
   );
 };
 
