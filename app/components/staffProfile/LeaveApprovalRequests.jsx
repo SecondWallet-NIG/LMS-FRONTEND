@@ -9,6 +9,8 @@ const LeaveApprovalRequests = () => {
 
   const headers = [
     { id: "createdAt", label: "Date Requested" },
+    { id: "staff", label: "Staff" },
+    { id: "leaveType", label: "Leave Type" },
     { id: "leaveType", label: "Leave Type" },
     { id: "startDate", label: "Start Date" },
     { id: "endDate", label: "endDate" },
@@ -24,6 +26,18 @@ const LeaveApprovalRequests = () => {
       createdAt: (
         <div className="text-[15px] font-light text-gray-700">
           {item?.leaveDetails?.createdAt?.slice(0, 10)}
+        </div>
+      ),
+      staff: (
+        <div>
+          <div className="text-[15px] font-light text-gray-700">
+            <div className="text-[15px] font-light text-gray-700">
+              {item?.userDetails?.lastName} {item?.userDetails?.firstName}
+            </div>
+            <div className="text-[15px] font-light text-gray-700">
+              {item?.userDetails?.email}
+            </div>
+          </div>
         </div>
       ),
       leaveType: (
