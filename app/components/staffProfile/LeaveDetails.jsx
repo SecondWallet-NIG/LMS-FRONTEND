@@ -1,12 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Button from "../shared/buttonComponent/Button";
-import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
-import CenterModal from "../modals/CenterModal";
 import RequestLeaveModal from "../leaveRequest/RequestLeaveModal";
 import RightModal from "../modals/RightModal";
-import RequestLeaveModal from "../leaveRequest/RequestLeaveModal";
+
 
 export default function StaffLeaveDetails({ data, id, isDashboard }) {
   const [openLeaveRequestModal, setOpenLeaveRequestModal] = useState(false);
