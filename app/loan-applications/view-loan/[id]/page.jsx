@@ -56,7 +56,6 @@ const ViewLoan = () => {
   const user = useSelector((state) => state.user?.data?.data?.results);
   const loanApprovals = useSelector((state) => state.loanApprovals);
   const [activityButton, setActivityButton] = useState("activity-logs");
-  const [logSearch, setLogSearch] = useState(false);
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
   const [isApprovalOpen, setApprovalOpen] = useState(false);
   const [isDeclineOpen, setDeclineOpen] = useState(false);
@@ -579,13 +578,12 @@ const ViewLoan = () => {
   // };
 
   const getLoanStatement = async () => {
-    dispatch(loanStatementOfAccount(id))
-      .unwrap()
-      .then((res) => {
-        setLoanStatementConvert(res);
-        setLoanStatementModal(true);
-      })
-      .catch((err) => console.log(err));
+    try {
+      const url = await dispatch(loanStatementOfAccount(id)).unwrap();
+      window.open(url, "_blank");
+    } catch (error) {
+      console.error("Error viewing document:", error);
+    }
   };
   console.log({ loanStatementModal });
 
@@ -715,6 +713,29 @@ const ViewLoan = () => {
                     {data?.data?.loanApplication?.createdBy?.email}
                   </button>
                 </div>
+                <div className="flex justify-end ml-8">
+                  <div>
+                    <h6 className="text-sm  font-medium">Disbursed Date</h6>
+                    <p className="text-swBlue text-sm bg-white py-2 rounded-lg font-medium">
+                      {data?.data?.loanApplication?.disbursedAt &&
+                        formatDate(
+                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
+                        )}
+                    </p>
+                  </div>
+                  <div>
+                    <Button
+                      size="normal"
+                      variant="primary"
+                      className="ml-12 text-xs rounded-md"
+                      onClick={() => getLoanStatement()}
+                      disabled={statementPending}
+                      blueBtn={true}
+                    >
+                      Generate Statement
+                    </Button>
+                  </div>
+                </div>
               </div>
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
@@ -762,25 +783,6 @@ const ViewLoan = () => {
             </div>
           </section>
           <div className="ml-5 mr-5 mt-5">
-            <div className="flex justify-between flex-wrap gap-5">
-              <div>
-                <h6 className="font-semibold text-swBlue">
-                  Disbursement Date:
-                </h6>
-                <p>
-                  {data?.data?.loanApplication?.disbursedAt &&
-                    formatDate(
-                      data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
-                    )}
-                </p>
-              </div>
-              <EditableButton
-                onClick={() => getLoanStatement()}
-                disabled={statementPending}
-                label={"Generate Statement"}
-                blueBtn={true}
-              />
-            </div>
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
