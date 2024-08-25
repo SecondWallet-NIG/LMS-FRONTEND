@@ -6,15 +6,15 @@ export default function StaffDeptInfo({
     const returnCardDetails = (name, value) => {
         return (
             <div>
-                <p className="text-xs font-medium text-swGrey400">{name}</p>
-                <p className="text-sm font-medium text-swBlack">{value}</p>
-            </div>
+            <p className="text-xs font-medium text-swGrey400">{name}</p>
+            <p className="text-sm font-medium text-swBlack">{value}</p>
+        </div>
         );
     };
 
     return (
         <div className="p-2 border-2 rounded-lg h-full">
-            {/* <p className="text-md text-swBlue font-medium">Department Information</p> */}
+            <p className="text-swBlue font-medium text-md">Department Information</p>
             <div className="grid grid-cols-2 gap-5 mt-2">
                 {returnCardDetails(
                     "Department Name",

@@ -509,12 +509,12 @@ export default function InvestmentDetails() {
           className={`${
             item.transactionStatment === ""
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : item.transactionStatment === "Top Up"
+              : item.transactionType === "Top Up"
               ? "bg-green-50 text-swGreen"
               : "text-red-400 bg-red-100"
           } px-2 py-1 rounded-full`}
         >
-          {item?.transactionStatment}
+          {item?.transactionType}
         </button>
       ),
       initiatedBy: (
