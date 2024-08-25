@@ -697,7 +697,7 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="w-full md:w-[70%]">
-              <div className="flex md:justify-end">
+              {/* <div className="flex md:justify-end">
                 <div>
                   <div className="text-sm  font-medium"> Loan Creator</div>
                   <button
@@ -736,12 +736,12 @@ const ViewLoan = () => {
                     </Button>
                   </div>
                 </div>
-              </div>
-              <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
+              </div> */}
+                  <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swBlue font-semibold mt-4 text-end">
+                    <p className="text-sm text-swBlue font-semibold mt-4 text-end">
                       {data?.data?.loanApplication?.loanId}
                     </p>
                   </div>
@@ -750,7 +750,7 @@ const ViewLoan = () => {
                   <p className="text-sm font-medium">Loan Amount</p>
 
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swBlue font-semibold mt-4">
+                    <p className="text-sm text-swBlue font-semibold mt-4">
                       ₦{" "}
                       {data?.data?.loanApplication?.loanAmount.toLocaleString()}
                     </p>
@@ -772,7 +772,7 @@ const ViewLoan = () => {
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Outstanding Balance</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-red-500 font-semibold mt-4">
+                    <p className="text-sm text-red-500 font-semibold mt-4">
                       ₦{" "}
                       {data?.data?.loanApplication?.outstandingBalance?.toLocaleString() ||
                         0}
@@ -780,6 +780,53 @@ const ViewLoan = () => {
                   </div>
                 </div>
               </div>
+              <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap mt-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
+                  <p className="text-sm font-medium">Loan Creator</p>
+                  <div className="flex justify-between items-center">
+                  <button
+                    onClick={() => {
+                      router.push(
+                        `/borrowers/profile/${data?.data?.customerDetails?._id}`
+                      );
+                    }}
+                    className={
+                      "text-swBlue text-sm py-2 rounded-lg font-medium underline"
+                    }
+                  >
+                    {data?.data?.loanApplication?.createdBy?.email}
+                  </button>
+                  </div>
+                </div>
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
+                  <p className="text-sm font-medium">Date Disbursed</p>
+
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-swBlue font-semibold mt-4">
+                    {data?.data?.loanApplication?.disbursedAt &&
+                        formatDate(
+                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
+                        )}
+                    </p>
+             
+                  </div>
+                </div>
+                <div className="w-full  sm:w-[10rem] rounded-xl">
+                <div>
+                    <Button
+                      // size="normal"
+                      // variant="primary"
+                      className="text-xs text-swBlue rounded-md"
+                      onClick={() => getLoanStatement()}
+                      disabled={statementPending}
+                      blueBtn={true}
+                    >
+                      Generate Statement
+                    </Button>
+                  </div>
+                </div>
+              </div>
+          
             </div>
           </section>
           <div className="ml-5 mr-5 mt-5">
@@ -859,14 +906,14 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        {data?.data?.loanApplication?.disbursedAt === null ? (
+                        {data?.data?.loanApplication?.loanMaturityDate === null ? (
                           "null"
                         ) : (
                           <p>
-                            {data?.data?.loanApplication?.disbursedAt.slice(
+                            {formatDate(data?.data?.loanApplication?.loanMaturityDate.slice(
                               0,
                               10
-                            )}
+                            ))}
                           </p>
                         )}
                       </div>
