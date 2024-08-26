@@ -559,9 +559,8 @@ export default function InvestmentDetails() {
       window.open(url, "_blank");
     } catch (error) {
       console.error("Error viewing document:", error);
-    }finally{
+    } finally {
       setStatementLoad(false);
-
     }
   };
 
@@ -667,12 +666,16 @@ export default function InvestmentDetails() {
 
         <div className="gap-8">
           <div className="flex justify-end px-5">
-            <EditableButton
+            <Button
+              // size="normal"
+              // variant="primary"
+              className="text-xs text-swBlue rounded-md"
               onClick={() => getInvestmentStatement()}
               disabled={statementLoad}
-              label={"Generate Statement"}
               blueBtn={true}
-            />
+            >
+              Generate Statement
+            </Button>
           </div>
           <div className="px-5 gap-4 py-3">
             <h1 className={`${headClass}`}>Investment Details</h1>
