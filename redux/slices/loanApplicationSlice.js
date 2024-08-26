@@ -111,25 +111,28 @@ export const diosbursementSummary = createAsyncThunk(
 
 export const loanStatementOfAccount = createAsyncThunk(
   "loan-statement-of-account",
-  async (loanId) => {
+  async (loanId, { getState }) => {
     try {
+      const { user } = getState(); // Assuming you have user in the state
       const response = await axios.get(
         `${API_URL}/loan-application/${loanId}/statement-of-account`,
         {
+          responseType: 'blob', // Important to handle blob data
           headers: {
             Authorization: `Bearer ${user?.data?.token}`,
-            "Content-Type": "application/pdf",
           },
-          responseType: "blob",
         }
       );
-      console.log(response);
+
+      // Create a URL for the blob data
       const url = URL.createObjectURL(response.data);
       return url;
     } catch (error) {
-      if (error.response.data.error) {
+      if (error.response && error.response.data && error.response.data.error) {
         throw new Error(error.response.data.error);
-      } else throw new Error("An error occured, please try again later");
+      } else {
+        throw new Error("An error occurred, please try again later");
+      }
     }
   }
 );

@@ -35,12 +35,10 @@ const CustomerLoanTransactions = ({ loanId }) => {
     { id: "amount", label: "Amount" },
     { id: "prevBalance", label: "Previous Balance" },
     { id: "currBalance", label: "Current Balance" },
-    { id: "transactionStatement", label: "Transaction Statement" },
-    { id: "transactionReceipt", label: "Transaction Receipt" },
+    { id: "transactionStatement", label: "Transaction Type" }
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log("trans", apiData);
     return apiData?.loanApplicationTransactions?.map((item) => ({
       id: item._id,
       transactionDate: (
@@ -73,31 +71,15 @@ const CustomerLoanTransactions = ({ loanId }) => {
         </div>
       ),
       transactionStatement: (
-        <div>
-          <div className="text-md font-light text-gray-700">
-            {item?.transactionStatment}
-          </div>
-        </div>
-      ),
-      transactionReceipt: (
-        <div className="z-30">
-          {item?.transactionReceipt !== null ? (
-            <div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSetUrl(item?.transactionReceipt);
-                  setOpenFileModal(true);
-                }}
-                className="text-md font-light text-gray-700 hover:text-swBlue"
-              >
-                View Receipt
-              </button>
-            </div>
-          ) : (
-            <div className="text-md font-light text-gray-700">No Receipt</div>
-          )}
-        </div>
+        <button
+        className={`${
+          item?.transactionType|| item?.transactionStatment === "Credit" || "Loan Interest Accrual"
+            ? "bg-swGreen text-white text-xs font-normal px-2 py-1 rounded-full"
+            : "bg-swIndicatorLightRed text-white"
+        } px-2 py-1 rounded-full`}
+      >
+        {item?.transactionType || item?.transactionStatment}
+      </button>
       ),
     }));
   };
@@ -106,7 +88,6 @@ const CustomerLoanTransactions = ({ loanId }) => {
     <div className="w-full">
       <ToastContainer />
       <ReusableDataTable
-        // onClickRow={"/payment-history/payment/"}
         dataTransformer={customDataTransformer}
         headers={headers}
         initialData={[]}

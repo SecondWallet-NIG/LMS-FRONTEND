@@ -76,10 +76,6 @@ export default function InvestmentDetails() {
   const [formData, setFormData] = useState({ closeInvestmentReason: "" });
   const [fileError, setFileError] = useState("");
   const [statementLoad, setStatementLoad] = useState(false);
-  const [investmentStatementConvert, setInvestmentStatementConvert] =
-    useState(null);
-  const [investmentStatementModal, setInvestmentStatementModal] =
-    useState(false);
   const [topUpData, setTopUpData] = useState({
     amount: "",
     paymentReceipt: null,
@@ -88,6 +84,9 @@ export default function InvestmentDetails() {
     withdrawAmount: "",
     paymentMethod: "",
   });
+  const { statementData, statementPending } = useSelector(
+    (state) => state.loanApplication
+  );
   const [successModal, setSuccessModal] = useState(false);
   const [failedModal, setFailedModal] = useState(false);
   const [successModalData, setSuccessModalData] = useState({});
@@ -516,12 +515,12 @@ export default function InvestmentDetails() {
           className={`${
             item.transactionStatment === ""
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : item.transactionStatment === "Top Up"
+              : item.transactionType === "Top Up"
               ? "bg-green-50 text-swGreen"
               : "text-red-400 bg-red-100"
           } px-2 py-1 rounded-full`}
         >
-          {item?.transactionStatment}
+          {item?.transactionType}
         </button>
       ),
       initiatedBy: (
@@ -555,18 +554,15 @@ export default function InvestmentDetails() {
 
   const getInvestmentStatement = async () => {
     setStatementLoad(true);
-    dispatch(investmentStatementOfAccount(id))
-      .unwrap()
-      .then((res) => {
-        setInvestmentStatementConvert(res);
-        setInvestmentStatementModal(true);
-        setStatementLoad(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setStatementLoad(false);
-      });
-    // console.log("helloo");
+    try {
+      const url = await dispatch(investmentStatementOfAccount(id)).unwrap();
+      window.open(url, "_blank");
+    } catch (error) {
+      console.error("Error viewing document:", error);
+    }finally{
+      setStatementLoad(false);
+
+    }
   };
 
   useEffect(() => {
@@ -657,7 +653,7 @@ export default function InvestmentDetails() {
                   </h2>
                   <button
                     className="flex gap-2 border text-sm px-3 py-2 font-semibold rounded-md cursor-pointer bg-white"
-                    disabled={data?.data?.status === "Closed"}  
+                    disabled={data?.data?.status === "Closed"}
                     onClick={() => setOpenTopUp(true)}
                   >
                     <FiCopy className="" size={16} />
@@ -803,22 +799,6 @@ export default function InvestmentDetails() {
           setErrorModalData({});
           setFailedModal(false);
         }}
-      />
-      <SharedInvestmentModal
-        isOpen={investmentStatementModal}
-        css={"max-w-2xl"}
-        header={"Investment Statement"}
-        onClose={() => setInvestmentStatementModal(false)}
-        children={
-          <div className="p-5">
-            <iframe
-              src={investmentStatementConvert}
-              width="100%"
-              height="400px"
-              type="application/pdf"
-            ></iframe>
-          </div>
-        }
       />
     </DashboardLayout>
   );

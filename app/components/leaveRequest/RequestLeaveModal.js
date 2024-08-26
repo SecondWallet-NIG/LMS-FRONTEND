@@ -26,6 +26,7 @@ const RequestLeaveModal = () => {
   const [formData, setFormData] = useState({
     leaveType: "",
     leaveDuration: 0,
+    reliever: "",
     description: "",
   });
   const { data } = useSelector((state) => state.user);
@@ -36,9 +37,12 @@ const RequestLeaveModal = () => {
   const reset = () => {
     setFormData({
       leaveType: "",
-      leaveDuration: "",
+      leaveDuration: 0,
+      reliever: "",
       description: "",
     });
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const preventMinus = (e) => {
@@ -66,10 +70,11 @@ const RequestLeaveModal = () => {
     const payload = {
       leaveType: formData.leaveType,
       leaveDuration: formData.leaveDuration,
+      reliever: formData.reliever,
       startDate: startDate,
       endDate: endDate,
       description: formData.description,
-      id: id,
+      userId: id,
     };
     dispatch(requestLeave(payload))
       .unwrap()

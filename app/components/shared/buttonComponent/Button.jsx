@@ -13,7 +13,7 @@ const classes = {
   },
   variant: {
     success: "outline-none bg-[#E8F7F0] hover:bg-green text-[#107E4B]",
-    primary: "outline-none bg-swBlue hover:bg-swBlue text-white",
+    primary: "outline-none bg-swBlue hover:bg-swDarkBlue text-white",
     secondary:
       "outline-none bg-gray-100 hover:bg-swBlue focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 text-gray-900 hover:text-white",
     danger:

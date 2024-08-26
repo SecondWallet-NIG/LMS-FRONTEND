@@ -56,7 +56,6 @@ const ViewLoan = () => {
   const user = useSelector((state) => state.user?.data?.data?.results);
   const loanApprovals = useSelector((state) => state.loanApprovals);
   const [activityButton, setActivityButton] = useState("activity-logs");
-  const [logSearch, setLogSearch] = useState(false);
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
   const [isApprovalOpen, setApprovalOpen] = useState(false);
   const [isDeclineOpen, setDeclineOpen] = useState(false);
@@ -78,11 +77,9 @@ const ViewLoan = () => {
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [statementLoad,setStatementLoad] = useState(false)
   const [openDibursementDatePicker, setOpenDisbursementDatePicker] =
     useState(false);
-  const [statementLoad, setStatementLoad] = useState(false);
-  const [loanStatementConvert, setLoanStatementConvert] = useState(null);
-  const [loanStatementModal, setLoanStatementModal] = useState(false);
   const [formData, setFormData] = useState({
     amount: "",
     paymentMethod: "",
@@ -579,20 +576,16 @@ const ViewLoan = () => {
   // };
 
   const getLoanStatement = async () => {
-    setStatementLoad(true);
-    dispatch(loanStatementOfAccount(id))
-      .unwrap()
-      .then((res) => {
-        setLoanStatementConvert(res);
-        setLoanStatementModal(true);
-        setStatementLoad(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setStatementLoad(false);
-      });
+    setStatementLoad(true)
+    try {
+      const url = await dispatch(loanStatementOfAccount(id)).unwrap();
+      window.open(url, "_blank");
+    } catch (error) {
+      console.error("Error viewing document:", error);
+    }finally{
+      setStatementLoad(false)
+    }
   };
-  console.log({ loanStatementModal });
 
   if (loanApprovals?.data?.data) {
     hasDecline = hasDeclineStatus();
@@ -704,7 +697,7 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="w-full md:w-[70%]">
-              <div className="flex md:justify-end">
+              {/* <div className="flex md:justify-end">
                 <div>
                   <div className="text-sm  font-medium"> Loan Creator</div>
                   <button
@@ -720,12 +713,35 @@ const ViewLoan = () => {
                     {data?.data?.loanApplication?.createdBy?.email}
                   </button>
                 </div>
-              </div>
+                <div className="flex justify-end ml-8">
+                  <div>
+                    <h6 className="text-sm  font-medium">Disbursed Date</h6>
+                    <p className="text-swBlue text-sm bg-white py-2 rounded-lg font-medium">
+                      {data?.data?.loanApplication?.disbursedAt &&
+                        formatDate(
+                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
+                        )}
+                    </p>
+                  </div>
+                  <div>
+                    <Button
+                      size="normal"
+                      variant="primary"
+                      className="ml-12 text-xs rounded-md"
+                      onClick={() => getLoanStatement()}
+                      disabled={statementPending}
+                      blueBtn={true}
+                    >
+                      Generate Statement
+                    </Button>
+                  </div>
+                </div>
+              </div> */}
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swBlue font-semibold mt-4 text-end">
+                    <p className="text-sm text-swBlue font-semibold mt-4 text-end">
                       {data?.data?.loanApplication?.loanId}
                     </p>
                   </div>
@@ -734,7 +750,7 @@ const ViewLoan = () => {
                   <p className="text-sm font-medium">Loan Amount</p>
 
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swBlue font-semibold mt-4">
+                    <p className="text-sm text-swBlue font-semibold mt-4">
                       ₦{" "}
                       {data?.data?.loanApplication?.loanAmount.toLocaleString()}
                     </p>
@@ -756,7 +772,7 @@ const ViewLoan = () => {
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Outstanding Balance</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-red-500 font-semibold mt-4">
+                    <p className="text-sm text-red-500 font-semibold mt-4">
                       ₦{" "}
                       {data?.data?.loanApplication?.outstandingBalance?.toLocaleString() ||
                         0}
@@ -764,28 +780,54 @@ const ViewLoan = () => {
                   </div>
                 </div>
               </div>
+              <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap mt-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
+                  <p className="text-sm font-medium">Loan Creator</p>
+                  <div className="flex justify-between items-center">
+                    <button
+                      onClick={() => {
+                        router.push(
+                          `/borrowers/profile/${data?.data?.customerDetails?._id}`
+                        );
+                      }}
+                      className={
+                        "text-swBlue text-sm py-2 rounded-lg font-medium underline"
+                      }
+                    >
+                      {data?.data?.loanApplication?.createdBy?.email}
+                    </button>
+                  </div>
+                </div>
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
+                  <p className="text-sm font-medium">Date Disbursed</p>
+
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-swBlue font-semibold mt-4">
+                      {data?.data?.loanApplication?.disbursedAt &&
+                        formatDate(
+                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
+                        )}
+                    </p>
+                  </div>
+                </div>
+                <div className="w-full  sm:w-[10rem] rounded-xl">
+                  <div>
+                    <Button
+                      // size="normal"
+                      // variant="primary"
+                      className="text-xs text-swBlue rounded-md"
+                      onClick={() => getLoanStatement()}
+                      disabled={statementLoad}
+                      blueBtn={true}
+                    >
+                      Generate Statement
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
           <div className="ml-5 mr-5 mt-5">
-            <div className="flex justify-between flex-wrap gap-5">
-              <div>
-                <h6 className="font-semibold text-swBlue">
-                  Disbursement Date:
-                </h6>
-                <p>
-                  {data?.data?.loanApplication?.disbursedAt &&
-                    formatDate(
-                      data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
-                    )}
-                </p>
-              </div>
-              <EditableButton
-                onClick={() => getLoanStatement()}
-                disabled={statementLoad}
-                label={"Generate Statement"}
-                blueBtn={true}
-              />
-            </div>
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
@@ -862,13 +904,16 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        {data?.data?.loanApplication?.disbursedAt === null ? (
+                        {data?.data?.loanApplication?.loanMaturityDate ===
+                        null ? (
                           "null"
                         ) : (
                           <p>
-                            {data?.data?.loanApplication?.disbursedAt.slice(
-                              0,
-                              10
+                            {formatDate(
+                              data?.data?.loanApplication?.loanMaturityDate.slice(
+                                0,
+                                10
+                              )
                             )}
                           </p>
                         )}
@@ -1811,22 +1856,6 @@ const ViewLoan = () => {
           />
         </div>
       </CenterModal>
-      <SharedInvestmentModal
-        isOpen={loanStatementModal}
-        css={"max-w-2xl"}
-        header={"Loan Statement"}
-        onClose={() => setLoanStatementModal(false)}
-        children={
-          <div className="p-5">
-            <iframe
-              src={loanStatementConvert}
-              width="100%"
-              height="400px"
-              type="application/pdf"
-            ></iframe>
-          </div>
-        }
-      />
     </DashboardLayout>
   );
 };
