@@ -579,13 +579,18 @@ const ViewLoan = () => {
   // };
 
   const getLoanStatement = async () => {
+    setStatementLoad(true);
     dispatch(loanStatementOfAccount(id))
       .unwrap()
       .then((res) => {
         setLoanStatementConvert(res);
         setLoanStatementModal(true);
+        setStatementLoad(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setStatementLoad(false);
+      });
   };
   console.log({ loanStatementModal });
 
@@ -776,7 +781,7 @@ const ViewLoan = () => {
               </div>
               <EditableButton
                 onClick={() => getLoanStatement()}
-                disabled={statementPending}
+                disabled={statementLoad}
                 label={"Generate Statement"}
                 blueBtn={true}
               />
@@ -1808,7 +1813,7 @@ const ViewLoan = () => {
       </CenterModal>
       <SharedInvestmentModal
         isOpen={loanStatementModal}
-        css={"max-w-xl"}
+        css={"max-w-2xl"}
         header={"Loan Statement"}
         onClose={() => setLoanStatementModal(false)}
         children={

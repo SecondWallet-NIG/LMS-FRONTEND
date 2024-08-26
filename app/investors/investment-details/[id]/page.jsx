@@ -15,6 +15,7 @@ import {
   getTransactionHistory,
   topUpInvestment,
   createWithdrawalRequest,
+  investmentStatementOfAccount,
 } from "@/redux/slices/investmentSlice";
 import { format } from "date-fns";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
@@ -25,6 +26,7 @@ import SelectField from "@/app/components/shared/input/SelectField";
 import { useImmer } from "use-immer";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 
 const header = [
   { id: "dueDate", label: "Due Date" },
@@ -73,6 +75,11 @@ export default function InvestmentDetails() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ closeInvestmentReason: "" });
   const [fileError, setFileError] = useState("");
+  const [statementLoad, setStatementLoad] = useState(false);
+  const [investmentStatementConvert, setInvestmentStatementConvert] =
+    useState(null);
+  const [investmentStatementModal, setInvestmentStatementModal] =
+    useState(false);
   const [topUpData, setTopUpData] = useState({
     amount: "",
     paymentReceipt: null,
@@ -546,6 +553,22 @@ export default function InvestmentDetails() {
     </div>
   );
 
+  const getInvestmentStatement = async () => {
+    setStatementLoad(true);
+    dispatch(investmentStatementOfAccount(id))
+      .unwrap()
+      .then((res) => {
+        setInvestmentStatementConvert(res);
+        setInvestmentStatementModal(true);
+        setStatementLoad(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setStatementLoad(false);
+      });
+    // console.log("helloo");
+  };
+
   useEffect(() => {
     dispatch(getSingleInvestment(id));
   }, []);
@@ -577,11 +600,19 @@ export default function InvestmentDetails() {
                 </p>
 
                 <div className="flex justify-between gap-4 mt-5 text-sm mb-10 lg:mb-1">
-                  <div onClick={() => setReqWithdrawal(true)}>
-                    <Button className="rounded-md flex gap-2">
-                      Request Withdrawal
-                    </Button>
-                  </div>
+                  {/* <div
+                    onClick={() =>
+                      data?.data.status !== "Closed" && setReqWithdrawal(true)
+                    }
+                  > */}
+                  <Button
+                    disabled={data?.data.status === "Closed"}
+                    className="rounded-md flex gap-2"
+                    onClick={() => setReqWithdrawal(true)}
+                  >
+                    Request Withdrawal
+                  </Button>
+                  {/* </div> */}
                   <button
                     onClick={() => setModal(true)}
                     disabled={data?.data?.status === "Closed"}
@@ -624,13 +655,14 @@ export default function InvestmentDetails() {
                   <h2 className="font-medium leading-8 text-2xl">
                     ₦ {data?.data?.currentInvestmentPrincipal?.toLocaleString()}
                   </h2>
-                  <span
+                  <button
                     className="flex gap-2 border text-sm px-3 py-2 font-semibold rounded-md cursor-pointer bg-white"
+                    disabled={data?.data?.status === "Closed"}  
                     onClick={() => setOpenTopUp(true)}
                   >
                     <FiCopy className="" size={16} />
                     <p className="-mt-0.5 ">Top up</p>
-                  </span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -638,6 +670,14 @@ export default function InvestmentDetails() {
         </div>
 
         <div className="gap-8">
+          <div className="flex justify-end px-5">
+            <EditableButton
+              onClick={() => getInvestmentStatement()}
+              disabled={statementLoad}
+              label={"Generate Statement"}
+              blueBtn={true}
+            />
+          </div>
           <div className="px-5 gap-4 py-3">
             <h1 className={`${headClass}`}>Investment Details</h1>
             {renderTable({
@@ -663,7 +703,11 @@ export default function InvestmentDetails() {
                     </p>
                   </p>
                   <p
-                    className={`-ml-1 mt-2 py-3 px-6 border border-swGreen bg-green-100 text-sm text-swGreen leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
+                    className={`-ml-1 mt-2 py-3 px-6 border ${
+                      data?.data.status === "Closed"
+                        ? "border-red-500 bg-red-100 text-red-500"
+                        : "border-swGreen bg-green-100 text-swGreen"
+                    }  text-sm  leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
                   >
                     {data?.data.status}
                   </p>
@@ -759,6 +803,22 @@ export default function InvestmentDetails() {
           setErrorModalData({});
           setFailedModal(false);
         }}
+      />
+      <SharedInvestmentModal
+        isOpen={investmentStatementModal}
+        css={"max-w-2xl"}
+        header={"Investment Statement"}
+        onClose={() => setInvestmentStatementModal(false)}
+        children={
+          <div className="p-5">
+            <iframe
+              src={investmentStatementConvert}
+              width="100%"
+              height="400px"
+              type="application/pdf"
+            ></iframe>
+          </div>
+        }
       />
     </DashboardLayout>
   );
