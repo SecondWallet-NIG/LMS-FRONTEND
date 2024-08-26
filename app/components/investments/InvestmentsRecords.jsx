@@ -23,7 +23,6 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.investments?.map((item, i) => ({
     id: item._id,
     investmentId: (
@@ -102,8 +101,6 @@ export default function InvestmentsRecords() {
   useEffect(() => {
     dispatch(getInvestmentRecordCards());
   }, []);
-
-  console.log("apiInvestment", data);
 
   return (
     <div className="flex flex-col gap-5">

@@ -25,9 +25,6 @@ const Card = ({ value, title, extraVal, currency }) => {
 };
 
 const CustomerSummaryCard = ({ data, financialCards, healthData }) => {
-  console.log("health", data);
-  console.log("heal", financialCards);
-  console.log({ healthData });
   return (
     <>
       {!financialCards && (

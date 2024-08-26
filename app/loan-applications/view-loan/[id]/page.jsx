@@ -91,8 +91,6 @@ const ViewLoan = () => {
     (state) => state.loanApplication
   );
 
-  console.log({ statementData });
-
   const handleFileChange = (e) => {
     setFileError("");
     let { name, files } = e.target;

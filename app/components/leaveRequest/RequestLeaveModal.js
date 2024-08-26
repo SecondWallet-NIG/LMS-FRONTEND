@@ -113,8 +113,6 @@ const RequestLeaveModal = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log({ formData });
-
   useEffect(() => {
     if (id) {
       dispatch(getUserById(id));

@@ -214,8 +214,6 @@ const CustomerRepayment = ({ loanId }) => {
       });
   };
 
-  console.log("clearBalance", formData);
-
   return (
     <div className="w-full">
       <ToastContainer />

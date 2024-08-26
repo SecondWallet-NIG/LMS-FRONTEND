@@ -26,8 +26,6 @@ const MyTasks = () => {
     dispatch(getStaffTasks(user?.data?.user?._id));
   }, []);
 
-  console.log("taskee", data);
-
   return (
     <DashboardLayout>
       <main>

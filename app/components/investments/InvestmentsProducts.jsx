@@ -58,8 +58,6 @@ export default function InvestmentProducts() {
     },
   ];
 
-  console.log(investmentProductCards);
-
   useEffect(() => {
     dispatch(getInvestmentProductsCards());
   }, []);
