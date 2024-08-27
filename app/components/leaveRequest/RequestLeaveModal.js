@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomDatePicker from "../shared/date/CustomDatePicker";
 import { leaveTypes } from "../helpers/utils";
 
-const RequestLeaveModal = () => {
+const RequestLeaveModal = ({ onClose }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -36,11 +36,13 @@ const RequestLeaveModal = () => {
 
   const reset = () => {
     setFormData({
+      ...formData,
       leaveType: "",
-      leaveDuration: 0,
+      // leaveDuration: 0,
       reliever: "",
       description: "",
     });
+    // onClose && onClose(false);
     setStartDate(null);
     setEndDate(null);
   };
@@ -137,7 +139,9 @@ const RequestLeaveModal = () => {
                   <SelectField
                     label={"Select Leave Type"}
                     isSearchable={true}
-                    value={leaveTypes.find((e) => e.id === formData.leaveType)}
+                    value={
+                      leaveTypes.find((e) => e.id === formData.leaveType) || ""
+                    }
                     onChange={(e) => {
                       console.log("e", e);
                       setFormData({ ...formData, leaveType: e.id });
@@ -145,25 +149,6 @@ const RequestLeaveModal = () => {
                     optionValue={leaveTypes}
                     placeholder={"Select"}
                   />
-                  {/* {formData.leaveType && type && (
-                    <p className="text-sm lower">
-                      You have{" "}
-                      {Object.keys(type).find((key) => {
-                        if (key === formData.leaveType) {
-                          return true;
-                        }
-                        return false;
-                      }) && type[formData.leaveType]}{" "}
-                      days left for your{" "}
-                      <span className="lowercase">
-                        {
-                          leaveTypes.find(
-                            (leave) => leave.value === formData.leaveType
-                          ).label
-                        }
-                      </span>
-                    </p>
-                  )} */}
                 </div>
               </div>
               <div className="flex justify-between mt-5">
@@ -171,7 +156,10 @@ const RequestLeaveModal = () => {
                   <SelectField
                     label={"Choose Reliever"}
                     isSearchable={true}
-                    value={allRelievers.find((e) => e.value === formData.value)}
+                    value={
+                      allRelievers.find((e) => e.value === formData.reliever) ||
+                      ""
+                    }
                     onChange={(e) =>
                       setFormData({ ...formData, reliever: e.value })
                     }
@@ -183,23 +171,13 @@ const RequestLeaveModal = () => {
               <div className="flex justify-between mt-7">
                 <div className="w-full flex flex-col gap-5">
                   <div className="flex gap-3 items-end">
-                    {/* <div className="w-full ">
-                    
-                      <InputField
-                        name="leaveDuration"
-                        value={formData.leaveDuration}
-                        onKeyPress={preventMinus}
-                        onWheel={() => document.activeElement.blur()}
-                        placeholder="Enter duration in days"
-                        onChange={handleInputField}
-                      />
-                    </div> */}
                     <CustomDatePicker
                       label={"Start Date"}
                       value={setStartDate}
                     />
                     <CustomDatePicker label={"End Date"} value={setEndDate} />
                   </div>
+                  <p>Duration: {formData?.leaveDuration} days</p>
                 </div>
               </div>
               <div className="flex justify-between mt-7">

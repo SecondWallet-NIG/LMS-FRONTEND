@@ -81,7 +81,7 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
                 </div>
             </div>
             <RightModal isOpen={openLeaveRequestModal} onClose={() => setOpenLeaveRequestModal(false)} className="mt-8">
-                <RequestLeaveModal />
+                <RequestLeaveModal onClose={setOpenLeaveRequestModal} />
             </RightModal>
 
         </div>
