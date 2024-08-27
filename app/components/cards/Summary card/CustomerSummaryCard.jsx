@@ -25,9 +25,6 @@ const Card = ({ value, title, extraVal, currency }) => {
 };
 
 const CustomerSummaryCard = ({ data, financialCards, healthData }) => {
-  console.log("health", data );
-  console.log("heal", financialCards );
-  console.log({ healthData });
   return (
     <>
       {!financialCards && (
@@ -35,18 +32,20 @@ const CustomerSummaryCard = ({ data, financialCards, healthData }) => {
           <Card
             title="Total Investments"
             value={healthData?.totalInvestments?.count || 0}
-            extraVal={healthData?.totalInvestments?.amount || 0}
+            extraVal={
+              healthData?.totalInvestments?.amount?.toLocaleString() || 0
+            }
           />
           <Card title="Average ROI" value={`${32}%`} />
           <Card
             title="Maturity Amount"
             value={healthData?.maturityAmount?.count || 0}
-            extraVal={healthData?.maturityAmount?.amount || 0}
+            extraVal={healthData?.maturityAmount?.amount?.toLocaleString() || 0}
           />
           <Card
             title="Withdrawals"
             value={healthData?.withdrawals?.count || 0}
-            extraVal={healthData?.withdrawals?.amount || 0}
+            extraVal={healthData?.withdrawals?.amount?.toLocaleString() || 0}
           />
         </main>
       )}

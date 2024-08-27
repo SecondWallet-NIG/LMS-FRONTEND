@@ -15,7 +15,6 @@ const header = [
 ];
 
 const customDataTransformer = (apiData) => {
-  console.log({ apiData });
   return apiData?.investments?.map((item, i) => ({
     id: item._id,
     investmentId: (

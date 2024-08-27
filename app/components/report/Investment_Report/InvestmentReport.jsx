@@ -40,7 +40,6 @@ export default function InvestmentReport() {
   // console.log("card", data);
   useEffect(() => {
     if (getInvestmentReportCardsData?.data) {
-      console.log(getInvestmentReportCardsData?.data);
       // const totalInvestors =
       //   Object?.keys(data?.data?.investmentsByCategory).length || [];
       setState((draft) => ({
@@ -63,8 +62,6 @@ export default function InvestmentReport() {
     //   })
     //   .catch((err) => console.log(err));
   }, []);
-
-  console.log("investment cards", getInvestmentReportCardsData);
 
   const cards = [
     { title: "Total Number of Investors", value: state?.totalInvestors || 0 },

@@ -20,7 +20,6 @@ const LeaveApprovalRequests = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({ apiData });
     return apiData?.leaveRequests?.map((item) => ({
       id: item._id,
       createdAt: (

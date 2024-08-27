@@ -1,17 +1,37 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from 'react-icons/fa';
-import './CustomDatePicker.css'; // Ensure this file has responsive styles
+import React, { useState, useRef, useEffect } from "react";
+import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from "react-icons/fa";
+import "./CustomDatePicker.css"; // Ensure this file has responsive styles
 
-const CustomDatePicker = ({ label, name }) => {
+const CustomDatePicker = ({ label, value }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [currentView, setCurrentView] = useState('day');
+  const [currentView, setCurrentView] = useState("day");
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const calendarRef = useRef(null);
 
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const years = Array.from({ length: 20 }, (_, i) => new Date().getFullYear() - 10 + i);
+  useEffect(() => {
+    value && value(selectedDate);
+  }, [selectedDate]);
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const years = Array.from(
+    { length: 20 },
+    (_, i) => new Date().getFullYear() - 10 + i
+  );
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
@@ -20,12 +40,12 @@ const CustomDatePicker = ({ label, name }) => {
 
   const handleMonthClick = (month) => {
     setCurrentMonth(month);
-    setCurrentView('day');
+    setCurrentView("day");
   };
 
   const handleYearClick = (year) => {
     setCurrentYear(year);
-    setCurrentView('month');
+    setCurrentView("month");
   };
 
   const generateCalendarDays = () => {
@@ -41,8 +61,17 @@ const CustomDatePicker = ({ label, name }) => {
       days.push(
         <div
           key={day}
-          className={`calendar-day ${selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth && selectedDate.getFullYear() === currentYear ? 'selected' : ''}`}
-          onClick={() => handleDateClick(new Date(currentYear, currentMonth, day))}
+          className={`calendar-day ${
+            selectedDate &&
+            selectedDate.getDate() === day &&
+            selectedDate.getMonth() === currentMonth &&
+            selectedDate.getFullYear() === currentYear
+              ? "selected"
+              : ""
+          }`}
+          onClick={() =>
+            handleDateClick(new Date(currentYear, currentMonth, day))
+          }
           role="button"
           tabIndex={0}
         >
@@ -58,7 +87,7 @@ const CustomDatePicker = ({ label, name }) => {
     return months.map((month, index) => (
       <div
         key={index}
-        className={`calendar-month ${index === currentMonth ? 'selected' : ''}`}
+        className={`calendar-month ${index === currentMonth ? "selected" : ""}`}
         onClick={() => handleMonthClick(index)}
         role="button"
         tabIndex={0}
@@ -72,7 +101,7 @@ const CustomDatePicker = ({ label, name }) => {
     return years.map((year) => (
       <div
         key={year}
-        className={`calendar-year ${year === currentYear ? 'selected' : ''}`}
+        className={`calendar-year ${year === currentYear ? "selected" : ""}`}
         onClick={() => handleYearClick(year)}
         role="button"
         tabIndex={0}
@@ -89,73 +118,106 @@ const CustomDatePicker = ({ label, name }) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div className="custom-date-picker" ref={calendarRef}>
-      {label && <label className="block text-gray-700 text-sm mb-2 capitalize">{label}</label>}
+      {label && (
+        <label className="block text-gray-700 text-sm mb-2 capitalize">
+          {label}
+        </label>
+      )}
       <div className="date-input-wrapper">
         <input
           type="text"
-          value={selectedDate ? selectedDate.toLocaleDateString() : ''}
+          value={selectedDate ? selectedDate.toLocaleDateString() : ""}
           readOnly
           className="date-input text-sm"
-          placeholder='dd/mm/yyyy'
+          placeholder="dd/mm/yyyy"
           aria-label={label}
         />
-        <FaCalendarAlt className="calendar-icon" onClick={() => setShowCalendar(!showCalendar)} />
+        <FaCalendarAlt
+          className="calendar-icon"
+          onClick={() => setShowCalendar(!showCalendar)}
+        />
       </div>
       {showCalendar && (
         <div className="calendar" aria-expanded={showCalendar}>
-          {currentView === 'day' && (
+          {currentView === "day" && (
             <>
               <div className="calendar-header">
-                <button className="calendar-nav-button" onClick={() => setCurrentMonth((prev) => (prev + 11) % 12)} aria-label="Previous Month">
+                <button
+                  className="calendar-nav-button"
+                  onClick={() => setCurrentMonth((prev) => (prev + 11) % 12)}
+                  aria-label="Previous Month"
+                >
                   <FaChevronLeft />
                 </button>
-                <span className="calendar-month-year">{months[currentMonth]} {currentYear}</span>
-                <button className="calendar-nav-button" onClick={() => setCurrentMonth((prev) => (prev + 1) % 12)} aria-label="Next Month">
+                <span className="calendar-month-year">
+                  {months[currentMonth]} {currentYear}
+                </span>
+                <button
+                  className="calendar-nav-button"
+                  onClick={() => setCurrentMonth((prev) => (prev + 1) % 12)}
+                  aria-label="Next Month"
+                >
                   <FaChevronRight />
                 </button>
               </div>
-              <div className="calendar-body">
-                {generateCalendarDays()}
-              </div>
-              <button className="calendar-back-button" onClick={() => setCurrentView('month')} aria-label="Back to Months">Back to Months</button>
+              <div className="calendar-body">{generateCalendarDays()}</div>
+              <button
+                className="calendar-back-button"
+                onClick={() => setCurrentView("month")}
+                aria-label="Back to Months"
+              >
+                Back to Months
+              </button>
             </>
           )}
-          {currentView === 'month' && (
+          {currentView === "month" && (
             <>
               <div className="calendar-header">
-                <button className="calendar-nav-button" onClick={() => setCurrentView('year')} aria-label="Previous Decade">
+                <button
+                  className="calendar-nav-button"
+                  onClick={() => setCurrentView("year")}
+                  aria-label="Previous Decade"
+                >
                   <FaChevronLeft />
                 </button>
                 <span className="calendar-month-year">Select Month</span>
-                <button className="calendar-nav-button" disabled aria-label="Next Decade">
+                <button
+                  className="calendar-nav-button"
+                  disabled
+                  aria-label="Next Decade"
+                >
                   <FaChevronRight />
                 </button>
               </div>
-              <div className="month-view">
-                {generateMonthView()}
-              </div>
+              <div className="month-view">{generateMonthView()}</div>
             </>
           )}
-          {currentView === 'year' && (
+          {currentView === "year" && (
             <>
               <div className="calendar-header">
-                <button className="calendar-nav-button" onClick={() => setCurrentYear((prev) => prev - 10)} aria-label="Previous 10 Years">
+                <button
+                  className="calendar-nav-button"
+                  onClick={() => setCurrentYear((prev) => prev - 10)}
+                  aria-label="Previous 10 Years"
+                >
                   <FaChevronLeft />
                 </button>
                 <span className="calendar-month-year">Select Year</span>
-                <button className="calendar-nav-button" onClick={() => setCurrentYear((prev) => prev + 10)} aria-label="Next 10 Years">
+                <button
+                  className="calendar-nav-button"
+                  onClick={() => setCurrentYear((prev) => prev + 10)}
+                  aria-label="Next 10 Years"
+                >
                   <FaChevronRight />
                 </button>
               </div>
-              <div className="year-view">
-                {generateYearView()}
-              </div>
+              <div className="year-view">{generateYearView()}</div>
             </>
           )}
         </div>

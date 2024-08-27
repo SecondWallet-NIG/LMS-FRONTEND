@@ -82,9 +82,6 @@ export default function InvestorBioData({
     { label: "Beneficiary", value: data?.data?.bankAccount?.accountName },
     { label: "BVN", value: data?.data?.bvn },
   ];
-
-  console.log("account", data?.data);
-
   // {
   //     bankArr.find(
   //       (option) =>

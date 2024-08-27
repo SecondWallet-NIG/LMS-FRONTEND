@@ -26,9 +26,7 @@ const CustomerLoanTransactions = ({ loanId }) => {
 
   const handleSetUrl = (content) => {
     setUrl(content);
-    console.log(content);
   };
-  console.log({ openFileModal });
 
   const headers = [
     { id: "transactionDate", label: "Transaction Date" },

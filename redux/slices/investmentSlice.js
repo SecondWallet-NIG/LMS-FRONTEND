@@ -547,6 +547,32 @@ export const getSingleWithdrawalRequest = createAsyncThunk(
   }
 );
 
+export const investmentStatementOfAccount = createAsyncThunk(
+  "investment-statement-of-account",
+  async (investmentId) => {
+    let token = getToken();
+    try {
+      const response = await axios.get(
+        `${API_URL}/investment/${investmentId}/statement-of-account`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/pdf",
+          },
+          responseType: "blob",
+        }
+      );
+      console.log(response);
+      const url = URL.createObjectURL(response.data);
+      return url;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const investmentSlice = createSlice({
   name: "investment",
   initialState: {

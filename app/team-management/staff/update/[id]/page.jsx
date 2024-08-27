@@ -115,8 +115,6 @@ const StaffUpdatePAge = () => {
       });
   };
 
-  console.log("est", data);
-
   useEffect(() => {
     setFormData({
       profilePicture: null,
@@ -139,7 +137,6 @@ const StaffUpdatePAge = () => {
     dispatch(getAllDepartments());
     // dispatch(getStaffTasks(id));
   }, []);
-  console.log("role", formData?.department);
 
   return (
     <DashboardLayout

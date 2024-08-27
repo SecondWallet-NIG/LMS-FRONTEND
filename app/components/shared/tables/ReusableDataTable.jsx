@@ -164,7 +164,6 @@ function ReusableDataTable({
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         toast.error("An error occurred while fetching data for download.");
         setLoading(false);
       });

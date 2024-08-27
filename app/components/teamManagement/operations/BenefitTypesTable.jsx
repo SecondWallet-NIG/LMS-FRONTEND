@@ -18,7 +18,6 @@ const BenefitTypesTable = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({ apiData });
     return apiData?.map((item, i) => ({
       id: item?._id,
       dateCreated: (

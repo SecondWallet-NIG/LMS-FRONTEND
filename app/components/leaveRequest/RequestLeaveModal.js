@@ -20,21 +20,29 @@ const RequestLeaveModal = () => {
   const [loading, setLoading] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState({ state: false, message: "" });
-  const [allUsers, setAllUsers] = useState([]);
+  const [allRelievers, setAllRelievers] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [formData, setFormData] = useState({
     leaveType: "",
-    leaveDuration: "",
+    leaveDuration: 0,
+    reliever: "",
     description: "",
   });
   const { data } = useSelector((state) => state.user);
   const type = data?.data?.employeeBenefit?.benefitType?.leaveTypes;
 
+  // console.log("dates", startDate, endDate);
+
   const reset = () => {
     setFormData({
       leaveType: "",
-      leaveDuration: "",
+      leaveDuration: 0,
+      reliever: "",
       description: "",
     });
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const preventMinus = (e) => {
@@ -61,9 +69,12 @@ const RequestLeaveModal = () => {
     setLoading(true);
     const payload = {
       leaveType: formData.leaveType,
-      leaveDuration: Number(formData.leaveDuration),
+      leaveDuration: formData.leaveDuration,
+      reliever: formData.reliever,
+      startDate: startDate,
+      endDate: endDate,
       description: formData.description,
-      id: id,
+      userId: id,
     };
     dispatch(requestLeave(payload))
       .unwrap()
@@ -79,7 +90,27 @@ const RequestLeaveModal = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllUsers(10000)).unwrap().then((res) => {console.log(res)}).catch(err => console.log(err));
+    if (startDate && endDate) {
+      const differenceInTime =
+        new Date(endDate).getTime() - new Date(startDate).getTime();
+      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+      // console.log({ differenceInDays });
+      setFormData({ ...formData, leaveDuration: differenceInDays });
+    }
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    dispatch(getAllUsers(10000))
+      .unwrap()
+      .then((res) => {
+        const allUsers = res?.data?.results.map((item) => ({
+          label: `${item?.firstName} ${item?.lastName}, ${item?.email}`,
+          value: item?._id,
+        }));
+        setAllRelievers(allUsers);
+        // console.log(res);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -106,16 +137,15 @@ const RequestLeaveModal = () => {
                   <SelectField
                     label={"Select Leave Type"}
                     isSearchable={true}
-                    value={leaveTypes.find(
-                      (e) => e.value === formData.leaveType
-                    )}
-                    onChange={(e) =>
-                      setFormData({ ...formData, leaveType: e.value })
-                    }
+                    value={leaveTypes.find((e) => e.id === formData.leaveType)}
+                    onChange={(e) => {
+                      console.log("e", e);
+                      setFormData({ ...formData, leaveType: e.id });
+                    }}
                     optionValue={leaveTypes}
                     placeholder={"Select"}
                   />
-                  {formData.leaveType && type && (
+                  {/* {formData.leaveType && type && (
                     <p className="text-sm lower">
                       You have{" "}
                       {Object.keys(type).find((key) => {
@@ -133,7 +163,7 @@ const RequestLeaveModal = () => {
                         }
                       </span>
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="flex justify-between mt-5">
@@ -141,13 +171,11 @@ const RequestLeaveModal = () => {
                   <SelectField
                     label={"Choose Reliever"}
                     isSearchable={true}
-                    value={leaveTypes.find(
-                      (e) => e.value === formData.leaveType
-                    )}
+                    value={allRelievers.find((e) => e.value === formData.value)}
                     onChange={(e) =>
-                      setFormData({ ...formData, leaveType: e.value })
+                      setFormData({ ...formData, reliever: e.value })
                     }
-                    optionValue={leaveTypes}
+                    optionValue={allRelievers}
                     placeholder={"Select"}
                   />
                 </div>
@@ -166,8 +194,11 @@ const RequestLeaveModal = () => {
                         onChange={handleInputField}
                       />
                     </div> */}
-                    <CustomDatePicker label={"Start Date"} />
-                    <CustomDatePicker label={"End Date"} />
+                    <CustomDatePicker
+                      label={"Start Date"}
+                      value={setStartDate}
+                    />
+                    <CustomDatePicker label={"End Date"} value={setEndDate} />
                   </div>
                 </div>
               </div>
@@ -176,7 +207,7 @@ const RequestLeaveModal = () => {
                   <div className="flex gap-3 items-end">
                     <div className="w-full ">
                       <p className="text-sm text-swDarkBlue mb-4">
-                        Enter Additional Message
+                        Description
                       </p>
                       <textarea
                         name="description"
@@ -196,7 +227,11 @@ const RequestLeaveModal = () => {
               <EditableButton
                 blueBtn={true}
                 disabled={
-                  Object.keys(formData).some((key) => formData[key] === "") ||
+                  Object.keys(formData).some(
+                    (key) => formData[key] === "" || formData[key] === 0
+                  ) ||
+                  !startDate ||
+                  !endDate ||
                   loading
                 }
                 label={loading ? "Requesting..." : "Request Leave"}

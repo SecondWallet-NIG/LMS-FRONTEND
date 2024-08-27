@@ -54,8 +54,6 @@ const ViewSingleLeaveRequest = () => {
       break;
   }
 
-  console.log("leave", data?.data);
-
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));
     if (_user) {

@@ -77,11 +77,9 @@ const ViewLoan = () => {
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [statementLoad,setStatementLoad] = useState(false)
   const [openDibursementDatePicker, setOpenDisbursementDatePicker] =
     useState(false);
-  const [statementLoad, setStatementLoad] = useState(false);
-  const [loanStatementConvert, setLoanStatementConvert] = useState(null);
-  const [loanStatementModal, setLoanStatementModal] = useState(false);
   const [formData, setFormData] = useState({
     amount: "",
     paymentMethod: "",
@@ -92,8 +90,6 @@ const ViewLoan = () => {
   const { statementData, statementPending } = useSelector(
     (state) => state.loanApplication
   );
-
-  console.log({ statementData });
 
   const handleFileChange = (e) => {
     setFileError("");
@@ -578,14 +574,16 @@ const ViewLoan = () => {
   // };
 
   const getLoanStatement = async () => {
+    setStatementLoad(true)
     try {
       const url = await dispatch(loanStatementOfAccount(id)).unwrap();
       window.open(url, "_blank");
     } catch (error) {
       console.error("Error viewing document:", error);
+    }finally{
+      setStatementLoad(false)
     }
   };
-  console.log({ loanStatementModal });
 
   if (loanApprovals?.data?.data) {
     hasDecline = hasDeclineStatus();
@@ -737,7 +735,7 @@ const ViewLoan = () => {
                   </div>
                 </div>
               </div> */}
-                  <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
+              <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID</p>
                   <div className="flex justify-between items-center">
@@ -784,18 +782,18 @@ const ViewLoan = () => {
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan Creator</p>
                   <div className="flex justify-between items-center">
-                  <button
-                    onClick={() => {
-                      router.push(
-                        `/borrowers/profile/${data?.data?.customerDetails?._id}`
-                      );
-                    }}
-                    className={
-                      "text-swBlue text-sm py-2 rounded-lg font-medium underline"
-                    }
-                  >
-                    {data?.data?.loanApplication?.createdBy?.email}
-                  </button>
+                    <button
+                      onClick={() => {
+                        router.push(
+                          `/borrowers/profile/${data?.data?.customerDetails?._id}`
+                        );
+                      }}
+                      className={
+                        "text-swBlue text-sm py-2 rounded-lg font-medium underline"
+                      }
+                    >
+                      {data?.data?.loanApplication?.createdBy?.email}
+                    </button>
                   </div>
                 </div>
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
@@ -803,22 +801,21 @@ const ViewLoan = () => {
 
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-swBlue font-semibold mt-4">
-                    {data?.data?.loanApplication?.disbursedAt &&
+                      {data?.data?.loanApplication?.disbursedAt &&
                         formatDate(
                           data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
                         )}
                     </p>
-             
                   </div>
                 </div>
                 <div className="w-full  sm:w-[10rem] rounded-xl">
-                <div>
+                  <div>
                     <Button
                       // size="normal"
                       // variant="primary"
                       className="text-xs text-swBlue rounded-md"
                       onClick={() => getLoanStatement()}
-                      disabled={statementPending}
+                      disabled={statementLoad}
                       blueBtn={true}
                     >
                       Generate Statement
@@ -826,7 +823,6 @@ const ViewLoan = () => {
                   </div>
                 </div>
               </div>
-          
             </div>
           </section>
           <div className="ml-5 mr-5 mt-5">
@@ -906,14 +902,17 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        {data?.data?.loanApplication?.loanMaturityDate === null ? (
+                        {data?.data?.loanApplication?.loanMaturityDate ===
+                        null ? (
                           "null"
                         ) : (
                           <p>
-                            {formatDate(data?.data?.loanApplication?.loanMaturityDate.slice(
-                              0,
-                              10
-                            ))}
+                            {formatDate(
+                              data?.data?.loanApplication?.loanMaturityDate.slice(
+                                0,
+                                10
+                              )
+                            )}
                           </p>
                         )}
                       </div>
@@ -1855,22 +1854,6 @@ const ViewLoan = () => {
           />
         </div>
       </CenterModal>
-      <SharedInvestmentModal
-        isOpen={loanStatementModal}
-        css={"max-w-xl"}
-        header={"Loan Statement"}
-        onClose={() => setLoanStatementModal(false)}
-        children={
-          <div className="p-5">
-            <iframe
-              src={loanStatementConvert}
-              width="100%"
-              height="400px"
-              type="application/pdf"
-            ></iframe>
-          </div>
-        }
-      />
     </DashboardLayout>
   );
 };

@@ -95,7 +95,6 @@ const Expenses = () => {
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.expense);
   const  expenseGraph  = useSelector((state) => state.report);
-console.log(expenseGraph?.data?.data);
  
   const router = useRouter();
 
