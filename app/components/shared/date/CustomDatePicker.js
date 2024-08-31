@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from "react-icons/fa";
 import "./CustomDatePicker.css"; // Ensure this file has responsive styles
 
-const CustomDatePicker = ({ label, value }) => {
+const CustomDatePicker = ({ label, value, clear }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [currentView, setCurrentView] = useState("day");
@@ -122,6 +122,12 @@ const CustomDatePicker = ({ label, value }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (clear) {
+      setSelectedDate(null);
+    }
+  }, [clear]);
+
   return (
     <div className="custom-date-picker" ref={calendarRef}>
       {label && (
@@ -149,6 +155,7 @@ const CustomDatePicker = ({ label, value }) => {
             <>
               <div className="calendar-header">
                 <button
+                  type="button"
                   className="calendar-nav-button"
                   onClick={() => setCurrentMonth((prev) => (prev + 11) % 12)}
                   aria-label="Previous Month"
@@ -159,6 +166,7 @@ const CustomDatePicker = ({ label, value }) => {
                   {months[currentMonth]} {currentYear}
                 </span>
                 <button
+                  type="button"
                   className="calendar-nav-button"
                   onClick={() => setCurrentMonth((prev) => (prev + 1) % 12)}
                   aria-label="Next Month"
@@ -180,6 +188,7 @@ const CustomDatePicker = ({ label, value }) => {
             <>
               <div className="calendar-header">
                 <button
+                  type="button"
                   className="calendar-nav-button"
                   onClick={() => setCurrentView("year")}
                   aria-label="Previous Decade"
@@ -188,6 +197,7 @@ const CustomDatePicker = ({ label, value }) => {
                 </button>
                 <span className="calendar-month-year">Select Month</span>
                 <button
+                  type="button"
                   className="calendar-nav-button"
                   disabled
                   aria-label="Next Decade"
@@ -202,6 +212,7 @@ const CustomDatePicker = ({ label, value }) => {
             <>
               <div className="calendar-header">
                 <button
+                  type="button"
                   className="calendar-nav-button"
                   onClick={() => setCurrentYear((prev) => prev - 10)}
                   aria-label="Previous 10 Years"
@@ -210,6 +221,7 @@ const CustomDatePicker = ({ label, value }) => {
                 </button>
                 <span className="calendar-month-year">Select Year</span>
                 <button
+                  type="button"
                   className="calendar-nav-button"
                   onClick={() => setCurrentYear((prev) => prev + 10)}
                   aria-label="Next 10 Years"

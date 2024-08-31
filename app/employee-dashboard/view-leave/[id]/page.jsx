@@ -12,6 +12,7 @@ import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInv
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import { leaveTypes } from "@/app/components/helpers/utils";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 
 const ViewSingleLeaveRequest = () => {
   const { id } = useParams();
@@ -35,24 +36,10 @@ const ViewSingleLeaveRequest = () => {
   });
   const [loading, setLoading] = useState(false);
   const { data } = useSelector((state) => state.hrms) || [];
-  const status = data?.data?.status;
-  let classNames =
-    "border p-1 text-xs rounded-md flex gap-1 items-center justify-center ";
-  let dotClass = "h-1 w-1 rounded-full ";
-  switch (status) {
-    case "Pending":
-      classNames += "border-swBlue bg-blue-100";
-      dotClass += "bg-swBlue";
-      break;
-    case "Approved":
-      classNames += "border-green-500 bg-green-100";
-      dotClass += "bg-green-500";
-      break;
-    default:
-      classNames += "border-red-500 bg-red-100";
-      dotClass += "bg-red-500";
-      break;
-  }
+  const level_1_id =
+    data?.data?.approvalDetails?.firstApproval?.approverDetails?._id;
+  const level_2_id =
+    data?.data?.approvalDetails?.secondApproval?.approverDetails?._id;
 
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));
@@ -82,24 +69,32 @@ const ViewSingleLeaveRequest = () => {
     const payload = {
       leaveId: id,
       approverId: user.id,
-      approvalLevel: 1,
+      approvalLevel:
+        user.id === level_1_id &&
+        user.id === level_2_id &&
+        data?.data?.approvalDetails?.firstApproval?.status === "Approved"
+          ? 2
+          : user.id === level_1_id
+          ? 1
+          : 2,
     };
     dispatch(approveLeaveRequest(payload))
       .unwrap()
       .then((res) => {
         setApprovalModal(false);
+        dispatch(getSingleLeaveRequest(id));
         setSuccessModal({
-          state: true,
           title: "Leave Approval Successful",
           description: "Leave has been approved successfully",
+          state: true,
         });
         setLoading(false);
       })
       .catch((err) => {
         setErrorModal({
-          state: true,
           title: "Leave Approval Failed",
           description: err?.message,
+          state: true,
         });
         setApprovalModal(false);
         setLoading(false);
@@ -111,26 +106,35 @@ const ViewSingleLeaveRequest = () => {
     const payload = {
       leaveId: id,
       approverId: user.id,
-      approvalLevel: 1,
+      approvalLevel:
+        user.id === level_1_id &&
+        user.id === level_2_id &&
+        (data?.data?.approvalDetails?.firstApproval?.status === "Declined" ||
+          data?.data?.approvalDetails?.firstApproval?.status === "Approved")
+          ? 2
+          : user.id === level_1_id
+          ? 1
+          : 2,
       declineReason: declineModal.reason,
     };
     dispatch(declineLeaveRequest(payload))
       .unwrap()
       .then((res) => {
         setDeclineModal({ state: false, reason: "" });
+        dispatch(getSingleLeaveRequest(id));
         setSuccessModal({
-          state: true,
           title: "Leave Decline Successful",
           description: "Leave has been declined successfully",
+          state: true,
         });
         setLoading(false);
       })
       .catch((err) => {
         setDeclineModal({ state: false, reason: "" });
         setErrorModal({
-          state: true,
           title: "Leave Decline Failed",
           description: err?.message,
+          state: true,
         });
         setLoading(false);
       });
@@ -142,15 +146,19 @@ const ViewSingleLeaveRequest = () => {
         Are You sure You Want To Approve?
       </p>
       <div className="flex gap-5 mt-10">
-        <button className="w-full border border-red-500 p-2 rounded-md text-red-500 hover:bg-red-100 transition-all duration-200">
-          No, Cancel
-        </button>
-        <button
-          className="w-full bg-swBlue hover:bg-blue-500 p-2 rounded-md text-white transition-all duration-200"
+        <EditableButton
+          redBtn={true}
+          label={"No, Cancel"}
+          className={"w-full"}
+          onClick={() => setApprovalModal(false)}
+        />
+        <EditableButton
+          blueBtn={true}
+          label={"Yes, Approve"}
           onClick={handleApprove}
-        >
-          Yes, Approve
-        </button>
+          className={"w-full"}
+          disabled={loading}
+        />
       </div>
     </div>
   );
@@ -172,27 +180,50 @@ const ViewSingleLeaveRequest = () => {
         ></textarea>
       </div>
       <div className="flex gap-5 mt-10">
-        <button
-          disabled={loading}
-          className={`w-full border border-red-500 p-2 rounded-md text-red-500 hover:bg-red-100 transition-all duration-200 ${
-            loading && "cursor-not-allowed"
-          }`}
+        <EditableButton
+          redBtn={true}
+          label={"Cancel"}
+          className={"w-full"}
           onClick={() => setDeclineModal({ state: false, reason: "" })}
-        >
-          Cancel
-        </button>
-        <button
-          disabled={loading}
-          className={`w-full bg-swBlue hover:bg-blue-500 p-2 rounded-md text-white transition-all duration-200 ${
-            loading && "cursor-not-allowed"
-          }`}
+        />
+        <EditableButton
+          blueBtn={true}
+          label={"Decline"}
           onClick={handleDecline}
-        >
-          Decline
-        </button>
+          className={"w-full"}
+          disabled={loading}
+        />
       </div>
     </div>
   );
+
+  const renderStatus = (status) => {
+    let classNames =
+      "border p-1 text-xs rounded-md flex gap-1 items-center justify-center ";
+    let dotClass = "h-1 w-1 rounded-full ";
+    switch (status) {
+      case "Pending":
+        classNames += "border-swBlue text-swBlue bg-blue-100";
+        dotClass += "bg-swBlue";
+        break;
+      case "Approved":
+        classNames += "border-green-500 bg-green-100";
+        dotClass += "bg-green-500";
+        break;
+      default:
+        classNames += "border-red-500 bg-red-100";
+        dotClass += "bg-red-500";
+        break;
+    }
+    return (
+      <div className={classNames}>
+        <div className={dotClass} />
+        {status}
+      </div>
+    );
+  };
+
+  console.log({ data });
 
   return (
     <DashboardLayout
@@ -200,15 +231,13 @@ const ViewSingleLeaveRequest = () => {
       paths={["Loan Plans and Packages", "View Plan"]}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
-        {status === "Pending" && (
+        {((level_1_id === user?.id &&
+          data?.data?.approvalDetails?.firstApproval?.status === "Pending" &&
+          data?.data?.leaveRequest?.status === "Pending") ||
+          (level_2_id === user?.id &&
+            data?.data?.approvalDetails?.secondApproval?.status === "Pending" &&
+            data?.data?.leaveRequest?.status === "Pending")) && (
           <div className="ml-auto flex gap-2 justify-end font-semibold pr-5">
-            {/* <Link
-            href={`/plans/view-plan/${id}/edit-plan`}
-            className="border py-2 px-3 flex gap-2 items-center rounded-lg"
-          >
-            <FiEdit2 size={20} />
-            Edit
-          </Link> */}
             <button
               disabled={loading}
               className={`border border-green-500 text-green-500 hover:bg-green-50 rounded-lg p-2 text-xs ${
@@ -232,12 +261,13 @@ const ViewSingleLeaveRequest = () => {
 
         <div className="flex justify-between mt-5 p-5 border-b">
           <p className="font-semibold text-xl">
-            {leaveTypes?.find((e) => e?.id === data?.data?.leaveType)?.label}
+            {
+              leaveTypes?.find(
+                (e) => e?.id === data?.data?.leaveRequest?.leaveType
+              )?.label
+            }
           </p>
-          <div className={classNames}>
-            <div className={dotClass} />
-            {status}
-          </div>
+          {renderStatus(data?.data?.leaveRequest?.status)}
         </div>
 
         <div className="p-5 flex flex-col gap-5 font-500">
@@ -246,47 +276,106 @@ const ViewSingleLeaveRequest = () => {
             <p className="min-w-[15rem]">Staff</p>
             <div>
               <p>
-                {data?.data?.userDetails?.lastName}{" "}
-                {data?.data?.userDetails?.firstName}
+                {data?.data?.leaveRequest?.userDetails?.lastName}{" "}
+                {data?.data?.leaveRequest?.userDetails?.firstName}
               </p>
-              <p className="text-swBlue">{data?.data?.userDetails?.email}</p>
+              <p className="text-swBlue">
+                {data?.data?.leaveRequest?.userDetails?.email}
+              </p>
+            </div>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">First Approval</p>
+            <div>
+              <p>
+                {
+                  data?.data?.approvalDetails?.firstApproval?.approverDetails
+                    ?.lastName
+                }{" "}
+                {
+                  data?.data?.approvalDetails?.firstApproval?.approverDetails
+                    ?.firstName
+                }
+              </p>
+              <p className="text-swBlue">
+                {
+                  data?.data?.approvalDetails?.firstApproval?.approverDetails
+                    ?.email
+                }
+              </p>
+              <div className="flex items-center gap-2">
+                Status:
+                {renderStatus(
+                  data?.data?.approvalDetails?.firstApproval?.status
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]">Second Approval</p>
+            <div>
+              <p>
+                {
+                  data?.data?.approvalDetails?.secondApproval?.approverDetails
+                    ?.lastName
+                }{" "}
+                {
+                  data?.data?.approvalDetails?.secondApproval?.approverDetails
+                    ?.firstName
+                }
+              </p>
+              <p className="text-swBlue">
+                {
+                  data?.data?.approvalDetails?.secondApproval?.approverDetails
+                    ?.email
+                }
+              </p>
+              <div className="flex items-center gap-2">
+                Status:
+                {renderStatus(
+                  data?.data?.approvalDetails?.secondApproval?.status
+                )}
+              </div>
             </div>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Date Requested</p>
-            <p>{data?.data?.createdAt?.slice(0, 10)}</p>
+            <p>{data?.data?.leaveRequest?.createdAt?.slice(0, 10)}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Start Date</p>
-            <p>{data?.data?.startDate?.slice(0, 10)}</p>
+            <p>{data?.data?.leaveRequest?.startDate?.slice(0, 10)}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">End Date</p>
-            <p>{data?.data?.endDate?.slice(0, 10)}</p>
+            <p>{data?.data?.leaveRequest?.endDate?.slice(0, 10)}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Duration</p>
-            <p>{data?.data?.leaveDuration} days(s)</p>
+            <p>{data?.data?.leaveRequest?.leaveDuration} days(s)</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Reliever</p>
             <div>
               <p>
-                {data?.data?.reliever?.lastName}{" "}
-                {data?.data?.reliever?.firstName}
+                {data?.data?.leaveRequest?.reliever?.lastName}{" "}
+                {data?.data?.leaveRequest?.reliever?.firstName}
               </p>
-              <p className="text-swBlue">{data?.data?.reliever?.email}</p>
+              <p className="text-swBlue">
+                {data?.data?.leaveRequest?.reliever?.email}
+              </p>
             </div>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Description</p>
-            <p>{data?.data?.description}</p>
+            <p>{data?.data?.leaveRequest?.description}</p>
           </div>
 
-          {status === "Declined" && (
+          {data?.data?.approvalDetails?.firstApproval?.status ===
+            "Declined" && (
             <div className="flex">
               <p className="min-w-[15rem]">Decline Reason</p>
-              <p>{data?.data?.declineReason}</p>
+              <p>{data?.data?.leaveRequest?.declineReason}</p>
             </div>
           )}
         </div>
@@ -306,8 +395,8 @@ const ViewSingleLeaveRequest = () => {
         children={declineHtml}
       />
       <SuccessModal
-        title={"Leave Approval Successful"}
-        description={"Leave has been approved successfully"}
+        title={successModal.title}
+        description={successModal.description}
         isOpen={successModal.state}
         onClose={() =>
           setSuccessModal({ state: false, title: "", description: "" })

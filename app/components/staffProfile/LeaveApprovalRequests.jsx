@@ -21,7 +21,7 @@ const LeaveApprovalRequests = () => {
 
   const customDataTransformer = (apiData) => {
     return apiData?.leaveRequests?.map((item) => ({
-      id: item._id,
+      id: item?.leaveDetails?._id,
       createdAt: (
         <div className="text-[15px] font-light text-gray-700">
           {item?.leaveDetails?.createdAt?.slice(0, 10)}

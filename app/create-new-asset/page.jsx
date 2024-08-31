@@ -25,8 +25,16 @@ const CreateNewAsset = () => {
   const [loading, setLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [userId, setUserId] = useState("");
-  const [successModal, setSuccessModal] = useState(false);
-  const [failedModal, setFailedModal] = useState(false);
+  const [successModal, setSuccessModal] = useState({
+    state: false,
+    title: "",
+    description: "",
+  });
+  const [failedModal, setFailedModal] = useState({
+    state: false,
+    title: "",
+    description: "",
+  });
   const [fileError, setFileError] = useState("");
   const [assetUploadType, setAssetUploadType] = useState("Single asset");
   const [openDate, setOpenDate] = useState(false);
@@ -38,6 +46,7 @@ const CreateNewAsset = () => {
     acquisitionDate: new Date(),
     value: "",
   });
+
   const options = [
     { value: "Single asset", label: "Single asset" },
     { value: "Bulk assets", label: "Bulk assets" },
@@ -112,12 +121,20 @@ const CreateNewAsset = () => {
     dispatch(createBulkAssets(payload))
       .unwrap()
       .then((response) => {
-        setSuccessModal(true);
+        setSuccessModal({
+          state: true,
+          title: "Bulk Assets Upload Successful",
+          description: `Upload in progress, you will be notified when this is complete`,
+        });
         setSelectedFiles([]);
         setLoading(false);
       })
       .catch((error) => {
-        setFailedModal(true);
+        setFailedModal({
+          state: true,
+          title: "Bulk Assets Upload Failed",
+          description: "An error Occured",
+        });
         setLoading(false);
       });
   };
@@ -145,7 +162,7 @@ const CreateNewAsset = () => {
       .unwrap()
       .then((res) => {
         if (res?.success === true) {
-          toast.success(res?.message);
+          // toast.success(res?.message);
           setFormData({
             name: "",
             category: "",
@@ -153,9 +170,18 @@ const CreateNewAsset = () => {
             acquisitionDate: new Date(),
             value: "",
           });
+          setSuccessModal({
+            state: true,
+            title: "Asset Creation Successful",
+            description: res?.message,
+          });
           setLoading(false);
         } else {
-          toast.error(res.message);
+          setFailedModal({
+            state: true,
+            title: "Asset Creation Failed",
+            description: res?.message,
+          });
           setLoading(false);
         }
       })
@@ -395,23 +421,41 @@ const CreateNewAsset = () => {
         )}
       </main>
       <SuccessModal
-        isOpen={successModal}
-        title={"Bulk Assets Upload Successful"}
-        description={`Upload in progress, you will be notified when this is complete`}
+        isOpen={successModal.state}
+        title={successModal.title}
+        description={successModal.description}
         // noButtons={true}
         btnLeft={"View Assets"}
         btnLeftFunc={() => router.push("/asset-management")}
-        btnRight={"Upload Bulk Assets"}
-        btnRightFunc={() => setSuccessModal(false)}
-        onClose={() => setSuccessModal(false)}
+        btnRight={"Add New Asset"}
+        btnRightFunc={() =>
+          setSuccessModal({
+            state: false,
+            title: "",
+            description: "",
+          })
+        }
+        onClose={() =>
+          setSuccessModal({
+            state: false,
+            title: "",
+            description: "",
+          })
+        }
       />
       <CancelModal
-        isOpen={failedModal}
-        title={"Bulk Assets Upload Failed"}
-        description={`An error occured`}
+        isOpen={failedModal.state}
+        title={failedModal.title}
+        description={failedModal.description}
         // noButtons={true}
         noButtons={true}
-        onClose={() => setFailedModal(false)}
+        onClose={() =>
+          setFailedModal({
+            state: false,
+            title: "",
+            description: "",
+          })
+        }
       />
     </DashboardLayout>
   );
