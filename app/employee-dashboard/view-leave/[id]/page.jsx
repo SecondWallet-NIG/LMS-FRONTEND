@@ -69,7 +69,6 @@ const ViewSingleLeaveRequest = () => {
     const payload = {
       leaveId: id,
       approverId: user.id,
-      // approvalLevel: user.id === level_1_id ? 1 : 2,
       approvalLevel:
         user.id === level_1_id &&
         user.id === level_2_id &&
@@ -85,17 +84,17 @@ const ViewSingleLeaveRequest = () => {
         setApprovalModal(false);
         dispatch(getSingleLeaveRequest(id));
         setSuccessModal({
-          state: true,
           title: "Leave Approval Successful",
           description: "Leave has been approved successfully",
+          state: true,
         });
         setLoading(false);
       })
       .catch((err) => {
         setErrorModal({
-          state: true,
           title: "Leave Approval Failed",
           description: err?.message,
+          state: true,
         });
         setApprovalModal(false);
         setLoading(false);
@@ -107,7 +106,15 @@ const ViewSingleLeaveRequest = () => {
     const payload = {
       leaveId: id,
       approverId: user.id,
-      approvalLevel: user.id === level_1_id ? 1 : 2,
+      approvalLevel:
+        user.id === level_1_id &&
+        user.id === level_2_id &&
+        (data?.data?.approvalDetails?.firstApproval?.status === "Declined" ||
+          data?.data?.approvalDetails?.firstApproval?.status === "Approved")
+          ? 2
+          : user.id === level_1_id
+          ? 1
+          : 2,
       declineReason: declineModal.reason,
     };
     dispatch(declineLeaveRequest(payload))
@@ -116,18 +123,18 @@ const ViewSingleLeaveRequest = () => {
         setDeclineModal({ state: false, reason: "" });
         dispatch(getSingleLeaveRequest(id));
         setSuccessModal({
-          state: true,
           title: "Leave Decline Successful",
           description: "Leave has been declined successfully",
+          state: true,
         });
         setLoading(false);
       })
       .catch((err) => {
         setDeclineModal({ state: false, reason: "" });
         setErrorModal({
-          state: true,
           title: "Leave Decline Failed",
           description: err?.message,
+          state: true,
         });
         setLoading(false);
       });
@@ -173,25 +180,7 @@ const ViewSingleLeaveRequest = () => {
         ></textarea>
       </div>
       <div className="flex gap-5 mt-10">
-        {/* <button
-          disabled={loading}
-          className={`w-full border border-red-500 p-2 rounded-md text-red-500 hover:bg-red-100 transition-all duration-200 ${
-            loading && "cursor-not-allowed"
-          }`}
-          onClick={() => setDeclineModal({ state: false, reason: "" })}
-        >
-          Cancel
-        </button>
-        <button
-          disabled={loading}
-          className={`w-full bg-swBlue hover:bg-blue-500 p-2 rounded-md text-white transition-all duration-200 ${
-            loading && "cursor-not-allowed"
-          }`}
-          onClick={handleDecline}
-        >
-          Decline
-        </button> */}
-                <EditableButton
+        <EditableButton
           redBtn={true}
           label={"Cancel"}
           className={"w-full"}
@@ -214,7 +203,7 @@ const ViewSingleLeaveRequest = () => {
     let dotClass = "h-1 w-1 rounded-full ";
     switch (status) {
       case "Pending":
-        classNames += "border-swBlue bg-blue-100";
+        classNames += "border-swBlue text-swBlue bg-blue-100";
         dotClass += "bg-swBlue";
         break;
       case "Approved":
@@ -248,13 +237,6 @@ const ViewSingleLeaveRequest = () => {
             data?.data?.approvalDetails?.secondApproval?.status ===
               "Pending")) && (
           <div className="ml-auto flex gap-2 justify-end font-semibold pr-5">
-            {/* <Link
-            href={`/plans/view-plan/${id}/edit-plan`}
-            className="border py-2 px-3 flex gap-2 items-center rounded-lg"
-          >
-            <FiEdit2 size={20} />
-            Edit
-          </Link> */}
             <button
               disabled={loading}
               className={`border border-green-500 text-green-500 hover:bg-green-50 rounded-lg p-2 text-xs ${
@@ -328,15 +310,6 @@ const ViewSingleLeaveRequest = () => {
               </div>
             </div>
           </div>
-          {/* <div className="flex">
-            <p className="min-w-[15rem]">First Approval Status</p>
-            <div>
-              <p>
-                {data?.data?.approvalDetails?.firstApproval?.status
-                }
-              </p>
-            </div>
-          </div> */}
           <div className="flex">
             <p className="min-w-[15rem]">Second Approval</p>
             <div>
@@ -364,15 +337,6 @@ const ViewSingleLeaveRequest = () => {
               </div>
             </div>
           </div>
-          {/* <div className="flex">
-            <p className="min-w-[15rem]">Second Approval Status</p>
-            <div>
-              <p>
-                {data?.data?.approvalDetails?.secondApproval?.status
-                }
-              </p>
-            </div>
-          </div> */}
           <div className="flex">
             <p className="min-w-[15rem]">Date Requested</p>
             <p>{data?.data?.leaveRequest?.createdAt?.slice(0, 10)}</p>
@@ -430,8 +394,8 @@ const ViewSingleLeaveRequest = () => {
         children={declineHtml}
       />
       <SuccessModal
-        title={"Leave Approval Successful"}
-        description={"Leave has been approved successfully"}
+        title={successModal.title}
+        description={successModal.description}
         isOpen={successModal.state}
         onClose={() =>
           setSuccessModal({ state: false, title: "", description: "" })

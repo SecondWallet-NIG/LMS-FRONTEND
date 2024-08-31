@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomDatePicker from "../shared/date/CustomDatePicker";
 import { leaveTypes } from "../helpers/utils";
+import { toast } from "react-toastify";
 
 const RequestLeaveModal = ({ onClose }) => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const RequestLeaveModal = ({ onClose }) => {
   const [allRelievers, setAllRelievers] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [clearDate, setClearDate] = useState(false);
   const [formData, setFormData] = useState({
     leaveType: "",
     leaveDuration: 0,
@@ -32,7 +34,7 @@ const RequestLeaveModal = ({ onClose }) => {
   const { data } = useSelector((state) => state.user);
   const type = data?.data?.employeeBenefit?.benefitType?.leaveTypes;
 
-  // console.log("dates", startDate, endDate);
+  console.log("dates", clearDate);
 
   const reset = () => {
     setFormData({
@@ -42,6 +44,7 @@ const RequestLeaveModal = ({ onClose }) => {
       reliever: "",
       description: "",
     });
+    setClearDate(false);
     // onClose && onClose(false);
     setStartDate(null);
     setEndDate(null);
@@ -51,6 +54,10 @@ const RequestLeaveModal = ({ onClose }) => {
     if (/[^0-9,]/g.test(e.key)) {
       e.preventDefault();
     }
+  };
+
+  const clear = () => {
+    setClearDate(true);
   };
 
   const handleInputField = (e) => {
@@ -68,6 +75,10 @@ const RequestLeaveModal = ({ onClose }) => {
   // ];
 
   const handleSubmit = () => {
+    if (formData.leaveDuration < 1) {
+      toast.error("Invalid leave duration: Duration should be 1 and above");
+      return;
+    }
     setLoading(true);
     const payload = {
       leaveType: formData.leaveType,
@@ -98,6 +109,9 @@ const RequestLeaveModal = ({ onClose }) => {
       const differenceInDays = differenceInTime / (1000 * 3600 * 24);
       // console.log({ differenceInDays });
       setFormData({ ...formData, leaveDuration: differenceInDays });
+      setClearDate(false);
+    } else {
+      setFormData({ ...formData, leaveDuration: 0 });
     }
   }, [startDate, endDate]);
 
@@ -174,28 +188,31 @@ const RequestLeaveModal = ({ onClose }) => {
                     <CustomDatePicker
                       label={"Start Date"}
                       value={setStartDate}
+                      clear={clearDate}
                     />
-                    <CustomDatePicker label={"End Date"} value={setEndDate} />
+                    <CustomDatePicker
+                      label={"End Date"}
+                      value={setEndDate}
+                      clear={clearDate}
+                    />
                   </div>
                   <p>Duration: {formData?.leaveDuration} days</p>
                 </div>
               </div>
-              <div className="flex justify-between mt-7">
-                <div className="w-full flex flex-col gap-5">
-                  <div className="flex gap-3 items-end">
-                    <div className="w-full ">
-                      <p className="text-sm text-swDarkBlue mb-4">
-                        Description
-                      </p>
-                      <textarea
-                        name="description"
-                        value={formData.description}
-                        placeholder="Enter Comment"
-                        rows="4"
-                        className="p-3 focus:outline-none border w-full rounded-md border-gray-300 text-sm"
-                        onChange={handleInputField}
-                      ></textarea>
-                    </div>
+            </div>
+            <div className="flex justify-between mt-7">
+              <div className="w-full flex flex-col gap-5">
+                <div className="flex gap-3 items-end">
+                  <div className="w-full ">
+                    <p className="text-sm text-swDarkBlue mb-4">Description</p>
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      placeholder="Enter Comment"
+                      rows="4"
+                      className="p-3 focus:outline-none border w-full rounded-md border-gray-300 text-sm"
+                      onChange={handleInputField}
+                    ></textarea>
                   </div>
                 </div>
               </div>
@@ -206,7 +223,7 @@ const RequestLeaveModal = ({ onClose }) => {
                 blueBtn={true}
                 disabled={
                   Object.keys(formData).some(
-                    (key) => formData[key] === "" || formData[key] === 0
+                    (key) => formData[key] === "" || formData[key] < 1 
                   ) ||
                   !startDate ||
                   !endDate ||
