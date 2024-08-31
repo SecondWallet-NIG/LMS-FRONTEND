@@ -232,10 +232,11 @@ const ViewSingleLeaveRequest = () => {
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         {((level_1_id === user?.id &&
-          data?.data?.approvalDetails?.firstApproval?.status === "Pending") ||
+          data?.data?.approvalDetails?.firstApproval?.status === "Pending" &&
+          data?.data?.leaveRequest?.status === "Pending") ||
           (level_2_id === user?.id &&
-            data?.data?.approvalDetails?.secondApproval?.status ===
-              "Pending")) && (
+            data?.data?.approvalDetails?.secondApproval?.status === "Pending" &&
+            data?.data?.leaveRequest?.status === "Pending")) && (
           <div className="ml-auto flex gap-2 justify-end font-semibold pr-5">
             <button
               disabled={loading}

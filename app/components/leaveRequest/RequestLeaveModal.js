@@ -34,30 +34,16 @@ const RequestLeaveModal = ({ onClose }) => {
   const { data } = useSelector((state) => state.user);
   const type = data?.data?.employeeBenefit?.benefitType?.leaveTypes;
 
-  console.log("dates", clearDate);
-
   const reset = () => {
     setFormData({
-      ...formData,
       leaveType: "",
-      // leaveDuration: 0,
+      leaveDuration: 0,
       reliever: "",
       description: "",
     });
-    setClearDate(false);
-    // onClose && onClose(false);
+    setClearDate(true);
     setStartDate(null);
     setEndDate(null);
-  };
-
-  const preventMinus = (e) => {
-    if (/[^0-9,]/g.test(e.key)) {
-      e.preventDefault();
-    }
-  };
-
-  const clear = () => {
-    setClearDate(true);
   };
 
   const handleInputField = (e) => {
@@ -65,14 +51,6 @@ const RequestLeaveModal = ({ onClose }) => {
 
     setFormData({ ...formData, [name]: value });
   };
-
-  // const leaveTypes = [
-  //   { label: "Annual Leave", value: "annualLeave" },
-  //   { label: "Sick Leave", value: "sickLeave" },
-  //   { label: "Maternity Leave", value: "maternityLeave" },
-  //   { label: "Paternity Leave", value: "paternityLeave" },
-  //   { label: "Unpaid Leave", value: "unpaidLeave" },
-  // ];
 
   const handleSubmit = () => {
     if (formData.leaveDuration < 1) {
@@ -93,8 +71,8 @@ const RequestLeaveModal = ({ onClose }) => {
       .unwrap()
       .then((res) => {
         setSuccessModal(true);
-        reset();
         setLoading(false);
+        reset();
       })
       .catch((err) => {
         setErrorModal({ state: true, message: err?.message });
@@ -157,7 +135,6 @@ const RequestLeaveModal = ({ onClose }) => {
                       leaveTypes.find((e) => e.id === formData.leaveType) || ""
                     }
                     onChange={(e) => {
-                      console.log("e", e);
                       setFormData({ ...formData, leaveType: e.id });
                     }}
                     optionValue={leaveTypes}
@@ -223,7 +200,7 @@ const RequestLeaveModal = ({ onClose }) => {
                 blueBtn={true}
                 disabled={
                   Object.keys(formData).some(
-                    (key) => formData[key] === "" || formData[key] < 1 
+                    (key) => formData[key] === "" || formData[key] < 1
                   ) ||
                   !startDate ||
                   !endDate ||
