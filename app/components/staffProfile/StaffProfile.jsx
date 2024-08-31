@@ -40,18 +40,20 @@ const StaffData = ({ path, isDashboard }) => {
   const activeBtn = "border-swBlue text-swBlue";
 
   useEffect(() => {
-    setFormData({
-      profilePicture: null,
-      firstName: data?.data?.user?.firstName,
-      lastName: data?.data?.user?.lastName,
-      email: data?.data?.user?.email,
-      phoneNumber: data?.data?.user?.phoneNumber,
-      role: data?.data?.user?.role?._id,
-      tag: data?.data?.user?.role?.tag,
-      status: data?.data?.user?.status,
-      isRoleAdmin: false,
-      profilePicture: data?.data?.user?.profilePicture,
-    });
+    if (data?.data) {
+      setFormData({
+        profilePicture: null,
+        firstName: data?.data?.user?.firstName,
+        lastName: data?.data?.user?.lastName,
+        email: data?.data?.user?.email,
+        phoneNumber: data?.data?.user?.phoneNumber,
+        role: data?.data?.user?.role?._id,
+        tag: data?.data?.user?.role?.tag,
+        status: data?.data?.user?.status,
+        isRoleAdmin: false,
+        profilePicture: data?.data?.user?.profilePicture,
+      });
+    }
   }, [data]);
 
   useEffect(() => {
@@ -72,22 +74,19 @@ const StaffData = ({ path, isDashboard }) => {
     }
   }, [formData?.profilePicture]);
 
-    useEffect(() => {
-        dispatch(getUserById(id));
-        dispatch(getRoles());
-        dispatch(getStaffTasks(id));
-    }, []);
-    return (
-        <DashboardLayout
-            isBackNav={true}
-            paths={path}
-        >
-            <ToastContainer />
-            <main>
-                <div className="p-2.5 sm:p-2.5">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg gap-5">
-                        {/* Personal details */}
-                        <StaffPersonalDetails data={data?.data} />
+  useEffect(() => {
+    dispatch(getUserById(id));
+    dispatch(getRoles());
+    dispatch(getStaffTasks(id));
+  }, []);
+  return (
+    <DashboardLayout isBackNav={true} paths={path}>
+      <ToastContainer />
+      <main>
+        <div className="p-2.5 sm:p-2.5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg gap-5">
+            {/* Personal details */}
+            <StaffPersonalDetails data={data?.data} />
 
             {/*Leave details */}
             <StaffLeaveDetails
@@ -97,7 +96,7 @@ const StaffData = ({ path, isDashboard }) => {
             />
 
             {/* Department information */}
-            <StaffDeptInfo />
+            <StaffDeptInfo data={data?.data} />
           </div>
           <div className="mt-10 mb-5">
             <button
