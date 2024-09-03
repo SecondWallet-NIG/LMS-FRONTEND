@@ -38,6 +38,7 @@ const PaymentPage = () => {
   // const { data: repaymentData } = useSelector(
   //   (state) => state?.repaymentHistory
   // );
+  console.log({ repaymentData });
   const [showApprovalBtns, setShowApprovalBtns] = useState(false);
   const [disableApprovalBtn, setDisableApprovalBtn] = useState(false);
   const [userRole, setUserRole] = useState("");
@@ -69,6 +70,7 @@ const PaymentPage = () => {
         dispatch(getAllRepaymentHistory());
         toast.error(err?.message);
         setDisableApprovalBtn(false);
+        console.log(err);
         // setTimeout(() => {
         //   window.location.reload();
         // }, 3000);
@@ -87,12 +89,16 @@ const PaymentPage = () => {
         // }, 3000);
         getRepayment();
       })
-      .catch((error) => toast.error("An error occured"));
+      .catch((error) => {
+        toast.error("An error occured");
+      });
   };
 
   // useEffect(() => {
   //   setRepaymentData(data?.results.find((option) => option._id === id));
   // }, [data]);
+
+  console.log("clearData", repaymentData?.result?.clearBalance);
 
   useEffect(() => {
     if (
@@ -312,6 +318,12 @@ const PaymentPage = () => {
               <p>No receipt to show</p>
             </div>
           )}
+          <div className="flex">
+            <p className="min-w-[15rem]  text-swBlue ">Clear Balance</p>
+            <p className="capitalize">
+              {repaymentData?.result?.clearBalance === true ? "true" : "false"}
+            </p>
+          </div>
         </div>
       </main>
     </DashboardLayout>
