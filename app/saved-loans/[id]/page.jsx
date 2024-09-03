@@ -439,7 +439,7 @@ const SavedLoan = () => {
       const loanPackageDataId = loanPackageData.find(
         (item) => item._id === savedLoans[param.id].formData.loanPackage
       );
-      setLoanPackageText(loanPackageDataId.name);
+      setLoanPackageText(loanPackageDataId?.name);
       setLoanPackageRate(loanPackageDataId?.interestRate?.rate);
     }
   }, [loanPackage]);
@@ -449,7 +449,7 @@ const SavedLoan = () => {
       <ToastContainer />
 
       {currentStep === 1 ? (
-        <main className="flex text-sm">
+        <main style={{ overflow: "hidden" }} className="flex text-sm">
           <div className="w-full md:w-2/3 pl-5 pr-5 pt-10 ">
             <div className="flex justify-between">
               <p className="text-lg font-semibold">Initiate loan application</p>
@@ -471,7 +471,7 @@ const SavedLoan = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-5 mt-5">
+            <div className="flex flex-col gap-5 pt-5">
               <p className="font-semibold">Loan details</p>
               <div className="">
                 <label className="block mb-2 text-gray-700 text-xs">
@@ -744,7 +744,7 @@ const SavedLoan = () => {
                   </div>
                 </div> */}
             </div>
-            <div className="flex flex-col gap-2 mt-5">
+            <div className="flex flex-col gap-2 pt-5">
               <p className="font-semibold">Upload Collateral documents</p>
               {fileError.collaterals && (
                 <p className="text-red-500 text-sm">{fileError.collaterals}</p>
@@ -788,7 +788,7 @@ const SavedLoan = () => {
                 ) : null}
               </div>
             </div>
-            <div className="flex flex-col gap-2 mt-5">
+            <div className="flex flex-col gap-2 pt-5">
               <p className="font-semibold">Upload Loan Application form</p>
               {fileError.applicationForm && (
                 <p className="text-red-500 text-sm">
@@ -837,7 +837,7 @@ const SavedLoan = () => {
                 ) : null}
               </div>
             </div>
-            <div className="flex flex-col gap-2 mt-5">
+            <div className="flex flex-col gap-2 pt-5">
               <p className="font-semibold">Upload Loan Affidavit document</p>
               {fileError.loanAffidavit && (
                 <p className="text-red-500 text-sm">
@@ -885,7 +885,7 @@ const SavedLoan = () => {
                 ) : null}
               </div>
             </div>
-            <div className="flex flex-col gap-2 mt-5">
+            <div className="flex flex-col gap-2 pt-5">
               <p className="font-semibold">Upload Guarantor Form</p>
               {fileError.guarantorForm && (
                 <p className="text-red-500 text-sm">
@@ -1160,7 +1160,7 @@ const SavedLoan = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-5 mt-5">
+                <div className="flex flex-col gap-5 pt-5">
                   <EditableButton
                     blueBtn={true}
                     disabled={
@@ -1423,7 +1423,7 @@ const SavedLoan = () => {
                     </div>
                   </div>
                 </div>
-                <div className="mb-10 mt-5">
+                <div className="mb-10 pt-5">
                   <EditableButton
                     blueBtn={true}
                     disabled={

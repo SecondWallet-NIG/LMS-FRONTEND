@@ -33,16 +33,23 @@ const Viewer = dynamic(
 const PaymentPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  // const [repaymentData, setRepaymentData] = useState({});
+  const [repaymentData, setRepaymentData] = useState(null);
   const [openReceipt, setOpenReceipt] = useState(false);
-  const { data: repaymentData } = useSelector(
-    (state) => state?.repaymentHistory
-  );
+  // const { data: repaymentData } = useSelector(
+  //   (state) => state?.repaymentHistory
+  // );
   const [showApprovalBtns, setShowApprovalBtns] = useState(false);
   const [disableApprovalBtn, setDisableApprovalBtn] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-
+  const getRepayment = () => {
+    dispatch(getSingleRepayment(id))
+      .unwrap()
+      .then((res) => {
+        setRepaymentData(res);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const approvePayment = async (loanId, repaymentId) => {
     setDisableApprovalBtn(true);
@@ -52,14 +59,19 @@ const PaymentPage = () => {
         toast.success("Payment approved");
         dispatch(getAllRepaymentHistory());
         setDisableApprovalBtn(false);
-        dispatch(getSingleRepayment(id));
-        window.location.reload();
+        // dispatch(getSingleRepayment(id));
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000);
+        getRepayment();
       })
-      .catch(() => {
+      .catch((err) => {
         dispatch(getAllRepaymentHistory());
-        toast.error("An error occured");
+        toast.error(err?.message);
         setDisableApprovalBtn(false);
-        window.location.reload();
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000);
       });
   };
 
@@ -69,8 +81,11 @@ const PaymentPage = () => {
       .unwrap()
       .then(() => {
         toast.success("Payment declined successfully");
-        dispatch(getSingleRepayment(id));
-        window.location.reload();
+        // dispatch(getSingleRepayment(id));
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000);
+        getRepayment();
       })
       .catch((error) => toast.error("An error occured"));
   };
@@ -96,7 +111,7 @@ const PaymentPage = () => {
     if (_user) {
       setUserRole(_user?.data?.user?.role?.tag);
     }
-    dispatch(getSingleRepayment(id));
+    getRepayment();
   }, []);
 
   return (
