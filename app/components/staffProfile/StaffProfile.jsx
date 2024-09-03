@@ -13,19 +13,26 @@ import StaffDeptInfo from "./DepartmentInformation";
 import LeaveRequests from "./LeaveRequests";
 import LeaveApprovalRequests from "./LeaveApprovalRequests";
 
-
 const StaffData = ({ path, isDashboard }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [leaveState, setLeaveState] = useState("requests");
-  const { data, loading } = useSelector((state) => state.user);
+  const [data, setData] = useState(null);
+  // const { data, loading } = useSelector((state) => state.user);
 
   const btnCls = "px-3 border-b-2 font-medium";
   const activeBtn = "border-swBlue text-swBlue";
 
-
   useEffect(() => {
-    dispatch(getUserById(id));
+    dispatch(getUserById(id))
+      .unwrap()
+      .then((res) => {
+        console.log({ res });
+        setData(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     dispatch(getRoles());
     dispatch(getStaffTasks(id));
   }, []);

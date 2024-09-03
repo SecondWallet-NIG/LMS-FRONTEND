@@ -73,12 +73,12 @@ const headerExpenseCategory = [
 const customDataTransformerExpenseCategory = (apiData) => {
   return apiData?.map((item, i) => ({
     name: (
-      <div className="text-lg text-gray-700 font-light whitespace-nowrap w-full">
+      <div className="text-base text-gray-700 font-light whitespace-nowrap w-full">
         {item?.name}
       </div>
     ),
     description: (
-      <div className="text-lg text-gray-700 font-light max-w-2xl">
+      <div className="text-base text-gray-700 font-light max-w-2xl">
         {item?.description}
       </div>
     ),
@@ -94,14 +94,23 @@ const Expenses = () => {
   const [openDeleteAssetModal, setOpenDeleteModal] = useState(false);
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.expense);
-  const  expenseGraph  = useSelector((state) => state.report);
- 
+  const expenseGraph = useSelector((state) => state.report);
+
   const router = useRouter();
 
   const cards = [
-    { title: "Total Number of Expenses", value: expenseGraph?.data?.data.totalExpenseCount || 0},
-    { title: "Total Expenses Value", value: expenseGraph?.data?.data.totalApprovedExpense || 0 },
-    { title: "Approved Expenses", value: expenseGraph?.data?.data.totalApprovedExpense || 0 },
+    {
+      title: "Total Number of Expenses",
+      value: expenseGraph?.data?.data.totalExpenseCount || 0,
+    },
+    {
+      title: "Total Expenses Value",
+      value: expenseGraph?.data?.data.totalApprovedExpense || 0,
+    },
+    {
+      title: "Approved Expenses",
+      value: expenseGraph?.data?.data.totalApprovedExpense || 0,
+    },
   ];
 
   const options = {
@@ -142,7 +151,7 @@ const Expenses = () => {
 
   const dataValuesExpenses = Array(12).fill(0);
   expenseGraph?.data?.data?.monthlyExpenses.forEach((entry) => {
-    const index = entry.month - 1 
+    const index = entry.month - 1;
     dataValuesExpenses[index] = entry?.totalExpenses;
   });
   const chartData = {
@@ -199,7 +208,7 @@ const Expenses = () => {
         {pageState === "expenses" && (
           <>
             <div className="p-5">
-            <InvestmentsCards cards={cards} />
+              <InvestmentsCards cards={cards} />
               <div className="w-full text-white rounded-3xl">
                 <BarChart options={options} data={chartData} />
               </div>
@@ -245,7 +254,7 @@ const Expenses = () => {
             <p className="text-xl font-semibold mb-5">
               Available Expense Categories
             </p>
- 
+
             <ReusableDataTable
               dataTransformer={customDataTransformerExpenseCategory}
               headers={headerExpenseCategory}
