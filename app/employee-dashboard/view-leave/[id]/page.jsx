@@ -260,20 +260,24 @@ const ViewSingleLeaveRequest = () => {
         )}
 
         <div className="flex justify-between mt-5 p-5 border-b">
-          <p className="font-semibold text-xl">
-            {
-              leaveTypes?.find(
-                (e) => e?.id === data?.data?.leaveRequest?.leaveType
-              )?.label
-            }
-          </p>
+          <p className="font-semibold text-xl">Leave details</p>
+
           {renderStatus(data?.data?.leaveRequest?.status)}
         </div>
 
-        <div className="p-5 flex flex-col gap-5 font-500">
-          <p className="text-lg font-semibold">Leave details</p>
+        {/* <div className="p-5 flex flex-col gap-5 font-500">
           <div className="flex">
-            <p className="min-w-[15rem]">Staff</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">Leave Type</p>
+            <div>
+              {
+                leaveTypes?.find(
+                  (e) => e?.id === data?.data?.leaveRequest?.leaveType
+                )?.label
+              }
+            </div>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem] font-medium text-swBlue">Staff</p>
             <div>
               <p>
                 {data?.data?.leaveRequest?.userDetails?.lastName}{" "}
@@ -285,7 +289,9 @@ const ViewSingleLeaveRequest = () => {
             </div>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">First Approval</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">
+              First Approval
+            </p>
             <div>
               <p>
                 {
@@ -312,7 +318,9 @@ const ViewSingleLeaveRequest = () => {
             </div>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Second Approval</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">
+              Second Approval
+            </p>
             <div>
               <p>
                 {
@@ -339,23 +347,25 @@ const ViewSingleLeaveRequest = () => {
             </div>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Date Requested</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">
+              Date Requested
+            </p>
             <p>{data?.data?.leaveRequest?.createdAt?.slice(0, 10)}</p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Start Date</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">Start Date</p>
             <p>{data?.data?.leaveRequest?.startDate?.slice(0, 10)}</p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">End Date</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">End Date</p>
             <p>{data?.data?.leaveRequest?.endDate?.slice(0, 10)}</p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Duration</p>
-            <p>{data?.data?.leaveRequest?.leaveDuration} days(s)</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">Duration</p>
+            <p>{data?.data?.leaveRequest?.leaveDuration} day(s)</p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Reliever</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">Reliever</p>
             <div>
               <p>
                 {data?.data?.leaveRequest?.reliever?.lastName}{" "}
@@ -367,17 +377,207 @@ const ViewSingleLeaveRequest = () => {
             </div>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Description</p>
+            <p className="min-w-[15rem] font-medium text-swBlue">Description</p>
             <p>{data?.data?.leaveRequest?.description}</p>
           </div>
 
           {data?.data?.approvalDetails?.firstApproval?.status ===
             "Declined" && (
             <div className="flex">
-              <p className="min-w-[15rem]">Decline Reason</p>
+              <p className="min-w-[15rem] font-medium text-swBlue">
+                Decline Reason
+              </p>
               <p>{data?.data?.leaveRequest?.declineReason}</p>
             </div>
           )}
+        </div> */}
+        <div className="mt-5 p-5 flex flex-col gap-5">
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Leave Type:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  {
+                    leaveTypes?.find(
+                      (e) => e?.id === data?.data?.leaveRequest?.leaveType
+                    )?.label
+                  }
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Staff:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {data?.data?.leaveRequest?.userDetails?.lastName}{" "}
+                    {data?.data?.leaveRequest?.userDetails?.firstName}
+                  </p>
+                  <p className="text-swBlue">
+                    {data?.data?.leaveRequest?.userDetails?.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium">First Approval:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {
+                      data?.data?.approvalDetails?.firstApproval
+                        ?.approverDetails?.lastName
+                    }{" "}
+                    {
+                      data?.data?.approvalDetails?.firstApproval
+                        ?.approverDetails?.firstName
+                    }
+                  </p>
+                  <p className="text-swBlue">
+                    {
+                      data?.data?.approvalDetails?.firstApproval
+                        ?.approverDetails?.email
+                    }
+                  </p>
+                  <div className="flex items-center gap-2">
+                    Status:
+                    {renderStatus(
+                      data?.data?.approvalDetails?.firstApproval?.status
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Second Approval:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {
+                      data?.data?.approvalDetails?.secondApproval
+                        ?.approverDetails?.lastName
+                    }{" "}
+                    {
+                      data?.data?.approvalDetails?.secondApproval
+                        ?.approverDetails?.firstName
+                    }
+                  </p>
+                  <p className="text-swBlue">
+                    {
+                      data?.data?.approvalDetails?.secondApproval
+                        ?.approverDetails?.email
+                    }
+                  </p>
+                  <div className="flex items-center gap-2">
+                    Status:
+                    {renderStatus(
+                      data?.data?.approvalDetails?.secondApproval?.status
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Date Requested:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>{data?.data?.leaveRequest?.createdAt?.slice(0, 10)}</p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Start Date:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>{data?.data?.leaveRequest?.startDate?.slice(0, 10)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">End Date:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>{data?.data?.leaveRequest?.endDate?.slice(0, 10)}</p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Duration:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>{data?.data?.leaveRequest?.leaveDuration} day(s)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Reliever:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {data?.data?.leaveRequest?.reliever?.lastName}{" "}
+                    {data?.data?.leaveRequest?.reliever?.firstName}
+                  </p>
+                  <p className="text-swBlue">
+                    {data?.data?.leaveRequest?.reliever?.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+            {data?.data?.leaveRequest?.status === "Declined" && (
+              // <div className="flex">
+              //   <p className="font-medium ">Decline Reason</p>
+              //   <p>{data?.data?.leaveRequest?.declineReason}</p>
+              // </div>
+              <div className="w-full">
+                <div>
+                  <p className="font-medium ">Decline Reason:</p>
+                </div>
+                <div className="w-full">
+                  <div>
+                    <p>{data?.data?.leaveRequest?.declineReason}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Additional Message:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>{data?.data?.leaveRequest?.description}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
       <SharedInvestmentModal
