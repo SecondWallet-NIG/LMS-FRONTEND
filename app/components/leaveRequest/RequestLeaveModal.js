@@ -181,7 +181,7 @@ const RequestLeaveModal = ({ onClose }) => {
               <div className="w-full flex flex-col gap-5">
                 <div className="flex gap-3 items-end">
                   <div className="w-full ">
-                    <p className="text-sm text-swDarkBlue mb-4">Description</p>
+                    <p className="text-sm text-swDarkBlue mb-4">Additonal Message</p>
                     <textarea
                       name="description"
                       value={formData.description}
