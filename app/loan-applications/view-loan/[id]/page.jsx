@@ -77,7 +77,7 @@ const ViewLoan = () => {
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [statementLoad,setStatementLoad] = useState(false)
+  const [statementLoad, setStatementLoad] = useState(false);
   const [openDibursementDatePicker, setOpenDisbursementDatePicker] =
     useState(false);
   const [formData, setFormData] = useState({
@@ -563,6 +563,8 @@ const ViewLoan = () => {
     return false;
   };
 
+  console.log({ data });
+
   // const hasDeclineStatus = () => {
   //   for (const approval of loanApprovals?.data?.data || []) {
   //     if (approval.status === "Declined") {
@@ -574,14 +576,14 @@ const ViewLoan = () => {
   // };
 
   const getLoanStatement = async () => {
-    setStatementLoad(true)
+    setStatementLoad(true);
     try {
       const url = await dispatch(loanStatementOfAccount(id)).unwrap();
       window.open(url, "_blank");
     } catch (error) {
       console.error("Error viewing document:", error);
-    }finally{
-      setStatementLoad(false)
+    } finally {
+      setStatementLoad(false);
     }
   };
 
@@ -871,7 +873,8 @@ const ViewLoan = () => {
                       <div>
                         <p>
                           ₦{" "}
-                          {data?.data?.loanApplication?.loanMaturityAmount?.toLocaleString()}
+                          {data?.data?.loanApplication?.loanMaturityAmount?.toLocaleString() ||
+                            0}
                         </p>
                       </div>
                     </td>
@@ -903,12 +906,14 @@ const ViewLoan = () => {
                     <td className="w-1/4 px-3 py-3">
                       <div>
                         {data?.data?.loanApplication?.loanMaturityDate ===
-                        null ? (
+                          null ||
+                        data?.data?.loanApplication?.loanMaturityDate ===
+                          undefined ? (
                           "null"
                         ) : (
                           <p>
                             {formatDate(
-                              data?.data?.loanApplication?.loanMaturityDate.slice(
+                              data?.data?.loanApplication?.loanMaturityDate?.slice(
                                 0,
                                 10
                               )

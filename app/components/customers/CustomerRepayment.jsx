@@ -187,6 +187,7 @@ const CustomerRepayment = ({ loanId }) => {
     }
   };
 
+  console.log({ formData });
   const logRepaymentFunction = (e) => {
     setLoading(true);
     setEnableLogRepaymentBtn(false);
