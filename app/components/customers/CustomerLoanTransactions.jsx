@@ -70,13 +70,12 @@ const CustomerLoanTransactions = ({ loanId }) => {
       ),
       transactionStatement: (
         <button
-        className={`${
-          item?.transactionType|| item?.transactionStatment === "Credit" || "Loan Interest Accrual"
-            ? "bg-swGreen text-white text-xs font-normal px-2 py-1 rounded-full"
-            : "bg-swIndicatorLightRed text-white"
+        className={`${item?.transactionStatement === "Loan Interest Accrual"
+            ? "bg-[#ede6e6] text-swDarkRed text-xs font-normal px-2 py-1 rounded-full"
+            : "bg-swLightGreenIndcatorBg text-swGreen font-normal"
         } px-2 py-1 rounded-full`}
       >
-        {item?.transactionType || item?.transactionStatment}
+        {item?.transactionStatement}
       </button>
       ),
     }));
