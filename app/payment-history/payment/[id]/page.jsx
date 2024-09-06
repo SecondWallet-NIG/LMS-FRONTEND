@@ -142,7 +142,7 @@ const PaymentPage = () => {
         </div>
 
         <div className="flex justify-between mt-5 p-5 border-b">
-          <p className="font-semibold text-xl">Payment</p>
+          <p className="font-semibold text-xl">Payment Details</p>
           {showApprovalBtns ? (
             <div className="flex gap-5">
               {/* <Button
@@ -200,7 +200,7 @@ const PaymentPage = () => {
         </div>
 
         <div className="p-5 flex flex-col gap-5 font-500">
-          <p className="text-lg font-semibold text-swBlue">payment details</p>
+          {/* <p className="text-lg font-semibold text-swBlue">payment details</p> */}
           <div className="flex">
             <p className="min-w-[15rem]  text-swBlue">Borrower name</p>
             <p>
