@@ -1280,7 +1280,6 @@ const CreateLoan = () => {
                       />
                     )
                   }
-                  // className={"w-full "}
                   className={`${loading === true && "cursor-not-allowed"}`}
                   label={"Create Loan"}
                   onClick={submitLoan}
