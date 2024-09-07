@@ -110,24 +110,29 @@ export const getUserById = createAsyncThunk("user/getUser", async (userId) => {
   }
 });
 
-export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
-  try {
-    const response = await axios.get(
-      `${API_URL}/user?page=1&per_page=100&sortedBy=-createdAt`,
-      {
-        headers: {
-          Authorization: `Bearer ${user?.data?.token}`,
-        },
-      }
-    );
+export const getAllUsers = createAsyncThunk(
+  "user/getAllUsers",
+  async (total) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/user?page=1&per_page=${
+          total ? total : "100"
+        }&sortedBy=-createdAt`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
 
-    return response.data;
-  } catch (error) {
-    if (error.response.data.error) {
-      throw new Error(error.response.data.error);
-    } else throw new Error("An error occured, please try again later");
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
   }
-});
+);
 
 export const getLoanOfficersCardsData = createAsyncThunk(
   "user/getLoanOfficers",

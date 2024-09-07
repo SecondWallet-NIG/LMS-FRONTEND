@@ -19,6 +19,7 @@ import reportReducer from "./slices/reportSlice";
 import assetReducer from "./slices/assetManagementSlice";
 import expenseReducer from "./slices/expenseManagementSlice";
 import investmentReducer from "./slices/investmentSlice";
+import hrmsReducer from "./slices/hrmsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -41,6 +42,7 @@ export const store = configureStore({
     asset: assetReducer,
     expense: expenseReducer,
     investment: investmentReducer,
+    hrms: hrmsReducer,
   },
   // Add middleware or other configuration options as needed
 });

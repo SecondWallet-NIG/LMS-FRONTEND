@@ -11,7 +11,7 @@ import PendingTasks from "../components/task-tables/PendingTask";
 import CompletedTasks from "../components/task-tables/CompletedTasks";
 const MyTasks = () => {
   const dispatch = useDispatch();
-  const { error, data } = useSelector((state) => state.approvalAssignee);
+  const { error, data } = useSelector((state) => state.UserTasks);
   const [activityButton, setActivityButton] = useState("allTasks");
   let user;
   if (typeof window !== "undefined") {
@@ -33,17 +33,17 @@ const MyTasks = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <MyTasksCard
               header={"all tasks"}
-              data={data?.totalCount}
+              data={data?.totalCount || 0}
               onClick={() => setActivityButton("allTasks")}
             />
             <MyTasksCard
               header={"completed tasks"}
-              data={data?.doneCount}
+              data={data?.doneCount || 0}
               onClick={() => setActivityButton("completedTasks")}
             />
             <MyTasksCard
               header={"pending tasks"}
-              data={data?.pendingCount}
+              data={data?.pendingCount || 0}
               onClick={() => setActivityButton("pendingTasks")}
             />
           </div>

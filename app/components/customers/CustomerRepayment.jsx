@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState} from "react";
+import React, { useState } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,6 +27,7 @@ const CustomerRepayment = ({ loanId }) => {
   const [formData, setFormData] = useState({
     repaymentMethod: "",
     repaymentAmount: "",
+    clearBalance: false,
     dateCollected: new Date(),
     repaymentReceipts: null,
   });
@@ -174,6 +175,8 @@ const CustomerRepayment = ({ loanId }) => {
     setFormData({
       repaymentMethod: "",
       repaymentAmount: "",
+      clearBalance: false,
+      dateCollected: new Date(),
       repaymentReceipts: null,
     });
   };
@@ -184,6 +187,7 @@ const CustomerRepayment = ({ loanId }) => {
     }
   };
 
+  console.log({ formData });
   const logRepaymentFunction = (e) => {
     setLoading(true);
     setEnableLogRepaymentBtn(false);
@@ -191,6 +195,7 @@ const CustomerRepayment = ({ loanId }) => {
     data.append("repaymentMethod", formData?.repaymentMethod);
     data.append("repaymentAmount", formData?.repaymentAmount);
     data.append("repaymentReceipts", formData?.repaymentReceipts);
+    data.append("clearBalance", formData?.clearBalance);
     data.append("dateCollected", format(formData?.dateCollected, "yyyy-MM-dd"));
     e.preventDefault();
     dispatch(logRepaymentFunc({ loanId, payload: data }))
@@ -328,6 +333,23 @@ const CustomerRepayment = ({ loanId }) => {
                   </p>
                 </div>
               )}
+            </div>
+            <div>
+              <label
+                htmlFor="clearBalance"
+                className="flex gap-2 items-center mt-3 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  name="clearBalance"
+                  id="clearBalance"
+                  className="h-5 w-5"
+                  onChange={(e) =>
+                    setFormData({ ...formData, clearBalance: e.target.checked })
+                  }
+                />
+                Clear Balance
+              </label>
             </div>
             <div className="pt-4">
               <p className="font-semibold pt-2 text-sm">

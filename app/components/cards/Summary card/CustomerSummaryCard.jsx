@@ -1,5 +1,3 @@
-
-
 const Card = ({ value, title, extraVal, currency }) => {
   return (
     <div>
@@ -10,10 +8,16 @@ const Card = ({ value, title, extraVal, currency }) => {
           </div>
         </div>
         <div className="flex items-center justify-between font-semibold mt-5">
-          <p className="text-4xl leading-10 text-swBlue700">
-            {value}
-          </p>
-          {extraVal && <p className={`text-base text-swBlack font-medium leading-6 ${!value ? "mx-auto" : ""}`}>{currency} {extraVal}</p>}
+          <p className="text-4xl leading-10 text-swBlue700">{value}</p>
+          {extraVal && (
+            <p
+              className={`text-base text-swBlack font-medium leading-6 ${
+                !value ? "mx-auto" : ""
+              }`}
+            >
+              {currency} {extraVal}
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -25,19 +29,44 @@ const CustomerSummaryCard = ({ data, financialCards, healthData }) => {
     <>
       {!financialCards && (
         <main className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card title="Total Investments" value={healthData?.totalInvestments?.count} extraVal={healthData?.totalInvestments?.amount} />
+          <Card
+            title="Total Investments"
+            value={healthData?.totalInvestments?.count || 0}
+            extraVal={
+              healthData?.totalInvestments?.amount?.toLocaleString() || 0
+            }
+          />
           <Card title="Average ROI" value={`${32}%`} />
-          <Card title="Maturity Amount" value={healthData?.maturityAmount?.count} extraVal={healthData?.maturityAmount?.amount} />
-          <Card title="Withdrawals" value={healthData?.withdrawals?.count} extraVal={healthData?.withdrawals?.amount} />
+          <Card
+            title="Maturity Amount"
+            value={healthData?.maturityAmount?.count || 0}
+            extraVal={healthData?.maturityAmount?.amount?.toLocaleString() || 0}
+          />
+          <Card
+            title="Withdrawals"
+            value={healthData?.withdrawals?.count || 0}
+            extraVal={healthData?.withdrawals?.amount?.toLocaleString() || 0}
+          />
         </main>
       )}
 
       <p className="font-semibold text-xl text-black my-4">Financials</p>
       {data && (
         <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card title="Annual Income" extraVal={data?.annualIncome?.toLocaleString()} currency={"₦"} />
-          <Card title="Networth" extraVal={data?.networth?.toLocaleString()} currency={"₦"} />
-          <Card title="Source of Income" extraVal={data?.sourceOfIncome} />
+          <Card
+            title="Annual Income"
+            extraVal={data?.annualIncome?.toLocaleString() || 0}
+            currency={"₦"}
+          />
+          <Card
+            title="Networth"
+            extraVal={data?.networth?.toLocaleString() || 0}
+            currency={"₦"}
+          />
+          <Card
+            title="Source of Income"
+            extraVal={data?.sourceOfIncome || " "}
+          />
         </main>
       )}
     </>

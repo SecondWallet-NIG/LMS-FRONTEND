@@ -78,7 +78,6 @@ const Staffs = () => {
   return (
     <div>
       <ToastContainer />
-      {/* <TeamManagementCard /> */}
       <div className="py-2">
         <div className="flex justify-between items-center">
           <ReusableDataTable

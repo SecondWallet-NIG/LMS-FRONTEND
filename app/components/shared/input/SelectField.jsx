@@ -19,6 +19,7 @@ const customStyles = {
       ? "your-custom-border-color"
       : provided.borderColor,
     boxShadow: state.isFocused ? "none" : provided.boxShadow,
+    fontSize: "14px"
   }),
 
   option: (provided, state) => ({
@@ -31,6 +32,7 @@ const customStyles = {
     "&:hover": {
       backgroundColor: "#f5f5f5",
     },
+    fontSize:"14px"
   }),
 };
 
@@ -55,7 +57,7 @@ const SelectField = ({
 
   return (
     <div>
-      <label className="block text-gray-700 text-sm mb-2">
+      <label className="block text-gray-700 text-sm mb-2 capitalize">
         {label}
         {required && <span className="text-red-600 ml-1">*</span>}
       </label>

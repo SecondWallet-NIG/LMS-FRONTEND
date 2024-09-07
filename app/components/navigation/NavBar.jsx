@@ -11,6 +11,9 @@ import Image from "next/image";
 import { formatDate } from "@/helpers";
 import { RxHamburgerMenu } from "react-icons/rx";
 import dynamic from "next/dynamic";
+import { AiOutlineSetting } from "react-icons/ai";
+import Link from "next/link";
+import { GoSignOut } from "react-icons/go";
 
 //import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -23,6 +26,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   const dispatch = useDispatch();
   const x = useSelector((state) => state.approvalAssignee);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isDropDownOpen, setDropDown] = useState(false);
   const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");
   const [openProfilePic, setOpenProfilePic] = useState(false);
@@ -37,6 +41,11 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
 
   const openNotifications = (state) => {
     setIsNotificationsOpen(state);
+  };
+
+  const signOut = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("email");
   };
 
   return (
@@ -150,7 +159,9 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
         <div className="rounded-full border-2 border-swBlue overflow-hidden h-[3.15rem] w-[3.15rem] relative">
           <img
             src={
-              user?.profilePicture
+              user?.profilePicture &&
+              user?.profilePicture !== "undefined" &&
+              user?.profilePicture !== "null"
                 ? user?.profilePicture
                 : "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
             }
@@ -170,7 +181,6 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
           />
         </div>
       </div>
-
       <Image
         src={navPatternBg}
         alt="nav pattern"
@@ -178,8 +188,31 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
         // width={"50%"}
         // height={"100%"}
         sizes="50%"
-        className="absolute w-1/2 ml-auto"
+        className="absolute w-1/2 ml-auto cursor-pointer"
+        onClick={() => setDropDown(!isDropDownOpen)}
       />
+
+      {isDropDownOpen && (
+        <div className="absolute top-full w-[10rem] min-w-[8rem] px-2 py-4 border bg-white rounded-lg mt-2 shadow-md right-2  h-[7rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray">
+          <div className="flex-col">
+            <Link
+              href={"/settings"}
+              className="flex gap-2 mb-3 hover:text-swBlack"
+            >
+              <AiOutlineSetting size={22} />
+              <p>Settings</p>
+            </Link>
+            <Link
+              href={"/"}
+              className="flex gap-2 border-t pt-3 hover:text-swBlack"
+              onClick={signOut}
+            >
+              <GoSignOut size={22} />
+              <p>Sign out</p>
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

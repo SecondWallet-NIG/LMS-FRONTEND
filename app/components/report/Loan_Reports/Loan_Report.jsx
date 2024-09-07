@@ -11,6 +11,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { handleCaptureClick } from "../../helpers/utils";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
+import LoanReportTable from "../../loans/LoanReportTable";
 
 const LoanReport = () => {
   const dispatch = useDispatch();
@@ -205,7 +206,7 @@ const LoanReport = () => {
       </div>
 
       <div className="rounded-xl overflow-hidden border mt-5 bg-white">
-        <LoanTable />
+        <LoanReportTable />
       </div>
       <CenterModal
         isOpen={dateFilterOpen}

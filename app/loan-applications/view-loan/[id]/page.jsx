@@ -15,6 +15,7 @@ import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import {
   disburseLoan,
   getSingleLoan,
+  loanStatementOfAccount,
 } from "@/redux/slices/loanApplicationSlice";
 import RequestApproval from "@/app/components/modals/loans/RequestApproval";
 import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
@@ -41,6 +42,10 @@ import { bankArr } from "@/constant";
 import { format } from "date-fns";
 import { FaRegCalendar } from "react-icons/fa";
 import { DayPicker } from "react-day-picker";
+import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTransactions";
+import { formatDate } from "@/helpers";
+import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
+import { base64ToBlob, fetchPdf } from "@/app/components/helpers/utils";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -51,7 +56,6 @@ const ViewLoan = () => {
   const user = useSelector((state) => state.user?.data?.data?.results);
   const loanApprovals = useSelector((state) => state.loanApprovals);
   const [activityButton, setActivityButton] = useState("activity-logs");
-  const [logSearch, setLogSearch] = useState(false);
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
   const [isApprovalOpen, setApprovalOpen] = useState(false);
   const [isDeclineOpen, setDeclineOpen] = useState(false);
@@ -73,6 +77,7 @@ const ViewLoan = () => {
   const router = useRouter();
   const [logRepayment, setLogRepayment] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [statementLoad, setStatementLoad] = useState(false);
   const [openDibursementDatePicker, setOpenDisbursementDatePicker] =
     useState(false);
   const [formData, setFormData] = useState({
@@ -81,7 +86,10 @@ const ViewLoan = () => {
     disbursementDate: new Date(),
     docs: null,
   });
-                                                                                                                    
+
+  const { statementData, statementPending } = useSelector(
+    (state) => state.loanApplication
+  );
 
   const handleFileChange = (e) => {
     setFileError("");
@@ -168,7 +176,6 @@ const ViewLoan = () => {
   const handleActivityToggle = (buttonId) => {
     setActivityButton(buttonId);
   };
-
 
   const preventMinus = (e) => {
     if (/[^0-9,]/g.test(e.key)) {
@@ -505,10 +512,9 @@ const ViewLoan = () => {
   };
 
   const modifyUsersToApprove = () => {
-
     if (Array.isArray(user)) {
       const users = user.filter((item) => item?.role?.tag === "LO");
- 
+
       setUsersToApprove(
         users.map((item) => ({
           label: item.firstName + " " + item.lastName,
@@ -531,6 +537,7 @@ const ViewLoan = () => {
     dispatch(getSingleLoan(id));
     dispatch(getLoanPackage());
     dispatch(getInterestType());
+    // dispatch(loanStatementOfAccount());
   }, []);
 
   useEffect(() => {
@@ -556,6 +563,8 @@ const ViewLoan = () => {
     return false;
   };
 
+  console.log({ data });
+
   // const hasDeclineStatus = () => {
   //   for (const approval of loanApprovals?.data?.data || []) {
   //     if (approval.status === "Declined") {
@@ -566,8 +575,19 @@ const ViewLoan = () => {
   //   return false;
   // };
 
-  if (loanApprovals?.data?.data) {
+  const getLoanStatement = async () => {
+    setStatementLoad(true);
+    try {
+      const url = await dispatch(loanStatementOfAccount(id)).unwrap();
+      window.open(url, "_blank");
+    } catch (error) {
+      console.error("Error viewing document:", error);
+    } finally {
+      setStatementLoad(false);
+    }
+  };
 
+  if (loanApprovals?.data?.data) {
     hasDecline = hasDeclineStatus();
   }
 
@@ -677,12 +697,9 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="w-full md:w-[70%]">
-              <div className="flex md:justify-end">
+              {/* <div className="flex md:justify-end">
                 <div>
-                  <div className="text-sm  font-medium">
-                    {" "}
- Loan Creator
-                  </div>
+                  <div className="text-sm  font-medium"> Loan Creator</div>
                   <button
                     onClick={() => {
                       router.push(
@@ -696,12 +713,35 @@ const ViewLoan = () => {
                     {data?.data?.loanApplication?.createdBy?.email}
                   </button>
                 </div>
-              </div>
+                <div className="flex justify-end ml-8">
+                  <div>
+                    <h6 className="text-sm  font-medium">Disbursed Date</h6>
+                    <p className="text-swBlue text-sm bg-white py-2 rounded-lg font-medium">
+                      {data?.data?.loanApplication?.disbursedAt &&
+                        formatDate(
+                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
+                        )}
+                    </p>
+                  </div>
+                  <div>
+                    <Button
+                      size="normal"
+                      variant="primary"
+                      className="ml-12 text-xs rounded-md"
+                      onClick={() => getLoanStatement()}
+                      disabled={statementPending}
+                      blueBtn={true}
+                    >
+                      Generate Statement
+                    </Button>
+                  </div>
+                </div>
+              </div> */}
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swBlue font-semibold mt-4 text-end">
+                    <p className="text-sm text-swBlue font-semibold mt-4 text-end">
                       {data?.data?.loanApplication?.loanId}
                     </p>
                   </div>
@@ -710,7 +750,7 @@ const ViewLoan = () => {
                   <p className="text-sm font-medium">Loan Amount</p>
 
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-swBlue font-semibold mt-4">
+                    <p className="text-sm text-swBlue font-semibold mt-4">
                       ₦{" "}
                       {data?.data?.loanApplication?.loanAmount.toLocaleString()}
                     </p>
@@ -732,11 +772,56 @@ const ViewLoan = () => {
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Outstanding Balance</p>
                   <div className="flex justify-between items-center">
-                    <p className="text-md text-red-500 font-semibold mt-4">
+                    <p className="text-sm text-red-500 font-semibold mt-4">
                       ₦{" "}
                       {data?.data?.loanApplication?.outstandingBalance?.toLocaleString() ||
                         0}
                     </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap mt-2">
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
+                  <p className="text-sm font-medium">Loan Creator</p>
+                  <div className="flex justify-between items-center">
+                    <button
+                      onClick={() => {
+                        router.push(
+                          `/borrowers/profile/${data?.data?.customerDetails?._id}`
+                        );
+                      }}
+                      className={
+                        "text-swBlue text-sm py-2 rounded-lg font-medium underline"
+                      }
+                    >
+                      {data?.data?.loanApplication?.createdBy?.email}
+                    </button>
+                  </div>
+                </div>
+                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
+                  <p className="text-sm font-medium">Date Disbursed</p>
+
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-swBlue font-semibold mt-4">
+                      {data?.data?.loanApplication?.disbursedAt &&
+                        formatDate(
+                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
+                        )}
+                    </p>
+                  </div>
+                </div>
+                <div className="w-full  sm:w-[10rem] rounded-xl">
+                  <div>
+                    <Button
+                      // size="normal"
+                      // variant="primary"
+                      className="text-xs text-swBlue rounded-md"
+                      onClick={() => getLoanStatement()}
+                      disabled={statementLoad}
+                      blueBtn={true}
+                    >
+                      Generate Statement
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -788,7 +873,8 @@ const ViewLoan = () => {
                       <div>
                         <p>
                           ₦{" "}
-                          {data?.data?.interestCalculation?.totalPayments?.toLocaleString()}
+                          {data?.data?.loanApplication?.loanMaturityAmount?.toLocaleString() ||
+                            0}
                         </p>
                       </div>
                     </td>
@@ -819,7 +905,21 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                       {data?.data?.loanApplication?.disbursedAt === null ? "null" : <p>{data?.data?.loanApplication?.disbursedAt.slice(0, 10)}</p>} 
+                        {data?.data?.loanApplication?.loanMaturityDate ===
+                          null ||
+                        data?.data?.loanApplication?.loanMaturityDate ===
+                          undefined ? (
+                          "null"
+                        ) : (
+                          <p>
+                            {formatDate(
+                              data?.data?.loanApplication?.loanMaturityDate?.slice(
+                                0,
+                                10
+                              )
+                            )}
+                          </p>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -846,9 +946,7 @@ const ViewLoan = () => {
                   <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p>
-                          {data?.data?.loanApplication?.interestRate} %
-                        </p>
+                        <p>{data?.data?.loanApplication?.interestRate} %</p>
                         {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
@@ -1138,8 +1236,7 @@ const ViewLoan = () => {
                       <div className="flex gap-2 items-center text-swDarkRed font-semibold">
                         <p>
                           {data?.data?.loanApplication
-                            ?.currentOverdueDaysCount
-                            || 0}{" "}
+                            ?.currentOverdueDaysCount || 0}{" "}
                           day(s){" "}
                         </p>
                       </div>
@@ -1206,6 +1303,15 @@ const ViewLoan = () => {
                   >
                     Payment History
                   </button>
+                  <button
+                    onClick={() => handleActivityToggle("loanTransactions")}
+                    className={`${
+                      activityButton === "loanTransactions" &&
+                      "font-semibold text-swBlue bg-blue-50"
+                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                  >
+                    Loan Transactions
+                  </button>
                 </div>
               </div>
               <div className="p-2">
@@ -1220,6 +1326,9 @@ const ViewLoan = () => {
 
                 {activityButton === "paymentHistory" && (
                   <CustomerPaymentHistory data={data?.data} loanId={id} />
+                )}
+                {activityButton === "loanTransactions" && (
+                  <CustomerLoanTransactions loanId={id} />
                 )}
               </div>
             </section>

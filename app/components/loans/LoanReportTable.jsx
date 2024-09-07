@@ -1,0 +1,164 @@
+"use client";
+
+import ReusableDataTable from "../shared/tables/ReusableDataTable";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { formatDate } from "@/helpers";
+import { formatTimeToAMPM } from "@/helpers";
+import Link from "next/link";
+
+const LoanReportTable = () => {
+  const [userId, setUserId] = useState("");
+  const [role, setRole] = useState("");
+  const [roleTag, setRoleTag] = useState("");
+  const router = useRouter();
+  const headers = [
+    { id: "disbursedAt", label: "Date Disbursed" },
+    { id: "name", label: "Borrower's Name & ID" },
+    { id: "loanPackageId", label: "Loan ID & package" },
+    { id: "loanAmount", label: "Loan Amount" },
+    { id: "totalAmountPaid", label: "Amount Paid" },
+    { id: "status", label: "Status" },
+    { id: "createdBy", label: "Initiated By" },
+  ];
+
+  const customDataTransformer = (apiData) => {
+    const timestamp = "2023-12-19T21:16:33.883Z";
+    const date = new Date(timestamp);
+    console.log({apiData});
+    
+
+    return apiData.loanApplications.map((item) => ({
+      id: item._id,
+      disbursedAt: (
+        <div>
+          <div className="text-[13px] font-[500] text-gray-700">
+            {formatDate(item.disbursedAt?.slice(0, 10))}
+          </div>
+          <div className="text-[13px] font-light text-gray-500 pt-2">
+            {formatTimeToAMPM(item.disbursedAt)}
+          </div>
+        </div>
+      ),
+      name: (
+        <div>
+          <div className="text-[14px] font-[500] text-gray-500">{`${item?.customerId?.firstName} ${item?.customerId?.lastName}`}</div>
+          <div className="text-[13px] text-gray-500 font-light pt-2">
+            {item?.customer?.customerId}
+          </div>
+        </div>
+      ),
+      loanPackageId: (
+        <div>
+          <div className="text-[13px] font-[500] text-gray-700">{`${item?.loanPackage?.name}`}</div>
+          <div className="text-[15px] text-gray-500 pt-2 font-light">
+            SWL-{`${item?.loanId}`}
+          </div>
+        </div>
+      ),
+      loanAmount: (
+        <div>
+          <div className="text-[15px] font-[500] text-gray-700 font-light">
+            ₦ {item?.loanAmount.toLocaleString()}
+          </div>
+        </div>
+      ),
+      totalAmountPaid: (
+        <div>
+          <div className="text-[15px] font-[500] text-gray-700 font-light">
+            ₦ {item?.totalAmountPaid.toLocaleString()}
+          </div>
+
+        <div className="text-xs text-swDarkRed font-light">₦ {item?.amountClearedOff | 0} (Cleared Off Amount)</div> 
+        </div>
+      ),
+      status: (
+        <button
+          className={`${
+            item.status === "Pending"
+              ? "bg-swIndicatorLightRed"
+              : item.status === "In Progress"
+              ? "bg-swIndicatorYellow"
+              : item.status === "Ready for Disbursal"
+              ? "bg-swIndicatorPurple"
+              : item.status === "Disbursed"
+              ? "bg-swBlue"
+              : item.status === "Fully Paid"
+              ? "bg-swGreen"
+              : "bg-swIndicatorDarkRed"
+          } px-2 py-1 rounded-full text-xs font-normal text-white whitespace-nowrap`}
+        >
+          {item.status === "Ready for Disbursal"
+            ? "Ready for Disbursement"
+            : item.status}
+        </button>
+      ),
+      createdBy: (
+        <div>
+          <div className="text-[13px] font-[500] text-swDarkGreen">
+            {item?.createdBy?.firstName} {item?.createdBy?.lastName}
+          </div>
+          <div className="text-[13px] font-[500] text-gray-700">
+            <Link
+              className="underline"
+              href={`/team-management/staff/${item?.createdBy?._id}`}
+            >
+              {item?.createdBy?.user?.email}
+            </Link>
+          </div>
+        </div>
+      ),
+    }));
+  };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (typeof window !== "undefined") {
+          const storedUser = JSON.parse(localStorage.getItem("user"));
+         setUserId(storedUser?.data?.user?._id || "");
+          setRole(storedUser?.data?.user?.role?.name || "");
+          setRoleTag(storedUser?.data?.user?.role?.tag || "");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [router.pathname]);
+
+  return (
+    <div>
+      {userId && (
+        <ReusableDataTable
+          filterParams={[
+            { name: "Disbursed" },
+            { name: "Fully Paid" },
+            { name: "Overdue" },
+          ]}
+          dataTransformer={customDataTransformer}
+          onClickRow="/loan-applications/view-loan"
+          headers={headers}
+          initialData={[]}
+          apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/report/loan/payment`}
+          btnText={
+            <div className="flex gap-1 items-center p-1">
+              <p className="">Create Loan</p>
+            </div>
+          }
+          btnTextClick={() => {
+            roleTag === "LO"
+              ? router.push("/create-loan")
+              : router.push("/unauthorized");
+          }}
+          filters={true}
+          pagination={true}
+         // userId={userId}
+          role={role}
+        />
+      )}
+    </div>
+  );
+};
+
+export default LoanReportTable;

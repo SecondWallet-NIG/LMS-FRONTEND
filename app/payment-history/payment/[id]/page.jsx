@@ -33,16 +33,24 @@ const Viewer = dynamic(
 const PaymentPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  // const [repaymentData, setRepaymentData] = useState({});
+  const [repaymentData, setRepaymentData] = useState(null);
   const [openReceipt, setOpenReceipt] = useState(false);
-  const { data: repaymentData } = useSelector(
-    (state) => state?.repaymentHistory
-  );
+  // const { data: repaymentData } = useSelector(
+  //   (state) => state?.repaymentHistory
+  // );
+  console.log({ repaymentData });
   const [showApprovalBtns, setShowApprovalBtns] = useState(false);
   const [disableApprovalBtn, setDisableApprovalBtn] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-
+  const getRepayment = () => {
+    dispatch(getSingleRepayment(id))
+      .unwrap()
+      .then((res) => {
+        setRepaymentData(res);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const approvePayment = async (loanId, repaymentId) => {
     setDisableApprovalBtn(true);
@@ -51,13 +59,17 @@ const PaymentPage = () => {
       .then(() => {
         toast.success("Payment approved");
         setDisableApprovalBtn(false);
-        dispatch(getSingleRepayment(id));
+        // dispatch(getSingleRepayment(id));
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000);
+        getRepayment();
       })
-      .catch((error) => {
-    
-        toast.error(error.message);
+      .catch((err) => {
+        dispatch(getAllRepaymentHistory());
+        toast.error(err?.message);
         setDisableApprovalBtn(false);
-        dispatch(getSingleRepayment(id));
+        console.log(err);
       });
   };
 
@@ -67,15 +79,22 @@ const PaymentPage = () => {
       .unwrap()
       .then(() => {
         toast.success("Payment declined successfully");
-        dispatch(getSingleRepayment(id));
-        window.location.reload();
+        // dispatch(getSingleRepayment(id));
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000);
+        getRepayment();
       })
-      .catch((error) => toast.error("An error occured"));
+      .catch((error) => {
+        toast.error("An error occured");
+      });
   };
 
   // useEffect(() => {
   //   setRepaymentData(data?.results.find((option) => option._id === id));
   // }, [data]);
+
+  console.log("clearData", repaymentData?.result?.clearBalance);
 
   useEffect(() => {
     if (
@@ -94,7 +113,7 @@ const PaymentPage = () => {
     if (_user) {
       setUserRole(_user?.data?.user?.role?.tag);
     }
-    dispatch(getSingleRepayment(id));
+    getRepayment();
   }, []);
 
   return (
@@ -119,7 +138,7 @@ const PaymentPage = () => {
         </div>
 
         <div className="flex justify-between mt-5 p-5 border-b">
-          <p className="font-semibold text-xl">Payment</p>
+          <p className="font-semibold text-xl">Payment Details</p>
           {showApprovalBtns ? (
             <div className="flex gap-5">
               {/* <Button
@@ -177,7 +196,7 @@ const PaymentPage = () => {
         </div>
 
         <div className="p-5 flex flex-col gap-5 font-500">
-          <p className="text-lg font-semibold text-swBlue">payment details</p>
+          {/* <p className="text-lg font-semibold text-swBlue">payment details</p> */}
           <div className="flex">
             <p className="min-w-[15rem]  text-swBlue">Borrower name</p>
             <p>
@@ -295,6 +314,12 @@ const PaymentPage = () => {
               <p>No receipt to show</p>
             </div>
           )}
+          <div className="flex">
+            <p className="min-w-[15rem]  text-swBlue ">Clear Balance</p>
+            <p className="capitalize">
+              {repaymentData?.result?.clearBalance === true ? "true" : "false"}
+            </p>
+          </div>
         </div>
       </main>
     </DashboardLayout>

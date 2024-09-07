@@ -31,7 +31,6 @@ const ViewExpense = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = JSON.parse(localStorage.getItem("user"));
-      console.log("user", user?.data?.user?.role?.tag);
       if (user?.data?.user?.role?.tag === "CFO") {
         setUpdateBtns(true);
       }

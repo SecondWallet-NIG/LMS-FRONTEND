@@ -15,6 +15,7 @@ import {
   getTransactionHistory,
   topUpInvestment,
   createWithdrawalRequest,
+  investmentStatementOfAccount,
 } from "@/redux/slices/investmentSlice";
 import { format } from "date-fns";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
@@ -25,6 +26,7 @@ import SelectField from "@/app/components/shared/input/SelectField";
 import { useImmer } from "use-immer";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 
 const header = [
   { id: "dueDate", label: "Due Date" },
@@ -73,6 +75,7 @@ export default function InvestmentDetails() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ closeInvestmentReason: "" });
   const [fileError, setFileError] = useState("");
+  const [statementLoad, setStatementLoad] = useState(false);
   const [topUpData, setTopUpData] = useState({
     amount: "",
     paymentReceipt: null,
@@ -81,6 +84,9 @@ export default function InvestmentDetails() {
     withdrawAmount: "",
     paymentMethod: "",
   });
+  const { statementData, statementPending } = useSelector(
+    (state) => state.loanApplication
+  );
   const [successModal, setSuccessModal] = useState(false);
   const [failedModal, setFailedModal] = useState(false);
   const [successModalData, setSuccessModalData] = useState({});
@@ -509,12 +515,12 @@ export default function InvestmentDetails() {
           className={`${
             item.transactionStatment === ""
               ? "bg-[#E7F1FE] text-swBlue text-xs font-normal px-2 py-1 rounded-full"
-              : item.transactionStatment === "Top Up"
+              : item.transactionType === "Top Up"
               ? "bg-green-50 text-swGreen"
               : "text-red-400 bg-red-100"
           } px-2 py-1 rounded-full`}
         >
-          {item?.transactionStatment}
+          {item?.transactionType}
         </button>
       ),
       initiatedBy: (
@@ -545,6 +551,18 @@ export default function InvestmentDetails() {
       <div className="grid grid-cols-4 gap-4">{tableContent}</div>
     </div>
   );
+
+  const getInvestmentStatement = async () => {
+    setStatementLoad(true);
+    try {
+      const url = await dispatch(investmentStatementOfAccount(id)).unwrap();
+      window.open(url, "_blank");
+    } catch (error) {
+      console.error("Error viewing document:", error);
+    } finally {
+      setStatementLoad(false);
+    }
+  };
 
   useEffect(() => {
     dispatch(getSingleInvestment(id));
@@ -577,11 +595,19 @@ export default function InvestmentDetails() {
                 </p>
 
                 <div className="flex justify-between gap-4 mt-5 text-sm mb-10 lg:mb-1">
-                  <div onClick={() => setReqWithdrawal(true)}>
-                    <Button className="rounded-md flex gap-2">
-                      Request Withdrawal
-                    </Button>
-                  </div>
+                  {/* <div
+                    onClick={() =>
+                      data?.data.status !== "Closed" && setReqWithdrawal(true)
+                    }
+                  > */}
+                  <Button
+                    disabled={data?.data.status === "Closed"}
+                    className="rounded-md flex gap-2"
+                    onClick={() => setReqWithdrawal(true)}
+                  >
+                    Request Withdrawal
+                  </Button>
+                  {/* </div> */}
                   <button
                     onClick={() => setModal(true)}
                     disabled={data?.data?.status === "Closed"}
@@ -624,13 +650,14 @@ export default function InvestmentDetails() {
                   <h2 className="font-medium leading-8 text-2xl">
                     ₦ {data?.data?.currentInvestmentPrincipal?.toLocaleString()}
                   </h2>
-                  <span
+                  <button
                     className="flex gap-2 border text-sm px-3 py-2 font-semibold rounded-md cursor-pointer bg-white"
+                    disabled={data?.data?.status === "Closed"}
                     onClick={() => setOpenTopUp(true)}
                   >
                     <FiCopy className="" size={16} />
                     <p className="-mt-0.5 ">Top up</p>
-                  </span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -638,6 +665,18 @@ export default function InvestmentDetails() {
         </div>
 
         <div className="gap-8">
+          <div className="flex justify-end px-5">
+            <Button
+              // size="normal"
+              // variant="primary"
+              className="text-xs text-swBlue rounded-md"
+              onClick={() => getInvestmentStatement()}
+              disabled={statementLoad}
+              blueBtn={true}
+            >
+              Generate Statement
+            </Button>
+          </div>
           <div className="px-5 gap-4 py-3">
             <h1 className={`${headClass}`}>Investment Details</h1>
             {renderTable({
@@ -663,7 +702,11 @@ export default function InvestmentDetails() {
                     </p>
                   </p>
                   <p
-                    className={`-ml-1 mt-2 py-3 px-6 border border-swGreen bg-green-100 text-sm text-swGreen leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
+                    className={`-ml-1 mt-2 py-3 px-6 border ${
+                      data?.data.status === "Closed"
+                        ? "border-red-500 bg-red-100 text-red-500"
+                        : "border-swGreen bg-green-100 text-swGreen"
+                    }  text-sm  leading-4 h-6 rounded-full flex justify-center items-center w-fit`}
                   >
                     {data?.data.status}
                   </p>

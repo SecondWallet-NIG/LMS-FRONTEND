@@ -5,7 +5,11 @@ import { usePathname } from "next/navigation";
 //icons
 import { RiBox3Line } from "react-icons/ri";
 import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
-import { AiFillMoneyCollect, AiOutlineSetting } from "react-icons/ai";
+import {
+  AiFillMoneyCollect,
+  AiOutlineSetting,
+  AiFillDashboard,
+} from "react-icons/ai";
 import { BiMapAlt, BiSolidBuilding } from "react-icons/bi";
 import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
@@ -34,7 +38,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState(true);
   const [activeLink, setActiveLink] = useState("");
-  const x = useSelector((state) => state.approvalAssignee);
+  const x = useSelector((state) => state.UserTasks);
   const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role
     ?.tag;
 
@@ -53,9 +57,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   if (typeof window !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
   }
+  const userId = user?.data?.user?._id;
 
   useEffect(() => {
-    dispatch(getApprovalAssignee(user?.data?.user?._id));
+    dispatch(getApprovalAssignee(userId));
   }, []);
 
   useEffect(() => {
@@ -148,7 +153,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   <div
                     className={`ml-8 bg-blue-400 text-white inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
                   >
-                    {`${x?.data?.pendingCount}` || 0}
+                    {`${x?.data?.pendingCount || 0}`}
                   </div>
                 </div>
               }
@@ -347,7 +352,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   size={20}
                 />
               }
-              
               pathname={pathname}
               text="Repayment"
               link="/repayment"
@@ -534,7 +538,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 setActiveLink("");
               }}
             />
-            <SidebarLink
+            {/* <SidebarLink
               allowedRoleTags={[
                 "LO",
                 "CFO",
@@ -556,13 +560,37 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               onClick={() => {
                 handleSidebarOpen(false);
               }}
+            /> */}
+
+            <SidebarLink
+              allowedRoleTags={[
+                "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "ICO",
+                "COF",
+                "CT0",
+                "LR0",
+                "Dir",
+                "OFA",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<AiFillDashboard size={20} />}
+              text="Employee Dashboard"
+              link={`/employee-dashboard/${userId}`}
+              sideBarOpen={sideBarOpen}
+              onClick={() => {
+                handleSidebarOpen(false);
+              }}
             />
           </div>
         </div>
 
         <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
           <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
-            <SidebarLink
+            {/* <SidebarLink
               allowedRoleTags={[
                 "LO",
                 "CFO",
@@ -587,7 +615,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 localStorage.removeItem("email");
                 //localStorage.clear();
               }}
-            />
+            /> */}
           </div>
         </div>
       </div>
@@ -667,7 +695,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   <div
                     className={`ml-8 bg-blue-400 text-white inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
                   >
-                    {`${x?.data?.pendingCount}` || 0}
+                    {`${x?.data?.pendingCount || 0}`}
                   </div>
                 </div>
               }
