@@ -58,7 +58,6 @@ const PaymentPage = () => {
       .unwrap()
       .then(() => {
         toast.success("Payment approved");
-        dispatch(getAllRepaymentHistory());
         setDisableApprovalBtn(false);
         // dispatch(getSingleRepayment(id));
         // setTimeout(() => {
@@ -71,9 +70,6 @@ const PaymentPage = () => {
         toast.error(err?.message);
         setDisableApprovalBtn(false);
         console.log(err);
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 3000);
       });
   };
 

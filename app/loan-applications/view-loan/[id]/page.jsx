@@ -795,7 +795,7 @@ const ViewLoan = () => {
                         "text-swBlue text-sm py-2 rounded-lg font-medium underline"
                       }
                     >
-                      {data?.data?.loanApplication?.createdBy?.email}
+                      {data?.data?.loanApplication?.createdBy?.firstName}  {data?.data?.loanApplication?.createdBy?.lastName}
                     </button>
                   </div>
                 </div>
