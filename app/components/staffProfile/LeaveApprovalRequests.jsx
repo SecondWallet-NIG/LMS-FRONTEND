@@ -20,6 +20,7 @@ const LeaveApprovalRequests = () => {
   ];
 
   const customDataTransformer = (apiData) => {
+    console.log({ apiData });
     return apiData?.leaveRequests?.map((item) => ({
       id: item?.leaveDetails?._id,
       createdAt: (
@@ -31,10 +32,11 @@ const LeaveApprovalRequests = () => {
         <div>
           <div className="text-[15px] font-light text-gray-700">
             <div className="text-[15px] font-light text-gray-700">
-              {item?.userDetails?.lastName} {item?.userDetails?.firstName}
+              {item?.leaveDetails?.userDetails?.lastName}{" "}
+              {item?.leaveDetails?.userDetails?.firstName}
             </div>
             <div className="text-[15px] font-light text-gray-700">
-              {item?.userDetails?.email}
+              {item?.leaveDetails?.userDetails?.email}
             </div>
           </div>
         </div>

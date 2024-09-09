@@ -27,6 +27,7 @@ import { useImmer } from "use-immer";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
+import Loader from "@/app/components/shared/Loader";
 
 const header = [
   { id: "dueDate", label: "Due Date" },
@@ -803,6 +804,7 @@ export default function InvestmentDetails() {
           setFailedModal(false);
         }}
       />
+      <Loader isOpen={statementLoad} />
     </DashboardLayout>
   );
 }

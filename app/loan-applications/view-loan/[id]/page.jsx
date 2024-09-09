@@ -46,6 +46,7 @@ import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTra
 import { formatDate } from "@/helpers";
 import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
 import { base64ToBlob, fetchPdf } from "@/app/components/helpers/utils";
+import Loader from "@/app/components/shared/Loader";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -1859,6 +1860,7 @@ const ViewLoan = () => {
           />
         </div>
       </CenterModal>
+      <Loader isOpen={statementLoad} />
     </DashboardLayout>
   );
 };
