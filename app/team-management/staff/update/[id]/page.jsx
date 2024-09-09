@@ -14,6 +14,8 @@ import { FiUser } from "react-icons/fi";
 import { IoMdCheckmark } from "react-icons/io";
 import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "@/redux/slices/userSlice";
+import { toast } from "react-toastify";
 
 const StaffUpdatePAge = () => {
   const { id } = useParams();
