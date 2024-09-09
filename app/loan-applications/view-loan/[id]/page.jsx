@@ -564,7 +564,6 @@ const ViewLoan = () => {
     return false;
   };
 
-  console.log({ data });
 
   // const hasDeclineStatus = () => {
   //   for (const approval of loanApprovals?.data?.data || []) {
@@ -795,7 +794,8 @@ const ViewLoan = () => {
                         "text-swBlue text-sm py-2 rounded-lg font-medium underline"
                       }
                     >
-                      {data?.data?.loanApplication?.createdBy?.firstName}  {data?.data?.loanApplication?.createdBy?.lastName}
+                      {data?.data?.loanApplication?.createdBy?.firstName}{" "}
+                      {data?.data?.loanApplication?.createdBy?.lastName}
                     </button>
                   </div>
                 </div>
@@ -811,20 +811,24 @@ const ViewLoan = () => {
                     </p>
                   </div>
                 </div>
-                <div className="w-full  sm:w-[10rem] rounded-xl">
-                  <div>
-                    <Button
-                      // size="normal"
-                      // variant="primary"
-                      className="text-xs text-swBlue rounded-md"
-                      onClick={() => getLoanStatement()}
-                      disabled={statementLoad}
-                      blueBtn={true}
-                    >
-                      Generate Statement
-                    </Button>
-                  </div>
-                </div>
+                {data?.data?.loanApplication?.status === "In Progress" ||
+                  data?.data?.loanApplication?.status === "Pending" ||
+                  data?.data?.loanApplication?.status === "Declined" || (
+                    <div className="w-full  sm:w-[10rem] rounded-xl">
+                      <div>
+                        <Button
+                          // size="normal"
+                          // variant="primary"
+                          className="text-xs text-swBlue rounded-md"
+                          onClick={() => getLoanStatement()}
+                          disabled={statementLoad}
+                          blueBtn={true}
+                        >
+                          Generate Statement
+                        </Button>
+                      </div>
+                    </div>
+                  )}
               </div>
             </div>
           </section>
