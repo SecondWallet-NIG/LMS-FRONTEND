@@ -7,7 +7,7 @@ import { getAllDepartments } from "@/redux/slices/hrmsSlice";
 import { getRoles } from "@/redux/slices/roleSlice";
 import { getUserById } from "@/redux/slices/userSlice";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
@@ -15,9 +15,10 @@ import { IoMdCheckmark } from "react-icons/io";
 import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "@/redux/slices/userSlice";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const StaffUpdatePAge = () => {
+  const router = useRouter();
   const { id } = useParams();
   const dispatch = useDispatch();
   const [profileImg, setProfileImg] = useState(null);
@@ -37,6 +38,8 @@ const StaffUpdatePAge = () => {
     status: "",
     isRoleAdmin: false,
   });
+
+  console.log({ data });
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -101,6 +104,7 @@ const StaffUpdatePAge = () => {
     payload.append("phoneNumber", formData.phoneNumber);
     payload.append("role", formData.role);
     payload.append("profilePicture", formData.profilePicture);
+    payload.append("role[department]", formData.department);
 
     dispatch(
       updateUser({ userId: data?.data?.user?._id, updatedData: payload })
@@ -108,8 +112,7 @@ const StaffUpdatePAge = () => {
       .unwrap()
       .then((res) => {
         toast.success("Profile updated successfully");
-        getUserById(data?.data?.user?._id);
-        setIsOpen(false);
+        dispatch(getUserById(id));
         //  window.location.reload();
       })
       .catch((error) => {
@@ -145,6 +148,7 @@ const StaffUpdatePAge = () => {
       isBackNav={true}
       paths={["Team Management", "Staff", "Update Staff"]}
     >
+      <ToastContainer />
       <div className="flex justify-center p-5">
         <form
           id="add-user-form"
@@ -160,7 +164,7 @@ const StaffUpdatePAge = () => {
               </div>
             </div>
 
-            <div className="pt-8 px-5 pb-16 overflow-y-auto bg-white relative">
+            <div className="pt-8 px-5 pb-16 overflow-y-auto scrollbar-hide bg-white relative">
               {/* <div className="flex flex-col"> */}
               <div className="flex">
                 <p className="font-semibold my-5 w-1/4">Profile picture</p>
@@ -318,7 +322,7 @@ const StaffUpdatePAge = () => {
               <EditableButton
                 whiteBtn={true}
                 label={"Cancel"}
-                onClick={() => setIsOpen(false)}
+                onClick={() => router.back()}
               />
               <EditableButton
                 blueBtn={true}
