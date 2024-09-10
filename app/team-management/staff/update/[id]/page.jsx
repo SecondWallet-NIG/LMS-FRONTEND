@@ -23,6 +23,7 @@ const StaffUpdatePAge = () => {
   const dispatch = useDispatch();
   const [profileImg, setProfileImg] = useState(null);
   const [fileError, setFileError] = useState("");
+  const [allDepartments, setAllDepartments] = useState([]);
   const { data, loading } = useSelector((state) => state.user);
   const { data: roleData } = useSelector((state) => state?.role);
   const { data: departments } = useSelector((state) => state?.hrms);
@@ -39,7 +40,7 @@ const StaffUpdatePAge = () => {
     isRoleAdmin: false,
   });
 
-  console.log({ data });
+  // console.log({ data });
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -104,7 +105,7 @@ const StaffUpdatePAge = () => {
     payload.append("phoneNumber", formData.phoneNumber);
     payload.append("role", formData.role);
     payload.append("profilePicture", formData.profilePicture);
-    payload.append("role[department]", formData.department);
+    // payload.append("department", formData.department);
 
     dispatch(
       updateUser({ userId: data?.data?.user?._id, updatedData: payload })
@@ -135,6 +136,45 @@ const StaffUpdatePAge = () => {
       profilePicture: data?.data?.user?.profilePicture,
     });
   }, [data]);
+
+  // console.log("roll", roleData, departments?.data?.departments);
+
+  // useEffect(() => {
+  //   if (formData?.role && departments?.data?.departments) {
+  //     // const dept = roleData
+  //     roleData?.data?.map((item, i) => {
+  //       // console.log(item?.department);
+  //       // console.log(departments?.data?.departments[i]);
+  //       for (let i = 0; i < departments?.data?.departments?.length; i++) {
+  //         if (item?.id === formData.role && i._id === item?.department?._id) {
+  //           console.log("trial", item);
+  //         }
+  //       }
+  //       // if (departments?.data?.departments?.includes(item?.department)) {
+  //       //   console.log("trial", item);
+  //       // }
+  //     });
+  //     // setAllDepartments(modifyObjects(departments?.data?.departments));
+  //   }
+  // }, [formData?.role]);
+
+  useEffect(() => {
+    if (formData?.role && roleData?.data && departments?.data?.departments) {
+      const dept = roleData?.data
+        .map((item) => {
+          return departments?.data?.departments.find((department) => {
+            return (
+              item?._id === formData.role &&
+              department?._id === item?.department?._id
+            );
+          });
+        })
+        .filter(Boolean); // Remove undefined values
+
+      console.log("trial", dept);
+      setAllDepartments(modifyObjects(dept));
+    }
+  }, [formData?.role, departments?.data?.departments, roleData?.data]);
 
   useEffect(() => {
     dispatch(getUserById(id));
@@ -286,12 +326,16 @@ const StaffUpdatePAge = () => {
                   <SelectField
                     name="department"
                     label={"Select User Department"}
+                    disabled={true}
                     required={true}
-                    value={modifyObjects(departments?.data?.departments).find(
-                      (option) => option.value === formData.department
-                    )}
+                    value={
+                      allDepartments[0] || {
+                        label: "No Assigned Department",
+                        value: "",
+                      }
+                    }
                     isSearchable={false}
-                    optionValue={modifyObjects(departments?.data?.departments)}
+                    optionValue={allDepartments}
                     onChange={(selectedOption) =>
                       handleSelectChange(selectedOption, "department")
                     }

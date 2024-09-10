@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Button from "../shared/buttonComponent/Button";
 import { AiOutlinePlus } from "react-icons/ai";
 
-export default function StaffDeptInfo({ data, id, isDashboard }) {
+export default function StaffDeptInfo({ data, isDashboard }) {
   const router = useRouter();
   console.log({ data });
   const returnCardDetails = (name, value) => {
@@ -22,10 +22,14 @@ export default function StaffDeptInfo({ data, id, isDashboard }) {
         <p className="text-swBlue font-medium text-md">
           Department Information
         </p>
-        {(!data?.user?.role?.department && !isDashboard) && (
+        {!data?.user?.role?.department && !isDashboard && (
           <Button
             className="border border-swBlue text-swBlue hover:bg-swDarkBlue text-xs md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap flex gap-1"
-            onClick={() => router.push(`/team-management/staff/update/${id}`)}
+            onClick={() =>
+              router.push(
+                `/team-management/role/department/update/${data?.user?.role?._id}`
+              )
+            }
           >
             {!isDashboard && <AiOutlinePlus size={15} />}
             <p className="">Add Department</p>
