@@ -14,6 +14,7 @@ const RolePage = () => {
 
     const customDataTransformer = (apiData) => {
         return apiData?.map((item) => ({
+            id: item._id,
             name: (
                 <div>
                     <div className="text-[15px] font-light text-gray-700 capitalize">{item.name}</div>
@@ -44,6 +45,7 @@ const RolePage = () => {
                     apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/role/all`}
                     initialData={[]}
                     headers={headers}
+                    onClickRow={"/team-management/role/department/update/"}
                     filters={true}
                     pagination={true}
                     btnText={

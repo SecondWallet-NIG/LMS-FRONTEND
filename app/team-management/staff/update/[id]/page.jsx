@@ -7,19 +7,23 @@ import { getAllDepartments } from "@/redux/slices/hrmsSlice";
 import { getRoles } from "@/redux/slices/roleSlice";
 import { getUserById } from "@/redux/slices/userSlice";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FiUser } from "react-icons/fi";
 import { IoMdCheckmark } from "react-icons/io";
 import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "@/redux/slices/userSlice";
+import { toast, ToastContainer } from "react-toastify";
 
 const StaffUpdatePAge = () => {
+  const router = useRouter();
   const { id } = useParams();
   const dispatch = useDispatch();
   const [profileImg, setProfileImg] = useState(null);
   const [fileError, setFileError] = useState("");
+  const [allDepartments, setAllDepartments] = useState([]);
   const { data, loading } = useSelector((state) => state.user);
   const { data: roleData } = useSelector((state) => state?.role);
   const { data: departments } = useSelector((state) => state?.hrms);
@@ -35,6 +39,8 @@ const StaffUpdatePAge = () => {
     status: "",
     isRoleAdmin: false,
   });
+
+  // console.log({ data });
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -99,6 +105,7 @@ const StaffUpdatePAge = () => {
     payload.append("phoneNumber", formData.phoneNumber);
     payload.append("role", formData.role);
     payload.append("profilePicture", formData.profilePicture);
+    // payload.append("department", formData.department);
 
     dispatch(
       updateUser({ userId: data?.data?.user?._id, updatedData: payload })
@@ -106,8 +113,7 @@ const StaffUpdatePAge = () => {
       .unwrap()
       .then((res) => {
         toast.success("Profile updated successfully");
-        getUserById(data?.data?.user?._id);
-        setIsOpen(false);
+        dispatch(getUserById(id));
         //  window.location.reload();
       })
       .catch((error) => {
@@ -131,6 +137,45 @@ const StaffUpdatePAge = () => {
     });
   }, [data]);
 
+  // console.log("roll", roleData, departments?.data?.departments);
+
+  // useEffect(() => {
+  //   if (formData?.role && departments?.data?.departments) {
+  //     // const dept = roleData
+  //     roleData?.data?.map((item, i) => {
+  //       // console.log(item?.department);
+  //       // console.log(departments?.data?.departments[i]);
+  //       for (let i = 0; i < departments?.data?.departments?.length; i++) {
+  //         if (item?.id === formData.role && i._id === item?.department?._id) {
+  //           console.log("trial", item);
+  //         }
+  //       }
+  //       // if (departments?.data?.departments?.includes(item?.department)) {
+  //       //   console.log("trial", item);
+  //       // }
+  //     });
+  //     // setAllDepartments(modifyObjects(departments?.data?.departments));
+  //   }
+  // }, [formData?.role]);
+
+  useEffect(() => {
+    if (formData?.role && roleData?.data && departments?.data?.departments) {
+      const dept = roleData?.data
+        .map((item) => {
+          return departments?.data?.departments.find((department) => {
+            return (
+              item?._id === formData.role &&
+              department?._id === item?.department?._id
+            );
+          });
+        })
+        .filter(Boolean); // Remove undefined values
+
+      console.log("trial", dept);
+      setAllDepartments(modifyObjects(dept));
+    }
+  }, [formData?.role, departments?.data?.departments, roleData?.data]);
+
   useEffect(() => {
     dispatch(getUserById(id));
     dispatch(getRoles());
@@ -143,6 +188,7 @@ const StaffUpdatePAge = () => {
       isBackNav={true}
       paths={["Team Management", "Staff", "Update Staff"]}
     >
+      <ToastContainer />
       <div className="flex justify-center p-5">
         <form
           id="add-user-form"
@@ -158,7 +204,7 @@ const StaffUpdatePAge = () => {
               </div>
             </div>
 
-            <div className="pt-8 px-5 pb-16 overflow-y-auto bg-white relative">
+            <div className="pt-8 px-5 pb-16 overflow-y-auto scrollbar-hide bg-white relative">
               {/* <div className="flex flex-col"> */}
               <div className="flex">
                 <p className="font-semibold my-5 w-1/4">Profile picture</p>
@@ -280,12 +326,16 @@ const StaffUpdatePAge = () => {
                   <SelectField
                     name="department"
                     label={"Select User Department"}
+                    disabled={true}
                     required={true}
-                    value={modifyObjects(departments?.data?.departments).find(
-                      (option) => option.value === formData.department
-                    )}
+                    value={
+                      allDepartments[0] || {
+                        label: "No Assigned Department",
+                        value: "",
+                      }
+                    }
                     isSearchable={false}
-                    optionValue={modifyObjects(departments?.data?.departments)}
+                    optionValue={allDepartments}
                     onChange={(selectedOption) =>
                       handleSelectChange(selectedOption, "department")
                     }
@@ -316,7 +366,7 @@ const StaffUpdatePAge = () => {
               <EditableButton
                 whiteBtn={true}
                 label={"Cancel"}
-                onClick={() => setIsOpen(false)}
+                onClick={() => router.back()}
               />
               <EditableButton
                 blueBtn={true}
