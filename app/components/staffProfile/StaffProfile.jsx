@@ -52,7 +52,7 @@ const StaffData = ({ path, isDashboard }) => {
             />
 
             {/* Department information */}
-            <StaffDeptInfo data={data?.data} />
+            <StaffDeptInfo data={data?.data} isDashboard={isDashboard}/>
           </div>
           <div className="mt-10 mb-5">
             <button
