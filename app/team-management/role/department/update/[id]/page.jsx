@@ -42,10 +42,14 @@ const UpdateDepartment = () => {
   useEffect(() => {
     if (roles?.data?.length > 0) {
       const role = roles?.data.find((role) => role._id === id);
-
+      setState((draft) => {
+        draft.department = role?.department?._id;
+      });
       setRole({ name: role.name, tag: role.tag });
     }
   }, [roles?.data]);
+
+  console.log({ role });
 
   useEffect(() => {
     if (data?.data) {
@@ -87,8 +91,7 @@ const UpdateDepartment = () => {
       .catch((err) => {
         setState((draft) => {
           draft.failedModal = true;
-          draft.failedMessage =
-            err?.message || "Role update has failed.";
+          draft.failedMessage = err?.message || "Role update has failed.";
           draft.loading = false;
         });
       });
@@ -140,6 +143,9 @@ const UpdateDepartment = () => {
                 // label={"Select department"}
                 // required={true}
                 isSearchable={true}
+                value={state.departments.find(
+                  (item) => item.value === state?.department
+                )}
                 placeholder={data?.data ? "Select Department..." : "Loading..."}
                 onChange={(e) =>
                   setState((draft) => {
