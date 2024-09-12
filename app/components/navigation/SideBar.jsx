@@ -47,7 +47,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   };
 
   useEffect(() => {
-    // setSideBarOpen(true);
     setTimeout(() => {
       setSideBarOpen(false);
     }, 1000);
@@ -76,7 +75,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
         onMouseEnter={() => handleSidebarOpen(true)}
         onMouseLeave={() => handleSidebarOpen(false)}
       >
-        <div className="flex justify-center items-center p-5 h-[4.55rem] border-b border-b-gray-300">
+        <div className="flex justify-center items-center p-5">
           {sideBarOpen ? (
             <Image src={companyLogo} alt="company logo" priority={true} />
           ) : (
@@ -92,7 +91,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
           )}
         </div>
 
-        <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
+        <div className="border-b border-b-gray-300 text-lg xl:text-xl">
           <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
             <div>
               <SidebarLink
@@ -105,6 +104,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   "COF",
                   "LR0",
                   "CT0",
+                  'HRM',
                   "Dir",
                   "System Admin",
                 ]}
@@ -135,6 +135,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "COF",
                 "LR0",
                 "CT0",
+                'HRM',
                 "Dir",
                 "System Admin",
               ]}
@@ -173,6 +174,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "ICO",
                 "COF",
                 "LR0",
+                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -249,6 +251,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "ICO",
                 "COF",
                 "LR0",
+                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -278,6 +281,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
+                'HRM',
                 "LR0",
                 "CT0",
                 "Dir",
@@ -307,6 +311,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
                 "COF",
                 "LR0",
                 "CT0",
@@ -340,6 +345,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
+                'HRM',
                 "CT0",
                 "LR0",
                 "Dir",
@@ -369,6 +375,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
                 "COF",
                 "CT0",
                 "LR0",
@@ -404,6 +411,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
+                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -421,6 +429,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
+                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -438,7 +447,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             userRoleTag === "Dir" ? (
               <>
                 <SidebarLink
-                  allowedRoleTags={["CFO", "CEO", "CT0", "Dir", "System Admin"]}
+                  allowedRoleTags={["CFO", "CEO", "CT0", "Dir",     'HRM', "System Admin"]}
                   userRoleTag={userRoleTag}
                   icon={<FaPeopleGroup size={20} />}
                   text="Team management"
@@ -465,6 +474,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
+                'HRM',
                 "CT0",
                 "OFA",
                 "Dir",
@@ -483,6 +493,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "CT0",
+                'HRM',
                 "Dir",
                 "OFA",
                 "System Admin",
@@ -517,6 +528,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
+                'HRM',
                 "LR0",
                 "CT0",
                 "Dir",
@@ -570,6 +582,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
+                'HRM',
+                'GS',
                 "CT0",
                 "LR0",
                 "Dir",
@@ -644,6 +658,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   "CEO",
                   "CAO",
                   "ICO",
+                  'HRM',
                   "COF",
                   "LR0",
                   "CT0",
@@ -674,6 +689,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
                 "COF",
                 "LR0",
                 "CT0",
@@ -713,6 +729,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
                 "COF",
                 "LR0",
                 "CT0",
@@ -786,6 +803,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
                 "COF",
                 "LR0",
                 "CT0",
@@ -816,6 +834,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
                 "COF",
                 "LR0",
                 "CT0",
@@ -847,6 +866,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
+                'HRM',
                 "LR0",
                 "CT0",
                 "Dir",
@@ -878,6 +898,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
                 "COF",
                 "CT0",
                 "LR0",
@@ -908,6 +929,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
                 "COF",
                 "CT0",
                 "LR0",
@@ -943,6 +965,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
+                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -959,6 +982,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
+                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -1003,6 +1027,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
+                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -1019,6 +1044,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
+                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -1053,6 +1079,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
+                'HRM',
                 "CT0",
                 "LR0",
                 "Dir",
@@ -1085,6 +1112,8 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
+                'HRM',
+                "GS",
                 "COF",
                 "LR0",
                 "CT0",
