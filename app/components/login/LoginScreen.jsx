@@ -59,6 +59,8 @@ const LoginScreen = () => {
           router.push("/onboarding");
         } else if (res?.data?.user?.role.tag === "OFA") {
           router.push("/expenses");
+        } else if (res?.data?.user?.role.tag === "GS") {
+          router.push(`/employee-dashboard/${res?.data?.user?._id}`);
         } else {
           router.push("/dashboard");
         }
@@ -68,21 +70,7 @@ const LoginScreen = () => {
       });
   };
 
-  // // Handle the response data when it changes
-  // useEffect(() => {
-  //  let x = JSON.parse(localStorage.getItem("user"))
 
-  //   if (x) {
-  //   //  localStorage.setItem("user", JSON.stringify(userData));
-  //     if (userData?.data?.user?.firstLogin === true) {
-  //       router.push("/onboarding");
-  //     } else {
-  //       router.push("/dashboard");
-  //     }
-  //   } else {
-  //     router.push("/");
-  //   }
-  // }, [userData]);
 
   const handleSeePassWord = () => {
     setSeePassword(!seePassword);
