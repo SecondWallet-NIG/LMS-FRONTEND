@@ -42,10 +42,14 @@ const UpdateDepartment = () => {
   useEffect(() => {
     if (roles?.data?.length > 0) {
       const role = roles?.data.find((role) => role._id === id);
-
+      setState((draft) => {
+        draft.department = role?.department?._id;
+      });
       setRole({ name: role.name, tag: role.tag });
     }
   }, [roles?.data]);
+
+  console.log({ role });
 
   useEffect(() => {
     if (data?.data) {
@@ -77,7 +81,7 @@ const UpdateDepartment = () => {
         setState((draft) => {
           draft.successModal = true;
           draft.successMessage =
-            res?.messsage || "Department has been added successfully.";
+            res?.messsage || "Role has been updated successfully.";
           draft.loading = false;
           draft.role = "";
           draft.permissions = [];
@@ -87,8 +91,7 @@ const UpdateDepartment = () => {
       .catch((err) => {
         setState((draft) => {
           draft.failedModal = true;
-          draft.failedMessage =
-            err?.message || "Department addition has failed.";
+          draft.failedMessage = err?.message || "Role update has failed.";
           draft.loading = false;
         });
       });
@@ -100,7 +103,7 @@ const UpdateDepartment = () => {
         <div className="flex justify-between items-center p-3">
           <div>
             <p className="text-xl lg:text-2xl font-bold text-swBlack">
-              Add Department
+              Update Role
             </p>
             <p className="text-sm mt-1">Role Information</p>
           </div>
@@ -140,6 +143,9 @@ const UpdateDepartment = () => {
                 // label={"Select department"}
                 // required={true}
                 isSearchable={true}
+                value={state.departments.find(
+                  (item) => item.value === state?.department
+                )}
                 placeholder={data?.data ? "Select Department..." : "Loading..."}
                 onChange={(e) =>
                   setState((draft) => {
@@ -159,15 +165,15 @@ const UpdateDepartment = () => {
             className={`text-white font-semibold p-2 px-16 bg-swBlue 
                         hover:bg-swBluee500 rounded-md flex items-center gap-2`}
           >
-            Add Department
+            Update Role
           </Button>
         </div>
       </div>
       <SuccessModal
         isOpen={state.successModal}
         description={state.successMessage}
-        title={"Department Added Successfully"}
-        btnLeft={"Staff Profile"}
+        title={"Role Updated Successfully"}
+        btnLeft={"Roles"}
         btnLeftFunc={() => router.back()}
         btnRight={"Done"}
         btnRightFunc={() =>
@@ -184,7 +190,7 @@ const UpdateDepartment = () => {
       <CancelModal
         isOpen={state.failedModal}
         description={state.failedMessage}
-        title={"Department Addition Failed"}
+        title={"Role update Failed"}
         noButtons={true}
         onClose={() =>
           setState((draft) => {
