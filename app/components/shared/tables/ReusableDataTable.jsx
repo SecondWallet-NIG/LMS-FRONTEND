@@ -539,25 +539,29 @@ function ReusableDataTable({
         {filters && (
           <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
             <div className="flex gap-2 items-center justify-between w-fit">
-              <div className="text-xs font-semibold flex border border-1 items-center mb-4 h-3">
-                <Select
-                  className="text-xs"
-                  styles={customStyles}
-                  options={options}
-                  value={{ value: perPage, label: perPage }}
-                  onChange={handleSelectChange}
-                  isSearchable={false}
-                />
-              </div>
-              <div className="flex gap-3 items-center">
-                <button
-                  onClick={toggleDateFilter}
-                  className="text-xs font-semibold flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg hover:bg-swBlue hover:text-white"
-                >
-                  <FiFilter size={15} />
-                  <p>Filter By Date</p>
-                </button>
-              </div>
+              {data?.length == 0 ? null : (
+                <div className="text-xs font-semibold flex border border-1 items-center mb-4 h-3">
+                  <Select
+                    className="text-xs"
+                    styles={customStyles}
+                    options={options}
+                    value={{ value: perPage, label: perPage }}
+                    onChange={handleSelectChange}
+                    isSearchable={false}
+                  />
+                </div>
+              )}
+              {data?.length == 0 ? null : (
+                <div className="flex gap-3 items-center">
+                  <button
+                    onClick={toggleDateFilter}
+                    className="text-xs font-semibold flex gap-2 items-center border border-swGray bg-white py-1.5 px-3 mb-4 rounded-lg hover:bg-swBlue hover:text-white"
+                  >
+                    <FiFilter size={15} />
+                    <p>Filter By Date</p>
+                  </button>
+                </div>
+              )}
               {filterParams && (
                 <div className="flex gap-3 items-center">
                   <button
@@ -612,87 +616,88 @@ function ReusableDataTable({
                 </div>
               ) : null}
             </div>
+            {data?.length == 0 ? null : (
+              <div className="mb-4 flex flex-col gap-2 sm:gap-0 xs:flex-row items-center justify-between w-ful">
+                <div className="flex justify-center items-center gap-2 w-full">
+                  <InputField
+                    startIcon={<FiSearch size={20} />}
+                    endIcon={
+                      <IoIosClose
+                        size={20}
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setSearchTerm("");
+                          handleLogSearch("close");
+                        }}
+                      />
+                    }
+                    placeholder={"Search..."}
+                    css={`
+                      ${logSearch
+                        ? "translate-x-[3rem] opacity-1 z-10"
+                        : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
+                    `}
+                    borderColor="bg-gray-200 "
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
 
-            <div className="mb-4 flex flex-col gap-2 sm:gap-0 xs:flex-row items-center justify-between w-ful">
-              <div className="flex justify-center items-center gap-2 w-full">
-                <InputField
-                  startIcon={<FiSearch size={20} />}
-                  endIcon={
-                    <IoIosClose
+                  <div
+                    className={`${
+                      logSearch ? "opacity-0" : "opacity-1"
+                    } bg-white w-fit p-2 rounded-md cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all ease-in-out`}
+                  >
+                    <FiSearch
                       size={20}
-                      className="cursor-pointer"
                       onClick={() => {
-                        setSearchTerm("");
-                        handleLogSearch("close");
+                        handleLogSearch("open");
                       }}
                     />
-                  }
-                  placeholder={"Search..."}
-                  css={`
-                    ${logSearch
-                      ? "translate-x-[3rem] opacity-1 z-10"
-                      : "translate-x-[17rem] -z-10 opacity-0"} transition-all ease-in-out
-                  `}
-                  borderColor="bg-gray-200 "
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
+                  </div>
 
-                <div
-                  className={`${
-                    logSearch ? "opacity-0" : "opacity-1"
-                  } bg-white w-fit p-2 rounded-md cursor-pointer border-2 border-transparent hover:border-gray-200 transition-all ease-in-out`}
-                >
-                  <FiSearch
-                    size={20}
-                    onClick={() => {
-                      handleLogSearch("open");
-                    }}
-                  />
-                </div>
-
-                {/* <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer">
+                  {/* <div className="bg-white w-fit p-2 rounded-md border-2 border-transparent hover:border-gray-200 cursor-pointer">
                   <BsThreeDotsVertical size={20} />
                 </div> */}
-              </div>
-              <div className="flex">
-                {btnText ? (
-                  <div>
-                    <Button
-                      className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
-                      onClick={btnTextClick}
-                    >
-                      {btnText}
-                    </Button>
-                  </div>
-                ) : null}
-                <Button
-                  disabled={loading ? true : false}
-                  className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
-                  onClick={handleDownload}
+                </div>
+                <div className="flex">
+                  {btnText ? (
+                    <div>
+                      <Button
+                        className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                        onClick={btnTextClick}
+                      >
+                        {btnText}
+                      </Button>
+                    </div>
+                  ) : null}
+                  <Button
+                    disabled={loading ? true : false}
+                    className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap"
+                    onClick={handleDownload}
+                  >
+                    <div className="flex gap-1 items-center p-1">
+                      <p className=""> {loading ? "Exporting" : "Export"}</p>
+                    </div>
+                  </Button>
+                </div>
+                <div
+                  className="ml-2 p-1 rounded-lg cursor-pointer hover:bg-gray-50 relative"
+                  onClick={() => setCustomizeOption(!customiseOption)}
                 >
-                  <div className="flex gap-1 items-center p-1">
-                    <p className=""> {loading ? "Exporting" : "Export"}</p>
-                  </div>
-                </Button>
+                  <HiDotsVertical size={20} />
+                  {customiseOption && (
+                    <div className="absolute p-2 rounded-lg bg-white top-full right-0 mt-2 shadow-md w-52">
+                      <p
+                        className="p-2 hover:bg-gray-50"
+                        onClick={() => setCustomizeTableModal(true)}
+                      >
+                        Customize table
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div
-                className="ml-2 p-1 rounded-lg cursor-pointer hover:bg-gray-50 relative"
-                onClick={() => setCustomizeOption(!customiseOption)}
-              >
-                <HiDotsVertical size={20} />
-                {customiseOption && (
-                  <div className="absolute p-2 rounded-lg bg-white top-full right-0 mt-2 shadow-md w-52">
-                    <p
-                      className="p-2 hover:bg-gray-50"
-                      onClick={() => setCustomizeTableModal(true)}
-                    >
-                      Customize table
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
+            )}
           </div>
         )}
         {data?.length > 0 && loading == false ? (
