@@ -105,7 +105,7 @@ const StaffUpdatePAge = () => {
     payload.append("phoneNumber", formData.phoneNumber);
     payload.append("role", formData.role);
     payload.append("profilePicture", formData.profilePicture);
-    // payload.append("department", formData.department);
+    payload.append("status", formData.status);
 
     dispatch(
       updateUser({ userId: data?.data?.user?._id, updatedData: payload })

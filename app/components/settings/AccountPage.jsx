@@ -11,10 +11,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 const AccountPage = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
-  const [userDetails, setUserDetails] = useState("");
+  const [userDetails, setUserDetails] = useState(null);
   const [firstName, setFirstName] = useState(userDetails?.firstName);
   const [lastName, setLastName] = useState(userDetails?.lastName);
   const [email, setEmail] = useState(userDetails?.email);
@@ -27,6 +29,8 @@ const AccountPage = () => {
     email: "",
     role: "",
   });
+  // console.log({ userDetails });
+  // console.log("userDetails", formData);
 
   const handleFileInputChange = (e) => {
     const files = Array.from(e.target.files);
@@ -53,12 +57,20 @@ const AccountPage = () => {
     payload.append("lastName", formData.lastName);
     payload.append("email", formData.email);
 
-    dispatch(updateUser({ userId: userDetails?._id, payload }))
+    dispatch(updateUser({ userId: userDetails?._id, updatedData: payload }))
       .unwrap()
       .then((res) => {
         toast.success("Profile updated successfully");
         getUserById(userDetails?._id);
         setLoading(false);
+
+        const user = JSON.parse(localStorage.getItem("user"));
+        user.data.user = res;
+        localStorage.setItem("user", JSON.stringify(user));
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       })
       .catch((error) => {
         toast.error("An error occured");
@@ -69,6 +81,7 @@ const AccountPage = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = JSON.parse(localStorage.getItem("user"));
+      console.log({ user });
       setUserDetails(user?.data?.user);
     }
   }, []);
@@ -247,11 +260,15 @@ const AccountPage = () => {
       </div>
 
       <div className="flex justify-end gap-3 mt-5 p-3 border-t">
-        <EditableButton whiteBtn={true} label={"Cancel"} disabled={true} />
+        <EditableButton
+          whiteBtn={true}
+          label={"Cancel"}
+          onClick={router.back()}
+        />
         <EditableButton
           blueBtn={true}
-          // disabled={loading ? true : false}
-          disabled={true}
+          disabled={loading ? true : false}
+          // disabled={true}
           label={"Save changes"}
           onClick={handleSubmit}
         />
