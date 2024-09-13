@@ -263,7 +263,7 @@ const AccountPage = () => {
         <EditableButton
           whiteBtn={true}
           label={"Cancel"}
-          onClick={router.back()}
+          onClick={() => router.back()}
         />
         <EditableButton
           blueBtn={true}
