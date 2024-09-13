@@ -40,7 +40,7 @@ const StaffUpdatePAge = () => {
     isRoleAdmin: false,
   });
 
-  // console.log({ data });
+  console.log(data);
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
@@ -177,6 +177,24 @@ const StaffUpdatePAge = () => {
   }, [formData?.role, departments?.data?.departments, roleData?.data]);
 
   useEffect(() => {
+    if (
+      formData?.profilePicture !== null &&
+      formData?.profilePicture &&
+      (formData?.profilePicture instanceof Blob ||
+        formData?.profilePicture instanceof File)
+    ) {
+      try {
+        setProfileImg(URL.createObjectURL(formData.profilePicture));
+      } catch (error) {
+        console.error("Error creating object URL:", error);
+      }
+    } else {
+      // Handle cases where the selected file is not a Blob or File
+      console.error("Invalid file type selected.");
+    }
+  }, [formData?.profilePicture]);
+
+  useEffect(() => {
     dispatch(getUserById(id));
     dispatch(getRoles());
     dispatch(getAllDepartments());
@@ -220,14 +238,27 @@ const StaffUpdatePAge = () => {
                         />
                       </div>
                     ) : (
-                      <div className="border-2 p-4 rounded-full">
-                        <FiUser size={40} />
+                      <div>
+                        {data?.data?.user?.profilePicture ? (
+                          <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
+                            <Image
+                              src={data?.data?.user?.profilePicture}
+                              alt="profile"
+                              fill
+                              sizes="100%"
+                            />
+                          </div>
+                        ) : (
+                          <div className="border-2 p-4 rounded-full">
+                            <FiUser size={40} />
+                          </div>
+                        )}
                       </div>
                     )}
 
                     <label
                       htmlFor="profilePicture"
-                      className="border-2 rounded-lg p-2 px-4 font-semibold cursor-pointer whitespace-nowrap"
+                      className="border-2 rounded-lg p-1 px-2 font-semibold cursor-pointer"
                     >
                       <input
                         type="file"
