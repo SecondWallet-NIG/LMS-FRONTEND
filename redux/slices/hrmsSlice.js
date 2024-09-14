@@ -41,6 +41,28 @@ export const getAllDepartments = createAsyncThunk("department", async () => {
   }
 });
 
+export const getSingleDepartment = createAsyncThunk(
+  "department-by-id",
+  async (id) => {
+    try {
+      let token = getToken();
+      const response = await axios.get(`${API_URL}/department/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          per_page: 1000,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const addNewBenefitTypes = createAsyncThunk(
   "benefit-type",
   async (payload) => {
@@ -302,6 +324,19 @@ const hrmsSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(declineLeaveRequest.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getSingleDepartment.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(getSingleDepartment.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(getSingleDepartment.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;
