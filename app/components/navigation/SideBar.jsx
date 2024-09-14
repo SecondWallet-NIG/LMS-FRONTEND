@@ -443,11 +443,12 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             {userRoleTag === "System Admin" ||
             userRoleTag === "CFO" ||
             userRoleTag === "CTO" ||
+            userRoleTag === "HRM" ||
             userRoleTag === "CEO" ||
             userRoleTag === "Dir" ? (
               <>
                 <SidebarLink
-                  allowedRoleTags={["CFO", "CEO", "CT0", "Dir",     'HRM', "System Admin"]}
+                  allowedRoleTags={["CFO", "CEO", "CT0", "Dir", 'HRM', "System Admin"]}
                   userRoleTag={userRoleTag}
                   icon={<FaPeopleGroup size={20} />}
                   text="Team management"
@@ -504,22 +505,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               link="/expenses"
               sideBarOpen={sideBarOpen}
             />
-            {/* <SidebarLink
-              allowedRoleTags={[
-                // "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "CT0",
-                "Dir",
-                "System Admin",
-              ]}
-              userRoleTag={userRoleTag}
-              icon={<FaRegStar size={20} />}
-              text="Investors"
-              link="/investors"
-              sideBarOpen={sideBarOpen}
-            /> */}
+
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -528,7 +514,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
-                'HRM',
                 "LR0",
                 "CT0",
                 "Dir",
@@ -550,30 +535,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 setActiveLink("");
               }}
             />
-            {/* <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "CT0",
-                "LR0",
-                "Dir",
-                "OFA",
-                "System Admin",
-              ]}
-              userRoleTag={userRoleTag}
-              icon={<AiOutlineSetting size={20} />}
-              text="Settings"
-              link="/settings"
-              sideBarOpen={sideBarOpen}
-              onClick={() => {
-                handleSidebarOpen(false);
-              }}
-            /> */}
-
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -582,7 +543,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
-                'HRM',
                 'GS',
                 "CT0",
                 "LR0",
