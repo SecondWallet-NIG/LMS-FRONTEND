@@ -93,6 +93,25 @@ export const createDepartment = createAsyncThunk(
   }
 );
 
+export const updateDepartment = createAsyncThunk(
+  "department/create",
+  async ({ payload, id }) => {
+    try {
+      let token = getToken();
+      const response = await axios.put(`${API_URL}/department/${id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response?.data || response;
+    } catch (error) {
+      if (error?.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const roleSlice = createSlice({
   name: "role",
   initialState: {

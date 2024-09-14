@@ -19,12 +19,12 @@ const LoanPackages = () => {
   const [showCreatePlan, setShowCreatePlan] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-
   const loanPackage =
     useSelector((state) => {
       return state?.loanPackage?.data?.data;
     }) || [];
 
+  console.log({ loanPackage });
   const handleSearch = (state) => {
     setSearchOpen(state);
   };
@@ -177,10 +177,10 @@ const LoanPackages = () => {
                     &#8358; {item?.loanAmountRange?.max.toLocaleString()}
                   </p>
                 </div>
-                <div className="flex justify-between mb-2">
+                {/* <div className="flex justify-between mb-2">
                   <p className="text-sm">Active loans</p>
                   <p className="font-semibold text-sm">100</p>
-                </div>
+                </div> */}
                 {/* <div className="flex justify-between">
                   <p>Active loans</p>
                   <p className="font-semibold">{item.active_loan}</p>

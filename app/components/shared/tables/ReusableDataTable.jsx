@@ -124,6 +124,8 @@ function ReusableDataTable({
           data?.data?.data?.investorProfiles ||
           data?.data?.data?.investments ||
           data?.data?.data?.assets ||
+          data?.data?.data?.attendances ||
+          data?.data?.data?.leaveRequests ||
           data?.data.results ||
           data?.data?.data;
         const nestedJsonData = allData;
@@ -539,7 +541,7 @@ function ReusableDataTable({
         {filters && (
           <div className="px-4 pt-4 flex flex-col md:flex-row justify-between md:items-center">
             <div className="flex gap-2 items-center justify-between w-fit">
-              {data?.length == 0 ? null : (
+              {data?.length == 0 && searchTerm.length < 1 ? null : (
                 <div className="text-xs font-semibold flex border border-1 items-center mb-4 h-3">
                   <Select
                     className="text-xs"
@@ -551,7 +553,7 @@ function ReusableDataTable({
                   />
                 </div>
               )}
-              {data?.length == 0 ? null : (
+              {data?.length == 0 && searchTerm.length < 1 ? null : (
                 <div className="flex gap-3 items-center">
                   <button
                     onClick={toggleDateFilter}
@@ -616,7 +618,7 @@ function ReusableDataTable({
                 </div>
               ) : null}
             </div>
-            {data?.length == 0 ? null : (
+            {data?.length == 0 && searchTerm.length < 1 ? null : (
               <div className="mb-4 flex flex-col gap-2 sm:gap-0 xs:flex-row items-center justify-between w-ful">
                 <div className="flex justify-center items-center gap-2 w-full">
                   <InputField
