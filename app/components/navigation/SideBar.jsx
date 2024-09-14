@@ -31,7 +31,7 @@ import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import Link from "next/link";
 import { LuArrowUpRight } from "react-icons/lu";
 import { PiCurrencyNgn } from "react-icons/pi";
-import { IoBuild } from "react-icons/io5";
+
 
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
@@ -174,7 +174,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "ICO",
                 "COF",
                 "LR0",
-                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -251,7 +250,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "ICO",
                 "COF",
                 "LR0",
-                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -281,7 +279,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
-                'HRM',
                 "LR0",
                 "CT0",
                 "Dir",
@@ -311,7 +308,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
-                'HRM',
                 "COF",
                 "LR0",
                 "CT0",
@@ -345,7 +341,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
-                'HRM',
                 "CT0",
                 "LR0",
                 "Dir",
@@ -375,7 +370,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
-                'HRM',
                 "COF",
                 "CT0",
                 "LR0",
@@ -429,7 +423,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
-                'HRM',
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -548,6 +541,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "LR0",
                 "Dir",
                 "OFA",
+                "HRM",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
