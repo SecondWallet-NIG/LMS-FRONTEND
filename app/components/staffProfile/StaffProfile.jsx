@@ -12,11 +12,12 @@ import StaffLeaveDetails from "./LeaveDetails";
 import StaffDeptInfo from "./DepartmentInformation";
 import LeaveRequests from "./LeaveRequests";
 import LeaveApprovalRequests from "./LeaveApprovalRequests";
+import Attendance from "./Attendance";
 
 const StaffData = ({ path, isDashboard }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [leaveState, setLeaveState] = useState("requests");
+  const [leaveState, setLeaveState] = useState("attendance");
   const [data, setData] = useState(null);
   // const { data, loading } = useSelector((state) => state.user);
 
@@ -52,9 +53,17 @@ const StaffData = ({ path, isDashboard }) => {
             />
 
             {/* Department information */}
-            <StaffDeptInfo data={data?.data} isDashboard={isDashboard}/>
+            <StaffDeptInfo data={data?.data} isDashboard={isDashboard} />
           </div>
           <div className="mt-10 mb-5">
+            <button
+              className={`${btnCls} ${
+                leaveState === "attendance" ? activeBtn : "border-transparent"
+              }`}
+              onClick={() => setLeaveState("attendance")}
+            >
+              Attendance
+            </button>
             <button
               className={`${btnCls} ${
                 leaveState === "requests" ? activeBtn : "border-transparent"
@@ -72,6 +81,9 @@ const StaffData = ({ path, isDashboard }) => {
               Leave Approval Requests
             </button>
           </div>
+          {leaveState === "attendance" && (
+            <Attendance isDashboard={isDashboard} />
+          )}
           {leaveState === "requests" && <LeaveRequests />}
           {leaveState === "approvals" && <LeaveApprovalRequests />}
         </div>

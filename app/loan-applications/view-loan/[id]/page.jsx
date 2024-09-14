@@ -51,11 +51,11 @@ import Loader from "@/app/components/shared/Loader";
 const ViewLoan = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { error, data } = useSelector((state) => state.loanApplication);
-  const loanPackage = useSelector((state) => state.loanPackage);
+  const { error, data } = useSelector((state) => state?.loanApplication);
+  const loanPackage = useSelector((state) => state?.loanPackage);
   //const interestType = useSelector((state) => state.interestType);
-  const user = useSelector((state) => state.user?.data?.data?.results);
-  const loanApprovals = useSelector((state) => state.loanApprovals);
+  const user = useSelector((state) => state?.user?.data?.data?.results);
+  const loanApprovals = useSelector((state) => state?.loanApprovals);
   const [activityButton, setActivityButton] = useState("activity-logs");
   const [isRequestApprovalOpen, setIsRequestApprovalOpen] = useState(false);
   const [isApprovalOpen, setApprovalOpen] = useState(false);
@@ -89,7 +89,7 @@ const ViewLoan = () => {
   });
 
   const { statementData, statementPending } = useSelector(
-    (state) => state.loanApplication
+    (state) => state?.loanApplication
   );
 
   const handleFileChange = (e) => {
@@ -157,7 +157,7 @@ const ViewLoan = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${data?.data?.customerDetails.firstName} ${data?.data?.customerDetails.lastName} - Offer Letter`;
+      a.download = `${data?.data?.customerDetails?.firstName} ${data?.data?.customerDetails?.lastName} - Offer Letter`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -308,7 +308,7 @@ const ViewLoan = () => {
         updatedData.append("loanDurationMetrics", formData.loanDurationMetrics);
         if (
           data?.data?.loanApplication?.loanFrequencyType === "Monthly" &&
-          formData.loanDurationMetrics === "Monthly"
+          formData?.loanDurationMetrics === "Monthly"
         ) {
           updatedData.append("numberOfRepayment", formData.loanDuration);
           updatedData.append("loanDuration", formData.loanDuration);
@@ -973,9 +973,9 @@ const ViewLoan = () => {
                         {/* <p>{data?.data?.loanApplication?.repaymentType} </p> */}
                         <p>
                           {
-                            repaymentTypeData.find(
+                            repaymentTypeData?.find(
                               (option) =>
-                                option.value ===
+                                option?.value ===
                                 data?.data?.loanApplication?.repaymentType
                             )?.label
                           }
@@ -1072,18 +1072,18 @@ const ViewLoan = () => {
                           <td className="p-2">
                             <button
                               className={`cursor-none ${
-                                item.status === "Approved"
+                                item?.status === "Approved"
                                   ? "bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
-                                  : item.status === "Pending"
+                                  : item?.status === "Pending"
                                   ? "bg-swLightGray text-swGray text-xs font-normal px-2 py-1 rounded-full"
-                                  : item.status === "Approval Requested"
+                                  : item?.status === "Approval Requested"
                                   ? "bg-red-400 text-white text-xs font-normal px-2 py-1 rounded-full"
-                                  : item.status === "Declined"
+                                  : item?.status === "Declined"
                                   ? "bg-red-500 text-white text-xs font-normal px-2 py-1 rounded-full"
                                   : "bg-gray-300 text-gray-800 text-xs font-normal px-2 py-1 rounded-full"
                               } px-2 py-1 rounded`}
                             >
-                              {item.status}
+                              {item?.status}
                             </button>
                           </td>
 
@@ -1419,7 +1419,7 @@ const ViewLoan = () => {
             <InputField
               label={"Enter new loan amount"}
               value={loanAmount}
-              onChange={(e) => setLoanAmount(e.target.value)}
+              onChange={(e) => setLoanAmount(e?.target?.value)}
             />
           </div>
           <EditableButton
@@ -1446,7 +1446,7 @@ const ViewLoan = () => {
           <div className="w-full mb-3">
             <SelectField
               value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
-                (option) => option.value === formData.loanPackage
+                (option) => option?.value === formData?.loanPackage
               )}
               // disabled={selectedCustomer === null ? true : false}
               name="loanPackage"
@@ -1487,7 +1487,7 @@ const ViewLoan = () => {
               value={interestRate}
               onKeyPress={preventMinus}
               onWheel={() => document.activeElement.blur()}
-              onChange={(e) => setInterestRate(e.target.value)}
+              onChange={(e) => setInterestRate(e?.target?.value)}
             />
           </div>
           <EditableButton
@@ -1513,8 +1513,8 @@ const ViewLoan = () => {
           </div>
           <div className="w-full mb-3">
             <SelectField
-              value={repaymentTypeData.find(
-                (option) => option.value === formData.repaymentType
+              value={repaymentTypeData?.find(
+                (option) => option?.value === formData?.repaymentType
               )}
               name="repaymentType"
               // disabled={formData.numberOfRepayment === 0 ? true : false}
@@ -1558,8 +1558,8 @@ const ViewLoan = () => {
           <div className="flex gap-2 items-end mb-3">
             <div className="w-1/3">
               <SelectField
-                value={loanDurationMetricsData.find(
-                  (option) => option.value === formData.loanDurationMetrics
+                value={loanDurationMetricsData?.find(
+                  (option) => option?.value === formData?.loanDurationMetrics
                 )}
                 name="loanDurationMetrics"
                 optionValue={loanDurationMetricsData}
@@ -1574,11 +1574,11 @@ const ViewLoan = () => {
             </div>
             <div className="w-2/3">
               <InputField
-                value={formData.loanDuration}
+                value={formData?.loanDuration}
                 required={false}
                 name="loanDuration"
                 onKeyPress={preventMinus}
-                onWheel={() => document.activeElement.blur()}
+                onWheel={() => document?.activeElement?.blur()}
                 activeBorderColor="border-swBlue"
                 placeholder="Enter number"
                 onChange={(e) => {
@@ -1613,8 +1613,8 @@ const ViewLoan = () => {
           <div className="flex gap-2 items-end">
             <div className="w-full mb-3">
               <SelectField
-                value={frequencyTypeData.find(
-                  (option) => option.value === formData.loanFrequencyType
+                value={frequencyTypeData?.find(
+                  (option) => option?.value === formData?.loanFrequencyType
                 )}
                 name="loanFrequencyType"
                 optionValue={frequencyTypeData}
@@ -1670,9 +1670,9 @@ const ViewLoan = () => {
                   <p className="pt-3">Bank Name: </p>
                   <p className="pt-3 font-semibold">
                     {
-                      bankArr.find(
+                      bankArr?.find(
                         (option) =>
-                          option.value ===
+                          option?.value ===
                           data?.data?.customerDetails?.bankAccount?.bankName
                       )?.label
                     }
@@ -1722,7 +1722,7 @@ const ViewLoan = () => {
             </div>
             <div className="relative pt-4 flex justify-between items-center">
               <p>
-                Disbursement Date: {format(formData.disbursementDate, "PPP")}
+                Disbursement Date: {formData?.disbursementDate &&format(formData?.disbursementDate, "PPP")}
               </p>
               <div
                 className="w-fit p-2 rounded-full border border-jsPrimary100 text-jsPrimary100 cursor-pointer"
@@ -1739,7 +1739,7 @@ const ViewLoan = () => {
                       caption: { color: "#2769b3" },
                     }}
                     modifiers={{
-                      selected: formData.disbursementDate,
+                      selected: formData?.disbursementDate,
                     }}
                     modifiersClassNames={{
                       selected: "my-selected",

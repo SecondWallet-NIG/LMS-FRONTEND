@@ -33,11 +33,11 @@ export default function StaffPersonalDetails({ data }) {
   return (
     <div>
       <div className="p-2 border-2 rounded-lg h-full">
-        <div className="flex items-start gap-5">
+        <div className="flex flex-col sm:flex-row items-start gap-5">
           {data?.user?.profilePicture &&
           data?.user?.profilePicture !== "null" &&
           data?.user?.profilePicture !== "undefined" ? (
-            <div className="h-[6rem] w-[6rem] rounded-lg text-swBlue border-swBlue relative overflow-hidden">
+            <div className="min-h-[4rem] min-w-[4rem] max-h-[4rem] max-w-[4rem]  rounded-full text-swBlue border-2 border-swBlue relative overflow-hidden">
               <Image
                 src={data?.user?.profilePicture}
                 alt="profile"
