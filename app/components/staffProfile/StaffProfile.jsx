@@ -13,6 +13,7 @@ import StaffDeptInfo from "./DepartmentInformation";
 import LeaveRequests from "./LeaveRequests";
 import LeaveApprovalRequests from "./LeaveApprovalRequests";
 import Attendance from "./Attendance";
+import ClockInDetails from "./ClockInDetails";
 
 const StaffData = ({ path, isDashboard }) => {
   const { id } = useParams();
@@ -41,7 +42,7 @@ const StaffData = ({ path, isDashboard }) => {
     <DashboardLayout isBackNav={true} paths={path}>
       <main>
         <div className="p-2.5 sm:p-2.5">
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Personal details */}
             <StaffPersonalDetails data={data?.data} />
 
@@ -54,6 +55,7 @@ const StaffData = ({ path, isDashboard }) => {
 
             {/* Department information */}
             <StaffDeptInfo data={data?.data} isDashboard={isDashboard} />
+            <ClockInDetails data={data?.data} isDashboard={isDashboard} />
           </div>
           <div className="mt-10 mb-5">
             <button
