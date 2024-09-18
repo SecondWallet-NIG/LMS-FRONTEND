@@ -93,3 +93,63 @@ export const fetchPdf = async (pdfUrl) => {
   const url = URL.createObjectURL(response.data);
   return url;
 };
+
+export const publicHolidays = [
+  new Date('2024-01-01'), // New Year's Day
+  new Date('2024-03-29'), // Good Friday
+  new Date('2024-04-01'), // Easter Monday
+  new Date('2024-05-01'), // Workers' Day
+  new Date('2024-06-12'), // Democracy Day
+  new Date('2024-06-16'), // Eid al-Fitr (Sallah) *
+  new Date('2024-06-17'), // Eid al-Fitr (Sallah) Holiday *
+  new Date('2024-07-20'), // Eid al-Adha (Sallah) *
+  new Date('2024-07-21'), // Eid al-Adha (Sallah) Holiday *
+  new Date('2024-10-01'), // Independence Day
+  new Date('2024-12-25'), // Christmas Day
+  new Date('2024-12-26'), // Boxing Day
+  // Additional religious holidays may vary
+];
+
+export const getPublicHolidays = (year) => {
+  // Function to calculate Easter Sunday using the "Anonymous Gregorian algorithm"
+  const getEasterSunday = (year) => {
+    const f = Math.floor;
+    const G = year % 19;
+    const C = f(year / 100);
+    const H = (C - f(C / 4) - f((8 * C + 13) / 25) + 19 * G + 15) % 30;
+    const I = H - f(H / 28) * (1 - f(29 / (H + 1)) * f((21 - G) / 11));
+    const J = (year + f(year / 4) + I + 2 - C + f(C / 4)) % 7;
+    const L = I - J;
+    const month = 3 + f((L + 40) / 44); // March is 3, April is 4
+    const day = L + 28 - 31 * f(month / 4);
+    return new Date(year, month - 1, day); // Easter Sunday
+  };
+
+  // Fixed holidays
+  const publicHolidays = [
+    new Date(`${year}-01-01`), // New Year's Day
+    new Date(`${year}-05-01`), // Workers' Day
+    new Date(`${year}-06-12`), // Democracy Day
+    new Date(`${year}-10-01`), // Independence Day
+    new Date(`${year}-12-25`), // Christmas Day
+    new Date(`${year}-12-26`), // Boxing Day
+  ];
+
+  // Easter holidays
+  const easterSunday = getEasterSunday(year);
+  const goodFriday = new Date(easterSunday);
+  goodFriday.setDate(easterSunday.getDate() - 2); // Good Friday (2 days before Easter)
+  const easterMonday = new Date(easterSunday);
+  easterMonday.setDate(easterSunday.getDate() + 1); // Easter Monday (1 day after Easter)
+
+  publicHolidays.push(goodFriday, easterMonday);
+
+  // Eid holidays (for now, placeholders for dynamic calculation or moon sighting adjustments)
+  // These dates vary based on lunar calculations, so placeholder dates can be adjusted yearly.
+  // publicHolidays.push(new Date(`${year}-06-16`)); // Eid al-Fitr (estimated date)
+  // publicHolidays.push(new Date(`${year}-06-17`)); // Eid al-Fitr Holiday (estimated date)
+  // publicHolidays.push(new Date(`${year}-07-20`)); // Eid al-Adha (estimated date)
+  // publicHolidays.push(new Date(`${year}-07-21`)); // Eid al-Adha Holiday (estimated date)
+
+  return publicHolidays;
+};

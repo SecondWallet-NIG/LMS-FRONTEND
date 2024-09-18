@@ -52,33 +52,33 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
             "Annual Leave",
             `${
               data?.employeeBenefit?.benefitType?.leaveTypes?.annualLeave || 0
-            } days`
+            } working day(s)`
           )}
           {returnCardDetails(
             "Sick Leave",
             `${
               data?.employeeBenefit?.benefitType?.leaveTypes?.sickLeave || 0
-            } days`
+            } working day(s)`
           )}
           {returnCardDetails(
             "Maternity Leave",
             `${
               data?.employeeBenefit?.benefitType?.leaveTypes?.maternityLeave ||
               0
-            } days`
+            } working day(s)`
           )}
           {returnCardDetails(
             "Paternity Leave",
             `${
               data?.employeeBenefit?.benefitType?.leaveTypes?.paternityLeave ||
               0
-            } days`
+            } working day(s)`
           )}
           {returnCardDetails(
             "Unpaid Leave",
             `${
               data?.employeeBenefit?.benefitType?.leaveTypes?.unpaidLeave || 0
-            } days`
+            } working day(s)`
           )}
         </div>
       </div>

@@ -11,7 +11,11 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomDatePicker from "../shared/date/CustomDatePicker";
-import { leaveTypes } from "../helpers/utils";
+import {
+  getPublicHolidays,
+  leaveTypes,
+  publicHolidays,
+} from "../helpers/utils";
 import { toast } from "react-toastify";
 
 const RequestLeaveModal = ({ onClose }) => {
@@ -33,6 +37,8 @@ const RequestLeaveModal = ({ onClose }) => {
   });
   const { data } = useSelector((state) => state.user);
   const type = data?.data?.employeeBenefit?.benefitType?.leaveTypes;
+
+  console.log("dates", startDate, endDate);
 
   const reset = () => {
     setFormData({
@@ -80,13 +86,31 @@ const RequestLeaveModal = ({ onClose }) => {
       });
   };
 
+  // Function to check if a date is a weekend or a public holiday
+  const isWeekendOrHoliday = (date) => {
+    const currentYear = new Date().getFullYear();
+    const day = date.getDay();
+    const isWeekend = day === 0 || day === 6; // Sunday or Saturday
+    const isHoliday = getPublicHolidays(currentYear).some(
+      (holiday) => holiday.toDateString() === date.toDateString()
+    );
+    return isWeekend || isHoliday;
+  };
+
   useEffect(() => {
     if (startDate && endDate) {
-      const differenceInTime =
-        new Date(endDate).getTime() - new Date(startDate).getTime();
-      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-      // console.log({ differenceInDays });
-      setFormData({ ...formData, leaveDuration: differenceInDays });
+      let currentDate = new Date(startDate);
+      const end = new Date(endDate);
+      let validDays = 0;
+
+      while (currentDate <= end) {
+        if (!isWeekendOrHoliday(currentDate)) {
+          validDays++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      setFormData({ ...formData, leaveDuration: validDays });
       setClearDate(false);
     } else {
       setFormData({ ...formData, leaveDuration: 0 });
@@ -173,7 +197,7 @@ const RequestLeaveModal = ({ onClose }) => {
                       clear={clearDate}
                     />
                   </div>
-                  <p>Duration: {formData?.leaveDuration} days</p>
+                  <p>Duration: {formData?.leaveDuration} working day(s)</p>
                 </div>
               </div>
             </div>
@@ -181,7 +205,9 @@ const RequestLeaveModal = ({ onClose }) => {
               <div className="w-full flex flex-col gap-5">
                 <div className="flex gap-3 items-end">
                   <div className="w-full ">
-                    <p className="text-sm text-swDarkBlue mb-4">Additonal Message</p>
+                    <p className="text-sm text-swDarkBlue mb-4">
+                      Additonal Message
+                    </p>
                     <textarea
                       name="description"
                       value={formData.description}
