@@ -200,6 +200,7 @@ const StaffUpdatePAge = () => {
     dispatch(getAllDepartments());
     // dispatch(getStaffTasks(id));
   }, []);
+  console.log("user", data?.data);
 
   return (
     <DashboardLayout
@@ -239,7 +240,9 @@ const StaffUpdatePAge = () => {
                       </div>
                     ) : (
                       <div>
-                        {data?.data?.user?.profilePicture ? (
+                        {data?.data?.user?.profilePicture &&
+                        data?.data?.user?.profilePicture !== "null" &&
+                        data?.data?.user?.profilePicture !== "undefined" ? (
                           <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
                             <Image
                               src={data?.data?.user?.profilePicture}

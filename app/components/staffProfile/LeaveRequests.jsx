@@ -48,8 +48,8 @@ const LeaveRequests = () => {
       ),
       leaveDuration: (
         <div>
-          <div className="text-[15px] font-light text-gray-700">
-            {item?.leaveDuration} day(s)
+          <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+            {item?.leaveDuration} working day(s)
           </div>
         </div>
       ),

@@ -35,12 +35,12 @@ export default function DepartmentPage() {
         </div>
       ),
       description: (
-        <div className="text-[15px] font-light text-gray-700">
+        <div className="text-[15px] font-light text-gray-700 max-w-lg">
           {item.description}
         </div>
       ),
       createdAt: (
-        <div className="text-[15px] font-light text-gray-700">
+        <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
           {item.createdAt?.slice(0, 10)}
         </div>
       ),
