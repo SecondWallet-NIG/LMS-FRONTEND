@@ -67,8 +67,8 @@ const LeaveApprovalRequests = () => {
       ),
       leaveDuration: (
         <div>
-          <div className="text-[15px] font-light text-gray-700">
-            {item?.leaveDetails?.leaveDuration} day(s)
+          <div className="text-[15px] font-light text-gray-700 whitespace-nowrap">
+            {item?.leaveDetails?.leaveDuration} working day(s)
           </div>
         </div>
       ),

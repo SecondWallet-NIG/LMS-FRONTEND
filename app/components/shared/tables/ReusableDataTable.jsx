@@ -712,7 +712,7 @@ function ReusableDataTable({
                     .map((header) => (
                       <th
                         key={header.id}
-                        className={`capitalize text-md px-4 py-6 bg-gray-50 text-black border-0 font-[500] cursor-pointer text-start ${
+                        className={`capitalize text-md px-4 py-6 bg-gray-50 text-black border-0 font-[500] cursor-pointer text-start whitespace-nowrap ${
                           header.id === sortField ? "" : ""
                         }`}
                         onClick={() => handleSort(header.id)}

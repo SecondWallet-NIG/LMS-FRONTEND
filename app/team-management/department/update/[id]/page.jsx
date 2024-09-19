@@ -40,7 +40,7 @@ const UpdateDepartmentPage = () => {
     if (department?.data) {
       setState((draft) => {
         draft.name = department?.data?.departmentName;
-        draft.departmentHead = department?.data?.departmentHead;
+        draft.departmentHead = department?.data?.departmentHead?._id;
         draft.description = department?.data?.description;
       });
     }

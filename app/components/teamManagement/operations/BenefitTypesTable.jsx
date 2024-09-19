@@ -32,32 +32,32 @@ const BenefitTypesTable = () => {
       ),
       annualLeave: (
         <div className="text-[15px] font-light text-gray-700">
-          {item?.leaveTypes?.annualLeave}
+          {item?.leaveTypes?.annualLeave} working days
         </div>
       ),
       maternityLeave: (
         <div className="text-[15px] font-light text-gray-700">
-          {item?.leaveTypes?.maternityLeave}
+          {item?.leaveTypes?.maternityLeave} working days
         </div>
       ),
       paternityLeave: (
         <div className="text-[15px] font-light text-gray-700">
-          {item?.leaveTypes?.paternityLeave}
+          {item?.leaveTypes?.paternityLeave} working days
         </div>
       ),
       personalLeave: (
         <div className="text-[15px] font-light text-gray-700">
-          {item?.leaveTypes?.personalLeave}
+          {item?.leaveTypes?.personalLeave} working days
         </div>
       ),
       sickLeave: (
         <div className="text-[15px] font-light text-gray-700">
-          {item?.leaveTypes?.sickLeave}
+          {item?.leaveTypes?.sickLeave} working days
         </div>
       ),
       unpaidLeave: (
         <div className="text-[15px] font-light text-gray-700">
-          {item?.leaveTypes?.unpaidLeave}
+          {item?.leaveTypes?.unpaidLeave} working days
         </div>
       ),
     }));
