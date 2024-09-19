@@ -46,7 +46,7 @@ const Investors = () => {
   }
 
   return (
-    <DashboardLayout roles={role}>
+    <DashboardLayout roles={roles}>
       <div className="">
         <div className="flex justify-between mt-5 mb-10 px-5">
           <div
