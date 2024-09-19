@@ -12,6 +12,7 @@ import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import { getAllUsers } from "@/redux/slices/userSlice";
 import { addNewBenefitTypes } from "@/redux/slices/hrmsSlice";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const AddBenefitTypesPage = () => {
   const dispatch = useDispatch();
@@ -92,7 +93,7 @@ const AddBenefitTypesPage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Benefit Types", "Add New"]}
-      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+      roles={teamManagementAuthRoles}
     >
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
         <div className="flex justify-between items-center p-3">

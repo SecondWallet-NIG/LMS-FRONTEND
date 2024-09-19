@@ -24,6 +24,7 @@ import { Rings } from "react-loader-spinner";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Unauthorized from "../unauthorized/page";
 import Loader from "../components/shared/Loader";
+import { createLoanAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -569,7 +570,7 @@ const CreateLoan = () => {
   }, [formData.loanPackage]);
 
   return (
-    <DashboardLayout roles={["LO"]}>
+    <DashboardLayout paths={["Create Loan"]} roles={createLoanAuthRoles}>
       <ToastContainer />
       {currentStep === 1 ? (
         <main className="flex text-sm">

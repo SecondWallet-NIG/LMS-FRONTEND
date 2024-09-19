@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import { getAllDepartments } from "@/redux/slices/hrmsSlice";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const AddRolePage = () => {
   const dispatch = useDispatch();
@@ -100,7 +101,7 @@ const AddRolePage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "New Role"]}
-      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+      roles={teamManagementAuthRoles}
     >
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
         <div className="flex justify-between items-center p-3">

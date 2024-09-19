@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
+import { paymentHystoryAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -42,19 +43,6 @@ const PaymentPage = () => {
   const [showApprovalBtns, setShowApprovalBtns] = useState(false);
   const [disableApprovalBtn, setDisableApprovalBtn] = useState(false);
   const [userRole, setUserRole] = useState("");
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "HRM",
-    "COF",
-    "CT0",
-    "LR0",
-    "Dir",
-    "System Admin",
-  ];
 
   const getRepayment = () => {
     dispatch(getSingleRepayment(id))
@@ -133,7 +121,7 @@ const PaymentPage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Payment History", "Payment"]}
-      roles={roles}
+      roles={paymentHistoryAuthRoles}
     >
       <ToastContainer />
       <main className="mx-auto max-w-4xl py-10 px-5">

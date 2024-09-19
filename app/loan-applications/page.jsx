@@ -3,22 +3,10 @@ import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import LoanTable from "../components/loans/LoanTable";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
+import { loanApplicationAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const LoanApplications = () => {
   const [showParagraph, setShowParagraph] = useState(true);
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "LR0",
-    "HRM",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
 
   const handleCloseClick = () => {
     setShowParagraph(false);
@@ -28,7 +16,7 @@ const LoanApplications = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Loan Applications"]}
-      roles={roles}
+      roles={loanApplicationAuthRoles}
     >
       {showParagraph && (
         <div className="flex justify-between rounded bg-swLightBlueIndcatorBg p-3 m-5">

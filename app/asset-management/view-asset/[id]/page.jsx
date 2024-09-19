@@ -9,6 +9,7 @@ import { FiEdit2, FiTrash } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAssetModal from "@/app/components/modals/DeleteAssetModal";
+import { assetManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const ViewAsset = () => {
   const dispatch = useDispatch();
@@ -16,17 +17,6 @@ const ViewAsset = () => {
   const [loading, setLoading] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { data } = useSelector((state) => state.asset);
-  const roles = [
-    // "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "HRM",
-    "CT0",
-    "OFA",
-    "Dir",
-    "System Admin",
-  ];
 
   useEffect(() => {
     dispatch(getSingleAsset(id));
@@ -36,7 +26,7 @@ const ViewAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Asset Management", "View asset"]}
-      roles={roles}
+      roles={assetManagementAuthRoles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">

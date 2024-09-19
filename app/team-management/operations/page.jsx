@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import Link from "next/link";
 import Button from "@/app/components/shared/buttonComponent/Button";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 export default function OperationsPage() {
   const router = useRouter();
@@ -56,7 +57,7 @@ export default function OperationsPage() {
     <DashboardLayout
       isBackNav={true}
       paths={["Team management", "Operations"]}
-      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+      roles={teamManagementAuthRoles}
     >
       <div className="">
         <div className="p-5 flex items-centers">

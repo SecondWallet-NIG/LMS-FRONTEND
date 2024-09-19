@@ -23,6 +23,8 @@ import { Rings } from "react-loader-spinner";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import check from "../../../../../public/images/check.svg";
 import Image from "next/image";
+import { plansAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+
 const EditPlansAndPackages = () => {
   const router = useRouter();
   const { plan_id } = useParams();
@@ -49,16 +51,6 @@ const EditPlansAndPackages = () => {
     createdBy: "",
   });
 
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "HRM",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
@@ -191,7 +183,7 @@ const EditPlansAndPackages = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Loan Plans and Packages", "View Plan", "Edit Plan"]}
-      roles={roles}
+      roles={plansAuthRoles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <ToastContainer />

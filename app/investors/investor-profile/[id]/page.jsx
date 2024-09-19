@@ -19,6 +19,7 @@ import InvestorSummary from "@/app/components/investments/InvestorSummary";
 import InvestorProfileDocs from "@/app/components/investor-profile/InvestorProfileDocs";
 import InvestorBioData from "@/app/components/investor-profile/InvestorBioData";
 import InvestorWorkData from "@/app/components/investor-profile/InvestorWorkData";
+import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -62,19 +63,6 @@ const InvestorProfile = () => {
       </Link>
     </div>
   );
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "HRM",
-    "LR0",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -126,7 +114,7 @@ const InvestorProfile = () => {
   }, [borrowerOptions]);
 
   return (
-    <DashboardLayout isBackNav={true} paths={paths} roles={roles}>
+    <DashboardLayout isBackNav={true} paths={paths} roles={investorsAuthRoles}>
       <div className="overflow-x-hidden">
         <div className="flex flex-col justify-between lg:flex-row gap-2 border-b border-gray-300 items-end py-4 px-8">
           {/* Profile header */}

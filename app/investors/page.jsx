@@ -6,6 +6,7 @@ import { useImmer } from "use-immer";
 import InvestorsRecords from "../components/investments/InvestorsRecords";
 import InvestmentsRecords from "../components/investments/InvestmentsRecords";
 import WithdrawalSchedule from "../components/investments/WithdrawalSchedule";
+import { investorsAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const poppins = Poppins({ weight: "500", subsets: ["latin"] });
 
@@ -23,19 +24,6 @@ const Investors = () => {
     { name: "Investment Records", selOption: "inRec" },
     { name: "Withdrawal Schedule", selOption: "withSch" },
   ];
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "HRM",
-    "LR0",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
 
   function handleNav(selOption) {
     if (selOption !== selectedNav) {
@@ -46,7 +34,7 @@ const Investors = () => {
   }
 
   return (
-    <DashboardLayout roles={roles}>
+    <DashboardLayout roles={investorsAuthRoles}>
       <div className="">
         <div className="flex justify-between mt-5 mb-10 px-5">
           <div

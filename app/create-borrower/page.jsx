@@ -29,6 +29,7 @@ import { FiTrash, FiUser } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Image from "next/image";
+import { borrowersAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const CreateCustomer = () => {
   const [isInputOpen, setIsInputOpen] = useState(false);
@@ -47,19 +48,6 @@ const CreateCustomer = () => {
   const [profileImg, setProfileImg] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "LR0",
-    "CT0",
-    "HRM",
-    "Dir",
-    "System Admin",
-  ];
 
   const {
     loading,
@@ -321,7 +309,7 @@ const CreateCustomer = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Borrowers", "Create borrower"]}
-      roles={roles}
+      roles={borrowersAuthRoles}
     >
       <ToastContainer />
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">

@@ -2,23 +2,12 @@
 import DisbursementCard from "@/app/components/cards/DisbursmentCard/DisbursementCard";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import DisbursedLoans from "../components/loans/DisbursedLoans";
+import { disbursementAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const AllDisburments = () => {
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "HRM",
-    "COF",
-    "LR0",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
+
   return (
-    <DashboardLayout roles={roles}>
+    <DashboardLayout  roles={disbursementAuthRoles}>
       <DisbursementCard />
       <DisbursedLoans />
     </DashboardLayout>

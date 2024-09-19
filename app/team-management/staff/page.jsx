@@ -8,6 +8,7 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import AllStaffsTable from "@/app/components/team management comps/AllStaffsTable";
 import { useState } from "react";
 import AllStaffsAttendanceTable from "@/app/components/team management comps/AllStaffsAttendanceTable";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const StaffDataPage = () => {
   const [pageState, setPageState] = useState("all staffs");
@@ -19,7 +20,7 @@ const StaffDataPage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Staff"]}
-      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+      roles={teamManagementAuthRoles}
     >
       <div className="">
         <div className="p-5">

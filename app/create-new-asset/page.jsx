@@ -18,6 +18,7 @@ import EditableButton from "../components/shared/editableButtonComponent/Editabl
 import { FiTrash } from "react-icons/fi";
 import SuccessModal from "../components/modals/SuccessModal";
 import CancelModal from "../components/modals/CancelModal";
+import { assetManagementAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const CreateNewAsset = () => {
   const dispatch = useDispatch();
@@ -46,16 +47,6 @@ const CreateNewAsset = () => {
     acquisitionDate: new Date(),
     value: "",
   });
-  const roles = [
-    "CFO",
-    "CEO",
-    "CAO",
-    "HRM",
-    "CT0",
-    "OFA",
-    "Dir",
-    "System Admin",
-  ];
 
   const options = [
     { value: "Single asset", label: "Single asset" },
@@ -215,7 +206,7 @@ const CreateNewAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Asset Management", "Add new asset"]}
-      roles={roles}
+      roles={assetManagementAuthRoles}
     >
       <ToastContainer />
       <main

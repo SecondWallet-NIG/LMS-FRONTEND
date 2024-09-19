@@ -8,6 +8,7 @@ import ManagementReport from "../components/report/Management_Report/MangementRe
 import ExpenseReport from "../components/report/Expense_Report/ExpenseReport";
 import AssetReport from "../components/report/Asset_Report/AssetReport";
 import InvestmentReport from "../components/report/Investment_Report/InvestmentReport";
+import { reportAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,23 +27,13 @@ const Report = () => {
     { name: "Asset Report", selOption: "asset" },
     { name: "Investment Report", selOption: "investment" },
   ];
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "HRM",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
 
   const handleReports = (id) => {
     setReportToggle(id);
   };
 
   return (
-    <DashboardLayout roles={roles}>
+    <DashboardLayout roles={reportAuthRoles}>
       <main className="">
         <section
           aria-label="Report toggles"

@@ -7,24 +7,12 @@ import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
 import WorkInformation from "@/app/components/editBorrowerProfile/WorkInformation";
 import ProfileDocuments from "@/app/components/editBorrowerProfile/Documents";
+import { borrowersAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EditProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [pageState, setPageState] = useState("Personal information");
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "LR0",
-    "CT0",
-    "HRM",
-    "Dir",
-    "System Admin",
-  ];
 
   const {
     loading,
@@ -39,7 +27,7 @@ const EditProfile = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Borrowers", "Edit Profile"]}
-      roles={roles}
+      roles={borrowersAuthRoles}
     >
       <main className="p-5 text-swTextColor">
         <div className="flex">

@@ -1,5 +1,6 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
+import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 import DeleteInvesmentProductModal from "@/app/components/investments/DeleteInvesmentProductModal";
 import { getSingleInvestmentProduct } from "@/redux/slices/investmentSlice";
 import Link from "next/link";
@@ -15,19 +16,6 @@ export default function ViewInvestmentProducts() {
   const btnClass =
     "rounded-md flex justify-center items-center py-2 px-3 font-medium text-swTextColor border hover:shadow-md";
   const { data } = useSelector((state) => state.investment);
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "HRM",
-    "LR0",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
 
   useEffect(() => {
     dispatch(getSingleInvestmentProduct(id));
@@ -44,7 +32,7 @@ export default function ViewInvestmentProducts() {
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "View investment products"]}
-      roles={roles}
+      roles={investorsAuthRoles}
     >
       <div className="mx-auto max-w-4xl py-10 px-5">
         <div className="flex gap-4 justify-end mb-10">

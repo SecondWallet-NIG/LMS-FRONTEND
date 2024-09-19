@@ -3,6 +3,7 @@ import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable"
 import { AiOutlinePlus } from "react-icons/ai";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import { useRouter } from "next/navigation";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const RolePage = () => {
   const router = useRouter();
@@ -43,7 +44,7 @@ const RolePage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Roles"]}
-      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+      roles={teamManagementAuthRoles}
     >
       <div className=" py-2 mt-5">
         <ReusableDataTable

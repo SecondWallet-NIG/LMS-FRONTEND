@@ -16,6 +16,7 @@ import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "@/redux/slices/userSlice";
 import { toast, ToastContainer } from "react-toastify";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const StaffUpdatePAge = () => {
   const router = useRouter();
@@ -206,7 +207,7 @@ const StaffUpdatePAge = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Staff", "Update Staff"]}
-      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+      roles={teamManagementAuthRoles}
     >
       <ToastContainer />
       <div className="flex justify-center p-5">

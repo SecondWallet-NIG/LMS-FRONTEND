@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useParams, useRouter } from "next/navigation";
 import { FaRegTrashAlt } from "react-icons/fa";
 import CancelModal from "@/app/components/modals/CancelModal";
+import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const CreateInvestmentProduct = () => {
   const { id } = useParams();
@@ -21,19 +22,6 @@ const CreateInvestmentProduct = () => {
   const [displayMonthlyForm, setDisplayMonthlyForm] = useState(false);
   const [displayYearlyForm, setDisplayYearlyForm] = useState(false);
   // const [formData, setPayload] = useState({});
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "HRM",
-    "LR0",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
   const [successModal, setSuccessModal] = useState(false);
   const [failedModal, setFailedModal] = useState(false);
   const [successModalData, setSuccessModalData] = useState({});
@@ -252,7 +240,7 @@ const CreateInvestmentProduct = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "Create Investment Product"]}
-      roles={roles}
+      roles={investorsAuthRoles}
     >
       <ToastContainer />
       <div className="mx-auto w-3/5">

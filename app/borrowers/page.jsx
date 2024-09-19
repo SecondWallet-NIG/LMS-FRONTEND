@@ -3,23 +3,11 @@
 import React from "react";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import CustomerLoan from "../components/customers/CustomerLoan";
+import { borrowersAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const Customers = () => {
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "LR0",
-    "CT0",
-    "HRM",
-    "Dir",
-    "System Admin",
-  ];
   return (
-    <DashboardLayout roles={roles}>
+    <DashboardLayout roles={borrowersAuthRoles}>
       <CustomerLoan />
     </DashboardLayout>
   );

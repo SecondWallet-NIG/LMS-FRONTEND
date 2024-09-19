@@ -13,6 +13,7 @@ import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import { leaveTypes } from "@/app/components/helpers/utils";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
+import { employeeDashboardAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const ViewSingleLeaveRequest = () => {
   const { id } = useParams();
@@ -229,6 +230,7 @@ const ViewSingleLeaveRequest = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Loan Plans and Packages", "View Plan"]}
+      roles={employeeDashboardAuthRoles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         {((level_1_id === user?.id &&

@@ -15,6 +15,7 @@ import CreateAssetModal from "../components/modals/CreateAssetModal";
 import Loader from "../components/shared/Loader";
 import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
 import { useRouter } from "next/navigation";
+import { assetManagementAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const header = [
   { id: "asset", label: "Asset" },
@@ -77,16 +78,6 @@ const AssetManagement = () => {
   const [openDeleteAssetModal, setOpenDeleteModal] = useState(false);
   const [assetTypeOptions, setAssetTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.asset);
-  const roles = [
-    "CFO",
-    "CEO",
-    "CAO",
-    "HRM",
-    "CT0",
-    "OFA",
-    "Dir",
-    "System Admin",
-  ];
 
   const options = {
     responsive: true,
@@ -146,7 +137,7 @@ const AssetManagement = () => {
       <DashboardLayout
         isBackNav={true}
         paths={["Asset Management"]}
-        roles={roles}
+        roles={assetManagementAuthRoles}
       >
         <div className="pt-5 pl-5 flex items-centers">
           <p

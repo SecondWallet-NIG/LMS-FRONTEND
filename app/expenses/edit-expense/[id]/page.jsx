@@ -14,6 +14,7 @@ import {
   getSingleExpense,
   updateSingleExpense,
 } from "@/redux/slices/expenseManagementSlice";
+import { expensesAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EditAsset = () => {
   const dispatch = useDispatch();
@@ -29,17 +30,6 @@ const EditAsset = () => {
     expenseDate: new Date(),
     amount: "",
   });
-  const roles = [
-    // "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "CT0",
-    "HRM",
-    "Dir",
-    "OFA",
-    "System Admin",
-  ];
   // const { data } = useSelector((state) => state.asset);
 
   // const options = [
@@ -133,7 +123,7 @@ const EditAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Expense", "Edit expense"]}
-      roles={roles}
+      roles={expensesAuthRoles}
     >
       <ToastContainer />
       <main

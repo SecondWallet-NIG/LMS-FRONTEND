@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "@/helpers";
 import RepaymentOverdueTable from "../components/repayment/OverdueTable";
 import Unauthorized from "../unauthorized/page";
+import { repaymentAuthRoles } from "../components/helpers/pageAuthRoles";
+
 const Repayment = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("overdue-repayment");
@@ -22,19 +24,6 @@ const Repayment = () => {
     { id: "amountPaid", label: "Amount Paid" },
     { id: "balanceToPay", label: "Balance To Pay" },
     { id: "status", label: "Status" },
-  ];
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "HRM",
-    "CT0",
-    "LR0",
-    "Dir",
-    "System Admin",
   ];
 
   const customDataTransformer = (apiData) => {
@@ -108,7 +97,7 @@ const Repayment = () => {
   }
 
   return (
-    <DashboardLayout roles={roles}>
+    <DashboardLayout roles={repaymentAuthRoles}>
       <main>
         {/* <div className="flex">
           <p

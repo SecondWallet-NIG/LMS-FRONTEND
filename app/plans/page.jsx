@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { useEffect } from "react";
 import Loader from "../components/shared/Loader";
+import { plansAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const LoanPackages = () => {
   const dispatch = useDispatch();
@@ -18,16 +19,6 @@ const LoanPackages = () => {
   const [data, setData] = useState([]);
   const [showCreatePlan, setShowCreatePlan] = useState(false);
   const [userRole, setUserRole] = useState("");
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "HRM",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
 
   const loanPackage =
     useSelector((state) => {
@@ -65,7 +56,7 @@ const LoanPackages = () => {
   }, [userRole]);
 
   return (
-    <DashboardLayout roles={roles}>
+    <DashboardLayout roles={plansAuthRoles}>
       <main className="mx-auto max-w-7xl p-5 overflow-hidden text-black">
         {showCreatePlan && (
           <Link

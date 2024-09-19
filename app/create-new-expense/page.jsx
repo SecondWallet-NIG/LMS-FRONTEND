@@ -18,6 +18,7 @@ import EditableButton from "../components/shared/editableButtonComponent/Editabl
 import { FiTrash } from "react-icons/fi";
 import SuccessModal from "../components/modals/SuccessModal";
 import CancelModal from "../components/modals/CancelModal";
+import { expensesAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const CreateNewExpense = () => {
   const dispatch = useDispatch();
@@ -38,17 +39,6 @@ const CreateNewExpense = () => {
     description: "",
     amount: "",
   });
-  const roles = [
-    // "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "CT0",
-    "HRM",
-    "Dir",
-    "OFA",
-    "System Admin",
-  ];
   const options = [
     { value: "Single expense", label: "Single expense" },
     { value: "Bulk expenses", label: "Bulk expenses" },
@@ -248,7 +238,7 @@ const CreateNewExpense = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Expenses", "Add New Expense"]}
-      roles={roles}
+      roles={expensesAuthRoles}
     >
       <ToastContainer />
       <main

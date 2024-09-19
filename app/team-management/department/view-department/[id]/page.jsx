@@ -12,6 +12,7 @@ import { LuTrash } from "react-icons/lu";
 import { getSingleDepartment } from "@/redux/slices/hrmsSlice";
 import { getUserById } from "@/redux/slices/userSlice";
 import { format } from "date-fns";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const ViewDepartment = () => {
   const { id } = useParams();
@@ -34,7 +35,7 @@ const ViewDepartment = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "View Department"]}
-      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+      roles={teamManagementAuthRoles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">

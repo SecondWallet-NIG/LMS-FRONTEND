@@ -14,6 +14,7 @@ import {
   updateSingleAsset,
 } from "@/redux/slices/assetManagementSlice";
 import { useParams, useRouter } from "next/navigation";
+import { assetManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EditAsset = () => {
   const dispatch = useDispatch();
@@ -30,17 +31,6 @@ const EditAsset = () => {
     acquisitionDate: new Date(),
     value: "",
   });
-  const roles = [
-    // "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "HRM",
-    "CT0",
-    "OFA",
-    "Dir",
-    "System Admin",
-  ];
   // const { data } = useSelector((state) => state.asset);
 
   const options = [
@@ -137,7 +127,7 @@ const EditAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Asset Management", "Add new asset"]}
-      roles={roles}
+      roles={assetManagementAuthRoles}
     >
       <ToastContainer />
       <main

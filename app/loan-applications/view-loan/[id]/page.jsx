@@ -47,6 +47,7 @@ import { formatDate } from "@/helpers";
 import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
 import { base64ToBlob, fetchPdf } from "@/app/components/helpers/utils";
 import Loader from "@/app/components/shared/Loader";
+import { loanApplicationAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -91,20 +92,6 @@ const ViewLoan = () => {
   const { statementData, statementPending } = useSelector(
     (state) => state?.loanApplication
   );
-
-  const roles = [
-    "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "ICO",
-    "COF",
-    "LR0",
-    "HRM",
-    "CT0",
-    "Dir",
-    "System Admin",
-  ];
 
   const handleFileChange = (e) => {
     setFileError("");
@@ -608,7 +595,7 @@ const ViewLoan = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Loan Applications", "View loan"]}
-      roles={roles}
+      roles={loanApplicationAuthRoles}
     >
       <ToastContainer />
       <main className="flex h-full">

@@ -12,6 +12,7 @@ import { getSingleExpense } from "@/redux/slices/expenseManagementSlice";
 import { handleFileExtention } from "@/app/components/helpers/utils";
 import Viewer from "react-viewer";
 import { IoMdClose } from "react-icons/io";
+import { expensesAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const ViewExpense = () => {
   const dispatch = useDispatch();
@@ -22,17 +23,6 @@ const ViewExpense = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openFileModal, setOpenFileModal] = useState(false);
   const [updateBtns, setUpdateBtns] = useState(false);
-  const roles = [
-    // "LO",
-    "CFO",
-    "CEO",
-    "CAO",
-    "CT0",
-    "HRM",
-    "Dir",
-    "OFA",
-    "System Admin",
-  ];
 
   const handleSetUrl = (content) => {
     setUrl(content);
@@ -60,7 +50,7 @@ const ViewExpense = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Expenses", "View expense"]}
-      roles={roles}
+      roles={expensesAuthRoles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         {updateBtns && (
