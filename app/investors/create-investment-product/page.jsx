@@ -21,6 +21,19 @@ const CreateInvestmentProduct = () => {
   const [displayMonthlyForm, setDisplayMonthlyForm] = useState(false);
   const [displayYearlyForm, setDisplayYearlyForm] = useState(false);
   // const [formData, setPayload] = useState({});
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "HRM",
+    "LR0",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
   const [successModal, setSuccessModal] = useState(false);
   const [failedModal, setFailedModal] = useState(false);
   const [successModalData, setSuccessModalData] = useState({});
@@ -239,6 +252,7 @@ const CreateInvestmentProduct = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "Create Investment Product"]}
+      roles={roles}
     >
       <ToastContainer />
       <div className="mx-auto w-3/5">

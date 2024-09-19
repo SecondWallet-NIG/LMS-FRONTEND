@@ -13,6 +13,19 @@ const MyTasks = () => {
   const dispatch = useDispatch();
   const { error, data } = useSelector((state) => state.UserTasks);
   const [activityButton, setActivityButton] = useState("allTasks");
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "LR0",
+    "CT0",
+    "HRM",
+    "Dir",
+    "System Admin",
+  ];
   let user;
   if (typeof window !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
@@ -27,7 +40,7 @@ const MyTasks = () => {
   }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={roles}>
       <main>
         <div className="p-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">

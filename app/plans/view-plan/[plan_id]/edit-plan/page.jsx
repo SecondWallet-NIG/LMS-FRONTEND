@@ -49,6 +49,17 @@ const EditPlansAndPackages = () => {
     createdBy: "",
   });
 
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
+
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
 
@@ -180,6 +191,7 @@ const EditPlansAndPackages = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Loan Plans and Packages", "View Plan", "Edit Plan"]}
+      roles={roles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <ToastContainer />

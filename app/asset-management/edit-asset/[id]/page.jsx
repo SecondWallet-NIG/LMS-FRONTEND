@@ -30,6 +30,17 @@ const EditAsset = () => {
     acquisitionDate: new Date(),
     value: "",
   });
+  const roles = [
+    // "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "OFA",
+    "Dir",
+    "System Admin",
+  ];
   // const { data } = useSelector((state) => state.asset);
 
   const options = [
@@ -126,6 +137,7 @@ const EditAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Asset Management", "Add new asset"]}
+      roles={roles}
     >
       <ToastContainer />
       <main

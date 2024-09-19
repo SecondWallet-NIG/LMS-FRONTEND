@@ -39,6 +39,16 @@ const CreatePlansAndPackages = () => {
     status: "Active",
     createdBy: "",
   });
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
 
   const [errors, setErrors] = useState({
     name: "",
@@ -173,7 +183,7 @@ const CreatePlansAndPackages = () => {
     }
   }, []);
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={roles}>
       <main className="mx-auto max-w-4xl py-10 px-5">
         <ToastContainer />
         <p className="font-semibold text-lg">Create Loan plan and Packages</p>

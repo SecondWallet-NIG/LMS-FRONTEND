@@ -54,7 +54,7 @@ const SavedLoans = () => {
   };
 
   return (
-    <DashboardLayout paths={["Saved Loans"]}>
+    <DashboardLayout paths={["Saved Loans"]} roles={["LO"]}>
       <div className="p-5 overflow-x-auto">
         <table className="w-full">
           {/* px-5 py-4 bg-swightGray text-swGray border-0 font-[500] cursor-pointer text-start */}

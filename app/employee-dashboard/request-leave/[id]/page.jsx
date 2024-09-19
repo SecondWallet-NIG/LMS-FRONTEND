@@ -34,6 +34,21 @@ const EmployeeRequestLeave = () => {
       description: "",
     });
   };
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "HRM",
+    "GS",
+    "CT0",
+    "LR0",
+    "Dir",
+    "OFA",
+    "System Admin",
+  ];
 
   const preventMinus = (e) => {
     if (/[^0-9,]/g.test(e.key)) {
@@ -78,6 +93,7 @@ const EmployeeRequestLeave = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Employee Dashboard", "Request Leave"]}
+      roles={roles}
     >
       <main className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
         <form id="add-user-form" className="">

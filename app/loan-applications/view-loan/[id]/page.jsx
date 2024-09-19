@@ -92,6 +92,20 @@ const ViewLoan = () => {
     (state) => state?.loanApplication
   );
 
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "LR0",
+    "HRM",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
+
   const handleFileChange = (e) => {
     setFileError("");
     let { name, files } = e.target;
@@ -564,7 +578,6 @@ const ViewLoan = () => {
     return false;
   };
 
-
   // const hasDeclineStatus = () => {
   //   for (const approval of loanApprovals?.data?.data || []) {
   //     if (approval.status === "Declined") {
@@ -595,6 +608,7 @@ const ViewLoan = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Loan Applications", "View loan"]}
+      roles={roles}
     >
       <ToastContainer />
       <main className="flex h-full">
@@ -1722,7 +1736,9 @@ const ViewLoan = () => {
             </div>
             <div className="relative pt-4 flex justify-between items-center">
               <p>
-                Disbursement Date: {formData?.disbursementDate &&format(formData?.disbursementDate, "PPP")}
+                Disbursement Date:{" "}
+                {formData?.disbursementDate &&
+                  format(formData?.disbursementDate, "PPP")}
               </p>
               <div
                 className="w-fit p-2 rounded-full border border-jsPrimary100 text-jsPrimary100 cursor-pointer"

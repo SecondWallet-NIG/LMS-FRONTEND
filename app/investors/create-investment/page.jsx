@@ -47,7 +47,19 @@ const CreateInvestment = () => {
     interestRateValue: "",
   });
   const { data } = useSelector((state) => state.investment);
-
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "HRM",
+    "LR0",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
   // const interestDurationOpt = [
   //   { value: "daily", label: "Daily" },
   //   { value: "monthly", label: "Monthly" },
@@ -296,7 +308,11 @@ const CreateInvestment = () => {
   }, [formData?.interestRateMetric, formData?.investmentProduct]);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Investors", "New investment"]}
+      roles={roles}
+    >
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create New Investment

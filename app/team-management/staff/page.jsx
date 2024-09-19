@@ -16,7 +16,11 @@ const StaffDataPage = () => {
   const activeBtn = "border-swBlue text-swBlue";
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team Management", "Staff"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team Management", "Staff"]}
+      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+    >
       <div className="">
         <div className="p-5">
           <button

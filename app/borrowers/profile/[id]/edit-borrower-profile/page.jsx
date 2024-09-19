@@ -12,6 +12,19 @@ const EditProfile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [pageState, setPageState] = useState("Personal information");
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "LR0",
+    "CT0",
+    "HRM",
+    "Dir",
+    "System Admin",
+  ];
 
   const {
     loading,
@@ -23,7 +36,11 @@ const EditProfile = () => {
     dispatch(getCustomerById(id));
   }, []);
   return (
-    <DashboardLayout isBackNav={true} paths={["Borrowers", "Edit Profile"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Borrowers", "Edit Profile"]}
+      roles={roles}
+    >
       <main className="p-5 text-swTextColor">
         <div className="flex">
           <p
@@ -64,12 +81,12 @@ const EditProfile = () => {
           )}
           {pageState === "Work information" && (
             <div>
-                 {
-              userData && userData?.employmentInformation === null ? <div>No employment information uploaded yet</div> :   <WorkInformation userData={userData} loading={loading} />
-            }
+              {userData && userData?.employmentInformation === null ? (
+                <div>No employment information uploaded yet</div>
+              ) : (
+                <WorkInformation userData={userData} loading={loading} />
+              )}
             </div>
-         
-          
           )}
           {pageState === "Documents" && (
             <ProfileDocuments userData={userData} loading={loading} />

@@ -20,6 +20,17 @@ const ViewPlan = () => {
       return state?.loanPackage?.data?.data;
     }) || [];
 
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
+
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));
     if (_user) {
@@ -44,6 +55,7 @@ const ViewPlan = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Loan Plans and Packages", "View Plan"]}
+      roles={roles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">

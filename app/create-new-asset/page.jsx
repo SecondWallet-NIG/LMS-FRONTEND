@@ -46,6 +46,16 @@ const CreateNewAsset = () => {
     acquisitionDate: new Date(),
     value: "",
   });
+  const roles = [
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "OFA",
+    "Dir",
+    "System Admin",
+  ];
 
   const options = [
     { value: "Single asset", label: "Single asset" },
@@ -205,6 +215,7 @@ const CreateNewAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Asset Management", "Add new asset"]}
+      roles={roles}
     >
       <ToastContainer />
       <main

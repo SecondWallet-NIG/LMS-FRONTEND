@@ -16,6 +16,17 @@ const ViewAsset = () => {
   const [loading, setLoading] = useState(true);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { data } = useSelector((state) => state.asset);
+  const roles = [
+    // "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "OFA",
+    "Dir",
+    "System Admin",
+  ];
 
   useEffect(() => {
     dispatch(getSingleAsset(id));
@@ -25,6 +36,7 @@ const ViewAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Asset Management", "View asset"]}
+      roles={roles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">

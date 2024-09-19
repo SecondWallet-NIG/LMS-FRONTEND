@@ -21,6 +21,21 @@ const StaffData = ({ path, isDashboard }) => {
   const [leaveState, setLeaveState] = useState("attendance");
   const [data, setData] = useState(null);
   // const { data, loading } = useSelector((state) => state.user);
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "HRM",
+    "GS",
+    "CT0",
+    "LR0",
+    "Dir",
+    "OFA",
+    "System Admin",
+  ];
 
   const btnCls = "px-3 border-b-2 font-medium";
   const activeBtn = "border-swBlue text-swBlue";
@@ -39,7 +54,7 @@ const StaffData = ({ path, isDashboard }) => {
     dispatch(getStaffTasks(id));
   }, []);
   return (
-    <DashboardLayout isBackNav={true} paths={path}>
+    <DashboardLayout isBackNav={true} paths={path} roles={roles}>
       <main>
         <div className="p-2.5 sm:p-2.5">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

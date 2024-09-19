@@ -77,6 +77,16 @@ const AssetManagement = () => {
   const [openDeleteAssetModal, setOpenDeleteModal] = useState(false);
   const [assetTypeOptions, setAssetTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.asset);
+  const roles = [
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "OFA",
+    "Dir",
+    "System Admin",
+  ];
 
   const options = {
     responsive: true,
@@ -133,7 +143,11 @@ const AssetManagement = () => {
 
   return (
     <>
-      <DashboardLayout isBackNav={true} paths={["Asset Management"]}>
+      <DashboardLayout
+        isBackNav={true}
+        paths={["Asset Management"]}
+        roles={roles}
+      >
         <div className="pt-5 pl-5 flex items-centers">
           <p
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${

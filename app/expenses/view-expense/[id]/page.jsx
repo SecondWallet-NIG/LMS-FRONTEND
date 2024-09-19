@@ -22,6 +22,17 @@ const ViewExpense = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openFileModal, setOpenFileModal] = useState(false);
   const [updateBtns, setUpdateBtns] = useState(false);
+  const roles = [
+    // "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "CT0",
+    "HRM",
+    "Dir",
+    "OFA",
+    "System Admin",
+  ];
 
   const handleSetUrl = (content) => {
     setUrl(content);
@@ -46,7 +57,11 @@ const ViewExpense = () => {
   // console.log("expense", data);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Expenses", "View expense"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Expenses", "View expense"]}
+      roles={roles}
+    >
       <main className="mx-auto max-w-4xl py-10 px-5">
         {updateBtns && (
           <div className="ml-auto flex gap-2 justify-end font-semibold">

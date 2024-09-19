@@ -42,6 +42,19 @@ const EditInvestmentProduct = () => {
     maximumInvestmentAmountYearly: "",
   });
   const { data } = useSelector((state) => state.investment);
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "HRM",
+    "LR0",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
 
   const resetForm = () => {
     setFormData({
@@ -309,6 +322,7 @@ const EditInvestmentProduct = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "View Investment Product", "Edit Product"]}
+      roles={roles}
     >
       <ToastContainer />
       <div className="mx-auto w-3/5">

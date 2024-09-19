@@ -29,6 +29,17 @@ const EditAsset = () => {
     expenseDate: new Date(),
     amount: "",
   });
+  const roles = [
+    // "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "CT0",
+    "HRM",
+    "Dir",
+    "OFA",
+    "System Admin",
+  ];
   // const { data } = useSelector((state) => state.asset);
 
   // const options = [
@@ -119,7 +130,11 @@ const EditAsset = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Expense", "Edit expense"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Expense", "Edit expense"]}
+      roles={roles}
+    >
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "

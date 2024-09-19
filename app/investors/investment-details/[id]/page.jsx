@@ -92,7 +92,19 @@ export default function InvestmentDetails() {
   const [failedModal, setFailedModal] = useState(false);
   const [successModalData, setSuccessModalData] = useState({});
   const [errorModalData, setErrorModalData] = useState({});
-
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "HRM",
+    "LR0",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
   // console.log("withDetasil", data?.data)
 
   const paymentMethod = [
@@ -573,6 +585,7 @@ export default function InvestmentDetails() {
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "Investment details"]}
+      roles={roles}
     >
       <div>
         {/* Header */}

@@ -20,13 +20,30 @@ const Disbursement = () => {
   const { loading, error, data } = useSelector(
     (state) => state.loanApplication
   );
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "HRM",
+    "COF",
+    "LR0",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
 
   useEffect(() => {
     dispatch(getDisbursementById(id));
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Disbursements", "Disbursement"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Disbursements", "Disbursement"]}
+      roles={roles}
+    >
       <ToastContainer />
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 text-sm justify-end font-semibold">

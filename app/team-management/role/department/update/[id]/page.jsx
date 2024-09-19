@@ -98,7 +98,11 @@ const UpdateDepartment = () => {
   };
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team Management", "New Role"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team Management", "New Role"]}
+      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+    >
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20 mb-60">
         <div className="flex justify-between items-center p-3">
           <div>

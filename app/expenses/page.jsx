@@ -95,6 +95,17 @@ const Expenses = () => {
   const [expenseTypeOptions, setExpenseTypeOptions] = useState([]);
   const { data } = useSelector((state) => state.expense);
   const expenseGraph = useSelector((state) => state.report);
+  const roles = [
+    // "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "CT0",
+    "HRM",
+    "Dir",
+    "OFA",
+    "System Admin",
+  ];
 
   const router = useRouter();
 
@@ -184,7 +195,7 @@ const Expenses = () => {
 
   return (
     <>
-      <DashboardLayout isBackNav={true} paths={["Expenses"]}>
+      <DashboardLayout isBackNav={true} paths={["Expenses"]} roles={roles}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${

@@ -38,6 +38,17 @@ const CreateNewExpense = () => {
     description: "",
     amount: "",
   });
+  const roles = [
+    // "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "CT0",
+    "HRM",
+    "Dir",
+    "OFA",
+    "System Admin",
+  ];
   const options = [
     { value: "Single expense", label: "Single expense" },
     { value: "Bulk expenses", label: "Bulk expenses" },
@@ -234,7 +245,11 @@ const CreateNewExpense = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Expenses", "Add New Expense"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Expenses", "Add New Expense"]}
+      roles={roles}
+    >
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "

@@ -45,6 +45,19 @@ export default function DisburseROI() {
     const bankName = bankArr.find(
         (option) => option.value === bankDetails?.bankAccount?.bankName
     )?.label;
+    const roles = [
+        "LO",
+        "CFO",
+        "CEO",
+        "CAO",
+        "ICO",
+        "COF",
+        "HRM",
+        "LR0",
+        "CT0",
+        "Dir",
+        "System Admin",
+      ]
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -100,7 +113,7 @@ export default function DisburseROI() {
     };
 
     return (
-        <DashboardLayout isBackNav={true} paths={["Investors", "Withdrawal"]}>
+        <DashboardLayout isBackNav={true} paths={["Investors", "Withdrawal"]} roles={roles}>
             <div className="px-6 lg:w-1/2 mx-auto mt-20 pb-10">
                 <h1 className="font-semibold text-2xl leading-8 text-black mb-16">
                     Withdrawal

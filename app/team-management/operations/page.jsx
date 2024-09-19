@@ -15,10 +15,10 @@ export default function OperationsPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [pageState, setPageState] = useState("benefit-types");
-  const { data } = useSelector(state => state?.hrms);
-  const finData = data?.data
-  const startDate = finData?.startDate || "2024-01-02T00:00:00.000Z"
-  const endDate = finData?.endDate || "2024-01-02T00:00:00.000Z"
+  const { data } = useSelector((state) => state?.hrms);
+  const finData = data?.data;
+  const startDate = finData?.startDate || "2024-01-02T00:00:00.000Z";
+  const endDate = finData?.endDate || "2024-01-02T00:00:00.000Z";
 
   const headers = [
     { id: "name", label: "Department Name" },
@@ -27,8 +27,8 @@ export default function OperationsPage() {
   ];
 
   useEffect(() => {
-    dispatch(getFinancialYear())
-  }, [])
+    dispatch(getFinancialYear());
+  }, []);
 
   const customDataTransformer = (apiData) => {
     return apiData?.departments?.map((item) => ({
@@ -53,13 +53,18 @@ export default function OperationsPage() {
   };
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team management", "Operations"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team management", "Operations"]}
+      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+    >
       <div className="">
         <div className="p-5 flex items-centers">
           <button
-            className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${pageState === "benefit-types" &&
+            className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
+              pageState === "benefit-types" &&
               "border-b-swBlue text-swBlue font-semibold"
-              }`}
+            }`}
             onClick={() => setPageState("benefit-types")}
           >
             Benefit Types
@@ -74,9 +79,10 @@ export default function OperationsPage() {
             Employee Benefits
           </button> */}
           <button
-            className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${pageState === "financial-year" &&
+            className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
+              pageState === "financial-year" &&
               "border-b-swBlue text-swBlue font-semibold"
-              }`}
+            }`}
             onClick={() => setPageState("financial-year")}
           >
             Financial year
@@ -111,14 +117,24 @@ export default function OperationsPage() {
           {pageState === "financial-year" && (
             <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5">
               <div className="flex justify-end">
-                <div className={`py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1 
-                  ${finData?.isActive ? "bg-green-50 text-swGreen" : "text-red-400 bg-red-100"}`}>
-                  <div className={`h-1 w-1 rounded-full ${finData?.isActive ? "bg-green-500" : "bg-red-500"}`}>
-                  </div>
-                  {finData?.isActive ? "Active": "Inactive"}
+                <div
+                  className={`py-1 px-2 border rounded-md flex w-fit text-xs items-center gap-1 
+                  ${
+                    finData?.isActive
+                      ? "bg-green-50 text-swGreen"
+                      : "text-red-400 bg-red-100"
+                  }`}
+                >
+                  <div
+                    className={`h-1 w-1 rounded-full ${
+                      finData?.isActive ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  ></div>
+                  {finData?.isActive ? "Active" : "Inactive"}
                 </div>
                 <Button className="bg-swBlue text-white md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap">
-                  <Link href={'/team-management/operations/financial-year/add-new'}
+                  <Link
+                    href={"/team-management/operations/financial-year/add-new"}
                     className="flex gap-1 items-center p-1"
                   >
                     <AiOutlinePlus size={15} />

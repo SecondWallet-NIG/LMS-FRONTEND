@@ -17,6 +17,19 @@ const DashboardPage = () => {
   const user = useSelector((state) => state.auth.user);
   const cardData = useSelector((state) => state.dashboardData);
   const graphData = useSelector((state) => state.dashboardData);
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "LR0",
+    "CT0",
+    "HRM",
+    "Dir",
+    "System Admin",
+  ];
 
   const options = {
     responsive: true,
@@ -182,7 +195,7 @@ const DashboardPage = () => {
   }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={roles}>
       {cardData && (
         <main className="text-swGray text-lg p-5 sm:p-10 bg-gray-50 h-full">
           {/* <DashboardPageCard /> */}

@@ -5,6 +5,7 @@ import TeamManagementCard from "../components/cards/Team management card/TeamMan
 import BarChart from "../components/chart/BarChart";
 
 const TeamManagement = () => {
+  const roles = ["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"];
   const labels = [
     "Jan",
     "Feb",
@@ -91,7 +92,7 @@ const TeamManagement = () => {
     ],
   };
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={roles}>
       <div className="mx-5">
         <TeamManagementCard />
         <div className="mt-10 flex justify-between">

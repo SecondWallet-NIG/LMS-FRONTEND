@@ -568,11 +568,8 @@ const CreateLoan = () => {
     setLoanPackageInterestRate(loanpackage);
   }, [formData.loanPackage]);
 
-  if (roleTag && roleTag !== "LO") {
-    return <Unauthorized />;
-  }
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={["LO"]}>
       <ToastContainer />
       {currentStep === 1 ? (
         <main className="flex text-sm">
@@ -1228,7 +1225,9 @@ const CreateLoan = () => {
                         />
                       )
                     }
-                    className={`w-full ${loading === true && "cursor-not-allowed"}`}
+                    className={`w-full ${
+                      loading === true && "cursor-not-allowed"
+                    }`}
                     label={"Create Loan"}
                     onClick={submitLoan}
                   />
@@ -1477,7 +1476,9 @@ const CreateLoan = () => {
                         />
                       )
                     }
-                    className={`w-full ${loading === true && "cursor-not-allowed"}`}
+                    className={`w-full ${
+                      loading === true && "cursor-not-allowed"
+                    }`}
                     label={"Create Loan"}
                     onClick={submitLoan}
                   />

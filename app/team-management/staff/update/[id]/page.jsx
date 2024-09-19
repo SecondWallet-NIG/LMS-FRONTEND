@@ -206,6 +206,7 @@ const StaffUpdatePAge = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Staff", "Update Staff"]}
+      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
     >
       <ToastContainer />
       <div className="flex justify-center p-5">

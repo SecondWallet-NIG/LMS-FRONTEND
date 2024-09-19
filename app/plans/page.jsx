@@ -18,6 +18,16 @@ const LoanPackages = () => {
   const [data, setData] = useState([]);
   const [showCreatePlan, setShowCreatePlan] = useState(false);
   const [userRole, setUserRole] = useState("");
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
 
   const loanPackage =
     useSelector((state) => {
@@ -55,7 +65,7 @@ const LoanPackages = () => {
   }, [userRole]);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={roles}>
       <main className="mx-auto max-w-7xl p-5 overflow-hidden text-black">
         {showCreatePlan && (
           <Link

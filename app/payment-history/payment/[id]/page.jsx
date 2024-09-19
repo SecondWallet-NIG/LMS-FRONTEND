@@ -42,6 +42,19 @@ const PaymentPage = () => {
   const [showApprovalBtns, setShowApprovalBtns] = useState(false);
   const [disableApprovalBtn, setDisableApprovalBtn] = useState(false);
   const [userRole, setUserRole] = useState("");
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "HRM",
+    "COF",
+    "CT0",
+    "LR0",
+    "Dir",
+    "System Admin",
+  ];
 
   const getRepayment = () => {
     dispatch(getSingleRepayment(id))
@@ -117,7 +130,11 @@ const PaymentPage = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Payment History", "Payment"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Payment History", "Payment"]}
+      roles={roles}
+    >
       <ToastContainer />
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 text-sm justify-end font-semibold">

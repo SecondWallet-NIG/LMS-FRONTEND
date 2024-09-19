@@ -47,6 +47,19 @@ const CreateCustomer = () => {
   const [profileImg, setProfileImg] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "LR0",
+    "CT0",
+    "HRM",
+    "Dir",
+    "System Admin",
+  ];
 
   const {
     loading,
@@ -305,7 +318,11 @@ const CreateCustomer = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Borrowers", "Create borrower"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Borrowers", "Create borrower"]}
+      roles={roles}
+    >
       <ToastContainer />
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
         <div className="flex justify-between items-center">

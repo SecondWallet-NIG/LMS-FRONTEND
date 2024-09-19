@@ -26,13 +26,23 @@ const Report = () => {
     { name: "Asset Report", selOption: "asset" },
     { name: "Investment Report", selOption: "investment" },
   ];
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "HRM",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
 
   const handleReports = (id) => {
     setReportToggle(id);
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={roles}>
       <main className="">
         <section
           aria-label="Report toggles"

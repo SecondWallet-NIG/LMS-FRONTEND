@@ -12,6 +12,19 @@ const BlackListedCustomers = () => {
   const router = useRouter();
   const [openWhitelistModal, setOpenWhitelistModal] = useState(false);
   const [borrowerId, setBorrowerId] = useState("");
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "LR0",
+    "CT0",
+    "HRM",
+    "Dir",
+    "System Admin",
+  ];
 
   const header = [
     { id: "sn", label: "S/N" },
@@ -66,7 +79,7 @@ const BlackListedCustomers = () => {
   };
 
   return (
-    <DashboardLayout paths={["Blacklisted Borrowers"]}>
+    <DashboardLayout paths={["Blacklisted Borrowers"]} roles={roles}>
       <ReusableDataTable
         dataTransformer={customDataTransformer}
         // onClickRow="/borrowers/profile"

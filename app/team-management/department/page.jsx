@@ -48,7 +48,11 @@ export default function DepartmentPage() {
   };
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team Management", "Department"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team Management", "Department"]}
+      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+    >
       <div className=" py-2 mt-5">
         <ReusableDataTable
           dataTransformer={customDataTransformer}

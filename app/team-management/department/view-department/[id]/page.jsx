@@ -34,6 +34,7 @@ const ViewDepartment = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "View Department"]}
+      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">

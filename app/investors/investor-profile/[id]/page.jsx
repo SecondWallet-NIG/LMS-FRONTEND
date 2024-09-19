@@ -33,8 +33,10 @@ const InvestorProfile = () => {
   const paths = ["Investors", "Investor profile"];
   const [roleTag, setRoleTag] = useState("");
   const { loading, error, data } = useSelector((state) => state.investment);
-  const [isEmploymentDetailsModalOpen, setIsEmploymentDetailsModalOpen] = useState(false);
-  const [isUploadDocumentsModalOpen, setIsUploadDocumentsModalOpen] = useState(false);
+  const [isEmploymentDetailsModalOpen, setIsEmploymentDetailsModalOpen] =
+    useState(false);
+  const [isUploadDocumentsModalOpen, setIsUploadDocumentsModalOpen] =
+    useState(false);
   const [activeButton, setActiveButton] = useState("bio-data");
   const [activityButton, setActivityButton] = useState("summary");
   const [infoHover, setInfoHover] = useState("");
@@ -44,25 +46,35 @@ const InvestorProfile = () => {
   const [user, setUser] = useState(null);
   const [openedMessages, setOpenedMessages] = useState("unread");
   const buttonRef = useRef(null);
-  const activeIcon = <div className="bg-swGreen p-0.5 rounded-full -mr-2 ml-2"></div>
-  const dataClass = 'pt-3 grid grid-cols-2'
-  const labelClass = 'text-sm text-swGray leading-5 flex gap-2'
-  const valueClass = 'font-medium text-sm leading-5 text-swBlack -ml-8 w-fit'
-  const detailsHeader = 'text-swBlack text-lg leading-7 my-1 font-semibold'
-  const editButton = <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit rounded-md flex">
-    <Link
-      href={"#"}
-      className="bg-white w-fit p-2 rounded-md"
-    >
-      {infoHover === "bio-data" && (
-        <FiEdit2
-          size={16}
-          className="text-swGray hover:text-black"
-        />
-      )}
-    </Link>
-  </div>
-
+  const activeIcon = (
+    <div className="bg-swGreen p-0.5 rounded-full -mr-2 ml-2"></div>
+  );
+  const dataClass = "pt-3 grid grid-cols-2";
+  const labelClass = "text-sm text-swGray leading-5 flex gap-2";
+  const valueClass = "font-medium text-sm leading-5 text-swBlack -ml-8 w-fit";
+  const detailsHeader = "text-swBlack text-lg leading-7 my-1 font-semibold";
+  const editButton = (
+    <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit rounded-md flex">
+      <Link href={"#"} className="bg-white w-fit p-2 rounded-md">
+        {infoHover === "bio-data" && (
+          <FiEdit2 size={16} className="text-swGray hover:text-black" />
+        )}
+      </Link>
+    </div>
+  );
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "COF",
+    "HRM",
+    "LR0",
+    "CT0",
+    "Dir",
+    "System Admin",
+  ];
 
   const handleInfoToggle = (buttonId) => {
     setActiveButton(buttonId);
@@ -113,9 +125,8 @@ const InvestorProfile = () => {
     };
   }, [borrowerOptions]);
 
-
   return (
-    <DashboardLayout isBackNav={true} paths={paths}>
+    <DashboardLayout isBackNav={true} paths={paths} roles={roles}>
       <div className="overflow-x-hidden">
         <div className="flex flex-col justify-between lg:flex-row gap-2 border-b border-gray-300 items-end py-4 px-8">
           {/* Profile header */}
@@ -182,7 +193,6 @@ const InvestorProfile = () => {
             </div>
           </div>
 
-
           <div className="w-full lg:w-1/2 sm:text-end">
             <div className="sm:ml-4 flex flex-col justify-between  sm:items-end">
               <p className="text-sm mb-5">
@@ -213,9 +223,10 @@ const InvestorProfile = () => {
               {activeButton !== "bio-data" ? activeIcon : ""}
               <button
                 onClick={() => handleInfoToggle("bio-data")}
-                className={`${activeButton === "bio-data" &&
+                className={`${
+                  activeButton === "bio-data" &&
                   "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md cursor-pointer whitespace-nowrap`}
+                } p-2 rounded-md cursor-pointer whitespace-nowrap`}
               >
                 Personal Information
               </button>
@@ -223,9 +234,10 @@ const InvestorProfile = () => {
               {activeButton !== "document" ? activeIcon : ""}
               <button
                 onClick={() => handleInfoToggle("document")}
-                className={`${activeButton === "document" &&
+                className={`${
+                  activeButton === "document" &&
                   "font-semibold text-swBlue bg-blue-50"
-                  } p-2 rounded-md cursor-pointer`}
+                } p-2 rounded-md cursor-pointer`}
               >
                 Documents
               </button>
@@ -244,9 +256,12 @@ const InvestorProfile = () => {
 
             {activeButton == "document" && (
               <InvestorProfileDocs
-                data={data} openModal={openModal}
-                labelClass={labelClass} handleInfoHoverIn={handleInfoHoverIn}
-                detailsHeader={detailsHeader} editButton={editButton}
+                data={data}
+                openModal={openModal}
+                labelClass={labelClass}
+                handleInfoHoverIn={handleInfoHoverIn}
+                detailsHeader={detailsHeader}
+                editButton={editButton}
               />
             )}
           </div>
@@ -256,17 +271,19 @@ const InvestorProfile = () => {
               <div className="flex gap-2 text-xs lg:text-sm">
                 <button
                   onClick={() => handleActivityToggle("summary")}
-                  className={`${activityButton === "summary" &&
+                  className={`${
+                    activityButton === "summary" &&
                     "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
+                  } p-2 rounded-md cursor-pointer`}
                 >
                   Summary
                 </button>
                 <button
                   onClick={() => handleActivityToggle("investments")}
-                  className={`${activityButton === "investments" &&
+                  className={`${
+                    activityButton === "investments" &&
                     "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer`}
+                  } p-2 rounded-md cursor-pointer`}
                 >
                   Investment
                 </button>
@@ -296,7 +313,9 @@ const InvestorProfile = () => {
             </div>
             <div className="p-2">
               {activityButton === "summary" && <InvestorSummary />}
-              {activityButton === "investments" && <CustomerLoanTable id={data?.data?._id} />}
+              {activityButton === "investments" && (
+                <CustomerLoanTable id={data?.data?._id} />
+              )}
             </div>
           </div>
         </div>

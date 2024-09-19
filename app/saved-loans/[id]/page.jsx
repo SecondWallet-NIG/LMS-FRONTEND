@@ -445,7 +445,7 @@ const SavedLoan = () => {
   }, [loanPackage]);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout paths={["LO"]}>
       <ToastContainer />
 
       {currentStep === 1 ? (

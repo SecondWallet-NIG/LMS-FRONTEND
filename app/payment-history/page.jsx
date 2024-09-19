@@ -8,9 +8,22 @@ import PaymentHistoryTable from "../components/payment-history/PaymentHistoryTab
 
 const PaymentHistory = () => {
   const dispatch = useDispatch()
+  const roles = [
+    "LO",
+    "CFO",
+    "CEO",
+    "CAO",
+    "ICO",
+    "HRM",
+    "COF",
+    "CT0",
+    "LR0",
+    "Dir",
+    "System Admin",
+  ]
   
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={roles}>
       <PaymentHistoryTable />
     </DashboardLayout>
   );

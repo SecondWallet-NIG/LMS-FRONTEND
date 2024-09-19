@@ -236,7 +236,11 @@ const NewStaffPage = () => {
   }, [formData?.profilePicture]);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team Management", "New Staff"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team Management", "New Staff"]}
+      roles={["CFO", "CEO", "CT0", "Dir", "HRM", "System Admin"]}
+    >
       <main className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
         <form id="add-user-form" className="">
           <div className="">
