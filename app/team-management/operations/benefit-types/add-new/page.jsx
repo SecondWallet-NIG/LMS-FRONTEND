@@ -136,14 +136,14 @@ const AddBenefitTypesPage = () => {
             <div className="pt-4 text-md font-semibold text-swBlue">
               Leave Section
             </div>
-            <InputField
+            {/* <InputField
                     value={state[label.toLowerCase().replace(" ", "")]}
                     name={state.level}
                     onChange={handleInputChange}
                     
                     label={"Staff Level"}
                     onWheel={() => document.activeElement.blur()}
-                  />
+                  /> */}
             {[
               "Staff Level",
               "Annual Leave",
