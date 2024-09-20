@@ -19,7 +19,6 @@ const ViewSingleLeaveRequest = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const [user, setUser] = useState({ role: "", id: "" });
-  const [showEditBtn, setShowEditBtn] = useState(false);
   const [approvalModal, setApprovalModal] = useState(false);
   const [successModal, setSuccessModal] = useState({
     state: false,
@@ -53,17 +52,7 @@ const ViewSingleLeaveRequest = () => {
     dispatch(getSingleLeaveRequest(id));
   }, []);
 
-  useEffect(() => {
-    if (
-      user.role === "CEO" ||
-      user.role === "CTO" ||
-      user.role === "CFO" ||
-      user.role === "Dir" ||
-      user.role === "System Admin"
-    ) {
-      setShowEditBtn(true);
-    }
-  }, [user.role]);
+  console.log(user);
 
   const handleApprove = () => {
     setLoading(true);
@@ -224,12 +213,16 @@ const ViewSingleLeaveRequest = () => {
     );
   };
 
-  console.log({ data });
+  console.log(
+    "approver",
+    data?.data?.approvalDetails?.firstApproval,
+    data?.data?.approvalDetails?.secondApproval
+  );
 
   return (
     <DashboardLayout
       isBackNav={true}
-      paths={["Loan Plans and Packages", "View Plan"]}
+      paths={["Employee dashboard", "View Leave"]}
       roles={employeeDashboardAuthRoles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
@@ -266,133 +259,6 @@ const ViewSingleLeaveRequest = () => {
 
           {renderStatus(data?.data?.leaveRequest?.status)}
         </div>
-
-        {/* <div className="p-5 flex flex-col gap-5 font-500">
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">Leave Type</p>
-            <div>
-              {
-                leaveTypes?.find(
-                  (e) => e?.id === data?.data?.leaveRequest?.leaveType
-                )?.label
-              }
-            </div>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">Staff</p>
-            <div>
-              <p>
-                {data?.data?.leaveRequest?.userDetails?.lastName}{" "}
-                {data?.data?.leaveRequest?.userDetails?.firstName}
-              </p>
-              <p className="text-swBlue">
-                {data?.data?.leaveRequest?.userDetails?.email}
-              </p>
-            </div>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">
-              First Approval
-            </p>
-            <div>
-              <p>
-                {
-                  data?.data?.approvalDetails?.firstApproval?.approverDetails
-                    ?.lastName
-                }{" "}
-                {
-                  data?.data?.approvalDetails?.firstApproval?.approverDetails
-                    ?.firstName
-                }
-              </p>
-              <p className="text-swBlue">
-                {
-                  data?.data?.approvalDetails?.firstApproval?.approverDetails
-                    ?.email
-                }
-              </p>
-              <div className="flex items-center gap-2">
-                Status:
-                {renderStatus(
-                  data?.data?.approvalDetails?.firstApproval?.status
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">
-              Second Approval
-            </p>
-            <div>
-              <p>
-                {
-                  data?.data?.approvalDetails?.secondApproval?.approverDetails
-                    ?.lastName
-                }{" "}
-                {
-                  data?.data?.approvalDetails?.secondApproval?.approverDetails
-                    ?.firstName
-                }
-              </p>
-              <p className="text-swBlue">
-                {
-                  data?.data?.approvalDetails?.secondApproval?.approverDetails
-                    ?.email
-                }
-              </p>
-              <div className="flex items-center gap-2">
-                Status:
-                {renderStatus(
-                  data?.data?.approvalDetails?.secondApproval?.status
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">
-              Date Requested
-            </p>
-            <p>{data?.data?.leaveRequest?.createdAt?.slice(0, 10)}</p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">Start Date</p>
-            <p>{data?.data?.leaveRequest?.startDate?.slice(0, 10)}</p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">End Date</p>
-            <p>{data?.data?.leaveRequest?.endDate?.slice(0, 10)}</p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">Duration</p>
-            <p>{data?.data?.leaveRequest?.leaveDuration} day(s)</p>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">Reliever</p>
-            <div>
-              <p>
-                {data?.data?.leaveRequest?.reliever?.lastName}{" "}
-                {data?.data?.leaveRequest?.reliever?.firstName}
-              </p>
-              <p className="text-swBlue">
-                {data?.data?.leaveRequest?.reliever?.email}
-              </p>
-            </div>
-          </div>
-          <div className="flex">
-            <p className="min-w-[15rem] font-medium text-swBlue">Description</p>
-            <p>{data?.data?.leaveRequest?.description}</p>
-          </div>
-
-          {data?.data?.approvalDetails?.firstApproval?.status ===
-            "Declined" && (
-            <div className="flex">
-              <p className="min-w-[15rem] font-medium text-swBlue">
-                Decline Reason
-              </p>
-              <p>{data?.data?.leaveRequest?.declineReason}</p>
-            </div>
-          )}
-        </div> */}
         <div className="mt-5 p-5 flex flex-col gap-5">
           <div className="flex flex-col sm:flex-row gap-5">
             <div className="w-full">

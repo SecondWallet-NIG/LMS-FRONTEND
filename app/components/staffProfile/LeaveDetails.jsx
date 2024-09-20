@@ -13,8 +13,8 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
   const returnCardDetails = (name, value) => {
     return (
       <div>
-        <p className="text-xs font-medium text-swGrey400">{name}</p>
-        <p className="text-sm font-medium text-swBlack">{value}</p>
+        <div className="font-medium text-swGrey400">{name}</div>
+        <div className="text-lg font-semibold text-swBlack">{value}</div>
       </div>
     );
   };
@@ -27,15 +27,19 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
     btnText = "Add Employee Benefit";
   }
 
-
   return (
     <div>
-      <div className="p-2 border-2 rounded-lg h-full">
-        <div className="flex justify-between">
-          <p className="text-md font-medium text-swBlue">Leave Details</p>
+      <div className="rounded-xl overflow-hidden h-full flex flex-col">
+        <div className="flex flex-col sm:flex-row justify-between items-start p-5 bg-swGrey25 border-b flex-wrap gap-5">
+          <div>
+            <p className=" text-lg font-semibold text-swBlue">Leave Details</p>
+            <p className="text-sm text-swGray400">
+              Important details concerning your leave request.
+            </p>
+          </div>
           {(!data?.employeeBenefit || isDashboard) && (
             <Button
-              className="border border-swBlue text-swBlue hover:bg-swDarkBlue text-xs md:p-[0.37rem] rounded-md ml-2 whitespace-nowrap flex gap-1"
+              className="border border-swBlue text-swBlue hover:bg-swDarkBlue text-sm p-3 rounded-md whitespace-nowrap flex gap-1"
               onClick={() =>
                 isDashboard
                   ? setOpenLeaveRequestModal(true)
@@ -47,39 +51,66 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
             </Button>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-5 mt-2">
-          {returnCardDetails(
-            "Annual Leave",
-            `${
-              data?.employeeBenefit?.benefitType?.leaveTypes?.annualLeave || 0
-            } working day(s)`
-          )}
-          {returnCardDetails(
-            "Sick Leave",
-            `${
-              data?.employeeBenefit?.benefitType?.leaveTypes?.sickLeave || 0
-            } working day(s)`
-          )}
-          {returnCardDetails(
-            "Maternity Leave",
-            `${
-              data?.employeeBenefit?.benefitType?.leaveTypes?.maternityLeave ||
-              0
-            } working day(s)`
-          )}
-          {returnCardDetails(
-            "Paternity Leave",
-            `${
-              data?.employeeBenefit?.benefitType?.leaveTypes?.paternityLeave ||
-              0
-            } working day(s)`
-          )}
-          {returnCardDetails(
-            "Unpaid Leave",
-            `${
-              data?.employeeBenefit?.benefitType?.leaveTypes?.unpaidLeave || 0
-            } working day(s)`
-          )}
+
+        <div className="p-5 bg-swGrey25 h-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-5 rounded-xl bg-white p-5 h-full">
+            {returnCardDetails(
+              "Annual Leave",
+              `${
+                data?.employeeBenefit?.benefitType?.leaveTypes?.annualLeave || 0
+              } working ${
+                data?.employeeBenefit?.benefitType?.leaveTypes?.annualLeave ===
+                1
+                  ? "day"
+                  : "days"
+              }`
+            )}
+            {returnCardDetails(
+              "Sick Leave",
+              `${
+                data?.employeeBenefit?.benefitType?.leaveTypes?.sickLeave || 0
+              } working ${
+                data?.employeeBenefit?.benefitType?.leaveTypes?.sickLeave === 1
+                  ? "day"
+                  : "days"
+              }`
+            )}
+            {returnCardDetails(
+              "Maternity Leave",
+              `${
+                data?.employeeBenefit?.benefitType?.leaveTypes
+                  ?.maternityLeave || 0
+              } working ${
+                data?.employeeBenefit?.benefitType?.leaveTypes
+                  ?.maternityLeave === 1
+                  ? "day"
+                  : "days"
+              }`
+            )}
+            {returnCardDetails(
+              "Paternity Leave",
+              `${
+                data?.employeeBenefit?.benefitType?.leaveTypes
+                  ?.paternityLeave || 0
+              } working ${
+                data?.employeeBenefit?.benefitType?.leaveTypes
+                  ?.paternityLeave === 1
+                  ? "day"
+                  : "days"
+              }`
+            )}
+            {returnCardDetails(
+              "Unpaid Leave",
+              `${
+                data?.employeeBenefit?.benefitType?.leaveTypes?.unpaidLeave || 0
+              } working ${
+                data?.employeeBenefit?.benefitType?.leaveTypes?.unpaidLeave ===
+                1
+                  ? "day"
+                  : "days"
+              }`
+            )}
+          </div>
         </div>
       </div>
       <RightModal
