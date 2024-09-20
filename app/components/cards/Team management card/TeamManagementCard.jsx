@@ -10,8 +10,6 @@ import { getTeamManagementSummary } from "@/redux/slices/reportSlice";
 const TeamManagementCard = () => {
   const dispatch = useDispatch();
   const  data  = useSelector((state) => state.report);
-  console.log();
-  
 
   useEffect(() => {
     dispatch(getTeamManagementSummary());
@@ -36,7 +34,7 @@ const TeamManagementCard = () => {
       count: data?.data?.data?.roleCount
     },
     {
-      label: "Operations",
+      label: <p className="text-lg font-semibold text-swDarkBlue">Operations</p>,
       icon: <TbReportMoney className="font-light text-swDarkBlue"  />,
       viewLink: "/team-management/operations",
 
