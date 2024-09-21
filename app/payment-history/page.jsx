@@ -5,7 +5,7 @@ import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import { useDispatch, useSelector } from "react-redux";
 
 import PaymentHistoryTable from "../components/payment-history/PaymentHistoryTable";
-import { paymentHystoryAuthRoles } from "../components/helpers/pageAuthRoles";
+import { paymentHistoryAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const PaymentHistory = () => {
   const dispatch = useDispatch()
