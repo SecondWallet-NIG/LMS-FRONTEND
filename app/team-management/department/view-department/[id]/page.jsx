@@ -3,21 +3,16 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FiEdit2, FiTrash } from "react-icons/fi";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { useEffect, useRef, useState } from "react";
-import { IoMdCheckmark } from "react-icons/io";
-import { LuTrash } from "react-icons/lu";
 import { getSingleDepartment } from "@/redux/slices/hrmsSlice";
-import { getUserById } from "@/redux/slices/userSlice";
+
 import { format } from "date-fns";
 import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const ViewDepartment = () => {
   const { id } = useParams();
-  const [userRole, setUserRole] = useState(false);
-  const [showEditBtn, setShowEditBtn] = useState(false);
+
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.hrms);
   // const { data: userData } = useSelector((state) => state.user);
@@ -26,10 +21,6 @@ const ViewDepartment = () => {
     dispatch(getSingleDepartment(id));
   }, []);
 
-  // useEffect(() => {
-  //   if (data?.data?.departmentHead)
-  //     dispatch(getUserById(data?.data?.departmentHead));
-  // }, [data]);
 
   return (
     <DashboardLayout
