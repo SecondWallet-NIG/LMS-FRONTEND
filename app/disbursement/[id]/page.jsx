@@ -1,5 +1,6 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
+import { disbursementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 import { handleFileExtention } from "@/app/components/helpers/utils";
 import { formatDate } from "@/helpers";
 import { getDisbursementById } from "@/redux/slices/loanApplicationSlice";
@@ -26,7 +27,11 @@ const Disbursement = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Disbursements", "Disbursement"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Disbursements", "Disbursement"]}
+      roles={disbursementAuthRoles}
+    >
       <ToastContainer />
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 text-sm justify-end font-semibold">

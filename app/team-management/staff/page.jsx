@@ -5,6 +5,7 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import AllStaffsTable from "@/app/components/team management comps/AllStaffsTable";
 import { useState } from "react";
 import AllStaffsAttendanceTable from "@/app/components/team management comps/AllStaffsAttendanceTable";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const StaffDataPage = () => {
   const [pageState, setPageState] = useState("all staffs");
@@ -13,7 +14,11 @@ const StaffDataPage = () => {
   const activeBtn = "border-swBlue text-swBlue";
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team Management", "Staff"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team Management", "Staff"]}
+      roles={teamManagementAuthRoles}
+    >
       <div className="">
         <div className="p-5">
           <button

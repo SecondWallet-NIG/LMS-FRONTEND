@@ -3,6 +3,7 @@ import { useState } from "react";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import TeamManagementCard from "../components/cards/Team management card/TeamManagementCard";
 import BarChart from "../components/chart/BarChart";
+import { teamManagementAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const TeamManagement = () => {
   const labels = [
@@ -91,7 +92,7 @@ const TeamManagement = () => {
     ],
   };
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={teamManagementAuthRoles}>
       <div className="mx-5">
         <TeamManagementCard />
       </div>

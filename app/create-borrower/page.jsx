@@ -29,6 +29,7 @@ import { FiTrash, FiUser } from "react-icons/fi";
 import { AiOutlineDelete } from "react-icons/ai";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Image from "next/image";
+import { borrowersAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const CreateCustomer = () => {
   const [isInputOpen, setIsInputOpen] = useState(false);
@@ -305,7 +306,11 @@ const CreateCustomer = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Borrowers", "Create borrower"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Borrowers", "Create borrower"]}
+      roles={borrowersAuthRoles}
+    >
       <ToastContainer />
       <main className="max-w-3xl mx-auto p-2 mt-10 text-sm">
         <div className="flex justify-between items-center">

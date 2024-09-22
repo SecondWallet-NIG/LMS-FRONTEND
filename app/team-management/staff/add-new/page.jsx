@@ -15,6 +15,7 @@ import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import { useImmer } from "use-immer";
 import { getAllDepartments } from "@/redux/slices/hrmsSlice";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const NewStaffPage = () => {
   const dispatch = useDispatch();
@@ -236,7 +237,11 @@ const NewStaffPage = () => {
   }, [formData?.profilePicture]);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team Management", "New Staff"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team Management", "New Staff"]}
+      roles={teamManagementAuthRoles}
+    >
       <main className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
         <form id="add-user-form" className="">
           <div className="">

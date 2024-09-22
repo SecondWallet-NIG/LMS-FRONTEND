@@ -18,6 +18,7 @@ import EditableButton from "@/app/components/shared/editableButtonComponent/Edit
 import { useRouter } from "next/navigation";
 import { LuPaperclip } from "react-icons/lu";
 import { FiTrash } from "react-icons/fi";
+import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const CreateInvestment = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,6 @@ const CreateInvestment = () => {
     interestRateValue: "",
   });
   const { data } = useSelector((state) => state.investment);
-
   // const interestDurationOpt = [
   //   { value: "daily", label: "Daily" },
   //   { value: "monthly", label: "Monthly" },
@@ -296,7 +296,11 @@ const CreateInvestment = () => {
   }, [formData?.interestRateMetric, formData?.investmentProduct]);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Investors", "New investment"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Investors", "New investment"]}
+      roles={investorsAuthRoles}
+    >
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
           Create New Investment

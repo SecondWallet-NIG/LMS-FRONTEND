@@ -8,6 +8,7 @@ import ManagementReport from "../components/report/Management_Report/MangementRe
 import ExpenseReport from "../components/report/Expense_Report/ExpenseReport";
 import AssetReport from "../components/report/Asset_Report/AssetReport";
 import InvestmentReport from "../components/report/Investment_Report/InvestmentReport";
+import { reportAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -32,7 +33,7 @@ const Report = () => {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={reportAuthRoles}>
       <main className="">
         <section
           aria-label="Report toggles"

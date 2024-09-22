@@ -14,6 +14,10 @@ import LeaveRequests from "./LeaveRequests";
 import LeaveApprovalRequests from "./LeaveApprovalRequests";
 import Attendance from "./Attendance";
 import ClockInDetails from "./ClockInDetails";
+import { employeeDashboardAuthRoles } from "../helpers/pageAuthRoles";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 const StaffData = ({ path, isDashboard }) => {
   const { id } = useParams();
@@ -23,7 +27,7 @@ const StaffData = ({ path, isDashboard }) => {
   // const { data, loading } = useSelector((state) => state.user);
 
   const btnCls = "px-3 border-b-2 font-medium";
-  const activeBtn = "border-swBlue text-swBlue";
+  const activeBtn = "border-swBlue text-swBlue font-semibold";
 
   useEffect(() => {
     dispatch(getUserById(id))
@@ -39,9 +43,13 @@ const StaffData = ({ path, isDashboard }) => {
     dispatch(getStaffTasks(id));
   }, []);
   return (
-    <DashboardLayout isBackNav={true} paths={path}>
-      <main>
-        <div className="p-2.5 sm:p-2.5">
+    <DashboardLayout
+      isBackNav={true}
+      paths={path}
+      roles={employeeDashboardAuthRoles}
+    >
+      <main className={inter.className}>
+        <div className="p-5 sm:p-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Personal details */}
             <StaffPersonalDetails data={data?.data} />

@@ -18,6 +18,7 @@ import EditableButton from "../components/shared/editableButtonComponent/Editabl
 import { FiTrash } from "react-icons/fi";
 import SuccessModal from "../components/modals/SuccessModal";
 import CancelModal from "../components/modals/CancelModal";
+import { expensesAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const CreateNewExpense = () => {
   const dispatch = useDispatch();
@@ -234,7 +235,11 @@ const CreateNewExpense = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Expenses", "Add New Expense"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Expenses", "Add New Expense"]}
+      roles={expensesAuthRoles}
+    >
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "

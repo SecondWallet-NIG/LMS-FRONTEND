@@ -14,6 +14,7 @@ import {
   updateSingleAsset,
 } from "@/redux/slices/assetManagementSlice";
 import { useParams, useRouter } from "next/navigation";
+import { assetManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EditAsset = () => {
   const dispatch = useDispatch();
@@ -126,6 +127,7 @@ const EditAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Asset Management", "Add new asset"]}
+      roles={assetManagementAuthRoles}
     >
       <ToastContainer />
       <main

@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
+import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const CreateInvestor = () => {
   const headerClass = "font-medium text-sm leading-5 text-swBlack";
@@ -96,7 +97,7 @@ const CreateInvestor = () => {
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
-    const reqComma = ['annualIncome', 'networth']
+    const reqComma = ["annualIncome", "networth"];
 
     if (reqComma.includes(name)) {
       const numericValue = value.replace(/[^0-9.]/g, "");
@@ -116,7 +117,7 @@ const CreateInvestor = () => {
             accountName: response.data.account_name,
           }));
           setBankNameVal(response.data.account_name);
-        } catch (error) { }
+        } catch (error) {}
       }
     }
   };
@@ -266,7 +267,6 @@ const CreateInvestor = () => {
     return numberString.replace(/,/g, "");
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -290,7 +290,10 @@ const CreateInvestor = () => {
     payload.append("bankAccount[accountNumber]", formData.accountNumber);
     payload.append("bankAccount[accountName]", formData.accountName);
     payload.append("bankAccount[bankName]", formData.bankName);
-    payload.append("annualIncome", removeCommasFromNumber(formData.annualIncome));
+    payload.append(
+      "annualIncome",
+      removeCommasFromNumber(formData.annualIncome)
+    );
     payload.append("networth", removeCommasFromNumber(formData.networth));
     payload.append("sourceOfIncome", formData.sourceOfIncome);
     payload.append("workStatus", formData.workStatus);
@@ -368,7 +371,7 @@ const CreateInvestor = () => {
     setUserId(user);
   }, []);
   return (
-    <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]}>
+    <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]} roles={investorsAuthRoles}>
       <ToastContainer />
       <div className="mx-auto w-full px-10 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
@@ -554,9 +557,7 @@ const CreateInvestor = () => {
                 required={true}
                 placeholder={"Select state"}
                 isSearchable={true}
-                value={
-                  states.find((e) => e.value === formData.state)
-                }
+                value={states.find((e) => e.value === formData.state)}
                 onChange={(selectedOption) => {
                   handleStateChange(selectedOption);
                   handleSelectChange(selectedOption, "state");
@@ -569,9 +570,7 @@ const CreateInvestor = () => {
                 label={"LGA"}
                 required={true}
                 optionValue={lga}
-                value={
-                  lga.find((e) => e.value === formData.lga)
-                }
+                value={lga.find((e) => e.value === formData.lga)}
                 placeholder={"Select lga"}
                 isSearchable={true}
                 onChange={(selectedOption) =>

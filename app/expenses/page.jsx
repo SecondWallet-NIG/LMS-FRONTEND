@@ -18,6 +18,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import InvestmentsCards from "../components/cards/InvestmentsCard/InvestmentsCards";
 import { getExpenseReportGraph } from "@/redux/slices/reportSlice";
+import { expensesAuthRoles } from "../components/helpers/pageAuthRoles";
 const header = [
   { id: "expenseDate", label: "Expense Date" },
   { id: "dateLogged", label: "Date Logged" },
@@ -184,7 +185,7 @@ const Expenses = () => {
 
   return (
     <>
-      <DashboardLayout isBackNav={true} paths={["Expenses"]}>
+      <DashboardLayout isBackNav={true} paths={["Expenses"]} roles={expensesAuthRoles}>
         <div className="pt-5 pl-5 flex items-centers">
           <p
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${

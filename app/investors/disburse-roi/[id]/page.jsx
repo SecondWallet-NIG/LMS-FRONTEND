@@ -15,6 +15,7 @@ import { bankArr } from "@/constant";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import { useRouter } from "next/navigation";
+import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 export default function DisburseROI() {
     const mtHeadClass = "flex gap-1";
@@ -100,7 +101,7 @@ export default function DisburseROI() {
     };
 
     return (
-        <DashboardLayout isBackNav={true} paths={["Investors", "Withdrawal"]}>
+        <DashboardLayout isBackNav={true} paths={["Investors", "Withdrawal"]} roles={investorsAuthRoles}>
             <div className="px-6 lg:w-1/2 mx-auto mt-20 pb-10">
                 <h1 className="font-semibold text-2xl leading-8 text-black mb-16">
                     Withdrawal

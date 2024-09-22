@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation";
 import { useImmer } from "use-immer";
 import { addNewBenefitTypes } from "@/redux/slices/hrmsSlice";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import InputField from "@/app/components/shared/input/InputField";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
+import Button from "@/app/components/shared/buttonComponent/Button";
+import InputField from "@/app/components/shared/input/InputField";
+import { getAllUsers } from "@/redux/slices/userSlice";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const daysOfWeek = [
   "monday",
@@ -129,6 +132,7 @@ const AddBenefitTypesPage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Benefit Types", "Add New"]}
+      roles={teamManagementAuthRoles}
     >
       <div className="mx-auto w-full px-5 lg:px-1 md:flex block gap-4 my-8">
         <div className="md:w-1/2 w-full">
