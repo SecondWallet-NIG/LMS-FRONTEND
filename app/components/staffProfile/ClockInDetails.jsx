@@ -13,15 +13,15 @@ export default function ClockInDetails({ data, isDashboard }) {
   const returnCardDetails = (name, value) => {
     return (
       <div>
-        <div className="font-medium text-swGrey400">{name}</div>
-        <div className="text-lg font-semibold text-swBlack">{value}</div>
+        <div className="font-medium text-swGrey400 text-sm">{name}</div>
+        <div className="text-sm font-light text-swBlack">{value}</div>
       </div>
     );
   };
 
   return (
     <div className="rounded-xl overflow-hidden h-full flex flex-col">
-      <div className="flex flex-col sm:flex-row justify-between items-start p-5 bg-swGrey25 border-b flex-wrap gap-5">
+      <div className="flex flex-col sm:flex-row justify-between items-start p-5 bg-[#f7f7f7] border-b flex-wrap gap-5">
         <div>
           <div>
             <div className="flex items-center gap-5">
@@ -61,7 +61,7 @@ export default function ClockInDetails({ data, isDashboard }) {
           </Button>
         )}
       </div>
-      <div className="p-5 bg-swGrey25">
+      <div className="p-5 bg-[#f7f7f7]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 rounded-xl bg-white p-5">
           {returnCardDetails("Date", format(new Date(), "dd/MM/yyyy"))}
           {returnCardDetails("Time", format(new Date(), "hh:mm a"))}

@@ -13,8 +13,8 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
   const returnCardDetails = (name, value) => {
     return (
       <div>
-        <div className="font-medium text-swGrey400">{name}</div>
-        <div className="text-lg font-semibold text-swBlack">{value}</div>
+        <div className="font-medium text-swGrey400 text-sm">{name}</div>
+        <div className="text-sm font-light text-swBlack">{value}</div>
       </div>
     );
   };
@@ -30,7 +30,7 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
   return (
     <div>
       <div className="rounded-xl overflow-hidden h-full flex flex-col">
-        <div className="flex flex-col sm:flex-row justify-between items-start p-5 bg-swGrey25 border-b flex-wrap gap-5">
+        <div className="flex flex-col sm:flex-row justify-between items-start p-5 bg-[#f7f7f7] border-b flex-wrap gap-5">
           <div>
             <p className=" text-lg font-semibold text-swBlue">Leave Details</p>
             <p className="text-sm text-swGray400">
@@ -52,7 +52,7 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
           )}
         </div>
 
-        <div className="p-5 bg-swGrey25 h-full">
+        <div className="p-5 bg-[#f7f7f7] h-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-5 rounded-xl bg-white p-5 h-full">
             {returnCardDetails(
               "Annual Leave",

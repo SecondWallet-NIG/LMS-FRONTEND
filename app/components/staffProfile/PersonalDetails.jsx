@@ -25,8 +25,8 @@ export default function StaffPersonalDetails({ data }) {
   const returnCardDetails = (name, value) => {
     return (
       <div>
-        <div className="font-medium text-swGrey400">{name}</div>
-        <div className="text-lg font-semibold text-swBlack">{value}</div>
+        <div className="font-medium text-swGrey400 text-sm">{name}</div>
+        <div className="text-lg font-light text-swBlack text-sm">{value}</div>
       </div>
     );
   };
@@ -65,7 +65,7 @@ export default function StaffPersonalDetails({ data }) {
 
   return (
     <div className="rounded-xl overflow-hidden flex flex-col">
-      <div className="flex justify-between p-5 bg-swGrey25 border-b">
+      <div className="flex justify-between p-5 bg-[#f7f7f7] border-b">
         <div className="flex items-start gap-3">
           {data?.user?.profilePicture &&
           data?.user?.profilePicture !== "null" &&
@@ -149,7 +149,7 @@ export default function StaffPersonalDetails({ data }) {
       >
         <FiPhoneOutgoing className="text-swBlue " size="20" />
       </Link> */}
-      <div className="p-5 bg-swGrey25 h-full">
+      <div className="p-5 bg-[#f7f7f7] h-full">
         <div className="rounded-xl bg-white w-full p-5 h-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {returnCardDetails(
