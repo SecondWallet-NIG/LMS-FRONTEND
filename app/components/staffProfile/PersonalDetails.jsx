@@ -138,7 +138,7 @@ export default function StaffPersonalDetails({ data }) {
 
         <div className="w-24 h-24 relative -mt-14 hidden sm:block">
           <DoughnutChart data={doughnutData} options={doughnutOptions} />
-          <p className="absolute top-[76%] left-1/2 -translate-x-1/2">
+          <p className="absolute top-[76%] left-1/2 -translate-x-1/2 text-swBlue">
             {tasks?.data?.totalCount || 0}
           </p>
         </div>
