@@ -37,12 +37,12 @@ export default function StaffPersonalDetails({ data }) {
       {
         // label: "# of Tasks",
         data: [
-          tasks?.data?.totalCount || 0,
+          // tasks?.data?.totalCount || 0,
           tasks?.data?.pendingCount || 0,
           tasks?.data?.doneCount || 0,
         ],
         backgroundColor: [
-          "#2769b3", // Total Tasks
+          // "#2769b3", // Total Tasks
           "#f9c00f", // Pending Tasks
           "#17b26a", // Completed Tasks
         ],
