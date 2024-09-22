@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URL } from "@/constant";
-import { format } from "date-fns";
 
 let user;
 if (typeof window !== "undefined") {
