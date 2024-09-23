@@ -51,8 +51,12 @@ const AddBenefitTypesPage = () => {
     },
   });
 
+  // console.log(state);
+  // console.log(clockInTime);
+  // console.log(clockOutTime);
+
   const reset = () => {
-    setState(draft => {
+    setState((draft) => {
       draft.level = "";
       draft.annualleave = "";
       draft.sickleave = "";
@@ -76,13 +80,13 @@ const AddBenefitTypesPage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setState(draft => {
+    setState((draft) => {
       draft[name] = value;
     });
   };
 
   const handleDayChange = (day) => {
-    setState(draft => {
+    setState((draft) => {
       draft.selectedDays[day] = !draft.selectedDays[day];
     });
   };
@@ -107,12 +111,12 @@ const AddBenefitTypesPage = () => {
         paternityLeave: Number(state.paternityleave),
         unpaidLeave: Number(state.unpaidleave),
       },
-      clockInAndOutTime: {
-        selectedDays: state.selectedDays,
-        clockInTime,
-        clockOutTime,
-      },
+      workingDays: state.selectedDays,
+      clockInTime,
+      clockOutTime,
     };
+
+    console.log(payload);
 
     try {
       await dispatch(addNewBenefitTypes(payload)).unwrap();
@@ -137,19 +141,17 @@ const AddBenefitTypesPage = () => {
       <div className="mx-auto w-full px-5 lg:px-1 md:flex block gap-4 my-8">
         <div className="md:w-1/2 w-full">
           <div className="px-5 pb-16 bg-white">
-            <div className="pt-4 text-md font-semibold text-swBlue">
+            <div className="pt-4 text-md font-semibold text-swBlue mb-5">
               Leave Section
             </div>
-            {/* <InputField
-                    value={state[label.toLowerCase().replace(" ", "")]}
-                    name={state.level}
-                    onChange={handleInputChange}
-                    
-                    label={"Staff Level"}
-                    onWheel={() => document.activeElement.blur()}
-                  /> */}
+            <InputField
+              name={"level"}
+              value={state.level}
+              onChange={handleInputChange}
+              label={"Staff Level"}
+              onWheel={() => document.activeElement.blur()}
+            />
             {[
-              "Staff Level",
               "Annual Leave",
               "Sick Leave",
               "Personal Leave",
@@ -227,9 +229,15 @@ const AddBenefitTypesPage = () => {
 
               <button
                 type="submit"
-                className="w-full bg-swBlue text-white font-semibold py-2 rounded-md hover:bg-blue-700"
+                disabled={loading}
+                className={`w-full bg-swBlue text-white font-semibold py-2 rounded-md hover:bg-blue-700 relative overflow-hidden ${
+                  loading ? "cursor-not-allowed" : ""
+                }`}
               >
-                Submit
+                {loading ? "Adding..." : "Submit"}
+                {loading && (
+                  <div className="absolute top-0 left-0 h-full w-full bg-white bg-opacity-50" />
+                )}
               </button>
             </form>
           </div>

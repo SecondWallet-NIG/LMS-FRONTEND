@@ -49,7 +49,7 @@ const Unauthorized = () => {
           You are not authorized to access this page.
         </p>
         <p className="2xl font-medium">
-          Returning you to the previous page in{" "}
+          Returning you to the home page in{" "}
           <span className="text-swBlue">{counter}</span>
         </p>
       </div>

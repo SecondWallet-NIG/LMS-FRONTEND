@@ -37,12 +37,12 @@ export default function StaffPersonalDetails({ data }) {
       {
         // label: "# of Tasks",
         data: [
-          tasks?.data?.totalCount || 0,
+          // tasks?.data?.totalCount || 0,
           tasks?.data?.pendingCount || 0,
           tasks?.data?.doneCount || 0,
         ],
         backgroundColor: [
-          "#2769b3", // Total Tasks
+          // "#2769b3", // Total Tasks
           "#f9c00f", // Pending Tasks
           "#17b26a", // Completed Tasks
         ],
@@ -138,7 +138,7 @@ export default function StaffPersonalDetails({ data }) {
 
         <div className="w-24 h-24 relative -mt-14 hidden sm:block">
           <DoughnutChart data={doughnutData} options={doughnutOptions} />
-          <p className="absolute top-[76%] left-1/2 -translate-x-1/2">
+          <p className="absolute top-[76%] left-1/2 -translate-x-1/2 text-swBlue">
             {tasks?.data?.totalCount || 0}
           </p>
         </div>

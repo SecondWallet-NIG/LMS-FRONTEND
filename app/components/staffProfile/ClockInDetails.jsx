@@ -111,7 +111,7 @@ export default function ClockInDetails({ data, isDashboard }) {
               </div>
               <div
                 className={`text-white text-xs py-1 px-3 rounded-full ${
-                  todayAttendance?.data?.status === "Early"
+                  todayAttendance?.data?.status === "Punctual"
                     ? "bg-swGreen"
                     : "bg-red-500"
                 }`}
