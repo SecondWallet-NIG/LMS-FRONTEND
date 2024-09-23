@@ -5,10 +5,12 @@ import Button from "../shared/buttonComponent/Button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 export default function StaffDeptInfo({ data, isDashboard }) {
   const router = useRouter();
   const [user, setUser] = useState("");
+  const [viewSalary, setViewSalary] = useState(false);
 
   const returnCardDetails = (name, value) => {
     return (
@@ -23,9 +25,7 @@ export default function StaffDeptInfo({ data, isDashboard }) {
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       const user = storedUser?.data?.user;
-
       setUser(user);
-      console.log("user",user?.role?.tag);
     }
   }, []);
 
@@ -40,7 +40,7 @@ export default function StaffDeptInfo({ data, isDashboard }) {
             Important details about your department
           </p>
         </div>
-        {!data?.user?.role?.department && !isDashboard ? (
+        {/* {!data?.user?.role?.department && !isDashboard ? (
           <Button
             className="border border-[#f7f7f7] text-[#f7f7f7] hover:bg-swDarkBlue text-sm p-3 rounded-md whitespace-nowrap flex gap-1"
             onClick={() =>
@@ -52,25 +52,39 @@ export default function StaffDeptInfo({ data, isDashboard }) {
             {!isDashboard && <AiOutlinePlus size={15} />}
             <p className="">Add Department</p>
           </Button>
-        ) : (
-          <div>
-            {user?.role?.tag === "HRM" &&
-              returnCardDetails(
+        ) : ( */}
+        <div>
+          {(user?.role?.tag === "HRM" || isDashboard) && (
+            <div className="flex items-end gap-2">
+              {returnCardDetails(
                 "Salary",
-                <div className="flex items-center">
-                  <Image
-                    src="/images/money.png"
-                    alt="money"
-                    height={30}
-                    width={30}
-                  />
-                  {`₦${
-                    data?.employeeBenefit?.salary?.toLocaleString() || 0
-                  }/month`}
-                </div>
+                viewSalary ? (
+                  <div className="flex items-center font-medium">
+                    <Image
+                      src="/images/money.png"
+                      alt="money"
+                      height={30}
+                      width={30}
+                    />
+                    {`₦${
+                      data?.employeeBenefit?.salary?.toLocaleString() || 0
+                    }/month`}
+                  </div>
+                ) : (
+                  <div>************</div>
+                )
               )}
-          </div>
-        )}
+              <div onClick={() => setViewSalary(!viewSalary)}>
+                {viewSalary ? (
+                  <IoEyeOffOutline className="-mt-6" size={20} />
+                ) : (
+                  <IoEyeOutline className="-mt-6" size={20} />
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        {/* )} */}
       </div>
       <div className="p-5 bg-[#f7f7f7] h-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 rounded-xl bg-white h-full p-5">

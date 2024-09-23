@@ -26,6 +26,8 @@ const RequestLeaveModal = ({ onClose }) => {
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState({ state: false, message: "" });
   const [allRelievers, setAllRelievers] = useState([]);
+  const [allHrm, setAllHrm] = useState([]);
+  const [allMd, setAllMd] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [clearDate, setClearDate] = useState(false);
@@ -33,12 +35,12 @@ const RequestLeaveModal = ({ onClose }) => {
     leaveType: "",
     leaveDuration: 0,
     reliever: "",
+    firstApprover: "",
+    secondApprover: "",
     description: "",
   });
   const { data } = useSelector((state) => state.user);
   const type = data?.data?.employeeBenefit?.benefitType?.leaveTypes;
-
-  console.log("dates", startDate, endDate);
 
   const reset = () => {
     setFormData({
@@ -126,7 +128,22 @@ const RequestLeaveModal = ({ onClose }) => {
           value: item?._id,
         }));
         setAllRelievers(allUsers);
-        // console.log(res);
+
+        const hrm = res?.data?.results
+          .filter((item) => item?.role?.tag === "HRM")
+          .map((item) => ({
+            label: `${item?.firstName} ${item?.lastName}, ${item?.email}`,
+            value: item?._id,
+          }));
+        setAllHrm(hrm);
+
+        const dir = res?.data?.results
+          .filter((item) => item?.role?.tag === "Dir")
+          .map((item) => ({
+            label: `${item?.firstName} ${item?.lastName}, ${item?.email}`,
+            value: item?._id,
+          }));
+        setAllMd(dir);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -198,6 +215,38 @@ const RequestLeaveModal = ({ onClose }) => {
                     />
                   </div>
                   <p>Duration: {formData?.leaveDuration} working day(s)</p>
+                </div>
+              </div>
+              <div className="flex justify-between mt-5">
+                <div className="w-full flex flex-col gap-3">
+                  <SelectField
+                    label={"Select First Approver"}
+                    isSearchable={true}
+                    value={
+                      allHrm.find((e) => e._id === formData.firstApprover) || ""
+                    }
+                    onChange={(e) => {
+                      setFormData({ ...formData, firstApprover: e._id });
+                    }}
+                    optionValue={allHrm}
+                    placeholder={"Select"}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between mt-5">
+                <div className="w-full flex flex-col gap-3">
+                  <SelectField
+                    label={"Select Second Approver"}
+                    isSearchable={true}
+                    value={
+                      allMd.find((e) => e._id === formData.secondApprover) || ""
+                    }
+                    onChange={(e) => {
+                      setFormData({ ...formData, secondApprover: e._id });
+                    }}
+                    optionValue={allMd}
+                    placeholder={"Select"}
+                  />
                 </div>
               </div>
             </div>
