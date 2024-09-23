@@ -121,7 +121,6 @@ const AddBenefitTypesPage = () => {
     try {
       await dispatch(addNewBenefitTypes(payload)).unwrap();
       setSuccessModal(true);
-      setLoading(false);
       reset();
     } catch (err) {
       setErrorModal({

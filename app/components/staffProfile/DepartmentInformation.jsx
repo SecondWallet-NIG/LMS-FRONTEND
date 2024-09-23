@@ -4,10 +4,12 @@ import { useRouter } from "next/navigation";
 import Button from "../shared/buttonComponent/Button";
 import { AiOutlinePlus } from "react-icons/ai";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function StaffDeptInfo({ data, isDashboard }) {
   const router = useRouter();
-  console.log("depttt",data?.user);
+  const [user, setUser] = useState("");
+
   const returnCardDetails = (name, value) => {
     return (
       <div>
@@ -16,6 +18,16 @@ export default function StaffDeptInfo({ data, isDashboard }) {
       </div>
     );
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const user = storedUser?.data?.user;
+
+      setUser(user);
+      console.log("user",user?.role?.tag);
+    }
+  }, []);
 
   return (
     <div className="rounded-xl overflow-hidden h-full flex flex-col">
@@ -42,20 +54,21 @@ export default function StaffDeptInfo({ data, isDashboard }) {
           </Button>
         ) : (
           <div>
-            {returnCardDetails(
-              "Salary",
-              <div className="flex items-center">
-                <Image
-                  src="/images/money.png"
-                  alt="money"
-                  height={30}
-                  width={30}
-                />
-                {`₦${
-                  data?.employeeBenefit?.salary?.toLocaleString() || 0
-                }/month`}
-              </div>
-            )}
+            {user?.role?.tag === "HRM" &&
+              returnCardDetails(
+                "Salary",
+                <div className="flex items-center">
+                  <Image
+                    src="/images/money.png"
+                    alt="money"
+                    height={30}
+                    width={30}
+                  />
+                  {`₦${
+                    data?.employeeBenefit?.salary?.toLocaleString() || 0
+                  }/month`}
+                </div>
+              )}
           </div>
         )}
       </div>
