@@ -154,6 +154,8 @@ const RequestLeaveModal = ({ onClose }) => {
     }
   }, [id]);
 
+  console.log(formData);
+
   return (
     <div>
       <main className="mx-auto w-full px-5 my-2">
@@ -223,10 +225,11 @@ const RequestLeaveModal = ({ onClose }) => {
                     label={"Select First Approver"}
                     isSearchable={true}
                     value={
-                      allHrm.find((e) => e._id === formData.firstApprover) || ""
+                      allHrm.find((e) => e.value === formData.firstApprover) ||
+                      ""
                     }
                     onChange={(e) => {
-                      setFormData({ ...formData, firstApprover: e._id });
+                      setFormData({ ...formData, firstApprover: e.value });
                     }}
                     optionValue={allHrm}
                     placeholder={"Select"}
@@ -239,10 +242,11 @@ const RequestLeaveModal = ({ onClose }) => {
                     label={"Select Second Approver"}
                     isSearchable={true}
                     value={
-                      allMd.find((e) => e._id === formData.secondApprover) || ""
+                      allMd.find((e) => e.value === formData.secondApprover) ||
+                      ""
                     }
                     onChange={(e) => {
-                      setFormData({ ...formData, secondApprover: e._id });
+                      setFormData({ ...formData, secondApprover: e.value });
                     }}
                     optionValue={allMd}
                     placeholder={"Select"}
