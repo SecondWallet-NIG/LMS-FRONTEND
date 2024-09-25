@@ -38,7 +38,6 @@ const AddBenefitTypesPage = () => {
     sickleave: "",
     personalleave: "",
     maternityleave: "",
-    paternityleave: "",
     unpaidleave: "",
     selectedDays: {
       monday: false,
@@ -51,9 +50,6 @@ const AddBenefitTypesPage = () => {
     },
   });
 
-  // console.log(state);
-  // console.log(clockInTime);
-  // console.log(clockOutTime);
 
   const reset = () => {
     setState((draft) => {
@@ -108,7 +104,6 @@ const AddBenefitTypesPage = () => {
         sickLeave: Number(state.sickleave),
         personalLeave: Number(state.personalleave),
         maternityLeave: Number(state.maternityleave),
-        paternityLeave: Number(state.paternityleave),
         unpaidLeave: Number(state.unpaidleave),
       },
       workingDays: state.selectedDays,
@@ -156,7 +151,6 @@ const AddBenefitTypesPage = () => {
               "Sick Leave",
               "Personal Leave",
               "Maternity Leave",
-              "Paternity Leave",
               "Unpaid Leave",
             ].map((label) => (
               <div className="flex justify-between mt-5 gap-5" key={label}>

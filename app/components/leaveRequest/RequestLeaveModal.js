@@ -222,7 +222,7 @@ const RequestLeaveModal = ({ onClose }) => {
               <div className="flex justify-between mt-5">
                 <div className="w-full flex flex-col gap-3">
                   <SelectField
-                    label={"Select First Approver"}
+                    label={"Select First Approver (Head, HR)"}
                     isSearchable={true}
                     value={
                       allHrm.find((e) => e.value === formData.firstApprover) ||
@@ -239,7 +239,7 @@ const RequestLeaveModal = ({ onClose }) => {
               <div className="flex justify-between mt-5">
                 <div className="w-full flex flex-col gap-3">
                   <SelectField
-                    label={"Select Second Approver"}
+                    label={"Select Second Approver (Managing Dir.)"}
                     isSearchable={true}
                     value={
                       allMd.find((e) => e.value === formData.secondApprover) ||
