@@ -107,8 +107,11 @@ const AddBenefitTypesPage = () => {
         unpaidLeave: Number(state.unpaidleave),
       },
       workingDays: state.selectedDays,
-      clockInTime,
-      clockOutTime,
+      clockInAndOutTime: {
+        clockIn: clockInTime,
+        clockOut: clockOutTime,
+      }
+
     };
 
     console.log(payload);
