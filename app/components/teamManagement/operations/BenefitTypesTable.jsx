@@ -71,6 +71,7 @@ const BenefitTypesTable = () => {
         headers={headers}
         filters={true}
         pagination={true}
+        onClickRow={"/team-management/operations/benefit-types/view"}
         btnText={
           <div
             className="flex gap-1 items-center p-1"
