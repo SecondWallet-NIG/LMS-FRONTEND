@@ -87,7 +87,7 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
                   : "days"
               }`
             )}
-            {returnCardDetails(
+            {/* {returnCardDetails(
               "Paternity Leave",
               `${
                 data?.employeeBenefit?.benefitType?.leaveTypes
@@ -98,7 +98,7 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
                   ? "day"
                   : "days"
               }`
-            )}
+            )} */}
             {returnCardDetails(
               "Unpaid Leave",
               `${

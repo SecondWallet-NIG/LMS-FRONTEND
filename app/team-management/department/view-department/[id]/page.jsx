@@ -2,9 +2,9 @@
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FiEdit2, FiTrash } from "react-icons/fi";
+import { FiEdit2 } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { getSingleDepartment } from "@/redux/slices/hrmsSlice";
 
 import { format } from "date-fns";

@@ -60,7 +60,6 @@ export const handleFileExtention = (file) => {
 export const leaveTypes = [
   { id: "annualLeave", label: "Annual Leave" },
   { id: "maternityLeave", label: "Maternity Leave" },
-  { id: "paternityLeave", label: "Paternity Leave" },
   { id: "personalLeave", label: "Personal Leave" },
   { id: "sickLeave", label: "Sick Leave" },
   { id: "unpaidLeave", label: "Unpaid Leave" },

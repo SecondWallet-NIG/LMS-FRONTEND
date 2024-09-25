@@ -20,15 +20,6 @@ const Attendance = ({ isDashboard }) => {
     return apiData?.attendances?.map((item) => ({
       id: item._id,
 
-      // staff: (
-      //   <div className="text-[15px] font-light text-gray-700">
-      //     <p>
-      //       {item?.user?.lastName} {item?.user?.firstName}{" "}
-      //       {item?.user?.middleName}
-      //     </p>
-      //     <p className="text-sm text-swBlue">{item?.user?.email}</p>
-      //   </div>
-      // ),
 
       date: (
         <div className="text-[15px] font-light text-gray-700">
@@ -39,7 +30,7 @@ const Attendance = ({ isDashboard }) => {
       timeIn: (
         <div className="text-[15px] font-light text-gray-700">
           {/* <p>{item?.date && format(new Date(item?.date), "PPP")}</p> */}
-          <p>{item?.clockIn && format(new Date(item?.clockIn), "hh:mm a")}</p>
+          <p>{item?.clockIn && format(new Date(item?.clockIn), "hh:mm a")} ({item?.ipAddress})</p>
         </div>
       ),
       timeOut: (
