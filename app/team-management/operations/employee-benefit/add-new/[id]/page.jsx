@@ -122,7 +122,7 @@ const AddBenefitTypesPage = () => {
         <div className="flex justify-between items-center p-3">
           <div>
             <p className="text-2xl lg:text-3xl font-bold text-swBlack">
-              Add Employee Benefit
+              Assign Employee Benefit
             </p>
             <p className="text-sm mt-1">Benefit Information</p>
           </div>

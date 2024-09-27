@@ -356,7 +356,7 @@ const NewStaffPage = () => {
                           (item) => item.value === formData.role
                         )) || { label: "Select Role...", value: "" }
                     }
-                    isSearchable={false}
+                    isSearchable={true}
                     // placeholder={"Select Role..."}
                     optionValue={modifyObjects(data?.data)}
                     onChange={(selectedOption) =>

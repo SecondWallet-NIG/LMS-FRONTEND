@@ -89,7 +89,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
-    padding: 10px;
+    padding: 5px;
   }
   
   .calendar-day, .calendar-month, .calendar-year {

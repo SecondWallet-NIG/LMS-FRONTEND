@@ -319,6 +319,7 @@ const StaffUpdatePAge = () => {
                     name="email"
                     label="Email address"
                     value={formData.email}
+                    disabled={true}
                     required={true}
                     placeholder="Email"
                     onChange={handleInputChange}
@@ -335,7 +336,7 @@ const StaffUpdatePAge = () => {
                     value={modifyObjects(roleData?.data).find(
                       (option) => option.value === formData.role
                     )}
-                    isSearchable={false}
+                    isSearchable={true}
                     optionValue={modifyObjects(roleData?.data)}
                     onChange={(selectedOption) =>
                       handleSelectChange(selectedOption, "role")

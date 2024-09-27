@@ -47,6 +47,8 @@ const RequestLeaveModal = ({ onClose }) => {
       leaveType: "",
       leaveDuration: 0,
       reliever: "",
+      firstApprover: "",
+      secondApprover: "",
       description: "",
     });
     setClearDate(true);
@@ -70,6 +72,8 @@ const RequestLeaveModal = ({ onClose }) => {
       leaveType: formData.leaveType,
       leaveDuration: formData.leaveDuration,
       reliever: formData.reliever,
+      firstApprover: formData.firstApprover,
+      secondApprover: formData.secondApprover,
       startDate: startDate,
       endDate: endDate,
       description: formData.description,
@@ -204,7 +208,7 @@ const RequestLeaveModal = ({ onClose }) => {
               </div>
               <div className="flex justify-between mt-7">
                 <div className="w-full flex flex-col gap-5">
-                  <div className="flex gap-3 items-end">
+                  <div className="flex flex-col md:flex-row gap-3 items-end">
                     <CustomDatePicker
                       label={"Start Date"}
                       value={setStartDate}
@@ -279,7 +283,9 @@ const RequestLeaveModal = ({ onClose }) => {
                 blueBtn={true}
                 disabled={
                   Object.keys(formData).some(
-                    (key) => formData[key] === "" || formData[key] < 1
+                    (key) =>
+                      key !== "description" &&
+                      (formData[key] === "" || formData[key] < 1)
                   ) ||
                   !startDate ||
                   !endDate ||
