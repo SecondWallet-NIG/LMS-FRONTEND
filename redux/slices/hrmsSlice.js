@@ -5,12 +5,15 @@ import { getToken } from "@/helpers";
 
 export const getAllBenefitTypes = createAsyncThunk(
   "benefit-type/all",
-  async () => {
+  async (total) => {
     try {
       let token = getToken();
       const response = await axios.get(`${API_URL}/benefit-type`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          params: {
+            per_page: 1000
+          }
         },
       });
       return response.data;

@@ -36,8 +36,9 @@ const AddBenefitTypesPage = () => {
     level: "",
     annualleave: "",
     sickleave: "",
-    personalleave: "",
+    casualleave: "",
     maternityleave: "",
+    paternityleave: "",
     unpaidleave: "",
     selectedDays: {
       monday: false,
@@ -50,13 +51,12 @@ const AddBenefitTypesPage = () => {
     },
   });
 
-
   const reset = () => {
     setState((draft) => {
       draft.level = "";
       draft.annualleave = "";
       draft.sickleave = "";
-      draft.personalleave = "";
+      draft.casualleave = "";
       draft.maternityleave = "";
       draft.paternityleave = "";
       draft.unpaidleave = "";
@@ -102,7 +102,7 @@ const AddBenefitTypesPage = () => {
       leaveTypes: {
         annualLeave: Number(state.annualleave),
         sickLeave: Number(state.sickleave),
-        personalLeave: Number(state.personalleave),
+        personalLeave: Number(state.casualleave),
         maternityLeave: Number(state.maternityleave),
         unpaidLeave: Number(state.unpaidleave),
       },
@@ -110,8 +110,7 @@ const AddBenefitTypesPage = () => {
       clockInAndOutTime: {
         clockIn: clockInTime,
         clockOut: clockOutTime,
-      }
-
+      },
     };
 
     console.log(payload);
@@ -152,7 +151,7 @@ const AddBenefitTypesPage = () => {
             {[
               "Annual Leave",
               "Sick Leave",
-              "Personal Leave",
+              "Causal Leave",
               "Maternity Leave",
               "Unpaid Leave",
             ].map((label) => (

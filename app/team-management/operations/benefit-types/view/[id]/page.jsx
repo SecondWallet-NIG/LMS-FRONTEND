@@ -5,12 +5,19 @@ import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles"
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FiEdit2 } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllBenefitTypes } from "@/redux/slices/hrmsSlice";
+import { format } from "date-fns";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const ViewBenefitType = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
+  const [benefit, setBenefit] = useState(null);
+
+  const { benData: data } = useSelector((state) => state?.hrms);
 
   const [workDays, setWorkDays] = useState([
     { day: "Monday", checked: false },
@@ -22,15 +29,33 @@ const ViewBenefitType = () => {
     { day: "Sunday", checked: false },
   ]);
 
-  const toggleDay = (day) => {
-    setWorkDays((prevWorkDays) =>
-      prevWorkDays.map((workDay) =>
-        workDay.day === day
-          ? { ...workDay, checked: !workDay.checked }
-          : workDay
-      )
-    );
-  };
+  console.log({ data });
+
+  useEffect(() => {
+    data?.data?.find((benefitType) => {
+      if (benefitType._id === id) {
+        setBenefit(benefitType);
+        const selectedDays = benefitType?.workingDays;
+        if (selectedDays) {
+          const selectedDaysArr = Object.keys(selectedDays);
+          setWorkDays((prevWorkDays) =>
+            prevWorkDays.map((workDay) =>
+              selectedDaysArr.includes(workDay.day.toLowerCase())
+                ? {
+                    ...workDay,
+                    checked: selectedDays[workDay.day.toLowerCase()],
+                  }
+                : workDay
+            )
+          );
+        }
+      }
+    });
+  }, [data]);
+
+  useEffect(() => {
+    dispatch(getAllBenefitTypes());
+  }, []);
 
   return (
     <DashboardLayout
@@ -69,31 +94,51 @@ const ViewBenefitType = () => {
           <p className="font-semibold text-xl">Leave Details</p>
           <div className="flex">
             <p className="min-w-[15rem]">Staff Level</p>
-            <p>Senior Manager</p>
+            <p>{benefit?.level}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Annual Leave</p>
-            <p>15 Days</p>
+            <p>
+              {benefit?.leaveTypes?.annualLeave}{" "}
+              {benefit?.leaveTypes?.annualLeave === 1 ? "day" : "days"}
+            </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Sick Leave</p>
-            <p>5days</p>
+            <p>
+              {benefit?.leaveTypes?.sickLeave}{" "}
+              {benefit?.leaveTypes?.sickLeave === 1 ? "day" : "days"}
+            </p>
           </div>
           <div className="flex">
-            <p className="min-w-[15rem]">Personal Leave</p>
-            <p>4 Days</p>
+            <p className="min-w-[15rem]">Casual Leave</p>
+            <p>
+              {benefit?.leaveTypes?.personalLeave}{" "}
+              {benefit?.leaveTypes?.personalLeave === 1 ? "day" : "days"}
+            </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Maternity Leave</p>
-            <p>90 Days</p>
+            <p>
+              {benefit?.leaveTypes?.maternityLeave}{" "}
+              {benefit?.leaveTypes?.maternityLeave === 1 ? "day" : "days"}
+            </p>
           </div>
-          <div className="flex">
-            <p className="min-w-[15rem]">Maternity Leave</p>
-            <p>40 Days</p>
-          </div>
+          {/* <div className="flex">
+            <p className="min-w-[15rem]">Paternity Leave</p>
+            <p>
+              {benefit?.leaveTypes?.paternityLeave}{" "}
+              {benefit?.leaveTypes?.paternityLeave === 1
+                ? "day"
+                : "days"}
+            </p>
+          </div> */}
           <div className="flex">
             <p className="min-w-[15rem]">Unpaid Leave</p>
-            <p>10 Days</p>
+            <p>
+              {benefit?.leaveTypes?.unpaidLeave}{" "}
+              {benefit?.leaveTypes?.unpaidLeave === 1 ? "day" : "days"}
+            </p>
           </div>
         </div>
 
@@ -114,10 +159,9 @@ const ViewBenefitType = () => {
               >
                 <input
                   type="checkbox"
+                  className="checkbox-blue h-5 w-5"
                   checked={item.checked}
-                  className="h-5 w-5"
                   name={item.day}
-                  onClick={() => toggleDay(item.day)}
                 />
                 {item.day}
               </label>
@@ -126,11 +170,23 @@ const ViewBenefitType = () => {
 
           <div className="flex mt-5">
             <p className="min-w-[15rem]">Clock In Time</p>
-            <p>9:00 AM</p>
+            <p>
+              {benefit?.clockInAndOutTime?.clockIn &&
+                format(
+                  new Date(`2024-1-1 ${benefit?.clockInAndOutTime?.clockIn}`),
+                  "hh:mm a"
+                )}
+            </p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem]">Clock Out Time</p>
-            <p>5:00 AM</p>
+            <p>
+              {benefit?.clockInAndOutTime?.clockIn &&
+                format(
+                  new Date(`2024-1-1 ${benefit?.clockInAndOutTime?.clockOut}`),
+                  "hh:mm a"
+                )}
+            </p>
           </div>
         </div>
       </main>

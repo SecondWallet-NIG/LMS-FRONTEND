@@ -24,7 +24,7 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
     btnText = "Request Leave";
   } else {
     btnLink = `/team-management/operations/employee-benefit/add-new/${id}`;
-    btnText = "Add Employee Benefit";
+    btnText = "Assign Employee Benefit";
   }
 
   return (
@@ -106,6 +106,18 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
               } working ${
                 data?.employeeBenefit?.benefitType?.leaveTypes?.unpaidLeave ===
                 1
+                  ? "day"
+                  : "days"
+              }`
+            )}
+            {returnCardDetails(
+              "Casual Leave",
+              `${
+                data?.employeeBenefit?.benefitType?.leaveTypes?.personalLeave ||
+                0
+              } working ${
+                data?.employeeBenefit?.benefitType?.leaveTypes
+                  ?.personalLeave === 1
                   ? "day"
                   : "days"
               }`

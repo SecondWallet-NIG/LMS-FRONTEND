@@ -1,9 +1,12 @@
 "use client";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useRouter } from "next/navigation";
 import { useImmer } from "use-immer";
-import { addNewBenefitTypes } from "@/redux/slices/hrmsSlice";
+import {
+  addNewBenefitTypes,
+  getAllBenefitTypes,
+} from "@/redux/slices/hrmsSlice";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
@@ -23,22 +26,22 @@ const daysOfWeek = [
 ];
 
 const UpdateBenefitTypesPage = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState({ state: false, message: "" });
-
   const [clockInTime, setClockInTime] = useState("");
   const [clockOutTime, setClockOutTime] = useState("");
-
+  const { benData: data } = useSelector((state) => state?.hrms);
   const [state, setState] = useImmer({
     level: "",
     annualleave: "",
     sickleave: "",
-    personalleave: "",
+    casualleave: "",
     maternityleave: "",
-    paternityleave: "",
+    // paternityleave: "",
     unpaidleave: "",
     selectedDays: {
       monday: false,
@@ -51,18 +54,14 @@ const UpdateBenefitTypesPage = () => {
     },
   });
 
-  // console.log(state);
-  // console.log(clockInTime);
-  // console.log(clockOutTime);
-
   const reset = () => {
     setState((draft) => {
       draft.level = "";
       draft.annualleave = "";
       draft.sickleave = "";
-      draft.personalleave = "";
+      draft.casualleave = "";
       draft.maternityleave = "";
-      draft.paternityleave = "";
+      // draft.paternityleave = "";
       draft.unpaidleave = "";
       draft.selectedDays = {
         monday: false,
@@ -106,9 +105,9 @@ const UpdateBenefitTypesPage = () => {
       leaveTypes: {
         annualLeave: Number(state.annualleave),
         sickLeave: Number(state.sickleave),
-        personalLeave: Number(state.personalleave),
+        personalLeave: Number(state.casualleave),
         maternityLeave: Number(state.maternityleave),
-        paternityLeave: Number(state.paternityleave),
+        // paternityLeave: Number(state.paternityleave),
         unpaidLeave: Number(state.unpaidleave),
       },
       workingDays: state.selectedDays,
@@ -116,7 +115,7 @@ const UpdateBenefitTypesPage = () => {
       clockOutTime,
     };
 
-    console.log(payload);
+    // console.log(payload);
 
     try {
       await dispatch(addNewBenefitTypes(payload)).unwrap();
@@ -131,6 +130,31 @@ const UpdateBenefitTypesPage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // console.log(data?.data);
+    data?.data?.find((benefitType) => {
+      if (benefitType._id === id) {
+        console.log(benefitType)
+        setState((draft) => {
+          draft.level = benefitType?.level;
+          draft.annualleave = benefitType?.leaveTypes?.annualLeave;
+          draft.sickleave = benefitType?.leaveTypes?.sickLeave;
+          draft.casualleave = benefitType?.leaveTypes?.annualLeave;
+          draft.maternityleave = benefitType?.leaveTypes?.maternityLeave;
+          // draft.paternityleave = benefitType?.leaveTypes?.paternityLeave;
+          draft.unpaidleave = benefitType?.leaveTypes?.unpaidLeave;
+          draft.selectedDays = benefitType?.workingDays;
+        });
+        setClockInTime(benefitType?.clockInAndOutTime?.clockIn);
+        setClockOutTime(benefitType?.clockInAndOutTime?.clockOut);
+      }
+    });
+  }, [data]);
+
+  useEffect(() => {
+    dispatch(getAllBenefitTypes());
+  }, []);
 
   return (
     <DashboardLayout
@@ -154,9 +178,9 @@ const UpdateBenefitTypesPage = () => {
             {[
               "Annual Leave",
               "Sick Leave",
-              "Personal Leave",
+              "Casual Leave",
               "Maternity Leave",
-              "Paternity Leave",
+              // "Paternity Leave",
               "Unpaid Leave",
             ].map((label) => (
               <div className="flex justify-between mt-5 gap-5" key={label}>
@@ -234,7 +258,7 @@ const UpdateBenefitTypesPage = () => {
                   loading ? "cursor-not-allowed" : ""
                 }`}
               >
-                {loading ? "Adding..." : "Submit"}
+                {loading ? "Updating..." : "Update"}
                 {loading && (
                   <div className="absolute top-0 left-0 h-full w-full bg-white bg-opacity-50" />
                 )}

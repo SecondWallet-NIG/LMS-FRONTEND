@@ -92,7 +92,7 @@ export default function OperationsPage() {
 
         <div className="mt-10">
           {pageState === "benefit-types" && <BenefitTypesTable />}
-          {pageState === "employee-benefits" && (
+          {/* {pageState === "employee-benefits" && (
             <ReusableDataTable
               dataTransformer={customDataTransformer}
               apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/benefit-type`}
@@ -114,7 +114,7 @@ export default function OperationsPage() {
                 </div>
               }
             />
-          )}
+          )} */}
           {pageState === "financial-year" && (
             <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5">
               <div className="flex justify-end">
