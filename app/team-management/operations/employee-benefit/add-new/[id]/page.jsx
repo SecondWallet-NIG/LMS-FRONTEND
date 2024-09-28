@@ -83,7 +83,7 @@ const AddBenefitTypesPage = () => {
       draft.loading = true;
     });
     const payload = {
-      description: state.description,
+      description: "benefit description",
       financialYear: finData?.data?._id,
       salary: Number(removeCommasFromNumber(state.salary)),
       benefitType: state.benefityType,
@@ -112,13 +112,15 @@ const AddBenefitTypesPage = () => {
       });
   };
 
+  
+
   return (
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Employee Benefit"]}
       roles={teamManagementAuthRoles}
     >
-      <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
+      <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20 min-h-[70vh]">
         <div className="flex justify-between items-center p-3">
           <div>
             <p className="text-2xl lg:text-3xl font-bold text-swBlack">
@@ -167,7 +169,7 @@ const AddBenefitTypesPage = () => {
             </div>
           </div>
 
-          <div className="flex justify-between mt-5 gap-5">
+          {/* <div className="flex justify-between mt-5 gap-5">
             <p className="w-1/4 font-semibold mr-2">Description</p>
             <div className="w-3/4 flex flex-col gap-5">
               <textarea
@@ -184,7 +186,7 @@ const AddBenefitTypesPage = () => {
                 }
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="p-3 border-t flex items-center justify-end gap-2 w-full">
@@ -192,7 +194,6 @@ const AddBenefitTypesPage = () => {
             disabled={
               !state.salary ||
               !state.benefityType ||
-              !state.description ||
               state.loading
             }
             onClick={handleSubmit}

@@ -127,6 +127,7 @@ export default function StaffPersonalDetails({ data }) {
               {!pathname.includes("employee-dashboard") && (
                 <Link
                   href={`/team-management/staff/update/${data?.user?._id}`}
+                  title="Update staff details"
                   className="hover:text-swBlue p-1 rounded-md cursor-pointer"
                 >
                   <FiEdit className="text-gray-600" size="20" />
