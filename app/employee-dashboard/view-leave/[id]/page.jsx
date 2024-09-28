@@ -1,25 +1,36 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   approveLeaveRequest,
+  cancelLeave,
   declineLeaveRequest,
   getSingleLeaveRequest,
 } from "@/redux/slices/hrmsSlice";
 import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
-import { leaveTypes } from "@/app/components/helpers/utils";
+import {
+  convertDateToISO,
+  getPublicHolidays,
+  leaveTypes,
+} from "@/app/components/helpers/utils";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import { employeeDashboardAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import CustomDatePicker from "@/app/components/shared/date/CustomDatePicker";
 
 const ViewSingleLeaveRequest = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const router = useRouter();
   const [user, setUser] = useState({ role: "", id: "" });
   const [approvalModal, setApprovalModal] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [clearDate, setClearDate] = useState(false);
+  const [leaveDuration, setLeaveDuration] = useState(0);
   const [successModal, setSuccessModal] = useState({
     state: false,
     title: "",
@@ -34,6 +45,7 @@ const ViewSingleLeaveRequest = () => {
     title: "",
     description: "",
   });
+  const [openCancelLeave, setCancelLeave] = useState(false);
   const [loading, setLoading] = useState(false);
   const { data } = useSelector((state) => state.hrms) || [];
   const level_1_id =
@@ -52,21 +64,30 @@ const ViewSingleLeaveRequest = () => {
     dispatch(getSingleLeaveRequest(id));
   }, []);
 
-  console.log(user);
+  // console.log(user);
 
   const handleApprove = () => {
     setLoading(true);
+    const approvalLevel =
+      user.id === level_1_id &&
+      user.id === level_2_id &&
+      data?.data?.approvalDetails?.firstApproval?.status === "Approved"
+        ? 2
+        : user.id === level_1_id
+        ? 1
+        : 2;
+
     const payload = {
       leaveId: id,
       approverId: user.id,
-      approvalLevel:
-        user.id === level_1_id &&
-        user.id === level_2_id &&
-        data?.data?.approvalDetails?.firstApproval?.status === "Approved"
-          ? 2
-          : user.id === level_1_id
-          ? 1
-          : 2,
+      approvalLevel: approvalLevel,
+      ...(approvalLevel === 1 &&
+        startDate !== null && { startDate: convertDateToISO(startDate) }),
+      ...(approvalLevel === 1 &&
+        endDate !== null && { endDate: convertDateToISO(endDate) }),
+      ...(approvalLevel === 1 &&
+        startDate !== null &&
+        endDate !== null && { leaveDuration: leaveDuration }),
     };
     dispatch(approveLeaveRequest(payload))
       .unwrap()
@@ -130,21 +151,96 @@ const ViewSingleLeaveRequest = () => {
       });
   };
 
+  const handleCancelLeave = () => {
+    setLoading(true);
+    dispatch(cancelLeave({ userId: user.id, leaveId: id }))
+      .unwrap()
+      .then((res) => {
+        setCancelLeave(false);
+        setSuccessModal({
+          title: "Leave Cancellation Successful",
+          description: "Leave has been canclled successfully",
+          state: true,
+        });
+        setLoading(false);
+        setTimeout(() => {
+          window.location.replace(`/dashboard`);
+          // router.push();
+        }, 3000);
+      })
+      .catch((err) => {
+        setErrorModal({
+          title: "Leave Cancellation Failed",
+          description: err?.message,
+          state: true,
+        });
+        setCancelLeave(false);
+        setLoading(false);
+      });
+  };
+
+  const clearDates = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setClearDate(true);
+    setLeaveDuration(0);
+  };
+
   const approveHtml = (
-    <div className="p-5">
-      <p className="text-center py-5 text-lg font-medium">
-        Are You sure You Want To Approve?
-      </p>
+    <div className="p-5 pt-0">
+      {user.id === level_1_id ? (
+        <div className="flex justify-between">
+          <div className="w-full flex flex-col gap-5">
+            <div>
+              <p>
+                Current StartDate:{" "}
+                {data?.data?.leaveRequest?.startDate?.slice(0, 10)}
+              </p>
+              <p>
+                Current EndDate:{" "}
+                {data?.data?.leaveRequest?.endDate?.slice(0, 10)}
+              </p>
+            </div>
+            <p className="text-gray-700 font-medium">
+              Update Start and End Date
+            </p>
+            <div>
+              <div className="flex flex-col gap-3 items-end -mt-2">
+                <CustomDatePicker
+                  label={"Start Date"}
+                  value={setStartDate}
+                  clear={clearDate}
+                />
+                <CustomDatePicker
+                  label={"End Date"}
+                  value={setEndDate}
+                  clear={clearDate}
+                />
+              </div>
+              <div className="flex justify-end">
+                <button className="text-red-500 text-xs" onClick={clearDates}>
+                  Clear dates
+                </button>
+              </div>
+            </div>
+            <p className="-mt-6">Duration: {leaveDuration} working day(s)</p>
+          </div>
+        </div>
+      ) : (
+        <p className="text-center py-5 text-lg font-medium mt-7">
+          Are You sure You Want To Approve?
+        </p>
+      )}
       <div className="flex gap-5 mt-10">
         <EditableButton
           redBtn={true}
-          label={"No, Cancel"}
+          label={"Cancel"}
           className={"w-full"}
           onClick={() => setApprovalModal(false)}
         />
         <EditableButton
           blueBtn={true}
-          label={"Yes, Approve"}
+          label={"Approve"}
           onClick={handleApprove}
           className={"w-full"}
           disabled={loading}
@@ -171,15 +267,36 @@ const ViewSingleLeaveRequest = () => {
       </div>
       <div className="flex gap-5 mt-10">
         <EditableButton
-          redBtn={true}
+          blueBtn={true}
           label={"Cancel"}
           className={"w-full"}
           onClick={() => setDeclineModal({ state: false, reason: "" })}
         />
         <EditableButton
-          blueBtn={true}
+          redBtn={true}
           label={"Decline"}
           onClick={handleDecline}
+          className={"w-full"}
+          disabled={loading}
+        />
+      </div>
+    </div>
+  );
+
+  const cancelLeaveRequest = (
+    <div className="p-5 pt-0">
+      <p className="-mt-5 text-gray-700">This action cannot be undone.</p>
+      <div className="flex gap-5 mt-10">
+        <EditableButton
+          blueBtn={true}
+          label={"Close"}
+          className={"w-full"}
+          onClick={() => setCancelLeave(false)}
+        />
+        <EditableButton
+          redBtn={true}
+          label={"Canel Leave Request"}
+          onClick={handleCancelLeave}
           className={"w-full"}
           disabled={loading}
         />
@@ -213,11 +330,43 @@ const ViewSingleLeaveRequest = () => {
     );
   };
 
-  console.log(
-    "approver",
-    data?.data?.approvalDetails?.firstApproval,
-    data?.data?.approvalDetails?.secondApproval
-  );
+  // console.log(
+  //   "approver",
+  //   data?.data?.approvalDetails?.firstApproval,
+  //   data?.data?.approvalDetails?.secondApproval
+  // );
+
+  const isWeekendOrHoliday = (date) => {
+    const currentYear = new Date().getFullYear();
+    const day = date.getDay();
+    const isWeekend = day === 0 || day === 6; // Sunday or Saturday
+    const isHoliday = getPublicHolidays(currentYear).some(
+      (holiday) => holiday.toDateString() === date.toDateString()
+    );
+    return isWeekend || isHoliday;
+  };
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      let currentDate = new Date(startDate);
+      const end = new Date(endDate);
+      let validDays = 0;
+      // console.log("startDate", convertDateToISO(startDate));
+
+      while (currentDate <= end) {
+        if (!isWeekendOrHoliday(currentDate)) {
+          validDays++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      setLeaveDuration(validDays);
+      // setClearDate(false);
+    } else {
+      setLeaveDuration(0);
+    }
+  }, [startDate, endDate]);
+
 
   return (
     <DashboardLayout
@@ -226,38 +375,53 @@ const ViewSingleLeaveRequest = () => {
       roles={employeeDashboardAuthRoles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
-        {((level_1_id === user?.id &&
-          data?.data?.approvalDetails?.firstApproval?.status === "Pending" &&
-          data?.data?.leaveRequest?.status === "Pending") ||
-          (level_2_id === user?.id &&
-            data?.data?.approvalDetails?.secondApproval?.status === "Pending" &&
-            data?.data?.leaveRequest?.status === "Pending")) && (
-          <div className="ml-auto flex gap-2 justify-end font-semibold pr-5">
-            <button
-              disabled={loading}
-              className={`border border-green-500 text-green-500 hover:bg-green-50 rounded-lg p-2 text-xs ${
-                loading && "cursor-not-allowed"
-              }`}
-              onClick={() => setApprovalModal(true)}
-            >
-              Approve
-            </button>
-            <button
-              disabled={loading}
-              className={`border border-red-500 text-red-500 hover:bg-red-50 rounded-lg p-2 text-xs ${
-                loading && "cursor-not-allowed"
-              }`}
-              onClick={() => setDeclineModal({ state: true, reason: "" })}
-            >
-              Decline
-            </button>
-          </div>
-        )}
+        <div>
+          {((level_1_id === user?.id &&
+            data?.data?.approvalDetails?.firstApproval?.status === "Pending" &&
+            data?.data?.leaveRequest?.status === "Pending") ||
+            (level_2_id === user?.id &&
+              data?.data?.approvalDetails?.secondApproval?.status ===
+                "Pending" &&
+              data?.data?.leaveRequest?.status === "Pending")) && (
+            <div className="ml-auto flex gap-2 justify-end font-semibold pr-5">
+              <button
+                disabled={loading}
+                className={`border border-green-500 text-green-500 hover:bg-green-50 rounded-lg p-2 text-xs ${
+                  loading && "cursor-not-allowed"
+                }`}
+                onClick={() => setApprovalModal(true)}
+              >
+                Approve
+              </button>
+              <button
+                disabled={loading}
+                className={`border border-red-500 text-red-500 hover:bg-red-50 rounded-lg p-2 text-xs ${
+                  loading && "cursor-not-allowed"
+                }`}
+                onClick={() => setDeclineModal({ state: true, reason: "" })}
+              >
+                Decline
+              </button>
+            </div>
+          )}
+        </div>
 
         <div className="flex justify-between mt-5 p-5 border-b">
           <p className="font-semibold text-xl">Leave details</p>
 
           {renderStatus(data?.data?.leaveRequest?.status)}
+        </div>
+        <div className="flex justify-end mt-5">
+          {data?.data?.leaveRequest?.userDetails?._id === user?.id &&
+            data?.data?.approvalDetails?.firstApproval?.status ===
+              "Pending" && (
+              <button
+                onClick={() => setCancelLeave(true)}
+                className="border border-red-500 text-red-500 hover:bg-red-50 rounded-lg p-2 text-xs"
+              >
+                Cancel Leave Request
+              </button>
+            )}
         </div>
         <div className="mt-5 p-5 flex flex-col gap-5">
           <div className="flex flex-col sm:flex-row gap-5">
@@ -451,7 +615,7 @@ const ViewSingleLeaveRequest = () => {
       <SharedInvestmentModal
         isOpen={approvalModal}
         css={"max-w-lg"}
-        header={"Approve"}
+        header={"Approve Leave Request"}
         onClose={() => setApprovalModal(false)}
         children={approveHtml}
       />
@@ -461,6 +625,13 @@ const ViewSingleLeaveRequest = () => {
         header={"Decline"}
         onClose={() => setDeclineModal({ state: false, reason: "" })}
         children={declineHtml}
+      />
+      <SharedInvestmentModal
+        isOpen={openCancelLeave}
+        css={"max-w-lg"}
+        header={"Are You Sure?"}
+        onClose={() => setCancelLeave(false)}
+        children={cancelLeaveRequest}
       />
       <SuccessModal
         title={successModal.title}
