@@ -12,6 +12,7 @@ import {
 } from "@/redux/slices/attendanceSlice";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { getLocation } from 'current-location-geo';
 import "react-toastify/dist/ReactToastify.css";
 import SuccessModal from "../modals/SuccessModal";
 import CancelModal from "../modals/CancelModal";
@@ -43,7 +44,13 @@ export default function ClockInDetails({ data, isDashboard }) {
 
   const handleClockIn = () => {
     setLoading(true);
-    dispatch(clockIn())
+    getLocation(function (err, position) {
+      if (err) {
+        console.error('Error:', err);
+        alert(err.message)
+        setLoading(false);
+      } else {
+        dispatch(clockIn({clockInAddress: position.address}))
       .unwrap()
       .then((res) => {
         setSuccessModal({
@@ -63,29 +70,41 @@ export default function ClockInDetails({ data, isDashboard }) {
         console.log("err", err?.error);
         setLoading(false);
       });
+   
+      }
+    });
+
   };
 
   const handleClockOut = () => {
     setLoading(true);
-    dispatch(clockOut())
-      .unwrap()
-      .then((res) => {
-        setSuccessModal({
-          state: true,
-          title: "Clock-out Successful",
-          description: res?.message,
+    getLocation(function (err, position) {
+      if (err) {
+        console.error('Error:', err);
+      } else {
+        dispatch(clockOut({clockOutAddress: position.address}))
+        .unwrap()
+        .then((res) => {
+          setSuccessModal({
+            state: true,
+            title: "Clock-out Successful",
+            description: res?.message,
+          });
+          dispatch(getCurrentDayAttendance());
+          setLoading(false);
+        })
+        .catch((err) => {
+          setFailedModal({
+            state: true,
+            title: "Clock-in Failed",
+            description: "Clock-out has failed, please try again",
+          });
+          setLoading(false);
         });
-        dispatch(getCurrentDayAttendance());
-        setLoading(false);
-      })
-      .catch((err) => {
-        setFailedModal({
-          state: true,
-          title: "Clock-in Failed",
-          description: "Clock-out has failed, please try again",
-        });
-        setLoading(false);
-      });
+     
+      }
+    });
+
   };
 
   useEffect(() => {
@@ -155,8 +174,8 @@ export default function ClockInDetails({ data, isDashboard }) {
           </Button>
         )}
       </div>
-      <div className="p-5 bg-[#f7f7f7]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 rounded-xl bg-white p-5">
+      <div className="p-5 bg-[#f7f7f7] h-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 rounded-xl bg-white h-full p-5">
           {returnCardDetails("Date", format(new Date(), "dd/MM/yyyy"))}
           {returnCardDetails("Time", format(new Date(), "hh:mm a"))}
           {returnCardDetails(

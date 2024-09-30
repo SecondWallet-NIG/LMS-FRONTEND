@@ -4,7 +4,7 @@ import { getRoles } from "@/redux/slices/roleSlice";
 import { getUserById } from "@/redux/slices/userSlice";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { getStaffTasks } from "@/redux/slices/userTaskSlice";
 import StaffPersonalDetails from "./PersonalDetails";
@@ -15,6 +15,7 @@ import LeaveApprovalRequests from "./LeaveApprovalRequests";
 import Attendance from "./Attendance";
 import ClockInDetails from "./ClockInDetails";
 import { employeeDashboardAuthRoles } from "../helpers/pageAuthRoles";
+import { getLocation } from 'current-location-geo';
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -50,10 +51,7 @@ const StaffData = ({ path, isDashboard }) => {
       <main className={inter.className}>
         <div className="p-5 sm:p-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {/* Personal details */}
             <StaffPersonalDetails data={data?.data} />
-
-            {/*Leave details */}
             <StaffLeaveDetails
               data={data?.data}
               id={id}

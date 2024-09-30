@@ -60,8 +60,11 @@ const RequestLeaveModal = ({ onClose }) => {
     const { name, value } = e.target;
 
     setFormData({ ...formData, [name]: value });
+
   };
 
+  console.log(startDate)
+  console.log(endDate)
   const handleSubmit = () => {
     if (formData.leaveDuration < 1) {
       toast.error("Invalid leave duration: Duration should be 1 and above");
@@ -159,6 +162,7 @@ const RequestLeaveModal = ({ onClose }) => {
   }, [id]);
 
   console.log(formData);
+
 
   return (
     <div>
@@ -306,7 +310,7 @@ const RequestLeaveModal = ({ onClose }) => {
         btnLeft={"Close"}
         btnLeftFunc={() => setSuccessModal(false)}
         btnRight={"Dashboard"}
-        btnRightFunc={() => router.push(`/employee-dashboard/${id}`)}
+        btnRightFunc={() => window.location.reload()}
         onClose={() => setSuccessModal(false)}
       />
       <CancelModal

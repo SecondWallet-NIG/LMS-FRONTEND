@@ -160,8 +160,14 @@ export const convertDateToISO = (dateString) => {
   // Parse the date string into a Date object
   const parsedDate = new Date(dateString);
 
-  // Format the Date object to ISO 8601 format
-  const iso8601Date = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss.SSSX");
+  // Format the Date object to ISO 8601 format with UTC time
+  const iso8601Date = parsedDate.toISOString();
 
   return iso8601Date;
+};
+
+export const convertDateToISOWithAddedHour = (dateString) => {
+  const parsedDate = new Date(dateString);
+  parsedDate.setHours(parsedDate.getHours() + 1);
+  return parsedDate.toISOString();
 };
