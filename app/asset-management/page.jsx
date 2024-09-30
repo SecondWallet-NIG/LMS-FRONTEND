@@ -185,7 +185,7 @@ const AssetManagement = () => {
               btnText={
                 <div className="flex gap-1 items-center p-1">
                   <IoMdAdd size={20} />
-                  <p>New asset</p>
+                  <p>New Asset</p>
                 </div>
               }
               btnTextClick={() => {

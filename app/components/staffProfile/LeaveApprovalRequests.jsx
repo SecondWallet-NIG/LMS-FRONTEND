@@ -11,7 +11,6 @@ const LeaveApprovalRequests = () => {
     { id: "createdAt", label: "Date Requested" },
     { id: "staff", label: "Staff" },
     { id: "leaveType", label: "Leave Type" },
-    { id: "leaveType", label: "Leave Type" },
     { id: "startDate", label: "Start Date" },
     { id: "endDate", label: "endDate" },
     { id: "leaveDuration", label: "Duration" },
