@@ -24,7 +24,6 @@ const StaffData = ({ path, isDashboard }) => {
   const dispatch = useDispatch();
   const [leaveState, setLeaveState] = useState("attendance");
   const [data, setData] = useState(null);
-  // const { data, loading } = useSelector((state) => state.user);
 
   const btnCls = "px-3 border-b-2 font-medium";
   const activeBtn = "border-swBlue text-swBlue font-semibold";

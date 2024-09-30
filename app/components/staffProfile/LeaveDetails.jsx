@@ -57,9 +57,9 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
             {returnCardDetails(
               "Annual Leave",
               `${
-                data?.employeeBenefit?.benefitType?.leaveTypes?.annualLeave || 0
+                data?.employeeBenefit?.leaveTypes?.annualLeave || 0
               } working ${
-                data?.employeeBenefit?.benefitType?.leaveTypes?.annualLeave ===
+                data?.employeeBenefit?.leaveTypes?.annualLeave ===
                 1
                   ? "day"
                   : "days"
@@ -68,9 +68,9 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
             {returnCardDetails(
               "Sick Leave",
               `${
-                data?.employeeBenefit?.benefitType?.leaveTypes?.sickLeave || 0
+                data?.employeeBenefit?.leaveTypes?.sickLeave || 0
               } working ${
-                data?.employeeBenefit?.benefitType?.leaveTypes?.sickLeave === 1
+                data?.employeeBenefit?.leaveTypes?.sickLeave === 1
                   ? "day"
                   : "days"
               }`
@@ -78,10 +78,10 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
             {returnCardDetails(
               "Maternity Leave",
               `${
-                data?.employeeBenefit?.benefitType?.leaveTypes
+                data?.employeeBenefit?.leaveTypes
                   ?.maternityLeave || 0
               } working ${
-                data?.employeeBenefit?.benefitType?.leaveTypes
+                data?.employeeBenefit?.leaveTypes
                   ?.maternityLeave === 1
                   ? "day"
                   : "days"
