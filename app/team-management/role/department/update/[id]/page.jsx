@@ -11,6 +11,7 @@ import { useParams, useRouter } from "next/navigation";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
 import { getAllDepartments } from "@/redux/slices/hrmsSlice";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const UpdateDepartment = () => {
   const { id } = useParams();
@@ -98,7 +99,11 @@ const UpdateDepartment = () => {
   };
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team Management", "New Role"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team Management", "New Role"]}
+      roles={teamManagementAuthRoles}
+    >
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20 mb-60">
         <div className="flex justify-between items-center p-3">
           <div>

@@ -10,6 +10,7 @@ import CancelModal from "@/app/components/modals/CancelModal";
 import { useDispatch } from "react-redux";
 import { addNewFinancialYear } from "@/redux/slices/hrmsSlice";
 import Button from "@/app/components/shared/buttonComponent/Button";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const AddNewFinancialYear = () => {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const AddNewFinancialYear = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Financial Year", "Add New"]}
+      roles={teamManagementAuthRoles}
     >
       <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20 min-h-[80vh]">
         <div className="flex justify-between items-center p-3">

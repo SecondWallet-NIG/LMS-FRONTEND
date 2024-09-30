@@ -24,6 +24,7 @@ import { Rings } from "react-loader-spinner";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Unauthorized from "../unauthorized/page";
 import Loader from "../components/shared/Loader";
+import { createLoanAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const CreateLoan = () => {
   const dispatch = useDispatch();
@@ -568,11 +569,8 @@ const CreateLoan = () => {
     setLoanPackageInterestRate(loanpackage);
   }, [formData.loanPackage]);
 
-  if (roleTag && roleTag !== "LO") {
-    return <Unauthorized />;
-  }
   return (
-    <DashboardLayout>
+    <DashboardLayout paths={["Create Loan"]} roles={createLoanAuthRoles}>
       <ToastContainer />
       {currentStep === 1 ? (
         <main className="flex text-sm">
@@ -1228,7 +1226,9 @@ const CreateLoan = () => {
                         />
                       )
                     }
-                    className={`w-full ${loading === true && "cursor-not-allowed"}`}
+                    className={`w-full ${
+                      loading === true && "cursor-not-allowed"
+                    }`}
                     label={"Create Loan"}
                     onClick={submitLoan}
                   />
@@ -1477,7 +1477,9 @@ const CreateLoan = () => {
                         />
                       )
                     }
-                    className={`w-full ${loading === true && "cursor-not-allowed"}`}
+                    className={`w-full ${
+                      loading === true && "cursor-not-allowed"
+                    }`}
                     label={"Create Loan"}
                     onClick={submitLoan}
                   />

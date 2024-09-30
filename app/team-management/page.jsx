@@ -3,6 +3,7 @@ import { useState } from "react";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import TeamManagementCard from "../components/cards/Team management card/TeamManagementCard";
 import BarChart from "../components/chart/BarChart";
+import { teamManagementAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const TeamManagement = () => {
   const labels = [
@@ -91,28 +92,9 @@ const TeamManagement = () => {
     ],
   };
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={teamManagementAuthRoles}>
       <div className="mx-5">
         <TeamManagementCard />
-        <div className="mt-10 flex justify-between">
-          <p className="text-xl font-semibold text-swBlue">Analytics</p>
-        </div>
-        <div className="flex flex-col sm:flex-row">
-          <div className="w-full sm:w-1/2">
-            <BarChart options={options} data={department} />
-          </div>
-          <div className="w-full sm:w-1/2">
-            <BarChart options={options} data={staff} />
-          </div>
-        </div>
-        <div className="flex flex-col sm:flex-row">
-          <div className="w-full sm:w-1/2">
-            <BarChart options={options} data={role} />
-          </div>
-          <div className="w-full sm:w-1/2">
-            <BarChart options={options} data={financial_year} />
-          </div>
-        </div>
       </div>
     </DashboardLayout>
   );

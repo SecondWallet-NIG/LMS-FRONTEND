@@ -14,6 +14,8 @@ const CustomDatePicker = ({ label, value, clear }) => {
     value && value(selectedDate);
   }, [selectedDate]);
 
+  const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
   const months = [
     "January",
     "February",
@@ -53,10 +55,22 @@ const CustomDatePicker = ({ label, value, clear }) => {
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
     const days = [];
+
+    // Add days of the week (non-clickable)
+    daysOfWeek.forEach((day) => {
+      days.push(
+        <div key={day} className="calendar-day header non-clickable">
+          {day}
+        </div>
+      );
+    });
+
+    // Add empty divs for days from the previous month
     for (let i = 0; i < firstDay; i++) {
       days.push(<div key={`empty-${i}`} className="calendar-day empty" />);
     }
 
+    // Add actual days of the current month (clickable)
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(
         <div

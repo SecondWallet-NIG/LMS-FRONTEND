@@ -11,6 +11,7 @@ import {
   getDashboardCardData,
   getDashboardGraphData,
 } from "@/redux/slices/dashboardSlice";
+import { dashboardAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
@@ -182,7 +183,7 @@ const DashboardPage = () => {
   }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={dashboardAuthRoles}>
       {cardData && (
         <main className="text-swGray text-lg p-5 sm:p-10 bg-gray-50 h-full">
           {/* <DashboardPageCard /> */}

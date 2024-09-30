@@ -2,21 +2,17 @@
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FiEdit2, FiTrash } from "react-icons/fi";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { FiEdit2 } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleLoanPackage } from "@/redux/slices/loanPackageSlice";
-import { useEffect, useRef, useState } from "react";
-import { IoMdCheckmark } from "react-icons/io";
-import { LuTrash } from "react-icons/lu";
+import { useEffect } from "react";
 import { getSingleDepartment } from "@/redux/slices/hrmsSlice";
-import { getUserById } from "@/redux/slices/userSlice";
+
 import { format } from "date-fns";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const ViewDepartment = () => {
   const { id } = useParams();
-  const [userRole, setUserRole] = useState(false);
-  const [showEditBtn, setShowEditBtn] = useState(false);
+
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.hrms);
   // const { data: userData } = useSelector((state) => state.user);
@@ -25,15 +21,12 @@ const ViewDepartment = () => {
     dispatch(getSingleDepartment(id));
   }, []);
 
-  // useEffect(() => {
-  //   if (data?.data?.departmentHead)
-  //     dispatch(getUserById(data?.data?.departmentHead));
-  // }, [data]);
 
   return (
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "View Department"]}
+      roles={teamManagementAuthRoles}
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 justify-end font-semibold">

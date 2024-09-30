@@ -16,6 +16,7 @@ import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "@/redux/slices/userSlice";
 import { toast, ToastContainer } from "react-toastify";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const StaffUpdatePAge = () => {
   const router = useRouter();
@@ -206,6 +207,7 @@ const StaffUpdatePAge = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Staff", "Update Staff"]}
+      roles={teamManagementAuthRoles}
     >
       <ToastContainer />
       <div className="flex justify-center p-5">
@@ -317,6 +319,7 @@ const StaffUpdatePAge = () => {
                     name="email"
                     label="Email address"
                     value={formData.email}
+                    disabled={true}
                     required={true}
                     placeholder="Email"
                     onChange={handleInputChange}
@@ -333,7 +336,7 @@ const StaffUpdatePAge = () => {
                     value={modifyObjects(roleData?.data).find(
                       (option) => option.value === formData.role
                     )}
-                    isSearchable={false}
+                    isSearchable={true}
                     optionValue={modifyObjects(roleData?.data)}
                     onChange={(selectedOption) =>
                       handleSelectChange(selectedOption, "role")

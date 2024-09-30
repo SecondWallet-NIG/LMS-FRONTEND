@@ -9,12 +9,17 @@ import CancelModal from "@/app/components/modals/CancelModal";
 import { useParams, useRouter } from "next/navigation";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
-import { addEmployeeBenefit, getAllBenefitTypes, getFinancialYear } from "@/redux/slices/hrmsSlice";
+import {
+  addEmployeeBenefit,
+  getAllBenefitTypes,
+  getFinancialYear,
+} from "@/redux/slices/hrmsSlice";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const AddBenefitTypesPage = () => {
   const dispatch = useDispatch();
-  const { benData: data } = useSelector(state => state?.hrms);
-  const { finData } = useSelector(state => state?.hrms);
+  const { benData: data } = useSelector((state) => state?.hrms);
+  const { finData } = useSelector((state) => state?.hrms);
   const { id } = useParams();
   const router = useRouter();
   const [state, setState] = useImmer({
@@ -27,45 +32,44 @@ const AddBenefitTypesPage = () => {
     successModal: false,
     successMessage: "",
     failedModal: false,
-    failedMessage: ""
+    failedMessage: "",
   });
 
   const reset = () => {
-    setState(draft => {
-      draft.salary = ""
-      draft.benefityType = ""
-      draft.description = ""
-    })
+    setState((draft) => {
+      draft.salary = "";
+      draft.benefityType = "";
+      draft.description = "";
+    });
   };
 
-
   useEffect(() => {
-    dispatch(getAllBenefitTypes())
-    dispatch(getFinancialYear())
+    dispatch(getAllBenefitTypes());
+    dispatch(getFinancialYear());
     if (typeof window !== "undefined") {
       const user = JSON.parse(localStorage.getItem("user"));
-      const userId = user?.data?.user?._id || ""
-      setState(draft => {
-        draft.createdBy = userId
-      })
+      const userId = user?.data?.user?._id || "";
+      setState((draft) => {
+        draft.createdBy = userId;
+      });
     }
   }, []);
 
   useEffect(() => {
     if (data?.data) {
-      const benefits = []
-      const res = data?.data || []
+      const benefits = [];
+      const res = data?.data || [];
 
       for (let i = 0; i < res.length; i++) {
         const value = res[i]._id;
         const label = res[i].level;
-        benefits.push({ value, label })
+        benefits.push({ value, label });
       }
-      setState(draft => {
-        draft.benefits = benefits
-      })
+      setState((draft) => {
+        draft.benefits = benefits;
+      });
     }
-  }, [data?.data])
+  }, [data?.data]);
 
   const removeCommasFromNumber = (numberString) => {
     if (typeof numberString !== "string") {
@@ -74,20 +78,18 @@ const AddBenefitTypesPage = () => {
     return numberString.replace(/,/g, "");
   };
 
-
   const handleSubmit = () => {
-    setState(draft => {
+    setState((draft) => {
       draft.loading = true;
     });
     const payload = {
-      description: state.description,
+      description: "benefit description",
       financialYear: finData?.data?._id,
       salary: Number(removeCommasFromNumber(state.salary)),
       benefitType: state.benefityType,
       createdBy: state.createdBy,
-      userId: id
+      userId: id,
     };
-
 
     dispatch(addEmployeeBenefit(payload))
       .unwrap()
@@ -95,29 +97,34 @@ const AddBenefitTypesPage = () => {
         setState((draft) => {
           draft.successModal = true;
           draft.loading = false;
-          draft.successMessage = res?.message || "Employee benefit added successfully.";
+          draft.successMessage =
+            res?.message || "Employee benefit added successfully.";
         });
         reset();
       })
       .catch((err) => {
         setState((draft) => {
           draft.failedModal = true;
-          draft.failedMessage = err?.message || "Employee benefit creation failed.";
+          draft.failedMessage =
+            err?.message || "Employee benefit creation failed.";
           draft.loading = false;
         });
       });
   };
 
+  
+
   return (
     <DashboardLayout
       isBackNav={true}
       paths={["Team Management", "Employee Benefit"]}
+      roles={teamManagementAuthRoles}
     >
-      <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
+      <div className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20 min-h-[70vh]">
         <div className="flex justify-between items-center p-3">
           <div>
             <p className="text-2xl lg:text-3xl font-bold text-swBlack">
-              Add Employee Benefit
+              Assign Employee Benefit
             </p>
             <p className="text-sm mt-1">Benefit Information</p>
           </div>
@@ -133,11 +140,13 @@ const AddBenefitTypesPage = () => {
                 name={"salary"}
                 label={"Enter salary"}
                 placeholder={"0"}
-                onChange={e => setState(draft => {
-                  draft.salary = Number(
-                    e.target.value.replace(/[^0-9.]/g, "")
-                  ).toLocaleString();
-                })}
+                onChange={(e) =>
+                  setState((draft) => {
+                    draft.salary = Number(
+                      e.target.value.replace(/[^0-9.]/g, "")
+                    ).toLocaleString();
+                  })
+                }
               />
             </div>
           </div>
@@ -150,8 +159,8 @@ const AddBenefitTypesPage = () => {
                 required={true}
                 isSearchable={true}
                 placeholder={data?.data ? "Select..." : "Loading..."}
-                onChange={e =>
-                  setState(draft => {
+                onChange={(e) =>
+                  setState((draft) => {
                     draft.benefityType = e.value;
                   })
                 }
@@ -160,7 +169,7 @@ const AddBenefitTypesPage = () => {
             </div>
           </div>
 
-          <div className="flex justify-between mt-5 gap-5">
+          {/* <div className="flex justify-between mt-5 gap-5">
             <p className="w-1/4 font-semibold mr-2">Description</p>
             <div className="w-3/4 flex flex-col gap-5">
               <textarea
@@ -170,20 +179,22 @@ const AddBenefitTypesPage = () => {
                 name={"description"}
                 label={"Enter description"}
                 placeholder={"Benefit description"}
-                onChange={e =>
-                  setState(draft => {
+                onChange={(e) =>
+                  setState((draft) => {
                     draft.description = e.target.value;
                   })
                 }
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="p-3 border-t flex items-center justify-end gap-2 w-full">
           <Button
-            disabled={!state.salary || !state.benefityType 
-              || !state.description || state.loading
+            disabled={
+              !state.salary ||
+              !state.benefityType ||
+              state.loading
             }
             onClick={handleSubmit}
             className={`text-white font-semibold p-2 px-16 bg-swBlue 
@@ -201,12 +212,12 @@ const AddBenefitTypesPage = () => {
         btnLeftFunc={() => router.push(`/team-management/staff/${id}`)}
         btnRight={"Done"}
         btnRightFunc={() =>
-          setState(draft => {
+          setState((draft) => {
             draft.successModal = false;
           })
         }
         onClose={() =>
-          setState(draft => {
+          setState((draft) => {
             draft.successModal = false;
           })
         }
@@ -217,7 +228,7 @@ const AddBenefitTypesPage = () => {
         title={"Employee Benefit Creation Failed"}
         noButtons={true}
         onClose={() =>
-          setState(draft => {
+          setState((draft) => {
             draft.failedModal = false;
           })
         }

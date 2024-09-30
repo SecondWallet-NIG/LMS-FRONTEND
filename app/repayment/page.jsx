@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "@/helpers";
 import RepaymentOverdueTable from "../components/repayment/OverdueTable";
 import Unauthorized from "../unauthorized/page";
+import { repaymentAuthRoles } from "../components/helpers/pageAuthRoles";
+
 const Repayment = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState("overdue-repayment");
@@ -95,7 +97,7 @@ const Repayment = () => {
   }
 
   return (
-    <DashboardLayout>
+    <DashboardLayout roles={repaymentAuthRoles}>
       <main>
         {/* <div className="flex">
           <p
@@ -134,8 +136,6 @@ const Repayment = () => {
                     : item?.loanTypeTitle === "Overdue Repayments"
                     ? setCurrentPage("overdue")
                     : null;
-
-                    
                 }}
                 className={`rounded-lg border p-2  hover:bg-swLightGray cursor-pointer ${
                   item?.loanTypeTitle === "Total Repayments"
@@ -166,13 +166,12 @@ const Repayment = () => {
               </div>
             ))}
         </div>
-        <>
-
-        
-        </>
+        <></>
         {currentPage === "overdue-repayment" && (
           <div className="w-full">
-            <div className="mt-4 mb-4 ml-4 text-swDarkRed">Upcoming Repayments (This Month Repayment)</div>
+            <div className="mt-4 mb-4 ml-4 text-swDarkRed">
+              Upcoming Repayments (This Month Repayment)
+            </div>
             {/* <RepaymentOverdueTable /> */}
             <ReusableDataTable
               // filterParams={[
@@ -197,7 +196,9 @@ const Repayment = () => {
         {currentPage === "overdue" && (
           <div className="w-full">
             {/* <RepaymentOverdueTable /> */}
-            <div className="mt-4 mb-4 ml-4 text-swIndicatorLightRed">Overdue Repayments</div>
+            <div className="mt-4 mb-4 ml-4 text-swIndicatorLightRed">
+              Overdue Repayments
+            </div>
             <ReusableDataTable
               headers={header}
               dataTransformer={customDataTransformer}
@@ -214,9 +215,10 @@ const Repayment = () => {
           </div>
         )}
         {currentPage === "fully-paid-repayment" && (
-          
           <div className="w-full">
-              <div className="mt-4 mb-4 ml-4 text-swDarkGreen">Fully Paid Repayment</div>
+            <div className="mt-4 mb-4 ml-4 text-swDarkGreen">
+              Fully Paid Repayment
+            </div>
             {/* <RepaymentOverdueTable /> */}
             <ReusableDataTable
               headers={header}
@@ -236,7 +238,7 @@ const Repayment = () => {
 
         {currentPage === "all-repayment" && (
           <div className="w-full">
-              <div className="mt-4 mb-4 ml-4 text-swBlue">All Repayments</div>
+            <div className="mt-4 mb-4 ml-4 text-swBlue">All Repayments</div>
             <ReusableDataTable
               filterParams={[
                 { name: "Unpaid" },

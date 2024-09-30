@@ -14,6 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useParams, useRouter } from "next/navigation";
 import { FaRegTrashAlt } from "react-icons/fa";
 import CancelModal from "@/app/components/modals/CancelModal";
+import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EditInvestmentProduct = () => {
   const { id } = useParams();
@@ -309,6 +310,7 @@ const EditInvestmentProduct = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "View Investment Product", "Edit Product"]}
+      roles={investorsAuthRoles}
     >
       <ToastContainer />
       <div className="mx-auto w-3/5">

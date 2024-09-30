@@ -4,6 +4,7 @@ import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import { useRouter } from "next/navigation";
 import ReusableDataTable from "@/app/components/shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 export default function DepartmentPage() {
   const router = useRouter();
@@ -48,7 +49,11 @@ export default function DepartmentPage() {
   };
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Team Management", "Department"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Team Management", "Department"]}
+      roles={teamManagementAuthRoles}
+    >
       <div className=" py-2 mt-5">
         <ReusableDataTable
           dataTransformer={customDataTransformer}

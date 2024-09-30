@@ -18,6 +18,7 @@ import EditableButton from "../components/shared/editableButtonComponent/Editabl
 import { FiTrash } from "react-icons/fi";
 import SuccessModal from "../components/modals/SuccessModal";
 import CancelModal from "../components/modals/CancelModal";
+import { assetManagementAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const CreateNewAsset = () => {
   const dispatch = useDispatch();
@@ -205,6 +206,7 @@ const CreateNewAsset = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Asset Management", "Add new asset"]}
+      roles={assetManagementAuthRoles}
     >
       <ToastContainer />
       <main

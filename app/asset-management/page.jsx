@@ -15,6 +15,7 @@ import CreateAssetModal from "../components/modals/CreateAssetModal";
 import Loader from "../components/shared/Loader";
 import DeleteAssetCategoryModal from "../components/modals/DeleteAssetCategoryModal";
 import { useRouter } from "next/navigation";
+import { assetManagementAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const header = [
   { id: "asset", label: "Asset" },
@@ -133,7 +134,11 @@ const AssetManagement = () => {
 
   return (
     <>
-      <DashboardLayout isBackNav={true} paths={["Asset Management"]}>
+      <DashboardLayout
+        isBackNav={true}
+        paths={["Asset Management"]}
+        roles={assetManagementAuthRoles}
+      >
         <div className="pt-5 pl-5 flex items-centers">
           <p
             className={`hover:text-swBlue py-1 px-4 border-b-2 border-transparent cursor-pointer font-medium ${
@@ -180,7 +185,7 @@ const AssetManagement = () => {
               btnText={
                 <div className="flex gap-1 items-center p-1">
                   <IoMdAdd size={20} />
-                  <p>New asset</p>
+                  <p>New Asset</p>
                 </div>
               }
               btnTextClick={() => {

@@ -26,6 +26,7 @@ import { bankArr } from "@/constant";
 import { formatDate } from "@/helpers";
 import BorrowerOptions from "@/app/components/customers/BorrowerOptions";
 import BorrowerSummary from "@/app/components/customers/BorrowerSummary";
+import { borrowersAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -109,7 +110,7 @@ const CustomerProfile = () => {
   }, [borrowerOptions]);
 
   return (
-    <DashboardLayout isBackNav={true} paths={paths}>
+    <DashboardLayout isBackNav={true} paths={paths} roles={borrowersAuthRoles}>
       <div className="overflow-x-hidden">
         <div className="flex flex-col sm:flex-row gap-2 border-b border-gray-300 items-end py-4 px-8">
           <div className="w-full sm:w-1/2">

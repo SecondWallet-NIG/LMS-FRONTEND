@@ -1,9 +1,12 @@
 "use client";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useRouter } from "next/navigation";
 import { useImmer } from "use-immer";
-import { addNewBenefitTypes } from "@/redux/slices/hrmsSlice";
+import {
+  addNewBenefitTypes,
+  getAllBenefitTypes,
+} from "@/redux/slices/hrmsSlice";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
@@ -22,23 +25,23 @@ const daysOfWeek = [
   "sunday",
 ];
 
-const AddBenefitTypesPage = () => {
+const UpdateBenefitTypesPage = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState({ state: false, message: "" });
-
   const [clockInTime, setClockInTime] = useState("");
   const [clockOutTime, setClockOutTime] = useState("");
-
+  const { benData: data } = useSelector((state) => state?.hrms);
   const [state, setState] = useImmer({
     level: "",
     annualleave: "",
     sickleave: "",
     casualleave: "",
     maternityleave: "",
-    paternityleave: "",
+    // paternityleave: "",
     unpaidleave: "",
     selectedDays: {
       monday: false,
@@ -58,7 +61,7 @@ const AddBenefitTypesPage = () => {
       draft.sickleave = "";
       draft.casualleave = "";
       draft.maternityleave = "";
-      draft.paternityleave = "";
+      // draft.paternityleave = "";
       draft.unpaidleave = "";
       draft.selectedDays = {
         monday: false,
@@ -104,16 +107,15 @@ const AddBenefitTypesPage = () => {
         sickLeave: Number(state.sickleave),
         personalLeave: Number(state.casualleave),
         maternityLeave: Number(state.maternityleave),
+        // paternityLeave: Number(state.paternityleave),
         unpaidLeave: Number(state.unpaidleave),
       },
       workingDays: state.selectedDays,
-      clockInAndOutTime: {
-        clockIn: clockInTime,
-        clockOut: clockOutTime,
-      },
+      clockInTime,
+      clockOutTime,
     };
 
-    console.log(payload);
+    // console.log(payload);
 
     try {
       await dispatch(addNewBenefitTypes(payload)).unwrap();
@@ -129,10 +131,35 @@ const AddBenefitTypesPage = () => {
     }
   };
 
+  useEffect(() => {
+    // console.log(data?.data);
+    data?.data?.find((benefitType) => {
+      if (benefitType._id === id) {
+        console.log(benefitType)
+        setState((draft) => {
+          draft.level = benefitType?.level;
+          draft.annualleave = benefitType?.leaveTypes?.annualLeave;
+          draft.sickleave = benefitType?.leaveTypes?.sickLeave;
+          draft.casualleave = benefitType?.leaveTypes?.annualLeave;
+          draft.maternityleave = benefitType?.leaveTypes?.maternityLeave;
+          // draft.paternityleave = benefitType?.leaveTypes?.paternityLeave;
+          draft.unpaidleave = benefitType?.leaveTypes?.unpaidLeave;
+          draft.selectedDays = benefitType?.workingDays;
+        });
+        setClockInTime(benefitType?.clockInAndOutTime?.clockIn);
+        setClockOutTime(benefitType?.clockInAndOutTime?.clockOut);
+      }
+    });
+  }, [data]);
+
+  useEffect(() => {
+    dispatch(getAllBenefitTypes());
+  }, []);
+
   return (
     <DashboardLayout
       isBackNav={true}
-      paths={["Team Management", "Benefit Types", "Add New"]}
+      paths={["Team Management", "Benefit Types", "Update"]}
       roles={teamManagementAuthRoles}
     >
       <div className="mx-auto w-full px-5 lg:px-1 md:flex block gap-4 my-8">
@@ -153,6 +180,7 @@ const AddBenefitTypesPage = () => {
               "Sick Leave",
               "Casual Leave",
               "Maternity Leave",
+              // "Paternity Leave",
               "Unpaid Leave",
             ].map((label) => (
               <div className="flex justify-between mt-5 gap-5" key={label}>
@@ -230,7 +258,7 @@ const AddBenefitTypesPage = () => {
                   loading ? "cursor-not-allowed" : ""
                 }`}
               >
-                {loading ? "Adding..." : "Submit"}
+                {loading ? "Updating..." : "Update"}
                 {loading && (
                   <div className="absolute top-0 left-0 h-full w-full bg-white bg-opacity-50" />
                 )}
@@ -261,4 +289,4 @@ const AddBenefitTypesPage = () => {
   );
 };
 
-export default AddBenefitTypesPage;
+export default UpdateBenefitTypesPage;

@@ -11,8 +11,7 @@ const BenefitTypesTable = () => {
     { id: "level", label: "Level" },
     { id: "annualLeave", label: "Annual Leave" },
     { id: "maternityLeave", label: "Maternity Leave" },
-    { id: "paternityLeave", label: "Paternity Leave" },
-    { id: "personalLeave", label: "Personal Leave" },
+    { id: "personalLeave", label: "Casual Leave" },
     { id: "sickLeave", label: "Sick Leave" },
     { id: "unpaidLeave", label: "Unpaid Leave" },
   ];
@@ -72,6 +71,7 @@ const BenefitTypesTable = () => {
         headers={headers}
         filters={true}
         pagination={true}
+        onClickRow={"/team-management/operations/benefit-types/view"}
         btnText={
           <div
             className="flex gap-1 items-center p-1"

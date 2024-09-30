@@ -7,6 +7,7 @@ import ReusableDataTable from "../components/shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
 import { format } from "date-fns";
 import BorrowerOptions from "../components/customers/BorrowerOptions";
+import { borrowersAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const BlackListedCustomers = () => {
   const router = useRouter();
@@ -66,7 +67,7 @@ const BlackListedCustomers = () => {
   };
 
   return (
-    <DashboardLayout paths={["Blacklisted Borrowers"]}>
+    <DashboardLayout paths={["Blacklisted Borrowers"]} roles={borrowersAuthRoles}>
       <ReusableDataTable
         dataTransformer={customDataTransformer}
         // onClickRow="/borrowers/profile"

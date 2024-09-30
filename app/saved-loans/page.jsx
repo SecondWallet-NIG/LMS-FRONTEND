@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { FiEdit2 } from "react-icons/fi";
 import Link from "next/link";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { createLoanAuthRoles } from "../components/helpers/pageAuthRoles";
 
 const SavedLoans = () => {
   const [allSavedLoans, setAllSavedLoans] = useState([]);
@@ -54,7 +55,7 @@ const SavedLoans = () => {
   };
 
   return (
-    <DashboardLayout paths={["Saved Loans"]}>
+    <DashboardLayout paths={["Saved Loans"]} roles={createLoanAuthRoles}>
       <div className="p-5 overflow-x-auto">
         <table className="w-full">
           {/* px-5 py-4 bg-swightGray text-swGray border-0 font-[500] cursor-pointer text-start */}

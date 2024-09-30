@@ -26,6 +26,8 @@ const RequestLeaveModal = ({ onClose }) => {
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState({ state: false, message: "" });
   const [allRelievers, setAllRelievers] = useState([]);
+  const [allHrm, setAllHrm] = useState([]);
+  const [allMd, setAllMd] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [clearDate, setClearDate] = useState(false);
@@ -33,18 +35,20 @@ const RequestLeaveModal = ({ onClose }) => {
     leaveType: "",
     leaveDuration: 0,
     reliever: "",
+    firstApprover: "",
+    secondApprover: "",
     description: "",
   });
   const { data } = useSelector((state) => state.user);
   const type = data?.data?.employeeBenefit?.benefitType?.leaveTypes;
-
-  console.log("dates", startDate, endDate);
 
   const reset = () => {
     setFormData({
       leaveType: "",
       leaveDuration: 0,
       reliever: "",
+      firstApprover: "",
+      secondApprover: "",
       description: "",
     });
     setClearDate(true);
@@ -68,6 +72,8 @@ const RequestLeaveModal = ({ onClose }) => {
       leaveType: formData.leaveType,
       leaveDuration: formData.leaveDuration,
       reliever: formData.reliever,
+      firstApprover: formData.firstApprover,
+      secondApprover: formData.secondApprover,
       startDate: startDate,
       endDate: endDate,
       description: formData.description,
@@ -126,7 +132,22 @@ const RequestLeaveModal = ({ onClose }) => {
           value: item?._id,
         }));
         setAllRelievers(allUsers);
-        // console.log(res);
+
+        const hrm = res?.data?.results
+          .filter((item) => item?.role?.tag === "HRM")
+          .map((item) => ({
+            label: `${item?.firstName} ${item?.lastName}, ${item?.email}`,
+            value: item?._id,
+          }));
+        setAllHrm(hrm);
+
+        const dir = res?.data?.results
+          .filter((item) => item?.role?.tag === "Dir")
+          .map((item) => ({
+            label: `${item?.firstName} ${item?.lastName}, ${item?.email}`,
+            value: item?._id,
+          }));
+        setAllMd(dir);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -136,6 +157,8 @@ const RequestLeaveModal = ({ onClose }) => {
       dispatch(getUserById(id));
     }
   }, [id]);
+
+  console.log(formData);
 
   return (
     <div>
@@ -185,7 +208,7 @@ const RequestLeaveModal = ({ onClose }) => {
               </div>
               <div className="flex justify-between mt-7">
                 <div className="w-full flex flex-col gap-5">
-                  <div className="flex gap-3 items-end">
+                  <div className="flex flex-col md:flex-row gap-3 items-end">
                     <CustomDatePicker
                       label={"Start Date"}
                       value={setStartDate}
@@ -198,6 +221,40 @@ const RequestLeaveModal = ({ onClose }) => {
                     />
                   </div>
                   <p>Duration: {formData?.leaveDuration} working day(s)</p>
+                </div>
+              </div>
+              <div className="flex justify-between mt-5">
+                <div className="w-full flex flex-col gap-3">
+                  <SelectField
+                    label={"Select First Approver (Head, HR)"}
+                    isSearchable={true}
+                    value={
+                      allHrm.find((e) => e.value === formData.firstApprover) ||
+                      ""
+                    }
+                    onChange={(e) => {
+                      setFormData({ ...formData, firstApprover: e.value });
+                    }}
+                    optionValue={allHrm}
+                    placeholder={"Select"}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between mt-5">
+                <div className="w-full flex flex-col gap-3">
+                  <SelectField
+                    label={"Select Second Approver (Managing Dir.)"}
+                    isSearchable={true}
+                    value={
+                      allMd.find((e) => e.value === formData.secondApprover) ||
+                      ""
+                    }
+                    onChange={(e) => {
+                      setFormData({ ...formData, secondApprover: e.value });
+                    }}
+                    optionValue={allMd}
+                    placeholder={"Select"}
+                  />
                 </div>
               </div>
             </div>
@@ -226,7 +283,9 @@ const RequestLeaveModal = ({ onClose }) => {
                 blueBtn={true}
                 disabled={
                   Object.keys(formData).some(
-                    (key) => formData[key] === "" || formData[key] < 1
+                    (key) =>
+                      key !== "description" &&
+                      (formData[key] === "" || formData[key] < 1)
                   ) ||
                   !startDate ||
                   !endDate ||

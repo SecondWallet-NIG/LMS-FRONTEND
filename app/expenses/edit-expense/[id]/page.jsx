@@ -14,6 +14,7 @@ import {
   getSingleExpense,
   updateSingleExpense,
 } from "@/redux/slices/expenseManagementSlice";
+import { expensesAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EditAsset = () => {
   const dispatch = useDispatch();
@@ -119,7 +120,11 @@ const EditAsset = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Expense", "Edit expense"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Expense", "Edit expense"]}
+      roles={expensesAuthRoles}
+    >
       <ToastContainer />
       <main
         className="p-5 max-w-3xl mt-10 mx-auto  min-h-screen "

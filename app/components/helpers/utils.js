@@ -1,6 +1,8 @@
 import { getToken } from "@/helpers";
 import axios from "axios";
 import html2canvas from "html2canvas";
+import { format } from "date-fns";
+// import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
 
 export const cls = (input) =>
   input
@@ -60,8 +62,7 @@ export const handleFileExtention = (file) => {
 export const leaveTypes = [
   { id: "annualLeave", label: "Annual Leave" },
   { id: "maternityLeave", label: "Maternity Leave" },
-  { id: "paternityLeave", label: "Paternity Leave" },
-  { id: "personalLeave", label: "Personal Leave" },
+  { id: "personalLeave", label: "Casual Leave" },
   { id: "sickLeave", label: "Sick Leave" },
   { id: "unpaidLeave", label: "Unpaid Leave" },
 ];
@@ -95,18 +96,18 @@ export const fetchPdf = async (pdfUrl) => {
 };
 
 export const publicHolidays = [
-  new Date('2024-01-01'), // New Year's Day
-  new Date('2024-03-29'), // Good Friday
-  new Date('2024-04-01'), // Easter Monday
-  new Date('2024-05-01'), // Workers' Day
-  new Date('2024-06-12'), // Democracy Day
-  new Date('2024-06-16'), // Eid al-Fitr (Sallah) *
-  new Date('2024-06-17'), // Eid al-Fitr (Sallah) Holiday *
-  new Date('2024-07-20'), // Eid al-Adha (Sallah) *
-  new Date('2024-07-21'), // Eid al-Adha (Sallah) Holiday *
-  new Date('2024-10-01'), // Independence Day
-  new Date('2024-12-25'), // Christmas Day
-  new Date('2024-12-26'), // Boxing Day
+  new Date("2024-01-01"), // New Year's Day
+  new Date("2024-03-29"), // Good Friday
+  new Date("2024-04-01"), // Easter Monday
+  new Date("2024-05-01"), // Workers' Day
+  new Date("2024-06-12"), // Democracy Day
+  new Date("2024-06-16"), // Eid al-Fitr (Sallah) *
+  new Date("2024-06-17"), // Eid al-Fitr (Sallah) Holiday *
+  new Date("2024-07-20"), // Eid al-Adha (Sallah) *
+  new Date("2024-07-21"), // Eid al-Adha (Sallah) Holiday *
+  new Date("2024-10-01"), // Independence Day
+  new Date("2024-12-25"), // Christmas Day
+  new Date("2024-12-26"), // Boxing Day
   // Additional religious holidays may vary
 ];
 
@@ -152,4 +153,15 @@ export const getPublicHolidays = (year) => {
   // publicHolidays.push(new Date(`${year}-07-21`)); // Eid al-Adha Holiday (estimated date)
 
   return publicHolidays;
+};
+
+// Function to convert date string to ISO 8601 format
+export const convertDateToISO = (dateString) => {
+  // Parse the date string into a Date object
+  const parsedDate = new Date(dateString);
+
+  // Format the Date object to ISO 8601 format
+  const iso8601Date = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss.SSSX");
+
+  return iso8601Date;
 };

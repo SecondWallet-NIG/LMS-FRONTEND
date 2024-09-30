@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import NavBar from "../navigation/NavBar";
 import Sidebar from "../navigation/SideBar";
 import RealTimeComponent from "../RealTimeComponent";
+import Unauthorized from "@/app/unauthorized/page";
 
-const DashboardLayout = ({ children, paths, isBackNav }) => {
+const DashboardLayout = ({ children, paths, isBackNav, roles }) => {
   const [minimizeSidebar, setMinimizeSidebar] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
@@ -22,7 +23,15 @@ const DashboardLayout = ({ children, paths, isBackNav }) => {
 
       if (!storedUser) {
         router.push("/");
+        return;
+      } else {
+        const user = JSON.parse(storedUser);
+        if (roles && !roles.includes(user?.data?.user?.role?.tag)) {
+          return router.push("/unauthorized");
+        }
       }
+
+      // console.log("role", user?.data?.user?.role?.tag);
     }
   }, [router]);
 

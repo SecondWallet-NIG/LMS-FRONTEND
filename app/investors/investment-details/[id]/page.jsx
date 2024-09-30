@@ -28,6 +28,7 @@ import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import Loader from "@/app/components/shared/Loader";
+import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const header = [
   { id: "dueDate", label: "Due Date" },
@@ -92,7 +93,6 @@ export default function InvestmentDetails() {
   const [failedModal, setFailedModal] = useState(false);
   const [successModalData, setSuccessModalData] = useState({});
   const [errorModalData, setErrorModalData] = useState({});
-
   // console.log("withDetasil", data?.data)
 
   const paymentMethod = [
@@ -573,6 +573,7 @@ export default function InvestmentDetails() {
     <DashboardLayout
       isBackNav={true}
       paths={["Investors", "Investment details"]}
+      roles={investorsAuthRoles}
     >
       <div>
         {/* Header */}

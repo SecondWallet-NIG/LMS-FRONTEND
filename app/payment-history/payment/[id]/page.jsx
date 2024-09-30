@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
+import { paymentHystoryAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -117,7 +118,11 @@ const PaymentPage = () => {
   }, []);
 
   return (
-    <DashboardLayout isBackNav={true} paths={["Payment History", "Payment"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Payment History", "Payment"]}
+      roles={paymentHistoryAuthRoles}
+    >
       <ToastContainer />
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 text-sm justify-end font-semibold">

@@ -5,12 +5,15 @@ import { getToken } from "@/helpers";
 
 export const getAllBenefitTypes = createAsyncThunk(
   "benefit-type/all",
-  async () => {
+  async (total) => {
     try {
       let token = getToken();
       const response = await axios.get(`${API_URL}/benefit-type`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          params: {
+            per_page: 1000,
+          },
         },
       });
       return response.data;
@@ -153,6 +156,28 @@ export const requestLeave = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const cancelLeave = createAsyncThunk(
+  "cancel-request-leave",
+  async ({ userId, leaveId }) => {
+    try {
+      let token = getToken();
+      const response = await axios.delete(
+        `${API_URL}/leave/cancel/${userId}/${leaveId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       if (error.response.data.error) {

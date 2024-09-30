@@ -7,6 +7,7 @@ import { getCustomerById } from "@/redux/slices/customerSlice";
 import { useParams } from "next/navigation";
 import WorkInformation from "@/app/components/editBorrowerProfile/WorkInformation";
 import ProfileDocuments from "@/app/components/editBorrowerProfile/Documents";
+import { borrowersAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EditProfile = () => {
   const { id } = useParams();
@@ -23,7 +24,11 @@ const EditProfile = () => {
     dispatch(getCustomerById(id));
   }, []);
   return (
-    <DashboardLayout isBackNav={true} paths={["Borrowers", "Edit Profile"]}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Borrowers", "Edit Profile"]}
+      roles={borrowersAuthRoles}
+    >
       <main className="p-5 text-swTextColor">
         <div className="flex">
           <p
@@ -64,12 +69,12 @@ const EditProfile = () => {
           )}
           {pageState === "Work information" && (
             <div>
-                 {
-              userData && userData?.employmentInformation === null ? <div>No employment information uploaded yet</div> :   <WorkInformation userData={userData} loading={loading} />
-            }
+              {userData && userData?.employmentInformation === null ? (
+                <div>No employment information uploaded yet</div>
+              ) : (
+                <WorkInformation userData={userData} loading={loading} />
+              )}
             </div>
-         
-          
           )}
           {pageState === "Documents" && (
             <ProfileDocuments userData={userData} loading={loading} />

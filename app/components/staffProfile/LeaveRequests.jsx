@@ -18,7 +18,7 @@ const LeaveRequests = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    return apiData?.map((item) => ({
+    return apiData?.leaveRequests?.map((item) => ({
       id: item._id,
       createdAt: (
         <div className="text-[15px] font-light text-gray-700">

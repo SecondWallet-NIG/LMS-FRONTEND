@@ -11,6 +11,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { leaveTypes } from "@/app/components/helpers/utils";
+import { employeeDashboardAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EmployeeRequestLeave = () => {
   const router = useRouter();
@@ -34,6 +35,7 @@ const EmployeeRequestLeave = () => {
       description: "",
     });
   };
+
 
   const preventMinus = (e) => {
     if (/[^0-9,]/g.test(e.key)) {
@@ -78,6 +80,7 @@ const EmployeeRequestLeave = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Employee Dashboard", "Request Leave"]}
+      roles={employeeDashboardAuthRoles}
     >
       <main className="mx-auto w-full px-5 lg:px-1 lg:w-3/5 my-20">
         <form id="add-user-form" className="">

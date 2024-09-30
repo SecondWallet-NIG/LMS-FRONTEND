@@ -47,6 +47,7 @@ import { formatDate } from "@/helpers";
 import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
 import { base64ToBlob, fetchPdf } from "@/app/components/helpers/utils";
 import Loader from "@/app/components/shared/Loader";
+import { loanApplicationAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -564,7 +565,6 @@ const ViewLoan = () => {
     return false;
   };
 
-
   // const hasDeclineStatus = () => {
   //   for (const approval of loanApprovals?.data?.data || []) {
   //     if (approval.status === "Declined") {
@@ -595,6 +595,7 @@ const ViewLoan = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Loan Applications", "View loan"]}
+      roles={loanApplicationAuthRoles}
     >
       <ToastContainer />
       <main className="flex h-full">
@@ -1722,7 +1723,9 @@ const ViewLoan = () => {
             </div>
             <div className="relative pt-4 flex justify-between items-center">
               <p>
-                Disbursement Date: {formData?.disbursementDate &&format(formData?.disbursementDate, "PPP")}
+                Disbursement Date:{" "}
+                {formData?.disbursementDate &&
+                  format(formData?.disbursementDate, "PPP")}
               </p>
               <div
                 className="w-fit p-2 rounded-full border border-jsPrimary100 text-jsPrimary100 cursor-pointer"

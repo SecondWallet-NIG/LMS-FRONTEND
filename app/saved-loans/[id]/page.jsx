@@ -25,6 +25,7 @@ import Image from "next/image";
 import { Rings } from "react-loader-spinner";
 import EditableButton from "../../components/shared/editableButtonComponent/EditableButton";
 import Unauthorized from "../../unauthorized/page";
+import { createLoanAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const SavedLoan = () => {
   const dispatch = useDispatch();
@@ -445,7 +446,7 @@ const SavedLoan = () => {
   }, [loanPackage]);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout paths={["Saved Loans"]} roles={createLoanAuthRoles}>
       <ToastContainer />
 
       {currentStep === 1 ? (

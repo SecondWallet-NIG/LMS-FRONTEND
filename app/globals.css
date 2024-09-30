@@ -57,3 +57,21 @@ input[type="number"]::-webkit-outer-spin-button {
   background-color: #2769b3;
   color: white;
 }
+
+.custom-hover-outline:hover {
+  outline: 2px solid #bad6f7;
+}
+
+.calendar-day.non-clickable {
+  cursor: default; /* Normal pointer (not clickable) */
+  background-color: #f1f1f1; /* Make it distinct if needed */
+  pointer-events: none; /* Prevent click events */
+}
+
+.checkbox-blue {
+  accent-color: #2769b3; /* For modern browsers */
+}
+.checkbox-blue:disabled {
+  accent-color: #2769b3;
+  /* opacity: 1; */
+}
