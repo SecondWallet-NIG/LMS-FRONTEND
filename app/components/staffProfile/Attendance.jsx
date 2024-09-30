@@ -30,13 +30,15 @@ const Attendance = ({ isDashboard }) => {
       timeIn: (
         <div className="text-[15px] font-light text-gray-700">
           {/* <p>{item?.date && format(new Date(item?.date), "PPP")}</p> */}
-          <p>{item?.clockIn && format(new Date(item?.clockIn), "hh:mm a")} ({item?.ipAddress})</p>
+          <p>{item?.clockIn && format(new Date(item?.clockIn), "hh:mm a")}</p>
+          <p className="text-xs">{item?.clockInAddress}</p>
         </div>
       ),
       timeOut: (
         <div className="text-[15px] font-light text-gray-700">
           {/* <p>{item?.date && format(new Date(item?.date), "PPP")}</p> */}
           <p>{item?.clockOut && format(new Date(item?.clockOut), "hh:mm a")}</p>
+          <p className="text-xs">{item?.clockOutAddress}</p>
         </div>
       ),
       totalHours: (
