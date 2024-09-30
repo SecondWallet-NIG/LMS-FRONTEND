@@ -155,8 +155,8 @@ export default function ClockInDetails({ data, isDashboard }) {
           </Button>
         )}
       </div>
-      <div className="p-5 bg-[#f7f7f7]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 rounded-xl bg-white p-5">
+      <div className="p-5 bg-[#f7f7f7] h-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 rounded-xl bg-white h-full p-5">
           {returnCardDetails("Date", format(new Date(), "dd/MM/yyyy"))}
           {returnCardDetails("Time", format(new Date(), "hh:mm a"))}
           {returnCardDetails(

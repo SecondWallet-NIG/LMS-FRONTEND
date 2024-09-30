@@ -29,6 +29,8 @@ export default function StaffDeptInfo({ data, isDashboard }) {
     }
   }, []);
 
+  console.log(data?.user?.role?.department?.departmentHead);
+
   return (
     <div className="rounded-xl overflow-hidden h-full flex flex-col">
       <div className="flex flex-col sm:flex-row justify-between items-start p-5 bg-[#f7f7f7] border-b flex-wrap gap-5">
@@ -98,7 +100,14 @@ export default function StaffDeptInfo({ data, isDashboard }) {
           )}
           {returnCardDetails(
             "Department Head",
-            data?.user?.role?.department?.departmentHead || "None"
+            <div>
+              <p>
+                {data?.user?.role?.department?.departmentHead?.firstName ||
+                  "None"}{" "}
+                {data?.user?.role?.department?.departmentHead?.lastName}
+              </p>
+              <p className="text-swBlue">{data?.user?.role?.department?.departmentHead?.email}</p>
+            </div>
           )}
           {returnCardDetails("Role", data?.user?.role?.name || "None")}
         </div>
