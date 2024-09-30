@@ -14,6 +14,7 @@ import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import {
   convertDateToISO,
+  convertDateToISOWithAddedHour,
   getPublicHolidays,
   leaveTypes,
 } from "@/app/components/helpers/utils";
@@ -194,11 +195,17 @@ const ViewSingleLeaveRequest = () => {
             <div>
               <p>
                 Current StartDate:{" "}
-                {data?.data?.leaveRequest?.startDate?.slice(0, 10)}
+                {data?.data?.leaveRequest?.startDate &&
+                  convertDateToISOWithAddedHour(
+                    data?.data?.leaveRequest?.startDate
+                  )?.slice(0, 10)}
               </p>
               <p>
                 Current EndDate:{" "}
-                {data?.data?.leaveRequest?.endDate?.slice(0, 10)}
+                {data?.data?.leaveRequest?.endDate &&
+                  convertDateToISOWithAddedHour(
+                    data?.data?.leaveRequest?.endDate
+                  )?.slice(0, 10)}
               </p>
             </div>
             <p className="text-gray-700 font-medium">
@@ -227,7 +234,7 @@ const ViewSingleLeaveRequest = () => {
           </div>
         </div>
       ) : (
-        <p className="text-center py-5 text-lg font-medium mt-7">
+        <p className="-mt-5 text-lg font-medium">
           Are You sure You Want To Approve?
         </p>
       )}
@@ -240,7 +247,7 @@ const ViewSingleLeaveRequest = () => {
         />
         <EditableButton
           blueBtn={true}
-          label={"Approve"}
+          label={"Yes, Approve"}
           onClick={handleApprove}
           className={"w-full"}
           disabled={loading}
@@ -295,7 +302,7 @@ const ViewSingleLeaveRequest = () => {
         />
         <EditableButton
           redBtn={true}
-          label={"Cancel Leave Request"}
+          label={"Yes, Cancel"}
           onClick={handleCancelLeave}
           className={"w-full"}
           disabled={loading}
@@ -366,8 +373,6 @@ const ViewSingleLeaveRequest = () => {
       setLeaveDuration(0);
     }
   }, [startDate, endDate]);
-
-
   return (
     <DashboardLayout
       isBackNav={true}
@@ -423,123 +428,209 @@ const ViewSingleLeaveRequest = () => {
               </button>
             )}
         </div>
-        <div className="mt-5 p-5 flex flex-col gap-5 text-sm">
-  <div className="flex flex-col sm:flex-row gap-5">
-    <div className="w-full">
-      <p className="font-medium">Leave Type:</p>
-      <div className="w-full">
-        <div>
-          {leaveTypes?.find(
-            (e) => e?.id === data?.data?.leaveRequest?.leaveType
-          )?.label}
+        <div className="mt-5 p-5 flex flex-col gap-5">
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Leave Type:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  {
+                    leaveTypes?.find(
+                      (e) => e?.id === data?.data?.leaveRequest?.leaveType
+                    )?.label
+                  }
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Staff:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {data?.data?.leaveRequest?.userDetails?.lastName}{" "}
+                    {data?.data?.leaveRequest?.userDetails?.firstName}
+                  </p>
+                  <p className="text-swBlue">
+                    {data?.data?.leaveRequest?.userDetails?.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium">First Approval:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {
+                      data?.data?.approvalDetails?.firstApproval
+                        ?.approverDetails?.lastName
+                    }{" "}
+                    {
+                      data?.data?.approvalDetails?.firstApproval
+                        ?.approverDetails?.firstName
+                    }
+                  </p>
+                  <p className="text-swBlue">
+                    {
+                      data?.data?.approvalDetails?.firstApproval
+                        ?.approverDetails?.email
+                    }
+                  </p>
+                  <div className="flex items-center gap-2">
+                    Status:
+                    {renderStatus(
+                      data?.data?.approvalDetails?.firstApproval?.status
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Second Approval:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {
+                      data?.data?.approvalDetails?.secondApproval
+                        ?.approverDetails?.lastName
+                    }{" "}
+                    {
+                      data?.data?.approvalDetails?.secondApproval
+                        ?.approverDetails?.firstName
+                    }
+                  </p>
+                  <p className="text-swBlue">
+                    {
+                      data?.data?.approvalDetails?.secondApproval
+                        ?.approverDetails?.email
+                    }
+                  </p>
+                  <div className="flex items-center gap-2">
+                    Status:
+                    {renderStatus(
+                      data?.data?.approvalDetails?.secondApproval?.status
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Date Requested:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {data?.data?.leaveRequest?.createdAt &&
+                      convertDateToISOWithAddedHour(
+                        data?.data?.leaveRequest?.createdAt
+                      )?.slice(0, 10)}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Start Date:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {data?.data?.leaveRequest?.startDate &&
+                      convertDateToISOWithAddedHour(
+                        data?.data?.leaveRequest?.startDate
+                      )?.slice(0, 10)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">End Date:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {data?.data?.leaveRequest?.endDate &&
+                      convertDateToISOWithAddedHour(
+                        data?.data?.leaveRequest?.endDate
+                      )?.slice(0, 10)}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Duration:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>{data?.data?.leaveRequest?.leaveDuration} day(s)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Reliever:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>
+                    {data?.data?.leaveRequest?.reliever?.lastName}{" "}
+                    {data?.data?.leaveRequest?.reliever?.firstName}
+                  </p>
+                  <p className="text-swBlue">
+                    {data?.data?.leaveRequest?.reliever?.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+            {data?.data?.leaveRequest?.status === "Declined" && (
+              // <div className="flex">
+              //   <p className="font-medium ">Decline Reason</p>
+              //   <p>{data?.data?.leaveRequest?.declineReason}</p>
+              // </div>
+              <div className="w-full">
+                <div>
+                  <p className="font-medium ">Decline Reason:</p>
+                </div>
+                <div className="w-full">
+                  <div>
+                    <p>{data?.data?.leaveRequest?.declineReason}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="w-full">
+              <div>
+                <p className="font-medium ">Additional Message:</p>
+              </div>
+              <div className="w-full">
+                <div>
+                  <p>{data?.data?.leaveRequest?.description}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div className="w-full">
-      <p className="font-medium">Staff:</p>
-      <div className="w-full">
-        <p className="">
-          {data?.data?.leaveRequest?.userDetails?.lastName}{" "}
-          {data?.data?.leaveRequest?.userDetails?.firstName}
-        </p>
-        <p className="text-swBlue">
-          {data?.data?.leaveRequest?.userDetails?.email}
-        </p>
-      </div>
-    </div>
-  </div>
-  <div className="flex flex-col sm:flex-row gap-5">
-    <div className="w-full">
-      <p className="font-medium">First Approval:</p>
-      <div className="w-full">
-        <p>
-          {data?.data?.approvalDetails?.firstApproval?.approverDetails?.lastName}{" "}
-          {data?.data?.approvalDetails?.firstApproval?.approverDetails?.firstName}
-        </p>
-        <p className="text-swBlue">
-          {data?.data?.approvalDetails?.firstApproval?.approverDetails?.email}
-        </p>
-        <div className="flex items-center gap-2">
-          Status: {renderStatus(data?.data?.approvalDetails?.firstApproval?.status)}
-        </div>
-      </div>
-    </div>
-    <div className="w-full">
-      <p className="font-medium">Second Approval:</p>
-      <div className="w-full">
-        <p>
-          {data?.data?.approvalDetails?.secondApproval?.approverDetails?.lastName}{" "}
-          {data?.data?.approvalDetails?.secondApproval?.approverDetails?.firstName}
-        </p>
-        <p className="text-swBlue">
-          {data?.data?.approvalDetails?.secondApproval?.approverDetails?.email}
-        </p>
-        <div className="flex items-center gap-2">
-          Status: {renderStatus(data?.data?.approvalDetails?.secondApproval?.status)}
-        </div>
-      </div>
-    </div>
-  </div>
-  <div className="flex flex-col sm:flex-row gap-5">
-    <div className="w-full">
-      <p className="font-medium">Date Requested:</p>
-      <div className="w-full">
-        <p>{data?.data?.leaveRequest?.createdAt?.slice(0, 10)}</p>
-      </div>
-    </div>
-    <div className="w-full">
-      <p className="font-medium">Start Date:</p>
-      <div className="w-full">
-        <p>{data?.data?.leaveRequest?.startDate?.slice(0, 10)}</p>
-      </div>
-    </div>
-  </div>
-  <div className="flex flex-col sm:flex-row gap-5">
-    <div className="w-full">
-      <p className="font-medium">End Date:</p>
-      <div className="w-full">
-        <p>{data?.data?.leaveRequest?.endDate?.slice(0, 10)}</p>
-      </div>
-    </div>
-    <div className="w-full">
-      <p className="font-medium">Duration:</p>
-      <div className="w-full">
-        <p>{data?.data?.leaveRequest?.leaveDuration} day(s)</p>
-      </div>
-    </div>
-  </div>
-  <div className="flex flex-col sm:flex-row gap-5">
-    <div className="w-full">
-      <p className="font-medium">Reliever:</p>
-      <div className="w-full">
-        <p>
-          {data?.data?.leaveRequest?.reliever?.lastName}{" "}
-          {data?.data?.leaveRequest?.reliever?.firstName}
-        </p>
-        <p className="text-swBlue">
-          {data?.data?.leaveRequest?.reliever?.email}
-        </p>
-      </div>
-    </div>
-    {data?.data?.leaveRequest?.status === "Declined" && (
-      <div className="w-full">
-        <p className="font-medium">Decline Reason:</p>
-        <div className="w-full">
-          <p>{data?.data?.leaveRequest?.declineReason}</p>
-        </div>
-      </div>
-    )}
-  </div>
-  <div className="flex flex-col sm:flex-row gap-5">
-    <div className="w-full">
-      <p className="font-medium">Additional Message:</p>
-      <div className="w-full">
-        <p>{data?.data?.leaveRequest?.description}</p>
-      </div>
-    </div>
-  </div>
-</div>
-
       </main>
       <SharedInvestmentModal
         isOpen={approvalModal}

@@ -1,7 +1,7 @@
 import { useParams, useRouter } from "next/navigation";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { AiOutlinePlus } from "react-icons/ai";
-import { leaveTypes } from "../helpers/utils";
+import { convertDateToISOWithAddedHour, leaveTypes } from "../helpers/utils";
 
 const LeaveRequests = () => {
   const router = useRouter();
@@ -22,7 +22,8 @@ const LeaveRequests = () => {
       id: item._id,
       createdAt: (
         <div className="text-[15px] font-light text-gray-700">
-          {item.createdAt?.slice(0, 10)}
+          {item?.createdAt &&
+            convertDateToISOWithAddedHour(item?.createdAt)?.slice(0, 10)}
         </div>
       ),
       leaveType: (
@@ -35,14 +36,16 @@ const LeaveRequests = () => {
       startDate: (
         <div>
           <div className="text-[15px] font-light text-gray-700">
-            {item?.startDate?.slice(0, 10)}
+          {item?.startDate &&
+            convertDateToISOWithAddedHour(item?.startDate)?.slice(0, 10)}
           </div>
         </div>
       ),
       endDate: (
         <div>
           <div className="text-[15px] font-light text-gray-700">
-            {item?.endDate?.slice(0, 10)}
+          {item?.endDate &&
+            convertDateToISOWithAddedHour(item?.endDate)?.slice(0, 10)}
           </div>
         </div>
       ),
