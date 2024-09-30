@@ -54,7 +54,7 @@ export default function StaffDeptInfo({ data, isDashboard }) {
           </Button>
         ) : ( */}
         <div>
-          {(user?.role?.tag === "HRM" || isDashboard) && (
+          {(user?.role?.tag === "HRM" || "CFO" || "CTO" || "Dir" || isDashboard) && (
             <div className="flex items-end gap-2">
               {returnCardDetails(
                 "Salary",

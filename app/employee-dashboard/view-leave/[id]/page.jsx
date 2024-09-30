@@ -295,7 +295,7 @@ const ViewSingleLeaveRequest = () => {
         />
         <EditableButton
           redBtn={true}
-          label={"Canel Leave Request"}
+          label={"Cancel Leave Request"}
           onClick={handleCancelLeave}
           className={"w-full"}
           disabled={loading}

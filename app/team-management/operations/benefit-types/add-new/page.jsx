@@ -151,7 +151,7 @@ const AddBenefitTypesPage = () => {
             {[
               "Annual Leave",
               "Sick Leave",
-              "Causal Leave",
+              "Casual Leave",
               "Maternity Leave",
               "Unpaid Leave",
             ].map((label) => (
