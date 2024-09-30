@@ -3,13 +3,14 @@ import axios from "axios";
 import { API_URL } from "@/constant";
 import { getToken } from "@/helpers";
 
-export const clockIn = createAsyncThunk("clock-in", async () => {
+export const clockIn = createAsyncThunk("clock-in", async (body) => {
+
   try {
     let token = getToken();
     if (!token) throw new Error("Token not provided");
     const response = await axios.patch(
       `${API_URL}/attendance/clock-in`,
-      {},
+      body,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -22,13 +23,13 @@ export const clockIn = createAsyncThunk("clock-in", async () => {
   }
 });
 
-export const clockOut = createAsyncThunk("clock-out", async () => {
+export const clockOut = createAsyncThunk("clock-out", async (body) => {
   try {
     let token = getToken();
     if (!token) throw new Error("Token not provided");
     const response = await axios.patch(
       `${API_URL}/attendance/clock-out`,
-      {},
+      body,
       {
         headers: {
           Authorization: `Bearer ${token}`,
