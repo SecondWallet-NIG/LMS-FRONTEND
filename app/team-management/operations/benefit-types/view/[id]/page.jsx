@@ -29,7 +29,6 @@ const ViewBenefitType = () => {
     { day: "Sunday", checked: false },
   ]);
 
-  console.log({ data });
 
   useEffect(() => {
     data?.data?.find((benefitType) => {
@@ -78,7 +77,7 @@ const ViewBenefitType = () => {
         </div> */}
 
         <div className="flex justify-between mt-5 p-5 border-b">
-          <p className="text-2xl font-semibold">Leave Section</p>
+          <p className="text-md font-medium">Leave Section</p>
           {/* {showEditBtn && ( */}
           <Link
             href={`/team-management/operations/benefit-types/update/${id}`}
@@ -91,7 +90,7 @@ const ViewBenefitType = () => {
         </div>
 
         <div className="p-5 flex flex-col gap-5 font-500">
-          <p className="font-semibold text-xl">Leave Details</p>
+          <p className="font-semibold text-md">Leave Details</p>
           <div className="flex">
             <p className="min-w-[15rem]">Staff Level</p>
             <p>{benefit?.level}</p>
@@ -143,12 +142,12 @@ const ViewBenefitType = () => {
         </div>
 
         <div className="flex justify-between mt-5 p-5 border-b">
-          <p className="font-semibold text-2xl">
+          <p className="font-semibold text-md">
             Resumption Time & Days Details
           </p>
         </div>
         <div className="p-5 flex flex-col gap-5 font-500">
-          <p className="font-semibold text-xl">Selected Work Days</p>
+          <p className="font-medium text-md">Selected Work Days</p>
 
           <div className="flex items-center gap-5 flex-wrap">
             {workDays.map((item) => (
@@ -159,7 +158,7 @@ const ViewBenefitType = () => {
               >
                 <input
                   type="checkbox"
-                  className="checkbox-blue h-5 w-5"
+                  className="checkbox-blue h-4 w-4"
                   checked={item.checked}
                   name={item.day}
                 />
