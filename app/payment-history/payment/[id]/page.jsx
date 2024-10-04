@@ -121,7 +121,7 @@ const PaymentPage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Payment History", "Payment"]}
-      roles={paymentHistoryAuthRoles}
+      roles={paymentHystoryAuthRoles}
     >
       <ToastContainer />
       <main className="mx-auto max-w-4xl py-10 px-5">
