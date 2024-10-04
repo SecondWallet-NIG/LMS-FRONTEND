@@ -145,7 +145,7 @@ const RequestLeaveModal = ({ onClose }) => {
         setAllHrm(hrm);
 
         const dir = res?.data?.results
-          .filter((item) => item?.role?.tag === "Dir")
+          .filter((item) => item?.role?.tag === "CEO")
           .map((item) => ({
             label: `${item?.firstName} ${item?.lastName}, ${item?.email}`,
             value: item?._id,
@@ -160,8 +160,6 @@ const RequestLeaveModal = ({ onClose }) => {
       dispatch(getUserById(id));
     }
   }, [id]);
-
-  console.log(formData);
 
 
   return (
