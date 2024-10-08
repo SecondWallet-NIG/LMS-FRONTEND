@@ -32,7 +32,6 @@ import Link from "next/link";
 import { LuArrowUpRight } from "react-icons/lu";
 import { PiCurrencyNgn } from "react-icons/pi";
 
-
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -442,7 +441,14 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             userRoleTag === "Dir" ? (
               <>
                 <SidebarLink
-                  allowedRoleTags={["CFO", "CEO", "CT0", "Dir", 'HRM', "System Admin"]}
+                  allowedRoleTags={[
+                    "CFO",
+                    "CEO",
+                    "CT0",
+                    "Dir",
+                    "HRM",
+                    "System Admin",
+                  ]}
                   userRoleTag={userRoleTag}
                   icon={<FaPeopleGroup size={20} />}
                   text="Team management"
@@ -537,7 +543,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
-                'GS',
+                "GS",
                 "CT0",
                 "LR0",
                 "Dir",
@@ -557,9 +563,9 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
           </div>
         </div>
 
-        <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
+        {/*<div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
           <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
-            {/* <SidebarLink
+             <SidebarLink
               allowedRoleTags={[
                 "LO",
                 "CFO",
@@ -584,9 +590,9 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 localStorage.removeItem("email");
                 //localStorage.clear();
               }}
-            /> */}
+            /> 
           </div>
-        </div>
+        </div>*/}
       </div>
 
       {/* Small screens */}
@@ -603,7 +609,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
           </p>
         </div>
 
-        <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
+        <div className="border-b border-b-gray-300 text-lg xl:text-xl">
           <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
             <div>
               <SidebarLink
@@ -613,10 +619,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   "CEO",
                   "CAO",
                   "ICO",
-                  "HRM",
                   "COF",
                   "LR0",
                   "CT0",
+                  "HRM",
                   "Dir",
                   "System Admin",
                 ]}
@@ -644,10 +650,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
-                "HRM",
                 "COF",
                 "LR0",
                 "CT0",
+                "HRM",
                 "Dir",
                 "System Admin",
               ]}
@@ -684,7 +690,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
-                "HRM",
                 "COF",
                 "LR0",
                 "CT0",
@@ -721,7 +726,10 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               userRoleTag={userRoleTag}
               icon={
                 <IoMdAdd
-                  className={`${activeLink === "create-loan" && "text-swBlue"}`}
+                  className={`${
+                    (activeLink === "create-loan" || "saved-loans") &&
+                    "text-swBlue"
+                  }`}
                   size={20}
                 />
               }
@@ -758,7 +766,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
-                "HRM",
                 "COF",
                 "LR0",
                 "CT0",
@@ -789,7 +796,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
-                "HRM",
                 "COF",
                 "LR0",
                 "CT0",
@@ -798,16 +804,16 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               ]}
               userRoleTag={userRoleTag}
               icon={
-                <FiFile
+                <FiFileText
                   className={`${
-                    activeLink === "loan-applications" && "text-swBlue"
+                    activeLink === "loan-drafts" && "text-swBlue"
                   } `}
                   size={20}
                 />
               }
               pathname={pathname}
-              text="Loan Drafts"
-              link="/loan-applications"
+              text="Loan drafts"
+              link="/loan-drafts"
               sideBarOpen={sideBarOpen}
               onClick={() => {
                 setActiveLink("loan-applications");
@@ -821,7 +827,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
-                "HRM",
                 "LR0",
                 "CT0",
                 "Dir",
@@ -853,7 +858,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
-                "HRM",
                 "COF",
                 "CT0",
                 "LR0",
@@ -884,7 +888,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CEO",
                 "CAO",
                 "ICO",
-                "HRM",
                 "COF",
                 "CT0",
                 "LR0",
@@ -931,13 +934,13 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               link="/report"
               sideBarOpen={sideBarOpen}
             />
+
             <SidebarLink
               allowedRoleTags={[
                 "LO",
                 "CFO",
                 "CEO",
                 "CAO",
-                "HRM",
                 "CT0",
                 "Dir",
                 "System Admin",
@@ -951,11 +954,20 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             {userRoleTag === "System Admin" ||
             userRoleTag === "CFO" ||
             userRoleTag === "CTO" ||
+            userRoleTag === "HRM" ||
             userRoleTag === "CEO" ||
+            userRoleTag === "HRM" ||
             userRoleTag === "Dir" ? (
               <>
                 <SidebarLink
-                  allowedRoleTags={["CFO", "CEO", "CT0", "Dir", "System Admin"]}
+                  allowedRoleTags={[
+                    "CFO",
+                    "CEO",
+                    "CT0",
+                    "Dir",
+                    "HRM",
+                    "System Admin",
+                  ]}
                   userRoleTag={userRoleTag}
                   icon={<FaPeopleGroup size={20} />}
                   text="Team management"
@@ -984,11 +996,12 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "HRM",
                 "CT0",
+                "OFA",
                 "Dir",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
-              icon={<FaInbox size={20} />}
+              icon={<BiSolidBuilding size={20} />}
               text="Asset management"
               link="/asset-management"
               sideBarOpen={sideBarOpen}
@@ -999,33 +1012,19 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CFO",
                 "CEO",
                 "CAO",
-                "HRM",
                 "CT0",
+                "HRM",
                 "Dir",
+                "OFA",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
-              icon={<LuArrowUpRight size={20} />}
+              icon={<PiCurrencyNgn size={20} />}
               text="Expenses"
               link="/expenses"
               sideBarOpen={sideBarOpen}
             />
-            {/* <SidebarLink
-              allowedRoleTags={[
-                // "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "CT0",
-                "Dir",
-                "System Admin",
-              ]}
-              userRoleTag={userRoleTag}
-              icon={<FaRegStar size={20} />}
-              text="Investors"
-              link="/investors"
-              sideBarOpen={sideBarOpen}
-            /> */}
+
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -1034,16 +1033,47 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 "CAO",
                 "ICO",
                 "COF",
-                "HRM",
-                "CT0",
                 "LR0",
+                "CT0",
                 "Dir",
                 "System Admin",
               ]}
               userRoleTag={userRoleTag}
-              icon={<AiOutlineSetting size={20} />}
-              text="Settings"
-              link="/settings"
+              icon={
+                <FiUser
+                  className={`${activeLink === "investors" && "text-swBlue"}`}
+                  size={20}
+                />
+              }
+              pathname={pathname}
+              text="Investment"
+              link="/investors"
+              // hasDropdown={true}
+              sideBarOpen={sideBarOpen}
+              onClick={() => {
+                setActiveLink("");
+              }}
+            />
+            <SidebarLink
+              allowedRoleTags={[
+                "LO",
+                "CFO",
+                "CEO",
+                "CAO",
+                "ICO",
+                "COF",
+                "GS",
+                "CT0",
+                "LR0",
+                "Dir",
+                "OFA",
+                "HRM",
+                "System Admin",
+              ]}
+              userRoleTag={userRoleTag}
+              icon={<AiFillDashboard size={20} />}
+              text="Employee Dashboard"
+              link={`/employee-dashboard/${userId}`}
               sideBarOpen={sideBarOpen}
               onClick={() => {
                 handleSidebarOpen(false);
@@ -1052,14 +1082,9 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
           </div>
         </div>
 
-        <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
+        {/* <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
           <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
-            {/* <Button variant="secondary" onClick={() => {
-         localStorage.removeItem("user");
-         router.push("/")
-      }}>
-        Sign Out
-      </Button> */}
+            
             <SidebarLink
               allowedRoleTags={[
                 "LO",
@@ -1088,7 +1113,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </main>
   );
