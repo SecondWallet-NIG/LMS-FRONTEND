@@ -1110,7 +1110,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 localStorage.removeItem("user");
                 localStorage.removeItem("email");
                 // localStorage.clear();
-              }}
+              }}  
             />
           </div>
         </div> */}
