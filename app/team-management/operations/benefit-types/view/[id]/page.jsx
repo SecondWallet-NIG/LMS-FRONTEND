@@ -30,26 +30,28 @@ const ViewBenefitType = () => {
   ]);
 
   useEffect(() => {
-    data?.data?.find((benefitType) => {
-      if (benefitType._id === id) {
-        setBenefit(benefitType);
-        const selectedDays = benefitType?.workingDays;
-        if (selectedDays) {
-          const selectedDaysArr = Object.keys(selectedDays);
-          setWorkDays((prevWorkDays) =>
-            prevWorkDays.map((workDay) =>
-              selectedDaysArr.includes(workDay?.day?.toLowerCase())
-                ? {
-                    ...workDay,
-                    checked: selectedDays[workDay?.day?.toLowerCase()],
-                  }
-                : workDay
-            )
-          );
+    if (data?.data && typeof id === "string") {
+      data?.data?.find((benefitType) => {
+        if (benefitType._id === id) {
+          setBenefit(benefitType);
+          const selectedDays = benefitType?.workingDays;
+          if (selectedDays) {
+            const selectedDaysArr = Object.keys(selectedDays);
+            setWorkDays((prevWorkDays) =>
+              prevWorkDays.map((workDay) =>
+                selectedDaysArr.includes(workDay?.day?.toLowerCase())
+                  ? {
+                      ...workDay,
+                      checked: selectedDays[workDay?.day?.toLowerCase()],
+                    }
+                  : workDay
+              )
+            );
+          }
         }
-      }
-    });
-  }, [data?.data]);
+      });
+    }
+  }, [data?.data, id]);
 
   useEffect(() => {
     dispatch(getAllBenefitTypes());
@@ -64,7 +66,6 @@ const ViewBenefitType = () => {
       <main
         className={`${inter.className} mx-auto max-w-4xl py-10 px-5 text-swBlack`}
       >
-
         <div className="flex justify-between mt-5 p-5 border-b">
           <p className="text-md font-medium">Leave Section</p>
           <Link
