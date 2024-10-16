@@ -38,7 +38,7 @@ const ViewBenefitType = () => {
           if (selectedDays) {
             const selectedDaysArr = Object.keys(selectedDays);
             setWorkDays((prevWorkDays) =>
-              prevWorkDays.map((workDay) =>
+              prevWorkDays?.map((workDay) =>
                 selectedDaysArr?.includes(workDay?.day?.toLowerCase())
                   ? {
                       ...workDay,
