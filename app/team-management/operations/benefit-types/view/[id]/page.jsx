@@ -29,7 +29,6 @@ const ViewBenefitType = () => {
     { day: "Sunday", checked: false },
   ]);
 
-
   useEffect(() => {
     data?.data?.find((benefitType) => {
       if (benefitType._id === id) {
@@ -39,10 +38,10 @@ const ViewBenefitType = () => {
           const selectedDaysArr = Object.keys(selectedDays);
           setWorkDays((prevWorkDays) =>
             prevWorkDays.map((workDay) =>
-              selectedDaysArr.includes(workDay.day.toLowerCase())
+              selectedDaysArr.includes(workDay?.day?.toLowerCase())
                 ? {
                     ...workDay,
-                    checked: selectedDays[workDay.day.toLowerCase()],
+                    checked: selectedDays[workDay?.day?.toLowerCase()],
                   }
                 : workDay
             )
@@ -50,7 +49,7 @@ const ViewBenefitType = () => {
         }
       }
     });
-  }, [data]);
+  }, [data?.data]);
 
   useEffect(() => {
     dispatch(getAllBenefitTypes());
@@ -65,27 +64,15 @@ const ViewBenefitType = () => {
       <main
         className={`${inter.className} mx-auto max-w-4xl py-10 px-5 text-swBlack`}
       >
-        {/* <div className="flex gap-5 justify-between items-center font-semibold">
-          <p className="text-2xl">Leave Section</p>
-          <Link
-            href={`/team-management/operations/benefit-types/update/${id}`}
-            className="border py-2 px-3 flex gap-2 items-center rounded-lg"
-          >
-            <FiEdit2 size={20} />
-            Edit
-          </Link>
-        </div> */}
 
         <div className="flex justify-between mt-5 p-5 border-b">
           <p className="text-md font-medium">Leave Section</p>
-          {/* {showEditBtn && ( */}
           <Link
             href={`/team-management/operations/benefit-types/update/${id}`}
             className="border py-2 px-3 flex gap-2 items-center rounded-lg"
           >
             <FiEdit2 size={20} />
             Edit
-            {/* )} */}
           </Link>
         </div>
 
@@ -123,15 +110,6 @@ const ViewBenefitType = () => {
               {benefit?.leaveTypes?.maternityLeave === 1 ? "day" : "days"}
             </p>
           </div>
-          {/* <div className="flex">
-            <p className="min-w-[15rem]">Paternity Leave</p>
-            <p>
-              {benefit?.leaveTypes?.paternityLeave}{" "}
-              {benefit?.leaveTypes?.paternityLeave === 1
-                ? "day"
-                : "days"}
-            </p>
-          </div> */}
           <div className="flex">
             <p className="min-w-[15rem]">Unpaid Leave</p>
             <p>
@@ -150,19 +128,19 @@ const ViewBenefitType = () => {
           <p className="font-medium text-md">Selected Work Days</p>
 
           <div className="flex items-center gap-5 flex-wrap">
-            {workDays.map((item) => (
+            {workDays?.map((item) => (
               <label
-                key={item.day}
-                htmlFor={item.day}
+                key={item?.day}
+                htmlFor={item?.day}
                 className="flex items-center gap-1"
               >
                 <input
                   type="checkbox"
                   className="checkbox-blue h-4 w-4"
-                  checked={item.checked}
-                  name={item.day}
+                  checked={item?.checked}
+                  name={item?.day}
                 />
-                {item.day}
+                {item?.day}
               </label>
             ))}
           </div>
