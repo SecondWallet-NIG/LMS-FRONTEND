@@ -204,10 +204,14 @@ const PaymentPage = () => {
           {/* <p className="text-lg font-semibold text-swBlue">payment details</p> */}
           <div className="flex">
             <p className="min-w-[15rem]  text-swBlue">Borrower name</p>
-            <p>
+            <p className="capitalize">
               {repaymentData?.result?.customer?.firstName}{" "}
               {repaymentData?.result?.customer?.lastName}
             </p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem]  text-swBlue">Amount Logged</p>
+            <p>₦ {repaymentData?.result?.amountLogged?.toLocaleString()}</p>
           </div>
           <div className="flex">
             <p className="min-w-[15rem] text-swBlue">Date Logged</p>
