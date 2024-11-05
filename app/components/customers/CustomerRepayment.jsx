@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { format, isValid } from "date-fns";
 import { FaRegCalendar } from "react-icons/fa";
 import { DayPicker } from "react-day-picker";
+import { checkDecimal } from "../helpers/utils";
 
 const CustomerRepayment = ({ loanId }) => {
   const dispatch = useDispatch();
@@ -181,13 +182,44 @@ const CustomerRepayment = ({ loanId }) => {
     });
   };
 
+  const handleInputChangeWithComma = (e) => {
+    const value = e.target.value.replace(/,/g, "");
+    // const value = e.target.value;
+    console.log({ value });
+    setFormData((prevData) => ({
+      ...prevData,
+      [e.target.name]: value,
+    }));
+  };
+
   const preventMinus = (e) => {
-    if (/[^0-9,]/g.test(e.key)) {
+    const allowedKeys = [
+      "Backspace",
+      "Delete",
+      "ArrowLeft",
+      "ArrowRight",
+      "Tab",
+      ".",
+    ];
+
+    if (allowedKeys.includes(e.key)) {
+      return;
+    }
+
+    // Prevent if it's not a digit and prevent multiple decimals
+    if (
+      !/^[0-9.]$/.test(e.key) ||
+      (e.key === "." && e.target.value.includes("."))
+    ) {
       e.preventDefault();
     }
   };
+  //  preventMinus = (e) => {
+  //   if (/[^0-9,]/g.test(e.key)) {
+  //     e.preventDefault();
+  //   }
+  // };
 
-  console.log({ formData });
   const logRepaymentFunction = (e) => {
     setLoading(true);
     setEnableLogRepaymentBtn(false);
@@ -214,6 +246,8 @@ const CustomerRepayment = ({ loanId }) => {
         setLoading(false);
       });
   };
+
+  console.log(formData);
 
   return (
     <div className="w-full">
@@ -268,11 +302,22 @@ const CustomerRepayment = ({ loanId }) => {
                 label="Amount received"
                 required={true}
                 placeholder="Enter amount"
-                ariaLabel={"Number input"}
-                value={formData?.repaymentAmount?.toLocaleString()}
+                onWheel={() => {
+                  const activeElement = document.activeElement;
+                  if (activeElement) {
+                    activeElement.blur();
+                  }
+                }}
+                value={
+                  !formData.repaymentAmount.includes(".")
+                    ? Number(formData.repaymentAmount).toLocaleString("en-US")
+                    : checkDecimal(formData.repaymentAmount)
+                    ? Number(formData.repaymentAmount).toLocaleString("en-US")
+                    : formData.repaymentAmount
+                }
                 onKeyPress={preventMinus}
                 onChange={(e) => {
-                  setInputState(e);
+                  handleInputChangeWithComma(e);
                 }}
                 hintText="Amount paid that received the current repayment amount will spill into the next repayment cycle"
               />

@@ -55,7 +55,6 @@ const InputField = ({
           value={value}
           disabled={disabled}
           max={maxLength} // Pass maxLength prop
-          // onKeyPress={onKeyPress}
           onKeyPress={onKeyPress}
           onWheel={onWheel}
         />
