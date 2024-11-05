@@ -179,3 +179,35 @@ export const convertDateToISOWithAddedHour = (dateString) => {
   parsedDate.setHours(parsedDate.getHours() + 1);
   return parsedDate.toISOString();
 };
+
+export const handleInputChangeWithComma = (e,setFormData) => {
+  const value = e.target.value.replace(/,/g, "");
+
+  setFormData((prevData) => ({
+    ...prevData,
+    [e.target.name]: value,
+  }));
+};
+
+export const preventMinus = (e) => {
+  const allowedKeys = [
+    "Backspace",
+    "Delete",
+    "ArrowLeft",
+    "ArrowRight",
+    "Tab",
+    ".",
+  ];
+
+  if (allowedKeys.includes(e.key)) {
+    return;
+  }
+
+  // Prevent if it's not a digit and prevent multiple decimals
+  if (
+    !/^[0-9.]$/.test(e.key) ||
+    (e.key === "." && e.target.value.includes("."))
+  ) {
+    e.preventDefault();
+  }
+};

@@ -69,6 +69,28 @@ export const getSingleLoan = createAsyncThunk(
 //   }
 // });
 
+export const correctLoanAction = createAsyncThunk(
+  "loanApplication/approval",
+  async (payload) => {
+    try {
+      const response = await axios.patch(
+        `${API_URL}/loan-application/update-fields`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const disburseLoan = createAsyncThunk(
   "loanApplication/disburse",
   async ({ loanId, payload }) => {
@@ -117,7 +139,7 @@ export const loanStatementOfAccount = createAsyncThunk(
       const response = await axios.get(
         `${API_URL}/loan-application/${loanId}/statement-of-account`,
         {
-          responseType: 'blob', // Important to handle blob data
+          responseType: "blob", // Important to handle blob data
           headers: {
             Authorization: `Bearer ${user?.data?.token}`,
           },
