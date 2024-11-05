@@ -48,6 +48,7 @@ import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInv
 import { base64ToBlob, fetchPdf } from "@/app/components/helpers/utils";
 import Loader from "@/app/components/shared/Loader";
 import { loanApplicationAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import CorrectLoanModal from "@/app/components/loanApplication/ViewLoan/CorrectLoanModal";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -80,6 +81,7 @@ const ViewLoan = () => {
   const [logRepayment, setLogRepayment] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statementLoad, setStatementLoad] = useState(false);
+  const [openCorrectLoanModal, setOpenCorrectLoanModal] = useState(false);
   const [openDibursementDatePicker, setOpenDisbursementDatePicker] =
     useState(false);
   const [formData, setFormData] = useState({
@@ -698,46 +700,6 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="w-full md:w-[70%]">
-              {/* <div className="flex md:justify-end">
-                <div>
-                  <div className="text-sm  font-medium"> Loan Creator</div>
-                  <button
-                    onClick={() => {
-                      router.push(
-                        `/borrowers/profile/${data?.data?.customerDetails?._id}`
-                      );
-                    }}
-                    className={
-                      "text-swBlue text-sm bg-white py-2 rounded-lg font-medium underline"
-                    }
-                  >
-                    {data?.data?.loanApplication?.createdBy?.email}
-                  </button>
-                </div>
-                <div className="flex justify-end ml-8">
-                  <div>
-                    <h6 className="text-sm  font-medium">Disbursed Date</h6>
-                    <p className="text-swBlue text-sm bg-white py-2 rounded-lg font-medium">
-                      {data?.data?.loanApplication?.disbursedAt &&
-                        formatDate(
-                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
-                        )}
-                    </p>
-                  </div>
-                  <div>
-                    <Button
-                      size="normal"
-                      variant="primary"
-                      className="ml-12 text-xs rounded-md"
-                      onClick={() => getLoanStatement()}
-                      disabled={statementPending}
-                      blueBtn={true}
-                    >
-                      Generate Statement
-                    </Button>
-                  </div>
-                </div>
-              </div> */}
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID</p>
@@ -833,7 +795,17 @@ const ViewLoan = () => {
               </div>
             </div>
           </section>
-          <div className="ml-5 mr-5 mt-5">
+          <div className="m-5 mb-0">
+            {/* <div className="flex justify-end">
+              <Button
+                className="text-xs text-swBlue rounded-md"
+                onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
+                // disabled={statementLoad}
+                blueBtn={true}
+              >
+                Correct loan
+              </Button>
+            </div> */}
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
@@ -1868,6 +1840,12 @@ const ViewLoan = () => {
         </div>
       </CenterModal>
       <Loader isOpen={statementLoad} />
+      <CorrectLoanModal
+        isOpen={openCorrectLoanModal}
+        onClose={setOpenCorrectLoanModal}
+        data={data?.data}
+        id={id}
+      />
     </DashboardLayout>
   );
 };
