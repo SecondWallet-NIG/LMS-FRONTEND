@@ -55,7 +55,7 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
           acc[key] = Number(formData[key]);
           return acc;
         }, {}),
-        id,
+        loanId:id,
       };
 
       dispatch(correctLoanAction(payload))
