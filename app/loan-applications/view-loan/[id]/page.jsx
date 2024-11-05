@@ -941,10 +941,10 @@ const ViewLoan = () => {
                       <h1>Repayment Type</h1>
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Loan Frequency</h1>
+                      <h1>Outstanding Principal</h1>
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Number of Repayments</h1>
+                      <h1>Current Accured Interest</h1>
                     </th>
                   </tr>
                 </thead>
@@ -952,7 +952,7 @@ const ViewLoan = () => {
                   <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p>{data?.data?.loanApplication?.interestRate} %</p>
+                        <p>{data?.data?.loanApplication?.interestRate} % ({data?.data?.loanApplication?.interestType.interestTypeCode})</p>
                         {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
@@ -998,8 +998,8 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p>{data?.data?.loanApplication?.loanFrequencyType} </p>
-                        {hasDecline && hasDecline === true ? (
+                        <p className="text-swIndicatorLightRed">₦ {data?.data?.loanApplication?.outstandingPrincipal} </p>
+                        {/* {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
                             onClick={() => {
@@ -1011,12 +1011,12 @@ const ViewLoan = () => {
                           >
                             <MdEdit size={15} />
                           </div>
-                        ) : null}
+                        ) : null} */}
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        <p>{data?.data?.loanApplication?.numberOfRepayment} </p>
+                        <p  className="text-swIndicatorLightRed">₦ {data?.data?.loanApplication?.currentInterest} </p>
                       </div>
                     </td>
                   </tr>
@@ -1344,9 +1344,9 @@ const ViewLoan = () => {
           <p className="border-b border-gray-300 p-4 text-swGray font-semibold">
             Loan Processes
           </p>
-          <div className="p-2">
+          {/* <div className="p-2">
             <LoanProcessCard data={loanApprovals} />
-          </div>
+          </div> */}
           <div className="flex justify-end">
             {useriD?.role?.tag === "CFO" ||
             useriD?.role?.tag === "CEO" ||
