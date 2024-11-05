@@ -165,6 +165,7 @@ export const getPublicHolidays = (year) => {
 
 // Function to convert date string to ISO 8601 format
 export const convertDateToISO = (dateString) => {
+  console.log({dateString});
   // Parse the date string into a Date object
   const parsedDate = new Date(dateString);
 
