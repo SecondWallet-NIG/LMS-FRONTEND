@@ -40,6 +40,14 @@ export const handleCaptureClick = (loading, divID, fileName) => {
   }
 };
 
+export const checkDecimal = (str) => {
+  if (str?.includes(".")) {
+    const parts = str?.split(".");
+    return parts?.length > 1 && parts[1]?.length > 0;
+  }
+  return false;
+};
+
 const downloadScreenshot = (dataUrl, loading, fileName) => {
   // Create an anchor element with a download attribute to download the screenshot
   const a = document.createElement("a");
