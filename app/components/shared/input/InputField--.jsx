@@ -6,6 +6,7 @@ const InputField = ({
   placeholder,
   inputType,
   borderColor,
+  disabled,
   dropDown,
   customSelect,
   required,
@@ -41,6 +42,7 @@ const InputField = ({
           type={inputType}
           id={name}
           name={name}
+          disabled={disabled}
           placeholder={placeholder}
           className={`w-[100%] p-2 -ml-[0.55rem] ${
             inputOpen === isActive

@@ -48,6 +48,7 @@ import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInv
 import { base64ToBlob, fetchPdf } from "@/app/components/helpers/utils";
 import Loader from "@/app/components/shared/Loader";
 import { loanApplicationAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import CorrectLoanModal from "@/app/components/loanApplication/ViewLoan/CorrectLoanModal";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -80,6 +81,7 @@ const ViewLoan = () => {
   const [logRepayment, setLogRepayment] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statementLoad, setStatementLoad] = useState(false);
+  const [openCorrectLoanModal, setOpenCorrectLoanModal] = useState(false);
   const [openDibursementDatePicker, setOpenDisbursementDatePicker] =
     useState(false);
   const [formData, setFormData] = useState({
@@ -698,46 +700,6 @@ const ViewLoan = () => {
               </div>
             </div>
             <div className="w-full md:w-[70%]">
-              {/* <div className="flex md:justify-end">
-                <div>
-                  <div className="text-sm  font-medium"> Loan Creator</div>
-                  <button
-                    onClick={() => {
-                      router.push(
-                        `/borrowers/profile/${data?.data?.customerDetails?._id}`
-                      );
-                    }}
-                    className={
-                      "text-swBlue text-sm bg-white py-2 rounded-lg font-medium underline"
-                    }
-                  >
-                    {data?.data?.loanApplication?.createdBy?.email}
-                  </button>
-                </div>
-                <div className="flex justify-end ml-8">
-                  <div>
-                    <h6 className="text-sm  font-medium">Disbursed Date</h6>
-                    <p className="text-swBlue text-sm bg-white py-2 rounded-lg font-medium">
-                      {data?.data?.loanApplication?.disbursedAt &&
-                        formatDate(
-                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
-                        )}
-                    </p>
-                  </div>
-                  <div>
-                    <Button
-                      size="normal"
-                      variant="primary"
-                      className="ml-12 text-xs rounded-md"
-                      onClick={() => getLoanStatement()}
-                      disabled={statementPending}
-                      blueBtn={true}
-                    >
-                      Generate Statement
-                    </Button>
-                  </div>
-                </div>
-              </div> */}
               <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
                   <p className="text-sm font-medium">Loan ID</p>
@@ -833,7 +795,17 @@ const ViewLoan = () => {
               </div>
             </div>
           </section>
-          <div className="ml-5 mr-5 mt-5">
+          <div className="m-5 mb-0">
+            <div className="flex justify-end">
+              <Button
+                className="text-xs text-swBlue rounded-md"
+                onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
+                // disabled={statementLoad}
+                blueBtn={true}
+              >
+                Correct loan
+              </Button>
+            </div>
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
@@ -941,10 +913,10 @@ const ViewLoan = () => {
                       <h1>Repayment Type</h1>
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Loan Frequency</h1>
+                      <h1>Outstanding Principal</h1>
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Number of Repayments</h1>
+                      <h1>Current Accured Interest</h1>
                     </th>
                   </tr>
                 </thead>
@@ -952,7 +924,7 @@ const ViewLoan = () => {
                   <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p>{data?.data?.loanApplication?.interestRate} %</p>
+                        <p>{data?.data?.loanApplication?.interestRate} % ({data?.data?.loanApplication?.interestType.interestTypeCode})</p>
                         {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
@@ -998,8 +970,8 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p>{data?.data?.loanApplication?.loanFrequencyType} </p>
-                        {hasDecline && hasDecline === true ? (
+                        <p className="text-swIndicatorLightRed">₦ {data?.data?.loanApplication?.outstandingPrincipal} </p>
+                        {/* {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
                             onClick={() => {
@@ -1011,12 +983,12 @@ const ViewLoan = () => {
                           >
                             <MdEdit size={15} />
                           </div>
-                        ) : null}
+                        ) : null} */}
                       </div>
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        <p>{data?.data?.loanApplication?.numberOfRepayment} </p>
+                        <p  className="text-swIndicatorLightRed">₦ {data?.data?.loanApplication?.currentInterest} </p>
                       </div>
                     </td>
                   </tr>
@@ -1344,9 +1316,9 @@ const ViewLoan = () => {
           <p className="border-b border-gray-300 p-4 text-swGray font-semibold">
             Loan Processes
           </p>
-          <div className="p-2">
+          {/* <div className="p-2">
             <LoanProcessCard data={loanApprovals} />
-          </div>
+          </div> */}
           <div className="flex justify-end">
             {useriD?.role?.tag === "CFO" ||
             useriD?.role?.tag === "CEO" ||
@@ -1868,6 +1840,12 @@ const ViewLoan = () => {
         </div>
       </CenterModal>
       <Loader isOpen={statementLoad} />
+      <CorrectLoanModal
+        isOpen={openCorrectLoanModal}
+        onClose={setOpenCorrectLoanModal}
+        // data={data?.data}
+        id={data?.data?.loanApplication?.loanId}
+      />
     </DashboardLayout>
   );
 };

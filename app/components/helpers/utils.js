@@ -40,6 +40,14 @@ export const handleCaptureClick = (loading, divID, fileName) => {
   }
 };
 
+export const checkDecimal = (str) => {
+  if (str?.includes(".")) {
+    const parts = str?.split(".");
+    return parts?.length > 1 && parts[1]?.length > 0;
+  }
+  return false;
+};
+
 const downloadScreenshot = (dataUrl, loading, fileName) => {
   // Create an anchor element with a download attribute to download the screenshot
   const a = document.createElement("a");
@@ -157,6 +165,7 @@ export const getPublicHolidays = (year) => {
 
 // Function to convert date string to ISO 8601 format
 export const convertDateToISO = (dateString) => {
+  console.log({dateString});
   // Parse the date string into a Date object
   const parsedDate = new Date(dateString);
 
@@ -170,4 +179,36 @@ export const convertDateToISOWithAddedHour = (dateString) => {
   const parsedDate = new Date(dateString);
   parsedDate.setHours(parsedDate.getHours() + 1);
   return parsedDate.toISOString();
+};
+
+export const handleInputChangeWithComma = (e,setFormData) => {
+  const value = e.target.value.replace(/,/g, "");
+
+  setFormData((prevData) => ({
+    ...prevData,
+    [e.target.name]: value,
+  }));
+};
+
+export const preventMinus = (e) => {
+  const allowedKeys = [
+    "Backspace",
+    "Delete",
+    "ArrowLeft",
+    "ArrowRight",
+    "Tab",
+    ".",
+  ];
+
+  if (allowedKeys.includes(e.key)) {
+    return;
+  }
+
+  // Prevent if it's not a digit and prevent multiple decimals
+  if (
+    !/^[0-9.]$/.test(e.key) ||
+    (e.key === "." && e.target.value.includes("."))
+  ) {
+    e.preventDefault();
+  }
 };
