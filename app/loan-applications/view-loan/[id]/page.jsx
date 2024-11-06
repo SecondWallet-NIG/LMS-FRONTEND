@@ -796,7 +796,7 @@ const ViewLoan = () => {
             </div>
           </section>
           <div className="m-5 mb-0">
-            {/* <div className="flex justify-end">
+            <div className="flex justify-end">
               <Button
                 className="text-xs text-swBlue rounded-md"
                 onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
@@ -805,7 +805,7 @@ const ViewLoan = () => {
               >
                 Correct loan
               </Button>
-            </div> */}
+            </div>
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
               <table className=" w-full ">
@@ -1843,8 +1843,8 @@ const ViewLoan = () => {
       <CorrectLoanModal
         isOpen={openCorrectLoanModal}
         onClose={setOpenCorrectLoanModal}
-        data={data?.data}
-        id={id}
+        // data={data?.data}
+        id={data?.data?.loanApplication?.loanId}
       />
     </DashboardLayout>
   );
