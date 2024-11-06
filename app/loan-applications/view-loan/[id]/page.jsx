@@ -1316,9 +1316,9 @@ const ViewLoan = () => {
           <p className="border-b border-gray-300 p-4 text-swGray font-semibold">
             Loan Processes
           </p>
-          {/* <div className="p-2">
+          <div className="p-2">
             <LoanProcessCard data={loanApprovals} />
-          </div> */}
+          </div>
           <div className="flex justify-end">
             {useriD?.role?.tag === "CFO" ||
             useriD?.role?.tag === "CEO" ||
