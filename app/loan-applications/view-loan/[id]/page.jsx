@@ -532,6 +532,7 @@ const ViewLoan = () => {
     const _user = JSON.parse(localStorage.getItem("user"));
     if (_user) {
       setUser(_user?.data?.user);
+      console.log({ x: _user?.data?.user.role.tag });
     }
     if (data) {
       setLoanAmount(data?.data?.loanApplication?.loanAmount);
@@ -797,14 +798,16 @@ const ViewLoan = () => {
           </section>
           <div className="m-5 mb-0">
             <div className="flex justify-end">
-              <Button
-                className="text-xs text-swBlue rounded-md"
-                onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
-                // disabled={statementLoad}
-                blueBtn={true}
-              >
-                Correct loan
-              </Button>
+              {user?.role?.tag === "CFO" || "CTO" || "Dir" || "FO" ? (
+                <Button
+                  className="text-xs text-swBlue rounded-md"
+                  onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
+                  // disabled={statementLoad}
+                  blueBtn={true}
+                >
+                  Correct loan
+                </Button>
+              ) : null}
             </div>
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
             <div className="border rounded-lg overflow-auto">
@@ -924,7 +927,14 @@ const ViewLoan = () => {
                   <tr className="text-start text-[14px]">
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p>{data?.data?.loanApplication?.interestRate} % ({data?.data?.loanApplication?.interestType.interestTypeCode})</p>
+                        <p>
+                          {data?.data?.loanApplication?.interestRate} % (
+                          {
+                            data?.data?.loanApplication?.interestType
+                              .interestTypeCode
+                          }
+                          )
+                        </p>
                         {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
@@ -970,7 +980,9 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div className="flex gap-2 items-center">
-                        <p className="text-swIndicatorLightRed">₦ {data?.data?.loanApplication?.outstandingPrincipal} </p>
+                        <p className="text-swIndicatorLightRed">
+                          ₦ {data?.data?.loanApplication?.outstandingPrincipal}{" "}
+                        </p>
                         {/* {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
@@ -988,7 +1000,9 @@ const ViewLoan = () => {
                     </td>
                     <td className="w-1/4 px-3 py-3">
                       <div>
-                        <p  className="text-swIndicatorLightRed">₦ {data?.data?.loanApplication?.currentInterest} </p>
+                        <p className="text-swIndicatorLightRed">
+                          ₦ {data?.data?.loanApplication?.currentInterest}{" "}
+                        </p>
                       </div>
                     </td>
                   </tr>
