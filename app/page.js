@@ -14,6 +14,7 @@ export default function Home() {
     if (_user) {
       setUser(_user);
       setRoleTag(_user?.data?.user?.role.tag);
+      console.log(_user?.data?.user?.role.tag)
     }
     setLoading(false);
   }, []);
