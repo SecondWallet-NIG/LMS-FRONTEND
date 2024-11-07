@@ -961,7 +961,7 @@ function ReusableDataTable({
   const [downloadData, setDownloadData] = useState();
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(10);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
   const [isLoading, setIsLoading] = useState(true);
   const [sortDirection, setSortDirection] = useState(
