@@ -18,6 +18,7 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
     outstandingPrincipal: "",
     currentInterest: "",
     outstandingBalance: "",
+    overdueAccurals: ""
   });
   const [successModal, setSuccessModal] = useState({
     state: false,
@@ -33,6 +34,7 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
       outstandingPrincipal: "",
       currentInterest: "",
       outstandingBalance: "",
+      overdueAccurals: ""
     });
   };
 
@@ -82,14 +84,15 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
     if (formData.outstandingPrincipal && formData.currentInterest) {
       const outstandingBalance =
         Number(formData.outstandingPrincipal) +
-        Number(formData.currentInterest);
+        Number(formData.currentInterest) +
+        Number(formData.overdueAccurals);
 
       setFormData((prev) => ({
         ...prev,
         outstandingBalance: String(outstandingBalance),
       }));
     }
-  }, [formData.outstandingPrincipal, formData.currentInterest]);
+  }, [formData.outstandingPrincipal, formData.currentInterest, formData.overdueAccurals]);
 
   if (!isOpen) return null;
   return (
@@ -147,6 +150,30 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
               : checkDecimal(formData.currentInterest)
               ? Number(formData.currentInterest).toLocaleString("en-US")
               : formData.currentInterest
+          }
+          onKeyPress={preventMinus}
+          onChange={(e) => {
+            handleInputChangeWithComma(e, setFormData);
+          }}
+        />
+          <InputField
+          name="overdueAccurals"
+          label="Overdue Accurals"
+          required={true}
+          // disabled={true}
+          placeholder="Enter amount"
+          onWheel={() => {
+            const activeElement = document.activeElement;
+            if (activeElement) {
+              activeElement.blur();
+            }
+          }}
+          value={
+            !formData.overdueAccurals.includes(".")
+              ? Number(formData.overdueAccurals).toLocaleString("en-US")
+              : checkDecimal(formData.overdueAccurals)
+              ? Number(formData.overdueAccurals).toLocaleString("en-US")
+              : formData.overdueAccurals
           }
           onKeyPress={preventMinus}
           onChange={(e) => {

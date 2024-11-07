@@ -103,6 +103,7 @@ const PaymentPage = () => {
       userRole === "CTO" ||
       userRole === "CFO" ||
       userRole === "Dir" ||
+      userRole === "FO" ||
       userRole === "SYSTEM ADMIN"
     ) {
       setShowApprovalBtns(true);
