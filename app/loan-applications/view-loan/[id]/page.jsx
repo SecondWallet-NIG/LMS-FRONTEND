@@ -1857,8 +1857,7 @@ const ViewLoan = () => {
       <CorrectLoanModal
         isOpen={openCorrectLoanModal}
         onClose={setOpenCorrectLoanModal}
-        // data={data?.data}
-        id={data?.data?.loanApplication?.loanId}
+        data={data?.data}
       />
     </DashboardLayout>
   );

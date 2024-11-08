@@ -7,18 +7,23 @@ import {
 import InputField from "../../shared/input/InputField";
 import Button from "../../shared/buttonComponent/Button";
 import { useDispatch } from "react-redux";
-import { correctLoanAction } from "@/redux/slices/loanApplicationSlice";
+import {
+  correctLoanAction,
+  getSingleLoan,
+} from "@/redux/slices/loanApplicationSlice";
 import SuccessModal from "../../modals/SuccessModal";
 import CancelModal from "../../modals/CancelModal";
+import { useParams } from "next/navigation";
 
-const CorrectLoanModal = ({ isOpen, onClose, id }) => {
+const CorrectLoanModal = ({ isOpen, onClose, data }) => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     outstandingPrincipal: "",
     currentInterest: "",
     outstandingBalance: "",
-    overdueAccurals: ""
+    overdueAccurals: "",
   });
   const [successModal, setSuccessModal] = useState({
     state: false,
@@ -34,7 +39,7 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
       outstandingPrincipal: "",
       currentInterest: "",
       outstandingBalance: "",
-      overdueAccurals: ""
+      overdueAccurals: "",
     });
   };
 
@@ -57,7 +62,7 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
           acc[key] = Number(formData[key]);
           return acc;
         }, {}),
-        loanId:id,
+        loanId: data?.loanApplication?.loanId,
       };
 
       dispatch(correctLoanAction(payload))
@@ -67,6 +72,7 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
             state: true,
             description: res?.message || "Loan has been corrected successfully",
           });
+          dispatch(getSingleLoan(id));
           setLoading(false);
         })
         .catch((err) => {
@@ -92,7 +98,11 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
         outstandingBalance: String(outstandingBalance),
       }));
     }
-  }, [formData.outstandingPrincipal, formData.currentInterest, formData.overdueAccurals]);
+  }, [
+    formData.outstandingPrincipal,
+    formData.currentInterest,
+    formData.overdueAccurals,
+  ]);
 
   if (!isOpen) return null;
   return (
@@ -156,7 +166,7 @@ const CorrectLoanModal = ({ isOpen, onClose, id }) => {
             handleInputChangeWithComma(e, setFormData);
           }}
         />
-          <InputField
+        <InputField
           name="overdueAccurals"
           label="Overdue Accurals"
           required={true}
