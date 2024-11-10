@@ -4,6 +4,7 @@ import { IoMdArrowDropright } from "react-icons/io";
 import LoanOfficerReport from "./LoanOfficerReport";
 import LoanProductsReport from "./LoanProductsReport";
 import FeeReport from "./FeeReport";
+import GeneralStatementOfAccount from "./GeneralStatementOfAccount";
 
 const ManagementReport = () => {
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
@@ -84,12 +85,26 @@ const ManagementReport = () => {
             <IoMdArrowDropright className="text-swGray" size={20} />
           )}
         </p>
+        <p
+          className={`${
+            reportToggle === "fee" && "text-swBlue font-semibold"
+          } p-2 w-full rounded-md cursor-pointer hover:bg-swLightGray flex justify-between items-center whitespace-nowrap`}
+          onClick={() => {
+            handleLoanToggle("gsa");
+          }}
+        >
+          General Statement of Account
+          {reportToggle === "gsa" && (
+            <IoMdArrowDropright className="text-swGray" size={20} />
+          )}
+        </p>
       </section>
 
       <section className="md:w-4/5">
         {reportToggle === "loan-officer" && <LoanOfficerReport />}
         {reportToggle === "loan-products" && <LoanProductsReport />}
         {reportToggle === "fee" && <FeeReport />}
+        {reportToggle === "gsa" && <GeneralStatementOfAccount />}
       </section>
     </main>
   );

@@ -43,6 +43,33 @@ export const getTeamManagementSummary = createAsyncThunk(
   }
 );
 
+export const generateGeneralStatementOfAccount = createAsyncThunk(
+  "team/generate", 
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = user?.data?.token;
+      if (!token) {
+        return rejectWithValue("Token is missing or invalid.");
+      }
+
+      // Set responseType to 'arraybuffer' to handle binary data (Excel file)
+      const response = await axios.get(`${API_URL}/financial-year/general/financial-statement`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: 'arraybuffer',  // Important: tells axios to treat response as binary data
+      });
+
+      console.log("API response", response);
+
+      return response.data;  // This will be a binary file (ArrayBuffer)
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message || "Something went wrong");
+    }
+  }
+);
+
+
 const reportSlice = createSlice({
   name: "report",
   initialState: {
@@ -98,7 +125,20 @@ const reportSlice = createSlice({
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;
-      });
+      })
+      .addCase(generateGeneralStatementOfAccount.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(generateGeneralStatementOfAccount.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(generateGeneralStatementOfAccount.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
 
   },
 });
