@@ -20,18 +20,45 @@ const RequestApproval = ({ data, approvalId, approvalLevel, onClose }) => {
     assignee: "",
   });
 
+  // const modifyUsersToApprove = (user) => {
+  //   if (Array.isArray(user)) {
+  //     console.log({approvalLevel});
+  //     const users = user.filter((item) => item?.role?.name === approvalLevel);
+
+  //     setUsersToApprove(
+  //       users.map((item) => ({
+  //         label: item.firstName + " " + item.lastName,
+  //         value: item._id,
+  //       }))
+  //     );
+  //   }
+  // };
+
   const modifyUsersToApprove = (user) => {
     if (Array.isArray(user)) {
-      const users = user.filter((item) => item?.role?.name === approvalLevel);
-
+      // Filter users based on role
+      const users = user.filter((item) => {
+        // Check for approvalLevel being "CFO"
+        if (approvalLevel === 'Chief Financial Officer') {
+          return (
+            item?.role?.name === 'Chief Financial Officer' ||
+            item?.role?.name === 'Finance Officer'
+          );
+        } else {
+          return item?.role?.name === approvalLevel;
+        }
+      });
+  
+      // Update users to approve
       setUsersToApprove(
         users.map((item) => ({
-          label: item.firstName + " " + item.lastName,
+          label: `${item.firstName} ${item.lastName}`,
           value: item._id,
         }))
       );
     }
   };
+  
 
   const handleInputChange = async (e) => {
     let { name, value } = e.target;
