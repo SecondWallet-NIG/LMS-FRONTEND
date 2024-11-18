@@ -653,7 +653,7 @@ const ViewLoan = () => {
                   </p>
 
                   <div className="flex gap-2 items-center h-fit w-fit mt-4">
-                    {useriD?.role?.tag === "CFO" ? (
+                    {useriD?.role?.tag === "CFO" || "FO" ? (
                       <Button
                         className={
                           "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
