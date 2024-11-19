@@ -31,7 +31,6 @@ export const myTaskAuthRoles = [
 ];
 
 // borrowers roles
-
 export const borrowersAuthRoles = [
   "LO",
   "CFO",

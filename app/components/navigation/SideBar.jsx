@@ -7,11 +7,9 @@ import { RiBox3Line } from "react-icons/ri";
 import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
 import {
   AiFillMoneyCollect,
-  AiOutlineSetting,
   AiFillDashboard,
 } from "react-icons/ai";
 import { BiMapAlt, BiSolidBuilding } from "react-icons/bi";
-import { GoSignOut } from "react-icons/go";
 import companyLogo from "../../../public/images/Logo.png";
 import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import SidebarLink from "../shared/sideBarLink/SidebarLink";
@@ -24,13 +22,29 @@ import {
   FiFileText,
 } from "react-icons/fi";
 import { IoMdAdd, IoMdCard, IoMdClose } from "react-icons/io";
-import { FaInbox, FaRegStar } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import Link from "next/link";
-import { LuArrowUpRight } from "react-icons/lu";
 import { PiCurrencyNgn } from "react-icons/pi";
+import {
+  assetManagementAuthRoles,
+  borrowersAuthRoles,
+  createLoanAuthRoles,
+  dashboardAuthRoles,
+  disbursementAuthRoles,
+  employeeDashboardAuthRoles,
+  expensesAuthRoles,
+  investorsAuthRoles,
+  loanApplicationAuthRoles,
+  loanDraftsAuthRoles,
+  myTaskAuthRoles,
+  paymentHistoryAuthRoles,
+  plansAuthRoles,
+  repaymentAuthRoles,
+  reportAuthRoles,
+  teamManagementAuthRoles,
+} from "../helpers/pageAuthRoles";
 
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
@@ -94,20 +108,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
           <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
             <div>
               <SidebarLink
-                allowedRoleTags={[
-                  "LO",
-                  "CFO",
-                  "CEO",
-                  "CAO",
-                  "ICO",
-                  "COF",
-                  "LR0",
-                  "CTO",
-                  "HRM",
-                  "Dir",
-                  "FO",
-                  "System Admin",
-                ]}
+                allowedRoleTags={dashboardAuthRoles}
                 userRoleTag={userRoleTag}
                 icon={
                   <TbAntennaBars5
@@ -126,20 +127,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               />
             </div>
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "LR0",
-                "CTO",
-                "FO",
-                "HRM",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={myTaskAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <RiBox3Line
@@ -167,19 +155,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "LR0",
-                "FO",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={borrowersAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiUser
@@ -206,7 +182,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }
             />
             <SidebarLink
-              allowedRoleTags={["LO"]}
+              allowedRoleTags={createLoanAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <IoMdAdd
@@ -244,19 +220,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={loanApplicationAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiFile
@@ -275,19 +239,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={loanDraftsAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiFileText
@@ -306,19 +258,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={disbursementAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiSend
@@ -339,19 +279,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
 
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "CTO",
-                "LR0",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={repaymentAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiArrowDownLeft
@@ -370,19 +298,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
 
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "FO",
-                "ICO",
-                "COF",
-                "CTO",
-                "LR0",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={paymentHistoryAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <AiFillMoneyCollect
@@ -407,17 +323,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
         <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
           <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""} `}>
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "FO",
-                "CEO",
-                "CAO",
-                "HRM",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={reportAuthRoles}
               userRoleTag={userRoleTag}
               icon={<TbReportMoney size={20} />}
               text="Report"
@@ -426,38 +332,17 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
 
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={plansAuthRoles}
               userRoleTag={userRoleTag}
               icon={<BiMapAlt size={20} />}
               text="Loan packages"
               link="/plans"
               sideBarOpen={sideBarOpen}
             />
-            {userRoleTag === "System Admin" ||
-            userRoleTag === "CFO" ||
-            userRoleTag === "CTO" ||
-            userRoleTag === "HRM" ||
-            userRoleTag === "CEO" ||
-            userRoleTag === "HRM" ||
-            userRoleTag === "Dir" ? (
+            {teamManagementAuthRoles.includes(userRoleTag) ? (
               <>
                 <SidebarLink
-                  allowedRoleTags={[
-                    "CFO",
-                    "CEO",
-                    "CTO",
-                    "Dir",
-                    "HRM",
-                    "System Admin",
-                  ]}
+                  allowedRoleTags={teamManagementAuthRoles}
                   userRoleTag={userRoleTag}
                   icon={<FaPeopleGroup size={20} />}
                   text="Team management"
@@ -479,17 +364,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               </>
             ) : null}
             <SidebarLink
-              allowedRoleTags={[
-                // "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "HRM",
-                "CTO",
-                "OFA",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={assetManagementAuthRoles}
               userRoleTag={userRoleTag}
               icon={<BiSolidBuilding size={20} />}
               text="Asset management"
@@ -497,17 +372,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               sideBarOpen={sideBarOpen}
             />
             <SidebarLink
-              allowedRoleTags={[
-                // "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "CTO",
-                "HRM",
-                "Dir",
-                "OFA",
-                "System Admin",
-              ]}
+              allowedRoleTags={expensesAuthRoles}
               userRoleTag={userRoleTag}
               icon={<PiCurrencyNgn size={20} />}
               text="Expenses"
@@ -516,19 +381,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
 
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={investorsAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiUser
@@ -546,22 +399,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "GS",
-                "FO",
-                "CTO",
-                "LR0",
-                "Dir",
-                "OFA",
-                "HRM",
-                "System Admin",
-              ]}
+              allowedRoleTags={employeeDashboardAuthRoles}
               userRoleTag={userRoleTag}
               icon={<AiFillDashboard size={20} />}
               text="Employee Dashboard"
@@ -573,37 +411,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
           </div>
         </div>
-
-        {/*<div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
-          <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
-             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "LR0",
-                "CTO",
-                "Dir",
-                "OFA",
-                "System Admin",
-              ]}
-              userRoleTag={userRoleTag}
-              icon={<GoSignOut size={20} />}
-              text="Sign Out"
-              link="/"
-              sideBarOpen={sideBarOpen}
-              onClick={() => {
-                handleSidebarOpen(false);
-                localStorage.removeItem("user");
-                localStorage.removeItem("email");
-                //localStorage.clear();
-              }}
-            /> 
-          </div>
-        </div>*/}
       </div>
 
       {/* Small screens */}
@@ -624,20 +431,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
           <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
             <div>
               <SidebarLink
-                allowedRoleTags={[
-                  "LO",
-                  "CFO",
-                  "CEO",
-                  "CAO",
-                  "ICO",
-                  "COF",
-                  "FO",
-                  "LR0",
-                  "CTO",
-                  "HRM",
-                  "Dir",
-                  "System Admin",
-                ]}
+                allowedRoleTags={dashboardAuthRoles}
                 userRoleTag={userRoleTag}
                 icon={
                   <TbAntennaBars5
@@ -656,20 +450,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               />
             </div>
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "LR0",
-                "FO",
-                "CTO",
-                "HRM",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={myTaskAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <RiBox3Line
@@ -697,19 +478,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "FO",
-                "ICO",
-                "COF",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={borrowersAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiUser
@@ -736,7 +505,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }
             />
             <SidebarLink
-              allowedRoleTags={["LO"]}
+              allowedRoleTags={createLoanAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <IoMdAdd
@@ -774,18 +543,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={loanApplicationAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiFile
@@ -804,19 +562,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={loanDraftsAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiFileText
@@ -835,19 +581,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={disbursementAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiSend
@@ -868,19 +602,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
 
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "CTO",
-                "LR0",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={repaymentAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiArrowDownLeft
@@ -899,19 +621,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
 
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "COF",
-                "FO",
-                "CTO",
-                "LR0",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={paymentHistoryAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <AiFillMoneyCollect
@@ -936,17 +646,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
         <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
           <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""} `}>
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "FO",
-                "HRM",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={reportAuthRoles}
               userRoleTag={userRoleTag}
               icon={<TbReportMoney size={20} />}
               text="Report"
@@ -955,38 +655,17 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
 
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={plansAuthRoles}
               userRoleTag={userRoleTag}
               icon={<BiMapAlt size={20} />}
               text="Loan packages"
               link="/plans"
               sideBarOpen={sideBarOpen}
             />
-            {userRoleTag === "System Admin" ||
-            userRoleTag === "CFO" ||
-            userRoleTag === "CTO" ||
-            userRoleTag === "HRM" ||
-            userRoleTag === "CEO" ||
-            userRoleTag === "HRM" ||
-            userRoleTag === "Dir" ? (
+            {teamManagementAuthRoles.includes(userRoleTag) ? (
               <>
                 <SidebarLink
-                  allowedRoleTags={[
-                    "CFO",
-                    "CEO",
-                    "CTO",
-                    "Dir",
-                    "HRM",
-                    "System Admin",
-                  ]}
+                  allowedRoleTags={teamManagementAuthRoles}
                   userRoleTag={userRoleTag}
                   icon={<FaPeopleGroup size={20} />}
                   text="Team management"
@@ -1008,17 +687,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               </>
             ) : null}
             <SidebarLink
-              allowedRoleTags={[
-                // "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "HRM",
-                "CTO",
-                "OFA",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={assetManagementAuthRoles}
               userRoleTag={userRoleTag}
               icon={<BiSolidBuilding size={20} />}
               text="Asset management"
@@ -1026,17 +695,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               sideBarOpen={sideBarOpen}
             />
             <SidebarLink
-              allowedRoleTags={[
-                // "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "CTO",
-                "HRM",
-                "Dir",
-                "OFA",
-                "System Admin",
-              ]}
+              allowedRoleTags={expensesAuthRoles}
               userRoleTag={userRoleTag}
               icon={<PiCurrencyNgn size={20} />}
               text="Expenses"
@@ -1045,19 +704,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
 
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "FO",
-                "ICO",
-                "COF",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
+              allowedRoleTags={investorsAuthRoles}
               userRoleTag={userRoleTag}
               icon={
                 <FiUser
@@ -1075,22 +722,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }}
             />
             <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "FO",
-                "COF",
-                "GS",
-                "CTO",
-                "LR0",
-                "Dir",
-                "OFA",
-                "HRM",
-                "System Admin",
-              ]}
+              allowedRoleTags={employeeDashboardAuthRoles}
               userRoleTag={userRoleTag}
               icon={<AiFillDashboard size={20} />}
               text="Employee Dashboard"
@@ -1102,39 +734,6 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
             />
           </div>
         </div>
-
-        {/* <div className="py-1 border-t border-t-swGray text-lg xl:text-xl mt-auto">
-          <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""}`}>
-            
-            <SidebarLink
-              allowedRoleTags={[
-                "LO",
-                "CFO",
-                "CEO",
-                "CAO",
-                "ICO",
-                "HRM",
-                "GS",
-                "COF",
-                "LR0",
-                "CTO",
-                "Dir",
-                "System Admin",
-              ]}
-              userRoleTag={userRoleTag}
-              icon={<GoSignOut size={20} />}
-              text="Sign Out"
-              link="/"
-              sideBarOpen={sideBarOpen}
-              onClick={() => {
-                handleSidebarOpen(false);
-                localStorage.removeItem("user");
-                localStorage.removeItem("email");
-                // localStorage.clear();
-              }}  
-            />
-          </div>
-        </div> */}
       </div>
     </main>
   );
