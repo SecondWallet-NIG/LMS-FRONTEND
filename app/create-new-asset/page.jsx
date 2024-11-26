@@ -321,7 +321,7 @@ const CreateNewAsset = () => {
                 endIcon={<p className="text-swGray">NGN &#8358;</p>}
                 label="Value"
                 value={formData?.value?.toLocaleString()}
-                placeholder="Enter loan amount"
+                placeholder="Enter asset amount"
                 onChange={handleChange}
               />
             </div>
