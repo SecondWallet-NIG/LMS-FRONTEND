@@ -185,7 +185,6 @@ const CustomerRepayment = ({ loanId }) => {
   const handleInputChangeWithComma = (e) => {
     const value = e.target.value.replace(/,/g, "");
     // const value = e.target.value;
-    console.log({ value });
     setFormData((prevData) => ({
       ...prevData,
       [e.target.name]: value,
@@ -246,8 +245,6 @@ const CustomerRepayment = ({ loanId }) => {
         setLoading(false);
       });
   };
-
-  console.log(formData);
 
   return (
     <div className="w-full">
