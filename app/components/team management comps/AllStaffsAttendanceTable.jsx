@@ -16,7 +16,6 @@ const AllStaffsAttendanceTable = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({ apiData });
     return apiData?.attendances?.map((item) => ({
       id: item?.user?._id,
 

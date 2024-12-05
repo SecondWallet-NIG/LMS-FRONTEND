@@ -16,7 +16,6 @@ const Attendance = ({ isDashboard }) => {
   ];
 
   const customDataTransformer = (apiData) => {
-    console.log({ apiData });
     return apiData?.attendances?.map((item) => ({
       id: item._id,
 
