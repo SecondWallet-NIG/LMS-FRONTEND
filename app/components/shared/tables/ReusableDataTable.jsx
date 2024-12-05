@@ -657,7 +657,6 @@
 //                     />
 //                   </div>
 
-             
 //                 </div>
 //                 <div className="flex">
 //                   {btnText ? (
@@ -913,7 +912,6 @@
 
 // export default ReusableDataTable;
 
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { FiFilter, FiSearch } from "react-icons/fi";
@@ -1039,6 +1037,7 @@ function ReusableDataTable({
           data?.data?.data?.investmentProducts ||
           data?.data?.data?.investorProfiles ||
           data?.data?.data?.investments ||
+          data?.data?.data?.attendances||
           data?.data?.data?.assets ||
           data?.data.results ||
           data?.data?.data;
@@ -1294,6 +1293,7 @@ function ReusableDataTable({
                 data?.data?.results ||
                 data?.data?.data ||
                 data?.data?.expenses ||
+                data?.data?.data?.attendances ||
                 data?.results ||
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results ||
