@@ -329,6 +329,29 @@ export const getSingleInvestor = createAsyncThunk(
   }
 );
 
+export const updateSingleInvestor = createAsyncThunk(
+  "/investment/investor/id/update",
+  async ({ id, payload }) => {
+    try {
+      let token = getToken();
+      const response = await axios.put(
+        `${API_URL}/investment/investor/${id}/update`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const getInvestorCards = createAsyncThunk(
   "investment/investor/cards-data",
   async () => {
