@@ -532,7 +532,6 @@ const ViewLoan = () => {
     const _user = JSON.parse(localStorage.getItem("user"));
     if (_user) {
       setUser(_user?.data?.user);
-      console.log({ x: _user?.data?.user.role.tag });
     }
     if (data) {
       setLoanAmount(data?.data?.loanApplication?.loanAmount);
@@ -798,7 +797,9 @@ const ViewLoan = () => {
           </section>
           <div className="m-5 mb-0">
             <div className="flex justify-end">
-              {user?.role?.tag === "CFO" || "CTO" || "Dir" || "FO" ? (
+              {["CFO", "CTO", "ICO", "Dir", "FO"].includes(
+                useriD?.role?.tag
+              ) ? (
                 <Button
                   className="text-xs text-swBlue rounded-md"
                   onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}

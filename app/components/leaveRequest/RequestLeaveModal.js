@@ -60,11 +60,7 @@ const RequestLeaveModal = ({ onClose }) => {
     const { name, value } = e.target;
 
     setFormData({ ...formData, [name]: value });
-
   };
-
-  console.log(startDate)
-  console.log(endDate)
   const handleSubmit = () => {
     if (formData.leaveDuration < 1) {
       toast.error("Invalid leave duration: Duration should be 1 and above");
@@ -160,7 +156,6 @@ const RequestLeaveModal = ({ onClose }) => {
       dispatch(getUserById(id));
     }
   }, [id]);
-
 
   return (
     <div>
