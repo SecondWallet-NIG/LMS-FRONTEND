@@ -20,6 +20,7 @@ import InvestorProfileDocs from "@/app/components/investor-profile/InvestorProfi
 import InvestorBioData from "@/app/components/investor-profile/InvestorBioData";
 import InvestorWorkData from "@/app/components/investor-profile/InvestorWorkData";
 import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { MdOutlineEdit } from "react-icons/md";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -171,9 +172,19 @@ const InvestorProfile = () => {
                   <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
                     <Link
                       href={`mailto:${data?.data?.email}`}
+                      title="Email"
                       className="bg-white border border-gray-300 w-fit p-2 rounded-md"
                     >
                       <AiOutlineMail size={15} />
+                    </Link>
+                  </div>
+                  <div className="p-[0.1rem] bg-transparent hover:bg-gray-200 w-fit h-fit m-auto rounded-md flex">
+                    <Link
+                      href={`/investors/update-investor/${id}`}
+                      title="Update investor"
+                      className="bg-white border border-gray-300 w-fit p-2 rounded-md"
+                    >
+                      <MdOutlineEdit size={15} />
                     </Link>
                   </div>
                 </div>
