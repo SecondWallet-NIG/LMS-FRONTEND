@@ -272,34 +272,67 @@ const CreateInvestor = () => {
     setLoading(true);
 
     let payload = new FormData();
-    payload.append("profilePicture", formData.profilePicture);
-    payload.append("firstName", formData.firstName);
-    payload.append("lastName", formData.lastName);
-    payload.append("middleName", formData.middleName);
-    payload.append("dateOfBirth", formData.dateOfBirth);
-    payload.append("gender", formData.gender);
-    payload.append("nin", formData.nin);
-    payload.append("bvn", formData.bvn);
-    payload.append("country", formData.country);
-    payload.append("state", formData.state);
-    payload.append("lga", formData.lga);
-    payload.append("address[houseNumber]", formData.houseNumber);
-    payload.append("address[houseLocation]", formData.houseLocation);
-    payload.append("phoneNumber", formData.phoneNumber);
-    payload.append("email", formData.email);
-    payload.append("bankAccount[accountNumber]", formData.accountNumber);
-    payload.append("bankAccount[accountName]", formData.accountName);
-    payload.append("bankAccount[bankName]", formData.bankName);
-    payload.append(
-      "annualIncome",
-      removeCommasFromNumber(formData.annualIncome)
-    );
-    payload.append("networth", removeCommasFromNumber(formData.networth));
-    payload.append("sourceOfIncome", formData.sourceOfIncome);
-    payload.append("workStatus", formData.workStatus);
-    payload.append("taxDoc", formData.taxDoc);
-    payload.append("bvnDoc", formData.bvnDoc);
-    payload.append("ninDoc", formData.ninDoc);
+    const keysToAppend = Object.keys(formData);
+
+    keysToAppend.forEach((key) => {
+      if (formData[key]) {
+        if (key === "annualIncome" || key === "networth") {
+          payload.append(key, removeCommasFromNumber(formData[key]));
+        } else if (
+          key !== "accountNumber" &&
+          key !== "accountName" &&
+          key !== "bankName" &&
+          key !== "houseNumber" &&
+          key !== "houseLocation"
+        ) {
+          payload.append(key, formData[key]);
+        }
+      }
+    });
+    if (formData.houseNumber && formData.houseLocation) {
+      const address = {
+        houseNumber: formData.houseNumber,
+        houseLocation: formData.houseLocation,
+      };
+      payload.append("address", JSON.stringify(address));
+    }
+    if (formData.accountNumber && formData.accountName && formData.bankName) {
+      const bankAccount = {
+        accountNumber: formData.accountNumber,
+        accountName: formData.accountName,
+        bankName: formData.bankName,
+      };
+      payload.append("bankAccount", JSON.stringify(bankAccount));
+    }
+
+    // payload.append("profilePicture", formData.profilePicture);
+    // payload.append("firstName", formData.firstName);
+    // payload.append("lastName", formData.lastName);
+    // payload.append("middleName", formData.middleName);
+    // payload.append("dateOfBirth", formData.dateOfBirth);
+    // payload.append("gender", formData.gender);
+    // payload.append("nin", formData.nin);
+    // payload.append("bvn", formData.bvn);
+    // payload.append("country", formData.country);
+    // payload.append("state", formData.state);
+    // payload.append("lga", formData.lga);
+    // payload.append("address[houseNumber]", formData.houseNumber);
+    // payload.append("address[houseLocation]", formData.houseLocation);
+    // payload.append("phoneNumber", formData.phoneNumber);
+    // payload.append("email", formData.email);
+    // payload.append("bankAccount[accountNumber]", formData.accountNumber);
+    // payload.append("bankAccount[accountName]", formData.accountName);
+    // payload.append("bankAccount[bankName]", formData.bankName);
+    // payload.append(
+    //   "annualIncome",
+    //   removeCommasFromNumber(formData.annualIncome)
+    // );
+    // payload.append("networth", removeCommasFromNumber(formData.networth));
+    // payload.append("sourceOfIncome", formData.sourceOfIncome);
+    // payload.append("workStatus", formData.workStatus);
+    // payload.append("taxDoc", formData.taxDoc);
+    // payload.append("bvnDoc", formData.bvnDoc);
+    // payload.append("ninDoc", formData.ninDoc);
 
     dispatch(createInvestor(payload))
       .unwrap()
@@ -371,7 +404,11 @@ const CreateInvestor = () => {
     setUserId(user);
   }, []);
   return (
-    <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]} roles={investorsAuthRoles}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Investors", "Create investor"]}
+      roles={investorsAuthRoles}
+    >
       <ToastContainer />
       <div className="mx-auto w-full px-10 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
