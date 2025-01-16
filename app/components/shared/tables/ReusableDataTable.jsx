@@ -958,10 +958,22 @@ function ReusableDataTable({
   const [dataCheck, setDataCheck] = useState(null);
   const [downloadData, setDownloadData] = useState();
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
   const [sortField, setSortField] = useState(sortedBy?.field || "");
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedPage = localStorage.getItem(`${apiEndpoint}_currentPage`);
+      return savedPage ? parseInt(savedPage) : 1;
+    }
+    return 1;
+  });
+  const [perPage, setPerPage] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedPerPage = localStorage.getItem(`${apiEndpoint}_perPage`);
+      return savedPerPage ? parseInt(savedPerPage) : 10;
+    }
+    return 10;
+  });
   const [sortDirection, setSortDirection] = useState(
     sortedBy?.direction || "asc"
   );
@@ -973,6 +985,7 @@ function ReusableDataTable({
   const [filterOptions, setFilterOptions] = useState(false);
   const [customiseOption, setCustomizeOption] = useState(false);
   const [customiseTableModal, setCustomizeTableModal] = useState(false);
+
   const [dateRange, setDateRange] = useState([
     {
       startDate: null,
@@ -981,6 +994,31 @@ function ReusableDataTable({
     },
   ]);
   const [status, setStatus] = useState(" ");
+
+  //Store pagination state in local storage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        `${apiEndpoint}_currentPage`,
+        currentPage.toString()
+      );
+      localStorage.setItem(`${apiEndpoint}_perPage`, perPage.toString());
+    }
+  }, [currentPage, perPage, apiEndpoint]);
+
+  // Clear pagination state when component unmounts
+  useEffect(() => {
+    return () => {
+      if (
+        typeof window !== "undefined" &&
+        !window.location.pathname.includes(onClickRow)
+      ) {
+        localStorage.removeItem(`${apiEndpoint}_currentPage`);
+        localStorage.removeItem(`${apiEndpoint}_perPage`);
+      }
+    };
+  }, [apiEndpoint, onClickRow]);
+
   const toggleDateFilter = () => {
     setDateFilterOpen(!dateFilterOpen);
   };
@@ -1037,7 +1075,7 @@ function ReusableDataTable({
           data?.data?.data?.investmentProducts ||
           data?.data?.data?.investorProfiles ||
           data?.data?.data?.investments ||
-          data?.data?.data?.attendances||
+          data?.data?.data?.attendances ||
           data?.data?.data?.assets ||
           data?.data.results ||
           data?.data?.data;
