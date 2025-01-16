@@ -797,7 +797,7 @@ const ViewLoan = () => {
           </section>
           <div className="m-5 mb-0">
             <div className="flex justify-end">
-              {["CFO", "CTO", "ICO", "Dir", "FO"].includes(
+              {["CFO", "CTO", "ICO", "Dir", "FO", "LO"].includes(
                 useriD?.role?.tag
               ) ? (
                 <Button
