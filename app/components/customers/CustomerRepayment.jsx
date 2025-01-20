@@ -17,6 +17,8 @@ import { FaRegCalendar } from "react-icons/fa";
 import { DayPicker } from "react-day-picker";
 import { checkDecimal } from "../helpers/utils";
 
+import ConfirmationModal from "../shared/warningModal/WarningModal";
+
 const CustomerRepayment = ({ loanId }) => {
   const dispatch = useDispatch();
   const [logRepayment, setLogRepayment] = useState(false);
@@ -246,6 +248,15 @@ const CustomerRepayment = ({ loanId }) => {
       });
   };
 
+  const [showClearBalanceConfirm, setShowClearBalanceConfirm] = useState(false);
+  const handleClearBalanceChange = (e) => {
+    if (e.target.checked) {
+      setShowClearBalanceConfirm(true);
+    } else {
+      setFormData((prev) => ({ ...prev, clearBalance: false }));
+    }
+  };
+
   return (
     <div className="w-full">
       <ToastContainer />
@@ -386,9 +397,8 @@ const CustomerRepayment = ({ loanId }) => {
                   name="clearBalance"
                   id="clearBalance"
                   className="h-5 w-5"
-                  onChange={(e) =>
-                    setFormData({ ...formData, clearBalance: e.target.checked })
-                  }
+                  checked={formData.clearBalance}
+                  onChange={handleClearBalanceChange}
                 />
                 Clear Balance
               </label>
@@ -462,6 +472,21 @@ const CustomerRepayment = ({ loanId }) => {
               </Button>
             </div>
           </div>
+          <ConfirmationModal
+            isOpen={showClearBalanceConfirm}
+            onClose={() => {
+              setShowClearBalanceConfirm(false);
+              setFormData((prev) => ({ ...prev, clearBalance: false }));
+            }}
+            onConfirm={() => {
+              setFormData((prev) => ({ ...prev, clearBalance: true }));
+              setShowClearBalanceConfirm(false);
+            }}
+            title="Clear Balance Confirmation"
+            message="Are you sure you want to clear the entire balance? This action will mark the loan as fully paid."
+            confirmText="Yes, Clear Balance"
+            cancelText="Cancel"
+          />
         </div>
       </CenterModal>
     </div>
