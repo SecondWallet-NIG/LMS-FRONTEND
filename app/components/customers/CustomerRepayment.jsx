@@ -19,7 +19,7 @@ import { checkDecimal } from "../helpers/utils";
 
 import ConfirmationModal from "../shared/warningModal/WarningModal";
 
-const CustomerRepayment = ({ loanId }) => {
+const CustomerRepayment = ({ loanId, status }) => {
   const dispatch = useDispatch();
   const [logRepayment, setLogRepayment] = useState(false);
   const [enableLogRepaymentBtn, setEnableLogRepaymentBtn] = useState(true);
@@ -272,17 +272,24 @@ const CustomerRepayment = ({ loanId }) => {
           />
         ) : null}
       </div>
-      <div className="mt-5 flex items-center justify-center">
-        <Button
-          disabled={enableLogRepayment === false ? false : true}
-          variant="secondary"
-          onClick={() => {
-            setLogRepayment(!logRepayment);
-          }}
-        >
-          Log Repayment
-        </Button>
-      </div>
+      {!(
+        status === "Fully Paid" ||
+        status === "Cleared Balance" ||
+        status === "Closed Off" ||
+        status === "Declined"
+      ) && (
+        <div className="mt-5 flex items-center justify-center">
+          <Button
+            disabled={enableLogRepayment === false ? false : true}
+            variant="secondary"
+            onClick={() => {
+              setLogRepayment(!logRepayment);
+            }}
+          >
+            Log Repayment
+          </Button>
+        </div>
+      )}
       <CenterModal isOpen={logRepayment} width={"40%"}>
         <div className="p-4">
           <div className="flex justify-between items-center text-white">
