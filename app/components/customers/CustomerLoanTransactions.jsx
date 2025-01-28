@@ -69,14 +69,33 @@ const CustomerLoanTransactions = ({ loanId }) => {
         </div>
       ),
       transactionStatement: (
-        <button
-        className={`${item?.transactionStatement === "Loan Interest Accrual"
-            ? "bg-[#ede6e6] text-swDarkRed text-xs font-normal px-2 py-1 rounded-full"
-            : "bg-swLightGreenIndcatorBg text-swGreen font-normal"
-        } px-2 py-1 rounded-full`}
-      >
-        {item?.transactionStatement}
-      </button>
+<button
+  className={`
+    ${item?.transactionStatement === "Loan Repayment" 
+      ? "bg-[#e0f7fa] text-[#004d40] text-xs font-normal px-2 py-1 rounded-full"
+      : item?.transactionStatement === "Loan Interest" 
+      ? "bg-[#ffebee] text-[#d32f2f] text-xs font-normal px-2 py-1 rounded-full"
+      : item?.transactionStatement === "Loan Disbursement"
+      ? "bg-[#e8f5e9] text-[#388e3c] text-xs font-normal px-2 py-1 rounded-full"
+      : item?.transactionStatement === "Overdue Fee" 
+      ? "bg-[#f3e5f5] text-[#7b1fa2] text-xs font-normal px-2 py-1 rounded-full"
+      : item?.transactionStatement === "Daily Loan Interest"
+      ? "bg-[#fff3e0] text-[#ff9800] text-xs font-normal px-2 py-1 rounded-full"
+      : item?.transactionStatement === "ON_START_OVERDUE_FEE_TOPUP"
+      ? "bg-[#ffeb3b] text-[#f57c00] text-xs font-normal px-2 py-1 rounded-full"
+      : item?.transactionStatement === "CRON_OVERDUE_FEE_TOPUP"
+      ? "bg-[#ff9800] text-[#bf360c] text-xs font-normal px-2 py-1 rounded-full"
+      : "bg-[#e8eaf6] text-[#303f9f] text-xs font-normal px-2 py-1 rounded-full"
+    }
+  `}
+>
+  {
+    item?.transactionStatement === "ON_START_OVERDUE_FEE_TOPUP" || item?.transactionStatement === "CRON_OVERDUE_FEE_TOPUP"
+      ? "Overdue Accrual"
+      : item?.transactionStatement
+  }
+</button>
+
       ),
     }));
   };
