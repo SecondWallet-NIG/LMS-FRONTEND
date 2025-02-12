@@ -53,7 +53,7 @@ const CustomerSummaryCard = ({ data, financialCards, healthData }) => {
       <p className="font-semibold text-xl text-black my-4">Financials</p>
       {data && (
         <main className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card
+          {/* <Card
             title="Annual Income"
             extraVal={data?.annualIncome?.toLocaleString() || 0}
             currency={"₦"}
@@ -62,7 +62,7 @@ const CustomerSummaryCard = ({ data, financialCards, healthData }) => {
             title="Networth"
             extraVal={data?.networth?.toLocaleString() || 0}
             currency={"₦"}
-          />
+          /> */}
           <Card
             title="Source of Income"
             extraVal={data?.sourceOfIncome || " "}
