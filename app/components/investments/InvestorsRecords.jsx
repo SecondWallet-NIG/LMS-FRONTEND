@@ -18,7 +18,7 @@ const header = [
   { id: "gender", label: "Gender" },
   { id: "state", label: "state" },
   { id: "phone", label: "Phone no" },
-  // { id: "annualIncome", label: "Annual income" },
+//   { id: "annualIncome", label: "Annual income" },
   { id: "workStatus", label: "Work status" },
   { id: "status", label: "Investor status" },
 ];
