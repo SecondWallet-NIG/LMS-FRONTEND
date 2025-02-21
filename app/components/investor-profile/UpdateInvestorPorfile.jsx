@@ -53,6 +53,8 @@ const UpdateInvestorPorfileScreen = () => {
     houseLocation: "",
     email: "",
     phoneNumber: "",
+    // annualIncome: "",
+    // networth: "",
     sourceOfIncome: "",
     accountNumber: "",
     accountName: "",
@@ -675,7 +677,6 @@ const UpdateInvestorPorfileScreen = () => {
         {/* Financial Information */}
         <div>
           <h6 className={`${headerClass}`}>Financial information</h6>
-
           <div className="w-full my-5">
             <InputField
               name={"sourceOfIncome"}
