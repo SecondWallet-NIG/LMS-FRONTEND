@@ -47,8 +47,8 @@ const CreateInvestor = () => {
     houseLocation: "",
     email: "",
     phoneNumber: "",
-    annualIncome: "",
-    networth: "",
+    // annualIncome: "",
+    // networth: "",
     sourceOfIncome: "",
     bankAccount: "",
     workStatus: "",
@@ -74,8 +74,8 @@ const CreateInvestor = () => {
       houseLocation: "",
       email: "",
       phoneNumber: "",
-      annualIncome: "",
-      networth: "",
+      // annualIncome: "",
+      // networth: "",
       sourceOfIncome: "",
       bankAccount: "",
       workStatus: "",
@@ -290,11 +290,11 @@ const CreateInvestor = () => {
     payload.append("bankAccount[accountNumber]", formData.accountNumber);
     payload.append("bankAccount[accountName]", formData.accountName);
     payload.append("bankAccount[bankName]", formData.bankName);
-    payload.append(
-      "annualIncome",
-      removeCommasFromNumber(formData.annualIncome)
-    );
-    payload.append("networth", removeCommasFromNumber(formData.networth));
+    // payload.append(
+    //   "annualIncome",
+    //   removeCommasFromNumber(formData.annualIncome)
+    // );
+    // payload.append("networth", removeCommasFromNumber(formData.networth));
     payload.append("sourceOfIncome", formData.sourceOfIncome);
     payload.append("workStatus", formData.workStatus);
     payload.append("taxDoc", formData.taxDoc);
@@ -371,7 +371,11 @@ const CreateInvestor = () => {
     setUserId(user);
   }, []);
   return (
-    <DashboardLayout isBackNav={true} paths={["Investors", "Create investor"]} roles={investorsAuthRoles}>
+    <DashboardLayout
+      isBackNav={true}
+      paths={["Investors", "Create investor"]}
+      roles={investorsAuthRoles}
+    >
       <ToastContainer />
       <div className="mx-auto w-full px-10 lg:w-3/5 mb-28">
         <h1 className="font-medium text-xl leading-7 text-black py-5">
@@ -508,7 +512,7 @@ const CreateInvestor = () => {
 
             <div className="w-full">
               <InputField
-                required={true}
+                required={false}
                 name="bvn"
                 onKeyPress={preventMinus}
                 onWheel={() => document.activeElement.blur()}
@@ -633,30 +637,6 @@ const CreateInvestor = () => {
         {/* Financial Information */}
         <div>
           <h6 className={`${headerClass}`}>Financial information</h6>
-          <div className="w-full my-5">
-            <InputField
-              name={"annualIncome"}
-              label={"Annual Income"}
-              placeholder={"Start typing"}
-              required={true}
-              value={formData.annualIncome}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="w-full">
-            <InputField
-              name={"networth"}
-              label={"Networth"}
-              placeholder={"Start typing"}
-              required={true}
-              value={formData.networth}
-              onChange={handleInputChange}
-            />
-            <p className="text-swGrey200 text-sm mt-1">
-              Assets minus Liabilities
-            </p>
-          </div>
 
           <div className="w-full my-5">
             <InputField

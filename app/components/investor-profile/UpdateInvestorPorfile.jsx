@@ -53,8 +53,8 @@ const UpdateInvestorPorfileScreen = () => {
     houseLocation: "",
     email: "",
     phoneNumber: "",
-    annualIncome: "",
-    networth: "",
+    // annualIncome: "",
+    // networth: "",
     sourceOfIncome: "",
     accountNumber: "",
     accountName: "",
@@ -678,7 +678,7 @@ const UpdateInvestorPorfileScreen = () => {
         {/* Financial Information */}
         <div>
           <h6 className={`${headerClass}`}>Financial information</h6>
-          <div className="w-full my-5">
+          {/* <div className="w-full my-5">
             <InputField
               name={"annualIncome"}
               label={"Annual Income"}
@@ -701,7 +701,7 @@ const UpdateInvestorPorfileScreen = () => {
             <p className="text-swGrey200 text-sm mt-1">
               Assets minus Liabilities
             </p>
-          </div>
+          </div> */}
 
           <div className="w-full my-5">
             <InputField
