@@ -6,11 +6,28 @@ import { AiOutlinePlus } from "react-icons/ai";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { useImmer } from "use-immer";
+import RightModal from "../modals/RightModal";
+import InputField from "../shared/input/InputField";
+//import Button from "../shared/buttonComponent/Button";
 
 export default function StaffDeptInfo({ data, isDashboard }) {
   const router = useRouter();
   const [user, setUser] = useState("");
+  const [openModal, setOpenModal] = useState(false);
   const [viewSalary, setViewSalary] = useState(false);
+  const [state, setState] = useImmer({
+    loading: false,
+    salary: "",
+    benefityType: "",
+    description: "",
+    benefits: [],
+    createdBy: "",
+    successModal: false,
+    successMessage: "",
+    failedModal: false,
+    failedMessage: "",
+  });
 
   const returnCardDetails = (name, value) => {
     return (
@@ -21,6 +38,40 @@ export default function StaffDeptInfo({ data, isDashboard }) {
     );
   };
 
+  const handleSubmit = () => {
+    setState((draft) => {
+      draft.loading = true;
+    });
+    const payload = {
+      description: "benefit description",
+      financialYear: finData?.data?._id,
+      salary: Number(removeCommasFromNumber(state.salary)),
+      benefitType: state.benefityType,
+      createdBy: state.createdBy,
+      userId: id,
+    };
+
+    dispatch(addEmployeeBenefit(payload))
+      .unwrap()
+      .then((res) => {
+        setState((draft) => {
+          draft.successModal = true;
+          draft.loading = false;
+          draft.successMessage =
+            res?.message || "Employee benefit added successfully.";
+        });
+        reset();
+      })
+      .catch((err) => {
+        setState((draft) => {
+          draft.failedModal = true;
+          draft.failedMessage =
+            err?.message || "Employee benefit creation failed.";
+          draft.loading = false;
+        });
+      });
+  };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -28,8 +79,6 @@ export default function StaffDeptInfo({ data, isDashboard }) {
       setUser(user);
     }
   }, []);
-
-  console.log(data?.user?.role?.department?.departmentHead);
 
   return (
     <div className="rounded-xl overflow-hidden h-full flex flex-col">
@@ -42,21 +91,13 @@ export default function StaffDeptInfo({ data, isDashboard }) {
             Important details about your department
           </p>
         </div>
-        {/* {!data?.user?.role?.department && !isDashboard ? (
-          <Button
-            className="border border-[#f7f7f7] text-[#f7f7f7] hover:bg-swDarkBlue text-sm p-3 rounded-md whitespace-nowrap flex gap-1"
-            onClick={() =>
-              router.push(
-                `/team-management/role/department/update/${data?.user?.role?._id}`
-              )
-            }
-          >
-            {!isDashboard && <AiOutlinePlus size={15} />}
-            <p className="">Add Department</p>
-          </Button>
-        ) : ( */}
+
         <div>
-          {(user?.role?.tag === "HRM" || "CFO" || "CTO" || "Dir" || isDashboard) && (
+          {(user?.role?.tag === "HRM" ||
+            "CFO" ||
+            "CTO" ||
+            "Dir" ||
+            isDashboard) && (
             <div className="flex items-end gap-2">
               {returnCardDetails(
                 "Salary",
@@ -83,6 +124,11 @@ export default function StaffDeptInfo({ data, isDashboard }) {
                   <IoEyeOutline className="-mt-6" size={20} />
                 )}
               </div>
+              <div>
+                <Button onClick={() => setOpenModal(true)}>
+                  Update Salary
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -106,12 +152,42 @@ export default function StaffDeptInfo({ data, isDashboard }) {
                   "None"}{" "}
                 {data?.user?.role?.department?.departmentHead?.lastName}
               </p>
-              <p className="text-swBlue">{data?.user?.role?.department?.departmentHead?.email}</p>
+              <p className="text-swBlue">
+                {data?.user?.role?.department?.departmentHead?.email}
+              </p>
             </div>
           )}
           {returnCardDetails("Role", data?.user?.role?.name || "None")}
         </div>
       </div>
+      <RightModal isOpen={openModal} onClose={() => setOpenModal(false)}>
+<div className="p-4">
+<InputField
+          required={true}
+          value={state.salary}
+          name={"salary"}
+          label={"Enter salary"}
+          placeholder={"0"}
+          onChange={(e) =>
+            setState((draft) => {
+              draft.salary = Number(
+                e.target.value.replace(/[^0-9.]/g, "")
+              ).toLocaleString();
+            })
+          }
+        />
+        <div className="p-3 border-t flex items-center justify-end gap-2 w-full">
+          <Button
+            disabled={!state.salary || !state.benefityType || state.loading}
+            onClick={handleSubmit}
+            className={`text-white font-semibold p-2 px-16 bg-swBlue 
+            hover:bg-swBluee500 rounded-md flex items-center gap-2`}
+          >
+            {state.loading ? "Adding..." : "Add Benefit"}
+          </Button>
+        </div>
+</div>
+      </RightModal>
     </div>
   );
 }
