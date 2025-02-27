@@ -9,16 +9,20 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useImmer } from "use-immer";
 import RightModal from "../modals/RightModal";
 import InputField from "../shared/input/InputField";
+import { updateEmployeeBenefit } from "@/redux/slices/hrmsSlice";
+import { useDispatch } from "react-redux";
+import { getUserById } from "@/redux/slices/userSlice";
 //import Button from "../shared/buttonComponent/Button";
 
 export default function StaffDeptInfo({ data, isDashboard }) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [user, setUser] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [viewSalary, setViewSalary] = useState(false);
   const [state, setState] = useImmer({
     loading: false,
-    salary: "",
+    salary: data?.employeeBenefit?.salary ?? 0,
     benefityType: "",
     description: "",
     benefits: [],
@@ -29,6 +33,14 @@ export default function StaffDeptInfo({ data, isDashboard }) {
     failedMessage: "",
   });
 
+  useEffect(() => {
+    if (data?.employeeBenefit?.salary !== undefined) {
+      setState((draft) => {
+        draft.salary = data.employeeBenefit.salary;
+      });
+    }
+  }, [data?.employeeBenefit?.salary, setState]);
+
   const returnCardDetails = (name, value) => {
     return (
       <div>
@@ -37,36 +49,41 @@ export default function StaffDeptInfo({ data, isDashboard }) {
       </div>
     );
   };
+  const removeCommasFromNumber = (num) => {
+    if (!num) return 0;
+    return num.toString().replace(/,/g, "");
+  };
 
-  const handleSubmit = () => {
+  const updateSalary = () => {
     setState((draft) => {
       draft.loading = true;
     });
-    const payload = {
-      description: "benefit description",
-      financialYear: finData?.data?._id,
-      salary: Number(removeCommasFromNumber(state.salary)),
-      benefitType: state.benefityType,
-      createdBy: state.createdBy,
-      userId: id,
-    };
 
-    dispatch(addEmployeeBenefit(payload))
+    const payload = {
+      salary: Number(removeCommasFromNumber(state.salary)),
+    };
+    dispatch(
+      updateEmployeeBenefit({
+        payload: payload,
+        id: data?.employeeBenefit?._id,
+      })
+    )
       .unwrap()
       .then((res) => {
         setState((draft) => {
           draft.successModal = true;
           draft.loading = false;
           draft.successMessage =
-            res?.message || "Employee benefit added successfully.";
+            res?.message || "Employee salary updated successfully.";
         });
-        reset();
+        dispatch(getUserById(data?.user?._id));
+        setOpenModal(false);
       })
       .catch((err) => {
         setState((draft) => {
           draft.failedModal = true;
           draft.failedMessage =
-            err?.message || "Employee benefit creation failed.";
+            err?.message || "Employee salary update failed.";
           draft.loading = false;
         });
       });
@@ -161,32 +178,32 @@ export default function StaffDeptInfo({ data, isDashboard }) {
         </div>
       </div>
       <RightModal isOpen={openModal} onClose={() => setOpenModal(false)}>
-<div className="p-4">
-<InputField
-          required={true}
-          value={state.salary}
-          name={"salary"}
-          label={"Enter salary"}
-          placeholder={"0"}
-          onChange={(e) =>
-            setState((draft) => {
-              draft.salary = Number(
-                e.target.value.replace(/[^0-9.]/g, "")
-              ).toLocaleString();
-            })
-          }
-        />
-        <div className="p-3 border-t flex items-center justify-end gap-2 w-full">
-          <Button
-            disabled={!state.salary || !state.benefityType || state.loading}
-            onClick={handleSubmit}
-            className={`text-white font-semibold p-2 px-16 bg-swBlue 
+        <div className="p-4">
+          <h2 className="font-700 text-[30px] mb-[3rem]">Update Salary</h2>
+          <InputField
+            required={true}
+            value={state.salary}
+            name={"salary"}
+            label={"Enter salary"}
+            onChange={(e) =>
+              setState((draft) => {
+                draft.salary = Number(
+                  e.target.value.replace(/[^0-9.]/g, "")
+                ).toLocaleString();
+              })
+            }
+          />
+          <div className="p-3 border-t flex items-center justify-end gap-2 w-full">
+            <Button
+              disabled={!state.salary || state.loading}
+              onClick={updateSalary}
+              className={`text-white font-semibold p-2 px-16 bg-swBlue 
             hover:bg-swBluee500 rounded-md flex items-center gap-2`}
-          >
-            {state.loading ? "Adding..." : "Add Benefit"}
-          </Button>
+            >
+              {state.loading ? "Updating..." : "Update Salary"}
+            </Button>
+          </div>
         </div>
-</div>
       </RightModal>
     </div>
   );
