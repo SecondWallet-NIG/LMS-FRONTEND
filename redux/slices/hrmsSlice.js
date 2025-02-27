@@ -113,7 +113,7 @@ export const updateEmployeeBenefit = createAsyncThunk(
   async ({ payload, id }) => {
     try {
       let token = getToken();
-      const response = await axios.post(
+      const response = await axios.put(
         `${API_URL}/employee-benefit/${id}`,
         payload,
         {
