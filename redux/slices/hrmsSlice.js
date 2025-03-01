@@ -108,6 +108,29 @@ export const addEmployeeBenefit = createAsyncThunk(
   }
 );
 
+export const updateEmployeeBenefit = createAsyncThunk(
+  "employee-benefit/update",
+  async ({ payload, id }) => {
+    try {
+      let token = getToken();
+      const response = await axios.put(
+        `${API_URL}/employee-benefit/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 export const addNewFinancialYear = createAsyncThunk(
   "financial-year",
   async (payload) => {
@@ -376,6 +399,19 @@ const hrmsSlice = createSlice({
         state.finData = action.payload;
       })
       .addCase(getFinancialYear.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(updateEmployeeBenefit.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(updateEmployeeBenefit.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+        state.finData = action.payload;
+      })
+      .addCase(updateEmployeeBenefit.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       });

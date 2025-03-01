@@ -290,11 +290,6 @@ const CreateInvestor = () => {
     payload.append("bankAccount[accountNumber]", formData.accountNumber);
     payload.append("bankAccount[accountName]", formData.accountName);
     payload.append("bankAccount[bankName]", formData.bankName);
-    // payload.append(
-    //   "annualIncome",
-    //   removeCommasFromNumber(formData.annualIncome)
-    // );
-    // payload.append("networth", removeCommasFromNumber(formData.networth));
     payload.append("sourceOfIncome", formData.sourceOfIncome);
     payload.append("workStatus", formData.workStatus);
     payload.append("taxDoc", formData.taxDoc);

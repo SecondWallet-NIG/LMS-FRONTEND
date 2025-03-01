@@ -376,8 +376,7 @@ const UpdateInvestorPorfileScreen = () => {
             houseLocation: res?.data?.address?.houseLocation,
             email: res?.data?.email,
             phoneNumber: res?.data?.phoneNumber,
-            annualIncome: Number(res?.data?.annualIncome)?.toLocaleString(),
-            networth: Number(res?.data?.networth)?.toLocaleString(),
+
             sourceOfIncome: res?.data?.sourceOfIncome,
             workStatus: res?.data?.workStatus,
             // bankName: res?.data?.bankAccount?.bankName,
@@ -678,31 +677,6 @@ const UpdateInvestorPorfileScreen = () => {
         {/* Financial Information */}
         <div>
           <h6 className={`${headerClass}`}>Financial information</h6>
-          {/* <div className="w-full my-5">
-            <InputField
-              name={"annualIncome"}
-              label={"Annual Income"}
-              placeholder={"Start typing"}
-              required={true}
-              value={formData.annualIncome}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="w-full">
-            <InputField
-              name={"networth"}
-              label={"Networth"}
-              placeholder={"Start typing"}
-              required={true}
-              value={formData.networth}
-              onChange={handleInputChange}
-            />
-            <p className="text-swGrey200 text-sm mt-1">
-              Assets minus Liabilities
-            </p>
-          </div> */}
-
           <div className="w-full my-5">
             <InputField
               name={"sourceOfIncome"}
