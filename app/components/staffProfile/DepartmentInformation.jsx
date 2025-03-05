@@ -12,6 +12,8 @@ import InputField from "../shared/input/InputField";
 import { updateEmployeeBenefit } from "@/redux/slices/hrmsSlice";
 import { useDispatch } from "react-redux";
 import { getUserById } from "@/redux/slices/userSlice";
+import { FaPencil } from "react-icons/fa6";
+import { FiEdit } from "react-icons/fi";
 //import Button from "../shared/buttonComponent/Button";
 
 export default function StaffDeptInfo({ data, isDashboard }) {
@@ -140,11 +142,6 @@ export default function StaffDeptInfo({ data, isDashboard }) {
                 ) : (
                   <IoEyeOutline className="-mt-6" size={20} />
                 )}
-              </div>
-              <div>
-                <Button onClick={() => setOpenModal(true)}>
-                  Update Salary
-                </Button>
               </div>
             </div>
           )}

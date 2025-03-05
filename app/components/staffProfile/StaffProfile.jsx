@@ -33,7 +33,6 @@ const StaffData = ({ path, isDashboard }) => {
     dispatch(getUserById(id))
       .unwrap()
       .then((res) => {
-        console.log({ res });
         setData(res);
       })
       .catch((err) => {
