@@ -1,22 +1,22 @@
 "use client";
-import DashboardLayout from "../dashboardLayout/DashboardLayout";
 import { getRoles } from "@/redux/slices/roleSlice";
 import { getUserById } from "@/redux/slices/userSlice";
+import { getStaffTasks } from "@/redux/slices/userTaskSlice";
+import { Inter } from "next/font/google";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { getStaffTasks } from "@/redux/slices/userTaskSlice";
-import StaffPersonalDetails from "./PersonalDetails";
-import StaffLeaveDetails from "./LeaveDetails";
-import StaffDeptInfo from "./DepartmentInformation";
-import LeaveRequests from "./LeaveRequests";
-import LeaveApprovalRequests from "./LeaveApprovalRequests";
+import EmployeeBenefitsLogCard from "../cards/Activity logs card/EmployeeBenefitLogCard";
+import DashboardLayout from "../dashboardLayout/DashboardLayout";
+import { employeeDashboardAuthRoles } from "../helpers/pageAuthRoles";
 import Attendance from "./Attendance";
 import ClockInDetails from "./ClockInDetails";
-import { employeeDashboardAuthRoles } from "../helpers/pageAuthRoles";
-import { getLocation } from 'current-location-geo';
-import { Inter } from "next/font/google";
+import StaffDeptInfo from "./DepartmentInformation";
+import LeaveApprovalRequests from "./LeaveApprovalRequests";
+import StaffLeaveDetails from "./LeaveDetails";
+import LeaveRequests from "./LeaveRequests";
+import StaffPersonalDetails from "./PersonalDetails";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -86,12 +86,21 @@ const StaffData = ({ path, isDashboard }) => {
             >
               Leave Approval Requests
             </button>
+            <button
+              className={`${btnCls} ${
+                leaveState === "logs" ? activeBtn : "border-transparent"
+              }`}
+              onClick={() => setLeaveState("logs")}
+            >
+              Employee Benefits Logs
+            </button>
           </div>
           {leaveState === "attendance" && (
             <Attendance isDashboard={isDashboard} />
           )}
           {leaveState === "requests" && <LeaveRequests />}
           {leaveState === "approvals" && <LeaveApprovalRequests />}
+          {leaveState === "logs" && <EmployeeBenefitsLogCard />}
         </div>
       </main>
     </DashboardLayout>
