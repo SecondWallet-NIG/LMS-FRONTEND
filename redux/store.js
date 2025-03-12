@@ -1,26 +1,27 @@
 // store/configureStore.js
 import { configureStore } from "@reduxjs/toolkit";
-import postReducer from "./slices/postSlice";
-import userReducer from "./slices/userSlice";
+import approvalAssigneeReducer from "./slices/approvalAssigneeSlice";
+import assetReducer from "./slices/assetManagementSlice";
+import attendanceReducer from "./slices/attendanceSlice";
 import authReducer from "./slices/authSlice";
 import customerReducer from "./slices/customerSlice";
+import dashboardReducer from "./slices/dashboardSlice";
+import employeeBenefitsLogReducer from "./slices/employeeBenefitsLogSlice";
+import expenseReducer from "./slices/expenseManagementSlice";
+import hrmsReducer from "./slices/hrmsSlice";
 import interestTypeReducer from "./slices/interestTypeSlice";
-import LoanPackageReducer from "./slices/loanPackageSlice";
-import roleReducer from "./slices/roleSlice";
+import investmentReducer from "./slices/investmentSlice";
+import loanApplicationLogReducer from "./slices/loanApplicationLogSlice";
 import loanApplicationReducer from "./slices/loanApplicationSlice";
 import loanApprovalReducer from "./slices/loanApprovalSlice";
+import LoanPackageReducer from "./slices/loanPackageSlice";
 import loanRepaymentReducer from "./slices/loanRepaymentSlice";
-import dashboardReducer from "./slices/dashboardSlice";
-import approvalAssigneeReducer from "./slices/approvalAssigneeSlice";
-import loanApplicationLogReducer from "./slices/loanApplicationLogSlice";
+import postReducer from "./slices/postSlice";
 import repaymentHistoryReducer from "./slices/repaymentHistorySlice";
-import userTaskReducer from "./slices/userTaskSlice";
 import reportReducer from "./slices/reportSlice";
-import assetReducer from "./slices/assetManagementSlice";
-import expenseReducer from "./slices/expenseManagementSlice";
-import investmentReducer from "./slices/investmentSlice";
-import hrmsReducer from "./slices/hrmsSlice";
-import attendanceReducer from "./slices/attendanceSlice";
+import roleReducer from "./slices/roleSlice";
+import userReducer from "./slices/userSlice";
+import userTaskReducer from "./slices/userTaskSlice";
 
 export const store = configureStore({
   reducer: {
@@ -45,6 +46,7 @@ export const store = configureStore({
     investment: investmentReducer,
     hrms: hrmsReducer,
     attendance: attendanceReducer,
+    employeeBenefitsLogs: employeeBenefitsLogReducer,
   },
   // Add middleware or other configuration options as needed
 });
