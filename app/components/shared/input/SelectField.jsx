@@ -1,9 +1,6 @@
-import React from "react";
 import Select from "react-select";
 
-const _options = [
-
-];
+const _options = [];
 
 const formatOptionLabel = ({ label, isSelected }) => (
   <div className="flex">
@@ -19,7 +16,7 @@ const customStyles = {
       ? "your-custom-border-color"
       : provided.borderColor,
     boxShadow: state.isFocused ? "none" : provided.boxShadow,
-    fontSize: "14px"
+    fontSize: "14px",
   }),
 
   option: (provided, state) => ({
@@ -32,7 +29,7 @@ const customStyles = {
     "&:hover": {
       backgroundColor: "#f5f5f5",
     },
-    fontSize:"14px"
+    fontSize: "14px",
   }),
 };
 

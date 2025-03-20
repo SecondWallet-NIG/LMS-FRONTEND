@@ -1,17 +1,16 @@
 "use client";
-import React, { useState } from "react";
-import Button from "../shared/buttonComponent/Button";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import RequestLeaveModal from "../leaveRequest/RequestLeaveModal";
 import RightModal from "../modals/RightModal";
-import { useRouter } from "next/navigation";
-import { FiEdit } from "react-icons/fi";
+import Button from "../shared/buttonComponent/Button";
 
 export default function StaffLeaveDetails({ data, id, isDashboard }) {
   const router = useRouter();
   const [openLeaveRequestModal, setOpenLeaveRequestModal] = useState(false);
-  console.log({data});
-  
+  console.log({ data });
+
   let btnLink, btnText;
 
   const returnCardDetails = (name, value) => {
@@ -28,7 +27,9 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
     btnText = "Request Leave";
   } else {
     btnLink = `/team-management/operations/employee-benefit/add-new/${id}`;
-    btnText = data?.employeeBenefit ? "Update Employee Benefit" : "Assign Employee Benefit"; // Update text if benefit is assigned
+    btnText = data?.employeeBenefit
+      ? "Update Employee Benefit"
+      : "Assign Employee Benefit"; // Update text if benefit is assigned
   }
 
   return (
@@ -37,26 +38,32 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
         <div className="flex flex-col sm:flex-row justify-between items-start p-5 bg-[#f7f7f7] border-b flex-wrap gap-5">
           <div>
             <p className=" text-lg font-semibold text-swBlue">Leave Details</p>
-      
-              <p className="text-sm text-swGray400">
-                Important details concerning your leave request.
-              </p>
-             
-        
+
+            <p className="text-sm text-swGray400">
+              Important details concerning your leave request.
+            </p>
+
+            {data?.employeeBenefit?.benefitType?.level && (
+              <div className="flex items-center gap-2">
+                <h6 className="text-base font-semibold text-swBlue">
+                  Current Benefit:{" "}
+                </h6>{" "}
+                <span>{data?.employeeBenefit.benefitType.level}</span>
+              </div>
+            )}
           </div>
-      
-            <Button
-              className="border border-swBlue text-swBlue hover:bg-swDarkBlue text-sm p-3 rounded-md whitespace-nowrap flex gap-1"
-              onClick={() =>
-                isDashboard
-                  ? setOpenLeaveRequestModal(true)
-                  : router.push(btnLink)
-              }
-            >
-              {!isDashboard && <AiOutlinePlus size={15} />}
-              <p className="">{btnText}</p>
-            </Button>
-          
+
+          <Button
+            className="border border-swBlue text-swBlue hover:bg-swDarkBlue text-sm p-3 rounded-md whitespace-nowrap flex gap-1"
+            onClick={() =>
+              isDashboard
+                ? setOpenLeaveRequestModal(true)
+                : router.push(btnLink)
+            }
+          >
+            {!isDashboard && <AiOutlinePlus size={15} />}
+            <p className="">{btnText}</p>
+          </Button>
         </div>
 
         <div className="p-5 bg-[#f7f7f7] h-full">
