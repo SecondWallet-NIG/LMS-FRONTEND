@@ -108,11 +108,8 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
             )} */}
             {returnCardDetails(
               "Unpaid Leave",
-              `${
-                data?.employeeBenefit?.benefitType?.leaveTypes?.unpaidLeave || 0
-              } working ${
-                data?.employeeBenefit?.benefitType?.leaveTypes?.unpaidLeave ===
-                1
+              `${data?.employeeBenefit?.leaveTypes?.unpaidLeave || 0} working ${
+                data?.employeeBenefit?.leaveTypes?.unpaidLeave === 1
                   ? "day"
                   : "days"
               }`
@@ -120,11 +117,9 @@ export default function StaffLeaveDetails({ data, id, isDashboard }) {
             {returnCardDetails(
               "Casual Leave",
               `${
-                data?.employeeBenefit?.benefitType?.leaveTypes?.personalLeave ||
-                0
+                data?.employeeBenefit?.leaveTypes?.personalLeave || 0
               } working ${
-                data?.employeeBenefit?.benefitType?.leaveTypes
-                  ?.personalLeave === 1
+                data?.employeeBenefit?.leaveTypes?.personalLeave === 1
                   ? "day"
                   : "days"
               }`

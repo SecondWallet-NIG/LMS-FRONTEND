@@ -433,7 +433,7 @@ const AddBenefitTypesPage = () => {
                 required={true}
                 isSearchable={true}
                 placeholder={data?.data ? "Select..." : "Loading..."}
-                value={data?.data ? state.benefitType : undefined}
+                // value={data?.data ? state.benefitType : undefined}
                 onChange={(e) =>
                   setState((draft) => {
                     draft.benefitType = e.value;
@@ -447,7 +447,7 @@ const AddBenefitTypesPage = () => {
 
         <div className="p-3 border-t flex items-center justify-end gap-2 w-full">
           <Button
-            disabled={!state.salary || !state.benefityType || state.loading}
+            disabled={!state.salary || !state.benefitType || state.loading}
             onClick={handleSubmit}
             className={`text-white font-semibold p-2 px-16 bg-swBlue 
             hover:bg-swBluee500 rounded-md flex items-center gap-2`}
