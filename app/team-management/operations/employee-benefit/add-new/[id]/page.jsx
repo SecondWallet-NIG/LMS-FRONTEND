@@ -119,14 +119,13 @@
 //       .unwrap()
 //       .then((res) => {
 //         console.log({res});
-        
+
 //         setData(res);
 //       })
 //       .catch((err) => {
 //         console.log(err);
 //       });
 //   }, []);
-  
 
 //   return (
 //     <DashboardLayout
@@ -211,7 +210,7 @@
 //               state.loading
 //             }
 //             onClick={handleSubmit}
-//             className={`text-white font-semibold p-2 px-16 bg-swBlue 
+//             className={`text-white font-semibold p-2 px-16 bg-swBlue
 //             hover:bg-swBluee500 rounded-md flex items-center gap-2`}
 //           >
 //             {state.loading ? "Adding..." : "Add Benefit"}
@@ -254,23 +253,23 @@
 // export default AddBenefitTypesPage;
 
 "use client";
-import { useEffect, useState } from "react";
-import SelectField from "@/app/components/shared/input/SelectField";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import { useSelector, useDispatch } from "react-redux";
-import { useImmer } from "use-immer";
-import SuccessModal from "@/app/components/modals/SuccessModal";
+import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 import CancelModal from "@/app/components/modals/CancelModal";
-import { useParams, useRouter } from "next/navigation";
+import SuccessModal from "@/app/components/modals/SuccessModal";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import InputField from "@/app/components/shared/input/InputField";
+import SelectField from "@/app/components/shared/input/SelectField";
 import {
   addEmployeeBenefit,
   getAllBenefitTypes,
   getFinancialYear,
 } from "@/redux/slices/hrmsSlice";
-import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 import { getUserById } from "@/redux/slices/userSlice";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useImmer } from "use-immer";
 
 const AddBenefitTypesPage = () => {
   const dispatch = useDispatch();
@@ -282,7 +281,7 @@ const AddBenefitTypesPage = () => {
   const [state, setState] = useImmer({
     loading: false,
     salary: "",
-    benefityType: "",
+    benefitType: "",
     description: "",
     benefits: [],
     createdBy: "",
@@ -295,7 +294,7 @@ const AddBenefitTypesPage = () => {
   const reset = () => {
     setState((draft) => {
       draft.salary = "";
-      draft.benefityType = "";
+      draft.benefitType = "";
       draft.description = "";
     });
   };
@@ -343,7 +342,7 @@ const AddBenefitTypesPage = () => {
       description: "benefit description",
       financialYear: finData?.data?._id,
       salary: Number(removeCommasFromNumber(state.salary)),
-      benefitType: state.benefityType,
+      benefitType: state.benefitType,
       createdBy: state.createdBy,
       userId: id,
     };
@@ -379,7 +378,7 @@ const AddBenefitTypesPage = () => {
         if (res?.data?.employeeBenefit) {
           setState((draft) => {
             draft.salary = res.data.employeeBenefit.salary.toLocaleString();
-            draft.benefityType = res.data.employeeBenefit.benefitType._id;
+            draft.benefitType = res.data.employeeBenefit.benefitType._id;
           });
         }
       })
@@ -398,7 +397,8 @@ const AddBenefitTypesPage = () => {
         <div className="flex justify-between items-center p-3">
           <div>
             <p className="text-2xl lg:text-3xl font-bold text-swBlack">
-              {(_data?.data?.employeeBenefit ? "Update" : "Assign")} Employee Benefit
+              {_data?.data?.employeeBenefit ? "Update" : "Assign"} Employee
+              Benefit
             </p>
             <p className="text-sm mt-1">Benefit Information</p>
           </div>
@@ -433,9 +433,10 @@ const AddBenefitTypesPage = () => {
                 required={true}
                 isSearchable={true}
                 placeholder={data?.data ? "Select..." : "Loading..."}
+                // value={data?.data ? state.benefitType : undefined}
                 onChange={(e) =>
                   setState((draft) => {
-                    draft.benefityType = e.value;
+                    draft.benefitType = e.value;
                   })
                 }
                 optionValue={state.benefits}
@@ -446,16 +447,16 @@ const AddBenefitTypesPage = () => {
 
         <div className="p-3 border-t flex items-center justify-end gap-2 w-full">
           <Button
-            disabled={
-              !state.salary ||
-              !state.benefityType ||
-              state.loading
-            }
+            disabled={!state.salary || !state.benefitType || state.loading}
             onClick={handleSubmit}
             className={`text-white font-semibold p-2 px-16 bg-swBlue 
             hover:bg-swBluee500 rounded-md flex items-center gap-2`}
           >
-            {state.loading ? "Adding..." : (_data?.data?.employeeBenefit ? "Update Benefit" : "Add Benefit")}
+            {state.loading
+              ? "Adding..."
+              : _data?.data?.employeeBenefit
+              ? "Update Benefit"
+              : "Add Benefit"}
           </Button>
         </div>
       </div>
@@ -493,4 +494,3 @@ const AddBenefitTypesPage = () => {
 };
 
 export default AddBenefitTypesPage;
-
