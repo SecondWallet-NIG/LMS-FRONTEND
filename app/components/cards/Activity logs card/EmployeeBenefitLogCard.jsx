@@ -25,13 +25,13 @@ const EmployeeBenefitsLogCard = ({ data }) => {
     <main>
       {logs?.data?.data.map((item, index) => {
         const salaryChanged =
-          item.changes.oldValue.salary !== undefined &&
-          item.changes.newValue.salary !== undefined &&
-          item.changes.oldValue.salary !== item.changes.newValue.salary;
+          item.changes?.oldValue?.salary !== undefined &&
+          item.changes?.newValue?.salary !== undefined &&
+          item.changes?.oldValue?.salary !== item.changes?.newValue?.salary;
 
         const benefitChanged =
-          item.changes.oldValue.benefit?.level !==
-          item.changes.newValue.benefit?.level;
+          item.changes?.oldValue?.benefit?.level !==
+          item.changes?.newValue?.benefit?.level;
         return (
           <div key={item._id} className="flex gap-4 py-4">
             {/* Timeline Indicator */}
