@@ -1,9 +1,13 @@
 "use client";
 
 import { getEmployeeBenefitsActivityLogs } from "@/redux/slices/employeeBenefitsLogSlice";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import sketch from "../../../../public/images/sketch.jpg";
+// import Loader from "../Loader";
+// import Loader from "../../../components/shared/Loader"
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("en-US", {
@@ -23,6 +27,14 @@ const EmployeeBenefitsLogCard = ({ data }) => {
   }, []);
   return (
     <main>
+      {logs?.data?.data.length === 0 && (
+        <div className="min-h-500 flex items-center justify-center">
+          <div className="rounded-lg p-8 w-[400px] flex flex-col items-center">
+            <Image src={sketch} alt="company logo" />
+            <p className="text-center text-md">This list is empty</p>
+          </div>
+        </div>
+      )}
       {logs?.data?.data.map((item, index) => {
         const salaryChanged =
           item.changes?.oldValue?.salary !== undefined &&
