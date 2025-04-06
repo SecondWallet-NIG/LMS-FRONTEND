@@ -185,14 +185,10 @@ export const teamManagementAuthRoles = [
 
 // investors
 export const investorsAuthRoles = [
-  "LO",
   "CFO",
   "CEO",
-  "CAO",
   "ICO",
   "FO",
-  "COF",
-  "LR0",
   "CTO",
   "Dir",
   "System Admin",
