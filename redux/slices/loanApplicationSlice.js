@@ -1,9 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { API_URL } from "@/constant";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { getToken } from "@/helpers";
 
 let user;
 if (typeof window !== "undefined") {
@@ -15,6 +14,28 @@ export const createLoanApplication = createAsyncThunk(
     try {
       const response = await axios.post(
         API_URL + "/loan-application/create",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      }
+    }
+  }
+);
+
+export const reStructureLoanApplication = createAsyncThunk(
+  "LoanApplication/Restructure",
+  async ({ loanId, payload }) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/loan-application/${loanId}/restructure`,
         payload,
         {
           headers: {
