@@ -785,19 +785,22 @@ const ViewLoan = () => {
                       </div>
                     </div>
                   )}
-                <div className="w-full  sm:w-[10rem] rounded-xl">
-                  <div>
-                    <Button
-                      // size="normal"
-                      // variant="primary"
-                      className="text-xs text-swBlue rounded-md"
-                      onClick={() => setIsRestructureOpen(true)}
-                      blueBtn={true}
-                    >
-                      Re-Structure Loan
-                    </Button>
-                  </div>
-                </div>
+                {data?.data?.loanApplication?.status === "Disbursed" ||
+                  (data?.data?.loanApplication?.status === "Overdue" && (
+                    <div className="w-full  sm:w-[10rem] rounded-xl">
+                      <div>
+                        <Button
+                          // size="normal"
+                          // variant="primary"
+                          className="text-xs text-swBlue rounded-md"
+                          onClick={() => setIsRestructureOpen(true)}
+                          blueBtn={true}
+                        >
+                          Re-Structure Loan
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
               </div>
             </div>
           </section>
