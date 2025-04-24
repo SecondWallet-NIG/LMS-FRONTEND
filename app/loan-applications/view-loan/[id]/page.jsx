@@ -8,6 +8,7 @@ import CustomerRepayment from "@/app/components/customers/CustomerRepayment";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import { loanApplicationAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 import CorrectLoanModal from "@/app/components/loanApplication/ViewLoan/CorrectLoanModal";
+import LoanRestructureTab from "@/app/components/loans/LoanRestructureTab";
 import CenterModal from "@/app/components/modals/CenterModal";
 import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
 import DeclineModal from "@/app/components/modals/loans/DeclineModal";
@@ -1312,6 +1313,17 @@ const ViewLoan = () => {
                   >
                     Loan Transactions
                   </button>
+                  <button
+                    onClick={() =>
+                      handleActivityToggle("loanRestructureRequest")
+                    }
+                    className={`${
+                      activityButton === "loanRestructureRequest" &&
+                      "font-semibold text-swBlue bg-blue-50"
+                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                  >
+                    Loan Restructure Requests
+                  </button>
                 </div>
               </div>
               <div className="p-2">
@@ -1333,6 +1345,9 @@ const ViewLoan = () => {
                 )}
                 {activityButton === "loanTransactions" && (
                   <CustomerLoanTransactions loanId={id} />
+                )}
+                {activityButton === "loanRestructureRequest" && (
+                  <LoanRestructureTab loanId={id} />
                 )}
               </div>
             </section>

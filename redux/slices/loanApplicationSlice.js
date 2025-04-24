@@ -30,12 +30,56 @@ export const createLoanApplication = createAsyncThunk(
   }
 );
 
-export const reStructureLoanApplication = createAsyncThunk(
-  "LoanApplication/Restructure",
+export const requestLoanRestructure = createAsyncThunk(
+  "LoanApplication/RequestRestructure",
   async ({ loanId, payload }) => {
     try {
+      const response = await axios.post(
+        `${API_URL}/loan-restructure/${loanId}/request`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      }
+    }
+  }
+);
+
+export const approveRestructureRequest = createAsyncThunk(
+  "LoanApplication/ApproveRestructure",
+  async ({ requestId, payload }) => {
+    try {
       const response = await axios.put(
-        `${API_URL}/loan-application/${loanId}/restructure`,
+        `${API_URL}/loan-restructure/${requestId}/approve`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      }
+    }
+  }
+);
+
+export const declineRestructureRequest = createAsyncThunk(
+  "LoanApplication/DeclineRestructure",
+  async ({ requestId, payload }) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/loan-restructure/${requestId}/decline`,
         payload,
         {
           headers: {

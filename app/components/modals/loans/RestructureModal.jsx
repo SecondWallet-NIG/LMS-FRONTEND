@@ -1,6 +1,6 @@
 import {
   getSingleLoan,
-  reStructureLoanApplication,
+  requestLoanRestructure,
 } from "@/redux/slices/loanApplicationSlice";
 import { MdClose } from "react-icons/md";
 import { Rings } from "react-loader-spinner";
@@ -127,7 +127,7 @@ export default function RestructureLoanModal({
 
     setLoading(true);
     e.preventDefault();
-    dispatch(reStructureLoanApplication({ loanId, payload }))
+    dispatch(requestLoanRestructure({ loanId, payload }))
       .unwrap()
       .then(() => {
         toast("Loan re-structure successful");
@@ -144,7 +144,7 @@ export default function RestructureLoanModal({
   return (
     <div className="p-4 overflow-x-auto">
       <div className="flex justify-between items-center">
-        <h4 className="text-lg font-semibold">Re-Structure Loan</h4>
+        <h4 className="text-lg font-semibold">Loan Restructure Request</h4>
         <MdClose
           size={20}
           onClick={() => closeModal()}
@@ -290,7 +290,7 @@ export default function RestructureLoanModal({
             )
           }
           className={`w-full ${loading === true && "cursor-not-allowed"}`}
-          label={"Re-structure Loan"}
+          label={"Request"}
           onClick={reStructureLoan}
         />
       </div>
