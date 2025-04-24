@@ -913,28 +913,27 @@
 // export default ReusableDataTable;
 
 "use client";
-import React, { useState, useEffect } from "react";
-import { FiFilter, FiSearch } from "react-icons/fi";
-import { MdOutlineSort } from "react-icons/md";
-import Select from "react-select";
-import Button from "../buttonComponent/Button";
-import Image from "next/image";
-import sketch from "../../../../public/images/sketch.jpg";
-import { useRouter } from "next/navigation";
-import InputField from "../input/InputField";
-import { IoIosClose } from "react-icons/io";
 import axios from "axios";
-import CenterModal from "../../modals/CenterModal";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Loader from "../Loader";
-import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { FaWindowClose } from "react-icons/fa";
+import { FiFilter, FiSearch } from "react-icons/fi";
 import { HiDotsVertical } from "react-icons/hi";
+import { IoIosClose } from "react-icons/io";
+import Select from "react-select";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as XLSX from "xlsx";
+import sketch from "../../../../public/images/sketch.jpg";
+import CenterModal from "../../modals/CenterModal";
+import Button from "../buttonComponent/Button";
+import InputField from "../input/InputField";
+import Loader from "../Loader";
 import CustomizeTableModal from "./CustomizeTableModal";
 
 function ReusableDataTable({
@@ -1078,7 +1077,8 @@ function ReusableDataTable({
           data?.data?.data?.attendances ||
           data?.data?.data?.assets ||
           data?.data.results ||
-          data?.data?.data;
+          data?.data?.data ||
+          data?.data;
         const nestedJsonData = allData;
 
         function flattenData(data, parentKey = "") {
@@ -1213,7 +1213,8 @@ function ReusableDataTable({
                 data?.data?.data ||
                 data?.results ||
                 data?.data?.data?.loanOfficers ||
-                data?.data?.loanOfficers
+                data?.data?.loanOfficers ||
+                data?.data
             );
             setData(transformedData);
             setPaginationLinks(data?.data.links);
@@ -1230,7 +1231,8 @@ function ReusableDataTable({
                 data?.data?.expenses ||
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
-                data.results
+                data.results ||
+                data?.data
             );
 
             setDownloadData(
@@ -1336,7 +1338,8 @@ function ReusableDataTable({
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results ||
                 data?.data?.data?.loanOfficers ||
-                data?.data?.loanOfficers
+                data?.data?.loanOfficers ||
+                data?.data
             );
 
             setData(transformedData);
@@ -1359,7 +1362,8 @@ function ReusableDataTable({
                 data?.data?.expenses ||
                 data.results ||
                 data?.data?.data?.results ||
-                data?.data?.data?.data?.results
+                data?.data?.data?.data?.results ||
+                data?.data
             );
             setPaginationLinks(
               data?.data?.links ||
