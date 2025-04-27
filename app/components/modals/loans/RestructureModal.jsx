@@ -117,13 +117,13 @@ export default function RestructureLoanModal({
       return;
     }
 
-    const payload = new FormData();
-    const num = parseInt(removeCommasFromNumber(formData.loanAmount));
-    payload.append("loanAmount", num);
-    payload.append("interestRate", formData.interestRate);
-    payload.append("loanDuration", formData.loanDuration);
-    payload.append("repaymentType", formData.repaymentType);
-    payload.append("loanFrequencyType", formData.loanFrequencyType);
+    const payload = {
+      loanAmount: parseInt(removeCommasFromNumber(formData.loanAmount)),
+      interestRate: formData.interestRate,
+      loanDuration: formData.loanDuration,
+      repaymentType: formData.repaymentType,
+      loanFrequencyType: formData.loanFrequencyType,
+    };
 
     setLoading(true);
     e.preventDefault();
