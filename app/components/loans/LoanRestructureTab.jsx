@@ -31,6 +31,7 @@ const LoanRestructureTab = ({ loanId }) => {
 
   const handleApproveClick = (requestId) => {
     setSelectedRequestId(requestId);
+    console.log(selectedRequestId);
     setApproveOpen(true);
   };
 
@@ -41,6 +42,7 @@ const LoanRestructureTab = ({ loanId }) => {
 
   const handleDeclineClick = (requestId) => {
     setSelectedRequestId(requestId);
+    console.log(selectedRequestId);
     setDeclineOpen(true);
   };
 
@@ -216,19 +218,19 @@ const LoanRestructureTab = ({ loanId }) => {
           </>
         )}
       </div>
-      <CenterModal isOpen={approveOpen}>
+      <CenterModal isOpen={approveOpen && !!selectedRequestId}>
         <LoanRestructureApprovalModal
           width={"100%"}
-          isOpen={approveOpen}
+          isOpen={approveOpen && !!selectedRequestId}
           closeModal={handleCloseApprovalModal}
           onClose={handleCloseApprovalModal}
           requestId={selectedRequestId}
         />{" "}
       </CenterModal>
-      <CenterModal isOpen={declineOpen}>
+      <CenterModal isOpen={declineOpen && !!selectedRequestId}>
         <LoanRestructureDeclineModal
           width={"100%"}
-          isOpen={declineOpen}
+          isOpen={declineOpen && !!selectedRequestId}
           closeModal={handleCloseDeclineModal}
           onClose={handleCloseDeclineModal}
           requestId={selectedRequestId}
