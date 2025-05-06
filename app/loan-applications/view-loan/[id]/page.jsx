@@ -1891,16 +1891,19 @@ const ViewLoan = () => {
           defaultLoanFrequencyType={
             data?.data?.loanApplication?.loanFrequencyType
           }
-          minInterestRate={
+          defaultLoanPackageId={
+            data?.data?.loanApplication?.loanPackageDetails?._id
+          }
+          minInterestRateProp={
             data?.data?.loanApplication?.loanPackage?.interestRate?.min
           }
-          maxInterestRate={
+          maxInterestRateProp={
             data?.data?.loanApplication?.loanPackage?.interestRate?.max
           }
-          minLoanAmount={
+          minLoanAmountProp={
             data?.data?.loanApplication?.loanPackage?.loanAmountRange?.min
           }
-          maxLoanAmount={
+          maxLoanAmountProp={
             data?.data?.loanApplication?.loanPackage?.loanAmountRange?.max
           }
           closeModal={() => setIsRestructureOpen(false)}

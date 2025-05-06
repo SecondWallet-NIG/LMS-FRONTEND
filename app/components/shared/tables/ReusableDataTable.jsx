@@ -1205,7 +1205,8 @@ function ReusableDataTable({
           setDataCheck(data);
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
-              data?.data?.data?.repayments ||
+              data?.data?.loanRestructureRequests ||
+                data?.data?.data?.repayments ||
                 data?.data?.results ||
                 data?.data?.expenses ||
                 data?.data?.assets ||
@@ -1217,6 +1218,7 @@ function ReusableDataTable({
                 data?.data
             );
             setData(transformedData);
+            console.log("Transformed data:", transformedData);
             setPaginationLinks(data?.data.links);
 
             setDownloadData(
@@ -1226,12 +1228,13 @@ function ReusableDataTable({
             setLoading(false);
           } else {
             setData(
-              data?.data?.data?.repayments ||
+              data?.data?.loanRestructureRequests ||
+                data?.data?.data?.repayments ||
                 data?.data?.results ||
                 data?.data?.expenses ||
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.data ||
-                data.results ||
+                data?.results ||
                 data?.data
             );
 
@@ -1328,7 +1331,8 @@ function ReusableDataTable({
           setDataCheck(data);
           if (typeof dataTransformer === "function") {
             const transformedData = dataTransformer(
-              data?.data?.data?.repayments ||
+              data?.data?.loanRestructureRequests ||
+                data?.data?.data?.repayments ||
                 data?.data?.data?.LoanApplicationAggregateData ||
                 data?.data?.results ||
                 data?.data?.data ||
@@ -1343,6 +1347,8 @@ function ReusableDataTable({
             );
 
             setData(transformedData);
+            console.log("Transformed data:", transformedData);
+
             setPaginationLinks(
               data?.data?.links ||
                 data?.data?.data?.links ||
@@ -1356,11 +1362,12 @@ function ReusableDataTable({
             setLoading(false);
           } else {
             setData(
-              data?.data?.data?.repayments ||
+              data?.data?.loanRestructureRequests ||
+                data?.data?.data?.repayments ||
                 data?.data?.results ||
                 data?.data?.data ||
                 data?.data?.expenses ||
-                data.results ||
+                data?.results ||
                 data?.data?.data?.results ||
                 data?.data?.data?.data?.results ||
                 data?.data
