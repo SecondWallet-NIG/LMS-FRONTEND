@@ -7,9 +7,10 @@ import { Rings } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import EditableButton from "../../shared/editableButtonComponent/EditableButton";
 import SelectField from "../../shared/input/SelectField";
 import InputField from "./../../shared/input/InputField";
@@ -21,15 +22,27 @@ export default function RestructureLoanModal({
   defaultInterestRate,
   defaultRepaymentType,
   defaultLoanFrequencyType,
-  minInterestRate,
-  maxInterestRate,
-  minLoanAmount,
-  maxLoanAmount,
+  defaultLoanPackageId,
+  minInterestRateProp,
+  maxInterestRateProp,
+  minLoanAmountProp,
+  maxLoanAmountProp,
   closeModal,
 }) {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [loanPackageloading, setLoanPackageLoanding] = useState(true);
   const [loading, setLoading] = useState(false);
+  const loanPackage = useSelector((state) => state.loanPackage);
+  const [minInterestRate, setMinInetrestRate] = useState(minInterestRateProp);
+  const [maxInterestRate, setmaxInetrestRate] = useState(maxInterestRateProp);
+  const [minLoanAmount, setMinLoanAmount] = useState(minLoanAmountProp);
+  const [maxLoanAmount, setMaxLoanAmount] = useState(maxLoanAmountProp);
+
+  useEffect(() => {
+    dispatch(getLoanPackage());
+    setLoanPackageLoanding(false);
+  }, []);
 
   const [formData, setFormData] = useState({
     loanAmount: defaultLoanAmount,
@@ -37,6 +50,7 @@ export default function RestructureLoanModal({
     loanDuration: defaultLoanDuration,
     repaymentType: defaultRepaymentType,
     loanFrequencyType: defaultLoanFrequencyType,
+    loanPackageId: defaultLoanPackageId,
   });
 
   const frequencyTypeData = [
@@ -89,6 +103,15 @@ export default function RestructureLoanModal({
     return numberString.replace(/,/g, "");
   };
 
+  const modifyLoanPackageData = (arr) => {
+    return arr?.map((item) => ({
+      label: item.name,
+      value: item._id,
+      interestRate: item?.interestRate,
+      loanAmountRange: item?.loanAmountRange,
+    }));
+  };
+
   const reStructureLoan = (e) => {
     if (
       formData.loanAmount < minLoanAmount ||
@@ -123,6 +146,7 @@ export default function RestructureLoanModal({
       loanDuration: formData.loanDuration,
       repaymentType: formData.repaymentType,
       loanFrequencyType: formData.loanFrequencyType,
+      loanPackageId: formData.loanPackageId,
     };
 
     setLoading(true);
@@ -130,7 +154,7 @@ export default function RestructureLoanModal({
     dispatch(requestLoanRestructure({ loanId, payload }))
       .unwrap()
       .then(() => {
-        toast("Loan re-structure successful");
+        toast("Loan restructure request sent");
         closeModal();
         dispatch(getSingleLoan(loanId));
         setLoading(false);
@@ -152,6 +176,33 @@ export default function RestructureLoanModal({
         />
       </div>
       <div className="w-full my-3 space-y-6">
+        <div>
+          <SelectField
+            value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
+              (option) => option.value === formData.loanPackageId
+            )}
+            disabled={loanPackageloading}
+            name="loanPackage"
+            optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
+            label={"Loan Package "}
+            required={true}
+            placeholder={loanPackageloading ? "Loading" : "Select loan package"}
+            isSearchable={false}
+            onChange={(selectedOption) => {
+              setFormData((prev) => ({
+                ...prev,
+                loanPackageId: selectedOption.value,
+              }));
+              setMinInetrestRate(selectedOption.interestRate?.min);
+              setmaxInetrestRate(selectedOption.interestRate?.max);
+              setMinLoanAmount(selectedOption.loanAmountRange.min);
+              setMaxLoanAmount(selectedOption.loanAmountRange.max);
+              // handleSelectChange(selectedOption, "loanPackage");
+              // setLoanPackageText(selectedOption.label);
+              // setLoanPackageRate(selectedOption.interestRate);
+            }}
+          />
+        </div>
         <div>
           <InputField
             name="interestRate"
@@ -208,9 +259,9 @@ export default function RestructureLoanModal({
             }`}
           >
             {formData?.loanAmount < minLoanAmount
-              ? `Interest rate cannot be less than ₦${minLoanAmount.toLocaleString()}`
+              ? `Loan amount cannot be less than ₦${minLoanAmount.toLocaleString()}`
               : formData?.loanAmount > maxLoanAmount
-              ? `Interest rate cannot be more than ₦${maxLoanAmount.toLocaleString()}`
+              ? `Loan amount cannot be more than ₦${maxLoanAmount.toLocaleString()}`
               : `min = ₦${minLoanAmount.toLocaleString() || 0} and max = ₦${
                   maxLoanAmount.toLocaleString() || 0
                 }`}
