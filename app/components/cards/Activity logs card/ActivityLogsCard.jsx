@@ -1,11 +1,11 @@
 "use client";
 
+import { formatDate, formatTimeToAMPM } from "@/helpers";
+import { getLoanApplicationLogs } from "@/redux/slices/loanApplicationLogSlice";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLoanApplicationLogs } from "@/redux/slices/loanApplicationLogSlice";
-import { useParams } from "next/navigation";
-import { formatDate, formatTimeToAMPM } from "@/helpers";
-import Link from "next/link";
 
 const CustomerActivityLogsCard = ({ data }) => {
   const { id } = useParams();
@@ -31,6 +31,8 @@ const CustomerActivityLogsCard = ({ data }) => {
                     ? "Loan updated by "
                     : item.action === "LOAN_CREATION"
                     ? "Loan created by"
+                    : item.action === "RESTRUCTURE_REQUEST"
+                    ? "Loan restructure requested by"
                     : ""}{" "}
                   {item?.updatedBy?.firstName} {item?.updatedBy?.lastName} with
                   email , {item?.updatedBy?.email} on{" "}
@@ -194,6 +196,53 @@ const CustomerActivityLogsCard = ({ data }) => {
                     <Link
                       className="underline"
                       href={`/team-management/staff/${item?.newValue?.assignee}`}
+                    >
+                      User
+                    </Link>
+                  </p>
+                  <div className="flex justify-end text-xs font-medium text-green-500 sm:hidden">
+                    {formatTimeToAMPM(item.createdAt)}
+                  </div>
+                </div>
+              ) : item.action === "RESTRUCTURE_REQUEST" ? (
+                <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg">
+                  <p className="text-xs sm:text-sm text-swBlue  font-medium">
+                    Loan restructure request with Loan ID, SWL-
+                    {item?.loanApplication}
+                  </p>
+
+                  <div className="flex justify-end text-xs font-medium text-green-500 sm:hidden">
+                    {formatTimeToAMPM(item.createdAt)}
+                  </div>
+                </div>
+              ) : item.action === "APPROVE_RESTRUCTURE_REQUEST" ? (
+                <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg">
+                  <p className="text-xs sm:text-sm text-swBlue  font-medium">
+                    Loan restructure request approval done.
+                  </p>
+                  <p className="text-xs sm:text-sm mt-2">
+                    View who approved the loan restructure request{" "}
+                    <Link
+                      className="underline"
+                      href={`/team-management/staff/${item?.updatedBy?._id}`}
+                    >
+                      User
+                    </Link>
+                  </p>
+                  <div className="flex justify-end text-xs font-medium text-green-500 sm:hidden">
+                    {formatTimeToAMPM(item.createdAt)}
+                  </div>
+                </div>
+              ) : item.action === "DECLINE_RESTRUCTURE_REQUEST" ? (
+                <div className="p-4 w-full bg-gray-100 mt-2 rounded-lg">
+                  <p className="text-xs sm:text-sm text-swBlue  font-medium">
+                    Loan restructure request approval declined.
+                  </p>
+                  <p className="text-xs sm:text-sm mt-2">
+                    View who approved the loan restructure request{" "}
+                    <Link
+                      className="underline"
+                      href={`/team-management/staff/${item?.updatedBy?._id}`}
                     >
                       User
                     </Link>

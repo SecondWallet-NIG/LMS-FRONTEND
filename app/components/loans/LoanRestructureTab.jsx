@@ -20,7 +20,7 @@ const Viewer = dynamic(
   { ssr: false } // This line is important
 );
 
-const LoanRestructureTab = ({ loanId }) => {
+const LoanRestructureTab = ({ loanId, user }) => {
   const [url, setUrl] = useState("");
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [openFileModal, setOpenFileModal] = useState(false);
@@ -63,6 +63,7 @@ const LoanRestructureTab = ({ loanId }) => {
 
   const headers = [
     { id: "dateRequested", label: "Date Requested" },
+    { id: "loanPackage", label: "Loan Package" },
     { id: "loanDuration", label: "Loan Duration" },
     { id: "interestRate", label: "Interest Rate" },
     { id: "repaymentType", label: "Repayment Type" },
@@ -79,6 +80,15 @@ const LoanRestructureTab = ({ loanId }) => {
         <div>
           <div className="text-md font-light text-gray-700 ">
             {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
+          </div>
+        </div>
+      ),
+      loanPackage: (
+        <div>
+          <div className="text-md font-medium text-gray-700 flex">
+            {item?.oldTerms?.loanPackageId?.name}
+            {" > "}
+            {item?.newTerms?.loanPackageId?.name}
           </div>
         </div>
       ),
@@ -144,26 +154,30 @@ const LoanRestructureTab = ({ loanId }) => {
         </button>
       ),
       action: (
-        <div>
-          {item?.status === "Pending" && (
-            <div className="flex gap-2 items-center">
-              <Button
-                variant="success"
-                onClick={() => handleApproveClick(item?._id)}
-                className="bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
-              >
-                Approve
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => handleDeclineClick(item?._id)}
-                className="bg-red-500 text-white text-xs font-normal px-2 py-1 rounded-full"
-              >
-                Decline
-              </Button>
+        <>
+          {(user?.role?.tag === "CFO" || "MD" || "FO") && (
+            <div>
+              {item?.status === "Pending" && (
+                <div className="flex gap-2 items-center">
+                  <Button
+                    variant="success"
+                    onClick={() => handleApproveClick(item?._id)}
+                    className="bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDeclineClick(item?._id)}
+                    className="bg-red-500 text-white text-xs font-normal px-2 py-1 rounded-full"
+                  >
+                    Decline
+                  </Button>
+                </div>
+              )}
             </div>
           )}
-        </div>
+        </>
       ),
     }));
   };
