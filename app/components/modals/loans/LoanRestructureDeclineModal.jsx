@@ -5,7 +5,7 @@ import {
   getSingleLoan,
 } from "@/redux/slices/loanApplicationSlice";
 import { getLoanApprovals } from "@/redux/slices/loanApprovalSlice";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -19,7 +19,7 @@ const LoanRestructureDeclineModal = ({
   requestId,
 }) => {
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
@@ -47,6 +47,7 @@ const LoanRestructureDeclineModal = ({
         dispatch(getLoanApprovals(id));
         setLoading(false);
         onClose();
+        router.refresh();
       })
       .catch((error) => {
         toast.error(`${error?.message}`);
@@ -91,7 +92,7 @@ const LoanRestructureDeclineModal = ({
                 Cancel
               </Button>
               <Button
-                disabled={loading ? true : false}
+                disabled={loading || !!requestId ? true : false}
                 onClick={submitLoan}
                 className="mt-4 block w-full rounded-lg"
               >

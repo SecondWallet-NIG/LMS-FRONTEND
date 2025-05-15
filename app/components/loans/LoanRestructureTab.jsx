@@ -31,7 +31,6 @@ const LoanRestructureTab = ({ loanId, user }) => {
 
   const handleApproveClick = (requestId) => {
     setSelectedRequestId(requestId);
-    console.log(selectedRequestId);
     setApproveOpen(true);
   };
 
@@ -42,7 +41,6 @@ const LoanRestructureTab = ({ loanId, user }) => {
 
   const handleDeclineClick = (requestId) => {
     setSelectedRequestId(requestId);
-    console.log(selectedRequestId);
     setDeclineOpen(true);
   };
 
