@@ -70,7 +70,7 @@ const LoanRestructureApprovalModal = ({
                 Cancel
               </Button>
               <Button
-                disabled={loading || !!requestId ? true : false}
+                disabled={loading ? true : false}
                 onClick={submitLoan}
                 className="mt-4 block w-full rounded-lg"
               >
