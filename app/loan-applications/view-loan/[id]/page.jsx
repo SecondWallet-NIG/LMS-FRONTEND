@@ -1,54 +1,48 @@
 "use client";
-import { useEffect } from "react";
 import LoanProcessCard from "@/app/components/cards/loanProcessCard/LoanProcessCard";
 import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
-import ActivityLogs from "@/app/components/customers/CustomerActivityLogs";
-import Summary from "@/app/components/customers/CustomerSummary";
+import CustomerPaymentHistory from "@/app/components/customers/CustomerHistoryPayment";
+import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
+import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTransactions";
+import CustomerRepayment from "@/app/components/customers/CustomerRepayment";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
+import { loanApplicationAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import CorrectLoanModal from "@/app/components/loanApplication/ViewLoan/CorrectLoanModal";
+import LoanRestructureTab from "@/app/components/loans/LoanRestructureTab";
+import CenterModal from "@/app/components/modals/CenterModal";
+import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
+import DeclineModal from "@/app/components/modals/loans/DeclineModal";
+import RequestApproval from "@/app/components/modals/loans/RequestApproval";
+import RestructureLoanModal from "@/app/components/modals/loans/RestructureModal";
+import Button from "@/app/components/shared/buttonComponent/Button";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
-import { useDispatch, useSelector } from "react-redux";
-import Image from "next/image";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import SelectField from "@/app/components/shared/input/SelectField";
+import Loader from "@/app/components/shared/Loader";
+import { bankArr } from "@/constant";
+import { formatDate } from "@/helpers";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import {
   disburseLoan,
   getSingleLoan,
   loanStatementOfAccount,
+  updateLoanApplication,
 } from "@/redux/slices/loanApplicationSlice";
-import RequestApproval from "@/app/components/modals/loans/RequestApproval";
-import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
-import { updateLoanApplication } from "@/redux/slices/loanApplicationSlice";
-import { getAllUsers } from "@/redux/slices/userSlice";
 import { getLoanApprovals } from "@/redux/slices/loanApprovalSlice";
+import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
+import { getAllUsers } from "@/redux/slices/userSlice";
+import { format } from "date-fns";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { DayPicker } from "react-day-picker";
+import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
+import { FaRegCalendar } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa6";
 import { MdClose, MdEdit } from "react-icons/md";
-import CenterModal from "@/app/components/modals/CenterModal";
-import Button from "@/app/components/shared/buttonComponent/Button";
-import { useRouter } from "next/navigation";
-import ApprovalModal from "@/app/components/modals/loans/ApprovalModal";
-import DeclineModal from "@/app/components/modals/loans/DeclineModal";
+import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
-import SelectField from "@/app/components/shared/input/SelectField";
-import CustomerRepayment from "@/app/components/customers/CustomerRepayment";
-import { AiOutlinePaperClip } from "react-icons/ai";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FaDownload } from "react-icons/fa6";
-import CustomerPaymentHistory from "@/app/components/customers/CustomerHistoryPayment";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
-import { bankArr } from "@/constant";
-import { format } from "date-fns";
-import { FaRegCalendar } from "react-icons/fa";
-import { DayPicker } from "react-day-picker";
-import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTransactions";
-import { formatDate } from "@/helpers";
-import SharedInvestmentModal from "@/app/components/modals/Investments/SharedInvestmentModal";
-import { base64ToBlob, fetchPdf } from "@/app/components/helpers/utils";
-import Loader from "@/app/components/shared/Loader";
-import { loanApplicationAuthRoles } from "@/app/components/helpers/pageAuthRoles";
-import CorrectLoanModal from "@/app/components/loanApplication/ViewLoan/CorrectLoanModal";
 
 const ViewLoan = () => {
   const { id } = useParams();
@@ -75,6 +69,7 @@ const ViewLoan = () => {
   const [openLoanPeriod, setOpenLoanPeriod] = useState(false);
   const [openLoanFrequency, setOpenLoanFrequency] = useState(false);
   const [loanReassignment, setLoanReassignment] = useState(false);
+  const [isRestructureOpen, setIsRestructureOpen] = useState(false);
   const [usersToApprove, setUsersToApprove] = useState([]);
   const [fileError, setFileError] = useState("");
   const router = useRouter();
@@ -791,6 +786,22 @@ const ViewLoan = () => {
                       </div>
                     </div>
                   )}
+                {(data?.data?.loanApplication?.status === "Disbursed" ||
+                  data?.data?.loanApplication?.status === "Overdue") && (
+                  <div className="w-full  sm:w-[10rem] rounded-xl">
+                    <div>
+                      <Button
+                        // size="normal"
+                        // variant="primary"
+                        className="text-xs text-swBlue rounded-md"
+                        onClick={() => setIsRestructureOpen(true)}
+                        blueBtn={true}
+                      >
+                        Restructure Loan
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -1302,6 +1313,17 @@ const ViewLoan = () => {
                   >
                     Loan Transactions
                   </button>
+                  <button
+                    onClick={() =>
+                      handleActivityToggle("loanRestructureRequest")
+                    }
+                    className={`${
+                      activityButton === "loanRestructureRequest" &&
+                      "font-semibold text-swBlue bg-blue-50"
+                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                  >
+                    Loan Restructure Requests
+                  </button>
                 </div>
               </div>
               <div className="p-2">
@@ -1323,6 +1345,9 @@ const ViewLoan = () => {
                 )}
                 {activityButton === "loanTransactions" && (
                   <CustomerLoanTransactions loanId={id} />
+                )}
+                {activityButton === "loanRestructureRequest" && (
+                  <LoanRestructureTab loanId={id} user={useriD} />
                 )}
               </div>
             </section>
@@ -1854,6 +1879,38 @@ const ViewLoan = () => {
             className={"w-full"}
           />
         </div>
+      </CenterModal>
+
+      <CenterModal
+        isOpen={isRestructureOpen && data?.data?.loanApplication?._id}
+      >
+        <RestructureLoanModal
+          loanId={data?.data?.loanApplication?._id}
+          defaultLoanAmount={data?.data?.loanApplication?.loanAmount}
+          defaultInterestRate={data?.data?.loanApplication?.interestRate}
+          defaultLoanDuration={data?.data?.loanApplication?.loanDuration}
+          defaultRepaymentType={data?.data?.loanApplication?.repaymentType}
+          user={useriD}
+          defaultLoanFrequencyType={
+            data?.data?.loanApplication?.loanFrequencyType
+          }
+          defaultLoanPackageId={
+            data?.data?.loanApplication?.loanPackageDetails?._id
+          }
+          minInterestRateProp={
+            data?.data?.loanApplication?.loanPackage?.interestRate?.min
+          }
+          maxInterestRateProp={
+            data?.data?.loanApplication?.loanPackage?.interestRate?.max
+          }
+          minLoanAmountProp={
+            data?.data?.loanApplication?.loanPackage?.loanAmountRange?.min
+          }
+          maxLoanAmountProp={
+            data?.data?.loanApplication?.loanPackage?.loanAmountRange?.max
+          }
+          closeModal={() => setIsRestructureOpen(false)}
+        />
       </CenterModal>
       <Loader isOpen={statementLoad} />
       <CorrectLoanModal
