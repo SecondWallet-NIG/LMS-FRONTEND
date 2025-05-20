@@ -34,6 +34,7 @@ export const requestLoanRestructure = createAsyncThunk(
   "LoanApplication/RequestRestructure",
   async ({ loanId, payload }) => {
     try {
+      const user = JSON.parse(localStorage.getItem("user")); 
       const response = await axios.post(
         `${API_URL}/loan-restructure/${loanId}/request`,
         payload,
@@ -56,6 +57,7 @@ export const approveRestructureRequest = createAsyncThunk(
   "LoanApplication/ApproveRestructure",
   async ({ requestId, payload }) => {
     try {
+      const user = JSON.parse(localStorage.getItem("user")); 
       const response = await axios.put(
         `${API_URL}/loan-restructure/${requestId}/approve`,
         payload,
@@ -78,6 +80,7 @@ export const declineRestructureRequest = createAsyncThunk(
   "LoanApplication/DeclineRestructure",
   async ({ requestId, payload }) => {
     try {
+      const user = JSON.parse(localStorage.getItem("user")); 
       const response = await axios.put(
         `${API_URL}/loan-restructure/${requestId}/decline`,
         payload,
@@ -100,6 +103,7 @@ export const getSingleLoan = createAsyncThunk(
   "loanApplication/getSingleLoan",
   async (loanId) => {
     try {
+      
       const response = await axios.get(
         `${API_URL}/loan-application/${loanId}`,
         {
