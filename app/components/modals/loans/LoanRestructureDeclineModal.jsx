@@ -6,7 +6,7 @@ import {
 } from "@/redux/slices/loanApplicationSlice";
 import { getLoanApprovals } from "@/redux/slices/loanApprovalSlice";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,6 +22,15 @@ const LoanRestructureDeclineModal = ({
 
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const _user = JSON.parse(localStorage.getItem("user"));
+    if (_user) {
+      setUser(_user?.data?.user);
+    }
+  }, []);
 
   const [formData, setFormData] = useState({
     reason: "",
@@ -39,7 +48,12 @@ const LoanRestructureDeclineModal = ({
     setLoading(true);
     console.log(formData);
     e.preventDefault();
-    dispatch(declineRestructureRequest({ requestId, payload: formData }))
+    dispatch(
+      declineRestructureRequest({
+        requestId,
+        payload: { reason: formData.reason, approver: user?._id },
+      })
+    )
       .unwrap()
       .then(() => {
         toast("Loan Restructure Request declined");

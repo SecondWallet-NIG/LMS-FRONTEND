@@ -144,26 +144,33 @@ const LoanRestructureTab = ({ loanId }) => {
         </button>
       ),
       action: (
-        <div>
-          {item?.status === "Pending" && (
-            <div className="flex gap-2 items-center">
-              <Button
-                variant="success"
-                onClick={() => handleApproveClick(item?._id)}
-                className="bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
-              >
-                Approve
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => handleDeclineClick(item?._id)}
-                className="bg-red-500 text-white text-xs font-normal px-2 py-1 rounded-full"
-              >
-                Decline
-              </Button>
-            </div>
-          )}
-        </div>
+        <>
+          {/* {(user?.role?.tag === "CFO" || "MD" || "FO") && ( */}
+          <div>
+            {item?.status === "Pending" &&
+              (user?.role?.tag === "CFO" ||
+                user?.role?.tag === "MD" ||
+                user?.role?.tag === "FO") && (
+                <div className="flex gap-2 items-center">
+                  <Button
+                    variant="success"
+                    onClick={() => handleApproveClick(item?._id)}
+                    className="bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDeclineClick(item?._id)}
+                    className="bg-red-500 text-white text-xs font-normal px-2 py-1 rounded-full"
+                  >
+                    Decline
+                  </Button>
+                </div>
+              )}
+          </div>
+          {/* )} */}
+        </>
       ),
     }));
   };

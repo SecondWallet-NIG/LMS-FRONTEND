@@ -26,6 +26,7 @@ export default function RestructureLoanModal({
   minLoanAmount,
   maxLoanAmount,
   closeModal,
+  user,
 }) {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -123,6 +124,8 @@ export default function RestructureLoanModal({
       loanDuration: formData.loanDuration,
       repaymentType: formData.repaymentType,
       loanFrequencyType: formData.loanFrequencyType,
+      loanPackageId: formData.loanPackageId,
+      userId: user?._id,
     };
 
     setLoading(true);
