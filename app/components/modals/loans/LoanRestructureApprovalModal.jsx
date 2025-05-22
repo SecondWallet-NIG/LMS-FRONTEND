@@ -44,6 +44,7 @@ const LoanRestructureApprovalModal = ({
         dispatch(getLoanApprovals(id));
         setLoading(false);
         onClose();
+        router.refresh();
       })
       .catch((error) => {
         toast.error(`${error?.message}`);

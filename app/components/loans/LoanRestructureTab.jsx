@@ -20,7 +20,7 @@ const Viewer = dynamic(
   { ssr: false } // This line is important
 );
 
-const LoanRestructureTab = ({ loanId }) => {
+const LoanRestructureTab = ({ loanId, user }) => {
   const [url, setUrl] = useState("");
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [openFileModal, setOpenFileModal] = useState(false);
@@ -31,7 +31,6 @@ const LoanRestructureTab = ({ loanId }) => {
 
   const handleApproveClick = (requestId) => {
     setSelectedRequestId(requestId);
-    console.log(selectedRequestId);
     setApproveOpen(true);
   };
 
@@ -42,7 +41,6 @@ const LoanRestructureTab = ({ loanId }) => {
 
   const handleDeclineClick = (requestId) => {
     setSelectedRequestId(requestId);
-    console.log(selectedRequestId);
     setDeclineOpen(true);
   };
 
@@ -63,6 +61,7 @@ const LoanRestructureTab = ({ loanId }) => {
 
   const headers = [
     { id: "dateRequested", label: "Date Requested" },
+    { id: "loanPackage", label: "Loan Package" },
     { id: "loanDuration", label: "Loan Duration" },
     { id: "interestRate", label: "Interest Rate" },
     { id: "repaymentType", label: "Repayment Type" },
@@ -79,6 +78,15 @@ const LoanRestructureTab = ({ loanId }) => {
         <div>
           <div className="text-md font-light text-gray-700 ">
             {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
+          </div>
+        </div>
+      ),
+      loanPackage: (
+        <div>
+          <div className="text-md font-medium text-gray-700 flex">
+            {item?.oldTerms?.loanPackageId?.name}
+            {" > "}
+            {item?.newTerms?.loanPackageId?.name}
           </div>
         </div>
       ),

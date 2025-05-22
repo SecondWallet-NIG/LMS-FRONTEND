@@ -1347,7 +1347,7 @@ const ViewLoan = () => {
                   <CustomerLoanTransactions loanId={id} />
                 )}
                 {activityButton === "loanRestructureRequest" && (
-                  <LoanRestructureTab loanId={id} />
+                  <LoanRestructureTab loanId={id} user={useriD} />
                 )}
               </div>
             </section>
@@ -1881,26 +1881,32 @@ const ViewLoan = () => {
         </div>
       </CenterModal>
 
-      <CenterModal isOpen={isRestructureOpen}>
+      <CenterModal
+        isOpen={isRestructureOpen && data?.data?.loanApplication?._id}
+      >
         <RestructureLoanModal
           loanId={data?.data?.loanApplication?._id}
           defaultLoanAmount={data?.data?.loanApplication?.loanAmount}
           defaultInterestRate={data?.data?.loanApplication?.interestRate}
           defaultLoanDuration={data?.data?.loanApplication?.loanDuration}
           defaultRepaymentType={data?.data?.loanApplication?.repaymentType}
+          user={useriD}
           defaultLoanFrequencyType={
             data?.data?.loanApplication?.loanFrequencyType
           }
-          minInterestRate={
+          defaultLoanPackageId={
+            data?.data?.loanApplication?.loanPackageDetails?._id
+          }
+          minInterestRateProp={
             data?.data?.loanApplication?.loanPackage?.interestRate?.min
           }
-          maxInterestRate={
+          maxInterestRateProp={
             data?.data?.loanApplication?.loanPackage?.interestRate?.max
           }
-          minLoanAmount={
+          minLoanAmountProp={
             data?.data?.loanApplication?.loanPackage?.loanAmountRange?.min
           }
-          maxLoanAmount={
+          maxLoanAmountProp={
             data?.data?.loanApplication?.loanPackage?.loanAmountRange?.max
           }
           closeModal={() => setIsRestructureOpen(false)}

@@ -19,7 +19,7 @@ const LoanRestructureDeclineModal = ({
   requestId,
 }) => {
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
@@ -61,6 +61,7 @@ const LoanRestructureDeclineModal = ({
         dispatch(getLoanApprovals(id));
         setLoading(false);
         onClose();
+        router.refresh();
       })
       .catch((error) => {
         toast.error(`${error?.message}`);
@@ -105,7 +106,7 @@ const LoanRestructureDeclineModal = ({
                 Cancel
               </Button>
               <Button
-                disabled={loading ? true : false}
+                disabled={loading || !!requestId ? true : false}
                 onClick={submitLoan}
                 className="mt-4 block w-full rounded-lg"
               >

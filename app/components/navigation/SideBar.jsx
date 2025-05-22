@@ -1,32 +1,28 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 //icons
-import { RiBox3Line } from "react-icons/ri";
-import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
-import {
-  AiFillMoneyCollect,
-  AiFillDashboard,
-} from "react-icons/ai";
+import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
+import Link from "next/link";
+import { AiFillDashboard, AiFillMoneyCollect } from "react-icons/ai";
 import { BiMapAlt, BiSolidBuilding } from "react-icons/bi";
-import companyLogo from "../../../public/images/Logo.png";
-import companyLogoIcon from "../../../public/images/Logo_icon.png";
-import SidebarLink from "../shared/sideBarLink/SidebarLink";
+import { FaPeopleGroup } from "react-icons/fa6";
 import {
   FiArrowDownLeft,
   FiArrowUpRight,
   FiFile,
+  FiFileText,
   FiSend,
   FiUser,
-  FiFileText,
 } from "react-icons/fi";
 import { IoMdAdd, IoMdCard, IoMdClose } from "react-icons/io";
-import { FaPeopleGroup } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
-import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
-import Link from "next/link";
 import { PiCurrencyNgn } from "react-icons/pi";
+import { RiBox3Line } from "react-icons/ri";
+import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
+import companyLogo from "../../../public/images/Logo.png";
+import companyLogoIcon from "../../../public/images/Logo_icon.png";
 import {
   assetManagementAuthRoles,
   borrowersAuthRoles,
@@ -45,6 +41,7 @@ import {
   reportAuthRoles,
   teamManagementAuthRoles,
 } from "../helpers/pageAuthRoles";
+import SidebarLink from "../shared/sideBarLink/SidebarLink";
 
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
@@ -237,6 +234,24 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               onClick={() => {
                 setActiveLink("loan-applications");
               }}
+              hasDropdown={true}
+              dropdownContent={
+                <div className="flex flex-col gap-4">
+                  <Link
+                    href={`/loan-applications`}
+                    className="ml-5 text-sm hover:text-swBlue"
+                  >
+                    Loan Applications
+                  </Link>
+
+                  <Link
+                    href={`/loan-restructure-requests`}
+                    className="ml-5 text-sm hover:text-swBlue"
+                  >
+                    Loan Restructure Requests
+                  </Link>
+                </div>
+              }
             />
             <SidebarLink
               allowedRoleTags={loanDraftsAuthRoles}
