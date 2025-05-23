@@ -6,7 +6,7 @@ import {
 } from "@/redux/slices/loanApplicationSlice";
 import { getLoanApprovals } from "@/redux/slices/loanApprovalSlice";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,11 +22,21 @@ const LoanRestructureApprovalModal = ({
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const router = useRouter();
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const _user = JSON.parse(localStorage.getItem("user"));
+    if (_user) {
+      setUser(_user?.data?.user);
+    }
+  }, []);
 
   const submitLoan = (e) => {
     setLoading(true);
     e.preventDefault();
-    dispatch(approveRestructureRequest({ requestId, undefined }))
+    dispatch(
+      approveRestructureRequest({ requestId, payload: { approver: user?._id } })
+    )
       .unwrap()
       .then(() => {
         toast("Loan restructure approved.");

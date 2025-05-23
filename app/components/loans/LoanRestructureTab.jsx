@@ -153,9 +153,12 @@ const LoanRestructureTab = ({ loanId, user }) => {
       ),
       action: (
         <>
-          {(user?.role?.tag === "CFO" || "MD" || "FO") && (
-            <div>
-              {item?.status === "Pending" && (
+          {/* {(user?.role?.tag === "CFO" || "MD" || "FO") && ( */}
+          <div>
+            {item?.status === "Pending" &&
+              (user?.role?.tag === "CFO" ||
+                user?.role?.tag === "MD" ||
+                user?.role?.tag === "FO") && (
                 <div className="flex gap-2 items-center">
                   <Button
                     variant="success"
@@ -173,8 +176,8 @@ const LoanRestructureTab = ({ loanId, user }) => {
                   </Button>
                 </div>
               )}
-            </div>
-          )}
+          </div>
+          {/* )} */}
         </>
       ),
     }));
