@@ -158,7 +158,8 @@ const LoanRestructureTab = ({ loanId, user }) => {
             {item?.status === "Pending" &&
               (user?.role?.tag === "CFO" ||
                 user?.role?.tag === "MD" ||
-                user?.role?.tag === "FO") && (
+                user?.role?.tag === "FO" ||
+                user?.role?.tag === "CTO") && (
                 <div className="flex gap-2 items-center">
                   <Button
                     variant="success"
