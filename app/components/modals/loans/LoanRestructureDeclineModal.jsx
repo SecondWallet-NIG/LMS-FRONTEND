@@ -5,9 +5,10 @@ import {
   getSingleLoan,
 } from "@/redux/slices/loanApplicationSlice";
 import { getLoanApprovals } from "@/redux/slices/loanApprovalSlice";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../../shared/buttonComponent/Button";
@@ -106,7 +107,7 @@ const LoanRestructureDeclineModal = ({
                 Cancel
               </Button>
               <Button
-                disabled={loading || !!requestId ? true : false}
+          
                 onClick={submitLoan}
                 className="mt-4 block w-full rounded-lg"
               >
