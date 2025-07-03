@@ -1,29 +1,27 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
+import { plansAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import CenterModal from "@/app/components/modals/CenterModal";
+import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
-import { FiMinus } from "react-icons/fi";
-import { MdArrowBackIos, MdKeyboardArrowDown, MdPercent } from "react-icons/md";
-import { TbCurrencyNaira } from "react-icons/tb";
-import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  createLoanPackage,
   getSingleLoanPackage,
   updateLoanPackage,
 } from "@/redux/slices/loanPackageSlice";
-import { useEffect } from "react";
-import CenterModal from "@/app/components/modals/CenterModal";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { IoMdCheckmark, IoMdClose } from "react-icons/io";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { FiMinus } from "react-icons/fi";
+import { IoMdCheckmark, IoMdClose } from "react-icons/io";
+import { MdArrowBackIos, MdKeyboardArrowDown, MdPercent } from "react-icons/md";
+import { TbCurrencyNaira } from "react-icons/tb";
 import { Rings } from "react-loader-spinner";
-import EditableButton from "@/app/components/shared/editableButtonComponent/EditableButton";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import check from "../../../../../public/images/check.svg";
-import Image from "next/image";
-import { plansAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 const EditPlansAndPackages = () => {
   const router = useRouter();
@@ -50,7 +48,6 @@ const EditPlansAndPackages = () => {
     status: "Active",
     createdBy: "",
   });
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target || e;
@@ -93,13 +90,13 @@ const EditPlansAndPackages = () => {
     const payload = {
       name: editPlan.name,
       loanAmountRange: {
-        min: editPlan.minAmount,
-        max: editPlan.maxAmount,
+        min: Number(editPlan.minAmount.toString().replace(/,/g, "")),
+        max: Number(editPlan.maxAmount.toString().replace(/,/g, "")),
       },
       interestRate: {
         rateType: editPlan.interestRateType,
-        min: editPlan.minRate,
-        max: editPlan.maxRate,
+        min: Number(editPlan.minRate.toString().replace(/,/g, "")),
+        max: Number(editPlan.maxRate.toString().replace(/,/g, "")),
       },
     };
 
