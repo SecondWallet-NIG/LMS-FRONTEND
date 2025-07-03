@@ -23,6 +23,7 @@ const LoanRestructureApprovalModal = ({
   const { id } = useParams();
   const router = useRouter();
   const [user, setUser] = useState();
+  const [disburseDate, setDisburseDate] = useState("");
 
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));
@@ -32,10 +33,23 @@ const LoanRestructureApprovalModal = ({
   }, []);
 
   const submitLoan = (e) => {
-    setLoading(true);
     e.preventDefault();
+
+    if (!disburseDate) {
+      toast.error("Please select a disbursement date.");
+      return;
+    }
+
+    setLoading(true);
+
     dispatch(
-      approveRestructureRequest({ requestId, payload: { approver: user?._id } })
+      approveRestructureRequest({
+        requestId,
+        payload: {
+          approver: user?._id,
+          disburseDate,
+        },
+      })
     )
       .unwrap()
       .then(() => {
@@ -57,34 +71,48 @@ const LoanRestructureApprovalModal = ({
   return (
     <main>
       <ToastContainer />
-      <form
-        //  style={modalStyles}
-        className="w-full"
-        id="add-user-form"
-      >
+      <form className="w-full" id="add-user-form" onSubmit={submitLoan}>
         <div className="border bg-white border-swLightGray rounded-lg">
           <div className="flex justify-between items-center p-3 text-white">
-            <div>
-              <p className="text-base font-semibold text-swGray">
-                Approve Loan Restructure Request
-              </p>
-            </div>
+            <p className="text-base font-semibold text-swGray">
+              Approve Loan Restructure Request
+            </p>
           </div>
-          <div className="p-4">
+
+          <div className="p-4 space-y-4">
+            {/* 🗓️ Disbursement Date Picker */}
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="disburseDate"
+                className="text-sm font-medium text-swGray"
+              >
+                Disbursement Date
+              </label>
+              <input
+                type="date"
+                id="disburseDate"
+                value={disburseDate}
+                onChange={(e) => setDisburseDate(e.target.value)}
+                className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                required
+              />
+            </div>
+
             <div className="flex justify-between gap-3">
               <Button
                 variant="secondary"
                 onClick={onClose}
                 className="mt-4 block w-full rounded-lg"
+                type="button"
               >
                 Cancel
               </Button>
               <Button
-                disabled={loading ? true : false}
-                onClick={submitLoan}
+                disabled={loading}
+                type="submit"
                 className="mt-4 block w-full rounded-lg"
               >
-                Approve Loan
+                {loading ? "Approving..." : "Approve Loan"}
               </Button>
             </div>
           </div>
