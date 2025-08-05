@@ -21,7 +21,7 @@ import { Rings } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import check from "../../../../../public/images/check.svg";
+const check = "/images/check.svg";
 
 const EditPlansAndPackages = () => {
   const router = useRouter();

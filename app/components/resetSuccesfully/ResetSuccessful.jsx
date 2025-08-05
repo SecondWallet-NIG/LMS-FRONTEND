@@ -3,9 +3,9 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '../shared/buttonComponent/Button';
 import PrevNextBtn from '../prevNextBtn/PrevNextBtn';
-import companyLogo from "../../../public/images/Logo.png";
-import checkMark from "../../../public/images/check.svg";
-import Image from 'next/image';
+const companyLogo = "/images/Logo.png";
+const checkMark = "/images/check.svg";
+
 
 const ResetSuccessful = () => {
   const router = useRouter();
@@ -19,13 +19,13 @@ const ResetSuccessful = () => {
         <PrevNextBtn />
       </div> */}
       <div className="flex justify-center items-center mt-20 -ml-5">
-        <Image src={companyLogo} alt="company logo" />
+        <Image src={companyLogo} alt="company logo" width={200} height={60} />
       </div>
       <div className="h-[70%] flex justify-center mt-20 items-center">
         <div className="w-[30%] bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl text-center font-semibold mb-4">Password reset successful</h2>
           <div className="flex justify-center items-center mb-2 -ml-5">
-            <Image src={checkMark} alt='checkmart-icon' />
+            <Image src={checkMark} alt='checkmart-icon' width={50} height={50} />
           </div>
 
           <p className="text-current text-center text-sm mt-2 pt-2">You can now log into your account with your new password.</p>

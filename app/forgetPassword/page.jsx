@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import companyLogo from "../../public/images/Logo.png";
+const companyLogo = "/images/Logo.png";
 import InputField from "../components/shared/input/InputField";
 import Button from "../components/shared/buttonComponent/Button";
 import Image from "next/image";
@@ -85,7 +85,7 @@ const ForgetPassword = () => {
         {step === 1 && (
           <div>
             <div className="flex justify-center items-center mt-20 -ml-5">
-              <Image src={companyLogo} alt="company logo" />
+              <Image src={companyLogo} alt="company logo" width={200} height={60} />
             </div>
             <div className="h-[70%] flex justify-center items-center mt-20">
               <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[40%] bg-white p-6 rounded-lg">

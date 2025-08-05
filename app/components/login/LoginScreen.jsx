@@ -1,13 +1,14 @@
 // LoginScreen.js
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineEmail, MdKey } from "react-icons/md";
 import InputField from "../shared/input/InputField";
 import Button from "../shared/buttonComponent/Button";
 import Link from "next/link";
-import Image from "next/image";
-import companyLogo from "../../../public/images/Logo.png";
+
+const companyLogo = "/images/Logo.png";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
@@ -99,7 +100,7 @@ const LoginScreen = () => {
       <ToastContainer />
       <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[40%] bg-white p-6 ">
         <div className="flex justify-center items-center mb-20 -ml-5">
-          <Image src={companyLogo} alt="company logo" />
+          <Image src={companyLogo} alt="company logo" width={200} height={60} />
         </div>
         {/* <h2 className="text-2xl text-center font-semibold mb-4">
           Log into your account
