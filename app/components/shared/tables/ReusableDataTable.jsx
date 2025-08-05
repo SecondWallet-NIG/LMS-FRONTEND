@@ -929,7 +929,7 @@ import Select from "react-select";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as XLSX from "xlsx";
-import sketch from "../../../../public/images/sketch.jpg";
+const sketch = "/images/sketch.jpg";
 import CenterModal from "../../modals/CenterModal";
 import Button from "../buttonComponent/Button";
 import InputField from "../input/InputField";
@@ -1719,7 +1719,7 @@ function ReusableDataTable({
         ) : data?.length == 0 && !isLoading ? (
           <div className="min-h-500 flex items-center justify-center">
             <div className="rounded-lg p-8 w-[400px] flex flex-col items-center">
-              <Image src={sketch} alt="company logo" />
+              <Image src={sketch} alt="company logo" width={200} height={150} />
               <p className="text-center text-md">This list is empty</p>
             </div>
           </div>

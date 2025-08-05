@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Button from "../shared/buttonComponent/Button";
 import Image from "next/image";
-import companyLogo from "../../../public/images/Logo.png";
+import Button from "../shared/buttonComponent/Button";
+
+const companyLogo = "/images/Logo.png";
 import ResetPasswordScreen from "../reset-password/ResetPasswordScreen";
 import ResetSuccessful from "../resetSuccesfully/ResetSuccessful";
 
@@ -50,7 +51,7 @@ const OnboardingScreen = () => {
             <form onSubmit={handleSubmit}>
               <div className="items-center text-center">
                 <div className="flex justify-center items-center mb-20">
-                  <Image src={companyLogo} alt="company logo" />
+                  <Image src={companyLogo} alt="company logo" width={200} height={60} />
                 </div>
                 <h2 className="text-xl font-semibold mb-8">
                   Hi {user?.firstName} {user?.lastName},

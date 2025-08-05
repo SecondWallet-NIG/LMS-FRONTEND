@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import InputField from "../shared/input/InputField";
 import { MdKey } from "react-icons/md";
 import Button from "../shared/buttonComponent/Button";
 import Link from "next/link";
-import Image from "next/image";
-import companyLogo from "../../../public/images/Logo.png";
+
+const companyLogo = "/images/Logo.png";
 
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "@/redux/slices/userSlice";
@@ -93,7 +94,7 @@ const ResetPasswordScreen = ({
     <div className="flex justify-center  items-center">
       <div className="w-[30%] bg-white p-6 rounded-lg shadow-m ">
         <div className="flex justify-center items-center mt-20 -ml-5">
-          <Image src={companyLogo} alt="company logo" />
+          <Image src={companyLogo} alt="company logo" width={200} height={60} />
         </div>
         <h2 className="text-2xl text-center font-semibold mt-20 mb-4">
           Reset Your Password
