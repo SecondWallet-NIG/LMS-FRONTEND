@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 //icons
@@ -87,15 +87,13 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
       >
         <div className="flex justify-center items-center p-5">
           {sideBarOpen ? (
-            <Image src={companyLogo} alt="company logo" priority={true} />
+            <img src={companyLogo} alt="company logo" className="h-8" />
           ) : (
             <div className="relative min-h-[2.5rem] min-w-[2.5rem]">
-              <Image
+              <img
                 src={companyLogoIcon}
                 alt="company logo"
-                priority={true}
-                fill
-                sizes="100%"
+                className="w-full h-full object-contain"
               />
             </div>
           )}
@@ -435,7 +433,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
         }`}
       >
         <div className="flex justify-between items-center p-5 h-[4.55rem] border-b border-b-gray-300">
-          <Image src={companyLogo} alt="company logo" priority={true} />
+          <img src={companyLogo} alt="company logo" className="h-8" />
 
           <p className="" onClick={() => sideBarChange(false)}>
             <IoMdClose size={20} />

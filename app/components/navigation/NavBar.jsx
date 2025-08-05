@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import { IoArrowBackSharp, IoCloseSharp } from "react-icons/io5";
 import navPatternBg from "../../../public/images/navPatterns.png";
-import Image from "next/image";
+
 import { formatDate } from "@/helpers";
 import { RxHamburgerMenu } from "react-icons/rx";
 import dynamic from "next/dynamic";
@@ -181,14 +181,10 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
           />
         </div>
       </div>
-      <Image
+      <img
         src={navPatternBg}
         alt="nav pattern"
-        fill
-        // width={"50%"}
-        // height={"100%"}
-        sizes="50%"
-        className="absolute w-1/2 ml-auto cursor-pointer"
+        className="absolute w-1/2 ml-auto cursor-pointer h-full object-cover"
         onClick={() => setDropDown(!isDropDownOpen)}
       />
 

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+
 import { FiMessageSquare } from "react-icons/fi";
 import CenterModal from "../../modals/CenterModal";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -54,11 +54,16 @@ const LoanProcessCard = ({ data }) => {
                 /> */}
               {item?.assignee?.profilePicture ? (
                 <div className="h-12 w-12 rounded-full relative border border-swBlue overflow-hidden">
-                  <Image
+                  <img
                     src={item?.assignee?.profilePicture}
                     alt="profile pic"
-                    fill
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
                   />
+                  <FaUserCircle size={47} className="text-swBlack" style={{display: 'none'}} />
                 </div>
               ) : (
                 <FaUserCircle size={47} className="text-swBlack" />
