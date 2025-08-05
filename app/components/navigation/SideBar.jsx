@@ -21,8 +21,8 @@ import { PiCurrencyNgn } from "react-icons/pi";
 import { RiBox3Line } from "react-icons/ri";
 import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
-import companyLogo from "../../../public/images/Logo.png";
-import companyLogoIcon from "../../../public/images/Logo_icon.png";
+const companyLogo = "/images/Logo.png";
+const companyLogoIcon = "/images/Logo_icon.png";
 import {
   assetManagementAuthRoles,
   borrowersAuthRoles,

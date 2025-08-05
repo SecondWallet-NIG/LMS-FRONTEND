@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import sketch from "../../../../public/images/sketch.jpg";
+const sketch = "/images/sketch.jpg";
 // import Loader from "../Loader";
 // import Loader from "../../../components/shared/Loader"
 
@@ -30,7 +30,7 @@ const EmployeeBenefitsLogCard = ({ data }) => {
       {logs?.data?.data.length === 0 && (
         <div className="min-h-500 flex items-center justify-center">
           <div className="rounded-lg p-8 w-[400px] flex flex-col items-center">
-            <Image src={sketch} alt="company logo" />
+            <Image src={sketch} alt="company logo" width={200} height={150} />
             <p className="text-center text-md">This list is empty</p>
           </div>
         </div>

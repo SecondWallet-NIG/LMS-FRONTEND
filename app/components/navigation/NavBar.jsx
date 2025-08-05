@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import { IoArrowBackSharp, IoCloseSharp } from "react-icons/io5";
-import navPatternBg from "../../../public/images/navPatterns.png";
+const navPatternBg = "/images/navPatterns.png";
 
 import { formatDate } from "@/helpers";
 import { RxHamburgerMenu } from "react-icons/rx";

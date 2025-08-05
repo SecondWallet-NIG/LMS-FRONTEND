@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import companyLogo from "../../../public/images/Logo.png";
-import Button from "../shared/buttonComponent/Button";
 import Image from "next/image";
+const companyLogo = "/images/Logo.png";
+import Button from "../shared/buttonComponent/Button";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { verifyToken } from "@/redux/slices/userSlice";
@@ -67,7 +68,7 @@ const Verification = ({ email, step, setStep, onEmailChange, onNextStep }) => {
     <div>
       <ToastContainer />
       <div className="flex justify-center items-center mt-20 -ml-5">
-        <Image src={companyLogo} alt="company logo" />
+        <Image src={companyLogo} alt="company logo" width={200} height={60} />
       </div>
       <div className="h-[70%] flex justify-center mt-20 items-center">
         <div className="w-[30%] bg-white p-6 rounded-lg shadow-md">
