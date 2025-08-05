@@ -95,7 +95,7 @@ const PaymentPage = () => {
   //   setRepaymentData(data?.results.find((option) => option._id === id));
   // }, [data]);
 
-  console.log("clearData", repaymentData?.result?.clearBalance);
+
 
   useEffect(() => {
     if (
@@ -104,7 +104,7 @@ const PaymentPage = () => {
       userRole === "CFO" ||
       userRole === "Dir" ||
       userRole === "FO" ||
-      userRole === "SYSTEM ADMIN"
+      userRole === "System Admin"
     ) {
       setShowApprovalBtns(true);
     }
