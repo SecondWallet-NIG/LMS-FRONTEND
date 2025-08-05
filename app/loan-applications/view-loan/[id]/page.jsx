@@ -32,7 +32,6 @@ import { getLoanApprovals } from "@/redux/slices/loanApprovalSlice";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { getAllUsers } from "@/redux/slices/userSlice";
 import { format } from "date-fns";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
@@ -587,6 +586,21 @@ const ViewLoan = () => {
   if (loanApprovals?.data?.data) {
     hasDecline = hasDeclineStatus();
   }
+  // Show loading state if data is not available
+  if (!data?.data) {
+    return (
+      <DashboardLayout
+        isBackNav={true}
+        paths={["Loan Applications", "View loan"]}
+        roles={loanApplicationAuthRoles}
+      >
+        <div className="flex justify-center items-center h-64">
+          <Loader />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout
       isBackNav={true}
@@ -603,17 +617,19 @@ const ViewLoan = () => {
             <div className="w-full md:w-[30%] whitespace-nowrap">
               <div className="flex ">
                 <div>
-                  <Image
+                  <img
                     src={
-                      data?.data?.loanApplication?.customerId?.customerId
-                        ?.profilePicture
-                        ? data?.data?.loanApplication?.customerId?.customerId
-                            ?.profilePicture
-                        : "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
+                      data?.data?.loanApplication?.customerId?.customerId?.profilePicture || 
+                      data?.data?.customerDetails?.profilePicture ||
+                      "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                     }
                     alt="user image"
                     width={60}
                     height={60}
+                    className="rounded-full"
+                    onError={(e) => {
+                      e.target.src = "https://cdn-icons-png.flaticon.com/512/4128/4128349.png";
+                    }}
                   />
                 </div>
                 <div className="ml-4 h-fit">
