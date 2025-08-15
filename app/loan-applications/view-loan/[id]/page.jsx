@@ -823,7 +823,7 @@ const ViewLoan = () => {
           </section>
           <div className="m-5 mb-0">
             <div className="flex justify-end">
-              {(useriD?.role?.tag === "ICO" || useriD?.role?.tag === "FO") && (
+              {(useriD?.role?.tag === "ICO" || useriD?.role?.tag === "FO" || useriD?.role?.tag === "CTO" || useriD?.role?.tag === "System Admin") && (
                 <Button
                   className="text-xs text-swBlue rounded-md"
                   onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
