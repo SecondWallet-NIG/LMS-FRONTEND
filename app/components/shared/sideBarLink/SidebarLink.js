@@ -83,7 +83,7 @@ const SidebarLink = ({
               isDropdownOpen ? "rotate-0" : "rotate-90"
             } transform transition`}
           >
-            &#8250;
+            ›
           </button>
         )}
       </div>

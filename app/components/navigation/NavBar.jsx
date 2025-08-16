@@ -51,9 +51,10 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   return (
     <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-full md:w-[95%] px-5 z-[100]">
       <div className="flex gap-2 sm:gap-5 items-center">
-        <div className="sm:hidden">
+        <div className="sm:hidden relative z-[200]">
           <RxHamburgerMenu
             size={20}
+            className="cursor-pointer hover:bg-gray-100 p-1 rounded"
             onClick={() => sideBarOpen(!sideBarState)}
           />
         </div>
@@ -167,7 +168,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
             }
             alt="user"
             className="cursor-pointer"
-            onClick={() => user?.profilePicture && setOpenProfilePic(true)}
+            onClick={() => setDropDown(!isDropDownOpen)}
           />
           <Viewer
             visible={openProfilePic}
@@ -184,8 +185,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
       <img
         src={navPatternBg}
         alt="nav pattern"
-        className="absolute w-1/2 ml-auto cursor-pointer h-full object-cover"
-        onClick={() => setDropDown(!isDropDownOpen)}
+        className="absolute w-1/2 ml-auto h-full object-cover"
       />
 
       {isDropDownOpen && (

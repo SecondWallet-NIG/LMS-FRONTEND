@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-//icons
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
 import Link from "next/link";
 import { AiFillDashboard, AiFillMoneyCollect } from "react-icons/ai";
@@ -21,6 +20,7 @@ import { PiCurrencyNgn } from "react-icons/pi";
 import { RiBox3Line } from "react-icons/ri";
 import { TbAntennaBars5, TbReportMoney } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
+
 const companyLogo = "/images/Logo.png";
 const companyLogoIcon = "/images/Logo_icon.png";
 import {
@@ -46,21 +46,13 @@ import SidebarLink from "../shared/sideBarLink/SidebarLink";
 const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const pathname = usePathname();
   const dispatch = useDispatch();
-  const [sideBarOpen, setSideBarOpen] = useState(true);
   const [activeLink, setActiveLink] = useState("");
-  const x = useSelector((state) => state.UserTasks);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const userTasks = useSelector((state) => state.UserTasks);
   const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role
-    ?.tag;
+    ?.tag || "";
 
-  const handleSidebarOpen = (state) => {
-    setSideBarOpen(state);
-  };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSideBarOpen(false);
-    }, 1000);
-  }, []);
 
   let user;
   if (typeof window !== "undefined") {
@@ -72,21 +64,63 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
     dispatch(getApprovalAssignee(userId));
   }, []);
 
+  // Ensure sidebar starts closed on initial mount
   useEffect(() => {
-    sideBarState ? handleSidebarOpen(true) : handleSidebarOpen(false);
-  }, [sideBarState]);
+    sideBarChange(false);
+  }, []);
+
+  // Set active link based on current pathname
+  useEffect(() => {
+    const path = pathname.split('/')[1];
+    setActiveLink(path || 'dashboard');
+  }, [pathname]);
+
+  // Close sidebar when navigating to a new page
+  useEffect(() => {
+    // Set navigating state to prevent hover interference
+    setIsNavigating(true);
+    // Close sidebar when pathname changes (both mobile and desktop)
+    sideBarChange(false);
+    
+    // Reset navigating state after a short delay
+    setTimeout(() => {
+      setIsNavigating(false);
+    }, 300);
+  }, [pathname]);
 
   return (
-    <main>
-      <div
-        className={`hidden fixed h-full border-r bg-white border-r-gray-300 md:flex flex-col font-medium z-[102] transition-all ease-in-out duration-1000 ${
-          sideBarOpen ? "w-4/5 sm:w-1/5 z-[200]" : "w-[10%] md:w-[5%]"
+    <>
+      {/* Mobile Overlay - Only show when sidebar is open on mobile */}
+      {sideBarState && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-[150] md:hidden"
+          onClick={() => sideBarChange(false)}
+        />
+      )}
+      
+      <main>
+        <div
+        className={`hidden fixed h-full border-r-4 border-r-blue-500 bg-white md:flex flex-col font-medium z-[102] transition-all ease-in-out duration-300 ${
+          sideBarState ? "w-4/5 sm:w-1/5 z-[200]" : "w-[10%] md:w-[5%]"
         }`}
-        onMouseEnter={() => handleSidebarOpen(true)}
-        onMouseLeave={() => handleSidebarOpen(false)}
+        onMouseEnter={() => {
+          if (window.innerWidth >= 768 && !isNavigating) {
+            // Add a small delay to prevent immediate reopening after navigation
+            setTimeout(() => {
+              sideBarChange(true);
+            }, 100);
+          }
+        }}
+        onMouseLeave={() => {
+          if (window.innerWidth >= 768 && !isNavigating) {
+            setTimeout(() => {
+              sideBarChange(false);
+            }, 200);
+          }
+        }}
       >
         <div className="flex justify-center items-center p-5">
-          {sideBarOpen ? (
+          {sideBarState ? (
             <img src={companyLogo} alt="company logo" className="h-8" />
           ) : (
             <div className="relative min-h-[2.5rem] min-w-[2.5rem]">
@@ -100,7 +134,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
         </div>
 
         <div className="border-b border-b-gray-300 text-lg xl:text-xl">
-          <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
+          <div className={`${sideBarState ? "px-2 lg:px-3 xl:px-8" : ""}`}>
             <div>
               <SidebarLink
                 allowedRoleTags={dashboardAuthRoles}
@@ -115,9 +149,13 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 text="Dashboard"
                 link="/dashboard"
                 isActive={"dashboard"}
-                sideBarOpen={sideBarOpen}
+                sideBarOpen={sideBarState}
                 onClick={() => {
                   setActiveLink("dashboard");
+                  // Close sidebar on mobile after navigation
+                  if (window.innerWidth < 768) {
+                    sideBarChange(false);
+                  }
                 }}
               />
             </div>
@@ -138,15 +176,19 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   <div
                     className={`ml-8 bg-blue-400 text-white inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
                   >
-                    {`${x?.data?.pendingCount || 0}`}
+                    {`${userTasks?.data?.pendingCount || 0}`}
                   </div>
                 </div>
               }
               link="/my-tasks"
               isActive={"my-tasks"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("my-tasks");
+                  // Close sidebar on mobile after navigation
+                  if (window.innerWidth < 768) {
+                    sideBarChange(false);
+                  }
               }}
             />
             <SidebarLink
@@ -161,10 +203,13 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Borrowers"
               link="/borrowers"
-              // hasDropdown={true}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("borrowers");
+                  // Close sidebar on mobile after navigation
+                  if (window.innerWidth < 768) {
+                    sideBarChange(false);
+                  }
               }}
               hasDropdown={true}
               dropdownContent={
@@ -196,7 +241,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   : "/unauthorised"
               }`}
               isActive={"create-loan"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("create-loan");
               }}
@@ -228,7 +273,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Loan applications"
               link="/loan-applications"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("loan-applications");
               }}
@@ -265,7 +310,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Loan drafts"
               link="/loan-drafts"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("loan-applications");
               }}
@@ -285,7 +330,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Disbursement"
               link="/disbursement"
               isActive={"disbursement"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("disbursement");
               }}
@@ -304,7 +349,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Repayment"
               link="/repayment"
               isActive={"repayment"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("repayment");
               }}
@@ -325,7 +370,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Payment History"
               link="/payment-history"
               isActive={"payment-history"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("payment-history");
               }}
@@ -334,14 +379,14 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
         </div>
 
         <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
-          <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""} `}>
+          <div className={`${sideBarState ? "px-3 lg:px-8" : ""} `}>
             <SidebarLink
               allowedRoleTags={reportAuthRoles}
               userRoleTag={userRoleTag}
               icon={<TbReportMoney size={20} />}
               text="Report"
               link="/report"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
             />
 
             <SidebarLink
@@ -350,7 +395,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<BiMapAlt size={20} />}
               text="Loan packages"
               link="/plans"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
             />
             {teamManagementAuthRoles.includes(userRoleTag) ? (
               <>
@@ -360,19 +405,19 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   icon={<FaPeopleGroup size={20} />}
                   text="Team management"
                   link="/team-management"
-                  sideBarOpen={sideBarOpen}
+                  sideBarOpen={sideBarState}
                 />
                 <SidebarLink
                   icon={<FiArrowUpRight size={20} />}
                   text="Expenses"
                   link="/expenses"
-                  sideBarOpen={sideBarOpen}
+                  sideBarOpen={sideBarState}
                 />
                 <SidebarLink
                   icon={<IoMdCard size={20} />}
                   text="Payroll"
                   link="/payroll"
-                  sideBarOpen={sideBarOpen}
+                  sideBarOpen={sideBarState}
                 />
               </>
             ) : null}
@@ -382,7 +427,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<BiSolidBuilding size={20} />}
               text="Asset management"
               link="/asset-management"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
             />
             <SidebarLink
               allowedRoleTags={expensesAuthRoles}
@@ -390,7 +435,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<PiCurrencyNgn size={20} />}
               text="Expenses"
               link="/expenses"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
             />
 
             <SidebarLink
@@ -405,8 +450,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Investment"
               link="/investors"
-              // hasDropdown={true}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("");
               }}
@@ -417,31 +461,30 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<AiFillDashboard size={20} />}
               text="Employee Dashboard"
               link={`/employee-dashboard/${userId}`}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
-                handleSidebarOpen(false);
+                // Handle click;
               }}
             />
           </div>
         </div>
       </div>
 
-      {/* Small screens */}
-      <div
-        className={`fixed h-full border-r bg-white border-r-gray-300 flex md:flex flex-col font-medium z-[200] transition-all ease-in-out duration-1000 w-[200px] ${
-          sideBarOpen ? "ml-0 z-[1000] sm:-ml-[280px]" : "-ml-[280px]"
-        }`}
-      >
+             {/* Small screens */}
+       <div
+         className={`fixed h-full border-r bg-white border-r-gray-300 flex md:hidden flex-col font-medium z-[200] transition-all ease-in-out duration-1000 w-[200px] ${
+           sideBarState ? "left-0 z-[1000]" : "-left-[200px]"
+         }`}
+       >
         <div className="flex justify-between items-center p-5 h-[4.55rem] border-b border-b-gray-300">
           <img src={companyLogo} alt="company logo" className="h-8" />
-
-          <p className="" onClick={() => sideBarChange(false)}>
+          <p className="cursor-pointer" onClick={() => sideBarChange(false)}>
             <IoMdClose size={20} />
           </p>
         </div>
 
         <div className="border-b border-b-gray-300 text-lg xl:text-xl">
-          <div className={`${sideBarOpen ? "px-2 lg:px-3 xl:px-8" : ""}`}>
+          <div className={`${sideBarState ? "px-2 lg:px-3 xl:px-8" : ""}`}>
             <div>
               <SidebarLink
                 allowedRoleTags={dashboardAuthRoles}
@@ -456,9 +499,13 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                 text="Dashboard"
                 link="/dashboard"
                 isActive={"dashboard"}
-                sideBarOpen={sideBarOpen}
+                sideBarOpen={sideBarState}
                 onClick={() => {
                   setActiveLink("dashboard");
+                  // Close sidebar on mobile after navigation
+                  if (window.innerWidth < 768) {
+                    sideBarChange(false);
+                  }
                 }}
               />
             </div>
@@ -479,15 +526,19 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   <div
                     className={`ml-8 bg-blue-400 text-white inline-block py-1 px-2 text-xs rounded-full whitespace-nowrap`}
                   >
-                    {`${x?.data?.pendingCount || 0}`}
+                    {`${userTasks?.data?.pendingCount || 0}`}
                   </div>
                 </div>
               }
               link="/my-tasks"
               isActive={"my-tasks"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("my-tasks");
+                  // Close sidebar on mobile after navigation
+                  if (window.innerWidth < 768) {
+                    sideBarChange(false);
+                  }
               }}
             />
             <SidebarLink
@@ -502,10 +553,13 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Borrowers"
               link="/borrowers"
-              // hasDropdown={true}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("borrowers");
+                  // Close sidebar on mobile after navigation
+                  if (window.innerWidth < 768) {
+                    sideBarChange(false);
+                  }
               }}
               hasDropdown={true}
               dropdownContent={
@@ -537,7 +591,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   : "/unauthorised"
               }`}
               isActive={"create-loan"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("create-loan");
               }}
@@ -569,7 +623,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Loan applications"
               link="/loan-applications"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("loan-applications");
               }}
@@ -588,7 +642,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Loan drafts"
               link="/loan-drafts"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("loan-applications");
               }}
@@ -608,7 +662,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Disbursement"
               link="/disbursement"
               isActive={"disbursement"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("disbursement");
               }}
@@ -627,7 +681,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Repayment"
               link="/repayment"
               isActive={"repayment"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("repayment");
               }}
@@ -648,7 +702,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               text="Payment History"
               link="/payment-history"
               isActive={"payment-history"}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("payment-history");
               }}
@@ -657,14 +711,14 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
         </div>
 
         <div className="py-5 border-b border-b-gray-300 text-lg xl:text-xl">
-          <div className={`${sideBarOpen ? "px-3 lg:px-8" : ""} `}>
+          <div className={`${sideBarState ? "px-3 lg:px-8" : ""} `}>
             <SidebarLink
               allowedRoleTags={reportAuthRoles}
               userRoleTag={userRoleTag}
               icon={<TbReportMoney size={20} />}
               text="Report"
               link="/report"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
             />
 
             <SidebarLink
@@ -673,7 +727,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<BiMapAlt size={20} />}
               text="Loan packages"
               link="/plans"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
             />
             {teamManagementAuthRoles.includes(userRoleTag) ? (
               <>
@@ -683,19 +737,19 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   icon={<FaPeopleGroup size={20} />}
                   text="Team management"
                   link="/team-management"
-                  sideBarOpen={sideBarOpen}
+                  sideBarOpen={sideBarState}
                 />
                 <SidebarLink
                   icon={<FiArrowUpRight size={20} />}
                   text="Expenses"
                   link="/expenses"
-                  sideBarOpen={sideBarOpen}
+                  sideBarOpen={sideBarState}
                 />
                 <SidebarLink
                   icon={<IoMdCard size={20} />}
                   text="Payroll"
                   link="/payroll"
-                  sideBarOpen={sideBarOpen}
+                  sideBarOpen={sideBarState}
                 />
               </>
             ) : null}
@@ -705,7 +759,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<BiSolidBuilding size={20} />}
               text="Asset management"
               link="/asset-management"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
             />
             <SidebarLink
               allowedRoleTags={expensesAuthRoles}
@@ -713,7 +767,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<PiCurrencyNgn size={20} />}
               text="Expenses"
               link="/expenses"
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
             />
 
             <SidebarLink
@@ -728,8 +782,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               pathname={pathname}
               text="Investment"
               link="/investors"
-              // hasDropdown={true}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
                 setActiveLink("");
               }}
@@ -740,15 +793,16 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               icon={<AiFillDashboard size={20} />}
               text="Employee Dashboard"
               link={`/employee-dashboard/${userId}`}
-              sideBarOpen={sideBarOpen}
+              sideBarOpen={sideBarState}
               onClick={() => {
-                handleSidebarOpen(false);
+                // Handle click;
               }}
             />
           </div>
         </div>
       </div>
-    </main>
+      </main>
+    </>
   );
 };
 
