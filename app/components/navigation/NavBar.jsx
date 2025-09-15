@@ -49,7 +49,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   };
 
   return (
-    <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-full md:w-[95%] px-5 z-[100]">
+    <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-full md:w-[95%] px-3 sm:px-5 z-[100] overflow-hidden">
       <div className="flex gap-2 sm:gap-5 items-center">
         <div className="sm:hidden relative z-[200]">
           <RxHamburgerMenu
@@ -78,8 +78,8 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
           <div className="bg-swGreen h-2 w-2 rounded-full top-0 right-0 absolute" />
         </div>
         {isNotificationsOpen && (
-          <div className="absolute top-full w-[25rem] min-w-[18rem] bg-white rounded-lg mt-5 shadow-md right-0 -mr-3 h-[30rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray">
-            <div className="flex items-center justify-between p-5 fixed w-[25rem] min-w-[18rem]rounded-t-md bg-white">
+          <div className="absolute top-full w-[90vw] max-w-[25rem] min-w-[18rem] sm:w-[25rem] bg-white rounded-lg mt-5 shadow-md right-0 -mr-3 h-[30rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray z-30">
+            <div className="flex items-center justify-between p-5 sticky top-0 w-full rounded-t-md bg-white border-b">
               <div className="flex gap-2 items-center">
                 <p className="text-lg font-semibold">Notifications</p>
                 <div className="py-1 px-4 bg-swLightGray rounded-full">
@@ -93,7 +93,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
               />
             </div>
 
-            <div className="flex gap-5 py-3 px-5 border-y fixed top-[9.5rem] w-[25rem] min-w-[18rem] bg-white">
+            <div className="flex gap-5 py-3 px-5 border-b sticky top-[4.5rem] w-full bg-white">
               <button
                 className={`py-2 px-4 rounded-md ${
                   openedMessages === "unread" && "bg-swLightGray"
@@ -106,7 +106,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
               </button>
             </div>
 
-            <div className="mt-[8.7rem]">
+            <div className="mt-2">
               {openedMessages === "unread" &&
                 x?.data?.results
                   .filter((item) => item.actionStatus == "Pending")
@@ -185,11 +185,15 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
       <img
         src={navPatternBg}
         alt="nav pattern"
-        className="absolute w-1/2 ml-auto h-full object-cover"
+        className="absolute w-1/2 ml-auto cursor-pointer h-full object-cover right-0 z-10 pointer-events-none"
+      />
+      <div
+        className="absolute right-0 top-0 w-16 h-full cursor-pointer z-20"
+        onClick={() => setDropDown(!isDropDownOpen)}
       />
 
       {isDropDownOpen && (
-        <div className="absolute top-full w-[10rem] min-w-[8rem] px-2 py-4 border bg-white rounded-lg mt-2 shadow-md right-2  h-[7rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray">
+        <div className="absolute top-full w-[10rem] min-w-[8rem] px-2 py-4 border bg-white rounded-lg mt-2 shadow-md right-2 h-[7rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray z-30">
           <div className="flex-col">
             <Link
               href={"/settings"}

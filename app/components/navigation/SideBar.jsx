@@ -470,12 +470,12 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
         </div>
       </div>
 
-             {/* Small screens */}
-       <div
-         className={`fixed h-full border-r bg-white border-r-gray-300 flex md:hidden flex-col font-medium z-[200] transition-all ease-in-out duration-1000 w-[200px] ${
-           sideBarState ? "left-0 z-[1000]" : "-left-[200px]"
-         }`}
-       >
+      {/* Small screens */}
+      <div
+        className={`md:hidden fixed h-full border-r bg-white border-r-gray-300 flex flex-col font-medium z-[200] transition-all ease-in-out duration-1000 w-[280px] max-w-[80vw] ${
+          sideBarOpen ? "ml-0 z-[1000]" : "-ml-[320px]"
+        }`}
+      >
         <div className="flex justify-between items-center p-5 h-[4.55rem] border-b border-b-gray-300">
           <img src={companyLogo} alt="company logo" className="h-8" />
           <p className="cursor-pointer" onClick={() => sideBarChange(false)}>
@@ -627,6 +627,24 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               onClick={() => {
                 setActiveLink("loan-applications");
               }}
+              hasDropdown={true}
+              dropdownContent={
+                <div className="flex flex-col gap-4">
+                  <Link
+                    href={`/loan-applications`}
+                    className="ml-5 text-sm hover:text-swBlue"
+                  >
+                    Loan Applications
+                  </Link>
+
+                  <Link
+                    href={`/loan-restructure-requests`}
+                    className="ml-5 text-sm hover:text-swBlue"
+                  >
+                    Loan Restructure Requests
+                  </Link>
+                </div>
+              }
             />
             <SidebarLink
               allowedRoleTags={loanDraftsAuthRoles}
