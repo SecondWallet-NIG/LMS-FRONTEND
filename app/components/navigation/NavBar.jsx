@@ -181,12 +181,12 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
           />
         </div>
       </div>
-      <img
+      {/* <img
         src={navPatternBg}
         alt="nav pattern"
         className="absolute w-1/2 ml-auto cursor-pointer h-full object-cover"
         onClick={() => setDropDown(!isDropDownOpen)}
-      />
+      /> */}
 
       {isDropDownOpen && (
         <div className="absolute top-full w-[10rem] min-w-[8rem] px-2 py-4 border bg-white rounded-lg mt-2 shadow-md right-2  h-[7rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray">
