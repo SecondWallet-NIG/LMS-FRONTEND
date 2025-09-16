@@ -1,19 +1,19 @@
 "use client";
-import { FaBell } from "react-icons/fa";
-import PagePath from "./PagePath";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { getApprovalAssignee } from "@/redux/slices/approvalAssigneeSlice";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaBell } from "react-icons/fa";
 import { IoArrowBackSharp, IoCloseSharp } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import PagePath from "./PagePath";
 const navPatternBg = "/images/navPatterns.png";
 
 import { formatDate } from "@/helpers";
-import { RxHamburgerMenu } from "react-icons/rx";
 import dynamic from "next/dynamic";
-import { AiOutlineSetting } from "react-icons/ai";
 import Link from "next/link";
+import { AiOutlineSetting } from "react-icons/ai";
 import { GoSignOut } from "react-icons/go";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 //import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -49,7 +49,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
   };
 
   return (
-    <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-full md:w-[95%] px-3 sm:px-5 z-[100] overflow-hidden">
+    <nav className="fixed bg-white flex justify-between items-center p-[0.68rem] border-b right-0 border-b-gray-300 w-full md:w-[95%] px-5 z-[100]">
       <div className="flex gap-2 sm:gap-5 items-center">
         <div className="sm:hidden">
           <RxHamburgerMenu
@@ -77,8 +77,8 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
           <div className="bg-swGreen h-2 w-2 rounded-full top-0 right-0 absolute" />
         </div>
         {isNotificationsOpen && (
-          <div className="absolute top-full w-[90vw] max-w-[25rem] min-w-[18rem] sm:w-[25rem] bg-white rounded-lg mt-5 shadow-md right-0 -mr-3 h-[30rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray z-30">
-            <div className="flex items-center justify-between p-5 sticky top-0 w-full rounded-t-md bg-white border-b">
+          <div className="absolute top-full w-[25rem] min-w-[18rem] bg-white rounded-lg mt-5 shadow-md right-0 -mr-3 h-[30rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray">
+            <div className="flex items-center justify-between p-5 fixed w-[25rem] min-w-[18rem]rounded-t-md bg-white">
               <div className="flex gap-2 items-center">
                 <p className="text-lg font-semibold">Notifications</p>
                 <div className="py-1 px-4 bg-swLightGray rounded-full">
@@ -92,7 +92,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
               />
             </div>
 
-            <div className="flex gap-5 py-3 px-5 border-b sticky top-[4.5rem] w-full bg-white">
+            <div className="flex gap-5 py-3 px-5 border-y fixed top-[9.5rem] w-[25rem] min-w-[18rem] bg-white">
               <button
                 className={`py-2 px-4 rounded-md ${
                   openedMessages === "unread" && "bg-swLightGray"
@@ -105,7 +105,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
               </button>
             </div>
 
-            <div className="mt-2">
+            <div className="mt-[8.7rem]">
               {openedMessages === "unread" &&
                 x?.data?.results
                   .filter((item) => item.actionStatus == "Pending")
@@ -167,7 +167,7 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
             }
             alt="user"
             className="cursor-pointer"
-            onClick={() => user?.profilePicture && setOpenProfilePic(true)}
+            onClick={() => setDropDown(!isDropDownOpen)}
           />
           <Viewer
             visible={openProfilePic}
@@ -184,15 +184,12 @@ const NavBar = ({ sideBarOpen, sideBarState, paths, isBackNav }) => {
       <img
         src={navPatternBg}
         alt="nav pattern"
-        className="absolute w-1/2 ml-auto cursor-pointer h-full object-cover right-0 z-10 pointer-events-none"
-      />
-      <div
-        className="absolute right-0 top-0 w-16 h-full cursor-pointer z-20"
+        className="absolute w-1/2 ml-auto cursor-pointer h-full object-cover"
         onClick={() => setDropDown(!isDropDownOpen)}
       />
 
       {isDropDownOpen && (
-        <div className="absolute top-full w-[10rem] min-w-[8rem] px-2 py-4 border bg-white rounded-lg mt-2 shadow-md right-2 h-[7rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray z-30">
+        <div className="absolute top-full w-[10rem] min-w-[8rem] px-2 py-4 border bg-white rounded-lg mt-2 shadow-md right-2  h-[7rem] overflow-x-hidden overflow-y-scroll scrollbar-hide text-swGray">
           <div className="flex-col">
             <Link
               href={"/settings"}
