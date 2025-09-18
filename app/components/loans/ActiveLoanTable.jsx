@@ -116,8 +116,8 @@ const ActiveLoanTable = () => {
               <p className="hidden lg:block">Create Loan</p>
             </div>
           }
-          btnTextClick={() => {
-            roleTag === "LO" ? router.push("/create-loan") : router.push("/unauthorized")
+btnTextClick={() => {
+            roleTag === "LO" || roleTag === "CTO" || roleTag === "CEO" || roleTag === "CFO" || roleTag === "Dir" || roleTag === "System Admin" ? router.push("/create-loan") : router.push("/unauthorized")
           }}
           filters={true}
           pagination={true}

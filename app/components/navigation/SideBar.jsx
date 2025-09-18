@@ -190,11 +190,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               }
               pathname={pathname}
               text="Create Loan"
-              link={`${
-                user?.data?.user?.role?.tag === "LO"
-                  ? "/create-loan"
-                  : "/unauthorised"
-              }`}
+              link='/create-loan'
               isActive={"create-loan"}
               sideBarOpen={sideBarOpen}
               onClick={() => {
@@ -203,11 +199,7 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
               hasDropdown={true}
               dropdownContent={
                 <Link
-                  href={`${
-                    user?.data?.user?.role?.tag === "LO"
-                      ? "/saved-loans"
-                      : "/unauthorised"
-                  }`}
+                  href='/saved-loans'
                   className="ml-5 text-sm hover:text-swBlue"
                 >
                   Saved Loans
