@@ -22,6 +22,7 @@ import reportReducer from "./slices/reportSlice";
 import roleReducer from "./slices/roleSlice";
 import userReducer from "./slices/userSlice";
 import userTaskReducer from "./slices/userTaskSlice";
+import accrualsReducer from "./slices/accrualsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -47,6 +48,7 @@ export const store = configureStore({
     hrms: hrmsReducer,
     attendance: attendanceReducer,
     employeeBenefitsLogs: employeeBenefitsLogReducer,
+    accruals: accrualsReducer,
   },
   // Add middleware or other configuration options as needed
 });

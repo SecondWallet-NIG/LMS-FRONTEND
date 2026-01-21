@@ -8,11 +8,31 @@ import InputField from "../components/shared/input/InputField";
 import { MdOutlineEmail } from "react-icons/md";
 import AccountPage from "../components/settings/AccountPage";
 import SecurityPage from "../components/settings/SecurityPage";
+import AccrualsPage from "../components/settings/AccrualsPage";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserById } from "@/redux/slices/userSlice";
 
 const Settings = () => {
   const [pageState, setPageState] = useState("Account");
+  const [userRole, setUserRole] = useState(null);
+  const [isDevelopment, setIsDevelopment] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const role = user?.data?.user?.role?.tag;
+      setUserRole(role);
+      
+      // Check if in development mode
+      const isDev = process.env.NODE_ENV === "development" || 
+                    window.location.hostname === "localhost" ||
+                    window.location.hostname === "127.0.0.1";
+      setIsDevelopment(isDev);
+    }
+  }, []);
+
+  // Show Accruals tab only for System Admin in development mode
+  const showAccrualsTab = isDevelopment && userRole === "System Admin";
 
   return (
     <DashboardLayout>
@@ -38,9 +58,22 @@ const Settings = () => {
           >
             Security
           </p>
+          {showAccrualsTab && (
+            <p
+              className={` border-b-2  px-6 py-2 cursor-pointer ${
+                pageState === "Accruals"
+                  ? "text-swBlue border-b-swBlue font-medium"
+                  : "border-transparent"
+              }`}
+              onClick={() => setPageState("Accruals")}
+            >
+              Accruals
+            </p>
+          )}
         </div>
         {pageState === "Account" && <AccountPage />}
         {pageState === "Security" && <SecurityPage />}
+        {pageState === "Accruals" && showAccrualsTab && <AccrualsPage />}
       </main>
     </DashboardLayout>
   );

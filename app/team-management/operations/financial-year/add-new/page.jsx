@@ -1,19 +1,24 @@
 "use client";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { LuCalendar } from "react-icons/lu";
 import InputField from "@/app/components/shared/input/InputField";
 import { format } from "date-fns";
 import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
-import { useDispatch } from "react-redux";
-import { addNewFinancialYear } from "@/redux/slices/hrmsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewFinancialYear, getFinancialYear } from "@/redux/slices/hrmsSlice";
 import Button from "@/app/components/shared/buttonComponent/Button";
 import { teamManagementAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { useRouter } from "next/navigation";
 
 const AddNewFinancialYear = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { data } = useSelector((state) => state?.hrms);
+  const activeFinancialYear = data?.data;
+  
   const [formData, setFormData] = useState({
     year: "",
     startDate: new Date(),
@@ -29,6 +34,15 @@ const AddNewFinancialYear = () => {
   const [successModal, setSuccessModal] = useState(false);
   const [errorModal, setErrorModal] = useState({ state: false, message: "" });
   const [openDate, setOpenDate] = useState(false);
+  const [hadActiveYear, setHadActiveYear] = useState(false);
+
+  useEffect(() => {
+    dispatch(getFinancialYear());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setHadActiveYear(activeFinancialYear?.isActive || false);
+  }, [activeFinancialYear]);
 
   const handleSubmit = () => {
     setLoading(true);
@@ -38,6 +52,8 @@ const AddNewFinancialYear = () => {
         setSuccessModal(true);
         reset();
         setLoading(false);
+        // Refresh financial year data
+        dispatch(getFinancialYear());
       })
       .catch((error) => {
         setErrorModal({
@@ -62,6 +78,21 @@ const AddNewFinancialYear = () => {
             </p>
           </div>
         </div>
+
+        {activeFinancialYear?.isActive && (
+          <div className="mt-5 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+            <p className="text-sm text-yellow-800 font-semibold mb-2">
+              ⚠️ Active Financial Year Detected
+            </p>
+            <p className="text-sm text-yellow-700">
+              There is currently an active financial year: <strong>{activeFinancialYear.year}</strong> 
+              {" "}({format(new Date(activeFinancialYear.startDate), "MMM dd, yyyy")} - {format(new Date(activeFinancialYear.endDate), "MMM dd, yyyy")}).
+            </p>
+            <p className="text-sm text-yellow-700 mt-1">
+              Creating a new financial year will automatically deactivate the current one.
+            </p>
+          </div>
+        )}
 
         <div className="flex justify-between mt-5 gap-5">
           <p className="w-1/4 font-semibold mr-2">Select Year</p>
@@ -134,7 +165,11 @@ const AddNewFinancialYear = () => {
       </div>
       <SuccessModal
         isOpen={successModal}
-        description={"Financal year has been created successfully"}
+        description={
+          hadActiveYear 
+            ? "Financial year has been created successfully. The previous financial year has been automatically deactivated."
+            : "Financial year has been created successfully"
+        }
         title={"Financial Year Creation Successful"}
         btnLeft={"Operations"}
         btnLeftFunc={() => router.push("/team-management/operations")}
