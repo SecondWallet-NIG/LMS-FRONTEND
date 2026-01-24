@@ -1,6 +1,7 @@
 # ---- Base Builder Stage -----
 FROM node:20-alpine AS builder
 
+ARG NEXT_PUBLIC_API_URL
 
 WORKDIR /app
 
