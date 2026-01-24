@@ -7,10 +7,10 @@ WORKDIR /app
 
 
 # Copy lockfile + manifest first (better caching)
-COPY package.json /
+COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install --legacy-peer-deps
+RUN npm ci
 
 # Copy rest of the source
 COPY . .
@@ -26,13 +26,10 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-# Copy package.json & node_modules from builder
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
-
-# Copy only necessary build artifacts
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3000
 
