@@ -19,8 +19,9 @@ import EditableButton from "@/app/components/shared/editableButtonComponent/Edit
 import InputField from "@/app/components/shared/input/InputField";
 import SelectField from "@/app/components/shared/input/SelectField";
 import Loader from "@/app/components/shared/Loader";
-import { bankArr } from "@/constant";
+import { bankArr, API_URL } from "@/constant";
 import { formatDate } from "@/helpers";
+import axios from "axios";
 import { getInterestType } from "@/redux/slices/interestTypeSlice";
 import {
   disburseLoan,
@@ -88,6 +89,8 @@ const ViewLoan = () => {
   const { statementData, statementPending } = useSelector(
     (state) => state?.loanApplication
   );
+  const [testTriggerLoading, setTestTriggerLoading] = useState(false);
+  const [daysToAdvance, setDaysToAdvance] = useState(1);
 
   const handleFileChange = (e) => {
     setFileError("");
@@ -211,7 +214,8 @@ const ViewLoan = () => {
         });
     } else if (update === "interestRate") {
       let updatedData = new FormData();
-      updatedData.append("interestRate", interestRate / 100);
+      // Backend expects interest rate as a percentage value (e.g. 10 for 10% per month)
+      updatedData.append("interestRate", interestRate);
 
       dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
         .unwrap()
@@ -538,6 +542,15 @@ const ViewLoan = () => {
     // dispatch(loanStatementOfAccount());
   }, []);
 
+  const principalDue =
+    Number(data?.data?.principalDueScheduled ?? NaN) ||
+    (Array.isArray(data?.data?.dueRepayments)
+      ? data?.data?.dueRepayments.reduce(
+          (sum, r) => sum + Number(r?.principalDueRemaining || 0),
+          0
+        )
+      : 0);
+
   useEffect(() => {
     modifyUsersToApprove();
   }, []);
@@ -580,6 +593,97 @@ const ViewLoan = () => {
       console.error("Error viewing document:", error);
     } finally {
       setStatementLoad(false);
+    }
+  };
+
+  // Test loan trigger functions
+  const triggerDailyAccrual = async () => {
+    setTestTriggerLoading(true);
+    try {
+      const userData = JSON.parse(localStorage.getItem("user"));
+      const response = await axios.post(
+        `${API_URL}/loan-application/test-loans/trigger-accrual`,
+        {
+          loanApplicationId: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.data?.token}`,
+          },
+        }
+      );
+
+      if (response.data.status === "success") {
+        dispatch(getSingleLoan(id));
+        toast.success("Daily interest accrued successfully!");
+      }
+    } catch (error) {
+      console.error("Error triggering accrual:", error);
+      toast.error(error.response?.data?.error || "Failed to trigger accrual");
+    } finally {
+      setTestTriggerLoading(false);
+    }
+  };
+
+  const advanceDays = async () => {
+    if (!daysToAdvance || daysToAdvance < 1) {
+      toast.error("Please enter a valid number of days (1-365)");
+      return;
+    }
+
+    setTestTriggerLoading(true);
+    try {
+      const userData = JSON.parse(localStorage.getItem("user"));
+      const response = await axios.post(
+        `${API_URL}/loan-application/test-loans/advance-days`,
+        {
+          loanApplicationId: id,
+          days: parseInt(daysToAdvance),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.data?.token}`,
+          },
+        }
+      );
+
+      if (response.data.status === "success") {
+        dispatch(getSingleLoan(id));
+        toast.success(`Advanced ${daysToAdvance} day(s) successfully!`);
+      }
+    } catch (error) {
+      console.error("Error advancing days:", error);
+      toast.error(error.response?.data?.error || "Failed to advance days");
+    } finally {
+      setTestTriggerLoading(false);
+    }
+  };
+
+  const triggerOverdueAccrual = async () => {
+    setTestTriggerLoading(true);
+    try {
+      const userData = JSON.parse(localStorage.getItem("user"));
+      const response = await axios.post(
+        `${API_URL}/loan-application/test-loans/trigger-overdue`,
+        {
+          loanApplicationId: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.data?.token}`,
+          },
+        }
+      );
+
+      if (response.data.status === "success") {
+        dispatch(getSingleLoan(id));
+        toast.success("Overdue accrual triggered successfully!");
+      }
+    } catch (error) {
+      console.error("Error triggering overdue accrual:", error);
+      toast.error(error.response?.data?.error || "Failed to trigger overdue accrual");
+    } finally {
+      setTestTriggerLoading(false);
     }
   };
 
@@ -1033,6 +1137,74 @@ const ViewLoan = () => {
                   </tr>
                 </tbody>
               </table>
+              <table className=" w-full ">
+                <thead className="bg-swLightGray ">
+                  <tr>
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
+                      Penalty Due
+                    </th>
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
+                      <h1>Interest Due</h1>
+                    </th>
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
+                      <h1>Principal Due (Scheduled)</h1>
+                    </th>
+                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
+                      <h1>Amount Due To Pay</h1>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="text-start text-[14px]">
+                    <td className="w-1/4 px-3 py-3">
+                      <p className="text-swIndicatorLightRed">
+                        ₦{" "}
+                        {Number(
+                          data?.data?.penaltyDue ??
+                            data?.data?.loanApplication?.amountAccruedForcurrentOverdue ??
+                            0
+                        ).toLocaleString()}
+                      </p>
+                    </td>
+                    <td className="w-1/4 px-3 py-3">
+                      <p className="text-swIndicatorLightRed">
+                        ₦{" "}
+                        {Number(
+                          data?.data?.interestDue ??
+                            data?.data?.loanApplication?.currentInterest ??
+                            0
+                        ).toLocaleString()}
+                      </p>
+                    </td>
+                    <td className="w-1/4 px-3 py-3">
+                      <p className="text-swIndicatorLightRed">
+                        ₦{" "}
+                        {Number(principalDue || 0).toLocaleString()}
+                      </p>
+                    </td>
+                    <td className="w-1/4 px-3 py-3">
+                      <p className="text-swIndicatorLightRed font-semibold">
+                        ₦{" "}
+                        {Number(
+                          data?.data?.amountDueToPay ??
+                            (Number(
+                              data?.data?.penaltyDue ??
+                                data?.data?.loanApplication
+                                  ?.amountAccruedForcurrentOverdue ??
+                                0
+                            ) +
+                              Number(
+                                data?.data?.interestDue ??
+                                  data?.data?.loanApplication?.currentInterest ??
+                                  0
+                              ) +
+                              Number(principalDue || 0))
+                        ).toLocaleString()}
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -1176,6 +1348,12 @@ const ViewLoan = () => {
                                     {item?.assignee?.firstName}{" "}
                                     {item?.assignee?.lastName}
                                   </p>
+                                  {item?.assignee?.email ? (
+                                    <p className="text-swGray">
+                                      {" "}
+                                      {item?.assignee?.email}
+                                    </p>
+                                  ) : null}
                                   <p className="text-swGray">
                                     {" "}
                                     {item?.assignee?.role?.name}
@@ -1273,6 +1451,61 @@ const ViewLoan = () => {
               </table>
             </div>
           </div>
+
+          {/* Test Loan Triggers Section */}
+          {data?.data?.loanApplication?.repaymentType === "installmentPayment" && (
+            <div className="ml-5 mr-5 mt-5">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <h6 className="font-semibold text-yellow-800 p-2 mb-3">
+                  🧪 Test Loan Triggers (Development Only)
+                </h6>
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <Button
+                      variant="primary"
+                      onClick={triggerDailyAccrual}
+                      disabled={testTriggerLoading}
+                      className="flex-1 text-sm"
+                    >
+                      {testTriggerLoading ? "Processing..." : "Trigger Daily Interest Accrual"}
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={triggerOverdueAccrual}
+                      disabled={testTriggerLoading}
+                      className="flex-1 text-sm"
+                    >
+                      {testTriggerLoading ? "Processing..." : "Trigger Overdue Accrual"}
+                    </Button>
+                  </div>
+                  <div className="flex gap-2 items-end">
+                    <div className="flex-1">
+                      <InputField
+                        label="Advance Days"
+                        type="number"
+                        min="1"
+                        max="365"
+                        value={daysToAdvance}
+                        onChange={(e) => setDaysToAdvance(e.target.value)}
+                        placeholder="Enter days (1-365)"
+                      />
+                    </div>
+                    <Button
+                      variant="primary"
+                      onClick={advanceDays}
+                      disabled={testTriggerLoading}
+                      className="mb-0"
+                    >
+                      {testTriggerLoading ? "Processing..." : "Advance Days"}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-yellow-700 mt-2">
+                    ⚠️ These buttons are for testing purposes only. Use them to simulate daily accruals and advance time for testing installment payment scenarios.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="p-5">
             <section id="loan-details">{/* <ReusableDataTables/> */}</section>
