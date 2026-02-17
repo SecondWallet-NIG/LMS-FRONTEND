@@ -48,9 +48,19 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
   const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState(true);
   const [activeLink, setActiveLink] = useState("");
+  const [isDevelopment, setIsDevelopment] = useState(false);
   const x = useSelector((state) => state.UserTasks);
   const userRoleTag = JSON.parse(localStorage.getItem("user"))?.data?.user?.role
     ?.tag;
+
+  useEffect(() => {
+    const isDev =
+      process.env.NODE_ENV === "development" ||
+      (typeof window !== "undefined" &&
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1"));
+    setIsDevelopment(!!isDev);
+  }, []);
 
   const handleSidebarOpen = (state) => {
     setSideBarOpen(state);
@@ -240,6 +250,14 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   >
                     Loan Restructure Requests
                   </Link>
+                  {isDevelopment && (
+                    <Link
+                      href="/test-installment-loan"
+                      className="ml-5 text-sm hover:text-swBlue text-amber-600"
+                    >
+                      Loan test
+                    </Link>
+                  )}
                 </div>
               }
             />
@@ -581,6 +599,14 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
                   >
                     Loan Restructure Requests
                   </Link>
+                  {isDevelopment && (
+                    <Link
+                      href="/test-installment-loan"
+                      className="ml-5 text-sm hover:text-swBlue text-amber-600"
+                    >
+                      Loan test
+                    </Link>
+                  )}
                 </div>
               }
             />

@@ -52,7 +52,7 @@ const RequestApproval = ({ data, approvalId, approvalLevel, onClose }) => {
       // Update users to approve
       setUsersToApprove(
         users.map((item) => ({
-          label: `${item.firstName} ${item.lastName}`,
+          label: `${item.firstName} ${item.lastName}${item.email ? ` (${item.email})` : ""}`,
           value: item._id,
         }))
       );

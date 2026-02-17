@@ -74,9 +74,14 @@ const LoanProcessCard = ({ data }) => {
                   className={`flex text-sm font-semibold border-2 border-white rounded-lg overflow-hidden cursor-pointer `}
                 >
                   {item?.assignee?.firstName ? (
-                    <p className="font-medium text-xs text-black">
-                      {item?.assignee?.firstName} {item?.assignee?.lastName}
-                    </p>
+                    <div className="flex flex-col">
+                      <p className="font-medium text-xs text-black">
+                        {item?.assignee?.firstName} {item?.assignee?.lastName}
+                      </p>
+                      {item?.assignee?.email ? (
+                        <p className="text-xs text-swGray">{item?.assignee?.email}</p>
+                      ) : null}
+                    </div>
                   ) : (
                     <p className="text-xs">Yet to be assigned</p>
                   )}
