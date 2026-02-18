@@ -1,20 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
-import Button from "../components/shared/buttonComponent/Button";
-import InputField from "../components/shared/input/InputField";
 import { API_URL } from "@/constant";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "@/redux/slices/customerSlice";
 import { getLoanApplication } from "@/redux/slices/loanApplicationSlice";
-import CenterModal from "../components/modals/CenterModal";
+import axios from "axios";
 import { format } from "date-fns";
+import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { FaRegCalendar } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
+import CenterModal from "../components/modals/CenterModal";
+import Button from "../components/shared/buttonComponent/Button";
+import InputField from "../components/shared/input/InputField";
+import SelectField from "../components/shared/input/SelectField";
+
+const repaymentMethodOptions = [
+  { value: "Cash", label: "Cash" },
+  { value: "Bank transfer", label: "Bank transfer" },
+];
 
 const TestInstallmentLoan = () => {
   const dispatch = useDispatch();
@@ -57,7 +63,7 @@ const TestInstallmentLoan = () => {
           item.firstName?.toLowerCase().includes(searchValue) ||
           item.lastName?.toLowerCase().includes(searchValue) ||
           item.email?.toLowerCase().includes(searchValue) ||
-          item.phoneNumber?.includes(searchValue)
+          item.phoneNumber?.includes(searchValue),
       );
       setFilteredData(filtered);
     }
@@ -71,7 +77,10 @@ const TestInstallmentLoan = () => {
 
     const validRepayments = Array.isArray(repayments)
       ? repayments.filter(
-          (r) => r?.dateCollected && r?.repaymentAmount && Number(r.repaymentAmount) > 0
+          (r) =>
+            r?.dateCollected &&
+            r?.repaymentAmount &&
+            Number(r.repaymentAmount) > 0,
         )
       : [];
 
@@ -84,14 +93,19 @@ const TestInstallmentLoan = () => {
         loanAmount: 100000,
         loanDuration: 5,
         interestRate: 10,
-        disbursementDaysAgo: Math.max(0, parseInt(disbursementDaysAgo, 10) || 0),
+        disbursementDaysAgo: Math.max(
+          0,
+          parseInt(disbursementDaysAgo, 10) || 0,
+        ),
       };
       if (validRepayments.length > 0) {
         payload.repayments = validRepayments.map((r) => ({
           repaymentAmount: parseFloat(r.repaymentAmount),
           dateCollected: r.dateCollected,
           repaymentMethod: r.repaymentMethod || "Cash",
-          ...(r.repaymentNumber ? { repaymentNumber: parseInt(r.repaymentNumber, 10) } : {}),
+          ...(r.repaymentNumber
+            ? { repaymentNumber: parseInt(r.repaymentNumber, 10) }
+            : {}),
         }));
       }
 
@@ -102,7 +116,7 @@ const TestInstallmentLoan = () => {
           headers: {
             Authorization: `Bearer ${userData?.data?.token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -133,7 +147,10 @@ const TestInstallmentLoan = () => {
       return;
     }
     const invalid = repayments.find(
-      (r) => !r?.dateCollected || !r?.repaymentAmount || Number(r.repaymentAmount) <= 0
+      (r) =>
+        !r?.dateCollected ||
+        !r?.repaymentAmount ||
+        Number(r.repaymentAmount) <= 0,
     );
     if (invalid) {
       toast.error("Please ensure all repayments have a valid amount and date");
@@ -151,14 +168,16 @@ const TestInstallmentLoan = () => {
             repaymentAmount: parseFloat(r.repaymentAmount),
             dateCollected: r.dateCollected,
             repaymentMethod: r.repaymentMethod || "Cash",
-            ...(r.repaymentNumber ? { repaymentNumber: parseInt(r.repaymentNumber, 10) } : {}),
+            ...(r.repaymentNumber
+              ? { repaymentNumber: parseInt(r.repaymentNumber, 10) }
+              : {}),
           })),
         },
         {
           headers: {
             Authorization: `Bearer ${userData?.data?.token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -176,7 +195,9 @@ const TestInstallmentLoan = () => {
       }
     } catch (error) {
       console.error("Error simulating repayment:", error);
-      toast.error(error.response?.data?.error || "Failed to simulate repayment");
+      toast.error(
+        error.response?.data?.error || "Failed to simulate repayment",
+      );
     } finally {
       setLoading(false);
     }
@@ -200,7 +221,7 @@ const TestInstallmentLoan = () => {
           headers: {
             Authorization: `Bearer ${userData?.data?.token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -239,7 +260,7 @@ const TestInstallmentLoan = () => {
           headers: {
             Authorization: `Bearer ${userData?.data?.token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -272,7 +293,7 @@ const TestInstallmentLoan = () => {
           headers: {
             Authorization: `Bearer ${userData?.data?.token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -281,28 +302,34 @@ const TestInstallmentLoan = () => {
       }
     } catch (error) {
       console.error("Error triggering overdue accrual:", error);
-      toast.error(error.response?.data?.error || "Failed to trigger overdue accrual");
+      toast.error(
+        error.response?.data?.error || "Failed to trigger overdue accrual",
+      );
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <DashboardLayout>
       <main className="p-5">
         <ToastContainer />
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-swBlue">Test Installment Loan</h1>
+          <h1 className="text-2xl font-bold text-swBlue">
+            Test Installment Loan
+          </h1>
           <p className="text-sm text-gray-600 mt-2">
-            Create test loans and trigger accruals for testing installment payment scenarios
+            Create test loans and trigger accruals for testing installment
+            payment scenarios
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Create Test Loan Section */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-swBlue">Create Test Loan</h2>
+            <h2 className="text-xl font-semibold mb-4 text-swBlue">
+              Create Test Loan
+            </h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -324,7 +351,9 @@ const TestInstallmentLoan = () => {
                 )}
               </div>
               <div className="text-sm text-gray-600">
-                <p><strong>Default Values:</strong></p>
+                <p>
+                  <strong>Default Values:</strong>
+                </p>
                 <ul className="list-disc list-inside mt-2">
                   <li>Loan Amount: ₦100,000</li>
                   <li>Duration: 5 months</li>
@@ -357,7 +386,9 @@ const TestInstallmentLoan = () => {
           {/* Loan Info Section */}
           {loanInfo && (
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-swBlue">Loan Information</h2>
+              <h2 className="text-xl font-semibold mb-4 text-swBlue">
+                Loan Information
+              </h2>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">Loan ID:</span>
@@ -367,26 +398,36 @@ const TestInstallmentLoan = () => {
                   <span className="font-medium">Disbursement date:</span>
                   <span>
                     {loanInfo.disbursedAt
-                      ? new Date(loanInfo.disbursedAt).toLocaleDateString("en-NG", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })
+                      ? new Date(loanInfo.disbursedAt).toLocaleDateString(
+                          "en-NG",
+                          {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          },
+                        )
                       : "N/A"}
-                    {loanInfo.disbursementDaysAgo != null && ` (${loanInfo.disbursementDaysAgo} days ago)`}
+                    {loanInfo.disbursementDaysAgo != null &&
+                      ` (${loanInfo.disbursementDaysAgo} days ago)`}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Outstanding Principal:</span>
-                  <span>₦{loanInfo.outstandingPrincipal?.toLocaleString() || "N/A"}</span>
+                  <span>
+                    ₦{loanInfo.outstandingPrincipal?.toLocaleString() || "N/A"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Current Interest:</span>
-                  <span>₦{loanInfo.currentInterest?.toLocaleString() || "N/A"}</span>
+                  <span>
+                    ₦{loanInfo.currentInterest?.toLocaleString() || "N/A"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Outstanding Balance:</span>
-                  <span>₦{loanInfo.outstandingBalance?.toLocaleString() || "N/A"}</span>
+                  <span>
+                    ₦{loanInfo.outstandingBalance?.toLocaleString() || "N/A"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -394,58 +435,17 @@ const TestInstallmentLoan = () => {
 
           {/* Trigger Accruals Section */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-swBlue">Trigger Accruals</h2>
-            {!loanApplicationId ? (
-              <p className="text-sm text-gray-600">
-                Create a test loan first to enable accruals and repayment simulation.
-              </p>
-            ) : null}
-
             <div className="space-y-4">
-              <Button
-                variant="primary"
-                onClick={triggerDailyAccrual}
-                disabled={loading || !loanApplicationId}
-                className="w-full"
-              >
-                {loading ? "Processing..." : "Trigger Daily Interest Accrual"}
-              </Button>
-
-              <div className="flex gap-2">
-                <InputField
-                  label="Advance Days"
-                  type="number"
-                  min="1"
-                  max="365"
-                  value={daysToAdvance}
-                  onChange={(e) => setDaysToAdvance(e.target.value)}
-                  placeholder="Enter days (1-365)"
-                  className="flex-1"
-                />
-                <Button
-                  variant="primary"
-                  onClick={advanceDays}
-                  disabled={loading || !loanApplicationId}
-                  className="mt-6"
-                >
-                  Advance
-                </Button>
-              </div>
-
-              <Button
-                variant="secondary"
-                onClick={triggerOverdueAccrual}
-                disabled={loading || !loanApplicationId}
-                className="w-full"
-              >
-                {loading ? "Processing..." : "Trigger Overdue Accrual"}
-              </Button>
-
               <div className="border-t pt-4">
-                <h3 className="text-sm font-semibold text-swBlue mb-2">Simulate Repayment</h3>
+                <h3 className="text-sm font-semibold text-swBlue mb-2">
+                  Simulate Repayment
+                </h3>
                 <div className="space-y-3">
                   {repayments.map((r, idx) => (
-                    <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div
+                      key={idx}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-3"
+                    >
                       <InputField
                         label={`Repayment Amount #${idx + 1}`}
                         type="number"
@@ -453,7 +453,10 @@ const TestInstallmentLoan = () => {
                         value={r.repaymentAmount}
                         onChange={(e) => {
                           const next = [...repayments];
-                          next[idx] = { ...next[idx], repaymentAmount: e.target.value };
+                          next[idx] = {
+                            ...next[idx],
+                            repaymentAmount: e.target.value,
+                          };
                           setRepayments(next);
                         }}
                         placeholder="e.g. 10000"
@@ -467,7 +470,9 @@ const TestInstallmentLoan = () => {
                           <div
                             className="flex items-center gap-2 py-2.5 px-3 rounded border border-gray-300 bg-white cursor-pointer hover:border-swBlue min-h-[42px]"
                             onClick={() =>
-                              setOpenDatePickerIdx(openDatePickerIdx === idx ? null : idx)
+                              setOpenDatePickerIdx(
+                                openDatePickerIdx === idx ? null : idx,
+                              )
                             }
                           >
                             <FaRegCalendar
@@ -478,7 +483,7 @@ const TestInstallmentLoan = () => {
                               {r.dateCollected
                                 ? format(
                                     new Date(r.dateCollected + "T12:00:00"),
-                                    "PPP"
+                                    "PPP",
                                   )
                                 : "Pick date"}
                             </span>
@@ -492,7 +497,9 @@ const TestInstallmentLoan = () => {
                                     ? new Date(r.dateCollected + "T12:00:00")
                                     : undefined,
                                 }}
-                                modifiersClassNames={{ selected: "my-selected" }}
+                                modifiersClassNames={{
+                                  selected: "my-selected",
+                                }}
                                 onDayClick={(value) => {
                                   const next = [...repayments];
                                   next[idx] = {
@@ -517,36 +524,33 @@ const TestInstallmentLoan = () => {
                         <Button
                           variant="secondary"
                           disabled={loading || repayments.length <= 1}
-                          onClick={() => setRepayments(repayments.filter((_, i) => i !== idx))}
+                          onClick={() =>
+                            setRepayments(
+                              repayments.filter((_, i) => i !== idx),
+                            )
+                          }
                           className="h-10"
                         >
                           Remove
                         </Button>
                       </div>
 
-                      <InputField
-                        label="Repayment # (optional)"
-                        type="number"
-                        min="1"
-                        value={r.repaymentNumber}
-                        onChange={(e) => {
-                          const next = [...repayments];
-                          next[idx] = { ...next[idx], repaymentNumber: e.target.value };
-                          setRepayments(next);
-                        }}
-                        placeholder="e.g. 1"
-                      />
-
-                      <InputField
+                      <SelectField
                         label="Repayment Method (optional)"
-                        type="text"
-                        value={r.repaymentMethod}
-                        onChange={(e) => {
+                        value={repaymentMethodOptions.find(
+                          (option) => option.value === r.repaymentMethod,
+                        )}
+                        optionValue={repaymentMethodOptions}
+                        placeholder="Select repayment method"
+                        isSearchable={false}
+                        onChange={(selectedOption) => {
                           const next = [...repayments];
-                          next[idx] = { ...next[idx], repaymentMethod: e.target.value };
+                          next[idx] = {
+                            ...next[idx],
+                            repaymentMethod: selectedOption?.value || "",
+                          };
                           setRepayments(next);
                         }}
-                        placeholder="Cash / Bank transfer / Card / Bank deposit"
                       />
                     </div>
                   ))}
@@ -577,7 +581,9 @@ const TestInstallmentLoan = () => {
                   disabled={loading || !loanApplicationId}
                   className="w-full mt-3"
                 >
-                  {loading ? "Processing..." : "Simulate Repayment & Trigger Accruals"}
+                  {loading
+                    ? "Processing..."
+                    : "Simulate Repayment & Trigger Accruals"}
                 </Button>
               </div>
             </div>
@@ -585,19 +591,32 @@ const TestInstallmentLoan = () => {
 
           {/* Instructions Section */}
           <div className="bg-blue-50 rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-swBlue">How to Use</h2>
+            <h2 className="text-xl font-semibold mb-4 text-swBlue">
+              How to Use
+            </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700">
               <li>Select a customer from the dropdown</li>
-              <li>Click "Create Test Loan" - loan will be auto-approved and disbursed</li>
-              <li>Use "Trigger Daily Interest Accrual" to accrue interest for today</li>
+              <li>
+                Click "Create Test Loan" - loan will be auto-approved and
+                disbursed
+              </li>
+              <li>
+                Use "Trigger Daily Interest Accrual" to accrue interest for
+                today
+              </li>
               <li>Use "Advance Days" to simulate multiple days passing</li>
-              <li>Use "Trigger Overdue Accrual" to calculate penalties for overdue loans</li>
+              <li>
+                Use "Trigger Overdue Accrual" to calculate penalties for overdue
+                loans
+              </li>
               <li>Navigate to the loan details page to test payments</li>
             </ol>
             {loanApplicationId && (
               <div className="mt-4 p-3 bg-white rounded">
                 <p className="text-sm font-medium">Loan Application ID:</p>
-                <p className="text-xs font-mono break-all">{loanApplicationId}</p>
+                <p className="text-xs font-mono break-all">
+                  {loanApplicationId}
+                </p>
                 <div className="flex flex-wrap gap-3 mt-2">
                   <a
                     href="/loan-applications"
@@ -620,14 +639,20 @@ const TestInstallmentLoan = () => {
         </div>
 
         {/* Customer Selection Modal */}
-        <CenterModal isOpen={isOpen} width={"40%"} onClose={() => {
-          setIsOpen(false);
-          setSearchTerm("");
-          setFilteredData(customer?.data || []);
-        }}>
+        <CenterModal
+          isOpen={isOpen}
+          width={"40%"}
+          onClose={() => {
+            setIsOpen(false);
+            setSearchTerm("");
+            setFilteredData(customer?.data || []);
+          }}
+        >
           <div className="h-[500px] overflow-y-scroll p-4">
             <div className="mb-4 flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-black">Select Customer</h3>
+              <h3 className="text-lg font-semibold text-black">
+                Select Customer
+              </h3>
               <button
                 className="text-black text-xl"
                 onClick={() => {
@@ -650,7 +675,9 @@ const TestInstallmentLoan = () => {
             </div>
             <div>
               {customer?.loading === "pending" ? (
-                <p className="text-center text-gray-500 py-8">Loading customers...</p>
+                <p className="text-center text-gray-500 py-8">
+                  Loading customers...
+                </p>
               ) : filteredData && filteredData.length > 0 ? (
                 filteredData.map((item) => (
                   <div
@@ -692,4 +719,3 @@ const TestInstallmentLoan = () => {
 };
 
 export default TestInstallmentLoan;
-
