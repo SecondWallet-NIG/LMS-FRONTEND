@@ -32,10 +32,10 @@ const TestInstallmentLoan = () => {
   const [disbursementDaysAgo, setDisbursementDaysAgo] = useState(18);
   const [repayments, setRepayments] = useState([
     {
-      repaymentAmount: 10000,
+      repaymentAmount: 0,
       dateCollected: new Date().toISOString().split("T")[0],
       repaymentNumber: "",
-      repaymentMethod: "Cash",
+      repaymentMethod: "",
     },
   ]);
   const [openDatePickerIdx, setOpenDatePickerIdx] = useState(null);
