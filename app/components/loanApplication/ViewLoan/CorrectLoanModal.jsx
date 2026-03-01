@@ -120,7 +120,7 @@ const CorrectLoanModal = ({ isOpen, onClose, data }) => {
         </p>
         <InputField
           name="outstandingPrincipal"
-          label="Outstanding Principal"
+          label="Outstanding Principal (from repayments)"
           required={true}
           // disabled={true}
           placeholder="Enter amount"
@@ -144,7 +144,7 @@ const CorrectLoanModal = ({ isOpen, onClose, data }) => {
         />
         <InputField
           name="currentInterest"
-          label="Current Interest"
+          label="Accrued Interest"
           required={true}
           // disabled={true}
           placeholder="Enter amount"
@@ -192,7 +192,7 @@ const CorrectLoanModal = ({ isOpen, onClose, data }) => {
         />
         <InputField
           name="outstandingBalance"
-          label="Outstanding Balance"
+          label="Outstanding Balance (principal + interest due + penalty)"
           required={true}
           disabled={true}
           placeholder="Enter amount"

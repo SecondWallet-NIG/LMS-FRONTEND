@@ -44,6 +44,15 @@ const TestInstallmentLoan = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const normalizedDisbursementDaysAgo = Math.max(
+    0,
+    parseInt(disbursementDaysAgo, 10) || 0,
+  );
+  const projectedDisbursementDate = format(
+    new Date(Date.now() - normalizedDisbursementDaysAgo * 24 * 60 * 60 * 1000),
+    "PPP",
+  );
+
   useEffect(() => {
     dispatch(getCustomers());
   }, [dispatch]);
@@ -93,10 +102,7 @@ const TestInstallmentLoan = () => {
         loanAmount: 100000,
         loanDuration: 5,
         interestRate: 10,
-        disbursementDaysAgo: Math.max(
-          0,
-          parseInt(disbursementDaysAgo, 10) || 0,
-        ),
+        disbursementDaysAgo: normalizedDisbursementDaysAgo,
       };
       if (validRepayments.length > 0) {
         payload.repayments = validRepayments.map((r) => ({
@@ -137,99 +143,24 @@ const TestInstallmentLoan = () => {
     }
   };
 
-  const simulateRepayment = async () => {
-    if (!loanApplicationId) {
-      toast.error("Please create a test loan first");
-      return;
-    }
-    if (!Array.isArray(repayments) || repayments.length === 0) {
-      toast.error("Please add at least one repayment");
-      return;
-    }
-    const invalid = repayments.find(
-      (r) =>
-        !r?.dateCollected ||
-        !r?.repaymentAmount ||
-        Number(r.repaymentAmount) <= 0,
-    );
-    if (invalid) {
-      toast.error("Please ensure all repayments have a valid amount and date");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const userData = JSON.parse(localStorage.getItem("user"));
-      const response = await axios.post(
-        `${API_URL}/loan-application/test-loans/simulate-repayment`,
-        {
-          loanApplicationId,
-          repayments: repayments.map((r) => ({
-            repaymentAmount: parseFloat(r.repaymentAmount),
-            dateCollected: r.dateCollected,
-            repaymentMethod: r.repaymentMethod || "Cash",
-            ...(r.repaymentNumber
-              ? { repaymentNumber: parseInt(r.repaymentNumber, 10) }
-              : {}),
-          })),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.data?.token}`,
-          },
-        },
-      );
-
-      if (response.data.status === "success") {
-        const finalState = response.data.data?.finalState;
-        if (finalState) {
-          setLoanInfo((prev) => ({
-            ...(prev || {}),
-            outstandingPrincipal: finalState.outstandingPrincipal,
-            currentInterest: finalState.currentInterest,
-            outstandingBalance: finalState.outstandingBalance,
-            status: finalState.status,
-          }));
-        }
-        toast.success("Repayment simulated successfully!");
-      }
-    } catch (error) {
-      console.error("Error simulating repayment:", error);
-      toast.error(
-        error.response?.data?.error || "Failed to simulate repayment",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const triggerDailyAccrual = async () => {
     if (!loanApplicationId) {
       toast.error("Please create a test loan first");
       return;
     }
-
     setLoading(true);
     try {
       const userData = JSON.parse(localStorage.getItem("user"));
       const response = await axios.post(
         `${API_URL}/loan-application/test-loans/trigger-accrual`,
-        {
-          loanApplicationId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.data?.token}`,
-          },
-        },
+        { loanApplicationId },
+        { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-
       if (response.data.status === "success") {
         setLoanInfo(response.data.data);
         toast.success("Daily interest accrued successfully!");
       }
     } catch (error) {
-      console.error("Error triggering accrual:", error);
       toast.error(error.response?.data?.error || "Failed to trigger accrual");
     } finally {
       setLoading(false);
@@ -241,34 +172,23 @@ const TestInstallmentLoan = () => {
       toast.error("Please create a test loan first");
       return;
     }
-
     if (!daysToAdvance || daysToAdvance < 1) {
       toast.error("Please enter a valid number of days (1-365)");
       return;
     }
-
     setLoading(true);
     try {
       const userData = JSON.parse(localStorage.getItem("user"));
       const response = await axios.post(
         `${API_URL}/loan-application/test-loans/advance-days`,
-        {
-          loanApplicationId,
-          days: parseInt(daysToAdvance),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.data?.token}`,
-          },
-        },
+        { loanApplicationId, days: parseInt(daysToAdvance, 10) },
+        { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-
       if (response.data.status === "success") {
         setLoanInfo(response.data.data.finalState);
         toast.success(`Advanced ${daysToAdvance} day(s) successfully!`);
       }
     } catch (error) {
-      console.error("Error advancing days:", error);
       toast.error(error.response?.data?.error || "Failed to advance days");
     } finally {
       setLoading(false);
@@ -280,28 +200,19 @@ const TestInstallmentLoan = () => {
       toast.error("Please create a test loan first");
       return;
     }
-
     setLoading(true);
     try {
       const userData = JSON.parse(localStorage.getItem("user"));
       const response = await axios.post(
         `${API_URL}/loan-application/test-loans/trigger-overdue`,
-        {
-          loanApplicationId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData?.data?.token}`,
-          },
-        },
+        { loanApplicationId },
+        { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-
       if (response.data.status === "success") {
         setLoanInfo(response.data.data);
         toast.success("Overdue accrual triggered successfully!");
       }
     } catch (error) {
-      console.error("Error triggering overdue accrual:", error);
       toast.error(
         error.response?.data?.error || "Failed to trigger overdue accrual",
       );
@@ -325,7 +236,6 @@ const TestInstallmentLoan = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Create Test Loan Section */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4 text-swBlue">
               Create Test Loan
@@ -351,16 +261,17 @@ const TestInstallmentLoan = () => {
                 )}
               </div>
               <div className="text-sm text-gray-600">
-                <p>
-                  <strong>Default Values:</strong>
-                </p>
+                <p><strong>Default Values:</strong></p>
                 <ul className="list-disc list-inside mt-2">
                   <li>Loan Amount: ₦100,000</li>
                   <li>Duration: 5 months</li>
                   <li>Interest Rate: 10%</li>
                   <li>Repayment Type: Installment Payment</li>
                   <li>Status: Auto-approved & Disbursed</li>
-                  <li>Disbursement Date: {disbursementDaysAgo} days ago</li>
+                  <li>
+                    Projected Disbursement Date: {projectedDisbursementDate} (
+                    {normalizedDisbursementDaysAgo} days ago)
+                  </li>
                 </ul>
               </div>
               <InputField
@@ -372,73 +283,14 @@ const TestInstallmentLoan = () => {
                 onChange={(e) => setDisbursementDaysAgo(e.target.value)}
                 placeholder="e.g. 18"
               />
-              <Button
-                variant="primary"
-                onClick={createTestLoan}
-                disabled={loading || !selectedCustomer}
-                className="w-full"
-              >
-                {loading ? "Creating..." : "Create Test Loan"}
-              </Button>
             </div>
           </div>
 
-          {/* Loan Info Section */}
-          {loanInfo && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-swBlue">
-                Loan Information
-              </h2>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="font-medium">Loan ID:</span>
-                  <span>{loanInfo.loanId || loanApplicationId}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Disbursement date:</span>
-                  <span>
-                    {loanInfo.disbursedAt
-                      ? new Date(loanInfo.disbursedAt).toLocaleDateString(
-                          "en-NG",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          },
-                        )
-                      : "N/A"}
-                    {loanInfo.disbursementDaysAgo != null &&
-                      ` (${loanInfo.disbursementDaysAgo} days ago)`}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Outstanding Principal:</span>
-                  <span>
-                    ₦{loanInfo.outstandingPrincipal?.toLocaleString() || "N/A"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Current Interest:</span>
-                  <span>
-                    ₦{loanInfo.currentInterest?.toLocaleString() || "N/A"}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Outstanding Balance:</span>
-                  <span>
-                    ₦{loanInfo.outstandingBalance?.toLocaleString() || "N/A"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Trigger Accruals Section */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="space-y-4">
               <div className="border-t pt-4">
                 <h3 className="text-sm font-semibold text-swBlue mb-2">
-                  Simulate Repayment
+                  Repayments (Optional)
                 </h3>
                 <div className="space-y-3">
                   {repayments.map((r, idx) => (
@@ -461,7 +313,6 @@ const TestInstallmentLoan = () => {
                         }}
                         placeholder="e.g. 10000"
                       />
-
                       <div className="flex gap-2 items-end">
                         <div className="flex-1 relative">
                           <p className="text-sm font-medium text-gray-700 mb-1">
@@ -475,10 +326,7 @@ const TestInstallmentLoan = () => {
                               )
                             }
                           >
-                            <FaRegCalendar
-                              size={18}
-                              className="text-gray-500 shrink-0"
-                            />
+                            <FaRegCalendar size={18} className="text-gray-500 shrink-0" />
                             <span className="text-sm text-gray-800">
                               {r.dateCollected
                                 ? format(
@@ -497,9 +345,7 @@ const TestInstallmentLoan = () => {
                                     ? new Date(r.dateCollected + "T12:00:00")
                                     : undefined,
                                 }}
-                                modifiersClassNames={{
-                                  selected: "my-selected",
-                                }}
+                                modifiersClassNames={{ selected: "my-selected" }}
                                 onDayClick={(value) => {
                                   const next = [...repayments];
                                   next[idx] = {
@@ -525,20 +371,17 @@ const TestInstallmentLoan = () => {
                           variant="secondary"
                           disabled={loading || repayments.length <= 1}
                           onClick={() =>
-                            setRepayments(
-                              repayments.filter((_, i) => i !== idx),
-                            )
+                            setRepayments(repayments.filter((_, i) => i !== idx))
                           }
                           className="h-10"
                         >
                           Remove
                         </Button>
                       </div>
-
                       <SelectField
                         label="Repayment Method (optional)"
                         value={repaymentMethodOptions.find(
-                          (option) => option.value === r.repaymentMethod,
+                          (o) => o.value === r.repaymentMethod,
                         )}
                         optionValue={repaymentMethodOptions}
                         placeholder="Select repayment method"
@@ -554,7 +397,6 @@ const TestInstallmentLoan = () => {
                       />
                     </div>
                   ))}
-
                   <Button
                     variant="secondary"
                     disabled={loading}
@@ -574,49 +416,129 @@ const TestInstallmentLoan = () => {
                     Add another repayment
                   </Button>
                 </div>
-
-                <Button
-                  variant="primary"
-                  onClick={simulateRepayment}
-                  disabled={loading || !loanApplicationId}
-                  className="w-full mt-3"
-                >
-                  {loading
-                    ? "Processing..."
-                    : "Simulate Repayment & Trigger Accruals"}
-                </Button>
               </div>
             </div>
           </div>
 
-          {/* Instructions Section */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-semibold mb-4 text-swBlue">
+              Loan Status & Actions
+            </h2>
+            {loanInfo ? (
+              <div className="space-y-2 text-sm mb-4">
+                <div className="flex justify-between">
+                  <span className="font-medium">Loan ID:</span>
+                  <span>{loanInfo.loanId || loanApplicationId}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Disbursement date:</span>
+                  <span>
+                    {loanInfo.disbursedAt
+                      ? new Date(loanInfo.disbursedAt).toLocaleDateString(
+                          "en-NG",
+                          { year: "numeric", month: "short", day: "numeric" },
+                        )
+                      : "N/A"}
+                    {loanInfo.disbursementDaysAgo != null &&
+                      ` (${loanInfo.disbursementDaysAgo} days ago)`}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Outstanding Principal (from repayments):</span>
+                  <span>
+                    ₦{loanInfo.outstandingPrincipal?.toLocaleString() ?? "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Accrued Interest:</span>
+                  <span>
+                    ₦{loanInfo.currentInterest?.toLocaleString() ?? "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Outstanding Balance:</span>
+                  <span>
+                    ₦{loanInfo.outstandingBalance?.toLocaleString() ?? "N/A"}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 mb-4">
+                No active loan. Create a test loan to see details and perform
+                actions.
+              </p>
+            )}
+            <div className="mt-6 border-t pt-4">
+              <h3 className="text-sm font-semibold text-swBlue mb-3">
+                Loan Actions
+              </h3>
+              <div className="space-y-4">
+                <div className="flex gap-2 items-end">
+                  <div className="flex-1">
+                    <InputField
+                      label="Days to Advance"
+                      type="number"
+                      min="1"
+                      value={daysToAdvance}
+                      onChange={(e) => setDaysToAdvance(e.target.value)}
+                      placeholder="e.g. 1"
+                      disabled={!loanApplicationId}
+                    />
+                  </div>
+                  <Button
+                    variant="secondary"
+                    onClick={advanceDays}
+                    disabled={loading || !loanApplicationId}
+                    className="h-[42px] mb-[2px]"
+                  >
+                    Advance Days
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Button
+                    variant="secondary"
+                    onClick={triggerDailyAccrual}
+                    disabled={loading || !loanApplicationId}
+                    className="w-full text-sm"
+                  >
+                    Trigger Daily Interest
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={triggerOverdueAccrual}
+                    disabled={loading || !loanApplicationId}
+                    className="w-full text-sm"
+                  >
+                    Trigger Overdue Accrual
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-blue-50 rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4 text-swBlue">
               How to Use
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700">
               <li>Select a customer from the dropdown</li>
+              <li>Add optional repayment(s) if you want to simulate payments</li>
               <li>
-                Click "Create Test Loan" - loan will be auto-approved and
-                disbursed
+                Click &quot;Create Test Loan & Simulate Repayments&quot; - loan
+                will be auto-approved, disbursed, and repayments applied
               </li>
+              <li>Use &quot;Trigger Daily Interest&quot; to accrue interest for today</li>
+              <li>Use &quot;Advance Days&quot; to simulate multiple days passing</li>
               <li>
-                Use "Trigger Daily Interest Accrual" to accrue interest for
-                today
+                Use &quot;Trigger Overdue Accrual&quot; to calculate penalties for
+                overdue loans
               </li>
-              <li>Use "Advance Days" to simulate multiple days passing</li>
-              <li>
-                Use "Trigger Overdue Accrual" to calculate penalties for overdue
-                loans
-              </li>
-              <li>Navigate to the loan details page to test payments</li>
+              <li>Navigate to the loan details page to verify schedule</li>
             </ol>
             {loanApplicationId && (
               <div className="mt-4 p-3 bg-white rounded">
                 <p className="text-sm font-medium">Loan Application ID:</p>
-                <p className="text-xs font-mono break-all">
-                  {loanApplicationId}
-                </p>
+                <p className="text-xs font-mono break-all">{loanApplicationId}</p>
                 <div className="flex flex-wrap gap-3 mt-2">
                   <a
                     href="/loan-applications"
@@ -638,10 +560,22 @@ const TestInstallmentLoan = () => {
           </div>
         </div>
 
-        {/* Customer Selection Modal */}
+        <div className="mt-6">
+          <Button
+            variant="primary"
+            onClick={createTestLoan}
+            disabled={loading || !selectedCustomer}
+            className="w-full py-3 text-lg"
+          >
+            {loading
+              ? "Processing..."
+              : "Create Test Loan & Simulate Repayments"}
+          </Button>
+        </div>
+
         <CenterModal
           isOpen={isOpen}
-          width={"40%"}
+          width="40%"
           onClose={() => {
             setIsOpen(false);
             setSearchTerm("");
@@ -678,7 +612,7 @@ const TestInstallmentLoan = () => {
                 <p className="text-center text-gray-500 py-8">
                   Loading customers...
                 </p>
-              ) : filteredData && filteredData.length > 0 ? (
+              ) : filteredData?.length > 0 ? (
                 filteredData.map((item) => (
                   <div
                     key={item._id}

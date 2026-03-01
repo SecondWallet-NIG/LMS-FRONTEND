@@ -847,7 +847,9 @@ const ViewLoan = () => {
                   </div>
                 </div>
                 <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Outstanding Balance</p>
+                  <p className="text-sm font-medium" title="Principal + interest due + penalty">
+                    Outstanding Balance
+                  </p>
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-red-500 font-semibold mt-4">
                       ₦{" "}
@@ -1045,10 +1047,10 @@ const ViewLoan = () => {
                       <h1>Repayment Type</h1>
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Outstanding Principal</h1>
+                      <h1>Outstanding Principal (from repayments)</h1>
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Current Accured Interest</h1>
+                      <h1>Accrued Interest</h1>
                     </th>
                   </tr>
                 </thead>
@@ -1147,7 +1149,7 @@ const ViewLoan = () => {
                       <h1>Interest Due</h1>
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Principal Due (Scheduled)</h1>
+                      <h1>Principal Due (from repayments)</h1>
                     </th>
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Amount Due To Pay</h1>
