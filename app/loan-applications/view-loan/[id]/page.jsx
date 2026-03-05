@@ -1091,6 +1091,8 @@ const ViewLoan = () => {
                             )?.label
                           }
                         </p>
+
+                        
                         {hasDecline && hasDecline === true ? (
                           <div
                             className="p-2 rounded-md hover:bg-white cursor-pointer"
