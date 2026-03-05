@@ -1137,6 +1137,7 @@ const ViewLoan = () => {
                   </tr>
                 </tbody>
               </table>
+              {/* Current due amounts: penalty, interest, principal, and total amount due to pay */}
               <table className=" w-full ">
                 <thead className="bg-swLightGray ">
                   <tr>
