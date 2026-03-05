@@ -1049,9 +1049,6 @@ const ViewLoan = () => {
                     <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
                       <h1>Outstanding Principal (from repayments)</h1>
                     </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Accrued Interest</h1>
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1062,7 +1059,7 @@ const ViewLoan = () => {
                           {data?.data?.loanApplication?.interestRate} % (
                           {
                             data?.data?.loanApplication?.interestType
-                              .interestTypeCode
+                              ?.interestTypeCode
                           }
                           )
                         </p>
@@ -1127,13 +1124,6 @@ const ViewLoan = () => {
                             <MdEdit size={15} />
                           </div>
                         ) : null} */}
-                      </div>
-                    </td>
-                    <td className="w-1/4 px-3 py-3">
-                      <div>
-                        <p className="text-swIndicatorLightRed">
-                          ₦ {data?.data?.loanApplication?.currentInterest}{" "}
-                        </p>
                       </div>
                     </td>
                   </tr>

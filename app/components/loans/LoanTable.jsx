@@ -15,7 +15,7 @@ const LoanTable = () => {
   const headers = [
     { id: "disbursedAt", label: "Date Disbursed" },
     { id: "name", label: "Borrower's Name & ID" },
-    { id: "loanPackageId", label: "Loan ID & package" },
+    { id: "loanPackageId", label: "Loan ID & Package", sortKey: "loanId" },
     { id: "loanAmount", label: "Loan Amount" },
     { id: "status", label: "Status" },
     { id: "createdBy", label: "Initiated By" },
