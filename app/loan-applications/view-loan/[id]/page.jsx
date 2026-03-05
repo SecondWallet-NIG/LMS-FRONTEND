@@ -1092,10 +1092,10 @@ const ViewLoan = () => {
                           }
                         </p>
 
-                        
+
                         {hasDecline && hasDecline === true ? (
                           <div
-                            className="p-2 rounded-md hover:bg-white cursor-pointer"
+                            className="p-2    rounded-md hover:bg-white cursor-pointer"
                             onClick={() => {
                               setLoanAmount(
                                 data?.data?.loanApplication?.loanAmount
