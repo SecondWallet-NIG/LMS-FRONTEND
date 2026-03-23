@@ -716,9 +716,9 @@ const ViewLoan = () => {
         <section className="w-full md:w-[70%] border-r border-gray-200 pb-20">
           <section
             id="customer_details"
-            className="m-5 flex flex-col md:flex-row gap-6 items-start md:items-center rounded-2xl border border-gray-100/90 bg-white px-5 py-5 shadow-sm"
+            className="m-5 flex flex-col xl:flex-row gap-6 items-start xl:items-center rounded-2xl border border-gray-100/90 bg-white px-5 py-5 shadow-sm"
           >
-            <div className="w-full md:w-[35%] border-b md:border-b-0 md:border-r border-gray-100 pb-4 md:pb-0 md:pr-4">
+            <div className="w-full xl:w-[40%] border-b xl:border-b-0 xl:border-r border-gray-100 pb-4 xl:pb-0 xl:pr-4 shrink-0">
               <div className="flex items-start sm:items-center">
                 <div className="shrink-0 mt-1 sm:mt-0">
                   <img
@@ -756,12 +756,12 @@ const ViewLoan = () => {
                           : data?.data?.loanApplication?.status === "Fully Paid"
                           ? "bg-swGreen"
                           : "bg-swIndicatorDarkRed"
-                      } px-2.5 py-0.5 rounded-full text-[10px] font-medium text-white uppercase tracking-wider`}
+                      } px-2.5 py-0.5 rounded-full text-[10px] font-medium text-white uppercase tracking-wider shrink-0`}
                     >
                       {data?.data?.loanApplication?.status}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 font-medium">
+                  <p className="text-sm text-gray-500 font-medium truncate">
                     {data?.data?.loanApplication?.customerId?.customerId}
                   </p>
 
@@ -797,7 +797,7 @@ const ViewLoan = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-[65%] flex flex-col gap-4 pl-0 md:pl-2">
+            <div className="w-full xl:w-[60%] flex flex-col gap-4 pl-0 xl:pl-2">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
                   <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Loan ID</p>

@@ -105,19 +105,42 @@ const CustomerRepayment = ({ loanId, status }) => {
     if (apiData?.length > 0) {
       setEnableLogRepayment(false);
     }
-    return apiData?.map((item) => ({
+    return apiData?.map((item) => {
+      const principal = Number(item?.repaymentPrincipal) ?? 0;
+      const overdueForInstallment = Number(item?.amountAccruedForOverdue) || 0;
+      // Interest from API = sum of Loan Interest transactions for this repayment's cycle; else fallback to schedule
+      const computedInterest =
+        item?.computedInterest != null && item?.computedInterest !== ""
+          ? Number(item.computedInterest)
+          : Math.max(0, (Number(item?.amountDue) || 0) - principal);
+      // Total due = principal + interest (from transactions) + overdue
+      const actualAmountDue = principal + computedInterest + overdueForInstallment;
+      const amountPaid = Number(item?.amountPaid) || 0;
+      const balanceToPay =
+        item?.balanceToPay != null && item?.balanceToPay !== ""
+          ? Number(item.balanceToPay)
+          : Math.max(0, actualAmountDue - amountPaid);
+
+      return {
       id: item._id,
       createdAt: (
         <div className="text-md font-[500] text-gray-700">
-          {item?.dueDate.slice(0, 10)}
+          {item?.dueDate?.slice(0, 10)}
         </div>
       ),
 
       amountDue: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            ₦ {item?.amountDue.toLocaleString()}
+            ₦ {actualAmountDue.toLocaleString()}
           </div>
+          {(principal > 0 || computedInterest > 0 || overdueForInstallment > 0) && (
+            <div className="text-xs text-gray-500 mt-0.5">
+              {principal > 0 && `Principal: ₦${principal.toLocaleString()}`}
+              {computedInterest > 0 && ` · Interest (due): ₦${computedInterest.toLocaleString()}`}
+              {overdueForInstallment > 0 && ` · Penalty: ₦${overdueForInstallment.toLocaleString()}`}
+            </div>
+          )}
         </div>
       ),
       loggedBy: (
@@ -147,10 +170,7 @@ const CustomerRepayment = ({ loanId, status }) => {
       balanceToPay: (
         <div>
           <div className="text-md font-[500] text-gray-700">
-            ₦{" "}
-            {item?.balanceToPay === null
-              ? "0"
-              : item?.balanceToPay.toLocaleString()}
+            ₦ {balanceToPay.toLocaleString()}
           </div>
         </div>
       ),
@@ -171,7 +191,8 @@ const CustomerRepayment = ({ loanId, status }) => {
           {item.status === "Fully paid" ? "Paid" : item.status}
         </button>
       ),
-    }));
+    };
+    });
   };
 
   const resetFormData = () => {

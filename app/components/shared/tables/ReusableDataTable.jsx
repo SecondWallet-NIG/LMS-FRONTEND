@@ -1160,8 +1160,19 @@ function ReusableDataTable({
     user = JSON.parse(localStorage.getItem("user"));
   }
 
-  const fetchData = (page, perPage, field, direction) => {
+  const fetchData = (page, perPage, fieldOverride, directionOverride) => {
+    const apiSortField =
+      fieldOverride !== undefined
+        ? fieldOverride
+        : (headers || []).find((h) => h.id === sortField)?.sortKey || sortField;
+    const effectiveDirection =
+      directionOverride !== undefined ? directionOverride : sortDirection;
+
     let apiUrl = `${apiEndpoint}?page=${page}&per_page=${perPage}`;
+    if (apiSortField) {
+      const prefix = effectiveDirection === "desc" ? "-" : "";
+      apiUrl += `&sortedBy=${prefix}${apiSortField}`;
+    }
     if (searchTerm) {
       apiUrl += `&search=${searchTerm}`;
       if (role === "Pending") {
@@ -1398,7 +1409,7 @@ function ReusableDataTable({
 
   const clearFilter = () => {
     setStatus(" ");
-    fetchData(currentPage, perPage, sortField, sortDirection);
+    fetchData(currentPage, perPage);
   };
 
   const clearDateFilter = () => {
@@ -1414,7 +1425,7 @@ function ReusableDataTable({
 
   const handlePageChange = (page, perPage) => {
     setCurrentPage(page);
-    fetchData(page, perPage, sortField, sortDirection);
+    fetchData(page, perPage);
   };
 
   const handleSelectChange = (selectedOption) => {
@@ -1422,12 +1433,17 @@ function ReusableDataTable({
     handlePageChange(1, selectedOption.value);
   };
 
-  const handleSort = (field) => {
+  const handleSort = (header) => {
+    const headerId = typeof header === "string" ? header : header.id;
+    const apiField =
+      typeof header === "object" && header.sortKey
+        ? header.sortKey
+        : headerId;
     const newSortDirection =
-      field === sortField && sortDirection === "asc" ? "desc" : "asc";
-    setSortField(field);
+      headerId === sortField && sortDirection === "asc" ? "desc" : "asc";
+    setSortField(headerId);
     setSortDirection(newSortDirection);
-    fetchData(currentPage, perPage, field, newSortDirection);
+    fetchData(currentPage, perPage, apiField, newSortDirection);
   };
 
   const handleSearchChange = (event) => {
@@ -1436,11 +1452,12 @@ function ReusableDataTable({
 
   const handleClearFilters = () => {
     setStatus("");
-    fetchData(currentPage, perPage, sortField, sortDirection);
+    fetchData(currentPage, perPage);
   };
 
   useEffect(() => {
-    fetchData(currentPage, perPage, sortField, sortDirection);
+    // Don't pass sort overrides: fetchData resolves apiSortField from sortField + headers (e.g. sortKey "loanId")
+    fetchData(currentPage, perPage);
   }, [
     apiEndpoint,
     currentPage,
@@ -1832,7 +1849,7 @@ function ReusableDataTable({
             </Button>
             <Button
               onClick={() => {
-                fetchData(currentPage, perPage, sortField, sortDirection);
+                fetchData(currentPage, perPage);
                 setDateFilterOpen(false);
               }}
             >
