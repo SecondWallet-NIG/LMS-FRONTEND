@@ -7,53 +7,50 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 
-const LoanProcessCard = ({ data }) => {
+const LoanProcessCard = ({ 
+  data, 
+  useriD, 
+  loanCreatorId,
+  onRequestApproval, 
+  onApprove, 
+  onDecline 
+}) => {
   const _data = data?.data?.data;
   const [commentOpen, setCommentOpen] = useState(false);
   const [approvalMsg, setApprovalMsg] = useState({});
 
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col gap-4">
       {Array.isArray(_data) &&
         _data?.map((item, index) => (
-          <div key={index} className="border-b border-gray-100 p-2">
-            <div className="flex justify-between items-center">
-              <p className="font-semibold capitalize text-xs text-black">
-                {item?.approvalTitle}
-              </p>
-
-              <button
-                className={`cursor-none ${
-                  item.status === "Approved"
-                    ? "bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
-                    : item.status === "Pending"
-                    ? "bg-swLightGray text-swGray text-xs font-normal px-2 py-1 rounded-full"
-                    : item.status === "Approval Requested"
-                    ? "bg-red-400 text-white text-xs font-normal px-2 py-1 rounded-full"
-                    : item.status === "Declined"
-                    ? "bg-red-500 text-white text-xs font-normal px-2 py-1 rounded-full"
-                    : "bg-gray-300 text-gray-800 text-xs font-normal px-2 py-1 rounded-full"
-                } px-2 py-1 rounded`}
+          <div key={index} className="p-4 rounded-xl border border-gray-100 bg-white shadow-sm flex flex-col gap-3">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="font-semibold text-sm text-gray-800">{item?.approvalTitle}</p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {item?.updatedAt ? new Date(item?.updatedAt).toLocaleDateString() : ''}
+                </p>
+              </div>
+              <span
+                className={`px-2.5 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wider ${
+                  item?.status === "Approved"
+                    ? "bg-[#E8F7F0] text-[#107E4B]"
+                    : item?.status === "Pending"
+                    ? "bg-gray-100 text-gray-600"
+                    : item?.status === "Approval Requested"
+                    ? "bg-red-100 text-red-600"
+                    : item?.status === "Declined"
+                    ? "bg-red-100 text-red-600"
+                    : "bg-gray-100 text-gray-600"
+                }`}
               >
-                {item.status}
-              </button>
+                {item?.status}
+              </span>
             </div>
-            <div className="flex items-end gap-2">
-              {/* <p className="font-medium text-xs ">{item?.createdAt}</p> */}
-              <p className="text-xs text-swBlue">
-                {item?.updatedAt ? item?.updatedAt.slice(0, 10) : null}
-              </p>
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-              {/* <Image
-                  src={item?.assignee?.profilePicture}
-                  alt="profile pic"
-                  className="rounded-full"
-                  height={50}
-                  width={50}
-                /> */}
+            
+            <div className="flex items-center gap-3 bg-gray-50/50 p-2 rounded-lg">
               {item?.assignee?.profilePicture ? (
-                <div className="h-12 w-12 rounded-full relative border border-swBlue overflow-hidden">
+                <div className="h-8 w-8 rounded-full relative border border-gray-200 overflow-hidden shrink-0">
                   <img
                     src={item?.assignee?.profilePicture}
                     alt="profile pic"
@@ -63,39 +60,62 @@ const LoanProcessCard = ({ data }) => {
                       e.target.nextSibling.style.display = 'block';
                     }}
                   />
-                  <FaUserCircle size={47} className="text-swBlack" style={{display: 'none'}} />
+                  <FaUserCircle size={32} className="text-gray-400" style={{display: 'none'}} />
                 </div>
               ) : (
-                <FaUserCircle size={47} className="text-swBlack" />
-              )}
-
-              <div>
-                <button
-                  className={`flex text-sm font-semibold border-2 border-white rounded-lg overflow-hidden cursor-pointer `}
-                >
-                  {item?.assignee?.firstName ? (
-                    <div className="flex flex-col">
-                      <p className="font-medium text-xs text-black">
-                        {item?.assignee?.firstName} {item?.assignee?.lastName}
-                      </p>
-                      {item?.assignee?.email ? (
-                        <p className="text-xs text-swGray">{item?.assignee?.email}</p>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <p className="text-xs">Yet to be assigned</p>
-                  )}
-                </button>
-                <div
-                  onClick={() => {
-                    setCommentOpen(!commentOpen);
-                    setApprovalMsg(item);
-                  }}
-                >
-                  <FiMessageSquare />
+                <div className="h-8 w-8 rounded-full bg-swBlue/10 flex items-center justify-center text-swBlue font-semibold text-xs shrink-0">
+                  {item?.assignee?.firstName?.charAt(0)}{item?.assignee?.lastName?.charAt(0)}
                 </div>
+              )}
+              
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-gray-800 truncate">
+                  {item?.assignee?.firstName ? `${item?.assignee?.firstName} ${item?.assignee?.lastName}` : "Unassigned"}
+                </p>
+                {item?.assignee?.role?.name && (
+                  <p className="text-[10px] text-gray-500 truncate">{item?.assignee?.role?.name}</p>
+                )}
               </div>
+              
+              <button 
+                onClick={() => {
+                  setCommentOpen(!commentOpen);
+                  setApprovalMsg(item);
+                }}
+                className="p-1.5 text-gray-400 hover:text-swBlue hover:bg-white rounded-md transition-colors shrink-0"
+                title="View Messages"
+              >
+                <FiMessageSquare size={14} />
+              </button>
             </div>
+
+            {/* Action Buttons */}
+            {loanCreatorId === useriD && onRequestApproval && (
+              <button
+                onClick={() => onRequestApproval(item)}
+                disabled={item?.status === "Approval Requested" || item?.status === "Approved"}
+                className="w-full py-2 text-xs font-medium rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {item?.status === "Pending" || item?.status === "Declined" ? "Request Approval" : item?.status}
+              </button>
+            )}
+
+            {item?.assignee?._id === useriD && item?.status === "Approval Requested" && onApprove && onDecline && (
+              <div className="flex gap-2 pt-1 border-t border-gray-100">
+                <button
+                  onClick={() => onApprove(item)}
+                  className="flex-1 py-2 bg-swBlue text-white text-xs font-medium rounded-lg hover:bg-swBlueActiveStateBg transition-colors"
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => onDecline(item)}
+                  className="flex-1 py-2 bg-red-50 text-red-600 border border-red-100 text-xs font-medium rounded-lg hover:bg-red-100 transition-colors"
+                >
+                  Decline
+                </button>
+              </div>
+            )}
           </div>
         ))}
       <CenterModal isOpen={commentOpen}>

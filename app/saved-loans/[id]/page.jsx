@@ -1,12 +1,23 @@
 "use client";
 
-import { useEffect } from "react";
-import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
+import { useEffect, useState } from "react";
+import {
+  LuArrowLeft,
+  LuBanknote,
+  LuCalculator,
+  LuChevronRight,
+  LuClipboardList,
+  LuFileUp,
+  LuPanelRight,
+  LuPencil,
+  LuSave,
+  LuSearch,
+  LuSparkles,
+  LuUserPlus,
+} from "react-icons/lu";
 import InputField from "../../components/shared/input/InputField";
 import SelectField from "../../components/shared/input/SelectField";
-import { useState } from "react";
 import { AiOutlineDelete, AiOutlinePaperClip } from "react-icons/ai";
-import Button from "../../components/shared/buttonComponent/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "@/redux/slices/customerSlice";
 import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
@@ -17,15 +28,17 @@ import CenterModal from "../../components/modals/CenterModal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PreviewInterest from "../../components/modals/PreviewInterest";
-import { FiUser } from "react-icons/fi";
 import { useParams, useRouter } from "next/navigation";
 import DashboardLayout from "../../components/dashboardLayout/DashboardLayout";
 import Link from "next/link";
-import Image from "next/image";
 import { Rings } from "react-loader-spinner";
 import EditableButton from "../../components/shared/editableButtonComponent/EditableButton";
 import Unauthorized from "../../unauthorized/page";
 import { createLoanAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import Loader from "../../components/shared/Loader";
+import BorrowerAvatar, {
+  getProfilePictureSrc,
+} from "../../components/loan/BorrowerAvatar";
 
 const SavedLoan = () => {
   const dispatch = useDispatch();
@@ -43,10 +56,11 @@ const SavedLoan = () => {
   const [loanPackageText, setLoanPackageText] = useState(null);
   const [loanPackageRate, setLoanPackageRate] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const [interest, setInterest] = useState(null);
   const [noOfRepayments, setNoOfRepayment] = useState(0);
   const [roleTag, setRoleTag] = useState("");
+  const [loanPackageInterestRate, setLoanPackageInterestRate] = useState({});
   const [fileError, setFileError] = useState({
     collaterals: "",
     applicationForm: "",
@@ -75,6 +89,7 @@ const SavedLoan = () => {
     loanAffidavit: null,
     offerLetter: null || "null",
     customerId: "",
+    interestRate: null,
   });
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -265,9 +280,10 @@ const SavedLoan = () => {
         interestTypeId: formData.interestType,
         repaymentType: formData.repaymentType,
         loanFrequencyType: formData.loanFrequencyType,
+        interestRate: formData.interestRate,
         startDate: "",
       };
-      e.preventDefault();
+      if (e?.preventDefault) e.preventDefault();
       dispatch(calculateInterest(payload))
         .unwrap()
         .then(() => {
@@ -283,6 +299,10 @@ const SavedLoan = () => {
       toast.error("Some required fields are missing");
       setIsLoading(false);
     }
+  };
+
+  const goToReviewStep = () => {
+    fetchInterest({ preventDefault: () => {} });
   };
 
   const handleFileChange = (e) => {
@@ -342,6 +362,7 @@ const SavedLoan = () => {
     payload.append("loanDurationMetrics", formData.loanDurationMetrics);
     payload.append("loanFrequencyType", formData.loanFrequencyType);
     payload.append("interestType", formData.interestType);
+    payload.append("interestRate", formData.interestRate);
     payload.append("applicationForm", formData.applicationForm);
     payload.append("assetImages", formData.assetImages);
     payload.append("collaterals", formData.collaterals);
@@ -375,7 +396,8 @@ const SavedLoan = () => {
     dispatch(getCustomers());
     dispatch(getLoanPackage());
     dispatch(getInterestType());
-  }, []);
+    setIsLoading(false);
+  }, [dispatch]);
 
   // useEffect(() => {
   //   const data = JSON.parse(localStorage.getItem("borrower"));
@@ -388,12 +410,51 @@ const SavedLoan = () => {
   // }, [customer?.data]);
 
   useEffect(() => {
-    let userId;
     if (typeof window !== "undefined") {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       setRoleTag(storedUser?.data?.user?.role.tag);
     }
   }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("savedLoans");
+    const savedLoans = saved ? JSON.parse(saved) : null;
+
+    if (savedLoans?.[param.id]) {
+      const fd = savedLoans[param.id].formData;
+      setFormData({
+        ...fd,
+        interestRate: fd.interestRate ?? null,
+      });
+      setSelectedCustomer(savedLoans[param.id].selectedCustomer);
+    }
+  }, [param.id]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("savedLoans");
+    const savedLoans = saved ? JSON.parse(saved) : null;
+
+    if (
+      loanPackage.loading === "succeeded" &&
+      savedLoans?.[param.id]?.formData?.loanPackage &&
+      loanPackage?.data?.data
+    ) {
+      const loanPackageData = loanPackage.data.data;
+
+      const loanPackageDataId = loanPackageData.find(
+        (item) => item._id === savedLoans[param.id].formData.loanPackage
+      );
+      setLoanPackageText(loanPackageDataId?.name);
+      setLoanPackageRate(loanPackageDataId?.interestRate?.rate);
+    }
+  }, [loanPackage, param.id]);
+
+  useEffect(() => {
+    const loanpackage = loanPackage?.data?.data?.find(
+      (item) => item._id === formData.loanPackage
+    );
+    setLoanPackageInterestRate(loanpackage || {});
+  }, [formData.loanPackage, loanPackage?.data?.data]);
 
   if (roleTag && roleTag !== "LO") {
     return <Unauthorized />;
@@ -420,78 +481,205 @@ const SavedLoan = () => {
     }
   };
 
-  useEffect(() => {
-    const saved = localStorage.getItem("savedLoans");
-    const savedLoans = saved ? JSON.parse(saved) : null;
+  const renderFileInput = (text, name) => {
+    return (
+      <div className="flex flex-col gap-3 rounded-xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/40 p-4 shadow-sm transition hover:border-swBlue/20 hover:shadow-md">
+        <p className="text-center text-xs font-semibold leading-snug text-swGrey500 sm:text-sm">
+          {text}
+        </p>
+        {fileError[name] && (
+          <p className="text-center text-sm text-swIndicatorLightRed">
+            {fileError[name]}
+          </p>
+        )}
 
-    if (savedLoans) {
-      setFormData(savedLoans[param.id].formData);
-      setSelectedCustomer(savedLoans[param.id].selectedCustomer);
-    }
-  }, []);
+        {formData[name]?.name ? (
+          <div
+            id="fileLabel3"
+            className="flex justify-between gap-2 rounded-lg border border-gray-100 bg-swLightGray/80 p-2"
+          >
+            <div className="truncate text-xs text-swGrey500">
+              {formData[name]?.name}
+            </div>
+            <button
+              type="button"
+              className="shrink-0 rounded-md p-1 text-swIndicatorLightRed transition hover:bg-red-50"
+              onClick={() => {
+                deleteFile(name);
+              }}
+            >
+              <AiOutlineDelete size={18} />
+            </button>
+          </div>
+        ) : null}
 
-  useEffect(() => {
-    const saved = localStorage.getItem("savedLoans");
-    const savedLoans = saved ? JSON.parse(saved) : null;
-
-    if (loanPackage.loading === "succeeded") {
-      const loanPackageData = loanPackage?.data?.data;
-
-      const loanPackageDataId = loanPackageData.find(
-        (item) => item._id === savedLoans[param.id].formData.loanPackage
-      );
-      setLoanPackageText(loanPackageDataId?.name);
-      setLoanPackageRate(loanPackageDataId?.interestRate?.rate);
-    }
-  }, [loanPackage]);
+        <div className="relative mt-auto flex justify-center">
+          <input
+            name={name}
+            type="file"
+            id={`fileInput-${name}`}
+            className="absolute h-0 w-0 opacity-0"
+            onChange={handleFileChange}
+            onClick={(e) => (e.target.value = null)}
+          />
+          <label htmlFor={`fileInput-${name}`} className="cursor-pointer">
+            <span className="inline-flex items-center gap-2 rounded-xl border-2 border-dashed border-swBlue/25 bg-swBlueActiveStateBg/50 px-4 py-2.5 text-sm font-semibold text-swBlue transition hover:border-swBlue hover:bg-white">
+              <AiOutlinePaperClip size={18} />
+              {formData[name]?.name ? "Change file" : "Select file"}
+            </span>
+          </label>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <DashboardLayout paths={["Saved Loans"]} roles={createLoanAuthRoles}>
       <ToastContainer />
 
       {currentStep === 1 ? (
-        <main style={{ overflow: "hidden" }} className="flex text-sm">
-          <div className="w-full md:w-2/3 pl-5 pr-5 pt-10 ">
-            <div className="flex justify-between">
-              <p className="text-lg font-semibold">Initiate loan application</p>
-
-              <div className="flex items-center gap-5">
-                <Link
-                  href="/create-borrower"
-                  className="flex gap-1 py-2 px-3 border-2 text-white hover:text-swBlue bg-swBlue hover:bg-white border-swBlue rounded-md focus:outline-none whitespace-nowrap"
-                >
-                  <IoMdAdd size={20} />
-                  <p>Add new borrower</p>
-                </Link>
-                <div
-                  onClick={savedLoans}
-                  className="flex gap-1 py-2 px-7 cursor-pointer border-2  text-swBlue hover:text-white hover:bg-swBlue border-swBlue rounded-md focus:outline-none whitespace-nowrap"
-                >
-                  <p>Save</p>
+        <main className="min-h-full bg-gradient-to-b from-[#f0f6fc] via-gray-50 to-gray-50 text-swGray">
+          <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-4 py-6 text-sm sm:px-8 lg:flex-row lg:items-start">
+          <div className="w-full flex-1 space-y-6 lg:max-w-none lg:pr-2">
+            <header className="flex flex-col gap-4 rounded-2xl border border-white/70 bg-white/85 p-5 shadow-md shadow-swBlue/5 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex min-w-0 gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-swBlue to-swDarkBlue text-white shadow-lg shadow-swBlue/25 ring-4 ring-white/60">
+                  <LuBanknote size={26} strokeWidth={2} />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-swBlue/80">
+                    Saved draft
+                  </p>
+                  <h1 className="mt-0.5 text-xl font-bold tracking-tight text-swGrey500 sm:text-2xl">
+                    Resume loan application
+                  </h1>
+                  <p className="mt-1 text-xs text-swGrey200 sm:text-sm">
+                    Continue editing or submit to create the loan.
+                  </p>
                 </div>
               </div>
-            </div>
+              <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                <Link
+                  href="/create-borrower"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-swBlue bg-swBlue px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-white hover:text-swBlue"
+                >
+                  <LuUserPlus size={18} strokeWidth={2.25} />
+                  Add new borrower
+                </Link>
+                <button
+                  type="button"
+                  onClick={savedLoans}
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-swBlue/25 bg-white px-4 py-2.5 text-sm font-semibold text-swBlue shadow-sm transition hover:border-swBlue hover:bg-swBlueActiveStateBg"
+                >
+                  <LuSave size={18} strokeWidth={2.25} />
+                  Save draft
+                </button>
+              </div>
+            </header>
 
-            <div className="flex flex-col gap-5 pt-5">
-              <p className="font-semibold">Loan details</p>
+            <nav
+              className="flex flex-col gap-3 rounded-2xl border border-gray-100/90 bg-white/95 p-3 shadow-sm backdrop-blur-sm sm:flex-row sm:items-stretch sm:gap-3"
+              aria-label="Application steps"
+            >
+              <div
+                className="flex flex-1 items-center gap-3 rounded-xl border border-swBlue/25 bg-swBlueActiveStateBg/60 p-3"
+                aria-current="step"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-swBlue to-swDarkBlue text-sm font-bold text-white shadow-md shadow-swBlue/25">
+                  1
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                    You are here
+                  </p>
+                  <p className="font-semibold text-swGrey500">
+                    Details & documents
+                  </p>
+                </div>
+              </div>
+              <div
+                className="hidden h-auto w-px shrink-0 bg-gradient-to-b from-transparent via-gray-200 to-transparent sm:block"
+                aria-hidden
+              />
+              <button
+                type="button"
+                onClick={goToReviewStep}
+                disabled={
+                  formData.repaymentType === null || isLoading === true
+                }
+                title="Open interest preview (same as Preview interest)"
+                className="flex flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left transition hover:border-swBlue/40 hover:bg-swBlueActiveStateBg/40 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-swBlue/35 bg-gray-50 text-sm font-bold text-swBlue">
+                  2
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-swGrey200">
+                    Go to next
+                  </p>
+                  <p className="font-medium text-swGrey500">
+                    Review & create
+                  </p>
+                </div>
+              </button>
+            </nav>
+
+            <section className="rounded-2xl border border-gray-100/90 bg-white p-5 shadow-sm sm:p-6">
+              <div className="mb-5 flex items-center gap-3 border-b border-gray-100 pb-4">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-swBlueActiveStateBg text-swBlue">
+                  <LuClipboardList size={20} strokeWidth={2} />
+                </span>
+                <div>
+                  <h2 className="text-base font-bold text-swGrey500 sm:text-lg">
+                    Loan details
+                  </h2>
+                  <p className="text-xs text-swGrey200 sm:text-sm">
+                    Required fields are marked with *
+                  </p>
+                </div>
+              </div>
+            <div className="flex flex-col gap-6">
+              <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
+                <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
+                  <LuSparkles size={14} className="text-amber-500" />
+                  Borrower & product
+                </h3>
+                <div className="space-y-4">
               <div className="">
-                <label className="block mb-2 text-gray-700 text-xs">
-                  Select Customer <span className="text-red-600 ml-1">*</span>
+                <label className="mb-2 block text-xs font-medium text-swGrey500">
+                  Select Customer <span className="ml-1 text-swIndicatorLightRed">*</span>
                 </label>
-                <div
-                  className="border border-[#ccc] text-[#808080] p-2.5 rounded-md"
+                <button
+                  type="button"
+                  className="group flex w-full items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-3.5 text-left shadow-sm transition hover:border-swBlue/35 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-swBlue/25"
                   onClick={() => {
                     setIsOpen(true);
                   }}
                 >
-                  {selectedCustomer != null ? (
-                    <div className="">
-                      {selectedCustomer.firstName} {selectedCustomer.lastName}
-                    </div>
-                  ) : (
-                    <div> Search and select customer</div>
-                  )}
-                </div>
+                  <span className="flex min-w-0 flex-1 items-center gap-3">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-swBlueActiveStateBg text-swBlue transition group-hover:bg-swBlue group-hover:text-white">
+                      <LuSearch size={18} strokeWidth={2.25} />
+                    </span>
+                    {selectedCustomer != null ? (
+                      <span className="min-w-0">
+                        <span className="block truncate font-semibold text-swGrey500">
+                          {selectedCustomer.firstName} {selectedCustomer.lastName}
+                        </span>
+                        <span className="block truncate text-xs text-swGrey200">
+                          Tap to change borrower
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="text-sm text-swGrey200">
+                        Search and select customer
+                      </span>
+                    )}
+                  </span>
+                  <LuChevronRight
+                    className="shrink-0 text-swGrey200 transition group-hover:translate-x-0.5 group-hover:text-swBlue"
+                    size={20}
+                  />
+                </button>
               </div>
               <SelectField
                 value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
@@ -527,6 +715,72 @@ const SavedLoan = () => {
                   }
                 />
               ) : null}
+              <div>
+                <InputField
+                  disabled={formData.loanPackage === null ? true : false}
+                  name="interestRate"
+                  required={true}
+                  onWheel={() => document.activeElement.blur()}
+                  activeBorderColor="border-swBlue"
+                  endIcon={<p className="text-swGray">%</p>}
+                  label="Interest Rate"
+                  value={formData?.interestRate}
+                  placeholder="Enter interest rate"
+                  isActive="loan-amount"
+                  onChange={(e) => {
+                    setInputState(e);
+
+                    if (formData.commitmentValue > 0) {
+                      updateCommitmentTotal(e);
+                    }
+                    if (
+                      formData.loanPackage &&
+                      formData.loanDuration &&
+                      formData.repaymentType
+                    ) {
+                      calculateInterest(
+                        e.target.value,
+                        formData.loanPackage,
+                        formData.loanDuration,
+                        formData.repaymentType
+                      );
+                    }
+                  }}
+                  inputOpen={isInputOpen}
+                />
+                <p
+                  className={`mt-1.5 rounded-lg px-3 py-2 text-xs leading-relaxed ${
+                    formData?.interestRate <
+                      loanPackageInterestRate?.interestRate?.min ||
+                    formData?.interestRate >
+                      loanPackageInterestRate?.interestRate?.max
+                      ? "bg-red-50 font-medium text-swIndicatorLightRed"
+                      : "bg-slate-50 text-swGrey200"
+                  }`}
+                >
+                  {formData?.interestRate <
+                  loanPackageInterestRate?.interestRate?.min
+                    ? `Interest rate cannot be less than ${loanPackageInterestRate?.interestRate?.min}%`
+                    : formData?.interestRate >
+                      loanPackageInterestRate?.interestRate?.max
+                    ? `Interest rate cannot be more than ${loanPackageInterestRate?.interestRate?.max}%`
+                    : `min = ${
+                        loanPackageInterestRate?.interestRate?.min || 0
+                      }% and max = ${
+                        loanPackageInterestRate?.interestRate?.max || 0
+                      }%`}
+                </p>
+              </div>
+                </div>
+              </div>
+
+              <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
+                <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
+                  <LuBanknote size={14} className="text-emerald-600" />
+                  Terms & amounts
+                </h3>
+                <div className="space-y-4">
+              <div>
               <InputField
                 disabled={formData.loanPackage === null ? true : false}
                 name="loanAmount"
@@ -560,6 +814,31 @@ const SavedLoan = () => {
                 }}
                 inputOpen={isInputOpen}
               />
+                <p
+                  className={`mt-1.5 rounded-lg px-3 py-2 text-xs leading-relaxed ${
+                    formData?.loanAmount <
+                      loanPackageInterestRate?.loanAmountRange?.min ||
+                    formData?.loanAmount >
+                      loanPackageInterestRate?.loanAmountRange?.max
+                      ? "bg-red-50 font-medium text-swIndicatorLightRed"
+                      : "bg-slate-50 text-swGrey200"
+                  }`}
+                >
+                  {formData?.loanAmount <
+                  loanPackageInterestRate?.loanAmountRange?.min
+                    ? `Amount cannot be less than ₦${loanPackageInterestRate?.loanAmountRange?.min?.toLocaleString?.() ?? ""}`
+                    : formData?.loanAmount >
+                      loanPackageInterestRate?.loanAmountRange?.max
+                    ? `Amount cannot be more than ₦${loanPackageInterestRate?.loanAmountRange?.max?.toLocaleString?.() ?? ""}`
+                    : `min = ₦${
+                        loanPackageInterestRate?.loanAmountRange?.min?.toLocaleString() ||
+                        0
+                      } and max = ₦${
+                        loanPackageInterestRate?.loanAmountRange?.max?.toLocaleString() ||
+                        0
+                      }`}
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row gap-2 items-end">
                 <div className="w-full sm:w-1/3">
                   <SelectField
@@ -597,6 +876,15 @@ const SavedLoan = () => {
                   />
                 </div>
               </div>
+                </div>
+              </div>
+
+              <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
+                <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
+                  <LuCalculator size={14} className="text-violet-600" />
+                  Fees & repayment
+                </h3>
+                <div className="space-y-4">
               <div className="flex gap-2">
                 <div className="w-full">
                   <InputField
@@ -706,472 +994,195 @@ const SavedLoan = () => {
                   }}
                 />
               </div>
+                </div>
+              </div>
+            </div>
+            </section>
 
-              {/* <div className="flex gap-2 items-end">
-                  <div className="w-1/3">
-                    <SelectField
-                      name="commitmentType"
-                      disabled={formData.loanAmount === 0 ? true : false}
-                      optionValue={commitmentType}
-                      label={"Fees"}
-                      required={true}
-                      placeholder={"Percentage"}
-                      isSearchable={false}
-                      onChange={(selectedOption) => {
-                        handleSelectChange(selectedOption, "commitmentType");
-                      }}
-                    />
-                  </div>
-                  <div className="w-2/3">
-                    <InputField
-                      disabled={formData.commitmentType === null ? true : false}
-                      required={false}
-                      name="commitmentValue"
-                       
-                       
-                      onKeyPress={preventMinus}
-                      onWheel={() => document.activeElement.blur()}
-                      activeBorderColor="border-swBlue"
-                      placeholder="Enter Value"
-                      endIcon={<p className="text-swGray">%</p>}
-                      onChange={(e) => {
-                        setInputState(e);
-                        calCommitmentTotal(e);
-                      }}
-                    />
-                  </div>
-                  <div className="p-2 rounded-lg border-2 border-white hover:border-gray-300 cursor-pointer">
-                    <AiOutlinePlus size={20} />
-                  </div>
-                </div> */}
-            </div>
-            <div className="flex flex-col gap-2 pt-5">
-              <p className="font-semibold">Upload Collateral documents</p>
-              {fileError.collaterals && (
-                <p className="text-red-500 text-sm">{fileError.collaterals}</p>
-              )}
-              <div className="relative">
-                <input
-                  name="collaterals"
-                  type="file"
-                  id="fileInput"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {formData?.collaterals?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.collaterals?.name ? (
-                  <div
-                    id="fileLabel"
-                    className="bg-swLightGray p-2 flex justify-between"
-                  >
-                    <div className="text-xs">{formData?.collaterals?.name}</div>
-                    <div
-                      onClick={() => {
-                        deleteFile("collaterals");
-                      }}
-                    >
-                      <AiOutlineDelete color="red" size={20} />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 pt-5">
-              <p className="font-semibold">Upload Loan Application form</p>
-              {fileError.applicationForm && (
-                <p className="text-red-500 text-sm">
-                  {fileError.applicationForm}
-                </p>
-              )}
-              <div className="relative">
-                <input
-                  name="applicationForm"
-                  type="file"
-                  id="fileInput1"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput1"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {" "}
-                      {formData?.applicationForm?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.applicationForm?.name ? (
-                  <div
-                    id="fileLabel1"
-                    className="bg-swLightGray p-2 flex justify-between"
-                  >
-                    <div className="text-xs">
-                      {formData?.applicationForm?.name}
-                    </div>
-                    <div
-                      onClick={() => {
-                        deleteFile("applicationForm");
-                      }}
-                    >
-                      <AiOutlineDelete color="red" size={20} />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 pt-5">
-              <p className="font-semibold">Upload Loan Affidavit document</p>
-              {fileError.loanAffidavit && (
-                <p className="text-red-500 text-sm">
-                  {fileError.loanAffidavit}
-                </p>
-              )}
-              <div className="relative">
-                <input
-                  name="loanAffidavit"
-                  type="file"
-                  id="fileInput2"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput2"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {formData?.loanAffidavit?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.loanAffidavit?.name ? (
-                  <div
-                    id="fileLabel3"
-                    className="bg-swLightGray p-2 flex justify-between"
-                  >
-                    <div className="text-xs">
-                      {formData?.loanAffidavit?.name}
-                    </div>
-                    <div
-                      onClick={() => {
-                        deleteFile("loanAffidavit");
-                      }}
-                    >
-                      <AiOutlineDelete color="red" size={20} />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 pt-5">
-              <p className="font-semibold">Upload Guarantor Form</p>
-              {fileError.guarantorForm && (
-                <p className="text-red-500 text-sm">
-                  {fileError.guarantorForm}
-                </p>
-              )}
-              <div className="relative">
-                <input
-                  name="guarantorForm"
-                  type="file"
-                  id="fileInput3"
-                  className="absolute w-0 h-0 opacity-0"
-                  onChange={handleFileChange}
-                  onClick={(e) => (e.target.value = null)}
-                />
-                <label
-                  htmlFor="fileInput3"
-                  className="px-4 py-2 text-white rounded-md cursor-pointer"
-                >
-                  <span className="py-2 px-6 rounded-md flex gap-2 border w-fit">
-                    <AiOutlinePaperClip color="black" size={20} />
-                    <p className="font-semibold text-black">
-                      {" "}
-                      {formData?.guarantorForm?.name
-                        ? "Change file"
-                        : "Select file"}
-                    </p>
-                  </span>
-                </label>
-                {formData?.guarantorForm?.name ? (
-                  <div
-                    id="fileLabel"
-                    className="bg-swLightGray p-2 flex justify-between mb-5"
-                  >
-                    <div className="text-xs">
-                      {formData?.guarantorForm?.name}
-                    </div>
-                    <div>
-                      <AiOutlineDelete
-                        onClick={() => {
-                          deleteFile("guarantorForm");
-                        }}
-                        color="red"
-                        size={20}
-                      />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-5 my-5 md:hidden">
-              <EditableButton
-                blueBtn={true}
-                disabled={
-                  formData.interestType === null || isLoading === true
-                    ? true
-                    : false
-                }
-                className={"w-full"}
-                label={"Preview Interest"}
-                onClick={fetchInterest}
-              />
-              <EditableButton
-                blueBtn={true}
-                disabled={
-                  formData.repaymentType === null || loading === true
-                    ? true
-                    : false
-                }
-                startIcon={
-                  loading && (
-                    <Rings
-                      height="20"
-                      width="20"
-                      color="#ffffff"
-                      radius="2"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                      visible={true}
-                      ariaLabel="rings-loading"
-                    />
-                  )
-                }
-                className={`w-full ${loading === true && "cursor-not-allowed"}`}
-                label={"Create Loan"}
-                onClick={submitLoan}
-              />
-            </div>
-          </div>
-          <div className="w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300 hidden md:block">
-            <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
-            {selectedCustomer != null ? (
-              <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto items-start flex gap-5">
-                {selectedCustomer.image ? (
-                  ""
-                ) : (
-                  // <div className="rounded-full bg-white h-fit w-fit">
-                  //   <img
-                  //     className="rounded-full"
-                  //     src={selectedCustomer?.profilePicture}
-                  //     alt="user image"
-                  //     width="60px"
-                  //     height="60px"
-                  //   />
-                  // </div>
-                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                    <img
-                      src={selectedCustomer?.profilePicture}
-                      alt="borrower"
-                      fill
-                      sizes="100%"
-                    />
-                  </div>
-                )}
+            <section className="rounded-2xl border border-gray-100/90 bg-white p-5 shadow-sm sm:p-6">
+              <div className="mb-5 flex items-center gap-3 border-b border-gray-100 pb-4">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10">
+                  <LuFileUp size={20} strokeWidth={2} />
+                </span>
                 <div>
-                  <p className="text-lg font-semibold">
-                    {selectedCustomer.firstName} {selectedCustomer.lastName}
-                  </p>
-
-                  <p className="text-sm mb-2">{selectedCustomer.email}</p>
-
-                  <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
-                    {selectedCustomer.phoneNumber.slice(1)}
+                  <h2 className="text-base font-bold text-swGrey500 sm:text-lg">
+                    Documents & uploads
+                  </h2>
+                  <p className="text-xs text-swGrey200 sm:text-sm">
+                    PDF, JPG, or PNG — max size per your server policy
                   </p>
                 </div>
               </div>
-            ) : (
-              <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
-                <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                  <img
-                    src="https://png.pngtree.com/png-clipart/20200224/original/pngtree-avatar-icon-profile-icon-member-login-vector-isolated-png-image_5247852.jpg"
-                    alt="borrower"
-                  />
-                </div>
-                <p className="text-xl font-semibold">Select Borrower</p>
-              </div>
-            )}
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Loan Package
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {loanPackageText || "No package selected yet"}
-                </div>
-              </div>
+            <div className="mb-6 grid grid-cols-1 gap-5 xs:grid-cols-2 sm:grid-cols-3 [background-image:radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] rounded-xl p-3 sm:p-4">
+              {renderFileInput("Upload Collateral documents", "collaterals")}
+              {renderFileInput(
+                "Upload Loan Application form",
+                "applicationForm"
+              )}
+              {renderFileInput(
+                "Upload Loan Affidavit document",
+                "loanAffidavit"
+              )}
+              {renderFileInput("Upload Guarantor Form", "guarantorForm")}
             </div>
+            </section>
 
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Interest Rate (Monthly)
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {loanPackageRate || 0} %
-                </div>
-              </div>
-            </div>
-
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Loan Amount
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  ₦{formatNumber(formData.loanAmount) || 0.0}
-                </div>
-              </div>
-            </div>
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Loan Frequency Type
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {repaymentTypeData.find(
-                    (option) => option.value === formData.repaymentType
-                  )?.label || "No Loan Frequency Type Yet"}
-                </div>
-              </div>
-            </div>
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Loan Duration
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
-                  <div>{formData.loanDuration || 0}</div>
-                  <div>{formData.loanDurationMetrics}</div>
-                </div>
-              </div>
-            </div>
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Numbers of Repayment
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {formData.numberOfRepayment || 0}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Commitment Fee
-              </div>
-              <div className="w-2/3 ">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
-                  <div>{formData.commitmentValue || 0.0}%</div>
-                  <div>
-                    ₦
-                    {formData.commitmentTotal
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Management Fee
-              </div>
-              <div className="w-2/3 ">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
-                  <div>{formData.commitmentValue || 0.0}%</div>
-                  <div>
-                    ₦
-                    {formData.managementTotal
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex pt-2">
-              <div className="w-full">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  <div className="flex justify-between  text-xs font-semibold pt-2">
-                    <div className="text-swGray">Loan Principal :</div>{" "}
-                    <div className="text-swBlue">
-                      ₦{formatNumber(formData?.loanAmount)}
-                    </div>
-                  </div>
-                  <div className="flex justify-between text-xs font-semibold pt-2">
-                    <div className="text-swGray">Interest at maturity :</div>{" "}
-                    <div className="text-swBlue">
-                      ₦
-                      {interest
-                        ?.toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
-                    </div>
-                  </div>
-                  <div className="flex justify-between  text-xs font-semibold pt-2">
-                    <div className="text-swGray">Commitment Fee :</div>{" "}
-                    <div className="text-swBlue">
-                      ₦
-                      {formData.commitmentTotal
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
-                    </div>
-                  </div>
-                  <div className="flex justify-between  text-xs font-semibold pt-2">
-                    <div className="text-swGray">Management Fee :</div>{" "}
-                    <div className="text-swBlue">
-                      ₦
-                      {formData.managementTotal
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-5 pt-5">
+            <div className="sticky bottom-0 z-30 mt-4 border-t border-gray-200/80 bg-gradient-to-t from-gray-50 via-gray-50/95 to-transparent pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 md:hidden">
+              <div className="rounded-2xl border border-gray-200/80 bg-white/95 p-4 shadow-2xl shadow-swBlue/10 backdrop-blur-md">
+                <p className="mb-3 text-center text-[11px] font-semibold uppercase tracking-wide text-swGrey200">
+                  Continue when ready
+                </p>
+                <div className="flex flex-col gap-3">
                   <EditableButton
                     blueBtn={true}
                     disabled={
-                      formData.interestType === null || isLoading === true
+                      formData.repaymentType === null || loading === true
                         ? true
                         : false
                     }
                     className={"w-full"}
                     label={"Preview Interest"}
-                    onClick={fetchInterest}
+                    onClick={goToReviewStep}
+                  />
+                  <EditableButton
+                    blueBtn={true}
+                    disabled={
+                      formData.repaymentType === null || loading === true
+                        ? true
+                        : false
+                    }
+                    startIcon={
+                      loading && (
+                        <Rings
+                          height="20"
+                          width="20"
+                          color="#ffffff"
+                          radius="2"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                          ariaLabel="rings-loading"
+                        />
+                      )
+                    }
+                    className={`w-full ${loading === true && "cursor-not-allowed"}`}
+                    label={"Create Loan"}
+                    onClick={submitLoan}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <aside className="hidden w-full shrink-0 border-t border-gray-200/80 pt-6 md:block lg:w-[300px] xl:w-[320px] lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+            <div className="sticky top-4 max-h-[calc(100vh-6rem)] space-y-3 overflow-y-auto overscroll-contain rounded-2xl border border-gray-100/90 bg-gradient-to-b from-white via-white to-swBlueActiveStateBg/20 p-4 shadow-lg shadow-swBlue/5 ring-1 ring-black/[0.03]">
+            <div className="border-b border-gray-100 pb-3">
+              <div className="flex items-center gap-2">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-swBlue text-white shadow-md">
+                  <LuPanelRight size={18} strokeWidth={2.25} />
+                </span>
+                <div>
+                  <p className="text-lg font-bold text-swGrey500">At a glance</p>
+                  <p className="text-[11px] leading-snug text-swGrey200">
+                    Snapshot only — full fields stay on the left
+                  </p>
+                </div>
+              </div>
+            </div>
+            {selectedCustomer != null ? (
+              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
+                <BorrowerAvatar
+                  key={`${selectedCustomer?._id ?? "c"}-${getProfilePictureSrc(selectedCustomer) ?? "no-photo"}`}
+                  customer={selectedCustomer}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-swGrey500">
+                    {selectedCustomer.firstName} {selectedCustomer.lastName}
+                  </p>
+                  <p className="truncate text-xs text-swGrey200">
+                    {selectedCustomer.phoneNumber?.replace(/^\+/, "") || "—"}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p className="rounded-lg border border-dashed border-gray-200 bg-gray-50/80 px-3 py-2 text-center text-xs text-swGrey200">
+                No borrower selected yet
+              </p>
+            )}
+
+            <div className="rounded-xl border border-swBlue/20 bg-swBlueActiveStateBg/50 p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                Principal
+              </p>
+              <p className="text-lg font-bold tabular-nums text-swGrey500 sm:text-xl">
+                ₦{formatNumber(formData.loanAmount) || "0"}
+              </p>
+            </div>
+
+            <dl className="space-y-0 text-sm">
+              <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
+                <dt className="text-swGrey200">Package</dt>
+                <dd className="max-w-[60%] text-right font-medium text-swGrey500">
+                  {loanPackageText || "—"}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
+                <dt className="text-swGrey200">Rate & tenor</dt>
+                <dd className="text-right font-medium text-swGrey500">
+                  {formData?.interestRate ?? "—"}% · {formData.loanDuration || "—"}{" "}
+                  {formData.loanDurationMetrics || ""}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
+                <dt className="text-swGrey200">Repayment</dt>
+                <dd className="max-w-[58%] text-right font-medium text-swGrey500">
+                  {repaymentTypeData.find(
+                    (o) => o.value === formData.repaymentType
+                  )?.label || "—"}{" "}
+                  · {formData.numberOfRepayment || 0} pymt
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2 py-2">
+                <dt className="text-swGrey200">Fees (est.)</dt>
+                <dd className="text-right font-semibold tabular-nums text-swGrey500">
+                  ₦
+                  {(
+                    (Number(formData.commitmentTotal) || 0) +
+                    (Number(formData.managementTotal) || 0)
+                  ).toLocaleString()}
+                </dd>
+              </div>
+            </dl>
+
+            {interest != null && !Number.isNaN(Number(interest)) && (
+              <div className="rounded-lg border border-emerald-100 bg-emerald-50/60 px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-wide text-emerald-800">
+                  Est. interest (maturity)
+                </p>
+                <p className="text-sm font-bold tabular-nums text-emerald-900">
+                  ₦
+                  {Number(interest)
+                    .toFixed(2)
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </p>
+              </div>
+            )}
+
+            <p className="text-center text-[10px] leading-relaxed text-swGrey200">
+              Full breakdown appears after you tap{" "}
+              <span className="font-semibold text-swGrey400">Preview interest</span>.
+            </p>
+
+                <div className="flex flex-col gap-3 border-t border-gray-100 pt-3">
+                  <EditableButton
+                    blueBtn={true}
+                    disabled={
+                      formData.repaymentType === null || isLoading === true
+                        ? true
+                        : false
+                    }
+                    className={"w-full"}
+                    label={"Preview Interest"}
+                    onClick={goToReviewStep}
                   />
 
                   <EditableButton
@@ -1202,31 +1213,84 @@ const SavedLoan = () => {
                     onClick={submitLoan}
                   />
                 </div>
-              </div>
             </div>
+          </aside>
           </div>
         </main>
       ) : null}
 
       {currentStep === 2 && (
-        <div className="flex">
-          <div className="w-full md:w-2/3 p-2">
+        <main className="min-h-full bg-gradient-to-b from-[#f0f6fc] via-gray-50 to-gray-50 text-swGray">
+        <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+          <div className="w-full rounded-2xl border border-gray-100/90 bg-white p-4 shadow-sm sm:p-6 lg:w-2/3">
+            <nav
+              className="mb-6 flex flex-col gap-3 rounded-xl border border-swBlue/15 bg-gradient-to-r from-swBlueActiveStateBg/60 to-white p-3 shadow-inner sm:flex-row sm:items-stretch sm:gap-3"
+              aria-label="Application steps"
+            >
+              <button
+                type="button"
+                onClick={() => setCurrentStep(1)}
+                className="flex flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left transition hover:border-swBlue/40 hover:bg-swBlueActiveStateBg/40 hover:shadow-sm"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-swBlue/35 bg-white text-sm font-bold text-swBlue shadow-sm">
+                  1
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                    Go back
+                  </p>
+                  <p className="font-semibold text-swGrey500">
+                    Details & documents
+                  </p>
+                </div>
+              </button>
+              <div
+                className="hidden h-auto w-px shrink-0 bg-gradient-to-b from-transparent via-gray-200 to-transparent sm:block"
+                aria-hidden
+              />
+              <div
+                className="flex flex-1 items-center gap-3 rounded-xl border border-swBlue/25 bg-swBlueActiveStateBg/60 p-3"
+                aria-current="step"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-swBlue to-swDarkBlue text-sm font-bold text-white shadow-md shadow-swBlue/25">
+                  2
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                    You are here
+                  </p>
+                  <p className="font-semibold text-swGrey500">Review & create</p>
+                </div>
+              </div>
+            </nav>
+            <div className="overflow-hidden rounded-xl border border-gray-100/80 bg-gray-50/30">
             <PreviewInterest
               formData={formData}
               selectedCustomer={selectedCustomer}
               setCurrentStep={setCurrentStep}
               data={interestValue?.data}
             />
+            </div>
 
-            <div className="text-end pt-4 flex gap-5 justify-end">
-              <Button
-                variant="danger"
-                onClick={() => {
-                  setCurrentStep(1);
-                }}
+            <div className="mt-6 flex flex-col gap-3 border-t border-gray-100 pt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <button
+                type="button"
+                onClick={() => setCurrentStep(1)}
+                className="order-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-swGrey500 shadow-sm transition hover:border-swBlue/35 hover:bg-swBlueActiveStateBg/50 hover:text-swBlue sm:order-1 sm:w-auto"
               >
-                Edit Loan Details
-              </Button>
+                <LuArrowLeft size={18} strokeWidth={2.25} className="shrink-0" />
+                Back to edit details
+              </button>
+              <p className="order-1 hidden text-xs text-swGrey200 sm:order-2 sm:mr-auto sm:inline sm:max-w-xs">
+                <LuPencil
+                  size={14}
+                  className="mr-1 inline align-text-bottom text-swBlue"
+                />
+                Return to step 1 to change any value, then run{" "}
+                <span className="font-medium text-swGrey400">Preview interest</span>{" "}
+                again to refresh numbers.
+              </p>
               <div className="md:hidden">
                 <EditableButton
                   blueBtn={true}
@@ -1249,182 +1313,102 @@ const SavedLoan = () => {
                       />
                     )
                   }
-                  className={`${loading === true && "cursor-not-allowed"}`}
+                  className={`w-full ${loading === true && "cursor-not-allowed"}`}
                   label={"Create Loan"}
                   onClick={submitLoan}
                 />
               </div>
             </div>
           </div>
-          <div className="hidden md:block w-1/3 pl-4 pr-4 pt-10  border-l border-gray-300">
-            <p className="text-lg text-swBlue font-semibold">Loan Summary</p>
-            {selectedCustomer != null ? (
-              <div className="p-4 m-2 bg-swBlue rounded-3xl text-white mx-auto flex gap-5 items-start">
-                {selectedCustomer.image ? (
-                  ""
-                ) : (
-                  <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                    <img
-                      src={selectedCustomer?.profilePicture}
-                      alt="borrower"
-                      fill
-                      sizes="100%"
-                    />
-                  </div>
-                )}
+          <aside className="hidden w-full shrink-0 border-t border-gray-200/80 pt-6 md:block lg:w-[300px] xl:w-[320px] lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+            <div className="sticky top-4 max-h-[calc(100vh-6rem)] space-y-3 overflow-y-auto overscroll-contain rounded-2xl border border-gray-100/90 bg-gradient-to-b from-white via-white to-swBlueActiveStateBg/20 p-4 shadow-lg shadow-swBlue/5 ring-1 ring-black/[0.03]">
+            <div className="border-b border-gray-100 pb-3">
+              <div className="flex items-center gap-2">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-swBlue text-white shadow-md">
+                  <LuPanelRight size={18} strokeWidth={2.25} />
+                </span>
                 <div>
-                  <p className="text-lg font-semibold">
+                  <p className="text-lg font-bold text-swGrey500">Review snapshot</p>
+                  <p className="text-[11px] leading-snug text-swGrey200">
+                    Key figures from your preview — full schedule is on the left
+                  </p>
+                </div>
+              </div>
+            </div>
+            {selectedCustomer != null ? (
+              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
+                <BorrowerAvatar
+                  key={`${selectedCustomer?._id ?? "c"}-${getProfilePictureSrc(selectedCustomer) ?? "no-photo"}`}
+                  customer={selectedCustomer}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-swGrey500">
                     {selectedCustomer.firstName} {selectedCustomer.lastName}
                   </p>
-
-                  <p className="text-sm mb-2">{selectedCustomer.email}</p>
-
-                  <p className="text-sm py-1 px-2 bg-white text-swBlue rounded-full w-fit">
-                    {selectedCustomer.phoneNumber.slice(1)}
+                  <p className="truncate text-xs text-swGrey200">
+                    {selectedCustomer.phoneNumber?.replace(/^\+/, "") || "—"}
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="p-4 m-2 bg-swBlue text-white rounded-3xl mx-auto flex gap-2 items-center">
-                <div className="h-[4.7rem] w-[4.7rem] border-2 rounded-full relative overflow-hidden">
-                  <img
-                    src={selectedCustomer?.profilePicture}
-                    alt="borrower"
-                    fill
-                    sizes="100%"
-                  />
-                </div>
-                <p className="text-xl font-semibold">Select Borrower</p>
-              </div>
+              <p className="rounded-lg border border-dashed border-gray-200 bg-gray-50/80 px-3 py-2 text-center text-xs text-swGrey200">
+                No borrower selected yet
+              </p>
             )}
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Loan Package
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {loanPackageText || "No package selected yet"}
-                </div>
-              </div>
+
+            <div className="rounded-xl border border-swBlue/20 bg-swBlueActiveStateBg/50 p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                Principal
+              </p>
+              <p className="text-lg font-bold tabular-nums text-swGrey500 sm:text-xl">
+                ₦{formatNumber(formData.loanAmount) || "0"}
+              </p>
             </div>
 
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Loan Amount
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  ₦{formatNumber(formData.loanAmount) || 0.0}
-                </div>
-              </div>
-            </div>
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Loan Frequency Type
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {repaymentTypeData.find(
-                    (option) => option.value === formData.repaymentType
-                  )?.label || "No Loan Frequency Type Yet"}
-                </div>
-              </div>
-            </div>
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Loan Duration
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
-                  <div> {formData.loanDuration || 0}</div>
-                  <div> {formData.loanDurationMetrics || 0}</div>
-                </div>
-              </div>
-            </div>
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Numbers of Repayment
-              </div>
-              <div className="w-2/3">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  {formData.numberOfRepayment || 0}
-                </div>
-              </div>
+            <div className="rounded-xl border-2 border-swBlue/30 bg-white p-3 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-swGrey200">
+                Total at maturity
+              </p>
+              <p className="text-xl font-bold tabular-nums text-swBlue">
+                ₦
+                {interestValue?.data?.totalPayments != null
+                  ? String(interestValue.data.totalPayments).replace(
+                      /\B(?=(\d{3})+(?!\d))/g,
+                      ","
+                    )
+                  : "—"}
+              </p>
             </div>
 
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Commitment Fee
+            <dl className="space-y-0 text-sm">
+              <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
+                <dt className="text-swGrey200">Interest (preview)</dt>
+                <dd className="font-semibold tabular-nums text-swGrey500">
+                  ₦
+                  {interestValue?.data?.totalInterestPayments != null
+                    ? Number(interestValue.data.totalInterestPayments)
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    : "—"}
+                </dd>
               </div>
-              <div className="w-2/3 ">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
-                  <div>{formData.commitmentValue || 0.0}%</div>
-                  <div>
-                    ₦
-                    {formData.commitmentTotal
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0}
-                  </div>
-                </div>
+              <div className="flex justify-between gap-2 py-2">
+                <dt className="text-swGrey200">Fees (commitment + mgmt)</dt>
+                <dd className="font-semibold tabular-nums text-swGrey500">
+                  ₦
+                  {(
+                    (Number(formData.commitmentTotal) || 0) +
+                    (Number(formData.managementTotal) || 0)
+                  ).toLocaleString()}
+                </dd>
               </div>
-            </div>
-            <div className="flex pt-2">
-              <div className="w-1/3 text-swGray text-xs font-semibold pt-2">
-                Management Fee
-              </div>
-              <div className="w-2/3 ">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto flex justify-between">
-                  <div>{formData.managementValue || 0.0}%</div>
-                  <div>
-                    ₦
-                    {formData.managementTotal
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0}
-                  </div>
-                </div>
-              </div>
-            </div>
+            </dl>
 
-            <div className="flex pt-2">
-              <div className="w-full">
-                <div className="p-4 m-2 bg-swLightGray rounded-lg  mx-auto">
-                  <div className="flex justify-between  text-xs font-semibold pt-2">
-                    <div className="text-swGray">Loan Principal :</div>{" "}
-                    <div className="text-swBlue">
-                      ₦{formatNumber(formData?.loanAmount)}
-                    </div>
-                  </div>
-                  <div className="flex justify-between text-xs font-semibold pt-2">
-                    <div className="text-swGray">Interest at maturity :</div>{" "}
-                    <div className="text-swBlue">
-                      ₦
-                      {interestValue?.data?.totalInterestPayments
-                        ?.toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
-                    </div>
-                  </div>
-                  <div className="flex justify-between  text-xs font-semibold pt-2">
-                    <div className="text-swGray">Commitment Fee :</div>{" "}
-                    <div className="text-swBlue">
-                      ₦
-                      {formData.commitmentTotal
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
-                    </div>
-                  </div>
-                  <div className="flex justify-between  text-sm  font-semibold pt-2">
-                    <div className="text-swGray">
-                      Total payment at maturity :
-                    </div>{" "}
-                    <div className="text-swBlue">
-                      ₦
-                      {interestValue?.data?.totalPayments
-                        ?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0.0}
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-10 pt-5">
+            <p className="text-center text-[10px] leading-relaxed text-swGrey200">
+              Line-by-line breakdown is in the preview panel.
+            </p>
+
+                <div className="border-t border-gray-100 pt-3">
                   <EditableButton
                     blueBtn={true}
                     disabled={
@@ -1453,10 +1437,11 @@ const SavedLoan = () => {
                     onClick={submitLoan}
                   />
                 </div>
-              </div>
             </div>
-          </div>
+          </aside>
         </div>
+        </div>
+        </main>
       )}
 
       <CenterModal
@@ -1464,18 +1449,19 @@ const SavedLoan = () => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       >
-        <div className="h-[500px] overflow-y-scroll">
-          <div className="mb-4 flex">
+        <div className="h-[500px] overflow-y-scroll rounded-xl">
+          <div className="mb-4 flex gap-2">
             <input
               type="search"
-              placeholder="Search Customer"
+              placeholder="Search customer by name, email, or phone"
               onChange={(e) => {
                 search(e.target.value);
               }}
-              className="bg-swLightGray px-2 rounded outline-none border w-full border-swLightGray h-10 "
+              className="h-11 w-full rounded-xl border border-gray-200 bg-gray-50/80 px-4 text-sm outline-none ring-swBlue/20 transition placeholder:text-swGrey200 focus:border-swBlue focus:bg-white focus:ring-2"
             />
             <button
-              className="p-2"
+              type="button"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-swGrey400 transition hover:border-swBlue/30 hover:text-swBlue"
               onClick={() => {
                 setIsOpen(false);
                 setFilteredData(customer?.data);
@@ -1489,9 +1475,9 @@ const SavedLoan = () => {
                 stroke="currentColor"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
@@ -1510,7 +1496,7 @@ const SavedLoan = () => {
                   setIsOpen(false);
                   setFilteredData(customer?.data);
                 }}
-                className="mb-4 p-4 border rounded-lg shadow-md transition duration-300 hover:bg-gray-100 cursor-pointer"
+                className="mb-3 cursor-pointer rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition hover:border-swBlue/25 hover:bg-swBlueActiveStateBg/40 hover:shadow-md"
               >
                 <div className="flex justify-between items-center mb-2">
                   <div>
@@ -1536,6 +1522,7 @@ const SavedLoan = () => {
             ))}
         </div>
       </CenterModal>
+      <Loader isOpen={isLoading} />
     </DashboardLayout>
   );
 };
