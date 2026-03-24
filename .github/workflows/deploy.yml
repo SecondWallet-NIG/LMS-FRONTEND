@@ -40,7 +40,7 @@ jobs:
           IMAGE_NAME_LC=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')
           TAG=${{ steps.vars.outputs.TAG }}
 
-          docker build \
+          docker build --no-cache \
             --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
             -t "$IMAGE_NAME_LC:$TAG" .
 
