@@ -19,12 +19,15 @@ ChartJS.register(
   Legend
 );
 
-const BarChart = ({options, data}) => {
+const BarChart = ({ options, data }) => {
   return (
-    <div style={{ height: '300px', borderRadius: '10px' }} className="border-1 mt-8 border-gray-100 p-4">
-        <Line  options={options} data={data} />
+    <div
+      style={{ height: "300px" }}
+      className="rounded-2xl border border-gray-100/90 bg-gradient-to-b from-white to-gray-50/50 p-4 shadow-sm"
+    >
+      <Line options={options} data={data} />
     </div>
-  )
-}
+  );
+};
 
 export default BarChart;

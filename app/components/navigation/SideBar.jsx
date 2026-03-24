@@ -57,9 +57,9 @@ const Sidebar = ({ sideBarState, sideBarOpen: sideBarChange }) => {
     const isDev =
       process.env.NODE_ENV === "development" ||
       (typeof window !== "undefined" &&
-        (window.location.hostname === "localhost" || window.location.hostname === "lms-frontend-cki9.vercel.app" ||
-          
-          window.location.hostname === "127.0.0.1"));
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1" ||
+          window.location.hostname === "lms-frontend-cki9.vercel.app"));
     setIsDevelopment(!!isDev);
   }, []);
 

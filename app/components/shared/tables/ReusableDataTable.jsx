@@ -1679,22 +1679,28 @@ function ReusableDataTable({
         )}
         {data?.length > 0 && loading == false ? (
           <div className="overflow-x-auto">
-            <table className="table-auto w-full border-collapse border overflow-hidden">
+            <table className="w-full border-collapse overflow-hidden rounded-xl bg-white">
               <thead>
-                <tr>
+                <tr className="bg-swLightGray/70">
                   {headers
                     .filter((item) => dataId.includes(item.id))
                     .map((header) => (
                       <th
                         key={header.id}
-                        className={`capitalize text-md px-4 py-6 bg-gray-50 text-black border-0 font-[500] cursor-pointer text-start whitespace-nowrap ${
-                          header.id === sortField ? "" : ""
-                        }`}
-                        onClick={() => handleSort(header)}
+                        className="whitespace-nowrap border-b border-gray-100 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-swGray cursor-pointer select-none"
+                        onClick={() => handleSort(header.id)}
+                        aria-label={`Sort by ${header.label}`}
+                        aria-sort={
+                          header.id === sortField
+                            ? sortDirection === "asc"
+                              ? "ascending"
+                              : "descending"
+                            : "none"
+                        }
                       >
                         {header.label}
                         {header.id === sortField && (
-                          <span className="ml-1">
+                          <span className="ml-1 text-[10px] text-swGrey200">
                             {sortDirection === "asc" ? "↑" : "↓"}
                           </span>
                         )}
@@ -1715,15 +1721,25 @@ function ReusableDataTable({
                       }
                     }}
                     key={item._id}
-                    className="border pt-2 pb-2 hover:bg-swLightGray"
-                    style={{ cursor: "pointer" }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        if (onClickRow) {
+                          setIsLoading(true);
+                          router.push(`${onClickRow}/${item.id || item._id}`);
+                        }
+                      }
+                    }}
+                    className="cursor-pointer transition-colors hover:bg-swLightGray/60 odd:bg-white even:bg-gray-50/40 border-b border-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-swBlue/25"
                   >
                     {headers
                       .filter((item) => dataId.includes(item.id))
                       .map((header) => (
                         <td
                           key={header.id}
-                          className="px-5 py-4 border font-400 text-xs font-semibold text-swGray border-none"
+                          className="whitespace-nowrap px-4 py-4 text-xs font-semibold text-swGrey500"
                         >
                           {item[header.id]}
                         </td>
@@ -1734,10 +1750,17 @@ function ReusableDataTable({
             </table>
           </div>
         ) : data?.length == 0 && !isLoading ? (
-          <div className="min-h-500 flex items-center justify-center">
-            <div className="rounded-lg p-8 w-[400px] flex flex-col items-center">
-              <Image src={sketch} alt="company logo" width={200} height={150} />
-              <p className="text-center text-md">This list is empty</p>
+          <div className="min-h-[280px] flex items-center justify-center">
+            <div className="w-full max-w-[520px] rounded-xl border border-gray-100/90 bg-white p-8">
+              <div className="flex flex-col items-center">
+                <Image src={sketch} alt="company logo" width={200} height={150} />
+                <p className="mt-3 text-center text-sm font-semibold text-swGrey500">
+                  No results found
+                </p>
+                <p className="mt-1 text-center text-xs text-swGrey200">
+                  Try adjusting filters or refresh the list.
+                </p>
+              </div>
             </div>
           </div>
         ) : null}
@@ -1749,7 +1772,7 @@ function ReusableDataTable({
               disabled={
                 !paginationLinks || !paginationLinks.prev || currentPage === 1
               }
-              className="px-2 py-1 rounded bg-swLightGray text-gray-700 mr-2"
+              className="mr-2 rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-swGrey400 transition hover:bg-swLightGray/40 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Previous
             </button>
@@ -1758,10 +1781,10 @@ function ReusableDataTable({
                 <button
                   key={pageNumber}
                   onClick={() => handlePageChange(pageNumber, perPage)}
-                  className={`px-3 py-1.5 ${
+                  className={`rounded-xl border px-3 py-1.5 text-sm transition ${
                     currentPage === pageNumber
-                      ? "bg-swBlue text-white"
-                      : "bg-swLightGray text-gray-700"
+                      ? "border-swBlue bg-swBlue text-white"
+                      : "border-gray-200 bg-white text-swGrey400 hover:bg-swLightGray/40"
                   }`}
                 >
                   {pageNumber}
@@ -1771,7 +1794,7 @@ function ReusableDataTable({
             <button
               onClick={() => handlePageChange(currentPage + 1, perPage)}
               disabled={!paginationLinks || !paginationLinks.next}
-              className="px-2 py-1 rounded bg-swLightGray text-gray-700 ml-2"
+              className="ml-2 rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-swGrey400 transition hover:bg-swLightGray/40 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Next
             </button>

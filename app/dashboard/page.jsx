@@ -1,12 +1,31 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { format } from "date-fns";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import BarChart from "../components/chart/BarChart";
 import DashboardCard from "../components/cards/dashboard/DashboardCard";
-import { LuUsers } from "react-icons/lu";
-import { IoMdArrowDown, IoMdArrowUp } from "react-icons/io";
+import {
+  LuActivity,
+  LuBanknote,
+  LuBarChart3,
+  LuClipboardCheck,
+  LuLandmark,
+  LuLayers,
+  LuLayoutDashboard,
+  LuPercent,
+  LuPieChart,
+  LuReceipt,
+  LuRefreshCw,
+  LuSend,
+  LuSparkles,
+  LuTrendingUp,
+  LuUsers,
+  LuWallet,
+} from "react-icons/lu";
+
+const ICON_SIZE = 22;
 import {
   getDashboardCardData,
   getDashboardGraphData,
@@ -182,17 +201,85 @@ const DashboardPage = () => {
     dispatch(getDashboardGraphData());
   }, []);
 
+  const todayLabel = useMemo(
+    () => format(new Date(), "EEEE, MMMM d, yyyy"),
+    []
+  );
+
+  const displayName =
+    user?.data?.user?.firstName ||
+    user?.firstName ||
+    user?.data?.firstName ||
+    "";
+
   return (
     <DashboardLayout roles={dashboardAuthRoles}>
       {cardData && (
-        <main className="text-swGray text-lg p-5 sm:p-10 bg-gray-50 h-full">
-          {/* <DashboardPageCard /> */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <main className="min-h-full bg-gradient-to-b from-[#f0f6fc] via-gray-50 to-gray-50 text-swGray">
+          <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-8 sm:py-8 lg:px-10">
+            {/* Page header */}
+            <header className="mb-8 flex flex-col gap-6 rounded-2xl border border-white/60 bg-gradient-to-br from-white via-white to-swBlueActiveStateBg/40 p-6 shadow-md shadow-swBlue/5 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex min-w-0 flex-1 gap-4">
+                <div
+                  className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-swBlue to-swDarkBlue text-white shadow-lg shadow-swBlue/25 ring-4 ring-white/80"
+                  aria-hidden
+                >
+                  <LuLayoutDashboard size={28} strokeWidth={2} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-swBlue/80">
+                    Dashboard
+                  </p>
+                  <h1 className="mt-1 text-2xl font-bold tracking-tight text-swGrey500 sm:text-3xl">
+                    {displayName
+                      ? `Welcome back, ${displayName}`
+                      : "Welcome back"}
+                  </h1>
+                  <p className="mt-2 flex items-center gap-2 text-sm text-swGrey200">
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-swGreen" />
+                    {todayLabel}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 sm:justify-end">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-swGreen/25 bg-white/80 px-3 py-1.5 text-xs font-semibold text-swGreen700 shadow-sm">
+                  <LuSparkles size={14} className="text-swGreen" />
+                  Live overview
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-swBlue/20 bg-swBlueActiveStateBg px-3 py-1.5 text-xs font-semibold text-swBlue shadow-sm">
+                  <LuBarChart3 size={14} />
+                  Loan management
+                </span>
+              </div>
+            </header>
+
+            <section aria-labelledby="overview-heading" className="mb-4">
+              <div className="flex items-start gap-3">
+                <span
+                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-swBlue/15 to-swBlue/5 text-swBlue shadow-sm ring-1 ring-swBlue/10"
+                  aria-hidden
+                >
+                  <LuSparkles size={22} strokeWidth={2} />
+                </span>
+                <div>
+                  <h2
+                    id="overview-heading"
+                    className="text-lg font-bold text-swGrey500 sm:text-xl"
+                  >
+                    Overview
+                  </h2>
+                  <p className="mt-1 text-sm text-swGrey200">
+                    Key metrics across borrowers, disbursements, and repayments.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-6">
             <DashboardCard
-              // blueBg={true}
-              iconBg="bg-blue-200"
-              iconColor="text-swBlue"
-              cardIcon={<LuUsers size={20} />}
+              iconBg="bg-sky-100"
+              iconColor="text-sky-600"
+              cardIcon={<LuUsers size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"Borrowers"}
               cardLinkLabel={"View"}
               cardLink={"/borrowers"}
@@ -207,10 +294,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              // blueBg={true}
-              iconBg="bg-yellow-200"
-              iconColor="text-yellow-500"
-              cardIcon={<IoMdArrowUp size={20} />}
+              iconBg="bg-amber-100"
+              iconColor="text-amber-600"
+              cardIcon={<LuSend size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"Disbursements"}
               cardLinkLabel={"View"}
               cardLink={"/disbursement"}
@@ -226,10 +312,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
-              // blueBg={true}
-              iconBg="bg-blue-200"
-              iconColor="text-[#00AEE8]"
-              cardIcon={<IoMdArrowDown size={20} />}
+              iconBg="bg-emerald-100"
+              iconColor="text-emerald-600"
+              cardIcon={<LuWallet size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"Repayments"}
               cardLinkLabel={"View"}
               cardLink={"/repayment"}
@@ -245,6 +330,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
+              iconBg="bg-violet-100"
+              iconColor="text-violet-600"
+              cardIcon={<LuLayers size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"All Loans (DL | OVD | FPL)"}
               cardLinkLabel={"View"}
               cardLink={"/loan-applications"}
@@ -259,6 +347,11 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
+              iconBg="bg-orange-100"
+              iconColor="text-orange-600"
+              cardIcon={
+                <LuClipboardCheck size={ICON_SIZE} strokeWidth={2.25} />
+              }
               cardName={"Loans Approved for Disbursement"}
               cardLinkLabel={"View"}
               cardLink={"/pending-loans"}
@@ -275,6 +368,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
+              iconBg="bg-rose-100"
+              iconColor="text-rose-600"
+              cardIcon={<LuActivity size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"Total Outstanding Active Loans"}
               cardLinkLabel={"View"}
               cardLink={"/active-loans"}
@@ -290,6 +386,9 @@ const DashboardPage = () => {
             />
 
             <DashboardCard
+              iconBg="bg-cyan-100"
+              iconColor="text-cyan-600"
+              cardIcon={<LuPieChart size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"Active / Fully Paid Loans"}
               // cardLinkLabel={"View"}
               // cardLink={"/loan-applications"}
@@ -305,6 +404,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
+              iconBg="bg-yellow-100"
+              iconColor="text-yellow-700"
+              cardIcon={<LuReceipt size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"Total Fees"}
               firstStat={[
                 "Management Fees",
@@ -319,6 +421,9 @@ const DashboardPage = () => {
               thirdStat={["null"]}
             />
             <DashboardCard
+              iconBg="bg-indigo-100"
+              iconColor="text-indigo-600"
+              cardIcon={<LuLandmark size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"Principal Outstanding Active Loans"}
               cardLinkLabel={"View"}
               cardLink={"/fully-paid-loans"}
@@ -330,6 +435,9 @@ const DashboardPage = () => {
               thirdStat={["null"]}
             />
             <DashboardCard
+              iconBg="bg-slate-100"
+              iconColor="text-slate-600"
+              cardIcon={<LuRefreshCw size={ICON_SIZE} strokeWidth={2.25} />}
               cardName={"Restructured Loans"}
               cardLink={""}
               cardLinkLabel={"View"}
@@ -337,6 +445,9 @@ const DashboardPage = () => {
               secondStat={["Count", "Coming soon"]}
             />
             <DashboardCard
+              iconBg="bg-fuchsia-100"
+              iconColor="text-fuchsia-600"
+              cardIcon={<LuTrendingUp size={ICON_SIZE} strokeWidth={2.25} />}
               cardLinkLabel={"View"}
               cardName={"Expected Interest"}
               cardLink={""}
@@ -352,6 +463,9 @@ const DashboardPage = () => {
               ]}
             />
             <DashboardCard
+              iconBg="bg-purple-100"
+              iconColor="text-purple-600"
+              cardIcon={<LuPercent size={ICON_SIZE} strokeWidth={2.25} />}
               cardLinkLabel={"View"}
               cardName={"Interest Outstanding Active Loans"}
               cardLink={""}
@@ -363,34 +477,82 @@ const DashboardPage = () => {
             />
           </div>
 
-          <section className="mt-10">
-            <div className="flex justify-between">
-              <p className="text-xl font-semibold text-swBlue">Analytics</p>
-              <div className="flex gap-3 items-center">
-                Select Timeframe
-                <div className="flex items-center gap-2 border rounded-lg text-sm font-semibold py-2 px-4">
-                  Month{" "}
-                  <MdOutlineKeyboardArrowDown size={20} className="-mr-1" />
+          <section
+            className="mt-12 rounded-2xl border border-gray-100/90 bg-white/90 p-5 shadow-sm backdrop-blur-sm sm:p-8"
+            aria-labelledby="analytics-heading"
+          >
+            <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-3">
+                <span
+                  className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/15 to-swBlue/10 text-emerald-700 shadow-sm ring-1 ring-emerald-500/15"
+                  aria-hidden
+                >
+                  <LuBarChart3 size={22} strokeWidth={2} />
+                </span>
+                <div>
+                  <h2
+                    id="analytics-heading"
+                    className="text-lg font-bold text-swGrey500 sm:text-xl"
+                  >
+                    Analytics
+                  </h2>
+                  <p className="mt-1 text-sm text-swGrey200">
+                    Monthly trends for loans, repayments, and fees.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-sm font-medium text-swGrey200">
+                  Timeframe
+                </span>
+                <div className="flex cursor-default items-center gap-2 rounded-xl border border-gray-200 bg-gray-50/80 px-4 py-2.5 text-sm font-semibold text-swGrey500 shadow-inner">
+                  Month
+                  <MdOutlineKeyboardArrowDown
+                    size={20}
+                    className="-mr-0.5 text-swGrey200"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-6">
+              <div className="w-full">
+                <div className="mb-3 flex items-center gap-2.5">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-700">
+                    <LuBanknote size={18} strokeWidth={2.25} />
+                  </span>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-swGrey200">
+                    Disbursed loans (monthly)
+                  </p>
+                </div>
+                <BarChart options={options} data={dataLoans} />
+              </div>
+              <div className="flex flex-col gap-6 lg:flex-row">
+                <div className="w-full lg:w-1/2">
+                  <div className="mb-3 flex items-center gap-2.5">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+                      <LuWallet size={18} strokeWidth={2.25} />
+                    </span>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-swGrey200">
+                      Repayments — expected vs actual
+                    </p>
+                  </div>
+                  <BarChart options={options} data={dataRepayments} />
+                </div>
+                <div className="w-full lg:w-1/2">
+                  <div className="mb-3 flex items-center gap-2.5">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-700">
+                      <LuReceipt size={18} strokeWidth={2.25} />
+                    </span>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-swGrey200">
+                      Fees & expected interest
+                    </p>
+                  </div>
+                  <BarChart options={_options} data={dataFees} />
                 </div>
               </div>
             </div>
           </section>
-          <div className="flex flex-col sm:flex-row">
-            {/* <div className="w-full sm:w-1/2">
-              <BarChart options={options} data={dataDisbursements} />
-            </div> */}
-
-            <div className="w-full">
-              <BarChart options={options} data={dataLoans} />
-            </div>
-          </div>
-          <div className="flex flex-col sm:flex-row">
-            <div className="w-full sm:w-1/2">
-              <BarChart options={options} data={dataRepayments} />
-            </div>
-            <div className="w-full sm:w-1/2">
-              <BarChart options={_options} data={dataFees} />
-            </div>
           </div>
         </main>
       )}

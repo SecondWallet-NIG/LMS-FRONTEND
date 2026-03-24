@@ -712,15 +712,15 @@ const ViewLoan = () => {
       roles={loanApplicationAuthRoles}
     >
       <ToastContainer />
-      <main className="flex h-full">
-        <section className="w-full border-r border-gray-300">
+      <main className="flex min-h-full bg-gradient-to-b from-[#f0f6fc] via-gray-50 to-gray-50">
+        <section className="w-full md:w-[70%] border-r border-gray-200 pb-20">
           <section
             id="customer_details"
-            className="flex flex-col md:flex-row gap-2 border-b border-gray-300 items-center py-4 px-5"
+            className="m-5 flex flex-col xl:flex-row gap-6 items-start xl:items-center rounded-2xl border border-gray-100/90 bg-white px-5 py-5 shadow-sm"
           >
-            <div className="w-full md:w-[30%] whitespace-nowrap">
-              <div className="flex ">
-                <div>
+            <div className="w-full xl:w-[40%] border-b xl:border-b-0 xl:border-r border-gray-100 pb-4 xl:pb-0 xl:pr-4 shrink-0">
+              <div className="flex items-start sm:items-center">
+                <div className="shrink-0 mt-1 sm:mt-0">
                   <img
                     src={
                       data?.data?.loanApplication?.customerId?.customerId?.profilePicture || 
@@ -728,112 +728,95 @@ const ViewLoan = () => {
                       "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                     }
                     alt="user image"
-                    width={60}
-                    height={60}
-                    className="rounded-full"
+                    width={64}
+                    height={64}
+                    className="rounded-full border-2 border-gray-50 shadow-sm"
                     onError={(e) => {
-                      e.target.src = "https://cdn-icons-png.flaticon.com/512/4128/4128349.png";
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
                     }}
                   />
                 </div>
-                <div className="ml-4 h-fit">
-                  <p className="text-md font-semibold text-swBlue mb-1">
-                    {data?.data?.customerDetails?.firstName}{" "}
-                    {data?.data?.customerDetails?.lastName}
-                    <button
+                <div className="ml-4 h-fit flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <p className="text-lg font-semibold text-swBlue truncate max-w-full">
+                      {data?.data?.customerDetails?.firstName}{" "}
+                      {data?.data?.customerDetails?.lastName}
+                    </p>
+                    <span
                       className={`${
                         data?.data?.loanApplication?.status === "Pending"
                           ? "bg-swIndicatorLightRed"
-                          : data?.data?.loanApplication?.status ===
-                            "In Progress"
+                          : data?.data?.loanApplication?.status === "In Progress"
                           ? "bg-swIndicatorYellow"
-                          : data?.data?.loanApplication?.status ===
-                            "Ready for Disbursal"
+                          : data?.data?.loanApplication?.status === "Ready for Disbursal"
                           ? "bg-swIndicatorPurple"
                           : data?.data?.loanApplication?.status === "Disbursed"
                           ? "bg-swBlue"
                           : data?.data?.loanApplication?.status === "Fully Paid"
                           ? "bg-swGreen"
                           : "bg-swIndicatorDarkRed"
-                      } px-2 py-1 rounded-full ml-4 text-xs font-normal text-white`}
+                      } px-2.5 py-0.5 rounded-full text-[10px] font-medium text-white uppercase tracking-wider shrink-0`}
                     >
                       {data?.data?.loanApplication?.status}
-                    </button>
-                  </p>
-                  <p className="text-xs">
-                    {" "}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-500 font-medium truncate">
                     {data?.data?.loanApplication?.customerId?.customerId}
                   </p>
 
-                  <div className="flex gap-2 items-center h-fit w-fit mt-4">
-                    {useriD?.role?.tag === "CFO" || "FO" ? (
-                      <Button
-                        className={
-                          "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
-                        }
-                        disabled={
-                          data?.data?.loanApplication?.status ===
-                          "Ready for Disbursal"
-                            ? false
-                            : true
-                        }
-                        onClick={() => {
-                          setLogRepayment(!logRepayment);
-                        }}
+                  <div className="flex flex-wrap gap-2 items-center h-fit mt-3">
+                    {useriD?.role?.tag === "CFO" || useriD?.role?.tag === "FO" ? (
+                      <button
+                        className="text-white text-xs bg-swBlue hover:bg-swBlueActiveStateBg px-3 py-1.5 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={data?.data?.loanApplication?.status !== "Ready for Disbursal"}
+                        onClick={() => setLogRepayment(!logRepayment)}
                       >
-                        <p>Disburse Loan</p>
-                      </Button>
+                        Disburse
+                      </button>
                     ) : null}
 
                     <button
-                      onClick={() => {
-                        router.push(
-                          `/borrowers/profile/${data?.data?.customerDetails?._id}`
-                        );
-                      }}
-                      className={
-                        "text-swBlue text-sm bg-white py-2 rounded-lg font-medium"
-                      }
+                      onClick={() => router.push(`/borrowers/profile/${data?.data?.customerDetails?._id}`)}
+                      className="text-swBlue text-xs border border-swBlue/20 hover:bg-swBlue/5 px-3 py-1.5 rounded-md font-medium transition-colors"
                     >
-                      View Profile
+                      Profile
                     </button>
 
                     {data?.data?.loanApplication?.offerLetter != null ? (
                       <a
                         download
-                        className={
-                          "text-swBlue text-sm bg-white py-2 rounded-lg font-medium "
-                        }
+                        className="text-swBlue text-xs border border-swBlue/20 hover:bg-swBlue/5 p-1.5 rounded-md font-medium transition-colors cursor-pointer"
                         onClick={handleDownload}
+                        title="Download Offer Letter"
                       >
-                        <FaDownload />
+                        <FaDownload size={14} />
                       </a>
                     ) : null}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-[70%]">
-              <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap">
-                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Loan ID</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-swBlue font-semibold mt-4 text-end">
+            <div className="w-full xl:w-[60%] flex flex-col gap-4 pl-0 xl:pl-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
+                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Loan ID</p>
+                  <div className="mt-1">
+                    <p className="text-sm font-semibold text-swBlue">
                       {data?.data?.loanApplication?.loanId}
                     </p>
                   </div>
                 </div>
-                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Loan Amount</p>
-
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-swBlue font-semibold mt-4">
+                <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
+                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Loan Amount</p>
+                  <div className="mt-1 flex justify-between items-center">
+                    <p className="text-sm font-semibold text-swBlue">
                       ₦{" "}
                       {data?.data?.loanApplication?.loanAmount.toLocaleString()}
                     </p>
                     {hasDecline && hasDecline === true ? (
                       <div
-                        className="p-2 rounded-md hover:bg-white cursor-pointer mt-2"
+                        className="p-1.5 rounded-md hover:bg-white cursor-pointer text-swGrey400 hover:text-swBlue transition-colors"
                         onClick={() => {
                           setLoanAmount(
                             data?.data?.loanApplication?.loanAmount
@@ -846,43 +829,36 @@ const ViewLoan = () => {
                     ) : null}
                   </div>
                 </div>
-                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium" title="Principal + interest due + penalty">
-                    Outstanding Balance
-                  </p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-red-500 font-semibold mt-4">
+                <div className="rounded-xl border border-red-100 bg-red-50/50 p-3">
+                  <p className="text-[11px] font-medium text-red-400 uppercase tracking-wider">Outstanding Balance</p>
+                  <div className="mt-1">
+                    <p className="text-sm font-semibold text-swIndicatorLightRed">
                       ₦{" "}
                       {data?.data?.loanApplication?.outstandingBalance?.toLocaleString() ||
                         0}
                     </p>
                   </div>
                 </div>
-              </div>
-              <div className="flex justify-start md:justify-end items-center gap-5 flex-wrap mt-2">
-                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Loan Creator</p>
-                  <div className="flex justify-between items-center">
+                <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
+                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Loan Creator</p>
+                  <div className="mt-1">
                     <button
                       onClick={() => {
                         router.push(
                           `/borrowers/profile/${data?.data?.customerDetails?._id}`
                         );
                       }}
-                      className={
-                        "text-swBlue text-sm py-2 rounded-lg font-medium underline"
-                      }
+                      className="text-sm font-medium text-swBlue hover:underline text-left"
                     >
                       {data?.data?.loanApplication?.createdBy?.firstName}{" "}
                       {data?.data?.loanApplication?.createdBy?.lastName}
                     </button>
                   </div>
                 </div>
-                <div className="w-full  sm:w-[10rem] bg-gray-100 rounded-xl p-2">
-                  <p className="text-sm font-medium">Date Disbursed</p>
-
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-swBlue font-semibold mt-4">
+                <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
+                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Date Disbursed</p>
+                  <div className="mt-1">
+                    <p className="text-sm font-semibold text-swBlue">
                       {data?.data?.loanApplication?.disbursedAt &&
                         formatDate(
                           data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
@@ -890,54 +866,43 @@ const ViewLoan = () => {
                     </p>
                   </div>
                 </div>
+              </div>
+              <div className="flex justify-start md:justify-end items-center gap-3 flex-wrap">
                 {data?.data?.loanApplication?.status === "In Progress" ||
                   data?.data?.loanApplication?.status === "Pending" ||
                   data?.data?.loanApplication?.status === "Declined" || (
-                    <div className="w-full  sm:w-[10rem] rounded-xl">
-                      <div>
-                        <Button
-                          // size="normal"
-                          // variant="primary"
-                          className="text-xs text-swBlue rounded-md"
-                          onClick={() => getLoanStatement()}
-                          disabled={statementLoad}
-                          blueBtn={true}
-                        >
-                          Generate Statement
-                        </Button>
-                      </div>
-                    </div>
+                    <button
+                      className="text-xs text-swBlue rounded-md border border-swBlue/20 hover:bg-swBlue/5 bg-white px-3 py-1.5 font-medium transition-colors disabled:opacity-50"
+                      onClick={() => getLoanStatement()}
+                      disabled={statementLoad}
+                    >
+                      Generate Statement
+                    </button>
                   )}
                 {(data?.data?.loanApplication?.status === "Disbursed" ||
                   data?.data?.loanApplication?.status === "Overdue") && (
-                  <div className="w-full  sm:w-[10rem] rounded-xl">
-                    <div>
-                      <Button
-                        // size="normal"
-                        // variant="primary"
-                        className="text-xs text-swBlue rounded-md"
-                        onClick={() => setIsRestructureOpen(true)}
-                        blueBtn={true}
-                      >
-                        Restructure Loan
-                      </Button>
-                    </div>
-                  </div>
+                  <button
+                    className="text-xs text-swBlue rounded-md border border-swBlue/20 hover:bg-swBlue/5 bg-white px-3 py-1.5 font-medium transition-colors"
+                    onClick={() => setIsRestructureOpen(true)}
+                  >
+                    Restructure Loan
+                  </button>
                 )}
               </div>
             </div>
           </section>
-          <div className="m-5 mb-0">
-            <div className="flex justify-end">
+          <div className="m-5 rounded-2xl border border-gray-100/90 bg-white shadow-sm overflow-hidden">
+            <div className="flex justify-between items-center border-b border-gray-100 px-5 py-4 bg-gray-50/50">
+              <h6 className="font-semibold text-swBlue">
+                Loan Details
+              </h6>
               {(useriD?.role?.tag === "ICO" || useriD?.role?.tag === "FO" || useriD?.role?.tag === "CTO" || useriD?.role?.tag === "System Admin") && (
-                <Button
-                  className="text-xs text-swBlue rounded-md"
+                <button
+                  className="text-xs text-swBlue rounded-md border border-swBlue/20 hover:bg-swBlue/5 bg-white px-3 py-1.5 font-medium transition-colors"
                   onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
-                  // disabled={statementLoad}
-                  blueBtn={true}
                 >
                   Correct loan
-                </Button>
+                </button>
               )}
             </div>
             <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
@@ -1202,277 +1167,195 @@ const ViewLoan = () => {
             </div>
           </div>
 
-          {data?.data?.loanApplication?.createdBy?._id === useriD?._id ? (
-            <div className="ml-5 mr-5 mt-5">
-              <h6 className="text-swBlue font-semibold p-2 ">
-                Loan Approval Needed
-              </h6>
-              <div className="border rounded-lg overflow-auto">
-                <table className=" w-full ">
-                  <thead className="bg-swLightGray ">
-                    <tr>
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
-                        ID
-                      </th>
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
-                        Action
-                      </th>
+              <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider mb-2">Loan Period</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold text-swBlue">
+                    {data?.data?.loanApplication?.loanDurationMetrics === "Yearly"
+                      ? `${data?.data?.loanApplication?.loanDuration}` * 12
+                      : `${data?.data?.loanApplication?.loanDuration}`}{" "}
+                    month(s)
+                  </p>
+                  {hasDecline && hasDecline === true ? (
+                    <div
+                      className="p-1.5 rounded-md hover:bg-gray-50 cursor-pointer text-swGrey400 hover:text-swBlue transition-colors"
+                      onClick={() => {
+                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
+                        setOpenLoanPeriod(true);
+                      }}
+                    >
+                      <MdEdit size={15} />
+                    </div>
+                  ) : null}
+                </div>
+              </div>
 
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
-                        <h1>Approval Status</h1>
-                      </th>
+              <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider mb-2">Maturity Date</p>
+                <p className="text-sm font-semibold text-swBlue">
+                  {data?.data?.loanApplication?.loanMaturityDate === null ||
+                  data?.data?.loanApplication?.loanMaturityDate === undefined
+                    ? "null"
+                    : formatDate(data?.data?.loanApplication?.loanMaturityDate?.slice(0, 10))}
+                </p>
+              </div>
 
-                      <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
-                        <h1>Action</h1>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Array.isArray(loanApprovals?.data?.data) &&
-                      loanApprovals?.data?.data?.map((item, index) => (
-                        <tr className="text-xs" key={index}>
-                          <td className="p-2  text-black">
-                            {item?.approvalLevel}
-                          </td>
-                          <td className="p-2 text-black">
-                            {item?.approvalLevel == 1
-                              ? "Approve borrowers Credit"
-                              : item?.approvalLevel == 2
-                              ? "Vett Loan"
-                              : item?.approvalLevel == 3
-                              ? "Request payout authorization"
-                              : item?.approvalLevel == 4
-                              ? "MD/CEO Approval"
-                              : item?.approvalLevel == 5
-                              ? "Payout Approval"
-                              : null}
-                          </td>
-                          <td className="p-2">
-                            <button
-                              className={`cursor-none ${
-                                item?.status === "Approved"
-                                  ? "bg-[#E8F7F0] text-[#107E4B]  text-xs font-normal px-2 py-1 rounded-full"
-                                  : item?.status === "Pending"
-                                  ? "bg-swLightGray text-swGray text-xs font-normal px-2 py-1 rounded-full"
-                                  : item?.status === "Approval Requested"
-                                  ? "bg-red-400 text-white text-xs font-normal px-2 py-1 rounded-full"
-                                  : item?.status === "Declined"
-                                  ? "bg-red-500 text-white text-xs font-normal px-2 py-1 rounded-full"
-                                  : "bg-gray-300 text-gray-800 text-xs font-normal px-2 py-1 rounded-full"
-                              } px-2 py-1 rounded`}
-                            >
-                              {item?.status}
-                            </button>
-                          </td>
+              {/* Row 2 */}
+              <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider mb-2">Monthly Interest Rate</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold text-swBlue">
+                    {data?.data?.loanApplication?.interestRate} % ({data?.data?.loanApplication?.interestType.interestTypeCode})
+                  </p>
+                  {hasDecline && hasDecline === true ? (
+                    <div
+                      className="p-1.5 rounded-md hover:bg-gray-50 cursor-pointer text-swGrey400 hover:text-swBlue transition-colors"
+                      onClick={() => {
+                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
+                        setOpenInterestType(true);
+                      }}
+                    >
+                      <MdEdit size={15} />
+                    </div>
+                  ) : null}
+                </div>
+              </div>
 
-                          <td className="p-2">
-                            <Button
-                              onClick={() => {
-                                setCurrentApprovalId(item?.approvalLevel);
-                                setCurrentApprovalLevel(item?.approvalTitle);
-                                setIsRequestApprovalOpen(true);
-                              }}
-                              disabled={
-                                item?.status === "Approval Requested" ||
-                                item?.status === "Approved"
-                              }
-                              variant="secondary"
-                              className="text-xs rounded-lg"
-                            >
-                              {item?.status === "Pending" || "Declined"
-                                ? "Request for Approval"
-                                : item?.status}
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+              <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider mb-2">Repayment Type</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold text-swBlue">
+                    {repaymentTypeData?.find(
+                      (option) => option?.value === data?.data?.loanApplication?.repaymentType
+                    )?.label}
+                  </p>
+                  {hasDecline && hasDecline === true ? (
+                    <div
+                      className="p-1.5 rounded-md hover:bg-gray-50 cursor-pointer text-swGrey400 hover:text-swBlue transition-colors"
+                      onClick={() => {
+                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
+                        setOpenRepaymentType(true);
+                      }}
+                    >
+                      <MdEdit size={15} />
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider mb-2">Outstanding Principal</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {data?.data?.loanApplication?.outstandingPrincipal}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider mb-2">Current Accrued Interest</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {data?.data?.loanApplication?.currentInterest}
+                </p>
+              </div>
+
+              {/* Row 3 - Due Amounts */}
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Penalty Due</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {Number(
+                    data?.data?.penaltyDue ??
+                    data?.data?.loanApplication?.amountAccruedForcurrentOverdue ??
+                    0
+                  ).toLocaleString()}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Interest Due</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {Number(
+                    data?.data?.interestDue ??
+                    data?.data?.loanApplication?.currentInterest ??
+                    0
+                  ).toLocaleString()}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Principal Due (Scheduled)</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {Number(principalDue || 0).toLocaleString()}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm">
+                <p className="text-[11px] font-bold text-red-600 uppercase tracking-wider mb-2">Amount Due To Pay</p>
+                <p className="text-sm font-bold text-swIndicatorDarkRed">
+                  ₦ {Number(
+                    data?.data?.amountDueToPay ??
+                    (Number(
+                      data?.data?.penaltyDue ??
+                      data?.data?.loanApplication?.amountAccruedForcurrentOverdue ??
+                      0
+                    ) +
+                    Number(
+                      data?.data?.interestDue ??
+                      data?.data?.loanApplication?.currentInterest ??
+                      0
+                    ) +
+                    Number(principalDue || 0))
+                  ).toLocaleString()}
+                </p>
               </div>
             </div>
-          ) : null}
-          {data?.data?.loanApplication?.createdBy?._id ===
-          useriD?._id ? null : (
-            <div className="ml-5 mr-5 mt-5">
-              {loanApprovals &&
-              Array.isArray(loanApprovals?.data?.data) &&
-              loanApprovals?.data?.data.filter(
-                (item) =>
-                  item?.assignee?._id === useriD?._id &&
-                  item?.status === "Approval Requested"
-              ).length > 0 ? (
-                <div>
-                  <h6 className="text-center font-semibold p-2">Loan Action</h6>
-                  <div className="border rounded-lg">
-                    <table className=" w-full ">
-                      <thead className="bg-swLightGray ">
-                        <tr>
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
-                            <h1>Action Task</h1>
-                          </th>
+          </div>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
-                            <h1>Assigned To</h1>
-                          </th>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
-                            <h1>Status</h1>
-                          </th>
 
-                          <th className="px-3 py-3 bg-swLightGray text-swGray text-[14px] font-medium border-0 text-start">
-                            <h1>Approve/Decline</h1>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {loanApprovals &&
-                          Array.isArray(loanApprovals?.data?.data) &&
-                          loanApprovals?.data?.data
-                            .filter(
-                              (item) =>
-                                item?.assignee?._id === useriD?._id &&
-                                item?.status === "Approval Requested"
-                            )
-                            .map((item, index) => (
-                              <tr className="text-xs" key={index}>
-                                <td className="p-2">{item?.approvalTitle}</td>
-                                <td className="p-2">
-                                  <p className="">
-                                    {" "}
-                                    {item?.assignee?.firstName}{" "}
-                                    {item?.assignee?.lastName}
-                                  </p>
-                                  {item?.assignee?.email ? (
-                                    <p className="text-swGray">
-                                      {" "}
-                                      {item?.assignee?.email}
-                                    </p>
-                                  ) : null}
-                                  <p className="text-swGray">
-                                    {" "}
-                                    {item?.assignee?.role?.name}
-                                  </p>
-                                </td>
-
-                                <td className="p-2 border font-400 text-xs text-swGray border-none">
-                                  {" "}
-                                  <button className="py-2 px-2 text-[#107E4B] text-xs bg-[#E8F7F0] rounded-full">
-                                    Pending
-                                  </button>
-                                </td>
-                                <td className="p-2 border font-400 text-xs text-swGray border-none">
-                                  <div className="flex gap-2">
-                                    <button
-                                      className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md"
-                                      onClick={() => {
-                                        setCurrentTaskId(item?.currentTaskId);
-                                        setCurrentApprovalId(
-                                          item?.approvalLevel
-                                        );
-                                        setCurrentApprovalLevel(
-                                          item?.approvalTitle
-                                        );
-                                        setApprovalOpen(true);
-                                      }}
-                                    >
-                                      Approve
-                                    </button>
-                                    <button
-                                      className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md"
-                                      onClick={() => {
-                                        setCurrentTaskId(item?.currentTaskId);
-                                        setCurrentApprovalId(
-                                          item?.approvalLevel
-                                        );
-                                        setCurrentApprovalLevel(
-                                          item?.approvalTitle
-                                        );
-                                        setDeclineOpen(true);
-                                      }}
-                                    >
-                                      Decline
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                            ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          )}
-
-          <div className="ml-5 mr-5 mt-5">
-            <h6 className="font-semibold text-swDarkRed p-2">Loan Accurals</h6>
-            <div className="border rounded-lg overflow-auto">
-              <table className=" w-full ">
-                <thead className="bg-swLightGray ">
-                  <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-swDarkRed text-[14px] font-medium border-0 text-start">
-                      Number of Overdue days
-                    </th>
-
-                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-swDarkRed text-[14px] font-medium border-0 text-start">
-                      <h1>Overdue Period Amount</h1>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-start text-[14px] font-medium">
-                    <td className="w-1/4 px-3 py-3">
-                      <div className="flex gap-2 items-center text-swDarkRed font-semibold">
-                        <p>
-                          {data?.data?.loanApplication
-                            ?.currentOverdueDaysCount || 0}{" "}
-                          day(s){" "}
-                        </p>
-                      </div>
-                    </td>
-
-                    <td className="w-1/4 px-3 py-3">
-                      <div>
-                        <p className="text-swDarkRed text-[14px] font-medium">
-                          ₦{" "}
-                          {data?.data?.loanApplication?.amountAccruedForcurrentOverdue?.toLocaleString() ||
-                            0}
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <div className="ml-5 mr-5 mt-5 rounded-2xl border border-red-100 bg-white shadow-sm overflow-hidden">
+            <h6 className="border-b border-red-100 px-5 py-4 font-semibold text-swDarkRed bg-red-50/30">
+              Loan Accruals
+            </h6>
+            <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Number of Overdue days</p>
+                <p className="text-sm font-semibold text-swDarkRed">
+                  {data?.data?.loanApplication?.currentOverdueDaysCount || 0} day(s)
+                </p>
+              </div>
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Overdue Period Amount</p>
+                <p className="text-sm font-semibold text-swDarkRed">
+                  ₦ {data?.data?.loanApplication?.amountAccruedForcurrentOverdue?.toLocaleString() || 0}
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Test Loan Triggers Section */}
           {data?.data?.loanApplication?.repaymentType === "installmentPayment" && (
-            <div className="ml-5 mr-5 mt-5">
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <h6 className="font-semibold text-yellow-800 p-2 mb-3">
-                  🧪 Test Loan Triggers (Development Only)
+            <div className="mx-5 mt-5">
+              <div className="bg-yellow-50/50 border border-yellow-200/60 rounded-2xl p-5 shadow-sm">
+                <h6 className="font-semibold text-yellow-800 mb-4 flex items-center gap-2">
+                  <span>🧪</span> Test Loan Triggers <span className="text-xs font-normal text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded-full">Development Only</span>
                 </h6>
-                <div className="space-y-3">
-                  <div className="flex gap-2">
-                    <Button
-                      variant="primary"
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
                       onClick={triggerDailyAccrual}
                       disabled={testTriggerLoading}
-                      className="flex-1 text-sm"
+                      className="flex-1 text-sm bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50"
                     >
                       {testTriggerLoading ? "Processing..." : "Trigger Daily Interest Accrual"}
-                    </Button>
-                    <Button
-                      variant="secondary"
+                    </button>
+                    <button
                       onClick={triggerOverdueAccrual}
                       disabled={testTriggerLoading}
-                      className="flex-1 text-sm"
+                      className="flex-1 text-sm border border-yellow-600 text-yellow-700 hover:bg-yellow-100 py-2 px-4 rounded-md transition-colors disabled:opacity-50"
                     >
                       {testTriggerLoading ? "Processing..." : "Trigger Overdue Accrual"}
-                    </Button>
+                    </button>
                   </div>
-                  <div className="flex gap-2 items-end">
+                  <div className="flex gap-3 items-end bg-white/50 p-3 rounded-xl border border-yellow-100">
                     <div className="flex-1">
                       <InputField
                         label="Advance Days"
@@ -1484,16 +1367,15 @@ const ViewLoan = () => {
                         placeholder="Enter days (1-365)"
                       />
                     </div>
-                    <Button
-                      variant="primary"
+                    <button
                       onClick={advanceDays}
                       disabled={testTriggerLoading}
-                      className="mb-0"
+                      className="mb-0 bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50 h-[42px]"
                     >
                       {testTriggerLoading ? "Processing..." : "Advance Days"}
-                    </Button>
+                    </button>
                   </div>
-                  <p className="text-xs text-yellow-700 mt-2">
+                  <p className="text-[11px] text-yellow-700/80 mt-2 font-medium">
                     ⚠️ These buttons are for testing purposes only. Use them to simulate daily accruals and advance time for testing installment payment scenarios.
                   </p>
                 </div>
@@ -1501,58 +1383,62 @@ const ViewLoan = () => {
             </div>
           )}
 
-          <div className="p-5">
+          <div className="px-5 pb-5">
             <section id="loan-details">{/* <ReusableDataTables/> */}</section>
             <section></section>
             <section
               id="activities"
-              className="border border-gray-300 rounded-2xl"
+              className="rounded-2xl border border-gray-100/90 bg-white pb-5 shadow-sm mt-5"
             >
-              {/* <div className="p-4 flex justify-between items-center"></div> */}
-              <div className="flex items-center justify-between overflow-x-hidden border-b border-gray-300 py-2 px-4 flex-wrap">
+              <div className="flex items-center justify-between overflow-x-hidden border-b border-gray-100 py-2 px-4 flex-wrap bg-gray-50/50 rounded-t-2xl">
                 <div className="flex gap-2 text-xs lg:text-sm overflow-auto">
                   <button
                     onClick={() => handleActivityToggle("activity-logs")}
                     className={`${
-                      activityButton === "activity-logs" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md text-xs md:text-sm`}
+                      activityButton === "activity-logs"
+                        ? "font-semibold text-swBlue bg-white shadow-sm border border-gray-200"
+                        : "text-gray-600 hover:bg-gray-100"
+                    } px-4 py-2 rounded-lg transition-all`}
                   >
                     Activity logs
                   </button>
                   <button
                     onClick={() => handleActivityToggle("loans")}
                     className={`${
-                      activityButton === "loans" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                      activityButton === "loans"
+                        ? "font-semibold text-swBlue bg-white shadow-sm border border-gray-200"
+                        : "text-gray-600 hover:bg-gray-100"
+                    } px-4 py-2 rounded-lg transition-all`}
                   >
                     Loan Documents
                   </button>
                   <button
                     onClick={() => handleActivityToggle("repayment")}
                     className={`${
-                      activityButton === "repayment" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                      activityButton === "repayment"
+                        ? "font-semibold text-swBlue bg-white shadow-sm border border-gray-200"
+                        : "text-gray-600 hover:bg-gray-100"
+                    } px-4 py-2 rounded-lg transition-all`}
                   >
                     Repayments
                   </button>
                   <button
                     onClick={() => handleActivityToggle("paymentHistory")}
                     className={`${
-                      activityButton === "paymentHistory" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                      activityButton === "paymentHistory"
+                        ? "font-semibold text-swBlue bg-white shadow-sm border border-gray-200"
+                        : "text-gray-600 hover:bg-gray-100"
+                    } px-4 py-2 rounded-lg transition-all`}
                   >
                     Payment History
                   </button>
                   <button
                     onClick={() => handleActivityToggle("loanTransactions")}
                     className={`${
-                      activityButton === "loanTransactions" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                      activityButton === "loanTransactions"
+                        ? "font-semibold text-swBlue bg-white shadow-sm border border-gray-200"
+                        : "text-gray-600 hover:bg-gray-100"
+                    } px-4 py-2 rounded-lg transition-all`}
                   >
                     Loan Transactions
                   </button>
@@ -1561,15 +1447,16 @@ const ViewLoan = () => {
                       handleActivityToggle("loanRestructureRequest")
                     }
                     className={`${
-                      activityButton === "loanRestructureRequest" &&
-                      "font-semibold text-swBlue bg-blue-50"
-                    } p-2 rounded-md cursor-pointer text-xs md:text-sm`}
+                      activityButton === "loanRestructureRequest"
+                        ? "font-semibold text-swBlue bg-white shadow-sm border border-gray-200"
+                        : "text-gray-600 hover:bg-gray-100"
+                    } px-4 py-2 rounded-lg transition-all`}
                   >
                     Loan Restructure Requests
                   </button>
                 </div>
               </div>
-              <div className="p-2">
+              <div className="p-4">
                 {activityButton === "activity-logs" && <CustomerActivityLogs />}
                 {/* {activityButton === "summary" && <Summary />} */}
                 {activityButton === "loans" && (
@@ -1596,28 +1483,50 @@ const ViewLoan = () => {
             </section>
           </div>
         </section>
-        <section id="loan_process" className="hidden md:block w-[30%] h-full">
-          <p className="border-b border-gray-300 p-4 text-swGray font-semibold">
-            Loan Processes
-          </p>
-          <div className="p-2">
-            <LoanProcessCard data={loanApprovals} />
-          </div>
-          <div className="flex justify-end">
-            {useriD?.role?.tag === "CFO" ||
-            useriD?.role?.tag === "CEO" ||
-            useriD?.role?.tag === "Dir" ? (
-              <Button
-                onClick={() => {
-                  setLoanReassignment(true);
-                  modifyUsersToApprove();
+        <section id="loan_process" className="hidden md:block w-[30%] h-full bg-white border-l border-gray-200">
+          <div className="sticky top-0 h-screen overflow-y-auto pb-32">
+            <p className="border-b border-gray-100 p-5 text-swBlue font-semibold bg-gray-50/50">
+              Loan Processes
+            </p>
+            <div className="p-4">
+              <LoanProcessCard 
+                data={loanApprovals} 
+                useriD={useriD?._id}
+                loanCreatorId={data?.data?.loanApplication?.createdBy?._id}
+                onRequestApproval={(item) => {
+                  setCurrentApprovalId(item?.approvalLevel);
+                  setCurrentApprovalLevel(item?.approvalTitle);
+                  setIsRequestApprovalOpen(true);
                 }}
-                className="m-2 w-full block rounded-lg text-sm"
-                variant="secondary"
-              >
-                Reassign Loan
-              </Button>
-            ) : null}
+                onApprove={(item) => {
+                  setCurrentTaskId(item?.currentTaskId);
+                  setCurrentApprovalId(item?.approvalLevel);
+                  setCurrentApprovalLevel(item?.approvalTitle);
+                  setApprovalOpen(true);
+                }}
+                onDecline={(item) => {
+                  setCurrentTaskId(item?.currentTaskId);
+                  setCurrentApprovalId(item?.approvalLevel);
+                  setCurrentApprovalLevel(item?.approvalTitle);
+                  setDeclineOpen(true);
+                }}
+              />
+            </div>
+            <div className="p-4 border-t border-gray-100">
+              {useriD?.role?.tag === "CFO" ||
+              useriD?.role?.tag === "CEO" ||
+              useriD?.role?.tag === "Dir" ? (
+                <button
+                  onClick={() => {
+                    setLoanReassignment(true);
+                    modifyUsersToApprove();
+                  }}
+                  className="w-full block rounded-lg text-sm py-2.5 font-medium border border-gray-200 hover:bg-gray-50 text-gray-700 transition-colors"
+                >
+                  Reassign Loan
+                </button>
+              ) : null}
+            </div>
           </div>
         </section>
       </main>
