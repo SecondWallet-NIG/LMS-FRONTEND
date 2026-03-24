@@ -905,265 +905,119 @@ const ViewLoan = () => {
                 </button>
               )}
             </div>
-            <h6 className="font-semibold text-swBlue p-2">Loan Details</h6>
-            <div className="border rounded-lg overflow-auto">
-              <table className=" w-full ">
-                <thead className="bg-swLightGray ">
-                  <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      Loan Package
-                    </th>
+            <div className="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Row 1 */}
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Loan Package</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold text-gray-800">{data?.data?.loanPackageDetails?.name}</p>
+                  {hasDecline && hasDecline === true && (
+                    <button onClick={() => { setLoanAmount(data?.data?.loanApplication?.loanAmount); setOpenLoanPackage(true); }} className="text-gray-400 hover:text-swBlue transition-colors">
+                      <MdEdit size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
 
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Maturity Amount</h1>
-                    </th>
-                    <th className="w-1/4  px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Loan Period</h1>
-                    </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Maturity Date</h1>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-start text-[14px]">
-                    <td className="w-1/4 px-3 py-3">
-                      <div className="flex gap-2 items-center">
-                        <p>{data?.data?.loanPackageDetails?.name} </p>
-                        {hasDecline && hasDecline === true ? (
-                          <div
-                            className="p-2 rounded-md hover:bg-white cursor-pointer"
-                            onClick={() => {
-                              setLoanAmount(
-                                data?.data?.loanApplication?.loanAmount
-                              );
-                              setOpenLoanPackage(true);
-                            }}
-                          >
-                            <MdEdit size={15} />
-                          </div>
-                        ) : null}
-                      </div>
-                    </td>
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Maturity Amount</p>
+                <p className="text-sm font-semibold text-gray-800">
+                  ₦ {data?.data?.loanApplication?.loanMaturityAmount?.toLocaleString() || 0}
+                </p>
+              </div>
 
-                    <td className="w-1/4 px-3 py-3">
-                      <div>
-                        <p>
-                          ₦{" "}
-                          {data?.data?.loanApplication?.loanMaturityAmount?.toLocaleString() ||
-                            0}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="w-1/4 px-3 py-3">
-                      <div className="flex gap-2 items-center">
-                        <p>
-                          {data?.data?.loanApplication?.loanDurationMetrics ===
-                          "Yearly"
-                            ? `${data?.data?.loanApplication?.loanDuration}` *
-                              12
-                            : `${data?.data?.loanApplication?.loanDuration}`}{" "}
-                          month(s)
-                        </p>
-                        {hasDecline && hasDecline === true ? (
-                          <div
-                            className="p-2 rounded-md hover:bg-white cursor-pointer"
-                            onClick={() => {
-                              setLoanAmount(
-                                data?.data?.loanApplication?.loanAmount
-                              );
-                              setOpenLoanPeriod(true);
-                            }}
-                          >
-                            <MdEdit size={15} />
-                          </div>
-                        ) : null}
-                      </div>
-                    </td>
-                    <td className="w-1/4 px-3 py-3">
-                      <div>
-                        {data?.data?.loanApplication?.loanMaturityDate ===
-                          null ||
-                        data?.data?.loanApplication?.loanMaturityDate ===
-                          undefined ? (
-                          "null"
-                        ) : (
-                          <p>
-                            {formatDate(
-                              data?.data?.loanApplication?.loanMaturityDate?.slice(
-                                0,
-                                10
-                              )
-                            )}
-                          </p>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table className=" w-full ">
-                <thead className="bg-swLightGray ">
-                  <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      Monthly Interest Rate
-                    </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Repayment Type</h1>
-                    </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Outstanding Principal (from repayments)</h1>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-start text-[14px]">
-                    <td className="w-1/4 px-3 py-3">
-                      <div className="flex gap-2 items-center">
-                        <p>
-                          {data?.data?.loanApplication?.interestRate} % (
-                          {
-                            data?.data?.loanApplication?.interestType
-                              ?.interestTypeCode
-                          }
-                          )
-                        </p>
-                        {hasDecline && hasDecline === true ? (
-                          <div
-                            className="p-2 rounded-md hover:bg-white cursor-pointer"
-                            onClick={() => {
-                              setLoanAmount(
-                                data?.data?.loanApplication?.loanAmount
-                              );
-                              setOpenInterestType(true);
-                            }}
-                          >
-                            <MdEdit size={15} />
-                          </div>
-                        ) : null}
-                      </div>
-                    </td>
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Loan Period</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold text-gray-800">
+                    {data?.data?.loanApplication?.loanDurationMetrics === "Yearly"
+                      ? `${data?.data?.loanApplication?.loanDuration}` * 12
+                      : `${data?.data?.loanApplication?.loanDuration}`} month(s)
+                  </p>
+                  {hasDecline && hasDecline === true && (
+                    <button onClick={() => { setLoanAmount(data?.data?.loanApplication?.loanAmount); setOpenLoanPeriod(true); }} className="text-gray-400 hover:text-swBlue transition-colors">
+                      <MdEdit size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
 
-                    <td className="w-1/4 px-3 py-3">
-                      <div className="flex gap-2 items-center">
-                        {/* <p>{data?.data?.loanApplication?.repaymentType} </p> */}
-                        <p>
-                          {
-                            repaymentTypeData?.find(
-                              (option) =>
-                                option?.value ===
-                                data?.data?.loanApplication?.repaymentType
-                            )?.label
-                          }
-                        </p>
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Maturity Date</p>
+                <p className="text-sm font-semibold text-gray-800">
+                  {data?.data?.loanApplication?.loanMaturityDate ? formatDate(data?.data?.loanApplication?.loanMaturityDate?.slice(0, 10)) : "N/A"}
+                </p>
+              </div>
 
+              {/* Row 2 */}
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Monthly Interest Rate</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold text-gray-800">
+                    {data?.data?.loanApplication?.interestRate} % ({data?.data?.loanApplication?.interestType?.interestTypeCode})
+                  </p>
+                  {hasDecline && hasDecline === true && (
+                    <button onClick={() => { setLoanAmount(data?.data?.loanApplication?.loanAmount); setOpenInterestType(true); }} className="text-gray-400 hover:text-swBlue transition-colors">
+                      <MdEdit size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
 
-                        {hasDecline && hasDecline === true ? (
-                          <div
-                            className="p-2    rounded-md hover:bg-white cursor-pointer"
-                            onClick={() => {
-                              setLoanAmount(
-                                data?.data?.loanApplication?.loanAmount
-                              );
-                              setOpenRepaymentType(true);
-                            }}
-                          >
-                            <MdEdit size={15} />
-                          </div>
-                        ) : null}
-                      </div>
-                    </td>
-                    <td className="w-1/4 px-3 py-3">
-                      <div className="flex gap-2 items-center">
-                        <p className="text-swIndicatorLightRed">
-                          ₦ {data?.data?.loanApplication?.outstandingPrincipal}{" "}
-                        </p>
-                        {/* {hasDecline && hasDecline === true ? (
-                          <div
-                            className="p-2 rounded-md hover:bg-white cursor-pointer"
-                            onClick={() => {
-                              setLoanAmount(
-                                data?.data?.loanApplication?.loanAmount
-                              );
-                              setOpenLoanFrequency(true);
-                            }}
-                          >
-                            <MdEdit size={15} />
-                          </div>
-                        ) : null} */}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table className=" w-full ">
-                <thead className="bg-swLightGray ">
-                  <tr>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      Penalty Due
-                    </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Interest Due</h1>
-                    </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Principal Due (from repayments)</h1>
-                    </th>
-                    <th className="w-1/4 px-3 py-3 bg-swLightGray text-black text-[14px] font-medium border-0 text-start">
-                      <h1>Amount Due To Pay</h1>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="text-start text-[14px]">
-                    <td className="w-1/4 px-3 py-3">
-                      <p className="text-swIndicatorLightRed">
-                        ₦{" "}
-                        {Number(
-                          data?.data?.penaltyDue ??
-                            data?.data?.loanApplication?.amountAccruedForcurrentOverdue ??
-                            0
-                        ).toLocaleString()}
-                      </p>
-                    </td>
-                    <td className="w-1/4 px-3 py-3">
-                      <p className="text-swIndicatorLightRed">
-                        ₦{" "}
-                        {Number(
-                          data?.data?.interestDue ??
-                            data?.data?.loanApplication?.currentInterest ??
-                            0
-                        ).toLocaleString()}
-                      </p>
-                    </td>
-                    <td className="w-1/4 px-3 py-3">
-                      <p className="text-swIndicatorLightRed">
-                        ₦{" "}
-                        {Number(principalDue || 0).toLocaleString()}
-                      </p>
-                    </td>
-                    <td className="w-1/4 px-3 py-3">
-                      <p className="text-swIndicatorLightRed font-semibold">
-                        ₦{" "}
-                        {Number(
-                          data?.data?.amountDueToPay ??
-                            (Number(
-                              data?.data?.penaltyDue ??
-                                data?.data?.loanApplication
-                                  ?.amountAccruedForcurrentOverdue ??
-                                0
-                            ) +
-                              Number(
-                                data?.data?.interestDue ??
-                                  data?.data?.loanApplication?.currentInterest ??
-                                  0
-                              ) +
-                              Number(principalDue || 0))
-                        ).toLocaleString()}
-                      </p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Repayment Type</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold text-gray-800">
+                    {repaymentTypeData?.find((option) => option?.value === data?.data?.loanApplication?.repaymentType)?.label || "N/A"}
+                  </p>
+                  {hasDecline && hasDecline === true && (
+                    <button onClick={() => { setLoanAmount(data?.data?.loanApplication?.loanAmount); setOpenRepaymentType(true); }} className="text-gray-400 hover:text-swBlue transition-colors">
+                      <MdEdit size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm col-span-1 sm:col-span-2">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Outstanding Principal (from repayments)</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {data?.data?.loanApplication?.outstandingPrincipal?.toLocaleString() || 0}
+                </p>
+              </div>
+
+              {/* Row 3 - Dues */}
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Penalty Due</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {Number(data?.data?.penaltyDue ?? data?.data?.loanApplication?.amountAccruedForcurrentOverdue ?? 0).toLocaleString()}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Interest Due</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {Number(data?.data?.interestDue ?? data?.data?.loanApplication?.currentInterest ?? 0).toLocaleString()}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Principal Due (from repayments)</p>
+                <p className="text-sm font-semibold text-swIndicatorLightRed">
+                  ₦ {Number(principalDue || 0).toLocaleString()}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm">
+                <p className="text-[11px] font-bold text-red-600 uppercase tracking-wider mb-2">Amount Due To Pay</p>
+                <p className="text-sm font-bold text-swIndicatorDarkRed">
+                  ₦ {Number(
+                    data?.data?.amountDueToPay ??
+                      (Number(data?.data?.penaltyDue ?? data?.data?.loanApplication?.amountAccruedForcurrentOverdue ?? 0) +
+                      Number(data?.data?.interestDue ?? data?.data?.loanApplication?.currentInterest ?? 0) +
+                      Number(principalDue || 0))
+                  ).toLocaleString()}
+                </p>
+              </div>
             </div>
           </div>
 
