@@ -1187,8 +1187,9 @@ const ViewLoan = () => {
             </div>
           </div>
 
-          {/* Test Loan Triggers Section */}
-          {data?.data?.loanApplication?.repaymentType === "installmentPayment" && (
+          {/* Test Loan Triggers Section — disabled (uncomment condition to re-enable) */}
+          {false &&
+            data?.data?.loanApplication?.repaymentType === "installmentPayment" && (
             <div className="mx-5 mt-5">
               <div className="bg-yellow-50/50 border border-yellow-200/60 rounded-2xl p-5 shadow-sm">
                 <h6 className="font-semibold text-yellow-800 mb-4 flex items-center gap-2">
