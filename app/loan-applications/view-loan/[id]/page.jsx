@@ -1,6 +1,7 @@
 "use client";
 import LoanProcessCard from "@/app/components/cards/loanProcessCard/LoanProcessCard";
 import CustomerActivityLogs from "@/app/components/customers/CustomerActivityLogs";
+import LoanAuditTrail from "@/app/components/customers/LoanAuditTrail";
 import CustomerPaymentHistory from "@/app/components/customers/CustomerHistoryPayment";
 import CustomerLoanDoc from "@/app/components/customers/CustomerLoanDoc";
 import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTransactions";
@@ -993,28 +994,46 @@ const ViewLoan = () => {
                 </p>
               </div>
 
-              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Interest Due</p>
-                <p className="text-sm font-semibold text-swIndicatorLightRed">
-                  ₦ {Number(data?.data?.interestDue ?? data?.data?.loanApplication?.currentInterest ?? 0).toLocaleString()}
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Current Principal Accruing</p>
+                <p className="text-sm font-semibold text-gray-800">
+                  ₦{" "}
+                  {Number(
+                    data?.data?.loanApplication?.principalBaseForInterest ??
+                      data?.data?.loanApplication?.outstandingPrincipal ??
+                      0
+                  ).toLocaleString()}
                 </p>
               </div>
 
-              <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Principal Due (from repayments)</p>
-                <p className="text-sm font-semibold text-swIndicatorLightRed">
-                  ₦ {Number(principalDue || 0).toLocaleString()}
+              <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Current Interest Accruing</p>
+                <p className="text-sm font-semibold text-gray-800">
+                  ₦{" "}
+                  {Number(
+                    data?.data?.loanApplication?.repaymentType === "installmentPayment"
+                      ? data?.data?.loanApplication?.currentInterest ?? 0
+                      : data?.data?.loanApplication?.currentInterest ??
+                          data?.data?.interestDue ??
+                          0
+                  ).toLocaleString()}
                 </p>
               </div>
 
               <div className="rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm">
                 <p className="text-[11px] font-bold text-red-600 uppercase tracking-wider mb-2">Amount Due To Pay</p>
                 <p className="text-sm font-bold text-swIndicatorDarkRed">
-                  ₦ {Number(
+                  ₦{" "}
+                  {Number(
                     data?.data?.amountDueToPay ??
-                      (Number(data?.data?.penaltyDue ?? data?.data?.loanApplication?.amountAccruedForcurrentOverdue ?? 0) +
-                      Number(data?.data?.interestDue ?? data?.data?.loanApplication?.currentInterest ?? 0) +
-                      Number(principalDue || 0))
+                      (data?.data?.loanApplication?.repaymentType === "installmentPayment"
+                        ? Number(data?.data?.penaltyDue ?? data?.data?.loanApplication?.amountAccruedForcurrentOverdue ?? 0) +
+                          Number(
+                            data?.data?.principalDueScheduled ?? principalDue ?? 0
+                          )
+                        : Number(data?.data?.penaltyDue ?? data?.data?.loanApplication?.amountAccruedForcurrentOverdue ?? 0) +
+                          Number(data?.data?.interestDue ?? data?.data?.loanApplication?.currentInterest ?? 0) +
+                          Number(principalDue || 0))
                   ).toLocaleString()}
                 </p>
               </div>
@@ -1114,6 +1133,16 @@ const ViewLoan = () => {
                     Activity logs
                   </button>
                   <button
+                    onClick={() => handleActivityToggle("audit-trail")}
+                    className={`${
+                      activityButton === "audit-trail"
+                        ? "font-semibold text-swBlue bg-white shadow-sm border border-gray-200"
+                        : "text-gray-600 hover:bg-gray-100"
+                    } px-4 py-2 rounded-lg transition-all`}
+                  >
+                    Audit trail
+                  </button>
+                  <button
                     onClick={() => handleActivityToggle("loans")}
                     className={`${
                       activityButton === "loans"
@@ -1169,6 +1198,7 @@ const ViewLoan = () => {
               </div>
               <div className="p-4">
                 {activityButton === "activity-logs" && <CustomerActivityLogs />}
+                {activityButton === "audit-trail" && <LoanAuditTrail />}
                 {/* {activityButton === "summary" && <Summary />} */}
                 {activityButton === "loans" && (
                   <CustomerLoanDoc data={data?.data} />
@@ -1178,6 +1208,7 @@ const ViewLoan = () => {
                     data={data?.data}
                     loanId={id}
                     status={data?.data?.loanApplication?.status}
+                    repaymentType={data?.data?.loanApplication?.repaymentType}
                   />
                 )}
 

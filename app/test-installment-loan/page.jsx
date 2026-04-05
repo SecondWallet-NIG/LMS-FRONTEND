@@ -13,6 +13,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DashboardLayout from "../components/dashboardLayout/DashboardLayout";
 import CenterModal from "../components/modals/CenterModal";
+import SuccessModal from "../components/modals/SuccessModal";
 import Button from "../components/shared/buttonComponent/Button";
 import InputField from "../components/shared/input/InputField";
 import SelectField from "../components/shared/input/SelectField";
@@ -41,6 +42,8 @@ const TestInstallmentLoan = () => {
   const [openDatePickerIdx, setOpenDatePickerIdx] = useState(null);
   const [loanInfo, setLoanInfo] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successModalData, setSuccessModalData] = useState({ title: "", description: "" });
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -125,14 +128,15 @@ const TestInstallmentLoan = () => {
         },
       );
 
-      if (response.data.status === "success") {
+            if (response.data.status === "success") {
         setLoanApplicationId(response.data.data.loanApplicationId);
         setLoanInfo(response.data.data);
         const msg =
           validRepayments.length > 0
             ? "Test loan created and repayments applied successfully! Check Loan Applications for the new loan."
             : "Test loan created, approved, and disbursed successfully! Check Loan Applications for the new loan.";
-        toast.success(msg, { autoClose: 5000 });
+        setSuccessModalData({ title: "Test Loan Created", description: msg });
+        setIsSuccessModalOpen(true);
         await dispatch(getLoanApplication());
       }
     } catch (error) {
@@ -156,9 +160,10 @@ const TestInstallmentLoan = () => {
         { loanApplicationId },
         { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-      if (response.data.status === "success") {
+            if (response.data.status === "success") {
         setLoanInfo(response.data.data);
-        toast.success("Daily interest accrued successfully!");
+        setSuccessModalData({ title: "Calculation Complete", description: "Daily interest accrued successfully!" });
+        setIsSuccessModalOpen(true);
       }
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to trigger accrual");
@@ -184,9 +189,10 @@ const TestInstallmentLoan = () => {
         { loanApplicationId, days: parseInt(daysToAdvance, 10) },
         { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-      if (response.data.status === "success") {
+            if (response.data.status === "success") {
         setLoanInfo(response.data.data.finalState);
-        toast.success(`Advanced ${daysToAdvance} day(s) successfully!`);
+        setSuccessModalData({ title: "Calculation Complete", description: `Advanced ${daysToAdvance} day(s) successfully!` });
+        setIsSuccessModalOpen(true);
       }
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to advance days");
@@ -208,9 +214,10 @@ const TestInstallmentLoan = () => {
         { loanApplicationId },
         { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-      if (response.data.status === "success") {
+            if (response.data.status === "success") {
         setLoanInfo(response.data.data);
-        toast.success("Overdue accrual triggered successfully!");
+        setSuccessModalData({ title: "Calculation Complete", description: "Overdue accrual triggered successfully!" });
+        setIsSuccessModalOpen(true);
       }
     } catch (error) {
       toast.error(
