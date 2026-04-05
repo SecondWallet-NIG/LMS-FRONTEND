@@ -19,7 +19,7 @@ import { checkDecimal } from "../helpers/utils";
 
 import ConfirmationModal from "../shared/warningModal/WarningModal";
 
-const CustomerRepayment = ({ loanId, status }) => {
+const CustomerRepayment = ({ loanId, status, repaymentType }) => {
   const dispatch = useDispatch();
   const [logRepayment, setLogRepayment] = useState(false);
   const [enableLogRepaymentBtn, setEnableLogRepaymentBtn] = useState(true);
@@ -108,18 +108,40 @@ const CustomerRepayment = ({ loanId, status }) => {
     return apiData?.map((item) => {
       const principal = Number(item?.repaymentPrincipal) ?? 0;
       const overdueForInstallment = Number(item?.amountAccruedForOverdue) || 0;
-      // Interest from API = sum of Loan Interest transactions for this repayment's cycle; else fallback to schedule
+      const rawAmountDue = Number(item?.amountDue) || 0;
+      // Interest from API = sum of Loan Interest transactions for this repayment's cycle; else schedule remainder
       const computedInterest =
         item?.computedInterest != null && item?.computedInterest !== ""
           ? Number(item.computedInterest)
-          : Math.max(0, (Number(item?.amountDue) || 0) - principal);
-      // Total due = principal + interest (from transactions) + overdue
-      const actualAmountDue = principal + computedInterest + overdueForInstallment;
+          : Math.max(0, rawAmountDue - principal);
+
+      const isInstallment = repaymentType === "installmentPayment";
+
+      // Installment: scheduled amountDue (+ penalty) is authoritative. Do not add principal + full transaction
+      // interest — after capitalization, principal already includes accrued interest but transactions still sum
+      // the same cycle, which double-counts.
+      let actualAmountDue;
+      let displayInterest;
+      if (isInstallment) {
+        actualAmountDue = rawAmountDue + overdueForInstallment;
+        const maxScheduleInterest = Math.max(0, rawAmountDue - principal);
+        if (maxScheduleInterest <= 0 && computedInterest > 0) {
+          displayInterest = 0;
+        } else {
+          displayInterest = Math.min(computedInterest, maxScheduleInterest);
+        }
+      } else {
+        actualAmountDue = principal + computedInterest + overdueForInstallment;
+        displayInterest = computedInterest;
+      }
+
       const amountPaid = Number(item?.amountPaid) || 0;
       const balanceToPay =
-        item?.balanceToPay != null && item?.balanceToPay !== ""
-          ? Number(item.balanceToPay)
-          : Math.max(0, actualAmountDue - amountPaid);
+        isInstallment
+          ? Math.max(0, actualAmountDue - amountPaid)
+          : item?.balanceToPay != null && item?.balanceToPay !== ""
+            ? Number(item.balanceToPay)
+            : Math.max(0, actualAmountDue - amountPaid);
 
       return {
       id: item._id,
@@ -134,10 +156,10 @@ const CustomerRepayment = ({ loanId, status }) => {
           <div className="text-md font-[500] text-gray-700">
             ₦ {actualAmountDue.toLocaleString()}
           </div>
-          {(principal > 0 || computedInterest > 0 || overdueForInstallment > 0) && (
+          {(principal > 0 || displayInterest > 0 || overdueForInstallment > 0) && (
             <div className="text-xs text-gray-500 mt-0.5">
               {principal > 0 && `Principal: ₦${principal.toLocaleString()}`}
-              {computedInterest > 0 && ` · Interest (due): ₦${computedInterest.toLocaleString()}`}
+              {displayInterest > 0 && ` · Interest (due): ₦${displayInterest.toLocaleString()}`}
               {overdueForInstallment > 0 && ` · Penalty: ₦${overdueForInstallment.toLocaleString()}`}
             </div>
           )}

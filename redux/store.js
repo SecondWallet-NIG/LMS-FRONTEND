@@ -12,6 +12,7 @@ import hrmsReducer from "./slices/hrmsSlice";
 import interestTypeReducer from "./slices/interestTypeSlice";
 import investmentReducer from "./slices/investmentSlice";
 import loanApplicationLogReducer from "./slices/loanApplicationLogSlice";
+import loanAuditTrailReducer from "./slices/loanAuditTrailSlice";
 import loanApplicationReducer from "./slices/loanApplicationSlice";
 import loanApprovalReducer from "./slices/loanApprovalSlice";
 import LoanPackageReducer from "./slices/loanPackageSlice";
@@ -40,6 +41,7 @@ export const store = configureStore({
     approvalAssignee: approvalAssigneeReducer,
     UserTasks: userTaskReducer,
     loanApplicationLogs: loanApplicationLogReducer,
+    loanAuditTrail: loanAuditTrailReducer,
     repaymentHistory: repaymentHistoryReducer,
     report: reportReducer,
     asset: assetReducer,
