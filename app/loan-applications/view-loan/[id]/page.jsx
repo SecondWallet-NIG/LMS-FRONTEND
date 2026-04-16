@@ -831,7 +831,7 @@ const ViewLoan = () => {
                   </div>
                 </div>
                 <div className="rounded-xl border border-red-100 bg-red-50/50 p-3">
-                  <p className="text-[11px] font-medium text-red-400 uppercase tracking-wider">Outstanding Balance</p>
+                  <p className="text-[11px] font-medium text-red-400 uppercase tracking-wider">Total Outstanding Balance</p>
                   <div className="mt-1">
                     <p className="text-sm font-semibold text-swIndicatorLightRed">
                       ₦{" "}
@@ -1021,7 +1021,7 @@ const ViewLoan = () => {
               </div>
 
               <div className="rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm">
-                <p className="text-[11px] font-bold text-red-600 uppercase tracking-wider mb-2">Amount Due To Pay</p>
+                <p className="text-[11px] font-bold text-red-600 uppercase tracking-wider mb-2">Current Outstanding Balance</p>
                 <p className="text-sm font-bold text-swIndicatorDarkRed">
                   ₦{" "}
                   {Number(
