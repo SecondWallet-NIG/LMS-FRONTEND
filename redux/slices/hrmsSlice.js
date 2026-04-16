@@ -267,6 +267,29 @@ export const declineLeaveRequest = createAsyncThunk(
   }
 );
 
+export const adminLeaveAction = createAsyncThunk(
+  "admin-leave-action",
+  async ({ leaveId, payload }) => {
+    try {
+      let token = getToken();
+      const response = await axios.post(
+        `${API_URL}/leave/${leaveId}/admin-action`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.data.error) {
+        throw new Error(error.response.data.error);
+      } else throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
 const hrmsSlice = createSlice({
   name: "hrms",
   initialState: {
@@ -372,6 +395,19 @@ const hrmsSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(declineLeaveRequest.rejected, (state, action) => {
+        console.log("action.error.message", action.error.message);
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(adminLeaveAction.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(adminLeaveAction.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(adminLeaveAction.rejected, (state, action) => {
         console.log("action.error.message", action.error.message);
         state.loading = "failed";
         state.error = action.error.message;

@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
+  adminLeaveAction,
   approveLeaveRequest,
   cancelLeave,
   declineLeaveRequest,
@@ -53,6 +54,22 @@ const ViewSingleLeaveRequest = () => {
     data?.data?.approvalDetails?.firstApproval?.approverDetails?._id;
   const level_2_id =
     data?.data?.approvalDetails?.secondApproval?.approverDetails?._id;
+  const canExecutiveManageLeave = ["CEO", "CTO", "Dir", "MD"].includes(
+    user?.role
+  );
+  const activeApprovalLevel =
+    data?.data?.leaveRequest?.status !== "Pending"
+      ? null
+      : data?.data?.approvalDetails?.firstApproval?.status === "Pending"
+      ? 1
+      : data?.data?.approvalDetails?.secondApproval?.status === "Pending"
+      ? 2
+      : null;
+  const activeApproverId =
+    activeApprovalLevel === 1 ? level_1_id : activeApprovalLevel === 2 ? level_2_id : null;
+  const canApproveOrDeclineLeave =
+    activeApprovalLevel !== null &&
+    (activeApproverId === user?.id || canExecutiveManageLeave);
 
   useEffect(() => {
     const _user = JSON.parse(localStorage.getItem("user"));
@@ -67,16 +84,43 @@ const ViewSingleLeaveRequest = () => {
 
   // console.log(user);
 
+  const handleAdminLeaveAction = (action) => {
+    const note = window.prompt(
+      `Add an optional note for ${action} action:`,
+      ""
+    );
+
+    setLoading(true);
+    dispatch(
+      adminLeaveAction({
+        leaveId: id,
+        payload: { action, note: note || "" },
+      })
+    )
+      .unwrap()
+      .then((res) => {
+        dispatch(getSingleLeaveRequest(id));
+        setSuccessModal({
+          title: "Leave Action Successful",
+          description:
+            res?.message || `Leave request ${action} processed successfully`,
+          state: true,
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        setErrorModal({
+          title: "Leave Action Failed",
+          description: err?.message,
+          state: true,
+        });
+        setLoading(false);
+      });
+  };
+
   const handleApprove = () => {
     setLoading(true);
-    const approvalLevel =
-      user.id === level_1_id &&
-      user.id === level_2_id &&
-      data?.data?.approvalDetails?.firstApproval?.status === "Approved"
-        ? 2
-        : user.id === level_1_id
-        ? 1
-        : 2;
+    const approvalLevel = activeApprovalLevel;
 
     const payload = {
       leaveId: id,
@@ -118,15 +162,7 @@ const ViewSingleLeaveRequest = () => {
     const payload = {
       leaveId: id,
       approverId: user.id,
-      approvalLevel:
-        user.id === level_1_id &&
-        user.id === level_2_id &&
-        (data?.data?.approvalDetails?.firstApproval?.status === "Declined" ||
-          data?.data?.approvalDetails?.firstApproval?.status === "Approved")
-          ? 2
-          : user.id === level_1_id
-          ? 1
-          : 2,
+      approvalLevel: activeApprovalLevel,
       declineReason: declineModal.reason,
     };
     dispatch(declineLeaveRequest(payload))
@@ -189,7 +225,7 @@ const ViewSingleLeaveRequest = () => {
 
   const approveHtml = (
     <div className="p-5 pt-0">
-      {user.id === level_1_id ? (
+      {approvalModal && activeApprovalLevel === 1 ? (
         <div className="flex justify-between">
           <div className="w-full flex flex-col gap-5">
             <div>
@@ -312,6 +348,10 @@ const ViewSingleLeaveRequest = () => {
   );
 
   const renderStatus = (status) => {
+    if (!status) {
+      return <span className="text-xs text-gray-400">N/A</span>;
+    }
+
     let classNames =
       "border p-1 text-xs rounded-md flex gap-1 items-center justify-center ";
     let dotClass = "h-1 w-1 rounded-full ";
@@ -381,13 +421,7 @@ const ViewSingleLeaveRequest = () => {
     >
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div>
-          {((level_1_id === user?.id &&
-            data?.data?.approvalDetails?.firstApproval?.status === "Pending" &&
-            data?.data?.leaveRequest?.status === "Pending") ||
-            (level_2_id === user?.id &&
-              data?.data?.approvalDetails?.secondApproval?.status ===
-                "Pending" &&
-              data?.data?.leaveRequest?.status === "Pending")) && (
+          {canApproveOrDeclineLeave && (
             <div className="ml-auto flex gap-2 justify-end font-semibold pr-5">
               <button
                 disabled={loading}
@@ -426,6 +460,32 @@ const ViewSingleLeaveRequest = () => {
               >
                 Cancel Leave Request
               </button>
+            )}
+          {canExecutiveManageLeave &&
+            data?.data?.leaveRequest?.status === "Pending" && (
+              <div className="flex gap-2">
+                <button
+                  disabled={loading}
+                  onClick={() => handleAdminLeaveAction("cancel")}
+                  className="border border-gray-400 text-gray-700 hover:bg-gray-50 rounded-lg p-2 text-xs"
+                >
+                  Cancel Leave
+                </button>
+                <button
+                  disabled={loading}
+                  onClick={() => handleAdminLeaveAction("decline")}
+                  className="border border-red-500 text-red-500 hover:bg-red-50 rounded-lg p-2 text-xs"
+                >
+                  Decline Leave
+                </button>
+                <button
+                  disabled={loading}
+                  onClick={() => handleAdminLeaveAction("terminate")}
+                  className="rounded-lg p-2 text-xs bg-black text-white"
+                >
+                  Terminate Leave
+                </button>
+              </div>
             )}
         </div>
         <div className="mt-5 p-5 flex flex-col gap-5">
@@ -469,20 +529,13 @@ const ViewSingleLeaveRequest = () => {
               <div className="w-full">
                 <div>
                   <p>
-                    {
-                      data?.data?.approvalDetails?.firstApproval
-                        ?.approverDetails?.lastName
-                    }{" "}
-                    {
-                      data?.data?.approvalDetails?.firstApproval
-                        ?.approverDetails?.firstName
-                    }
+                    {data?.data?.approvalDetails?.firstApproval?.approverDetails
+                      ? `${data?.data?.approvalDetails?.firstApproval?.approverDetails?.lastName} ${data?.data?.approvalDetails?.firstApproval?.approverDetails?.firstName}`
+                      : "Not assigned"}
                   </p>
                   <p className="text-swBlue">
-                    {
-                      data?.data?.approvalDetails?.firstApproval
-                        ?.approverDetails?.email
-                    }
+                    {data?.data?.approvalDetails?.firstApproval?.approverDetails
+                      ?.email || ""}
                   </p>
                   <div className="flex items-center gap-2">
                     Status:
@@ -500,20 +553,13 @@ const ViewSingleLeaveRequest = () => {
               <div className="w-full">
                 <div>
                   <p>
-                    {
-                      data?.data?.approvalDetails?.secondApproval
-                        ?.approverDetails?.lastName
-                    }{" "}
-                    {
-                      data?.data?.approvalDetails?.secondApproval
-                        ?.approverDetails?.firstName
-                    }
+                    {data?.data?.approvalDetails?.secondApproval?.approverDetails
+                      ? `${data?.data?.approvalDetails?.secondApproval?.approverDetails?.lastName} ${data?.data?.approvalDetails?.secondApproval?.approverDetails?.firstName}`
+                      : "Not assigned"}
                   </p>
                   <p className="text-swBlue">
-                    {
-                      data?.data?.approvalDetails?.secondApproval
-                        ?.approverDetails?.email
-                    }
+                    {data?.data?.approvalDetails?.secondApproval?.approverDetails
+                      ?.email || ""}
                   </p>
                   <div className="flex items-center gap-2">
                     Status:

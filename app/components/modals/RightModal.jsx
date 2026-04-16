@@ -26,7 +26,7 @@ const RightModal = ({
         style={modalStyles}
         className={`${
           bgColor ? bgColor : "bg-white"
-        } overflow-hidden h-screen pt-2 ${
+        } h-screen overflow-y-auto overflow-x-hidden pt-2 ${
           twidth || "max-w-xl w-full"
         } relative`} // Added relative for positioning the close button
       >

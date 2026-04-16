@@ -223,7 +223,7 @@ const RequestLeaveModal = ({ onClose }) => {
               <div className="flex justify-between mt-5">
                 <div className="w-full flex flex-col gap-3">
                   <SelectField
-                    label={"Select First Approver (Head, HR)"}
+                    label={"Select First Approver (Head, HR) - Optional"}
                     isSearchable={true}
                     value={
                       allHrm.find((e) => e.value === formData.firstApprover) ||
@@ -279,11 +279,10 @@ const RequestLeaveModal = ({ onClose }) => {
               <EditableButton
                 blueBtn={true}
                 disabled={
-                  Object.keys(formData).some(
-                    (key) =>
-                      key !== "description" &&
-                      (formData[key] === "" || formData[key] < 1)
-                  ) ||
+                  !formData.leaveType ||
+                  !formData.reliever ||
+                  !formData.secondApprover ||
+                  formData.leaveDuration < 1 ||
                   !startDate ||
                   !endDate ||
                   loading

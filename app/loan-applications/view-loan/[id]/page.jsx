@@ -60,7 +60,6 @@ const ViewLoan = () => {
   const [interestRate, setInterestRate] = useState(0);
   const [currentApprovalLevel, setCurrentApprovalLevel] = useState(null);
   const [currentApprovalId, setCurrentApprovalId] = useState(null);
-  const [currentTaskId, setCurrentTaskId] = useState(null);
   const [useriD, setUser] = useState(null);
   const [openLoanPackage, setOpenLoanPackage] = useState(false);
   const [openInterestType, setOpenInterestType] = useState(false);
@@ -88,7 +87,6 @@ const ViewLoan = () => {
   const { statementData, statementPending } = useSelector(
     (state) => state?.loanApplication
   );
-
   const handleFileChange = (e) => {
     setFileError("");
     let { name, files } = e.target;
@@ -1193,7 +1191,6 @@ const ViewLoan = () => {
                                     <button
                                       className="py-2 px-2 text-[#ffffff] text-xs bg-swBlue rounded-md"
                                       onClick={() => {
-                                        setCurrentTaskId(item?.currentTaskId);
                                         setCurrentApprovalId(
                                           item?.approvalLevel
                                         );
@@ -1208,7 +1205,6 @@ const ViewLoan = () => {
                                     <button
                                       className="py-2 px-2 text-red-500  border-red-500 text-xs bg-red-50 rounded-md"
                                       onClick={() => {
-                                        setCurrentTaskId(item?.currentTaskId);
                                         setCurrentApprovalId(
                                           item?.approvalLevel
                                         );
@@ -1417,7 +1413,6 @@ const ViewLoan = () => {
           width={"100%"}
           approvalLevel={currentApprovalLevel}
           approvalId={currentApprovalId}
-          currentTaskId={currentTaskId}
           isOpen={isApprovalOpen}
           closeModal={setApprovalOpen}
           data={data?.data}
