@@ -15,7 +15,6 @@ const RequestApproval = ({ data, approvalId, approvalLevel, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [formData, setFormData] = useState({
-    approvalLevel: approvalId,
     requestNote: "",
     assignee: "",
   });
@@ -76,9 +75,23 @@ const RequestApproval = ({ data, approvalId, approvalLevel, onClose }) => {
   };
 
   const submitLoan = (e) => {
-    setLoading(true);
-    const payload = { id, formData };
     e.preventDefault();
+    const { assignee, requestNote } = formData;
+    if (!assignee) {
+      toast.error("Please select an assignee");
+      return;
+    }
+
+    const payload = {
+      id,
+      formData: {
+        approvalLevel: Number(approvalId),
+        requestNote,
+        assignee,
+      },
+    };
+
+    setLoading(true);
     dispatch(requestLoanApproval(payload))
       .unwrap()
       .then(() => {

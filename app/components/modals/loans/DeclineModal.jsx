@@ -26,6 +26,7 @@ const DeclineModal = ({
   closeModal,
   approvalId,
   approvalLevel,
+  currentTaskId,
 }) => {
   const dispatch = useDispatch();
 
@@ -66,9 +67,15 @@ const DeclineModal = ({
   };
 
   const submitLoan = (e) => {
-    setLoading(true);
-    const payload = { id, formData };
     e.preventDefault();
+    setLoading(true);
+    const payload = {
+      id,
+      formData: {
+        ...formData,
+        taskId: currentTaskId,
+      },
+    };
     dispatch(declineLoanRequest(payload))
       .unwrap()
       .then(() => {

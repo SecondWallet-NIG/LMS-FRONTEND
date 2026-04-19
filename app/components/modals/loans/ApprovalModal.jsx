@@ -65,6 +65,12 @@ const ApprovalModal = ({
   };
 
   const submitLoan = (e) => {
+    e.preventDefault();
+    if (!currentTaskId) {
+      toast.error("Unable to approve this step: taskId is missing");
+      return;
+    }
+
     setLoading(true);
     let _formData = {
       approvalLevel: approvalId,
@@ -73,7 +79,6 @@ const ApprovalModal = ({
     };
 
     const payload = { id, _formData };
-    e.preventDefault();
     dispatch(approveLoanRequest(payload))
       .unwrap()
       .then(() => {

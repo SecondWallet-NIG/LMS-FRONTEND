@@ -60,6 +60,7 @@ const ViewLoan = () => {
   const [interestRate, setInterestRate] = useState(0);
   const [currentApprovalLevel, setCurrentApprovalLevel] = useState(null);
   const [currentApprovalId, setCurrentApprovalId] = useState(null);
+  const [currentTaskId, setCurrentTaskId] = useState(null);
   const [useriD, setUser] = useState(null);
   const [openLoanPackage, setOpenLoanPackage] = useState(false);
   const [openInterestType, setOpenInterestType] = useState(false);
@@ -1197,6 +1198,7 @@ const ViewLoan = () => {
                                         setCurrentApprovalLevel(
                                           item?.approvalTitle
                                         );
+                                        setCurrentTaskId(item?.currentTaskId);
                                         setApprovalOpen(true);
                                       }}
                                     >
@@ -1211,6 +1213,7 @@ const ViewLoan = () => {
                                         setCurrentApprovalLevel(
                                           item?.approvalTitle
                                         );
+                                        setCurrentTaskId(item?.currentTaskId);
                                         setDeclineOpen(true);
                                       }}
                                     >
@@ -1413,6 +1416,7 @@ const ViewLoan = () => {
           width={"100%"}
           approvalLevel={currentApprovalLevel}
           approvalId={currentApprovalId}
+          currentTaskId={currentTaskId}
           isOpen={isApprovalOpen}
           closeModal={setApprovalOpen}
           data={data?.data}
@@ -1423,6 +1427,7 @@ const ViewLoan = () => {
         <DeclineModal
           approvalLevel={currentApprovalLevel}
           approvalId={currentApprovalId}
+          currentTaskId={currentTaskId}
           isOpen={isDeclineOpen}
           closeModal={setDeclineOpen}
           onClose={() => setDeclineOpen(false)}
