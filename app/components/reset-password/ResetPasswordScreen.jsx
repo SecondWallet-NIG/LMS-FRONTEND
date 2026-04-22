@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import InputField from "../shared/input/InputField";
@@ -38,6 +38,22 @@ const ResetPasswordScreen = ({
     newPassword: false,
     newPasswordConfirmation: false,
   });
+  const [urlVerificationToken, setUrlVerificationToken] = useState("");
+
+  useEffect(() => {
+    if (verificationToken) {
+      setUrlVerificationToken(verificationToken);
+      return;
+    }
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const tokenFromUrl = searchParams.get("token") || "";
+    setUrlVerificationToken(tokenFromUrl);
+  }, [verificationToken]);
 
   const handleInputChange = (e, num) => {
     const { name, value } = e.target;
@@ -57,7 +73,7 @@ const ResetPasswordScreen = ({
     const tokenFromStorage = JSON.parse(
       localStorage.getItem("verificationCode")
     );
-    const activeVerificationToken = verificationToken || tokenFromStorage;
+    const activeVerificationToken = urlVerificationToken || tokenFromStorage;
 
     if (!activeVerificationToken) {
       toast.error("Invalid or expired reset link.");
