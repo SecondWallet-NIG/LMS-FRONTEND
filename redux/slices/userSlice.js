@@ -49,9 +49,34 @@ export const getVerifyToken = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      if (error.response.data.error === "User not found") {
-        throw new Error("User not found");
-      } else throw new Error("An error occured, please try again later");
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
+      throw new Error("An error occured, please try again later");
+    }
+  }
+);
+
+export const triggerUserPasswordResetByAdmin = createAsyncThunk(
+  "admin/triggerUserPasswordResetByAdmin",
+  async (userId) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/admin/users/${userId}/reset-password/initiate`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
+      throw new Error("An error occured, please try again later");
     }
   }
 );
@@ -61,7 +86,7 @@ export const verifyToken = createAsyncThunk(
   async (payload) => {
     try {
       const response = await axios.post(
-        API_URL + "/auth/reset-password/verify-token ",
+        API_URL + "/auth/reset-password/verify-token",
         payload
       );
       return response.data;
@@ -183,7 +208,7 @@ export const resetPassword = createAsyncThunk(
   async (payload) => {
     try {
       const response = await axios.post(
-        API_URL + "/auth/reset-password ",
+        API_URL + "/auth/reset-password",
         payload
       );
       return response.data;
@@ -279,6 +304,18 @@ const userSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getVerifyToken.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(triggerUserPasswordResetByAdmin.pending, (state) => {
+        state.loading = "pending";
+        state.error = null;
+      })
+      .addCase(triggerUserPasswordResetByAdmin.fulfilled, (state, action) => {
+        state.loading = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(triggerUserPasswordResetByAdmin.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       })

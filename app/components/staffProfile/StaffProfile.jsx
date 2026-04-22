@@ -1,11 +1,15 @@
 "use client";
 import { getRoles } from "@/redux/slices/roleSlice";
-import { getUserById } from "@/redux/slices/userSlice";
+import {
+  getUserById,
+  triggerUserPasswordResetByAdmin,
+} from "@/redux/slices/userSlice";
 import { getStaffTasks } from "@/redux/slices/userTaskSlice";
 import { Inter } from "next/font/google";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EmployeeBenefitsLogCard from "../cards/Activity logs card/EmployeeBenefitLogCard";
 import DashboardLayout from "../dashboardLayout/DashboardLayout";
@@ -41,14 +45,36 @@ const StaffData = ({ path, isDashboard }) => {
     dispatch(getRoles());
     dispatch(getStaffTasks(id));
   }, []);
+
+  const handleTriggerPasswordReset = () => {
+    dispatch(triggerUserPasswordResetByAdmin(id))
+      .unwrap()
+      .then(() => {
+        toast.success("Password reset OTP has been sent");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
   return (
     <DashboardLayout
       isBackNav={true}
       paths={path}
       roles={employeeDashboardAuthRoles}
     >
+      <ToastContainer />
       <main className={inter.className}>
         <div className="p-5 sm:p-10">
+          <div className="mb-5 flex justify-end">
+            <button
+              type="button"
+              className="bg-swBlue text-white px-4 py-2 rounded-md text-sm font-medium"
+              onClick={handleTriggerPasswordReset}
+            >
+              Send Password Reset OTP
+            </button>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <StaffPersonalDetails data={data?.data} />
             <StaffLeaveDetails

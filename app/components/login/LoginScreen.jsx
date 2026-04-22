@@ -6,7 +6,6 @@ import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineEmail, MdKey } from "react-icons/md";
 import InputField from "../shared/input/InputField";
 import Button from "../shared/buttonComponent/Button";
-import Link from "next/link";
 
 const companyLogo = "/images/Logo.png";
 import { toast, ToastContainer } from "react-toastify";
@@ -151,9 +150,6 @@ const LoginScreen = () => {
         >
           {loading === true ? "Logging In..." : "Log In"}
         </Button>
-        <p className="text-sm mt-2 pt-2 text-center">
-          <Link href="/forgetPassword">Forgot Password</Link>
-        </p>
       </div>
     </div>
   );

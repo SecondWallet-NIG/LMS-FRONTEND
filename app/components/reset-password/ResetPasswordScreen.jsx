@@ -17,10 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const ResetPasswordScreen = ({
-  email,
-  step,
-  setStep,
-  onEmailChange,
+  verificationToken = "",
   onNextStep,
 }) => {
   const router = useRouter();
@@ -57,21 +54,30 @@ const ResetPasswordScreen = ({
   };
 
   const handleResetPassword = async () => {
-    const email = JSON.parse(localStorage.getItem("email"));
-    const verificationToken = JSON.parse(
+    const tokenFromStorage = JSON.parse(
       localStorage.getItem("verificationCode")
     );
+    const activeVerificationToken = verificationToken || tokenFromStorage;
+
+    if (!activeVerificationToken) {
+      toast.error("Invalid or expired reset link.");
+      return;
+    }
 
     const payload = {
       ...resetData,
-      email: email,
-      verificationToken: verificationToken,
+      verificationToken: activeVerificationToken,
     };
     dispatch(resetPassword(payload))
       .unwrap()
       .then(() => {
         toast.success("Password reset successful.");
-        onNextStep();
+        if (onNextStep) {
+          onNextStep();
+          return;
+        }
+
+        router.push("/");
       })
       .catch((error) => {
         toast.error(error.message);
@@ -219,7 +225,7 @@ const ResetPasswordScreen = ({
           {loading === true ? "Resetting Password..." : "Reset Password"}
         </Button>
         <p className="text-sm mt-2 pt-2 text-center">
-          <Link href="/login">Back to Login</Link>
+          <Link href="/">Back to Login</Link>
         </p>
       </div>
       <ToastContainer />

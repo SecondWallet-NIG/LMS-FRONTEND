@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 const companyLogo = "/images/Logo.png";
 import InputField from "../components/shared/input/InputField";
 import Button from "../components/shared/buttonComponent/Button";
@@ -8,9 +8,7 @@ import PrevNextBtn from "../components/prevNextBtn/PrevNextBtn";
 import Verification from "../components/verification/Verification";
 import ResetSuccessful from "../components/resetSuccesfully/ResetSuccessful";
 import ResetPasswordScreen from "../components/reset-password/ResetPasswordScreen";
-import { getVerifyToken } from "@/redux/slices/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 import { isValidEmail } from "../components/helpers/utils";
 
 //toast
@@ -18,10 +16,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ForgetPassword = () => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-
-  const { loading, error, data: userData } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
 
   const [step, setStep] = useState(1);
 
@@ -55,18 +50,10 @@ const ForgetPassword = () => {
     }
   };
 
-  const handleVerifyEmail = () => {
-    dispatch(getVerifyToken(payload))
-      .unwrap()
-      .then(() => {
-        // Handle a successful login here if needed
-        localStorage.setItem("email", JSON.stringify(payload.email));
-        toast.success("Please check your email for the verification code");
-        handleNextStep();
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+  const handleProceedToVerification = () => {
+    localStorage.setItem("email", JSON.stringify(payload.email));
+    toast.success("Enter the verification code sent by your administrator");
+    handleNextStep();
   };
 
   return (
@@ -93,7 +80,8 @@ const ForgetPassword = () => {
                   Reset password
                 </h2>
                 <p className="text-current text-sm mt-2 pt-2">
-                  Enter your email address so we can send you a reset code
+                  Enter your email address and continue with the reset code sent
+                  by your administrator
                 </p>
                 <div className="mt-2">
                   <InputField
@@ -106,13 +94,13 @@ const ForgetPassword = () => {
                   />
                 </div>
                 <Button
-                  onClick={handleVerifyEmail}
+                  onClick={handleProceedToVerification}
                   disabled={!validInput.email || loading === "pending"}
                   className={`w-full text-white py-2 px-4 rounded-md mt-8 ${
                     !validInput.email && "bg-gray-300 cursor-not-allowed"
                   } ${validInput.email && "bg-swBlue"} `}
                 >
-                  {loading === true ? "Processing..." : "Verify Email"}
+                  Continue
                 </Button>
                 <p className="text-sm mt-2 pt-2 text-center">
                   <a href="#">Login</a>
