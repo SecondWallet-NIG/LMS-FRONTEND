@@ -46,7 +46,14 @@ export const borrowersAuthRoles = [
 ];
 
 // create loan
-export const createLoanAuthRoles = ["LO", "CTO", "CEO", 'CFO', 'Dir', 'System Admin'];
+export const createLoanAuthRoles = [
+  "LO",
+  "CTO",
+  "CEO",
+  "CFO",
+  "Dir",
+  "System Admin",
+];
 
 // loan application
 export const loanApplicationAuthRoles = [
@@ -196,6 +203,7 @@ export const investorsAuthRoles = [
 
 // employee dashboard
 export const employeeDashboardAuthRoles = [
+  "FDO",
   "LO",
   "CFO",
   "CEO",

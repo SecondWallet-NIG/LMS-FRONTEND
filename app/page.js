@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import LoginScreen from "./components/login/LoginScreen";
 import DashboardPage from "./dashboard/page";
+import EmployeeDashboard from "./employee-dashboard/[id]/page";
 import Expenses from "./expenses/page";
 
 export default function Home() {
@@ -25,6 +26,10 @@ export default function Home() {
 
   if (roleTag && roleTag === "OFA" && !loading) {
     return <Expenses />;
+  }
+
+  if (roleTag && roleTag === "FDO" && !loading) {
+    return <EmployeeDashboard />;
   }
   return <>{!loading && <DashboardPage />}</>;
 }
