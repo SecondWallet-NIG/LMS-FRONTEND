@@ -7,6 +7,7 @@ import { formatDate } from "@/helpers";
 import {
   approveLoggedPayment,
   declineLoggedPayment,
+  getApprovalJobStatus,
 } from "@/redux/slices/loanRepaymentSlice";
 // import { getAllRepayments } from "@/redux/slices/loanRepaymentSlice";
 import {
@@ -43,6 +44,8 @@ const PaymentPage = () => {
   const [showApprovalBtns, setShowApprovalBtns] = useState(false);
   const [disableApprovalBtn, setDisableApprovalBtn] = useState(false);
   const [userRole, setUserRole] = useState("");
+  const [approvalJob, setApprovalJob] = useState(null);
+  const [approvalJobPollId, setApprovalJobPollId] = useState(null);
 
   const getRepayment = () => {
     dispatch(getSingleRepayment(id))
@@ -57,13 +60,46 @@ const PaymentPage = () => {
     setDisableApprovalBtn(true);
     dispatch(approveLoggedPayment({ loanId, repaymentId }))
       .unwrap()
-      .then(() => {
+      .then((res) => {
+        if (res?.async && res?.jobId) {
+          toast.info("Rebuilding ledger for backdated approval...");
+          setApprovalJob({ jobId: res.jobId, status: "queued", progress: { percent: 0 } });
+
+          const pollId = setInterval(() => {
+            dispatch(getApprovalJobStatus({ jobId: res.jobId }))
+              .unwrap()
+              .then((jobRes) => {
+                setApprovalJob(jobRes);
+                const status = jobRes?.status;
+                if (status === "completed") {
+                  clearInterval(pollId);
+                  setApprovalJobPollId(null);
+                  setDisableApprovalBtn(false);
+                  toast.success("Payment approved and ledger rebuilt");
+                  setApprovalJob(null);
+                  getRepayment();
+                }
+                if (status === "failed") {
+                  clearInterval(pollId);
+                  setApprovalJobPollId(null);
+                  setDisableApprovalBtn(false);
+                  toast.error(jobRes?.error || "Ledger rebuild failed");
+                }
+              })
+              .catch((err) => {
+                clearInterval(pollId);
+                setApprovalJobPollId(null);
+                setDisableApprovalBtn(false);
+                toast.error(err?.message || "Failed to track approval job");
+              });
+          }, 1500);
+
+          setApprovalJobPollId(pollId);
+          return;
+        }
+
         toast.success("Payment approved");
         setDisableApprovalBtn(false);
-        // dispatch(getSingleRepayment(id));
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 3000);
         getRepayment();
       })
       .catch((err) => {
@@ -118,6 +154,14 @@ const PaymentPage = () => {
     getRepayment();
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (approvalJobPollId) {
+        clearInterval(approvalJobPollId);
+      }
+    };
+  }, [approvalJobPollId]);
+
   return (
     <DashboardLayout
       isBackNav={true}
@@ -125,6 +169,44 @@ const PaymentPage = () => {
       roles={paymentHystoryAuthRoles}
     >
       <ToastContainer />
+      {approvalJob?.jobId ? (
+        <CenterModal open={true} setOpen={() => {}}>
+          <div className="w-full max-w-md">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-lg font-semibold text-swBlue">Approving backdated payment</p>
+                <p className="mt-1 text-sm text-gray-600">
+                  Rebuilding loan ledger. This can take a moment for older loans.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="text-gray-400 cursor-not-allowed"
+                aria-label="Close disabled while processing"
+                disabled
+              >
+                <IoMdClose size={18} />
+              </button>
+            </div>
+
+            <div className="mt-4">
+              <div className="flex items-center justify-between text-xs text-gray-600">
+                <span>Status: {approvalJob?.status || "running"}</span>
+                <span>{approvalJob?.progress?.percent ?? 0}%</span>
+              </div>
+              <div className="mt-2 h-2 w-full rounded-full bg-gray-100">
+                <div
+                  className="h-2 rounded-full bg-swBlue transition-all"
+                  style={{ width: `${approvalJob?.progress?.percent ?? 0}%` }}
+                />
+              </div>
+              <p className="mt-2 text-xs text-gray-500">
+                {approvalJob?.progress?.stage ? `Stage: ${approvalJob.progress.stage}` : null}
+              </p>
+            </div>
+          </div>
+        </CenterModal>
+      ) : null}
       <main className="mx-auto max-w-4xl py-10 px-5">
         <div className="ml-auto flex gap-2 text-sm justify-end font-semibold">
           <div className="flex items-center whitespace-nowrap gap-5">

@@ -110,12 +110,35 @@ export const approveLoggedPayment = createAsyncThunk('loanApplication/repayment-
         Authorization: `Bearer ${user?.data?.token}`
       }
     });
-    return response.data;
+    if (response?.status === 202 || response?.data?.jobId) {
+      return {
+        async: true,
+        jobId: response?.data?.jobId,
+        message: response?.data?.message,
+      };
+    }
+    return { async: false, ...response.data };
   } catch (error) {
     if (error.response.data.error) {
       throw new Error(error.response.data.error)
     }
     else throw new Error("An error occured, please try again later")
+  }
+});
+
+export const getApprovalJobStatus = createAsyncThunk('loanApplication/repayment-approval-job-status', async ({ jobId }) => {
+  try {
+    const response = await axios.get(`${API_URL}/repayment/approval-jobs/${jobId}`, {
+      headers: {
+        Authorization: `Bearer ${user?.data?.token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response?.data?.error) {
+      throw new Error(error.response.data.error)
+    }
+    throw new Error("An error occured, please try again later")
   }
 });
 
