@@ -1688,7 +1688,7 @@ function ReusableDataTable({
                       <th
                         key={header.id}
                         className="whitespace-nowrap border-b border-gray-100 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-swGray cursor-pointer select-none"
-                        onClick={() => handleSort(header.id)}
+                        onClick={() => handleSort(header)}
                         aria-label={`Sort by ${header.label}`}
                         aria-sort={
                           header.id === sortField

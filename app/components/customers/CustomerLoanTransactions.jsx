@@ -29,11 +29,11 @@ const CustomerLoanTransactions = ({ loanId }) => {
   };
 
   const headers = [
-    { id: "transactionDate", label: "Transaction Date" },
-    { id: "amount", label: "Amount" },
-    { id: "prevBalance", label: "Previous Balance" },
-    { id: "currBalance", label: "Current Balance" },
-    { id: "transactionStatement", label: "Transaction Type" }
+    { id: "transactionDate", label: "Transaction Date", sortKey: "createdAt" },
+    { id: "amount", label: "Amount", sortKey: "amount" },
+    { id: "prevBalance", label: "Previous Balance", sortKey: "previousBalance" },
+    { id: "currBalance", label: "Current Balance", sortKey: "currentBalance" },
+    { id: "transactionStatement", label: "Transaction Type", sortKey: "transactionStatement" },
   ];
 
   const customDataTransformer = (apiData) => {
@@ -108,6 +108,7 @@ const CustomerLoanTransactions = ({ loanId }) => {
         headers={headers}
         initialData={[]}
         apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/${loanId}/transactions`}
+        sortedBy={{ field: "transactionDate", direction: "desc" }}
         filters={true}
         pagination={true}
       />
