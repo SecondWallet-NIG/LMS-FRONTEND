@@ -4,7 +4,11 @@ import "../../globals.css";
 import { useRouter } from "next/navigation";
 import NavBar from "../navigation/NavBar";
 import Sidebar from "../navigation/SideBar";
-import RealTimeComponent from "../RealTimeComponent";
+import dynamic from "next/dynamic";
+
+const RealTimeComponent = dynamic(() => import("../RealTimeComponent"), {
+  ssr: false,
+});
 import Unauthorized from "@/app/unauthorized/page";
 
 const DashboardLayout = ({ children, paths, isBackNav, roles }) => {

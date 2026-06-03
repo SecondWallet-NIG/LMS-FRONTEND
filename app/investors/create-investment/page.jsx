@@ -509,10 +509,11 @@ const CreateInvestment = () => {
       <SharedInvestmentModal
         css={"max-w-sm"}
         header={"Preview ROI"}
-        children={modalChildren}
         isOpen={isPreviewOpen}
         onClose={setPreview}
-      />
+      >
+        {modalChildren}
+      </SharedInvestmentModal>
       <SuccessModal
         isOpen={successModal}
         description={successModalMessage}

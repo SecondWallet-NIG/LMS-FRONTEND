@@ -766,22 +766,25 @@ export default function InvestmentDetails() {
         header={"Close Investment"}
         isOpen={isModalOpen}
         onClose={setModal}
-        children={modalChildren}
-      />
+      >
+        {modalChildren}
+      </SharedInvestmentModal>
       <SharedInvestmentModal
         css={"max-w-lg"}
         header={"Topup"}
         isOpen={openTopUp}
         onClose={setOpenTopUp}
-        children={topUpChildren}
-      />
+      >
+        {topUpChildren}
+      </SharedInvestmentModal>
       <SharedInvestmentModal
         css={"max-w-lg"}
         header={"Request Withdrawal"}
         isOpen={reqWithdrawal}
         onClose={setReqWithdrawal}
-        children={reqWithChildren}
-      />
+      >
+        {reqWithChildren}
+      </SharedInvestmentModal>
       <SuccessModal
         isOpen={successModal}
         title={successModalData.title}

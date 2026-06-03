@@ -637,22 +637,25 @@ const ViewSingleLeaveRequest = () => {
         css={"max-w-lg"}
         header={"Approve Leave Request"}
         onClose={() => setApprovalModal(false)}
-        children={approveHtml}
-      />
+      >
+        {approveHtml}
+      </SharedInvestmentModal>
       <SharedInvestmentModal
         isOpen={declineModal.state}
         css={"max-w-lg"}
         header={"Decline"}
         onClose={() => setDeclineModal({ state: false, reason: "" })}
-        children={declineHtml}
-      />
+      >
+        {declineHtml}
+      </SharedInvestmentModal>
       <SharedInvestmentModal
         isOpen={openCancelLeave}
         css={"max-w-lg"}
         header={"Are You Sure?"}
         onClose={() => setCancelLeave(false)}
-        children={cancelLeaveRequest}
-      />
+      >
+        {cancelLeaveRequest}
+      </SharedInvestmentModal>
       <SuccessModal
         title={successModal.title}
         description={successModal.description}
