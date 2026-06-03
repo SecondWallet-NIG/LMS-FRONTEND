@@ -5,7 +5,7 @@ import { getCustomers } from "@/redux/slices/customerSlice";
 import { getLoanApplication } from "@/redux/slices/loanApplicationSlice";
 import axios from "axios";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { FaRegCalendar } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,6 +46,19 @@ const TestInstallmentLoan = () => {
   const [successModalData, setSuccessModalData] = useState({ title: "", description: "" });
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [computationInProgress, setComputationInProgress] = useState(false);
+  const pollIntervalRef = useRef(null);
+
+  const clearComputationPoll = useCallback(() => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+      pollIntervalRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => clearComputationPoll();
+  }, [clearComputationPoll]);
 
   const normalizedDisbursementDaysAgo = Math.max(
     0,
@@ -81,6 +94,61 @@ const TestInstallmentLoan = () => {
     }
   };
 
+  const pollTestLoanComputationJob = useCallback(
+    (jobId, loanId) => {
+      clearComputationPoll();
+      const userData = JSON.parse(localStorage.getItem("user"));
+      const authHeader = { Authorization: `Bearer ${userData?.data?.token}` };
+
+      pollIntervalRef.current = setInterval(async () => {
+        try {
+          const { data: body } = await axios.get(
+            `${API_URL}/loan-application/test-loans/jobs/${jobId}`,
+            { headers: authHeader },
+          );
+
+          if (!body?.success) {
+            return;
+          }
+
+          const job = body.data;
+          const status = job?.status;
+
+          if (status === "completed") {
+            clearComputationPoll();
+            setComputationInProgress(false);
+            if (job.result) {
+              setLoanInfo(job.result);
+            }
+            const doneLoanId = loanId || job.result?.loanId || "";
+            toast.success(
+              `Calculations for test loan ${doneLoanId} are complete. You can view it under Loan Applications.`,
+              {
+                toastId: doneLoanId
+                  ? `test-loan-done-${doneLoanId}`
+                  : `test-loan-done-${jobId}`,
+              },
+            );
+            dispatch(getLoanApplication());
+          }
+
+          if (status === "failed") {
+            clearComputationPoll();
+            setComputationInProgress(false);
+            toast.error(job?.error || "Test loan calculation failed");
+          }
+        } catch (err) {
+          clearComputationPoll();
+          setComputationInProgress(false);
+          toast.error(
+            err?.response?.data?.error || "Failed to track calculation job",
+          );
+        }
+      }, 1500);
+    },
+    [clearComputationPoll, dispatch],
+  );
+
   const createTestLoan = async () => {
     if (!selectedCustomer) {
       toast.error("Please select a customer");
@@ -97,7 +165,6 @@ const TestInstallmentLoan = () => {
       : [];
 
     setLoading(true);
-    toast.info("Creation is in progress...", { autoClose: 3000 });
     try {
       const userData = JSON.parse(localStorage.getItem("user"));
       const payload = {
@@ -128,16 +195,29 @@ const TestInstallmentLoan = () => {
         },
       );
 
-            if (response.data.status === "success") {
-        setLoanApplicationId(response.data.data.loanApplicationId);
-        setLoanInfo(response.data.data);
-        const msg =
-          validRepayments.length > 0
-            ? "Test loan created and repayments applied successfully! Check Loan Applications for the new loan."
-            : "Test loan created, approved, and disbursed successfully! Check Loan Applications for the new loan.";
-        setSuccessModalData({ title: "Test Loan Created", description: msg });
-        setIsSuccessModalOpen(true);
-        await dispatch(getLoanApplication());
+      if (response.data?.success && response.data?.data) {
+        const result = response.data.data;
+        setLoanApplicationId(result.loanApplicationId);
+        setLoanInfo(result);
+
+        if (result.async && result.jobId) {
+          setComputationInProgress(true);
+          toast.info(
+            `Test loan ${result.loanId} disbursed. Calculations are running in the background — you can leave this page.`,
+            { autoClose: 8000 },
+          );
+          pollTestLoanComputationJob(result.jobId, result.loanId);
+          dispatch(getLoanApplication());
+        } else {
+          toast.success("Test loan created successfully.");
+          setSuccessModalData({
+            title: "Test Loan Created",
+            description:
+              "Test loan created successfully. Check Loan Applications for the new loan.",
+          });
+          setIsSuccessModalOpen(true);
+          await dispatch(getLoanApplication());
+        }
       }
     } catch (error) {
       console.error("Error creating test loan:", error);
@@ -160,10 +240,9 @@ const TestInstallmentLoan = () => {
         { loanApplicationId },
         { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-            if (response.data.status === "success") {
+      if (response.data?.success) {
         setLoanInfo(response.data.data);
-        setSuccessModalData({ title: "Calculation Complete", description: "Daily interest accrued successfully!" });
-        setIsSuccessModalOpen(true);
+        toast.success("Daily interest accrued successfully!");
       }
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to trigger accrual");
@@ -189,10 +268,9 @@ const TestInstallmentLoan = () => {
         { loanApplicationId, days: parseInt(daysToAdvance, 10) },
         { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-            if (response.data.status === "success") {
+      if (response.data?.success) {
         setLoanInfo(response.data.data.finalState);
-        setSuccessModalData({ title: "Calculation Complete", description: `Advanced ${daysToAdvance} day(s) successfully!` });
-        setIsSuccessModalOpen(true);
+        toast.success(`Advanced ${daysToAdvance} day(s) successfully!`);
       }
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to advance days");
@@ -214,10 +292,9 @@ const TestInstallmentLoan = () => {
         { loanApplicationId },
         { headers: { Authorization: `Bearer ${userData?.data?.token}` } },
       );
-            if (response.data.status === "success") {
+      if (response.data?.success) {
         setLoanInfo(response.data.data);
-        setSuccessModalData({ title: "Calculation Complete", description: "Overdue accrual triggered successfully!" });
-        setIsSuccessModalOpen(true);
+        toast.success("Overdue accrual triggered successfully!");
       }
     } catch (error) {
       toast.error(
@@ -431,6 +508,12 @@ const TestInstallmentLoan = () => {
             <h2 className="text-xl font-semibold mb-4 text-swBlue">
               Loan Status & Actions
             </h2>
+            {computationInProgress && (
+              <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 mb-4">
+                Accruals and repayments are computing in the background. You can
+                use other pages — a toast will appear when calculations finish.
+              </p>
+            )}
             {loanInfo ? (
               <div className="space-y-2 text-sm mb-4">
                 <div className="flex justify-between">

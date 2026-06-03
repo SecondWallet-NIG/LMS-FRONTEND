@@ -142,6 +142,32 @@ export const getApprovalJobStatus = createAsyncThunk('loanApplication/repayment-
   }
 });
 
+export const reapplyInstallmentAllocations = createAsyncThunk(
+  'loanApplication/reapply-installment-allocations',
+  async ({ loanId }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/repayment/loan-application/${loanId}/reapply-installment-allocations`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user?.data?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+      throw new Error('An error occured, please try again later');
+    }
+  }
+);
+
 export const declineLoggedPayment = createAsyncThunk('loanApplication/repayment-decline', async ({ loanId, repaymentId }) => {
   try {
     const response = await axios.get(`${API_URL}/repayment/decline/${loanId}/${repaymentId}`, {

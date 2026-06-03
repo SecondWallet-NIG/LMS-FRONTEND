@@ -30,7 +30,7 @@ const RealTimeComponent = () => {
     // Subscribe to loan notifications
     const loanChannel = pusher.subscribe('loan-notifications');
     
-    const handleLoanNotification = (data) => {
+    const handleLoanInfoNotification = (data) => {
       toast.info(data.message, {
         position: "top-right",
         autoClose: 5000,
@@ -41,9 +41,22 @@ const RealTimeComponent = () => {
       });
     };
 
-    loanChannel.bind('loan.created', handleLoanNotification);
-    loanChannel.bind('testLoan.created', handleLoanNotification);
-    loanChannel.bind('testLoan.calculationComplete', handleLoanNotification);
+    const handleTestLoanCalculationComplete = (data) => {
+      const loanId = data?.loanId || "";
+      toast.success(
+        data.message ||
+          `Calculations for test loan (${loanId}) are complete.`,
+        {
+          position: "top-right",
+          autoClose: 6000,
+          toastId: loanId ? `test-loan-done-${loanId}` : undefined,
+        },
+      );
+    };
+
+    loanChannel.bind('loan.created', handleLoanInfoNotification);
+    loanChannel.bind('testLoan.created', handleLoanInfoNotification);
+    loanChannel.bind('testLoan.calculationComplete', handleTestLoanCalculationComplete);
 
     return () => {
       channel.unbind_all();

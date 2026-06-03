@@ -10,7 +10,11 @@ import InputField from "../shared/input/InputField";
 import SelectField from "../shared/input/SelectField";
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
-import { logRepaymentFunc } from "@/redux/slices/loanRepaymentSlice";
+import {
+  logRepaymentFunc,
+  reapplyInstallmentAllocations,
+  getApprovalJobStatus,
+} from "@/redux/slices/loanRepaymentSlice";
 import { useDispatch } from "react-redux";
 import { format, isValid } from "date-fns";
 import { FaRegCalendar } from "react-icons/fa";
@@ -19,7 +23,16 @@ import { checkDecimal } from "../helpers/utils";
 
 import ConfirmationModal from "../shared/warningModal/WarningModal";
 
-const CustomerRepayment = ({ loanId, status, repaymentType }) => {
+const LOG_AMOUNT_EPS = 0.01;
+
+const parseRepaymentAmountInput = (value) => {
+  const normalized = String(value ?? "").replace(/,/g, "").trim();
+  const amount = parseFloat(normalized);
+  return Number.isFinite(amount) ? amount : NaN;
+};
+
+const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
+  const outstandingBalance = Number(data?.loanApplication?.outstandingBalance) || 0;
   const dispatch = useDispatch();
   const [logRepayment, setLogRepayment] = useState(false);
   const [enableLogRepaymentBtn, setEnableLogRepaymentBtn] = useState(true);
@@ -34,6 +47,11 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
     dateCollected: new Date(),
     repaymentReceipts: null,
   });
+
+  const parsedLogAmount = parseRepaymentAmountInput(formData?.repaymentAmount);
+  const exceedsOutstandingBalance =
+    Number.isFinite(parsedLogAmount) &&
+    parsedLogAmount > outstandingBalance + LOG_AMOUNT_EPS;
 
   const handleFileChange = (e) => {
     setFileError("");
@@ -117,31 +135,40 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
 
       const isInstallment = repaymentType === "installmentPayment";
 
-      // Installment: scheduled amountDue (+ penalty) is authoritative. Do not add principal + full transaction
-      // interest — after capitalization, principal already includes accrued interest but transactions still sum
-      // the same cycle, which double-counts.
+      // Installment: amount due = principal + accrued interest (ledger) + penalty — not projected amountDue.
       let actualAmountDue;
       let displayInterest;
       if (isInstallment) {
-        actualAmountDue = rawAmountDue + overdueForInstallment;
         const maxScheduleInterest = Math.max(0, rawAmountDue - principal);
-        if (maxScheduleInterest <= 0 && computedInterest > 0) {
+        if (item?.interestRemaining != null && item?.interestRemaining !== "") {
+          displayInterest = Number(item.interestRemaining);
+        } else if (maxScheduleInterest <= 0 && computedInterest > 0) {
           displayInterest = 0;
         } else {
           displayInterest = Math.min(computedInterest, maxScheduleInterest);
         }
+        actualAmountDue =
+          item?.accruedAmountDue != null && item?.accruedAmountDue !== ""
+            ? Number(item.accruedAmountDue)
+            : principal + displayInterest + overdueForInstallment;
       } else {
         actualAmountDue = principal + computedInterest + overdueForInstallment;
         displayInterest = computedInterest;
       }
 
       const amountPaid = Number(item?.amountPaid) || 0;
+      const paidFromInterest = Number(item?.amountPaidFromInterest) || 0;
+      const paidFromPrincipal = Number(item?.amountPaidFromPrincipal) || 0;
+      const balanceFromBuckets =
+        item?.principalRemaining != null && item?.interestRemaining != null
+          ? Number(item.principalRemaining) + Number(item.interestRemaining) + overdueForInstallment
+          : null;
       const balanceToPay =
-        isInstallment
-          ? Math.max(0, actualAmountDue - amountPaid)
-          : item?.balanceToPay != null && item?.balanceToPay !== ""
-            ? Number(item.balanceToPay)
-            : Math.max(0, actualAmountDue - amountPaid);
+        isInstallment && balanceFromBuckets != null
+          ? balanceFromBuckets
+          : isInstallment && item?.balanceToPay != null && item?.balanceToPay !== ""
+          ? Number(item.balanceToPay)
+          : Math.max(0, actualAmountDue - amountPaid);
 
       return {
       id: item._id,
@@ -187,6 +214,12 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
               ? "0"
               : item?.amountPaid.toLocaleString()}
           </div>
+          {isInstallment && amountPaid > 0 && (paidFromInterest > 0 || paidFromPrincipal > 0) && (
+            <div className="text-xs text-gray-500 mt-0.5">
+              {paidFromInterest > 0 && `Interest: ₦${paidFromInterest.toLocaleString()}`}
+              {paidFromPrincipal > 0 && ` · Principal: ₦${paidFromPrincipal.toLocaleString()}`}
+            </div>
+          )}
         </div>
       ),
       balanceToPay: (
@@ -265,16 +298,30 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
   // };
 
   const logRepaymentFunction = (e) => {
+    e.preventDefault();
+    const amountToLog = parseRepaymentAmountInput(formData?.repaymentAmount);
+
+    if (!Number.isFinite(amountToLog) || amountToLog <= 0) {
+      toast.error("Enter a valid repayment amount greater than zero");
+      return;
+    }
+
+    if (amountToLog > outstandingBalance + LOG_AMOUNT_EPS) {
+      toast.error(
+        `Amount cannot exceed outstanding balance (₦${outstandingBalance.toLocaleString()})`
+      );
+      return;
+    }
+
     setLoading(true);
     setEnableLogRepaymentBtn(false);
-    const data = new FormData();
-    data.append("repaymentMethod", formData?.repaymentMethod);
-    data.append("repaymentAmount", formData?.repaymentAmount);
-    data.append("repaymentReceipts", formData?.repaymentReceipts);
-    data.append("clearBalance", formData?.clearBalance);
-    data.append("dateCollected", format(formData?.dateCollected, "yyyy-MM-dd"));
-    e.preventDefault();
-    dispatch(logRepaymentFunc({ loanId, payload: data }))
+    const payload = new FormData();
+    payload.append("repaymentMethod", formData?.repaymentMethod);
+    payload.append("repaymentAmount", String(amountToLog));
+    payload.append("repaymentReceipts", formData?.repaymentReceipts);
+    payload.append("clearBalance", formData?.clearBalance);
+    payload.append("dateCollected", format(formData?.dateCollected, "yyyy-MM-dd"));
+    dispatch(logRepaymentFunc({ loanId, payload }))
       .unwrap()
       .then(() => {
         resetFormData();
@@ -292,6 +339,57 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
   };
 
   const [showClearBalanceConfirm, setShowClearBalanceConfirm] = useState(false);
+  const [showReapplyConfirm, setShowReapplyConfirm] = useState(false);
+  const [reapplyLoading, setReapplyLoading] = useState(false);
+  const [tableRefreshKey, setTableRefreshKey] = useState(0);
+  const [reapplyJob, setReapplyJob] = useState(null);
+
+  const handleReapplyAllocations = () => {
+    setReapplyLoading(true);
+    dispatch(reapplyInstallmentAllocations({ loanId }))
+      .unwrap()
+      .then((res) => {
+        setShowReapplyConfirm(false);
+        if (!res?.jobId) {
+          toast.success(res?.message || "Payment allocation reapplied");
+          setTableRefreshKey((k) => k + 1);
+          setReapplyLoading(false);
+          return;
+        }
+        toast.info("Rebuilding ledger and reapplying payments (interest before principal)...");
+        setReapplyJob({ jobId: res.jobId, status: "queued" });
+        const pollId = setInterval(() => {
+          dispatch(getApprovalJobStatus({ jobId: res.jobId }))
+            .unwrap()
+            .then((jobRes) => {
+              setReapplyJob(jobRes);
+              if (jobRes?.status === "completed") {
+                clearInterval(pollId);
+                setReapplyJob(null);
+                setReapplyLoading(false);
+                toast.success("Payment allocation reapplied successfully");
+                setTableRefreshKey((k) => k + 1);
+              }
+              if (jobRes?.status === "failed") {
+                clearInterval(pollId);
+                setReapplyJob(null);
+                setReapplyLoading(false);
+                toast.error(jobRes?.error || "Reapply failed");
+              }
+            })
+            .catch((err) => {
+              clearInterval(pollId);
+              setReapplyJob(null);
+              setReapplyLoading(false);
+              toast.error(err?.message || "Failed to track reapply job");
+            });
+        }, 1500);
+      })
+      .catch((err) => {
+        setReapplyLoading(false);
+        toast.error(err?.message || "Could not reapply payment allocation");
+      });
+  };
   const handleClearBalanceChange = (e) => {
     if (e.target.checked) {
       setShowClearBalanceConfirm(true);
@@ -306,6 +404,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
       <div>
         {enableLogRepaymentBtn == true ? (
           <ReusableDataTable
+            key={tableRefreshKey}
             dataTransformer={customDataTransformer}
             headers={headers}
             initialData={[]}
@@ -315,13 +414,29 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
           />
         ) : null}
       </div>
-      {!(
-        status === "Fully Paid" ||
-        status === "Cleared Balance" ||
-        status === "Closed Off" ||
-        status === "Declined"
-      ) && (
-        <div className="mt-5 flex items-center justify-center">
+      {reapplyJob?.progress?.percent != null && (
+        <p className="mt-3 text-sm text-swGray text-center">
+          Reapplying allocations… {reapplyJob.progress.percent}%
+        </p>
+      )}
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+        {repaymentType === "installmentPayment" &&
+          status !== "Closed Off" &&
+          status !== "Declined" && (
+            <Button
+              variant="secondary"
+              disabled={reapplyLoading}
+              onClick={() => setShowReapplyConfirm(true)}
+            >
+              {reapplyLoading ? "Reapplying…" : "Reapply payment allocation"}
+            </Button>
+          )}
+        {!(
+          status === "Fully Paid" ||
+          status === "Cleared Balance" ||
+          status === "Closed Off" ||
+          status === "Declined"
+        ) && (
           <Button
             disabled={enableLogRepayment === false ? false : true}
             variant="secondary"
@@ -331,8 +446,17 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
           >
             Log Repayment
           </Button>
-        </div>
-      )}
+        )}
+      </div>
+      <ConfirmationModal
+        isOpen={showReapplyConfirm}
+        onClose={() => setShowReapplyConfirm(false)}
+        onConfirm={handleReapplyAllocations}
+        title="Reapply payment allocation?"
+        message="This replays the loan ledger from disbursement and reapplies every approved payment in date order (interest before principal on each installment). Use this to fix loans that were allocated incorrectly. This may take a minute."
+        confirmText="Reapply"
+        cancelText="Cancel"
+      />
       <CenterModal isOpen={logRepayment} width={"40%"}>
         <div className="p-4">
           <div className="flex justify-between items-center text-white">
@@ -377,7 +501,11 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
                 onChange={(e) => {
                   handleInputChangeWithComma(e);
                 }}
-                hintText="Amount paid that received the current repayment amount will spill into the next repayment cycle"
+                hintText={
+                  outstandingBalance > 0
+                    ? `Maximum loggable amount: ₦${outstandingBalance.toLocaleString()} (total outstanding balance). Excess applies to upcoming installments on approval.`
+                    : "Amount paid that received the current repayment amount will spill into the next repayment cycle"
+                }
               />
             </div>
             <div className="pt-4">
@@ -514,7 +642,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType }) => {
                 Cancel
               </Button>
               <Button
-                disabled={loading ? true : false}
+                disabled={loading || exceedsOutstandingBalance}
                 variant="secondary"
                 onClick={logRepaymentFunction}
               >

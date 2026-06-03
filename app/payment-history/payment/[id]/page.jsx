@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
-import { paymentHystoryAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { paymentHistoryAuthRoles } from "@/app/components/helpers/pageAuthRoles";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -166,7 +166,7 @@ const PaymentPage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Payment History", "Payment"]}
-      roles={paymentHystoryAuthRoles}
+      roles={paymentHistoryAuthRoles}
     >
       <ToastContainer />
       {approvalJob?.jobId ? (
