@@ -4,21 +4,18 @@ FROM node:20-alpine AS builder
 ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_PUSHER_KEY
 ARG NEXT_PUBLIC_PUSHER_CLUSTER
-ARG NODE_ENV
 
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_PUSHER_KEY=$NEXT_PUBLIC_PUSHER_KEY
 ENV NEXT_PUBLIC_PUSHER_CLUSTER=$NEXT_PUBLIC_PUSHER_CLUSTER
-ENV NODE_ENV=$NODE_ENV
-
 
 WORKDIR /app
-
 
 # Copy lockfile + manifest first (better caching)
 COPY package.json package-lock.json ./
 
-# Install dependencies
+# Install all deps (incl. devDependencies) required for `next build` lint/typecheck.
+# Do not set NODE_ENV=production here — it skips devDependencies and breaks CI builds.
 RUN npm ci
 
 # Copy rest of the source
