@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - staging
+      - live-uat
 
 jobs:
   build-and-push:
@@ -33,6 +34,12 @@ jobs:
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_PUSHER_CLUSTER=${{ secrets.NEXT_PUBLIC_PUSHER_CLUSTER }}" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_PUSHER_KEY=${{ secrets.NEXT_PUBLIC_PUSHER_KEY }}" >> $GITHUB_ENV
+            
+          elif [[ "$TAG" == "live-uat" ]]; then
+            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_LIVE_UAT_API_URL }}" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_PUSHER_CLUSTER=${{ secrets.NEXT_PUBLIC_LIVE_UAT_PUSHER_CLUSTER }}" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_PUSHER_KEY=${{ secrets.NEXT_PUBLIC_LIVE_UAT_PUSHER_KEY }}" >> $GITHUB_ENV
+
           else
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_STAGING_API_URL }}" >> $GITHUB_ENV
             echo "NEXT_PUBLIC_PUSHER_CLUSTER=${{ secrets.NEXT_PUBLIC_STAGING_PUSHER_CLUSTER }}" >> $GITHUB_ENV
