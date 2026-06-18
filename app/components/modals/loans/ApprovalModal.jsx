@@ -64,18 +64,29 @@ const ApprovalModal = ({
     }));
   };
 
-  const submitLoan = (e) => {
-    e.preventDefault();
-    if (!currentTaskId) {
-      toast.error("Unable to approve this step: taskId is missing");
-      return;
+  const resolveTaskId = () => {
+    if (currentTaskId) {
+      return currentTaskId;
     }
 
+    if (typeof window !== "undefined") {
+      const storedTaskId = localStorage.getItem("taskId");
+      if (storedTaskId) {
+        return storedTaskId;
+      }
+    }
+
+    return null;
+  };
+
+  const submitLoan = (e) => {
+    e.preventDefault();
     setLoading(true);
+    const resolvedTaskId = resolveTaskId();
     let _formData = {
       approvalLevel: approvalId,
       approvalNote: formData?.approvalNote,
-      taskId: currentTaskId,
+      ...(resolvedTaskId ? { taskId: resolvedTaskId } : {}),
     };
 
     const payload = { id, _formData };

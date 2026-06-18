@@ -1,32 +1,53 @@
-import React, { useEffect } from "react";
-import Pusher from "pusher-js";
+"use client";
 
-const pusher = new Pusher("19b78da79fdeeb108f04", {
-  cluster: "mt1",
-  encrypted: true,
-});
+import { useEffect } from "react";
 
 const RealTimeComponent = () => {
   useEffect(() => {
-    let user;
-    if (typeof window !== 'undefined') {
-       user = JSON.parse(localStorage.getItem("user"));
-    }
+    let pusher;
+    let channel;
+    let cancelled = false;
 
+    const setupPusher = async () => {
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const userId = user?.data?.user?._id;
 
-    const channel = pusher.subscribe(`bulkCreation.${user?.data?.user?._id}`);
+      if (!userId) {
+        return;
+      }
 
-    channel.bind("bulkCreateCustomerProfile", (data) => {
-       alert(data.message)
-    });
+      const { default: Pusher } = await import("pusher-js");
+
+      if (cancelled) {
+        return;
+      }
+
+      pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "mt1",
+      });
+
+      channel = pusher.subscribe(`bulkCreation.${userId}`);
+      channel.bind("bulkCreateCustomerProfile", (data) => {
+        alert(data.message);
+      });
+    };
+
+    setupPusher();
 
     return () => {
-      channel.unbind_all();
-      pusher.unsubscribe(`bulkCreation.${user?.data?.user?._id}`);
+      cancelled = true;
+
+      if (channel) {
+        channel.unbind_all();
+      }
+
+      if (pusher) {
+        pusher.disconnect();
+      }
     };
   }, []);
 
-  return <div></div>;
+  return null;
 };
 
 export default RealTimeComponent;

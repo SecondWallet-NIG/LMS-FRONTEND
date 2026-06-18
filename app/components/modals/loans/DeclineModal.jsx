@@ -66,14 +66,30 @@ const DeclineModal = ({
     });
   };
 
+  const resolveTaskId = () => {
+    if (currentTaskId) {
+      return currentTaskId;
+    }
+
+    if (typeof window !== "undefined") {
+      const storedTaskId = localStorage.getItem("taskId");
+      if (storedTaskId) {
+        return storedTaskId;
+      }
+    }
+
+    return null;
+  };
+
   const submitLoan = (e) => {
     e.preventDefault();
     setLoading(true);
+    const resolvedTaskId = resolveTaskId();
     const payload = {
       id,
       formData: {
         ...formData,
-        taskId: currentTaskId,
+        ...(resolvedTaskId ? { taskId: resolvedTaskId } : {}),
       },
     };
     dispatch(declineLoanRequest(payload))
