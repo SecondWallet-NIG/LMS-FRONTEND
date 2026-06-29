@@ -14,7 +14,10 @@ import { bankArr, statesAndLgas } from "@/constant";
 import InputField from "../shared/input/InputField";
 import { updateCustomer } from "@/redux/slices/customerSlice";
 import { IoIosClose } from "react-icons/io";
+import useBanks from "@/hooks/use-banks";
+
 const PersonalInformation = ({ userData, loading }) => {
+  const { banks, loading: bankLoading, error: bankError } = useBanks();
   const dispatch = useDispatch();
   const router = useRouter();
   const { id } = useParams();
@@ -86,7 +89,7 @@ const PersonalInformation = ({ userData, loading }) => {
 
   const verifyBankDetails = async (accountNumber, bankCode) => {
     const url = `https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`;
-    const secretKey = "sk_test_fc684264fab5c82971c56f2fab38c5c252c171b4"; // Replace with your actual secret key
+    const secretKey = process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY; // Replace with your actual secret key
 
     try {
       const response = await fetch(url, {
@@ -243,7 +246,7 @@ const PersonalInformation = ({ userData, loading }) => {
         try {
           const response = await verifyBankDetails(
             userData?.profileInfo?.bankAccount?.accountNumber,
-            userData?.profileInfo?.bankAccount?.bankName
+            userData?.profileInfo?.bankAccount?.bankName,
           );
           setVerificationResponse(response);
           setBankNameVal(response?.data?.account_name);
@@ -396,7 +399,7 @@ const PersonalInformation = ({ userData, loading }) => {
             <SelectField
               name="gender"
               value={genderOptions.find(
-                (option) => option.value === formData.gender
+                (option) => option.value === formData.gender,
               )}
               optionValue={genderOptions}
               label={"Gender"}
@@ -455,7 +458,7 @@ const PersonalInformation = ({ userData, loading }) => {
               name="country"
               label={"Country"}
               value={countryOptions.find(
-                (option) => option.value === formData.country
+                (option) => option.value === formData.country,
               )}
               optionValue={countryOptions}
               required={true}
@@ -543,16 +546,17 @@ const PersonalInformation = ({ userData, loading }) => {
         <p className="font-semibold">Bank Account Information</p>
         <div className="flex space-x-4">
           <div className="w-1/2">
+            {bankError && (
+              <p className="text-red-500 text-sm">Failed to load banks</p>
+            )}
             <SelectField
               name="bankName"
               label="Bank name"
-              value={bankArr.find(
-                (option) => option.value === formData.bankName
-              )}
-              optionValue={bankArr}
+              optionValue={banks}
               required={true}
-              placeholder={"Select bank"}
+              placeholder={loading ? "Loading banks..." : "Select bank"}
               isSearchable={true}
+              isDisabled={bankLoading}
               onChange={(selectedOption) =>
                 handleSelectChange(selectedOption, "bankName")
               }

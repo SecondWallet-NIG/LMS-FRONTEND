@@ -183,7 +183,7 @@ const CreateInvestor = () => {
 
   const verifyBankDetails = async (accountNumber, bankCode) => {
     const url = `https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`;
-    const secretKey = "sk_test_fc684264fab5c82971c56f2fab38c5c252c171b4"; // Replace with your actual secret key
+    const secretKey = process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY; // Replace with your actual secret key
 
     try {
       const response = await fetch(url, {
@@ -335,7 +335,7 @@ const CreateInvestor = () => {
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
         setFileError(
-          "Invalid file type. Please select an image (.jpg, .jpeg, .png)."
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png).",
         );
         return;
       }
@@ -721,7 +721,7 @@ const CreateInvestor = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
             {renderFileInput(
               "Upload Tax Identification Number (TIN)",
-              "taxDoc"
+              "taxDoc",
             )}
             {renderFileInput("Upload Bank Verification Number (BVN)", "bvnDoc")}
             {renderFileInput("Upload National Identity Number (NIN)", "ninDoc")}
