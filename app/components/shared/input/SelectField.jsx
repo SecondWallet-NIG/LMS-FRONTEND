@@ -31,6 +31,9 @@ const customStyles = {
     },
     fontSize: "14px",
   }),
+
+  // Render the menu above any overflow/clipping ancestor (modals, scrollable cards)
+  menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
 };
 
 const SelectField = ({
@@ -63,6 +66,8 @@ const SelectField = ({
         name={name}
         isDisabled={disabled}
         styles={customStyles}
+        menuPortalTarget={typeof document !== "undefined" ? document.body : null}
+        menuPosition="fixed"
         isSearchable={isSearchable}
         options={optionValue ? optionValue : _options}
         placeholder={placeholder}
