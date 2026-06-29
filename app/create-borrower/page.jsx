@@ -30,6 +30,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import EditableButton from "../components/shared/editableButtonComponent/EditableButton";
 import Image from "next/image";
 import { borrowersAuthRoles } from "../components/helpers/pageAuthRoles";
+import useBanks from "@/hooks/use-banks";
 
 const CreateCustomer = () => {
   const [isInputOpen, setIsInputOpen] = useState(false);
@@ -48,6 +49,8 @@ const CreateCustomer = () => {
   const [profileImg, setProfileImg] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const { banks, loading: bankLoading, error: bankError } = useBanks();
 
   const {
     loading,
@@ -138,7 +141,7 @@ const CreateCustomer = () => {
       const allowedExtensions = ["jpg", "jpeg", "png"];
       if (!allowedExtensions.includes(fileExtension)) {
         setFileError(
-          "Invalid file type. Please select an image (.jpg, .jpeg, .png)."
+          "Invalid file type. Please select an image (.jpg, .jpeg, .png).",
         );
         return;
       }
@@ -155,7 +158,7 @@ const CreateCustomer = () => {
 
   const verifyBankDetails = async (accountNumber, bankCode) => {
     const url = `https://api.paystack.co/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`;
-    const secretKey = "sk_test_fc684264fab5c82971c56f2fab38c5c252c171b4"; // Replace with your actual secret key
+    const secretKey = process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY; // Replace with your actual secret key
 
     try {
       const response = await fetch(url, {
@@ -293,7 +296,7 @@ const CreateCustomer = () => {
       .unwrap()
       .then((response) => {
         toast.success(
-          "Upload in progress, you will be notified when this is complete"
+          "Upload in progress, you will be notified when this is complete",
         );
       })
       .catch((error) => {
@@ -570,13 +573,17 @@ const CreateCustomer = () => {
               <p className="font-semibold">Bank Account Information</p>
               <div className="flex flex-col md:flex-row gap-5">
                 <div className="w-full md:w-1/2">
+                  {bankError && (
+                    <p className="text-red-500 text-sm">Failed to load banks</p>
+                  )}
                   <SelectField
                     name="bankName"
                     label="Bank name"
-                    optionValue={bankArr}
+                    optionValue={banks}
                     required={true}
-                    placeholder={"Select bank"}
+                    placeholder={loading ? "Loading banks..." : "Select bank"}
                     isSearchable={true}
+                    isDisabled={bankLoading}
                     onChange={(selectedOption) =>
                       handleSelectChange(selectedOption, "bankName")
                     }
