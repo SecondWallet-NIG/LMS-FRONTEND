@@ -31,6 +31,8 @@ jobs:
           TAG="${{ steps.vars.outputs.TAG }}"
           if [[ "$TAG" == "main" ]]; then
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY }}" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_PAYSTACK_SECRET_KEY=${{ secrets.NEXT_PUBLIC_PAYSTACK_SECRET_KEYL }}" >> $GITHUB_ENV
           else
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_STAGING_API_URL }}" >> $GITHUB_ENV
           fi
@@ -42,6 +44,8 @@ jobs:
 
           docker build \
             --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+            --build-arg NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=$NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY \
+            --build-arg NEXT_PUBLIC_PAYSTACK_SECRET_KEY=$NEXT_PUBLIC_PAYSTACK_SECRET_KEY \
             -t "$IMAGE_NAME_LC:$TAG" .
 
       - name: Push Docker image
