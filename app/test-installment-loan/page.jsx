@@ -23,6 +23,16 @@ const repaymentMethodOptions = [
   { value: "Bank transfer", label: "Bank transfer" },
 ];
 
+const testRepaymentTypeOptions = [
+  { value: "installmentPayment", label: "Installment Payment" },
+  { value: "equatedRepayment", label: "Equated Repayment" },
+];
+
+const repaymentTypeLabels = {
+  installmentPayment: "Installment Payment",
+  equatedRepayment: "Equated Repayment",
+};
+
 const TestInstallmentLoan = () => {
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.customer);
@@ -31,6 +41,8 @@ const TestInstallmentLoan = () => {
   const [loanApplicationId, setLoanApplicationId] = useState("");
   const [daysToAdvance, setDaysToAdvance] = useState(1);
   const [disbursementDaysAgo, setDisbursementDaysAgo] = useState(18);
+  const [repaymentType, setRepaymentType] = useState("installmentPayment");
+  const [activeLoanRepaymentType, setActiveLoanRepaymentType] = useState("installmentPayment");
   const [repayments, setRepayments] = useState([
     {
       repaymentAmount: 0,
@@ -119,6 +131,9 @@ const TestInstallmentLoan = () => {
             setComputationInProgress(false);
             if (job.result) {
               setLoanInfo(job.result);
+              if (job.result.repaymentType) {
+                setActiveLoanRepaymentType(job.result.repaymentType);
+              }
             }
             const doneLoanId = loanId || job.result?.loanId || "";
             toast.success(
@@ -173,6 +188,7 @@ const TestInstallmentLoan = () => {
         loanDuration: 5,
         interestRate: 10,
         disbursementDaysAgo: normalizedDisbursementDaysAgo,
+        repaymentType,
       };
       if (validRepayments.length > 0) {
         payload.repayments = validRepayments.map((r) => ({
@@ -198,6 +214,7 @@ const TestInstallmentLoan = () => {
       if (response.data?.success && response.data?.data) {
         const result = response.data.data;
         setLoanApplicationId(result.loanApplicationId);
+        setActiveLoanRepaymentType(result.repaymentType || repaymentType);
         setLoanInfo(result);
 
         if (result.async && result.jobId) {
@@ -305,17 +322,20 @@ const TestInstallmentLoan = () => {
     }
   };
 
+  const isInstallmentAccrualLoan =
+    (loanInfo?.repaymentType || activeLoanRepaymentType) === "installmentPayment";
+
   return (
     <DashboardLayout>
       <main className="p-5">
         <ToastContainer />
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-swBlue">
-            Test Installment Loan
+            Test Loan (Installment & Equated)
           </h1>
           <p className="text-sm text-gray-600 mt-2">
-            Create test loans and trigger accruals for testing installment
-            payment scenarios
+            Create test loans with installment or equated repayment and trigger
+            accruals for testing payment scenarios
           </p>
         </div>
 
@@ -344,13 +364,32 @@ const TestInstallmentLoan = () => {
                   </p>
                 )}
               </div>
+              <div>
+                <SelectField
+                  label="Repayment Type"
+                  placeholder="Select repayment type"
+                  optionValue={testRepaymentTypeOptions}
+                  isSearchable={false}
+                  value={
+                    testRepaymentTypeOptions.find(
+                      (option) => option.value === repaymentType,
+                    ) || testRepaymentTypeOptions[0]
+                  }
+                  onChange={(selected) =>
+                    setRepaymentType(selected?.value || "installmentPayment")
+                  }
+                />
+              </div>
               <div className="text-sm text-gray-600">
                 <p><strong>Default Values:</strong></p>
                 <ul className="list-disc list-inside mt-2">
                   <li>Loan Amount: ₦100,000</li>
                   <li>Duration: 5 months</li>
                   <li>Interest Rate: 10%</li>
-                  <li>Repayment Type: Installment Payment</li>
+                  <li>
+                    Repayment Type:{" "}
+                    {repaymentTypeLabels[repaymentType] || repaymentType}
+                  </li>
                   <li>Status: Auto-approved & Disbursed</li>
                   <li>
                     Projected Disbursement Date: {projectedDisbursementDate} (
@@ -521,6 +560,14 @@ const TestInstallmentLoan = () => {
                   <span>{loanInfo.loanId || loanApplicationId}</span>
                 </div>
                 <div className="flex justify-between">
+                  <span className="font-medium">Repayment Type:</span>
+                  <span>
+                    {repaymentTypeLabels[loanInfo.repaymentType] ||
+                      loanInfo.repaymentType ||
+                      "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
                   <span className="font-medium">Disbursement date:</span>
                   <span>
                     {loanInfo.disbursedAt
@@ -588,7 +635,7 @@ const TestInstallmentLoan = () => {
                   <Button
                     variant="secondary"
                     onClick={triggerDailyAccrual}
-                    disabled={loading || !loanApplicationId}
+                    disabled={loading || !loanApplicationId || !isInstallmentAccrualLoan}
                     className="w-full text-sm"
                   >
                     Trigger Daily Interest
@@ -596,12 +643,18 @@ const TestInstallmentLoan = () => {
                   <Button
                     variant="secondary"
                     onClick={triggerOverdueAccrual}
-                    disabled={loading || !loanApplicationId}
+                    disabled={loading || !loanApplicationId || !isInstallmentAccrualLoan}
                     className="w-full text-sm"
                   >
                     Trigger Overdue Accrual
                   </Button>
                 </div>
+                {!isInstallmentAccrualLoan && loanApplicationId && (
+                  <p className="text-xs text-amber-700">
+                    Daily interest and overdue triggers apply to installment
+                    payment loans only. Equated loans use the fixed EMI schedule.
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -612,16 +665,23 @@ const TestInstallmentLoan = () => {
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700">
               <li>Select a customer from the dropdown</li>
+              <li>
+                Choose repayment type: Installment Payment (daily accrual) or
+                Equated Repayment (fixed EMI schedule)
+              </li>
               <li>Add optional repayment(s) if you want to simulate payments</li>
               <li>
                 Click &quot;Create Test Loan & Simulate Repayments&quot; - loan
                 will be auto-approved, disbursed, and repayments applied
               </li>
-              <li>Use &quot;Trigger Daily Interest&quot; to accrue interest for today</li>
+              <li>
+                For installment loans, use &quot;Trigger Daily Interest&quot; to
+                accrue interest for today
+              </li>
               <li>Use &quot;Advance Days&quot; to simulate multiple days passing</li>
               <li>
-                Use &quot;Trigger Overdue Accrual&quot; to calculate penalties for
-                overdue loans
+                For installment loans, use &quot;Trigger Overdue Accrual&quot; to
+                calculate penalties for overdue loans
               </li>
               <li>Navigate to the loan details page to verify schedule</li>
             </ol>
