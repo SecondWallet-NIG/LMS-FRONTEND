@@ -7,6 +7,7 @@ import { IoMdClose } from "react-icons/io";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { handleFileExtention } from "../helpers/utils";
+import { hasCfoPermissions } from "../helpers/rolePermissions";
 import CenterModal from "../modals/CenterModal";
 import LoanRestructureApprovalModal from "../modals/loans/LoanRestructureApprovalModal";
 import LoanRestructureDeclineModal from "../modals/loans/LoanRestructureDeclineModal";
@@ -156,10 +157,9 @@ const LoanRestructureTab = ({ loanId, user }) => {
           {/* {(user?.role?.tag === "CFO" || "MD" || "FO") && ( */}
           <div>
             {item?.status === "Pending" &&
-              (user?.role?.tag === "CFO" ||
+              (hasCfoPermissions(user?.role?.tag) ||
                 user?.role?.tag === "MD" ||
                 user?.role?.tag === "FO" ||
-                user?.role?.tag === "FCO" ||
                 user?.role?.tag === "CTO") && (
                 <div className="flex gap-2 items-center">
                   <Button

@@ -13,6 +13,7 @@ import { handleFileExtention } from "@/app/components/helpers/utils";
 import Viewer from "react-viewer";
 import { IoMdClose } from "react-icons/io";
 import { expensesAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { hasCfoPermissions } from "@/app/components/helpers/rolePermissions";
 
 const ViewExpense = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const ViewExpense = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = JSON.parse(localStorage.getItem("user"));
-      if (user?.data?.user?.role?.tag === "CFO") {
+      if (hasCfoPermissions(user?.data?.user?.role?.tag)) {
         setUpdateBtns(true);
       }
     }

@@ -10,35 +10,40 @@ import Unauthorized from "@/app/unauthorized/page";
 const DashboardLayout = ({ children, paths, isBackNav, roles }) => {
   const [minimizeSidebar, setMinimizeSidebar] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(true);
   const router = useRouter();
   const [sideBarOpen, setSideBarOpen] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const data = JSON.parse(localStorage.getItem("minimizeSidebar"));
-      setMinimizeSidebar(data === true); // Use strict equality
+      setMinimizeSidebar(data === true);
       const storedUser = localStorage.getItem("user");
 
-      setIsAuthenticated(!!storedUser); // Check if storedUser is not null or undefined
-
       if (!storedUser) {
+        setIsAuthenticated(false);
+        setIsAuthorized(false);
         router.push("/");
         return;
-      } else {
-        const user = JSON.parse(storedUser);
-        if (roles && !roles.includes(user?.data?.user?.role?.tag)) {
-          return router.push("/unauthorized");
-        }
       }
 
-      // console.log("role", user?.data?.user?.role?.tag);
+      const user = JSON.parse(storedUser);
+      const roleTag = user?.data?.user?.role?.tag;
+      const authorized = !roles || roles.includes(roleTag);
+
+      setIsAuthenticated(true);
+      setIsAuthorized(authorized);
+
+      if (!authorized) {
+        router.push("/unauthorized");
+      }
     }
-  }, [router]);
+  }, [router, roles]);
 
   return (
     <div className="h-screen">
       <div className="flex h-full w-full">
-        {isAuthenticated && (
+        {isAuthenticated && isAuthorized && (
           <div>
             <Sidebar sideBarOpen={setSideBarOpen} sideBarState={sideBarOpen} />
             <NavBar
@@ -51,7 +56,9 @@ const DashboardLayout = ({ children, paths, isBackNav, roles }) => {
         )}
         {/* w-[10%] lg:w-[5%] */}
         <div className="h-full w-full md:w-[95%] ml-auto mt-[4.5rem] text-swGray">
-          <div className="overflow-y-auto">{isAuthenticated && children}</div>
+          <div className="overflow-y-auto">
+            {isAuthenticated && isAuthorized ? children : null}
+          </div>
         </div>
         <RealTimeComponent />
       </div>

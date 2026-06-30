@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { IoMdCheckmark } from "react-icons/io";
 import { LuTrash } from "react-icons/lu";
 import { plansAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { hasCfoPermissions } from "@/app/components/helpers/rolePermissions";
 
 const ViewPlan = () => {
   const { plan_id } = useParams();
@@ -33,7 +34,7 @@ const ViewPlan = () => {
     if (
       userRole === "CEO" ||
       userRole === "CTO" ||
-      userRole === "CFO" ||
+      hasCfoPermissions(userRole) ||
       userRole === "Dir" ||
       userRole === "System Admin"
     ) {

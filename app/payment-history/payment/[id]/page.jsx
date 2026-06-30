@@ -23,7 +23,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dynamic from "next/dynamic";
-import { paymentHystoryAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { paymentHistoryAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { hasCfoPermissions } from "@/app/components/helpers/rolePermissions";
 
 // import Viewer from "react-viewer";
 const Viewer = dynamic(
@@ -101,10 +102,9 @@ const PaymentPage = () => {
     if (
       userRole === "CEO" ||
       userRole === "CTO" ||
-      userRole === "CFO" ||
+      hasCfoPermissions(userRole) ||
       userRole === "Dir" ||
       userRole === "FO" ||
-      userRole === "FCO" ||
       userRole === "System Admin"
     ) {
       setShowApprovalBtns(true);
@@ -123,7 +123,7 @@ const PaymentPage = () => {
     <DashboardLayout
       isBackNav={true}
       paths={["Payment History", "Payment"]}
-      roles={paymentHystoryAuthRoles}
+      roles={paymentHistoryAuthRoles}
     >
       <ToastContainer />
       <main className="mx-auto max-w-4xl py-10 px-5">

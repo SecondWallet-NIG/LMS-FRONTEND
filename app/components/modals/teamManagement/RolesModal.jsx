@@ -21,6 +21,7 @@ const RolesModal = ({ isOpen, onClose, children, width }) => {
   const adminOptions = [
     { value: "ceo", label: "CEO" },
     { value: "cfo", label: "CFO" },
+    { value: "fco", label: "FCO" },
     { value: "cto", label: "CTO" },
     { value: "director", label: "Director" },
   ];

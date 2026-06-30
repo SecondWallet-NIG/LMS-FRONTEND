@@ -16,6 +16,7 @@ import SuccessModal from "@/app/components/modals/SuccessModal";
 import CancelModal from "@/app/components/modals/CancelModal";
 import { useRouter } from "next/navigation";
 import { investorsAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { hasCfoPermissions } from "@/app/components/helpers/rolePermissions";
 
 export default function DisburseROI() {
     const mtHeadClass = "flex gap-1";
@@ -50,7 +51,7 @@ export default function DisburseROI() {
     useEffect(() => {
         if (typeof window !== "undefined") {
             const user = JSON.parse(localStorage.getItem("user"));
-            if (user?.data?.user?.role?.tag === "CFO") {
+            if (hasCfoPermissions(user?.data?.user?.role?.tag)) {
                 setDisburseRoiBtn(true);
             }
         }

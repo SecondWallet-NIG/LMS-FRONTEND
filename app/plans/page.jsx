@@ -11,6 +11,7 @@ import { getLoanPackage } from "@/redux/slices/loanPackageSlice";
 import { useEffect } from "react";
 import Loader from "../components/shared/Loader";
 import { plansAuthRoles } from "../components/helpers/pageAuthRoles";
+import { hasCfoPermissions } from "../components/helpers/rolePermissions";
 
 const LoanPackages = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const LoanPackages = () => {
     if (
       userRole === "CEO" ||
       userRole === "CTO" ||
-      userRole === "CFO" ||
+      hasCfoPermissions(userRole) ||
       userRole === "Dir" ||
       userRole === "System Admin"
     ) {

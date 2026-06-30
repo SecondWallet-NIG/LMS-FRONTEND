@@ -76,7 +76,7 @@ const StaffsModal = ({ isOpen, onClose, width, data, selected }) => {
   const adminOptions = [
     { value: "CEO", label: "CEO" },
     { value: "CFO", label: "CFO" },
-    { value: "CFO", label: "CFO" },
+    { value: "FCO", label: "FCO" },
     { value: "Director", label: "Director" },
   ];
 

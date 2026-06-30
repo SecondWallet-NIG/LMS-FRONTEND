@@ -7,6 +7,7 @@ import CustomerLoanTransactions from "@/app/components/customers/CustomerLoanTra
 import CustomerRepayment from "@/app/components/customers/CustomerRepayment";
 import DashboardLayout from "@/app/components/dashboardLayout/DashboardLayout";
 import { loanApplicationAuthRoles } from "@/app/components/helpers/pageAuthRoles";
+import { hasCfoPermissions } from "@/app/components/helpers/rolePermissions";
 import CorrectLoanModal from "@/app/components/loanApplication/ViewLoan/CorrectLoanModal";
 import LoanRestructureTab from "@/app/components/loans/LoanRestructureTab";
 import CenterModal from "@/app/components/modals/CenterModal";
@@ -661,7 +662,8 @@ const ViewLoan = () => {
                   </p>
 
                   <div className="flex gap-2 items-center h-fit w-fit mt-4">
-                    {useriD?.role?.tag === "CFO" || "FO" ? (
+                    {hasCfoPermissions(useriD?.role?.tag) ||
+                    useriD?.role?.tag === "FO" ? (
                       <Button
                         className={
                           "text-white text-xs bg-[#2769b3d9] px-3 py-2 rounded-lg font-medium"
@@ -822,7 +824,7 @@ const ViewLoan = () => {
           </section>
           <div className="m-5 mb-0">
             <div className="flex justify-end">
-              {(useriD?.role?.tag === "ICO" || useriD?.role?.tag === "FO" || useriD?.role?.tag === "FCO" || useriD?.role?.tag === "CTO" || useriD?.role?.tag === "System Admin") && (
+              {(useriD?.role?.tag === "ICO" || useriD?.role?.tag === "FO" || useriD?.role?.tag === "CTO" || useriD?.role?.tag === "System Admin") && (
                 <Button
                   className="text-xs text-swBlue rounded-md"
                   onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
@@ -1376,7 +1378,7 @@ const ViewLoan = () => {
             <LoanProcessCard data={loanApprovals} />
           </div>
           <div className="flex justify-end">
-            {useriD?.role?.tag === "CFO" ||
+            {hasCfoPermissions(useriD?.role?.tag) ||
             useriD?.role?.tag === "CEO" ||
             useriD?.role?.tag === "Dir" ? (
               <Button
