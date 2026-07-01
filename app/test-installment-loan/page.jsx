@@ -42,7 +42,8 @@ const TestInstallmentLoan = () => {
   const [daysToAdvance, setDaysToAdvance] = useState(1);
   const [disbursementDaysAgo, setDisbursementDaysAgo] = useState(18);
   const [repaymentType, setRepaymentType] = useState("installmentPayment");
-  const [activeLoanRepaymentType, setActiveLoanRepaymentType] = useState("installmentPayment");
+  const [activeLoanRepaymentType, setActiveLoanRepaymentType] =
+    useState("installmentPayment");
   const [repayments, setRepayments] = useState([
     {
       repaymentAmount: 0,
@@ -55,11 +56,16 @@ const TestInstallmentLoan = () => {
   const [loanInfo, setLoanInfo] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [successModalData, setSuccessModalData] = useState({ title: "", description: "" });
+  const [successModalData, setSuccessModalData] = useState({
+    title: "",
+    description: "",
+  });
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [computationInProgress, setComputationInProgress] = useState(false);
   const pollIntervalRef = useRef(null);
+
+  const LOAN_AMOUNT = 100000;
 
   const clearComputationPoll = useCallback(() => {
     if (pollIntervalRef.current) {
@@ -90,6 +96,23 @@ const TestInstallmentLoan = () => {
       setFilteredData(customer.data);
     }
   }, [customer?.data]);
+
+  const EQUATED_MONTHLY_AMOUNT = 30000;
+  const EQUATED_MONTHS = 5;
+
+  const equatedSchedule = Array.from({ length: EQUATED_MONTHS }, (_, i) => {
+    const date = new Date();
+    date.setMonth(date.getMonth() + i + 1);
+    return {
+      repaymentAmount:
+        i === EQUATED_MONTHS - 1
+          ? LOAN_AMOUNT - EQUATED_MONTHLY_AMOUNT * (EQUATED_MONTHS - 1)
+          : EQUATED_MONTHLY_AMOUNT,
+      dateCollected: date.toISOString().split("T")[0],
+      repaymentNumber: String(i + 1),
+      repaymentMethod: "Bank transfer",
+    };
+  });
 
   const handleCustomerSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
@@ -189,6 +212,10 @@ const TestInstallmentLoan = () => {
         interestRate: 10,
         disbursementDaysAgo: normalizedDisbursementDaysAgo,
         repaymentType,
+        repaymentType,
+        ...(repaymentType === "equatedRepayment" && {
+          fixedMonthlyPayment: EQUATED_MONTHLY_AMOUNT,
+        }),
       };
       if (validRepayments.length > 0) {
         payload.repayments = validRepayments.map((r) => ({
@@ -322,8 +349,10 @@ const TestInstallmentLoan = () => {
     }
   };
 
-  const isInstallmentAccrualLoan =
-    (loanInfo?.repaymentType || activeLoanRepaymentType) === "installmentPayment";
+  // const isInstallmentAccrualLoan =
+  //   (loanInfo?.repaymentType || activeLoanRepaymentType) ===
+  //   "installmentPayment";
+  const isInstallmentAccrualLoan = true;
 
   return (
     <DashboardLayout>
@@ -375,13 +404,58 @@ const TestInstallmentLoan = () => {
                       (option) => option.value === repaymentType,
                     ) || testRepaymentTypeOptions[0]
                   }
-                  onChange={(selected) =>
-                    setRepaymentType(selected?.value || "installmentPayment")
-                  }
+                  onChange={(selected) => {
+                    const val = selected?.value || "installmentPayment";
+                    setRepaymentType(val);
+                    if (val === "equatedRepayment") {
+                      setRepayments(equatedSchedule);
+                    } else {
+                      setRepayments([
+                        {
+                          repaymentAmount: 0,
+                          dateCollected: new Date().toISOString().split("T")[0],
+                          repaymentNumber: "",
+                          repaymentMethod: "",
+                        },
+                      ]);
+                    }
+                  }}
                 />
+                {repaymentType === "equatedRepayment" && (
+                  <div className="border border-blue-100 bg-blue-50 rounded-lg p-4 space-y-2 mt-2">
+                    <h3 className="text-sm font-semibold text-swBlue">
+                      Equated Payment Schedule
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      Fixed: ₦{EQUATED_MONTHLY_AMOUNT.toLocaleString()}/month ×{" "}
+                      {EQUATED_MONTHS} months
+                    </p>
+                    <div className="max-h-36 overflow-y-auto space-y-1">
+                      {equatedSchedule.map((r, i) => (
+                        <div key={i} className="flex justify-between text-xs">
+                          <span className="text-gray-500">
+                            Month {i + 1} ·{" "}
+                            {format(
+                              new Date(r.dateCollected + "T12:00:00"),
+                              "dd MMM yyyy",
+                            )}
+                          </span>
+                          <span className="font-medium">
+                            ₦{r.repaymentAmount.toLocaleString()}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-gray-400 text-xs pt-1 border-t border-blue-100">
+                      These repayments will be submitted with the loan.
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="text-sm text-gray-600">
-                <p><strong>Default Values:</strong></p>
+                <p>
+                  <strong>Default Values:</strong>
+                </p>
                 <ul className="list-disc list-inside mt-2">
                   <li>Loan Amount: ₦100,000</li>
                   <li>Duration: 5 months</li>
@@ -449,7 +523,10 @@ const TestInstallmentLoan = () => {
                               )
                             }
                           >
-                            <FaRegCalendar size={18} className="text-gray-500 shrink-0" />
+                            <FaRegCalendar
+                              size={18}
+                              className="text-gray-500 shrink-0"
+                            />
                             <span className="text-sm text-gray-800">
                               {r.dateCollected
                                 ? format(
@@ -468,7 +545,9 @@ const TestInstallmentLoan = () => {
                                     ? new Date(r.dateCollected + "T12:00:00")
                                     : undefined,
                                 }}
-                                modifiersClassNames={{ selected: "my-selected" }}
+                                modifiersClassNames={{
+                                  selected: "my-selected",
+                                }}
                                 onDayClick={(value) => {
                                   const next = [...repayments];
                                   next[idx] = {
@@ -494,7 +573,9 @@ const TestInstallmentLoan = () => {
                           variant="secondary"
                           disabled={loading || repayments.length <= 1}
                           onClick={() =>
-                            setRepayments(repayments.filter((_, i) => i !== idx))
+                            setRepayments(
+                              repayments.filter((_, i) => i !== idx),
+                            )
                           }
                           className="h-10"
                         >
@@ -581,7 +662,9 @@ const TestInstallmentLoan = () => {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-medium">Outstanding Principal (from repayments):</span>
+                  <span className="font-medium">
+                    Outstanding Principal (from repayments):
+                  </span>
                   <span>
                     ₦{loanInfo.outstandingPrincipal?.toLocaleString() ?? "N/A"}
                   </span>
@@ -635,7 +718,9 @@ const TestInstallmentLoan = () => {
                   <Button
                     variant="secondary"
                     onClick={triggerDailyAccrual}
-                    disabled={loading || !loanApplicationId || !isInstallmentAccrualLoan}
+                    disabled={
+                      loading || !loanApplicationId || !isInstallmentAccrualLoan
+                    }
                     className="w-full text-sm"
                   >
                     Trigger Daily Interest
@@ -643,7 +728,9 @@ const TestInstallmentLoan = () => {
                   <Button
                     variant="secondary"
                     onClick={triggerOverdueAccrual}
-                    disabled={loading || !loanApplicationId || !isInstallmentAccrualLoan}
+                    disabled={
+                      loading || !loanApplicationId || !isInstallmentAccrualLoan
+                    }
                     className="w-full text-sm"
                   >
                     Trigger Overdue Accrual
@@ -652,7 +739,8 @@ const TestInstallmentLoan = () => {
                 {!isInstallmentAccrualLoan && loanApplicationId && (
                   <p className="text-xs text-amber-700">
                     Daily interest and overdue triggers apply to installment
-                    payment loans only. Equated loans use the fixed EMI schedule.
+                    payment loans only. Equated loans use the fixed EMI
+                    schedule.
                   </p>
                 )}
               </div>
@@ -669,7 +757,9 @@ const TestInstallmentLoan = () => {
                 Choose repayment type: Installment Payment (daily accrual) or
                 Equated Repayment (fixed EMI schedule)
               </li>
-              <li>Add optional repayment(s) if you want to simulate payments</li>
+              <li>
+                Add optional repayment(s) if you want to simulate payments
+              </li>
               <li>
                 Click &quot;Create Test Loan & Simulate Repayments&quot; - loan
                 will be auto-approved, disbursed, and repayments applied
@@ -678,17 +768,21 @@ const TestInstallmentLoan = () => {
                 For installment loans, use &quot;Trigger Daily Interest&quot; to
                 accrue interest for today
               </li>
-              <li>Use &quot;Advance Days&quot; to simulate multiple days passing</li>
               <li>
-                For installment loans, use &quot;Trigger Overdue Accrual&quot; to
-                calculate penalties for overdue loans
+                Use &quot;Advance Days&quot; to simulate multiple days passing
+              </li>
+              <li>
+                For installment loans, use &quot;Trigger Overdue Accrual&quot;
+                to calculate penalties for overdue loans
               </li>
               <li>Navigate to the loan details page to verify schedule</li>
             </ol>
             {loanApplicationId && (
               <div className="mt-4 p-3 bg-white rounded">
                 <p className="text-sm font-medium">Loan Application ID:</p>
-                <p className="text-xs font-mono break-all">{loanApplicationId}</p>
+                <p className="text-xs font-mono break-all">
+                  {loanApplicationId}
+                </p>
                 <div className="flex flex-wrap gap-3 mt-2">
                   <a
                     href="/loan-applications"
