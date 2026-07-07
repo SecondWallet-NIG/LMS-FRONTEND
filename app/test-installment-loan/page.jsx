@@ -407,50 +407,16 @@ const TestInstallmentLoan = () => {
                   onChange={(selected) => {
                     const val = selected?.value || "installmentPayment";
                     setRepaymentType(val);
-                    if (val === "equatedRepayment") {
-                      setRepayments(equatedSchedule);
-                    } else {
-                      setRepayments([
-                        {
-                          repaymentAmount: 0,
-                          dateCollected: new Date().toISOString().split("T")[0],
-                          repaymentNumber: "",
-                          repaymentMethod: "",
-                        },
-                      ]);
-                    }
+                    setRepayments([
+                      {
+                        repaymentAmount: 0,
+                        dateCollected: new Date().toISOString().split("T")[0],
+                        repaymentNumber: "",
+                        repaymentMethod: "",
+                      },
+                    ]);
                   }}
                 />
-                {repaymentType === "equatedRepayment" && (
-                  <div className="border border-blue-100 bg-blue-50 rounded-lg p-4 space-y-2 mt-2">
-                    <h3 className="text-sm font-semibold text-swBlue">
-                      Equated Payment Schedule
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      Fixed: ₦{EQUATED_MONTHLY_AMOUNT.toLocaleString()}/month ×{" "}
-                      {EQUATED_MONTHS} months
-                    </p>
-                    <div className="max-h-36 overflow-y-auto space-y-1">
-                      {equatedSchedule.map((r, i) => (
-                        <div key={i} className="flex justify-between text-xs">
-                          <span className="text-gray-500">
-                            Month {i + 1} ·{" "}
-                            {format(
-                              new Date(r.dateCollected + "T12:00:00"),
-                              "dd MMM yyyy",
-                            )}
-                          </span>
-                          <span className="font-medium">
-                            ₦{r.repaymentAmount.toLocaleString()}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-gray-400 text-xs pt-1 border-t border-blue-100">
-                      These repayments will be submitted with the loan.
-                    </p>
-                  </div>
-                )}
               </div>
               <div className="text-sm text-gray-600">
                 <p>
