@@ -15,8 +15,10 @@ const CompletedTasks = () => {
   ];
 
   const customDataTransformer = (apiData) => {
-    return apiData?.data?.results.map((item) => ({
-      id: item._id,
+    const results = apiData?.results || apiData?.data?.results || [];
+    return results.map((item) => ({
+      id: item?.loanApplication?._id || item._id,
+      taskId: item?._id,
       createdAt: (
         <div className="text-md font-[500] text-gray-700">
           {item.createdAt?.slice(0, 10)}

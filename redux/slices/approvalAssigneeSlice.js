@@ -15,7 +15,7 @@ export const getApprovalAssignee = createAsyncThunk(
         `${API_URL}/loan-application/task/${assigneeId}`,
         {
           headers: {
-             Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${user?.data?.token}`,
           },
         }
       );
