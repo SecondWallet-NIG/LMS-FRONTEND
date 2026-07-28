@@ -26,13 +26,16 @@ import ConfirmationModal from "../shared/warningModal/WarningModal";
 const LOG_AMOUNT_EPS = 0.01;
 
 const parseRepaymentAmountInput = (value) => {
-  const normalized = String(value ?? "").replace(/,/g, "").trim();
+  const normalized = String(value ?? "")
+    .replace(/,/g, "")
+    .trim();
   const amount = parseFloat(normalized);
   return Number.isFinite(amount) ? amount : NaN;
 };
 
 const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
-  const outstandingBalance = Number(data?.loanApplication?.outstandingBalance) || 0;
+  const outstandingBalance =
+    Number(data?.loanApplication?.outstandingBalance) || 0;
   const dispatch = useDispatch();
   const [logRepayment, setLogRepayment] = useState(false);
   const [enableLogRepaymentBtn, setEnableLogRepaymentBtn] = useState(true);
@@ -62,7 +65,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     if (!allowedExtensions.includes(fileExtension)) {
       setFileError(
-        "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+        "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf).",
       );
       return;
     }
@@ -133,12 +136,16 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
           ? Number(item.computedInterest)
           : Math.max(0, rawAmountDue - principal);
 
-      const isInstallment = repaymentType === "installmentPayment";
+      // const isInstallment = repaymentType === "installmentPayment";
+
+      const usesAccrualFields =
+        repaymentType === "installmentPayment" ||
+        repaymentType === "equatedRepayment";
 
       // Installment: amount due = principal + accrued interest (ledger) + penalty — not projected amountDue.
       let actualAmountDue;
       let displayInterest;
-      if (isInstallment) {
+      if (usesAccrualFields) {
         const maxScheduleInterest = Math.max(0, rawAmountDue - principal);
         if (item?.interestRemaining != null && item?.interestRemaining !== "") {
           displayInterest = Number(item.interestRemaining);
@@ -161,92 +168,119 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
       const paidFromPrincipal = Number(item?.amountPaidFromPrincipal) || 0;
       const balanceFromBuckets =
         item?.principalRemaining != null && item?.interestRemaining != null
-          ? Number(item.principalRemaining) + Number(item.interestRemaining) + overdueForInstallment
+          ? Number(item.principalRemaining) +
+            Number(item.interestRemaining) +
+            overdueForInstallment
           : null;
       const balanceToPay =
-        isInstallment && balanceFromBuckets != null
+        usesAccrualFields && balanceFromBuckets != null
           ? balanceFromBuckets
-          : isInstallment && item?.balanceToPay != null && item?.balanceToPay !== ""
-          ? Number(item.balanceToPay)
-          : Math.max(0, actualAmountDue - amountPaid);
+          : usesAccrualFields &&
+              item?.balanceToPay != null &&
+              item?.balanceToPay !== ""
+            ? Number(item.balanceToPay)
+            : Math.max(0, actualAmountDue - amountPaid);
+
+      const originalPrincipal =
+        item?.fixedSchedule?.repaymentPrincipal != null
+          ? Number(item.fixedSchedule.repaymentPrincipal)
+          : null;
+      const principalAdjusted =
+        usesAccrualFields &&
+        originalPrincipal != null &&
+        Math.abs(originalPrincipal - principal) > 0.5;
 
       return {
-      id: item._id,
-      createdAt: (
-        <div className="text-md font-[500] text-gray-700">
-          {item?.dueDate?.slice(0, 10)}
-        </div>
-      ),
+        id: item._id,
+        createdAt: (
+          <div className="text-md font-[500] text-gray-700">
+            {item?.dueDate?.slice(0, 10)}
+          </div>
+        ),
 
-      amountDue: (
-        <div>
-          <div className="text-md font-[500] text-gray-700">
-            ₦ {actualAmountDue.toLocaleString()}
-          </div>
-          {(principal > 0 || displayInterest > 0 || overdueForInstallment > 0) && (
-            <div className="text-xs text-gray-500 mt-0.5">
-              {principal > 0 && `Principal: ₦${principal.toLocaleString()}`}
-              {displayInterest > 0 && ` · Interest (due): ₦${displayInterest.toLocaleString()}`}
-              {overdueForInstallment > 0 && ` · Penalty: ₦${overdueForInstallment.toLocaleString()}`}
+        amountDue: (
+          <div>
+            <div className="text-md font-[500] text-gray-700">
+              ₦ {actualAmountDue.toLocaleString()}
             </div>
-          )}
-        </div>
-      ),
-      loggedBy: (
-        <div>
-          <div className="text-md font-[500] text-gray-700">
-            {item?.loggedBy === null ? "NIL" : item?.loggedBy?.firstName}
+            {(principal > 0 ||
+              displayInterest > 0 ||
+              overdueForInstallment > 0) && (
+              <div className="text-xs text-gray-500 mt-0.5">
+                {principal > 0 && `Principal: ₦${principal.toLocaleString()}`}
+                {displayInterest > 0 &&
+                  ` · Interest (due): ₦${displayInterest.toLocaleString()}`}
+                {overdueForInstallment > 0 &&
+                  ` · Penalty: ₦${overdueForInstallment.toLocaleString()}`}
+              </div>
+            )}
+            {/* {principalAdjusted && (
+              <div className="text-xs text-amber-600 mt-0.5">
+                Principal reduced from ₦{originalPrincipal.toLocaleString()} —
+                an earlier overpayment was applied to this installment
+              </div>
+            )} */}
           </div>
-        </div>
-      ),
-      repaymentMethod: (
-        <div>
-          <div className="text-md font-[500] text-gray-700">
-            {item?.repaymentMethod === null ? "NIL" : item?.repaymentMethod}
-          </div>
-        </div>
-      ),
-      amountPaid: (
-        <div>
-          <div className="text-md font-[500] text-gray-700">
-            ₦{" "}
-            {item?.amountPaid === null
-              ? "0"
-              : item?.amountPaid.toLocaleString()}
-          </div>
-          {isInstallment && amountPaid > 0 && (paidFromInterest > 0 || paidFromPrincipal > 0) && (
-            <div className="text-xs text-gray-500 mt-0.5">
-              {paidFromInterest > 0 && `Interest: ₦${paidFromInterest.toLocaleString()}`}
-              {paidFromPrincipal > 0 && ` · Principal: ₦${paidFromPrincipal.toLocaleString()}`}
+        ),
+        loggedBy: (
+          <div>
+            <div className="text-md font-[500] text-gray-700">
+              {item?.loggedBy === null ? "NIL" : item?.loggedBy?.firstName}
             </div>
-          )}
-        </div>
-      ),
-      balanceToPay: (
-        <div>
-          <div className="text-md font-[500] text-gray-700">
-            ₦ {balanceToPay.toLocaleString()}
           </div>
-        </div>
-      ),
-      status: (
-        <button
-          className={`${
-            item.status === "Unpaid"
-              ? "bg-[#E7F1FE] text-swBlue"
-              : item.status === "Fully paid"
-              ? "bg-swLightGreenIndcatorBg text-swGreen"
-              : item.status === "Due"
-              ? "bg-swLightPinkIndcatorBg text-swIndicatorLightRed"
-              : item.status === "Overdue"
-              ? "text-red-400 bg-red-100"
-              : "bg-[#F8A9A3] text-white"
-          } px-2 py-1 text-xs font-normal rounded-full`}
-        >
-          {item.status === "Fully paid" ? "Paid" : item.status}
-        </button>
-      ),
-    };
+        ),
+        repaymentMethod: (
+          <div>
+            <div className="text-md font-[500] text-gray-700">
+              {item?.repaymentMethod === null ? "NIL" : item?.repaymentMethod}
+            </div>
+          </div>
+        ),
+        amountPaid: (
+          <div>
+            <div className="text-md font-[500] text-gray-700">
+              ₦{" "}
+              {item?.amountPaid === null
+                ? "0"
+                : item?.amountPaid.toLocaleString()}
+            </div>
+            {usesAccrualFields &&
+              amountPaid > 0 &&
+              (paidFromInterest > 0 || paidFromPrincipal > 0) && (
+                <div className="text-xs text-gray-500 mt-0.5">
+                  {paidFromInterest > 0 &&
+                    `Interest: ₦${paidFromInterest.toLocaleString()}`}
+                  {paidFromPrincipal > 0 &&
+                    ` · Principal: ₦${paidFromPrincipal.toLocaleString()}`}
+                </div>
+              )}
+          </div>
+        ),
+        balanceToPay: (
+          <div>
+            <div className="text-md font-[500] text-gray-700">
+              ₦ {balanceToPay.toLocaleString()}
+            </div>
+          </div>
+        ),
+        status: (
+          <button
+            className={`${
+              item.status === "Unpaid"
+                ? "bg-[#E7F1FE] text-swBlue"
+                : item.status === "Fully paid"
+                  ? "bg-swLightGreenIndcatorBg text-swGreen"
+                  : item.status === "Due"
+                    ? "bg-swLightPinkIndcatorBg text-swIndicatorLightRed"
+                    : item.status === "Overdue"
+                      ? "text-red-400 bg-red-100"
+                      : "bg-[#F8A9A3] text-white"
+            } px-2 py-1 text-xs font-normal rounded-full`}
+          >
+            {item.status === "Fully paid" ? "Paid" : item.status}
+          </button>
+        ),
+      };
     });
   };
 
@@ -308,7 +342,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
 
     if (amountToLog > outstandingBalance + LOG_AMOUNT_EPS) {
       toast.error(
-        `Amount cannot exceed outstanding balance (₦${outstandingBalance.toLocaleString()})`
+        `Amount cannot exceed outstanding balance (₦${outstandingBalance.toLocaleString()})`,
       );
       return;
     }
@@ -320,7 +354,10 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
     payload.append("repaymentAmount", String(amountToLog));
     payload.append("repaymentReceipts", formData?.repaymentReceipts);
     payload.append("clearBalance", formData?.clearBalance);
-    payload.append("dateCollected", format(formData?.dateCollected, "yyyy-MM-dd"));
+    payload.append(
+      "dateCollected",
+      format(formData?.dateCollected, "yyyy-MM-dd"),
+    );
     dispatch(logRepaymentFunc({ loanId, payload }))
       .unwrap()
       .then(() => {
@@ -356,7 +393,9 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
           setReapplyLoading(false);
           return;
         }
-        toast.info("Rebuilding ledger and reapplying payments (interest before principal)...");
+        toast.info(
+          "Rebuilding ledger and reapplying payments (interest before principal)...",
+        );
         setReapplyJob({ jobId: res.jobId, status: "queued" });
         const pollId = setInterval(() => {
           dispatch(getApprovalJobStatus({ jobId: res.jobId }))
@@ -494,8 +533,8 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
                   !formData.repaymentAmount.includes(".")
                     ? Number(formData.repaymentAmount).toLocaleString("en-US")
                     : checkDecimal(formData.repaymentAmount)
-                    ? Number(formData.repaymentAmount).toLocaleString("en-US")
-                    : formData.repaymentAmount
+                      ? Number(formData.repaymentAmount).toLocaleString("en-US")
+                      : formData.repaymentAmount
                 }
                 onKeyPress={preventMinus}
                 onChange={(e) => {
@@ -527,7 +566,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
                   formData && isValid(new Date(formData?.dateCollected))
                     ? new Date(formData?.dateCollected)
                     : new Date(),
-                  "PPP"
+                  "PPP",
                 )}
               </p>
               <div
