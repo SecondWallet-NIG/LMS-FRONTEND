@@ -44,6 +44,16 @@ const TestInstallmentLoan = () => {
   const [repaymentType, setRepaymentType] = useState("installmentPayment");
   const [activeLoanRepaymentType, setActiveLoanRepaymentType] =
     useState("installmentPayment");
+
+  // NEW: duration is now user-controlled instead of a hardcoded constant
+  const [loanDuration, setLoanDuration] = useState(5);
+
+  // NEW: lets the user decide whether to pin the EMI to a specific amount
+  // (equatedRepayment only) or let the backend compute it from
+  // amount / duration / interest.
+  const [useFixedPayment, setUseFixedPayment] = useState(false);
+  const [fixedMonthlyPayment, setFixedMonthlyPayment] = useState(30000);
+
   const [repayments, setRepayments] = useState([
     {
       repaymentAmount: 0,
@@ -87,6 +97,20 @@ const TestInstallmentLoan = () => {
     "PPP",
   );
 
+  // NEW: normalized, validated duration (1-360 months) driven by user input
+  const normalizedLoanDuration = Math.max(
+    1,
+    Math.min(360, parseInt(loanDuration, 10) || 1),
+  );
+
+  // NEW: normalized fixed payment amount, only meaningful when the toggle is on
+  const normalizedFixedMonthlyPayment = Math.max(
+    0,
+    parseFloat(fixedMonthlyPayment) || 0,
+  );
+
+  const isEquatedRepayment = repaymentType === "equatedRepayment";
+
   useEffect(() => {
     dispatch(getCustomers());
   }, [dispatch]);
@@ -96,23 +120,6 @@ const TestInstallmentLoan = () => {
       setFilteredData(customer.data);
     }
   }, [customer?.data]);
-
-  const EQUATED_MONTHLY_AMOUNT = 30000;
-  const EQUATED_MONTHS = 5;
-
-  const equatedSchedule = Array.from({ length: EQUATED_MONTHS }, (_, i) => {
-    const date = new Date();
-    date.setMonth(date.getMonth() + i + 1);
-    return {
-      repaymentAmount:
-        i === EQUATED_MONTHS - 1
-          ? LOAN_AMOUNT - EQUATED_MONTHLY_AMOUNT * (EQUATED_MONTHS - 1)
-          : EQUATED_MONTHLY_AMOUNT,
-      dateCollected: date.toISOString().split("T")[0],
-      repaymentNumber: String(i + 1),
-      repaymentMethod: "Bank transfer",
-    };
-  });
 
   const handleCustomerSearch = (e) => {
     const searchValue = e.target.value.toLowerCase();
@@ -207,15 +214,19 @@ const TestInstallmentLoan = () => {
       const userData = JSON.parse(localStorage.getItem("user"));
       const payload = {
         customerEmail: selectedCustomer.email,
-        loanAmount: 100000,
-        loanDuration: 5,
+        loanAmount: LOAN_AMOUNT,
+        loanDuration: normalizedLoanDuration,
         interestRate: 10,
         disbursementDaysAgo: normalizedDisbursementDaysAgo,
         repaymentType,
-        repaymentType,
-        ...(repaymentType === "equatedRepayment" && {
-          fixedMonthlyPayment: EQUATED_MONTHLY_AMOUNT,
-        }),
+        // Only send fixedMonthlyPayment when the user explicitly opted into
+        // a fixed EMI on an equated-repayment loan. Otherwise leave it out
+        // so the backend derives the EMI from amount/duration/interest.
+        ...(isEquatedRepayment &&
+          useFixedPayment &&
+          normalizedFixedMonthlyPayment > 0 && {
+            fixedMonthlyPayment: normalizedFixedMonthlyPayment,
+          }),
       };
       if (validRepayments.length > 0) {
         payload.repayments = validRepayments.map((r) => ({
@@ -407,6 +418,9 @@ const TestInstallmentLoan = () => {
                   onChange={(selected) => {
                     const val = selected?.value || "installmentPayment";
                     setRepaymentType(val);
+                    if (val !== "equatedRepayment") {
+                      setUseFixedPayment(false);
+                    }
                     setRepayments([
                       {
                         repaymentAmount: 0,
@@ -418,18 +432,70 @@ const TestInstallmentLoan = () => {
                   }}
                 />
               </div>
+
+              {/* NEW: dynamic duration input, replaces the old hardcoded 5 months */}
+              <InputField
+                label="Loan Duration (months)"
+                type="number"
+                min="1"
+                max="360"
+                value={loanDuration}
+                onChange={(e) => setLoanDuration(e.target.value)}
+                placeholder="e.g. 5"
+              />
+
+              {/* NEW: fixed-payment toggle, only relevant for equated repayment */}
+              {isEquatedRepayment && (
+                <div className="border border-gray-200 rounded-md p-3">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={useFixedPayment}
+                      onChange={(e) => setUseFixedPayment(e.target.checked)}
+                      className="h-4 w-4"
+                    />
+                    Use a fixed monthly payment (EMI)
+                  </label>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {useFixedPayment
+                      ? "You're pinning the EMI to a specific amount below."
+                      : "Off: the backend will calculate the EMI from the loan amount, duration, and interest rate."}
+                  </p>
+                  {useFixedPayment && (
+                    <div className="mt-3">
+                      <InputField
+                        label="Fixed Monthly Payment (₦)"
+                        type="number"
+                        min="1"
+                        value={fixedMonthlyPayment}
+                        onChange={(e) => setFixedMonthlyPayment(e.target.value)}
+                        placeholder="e.g. 30000"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="text-sm text-gray-600">
                 <p>
                   <strong>Default Values:</strong>
                 </p>
                 <ul className="list-disc list-inside mt-2">
-                  <li>Loan Amount: ₦100,000</li>
-                  <li>Duration: 5 months</li>
+                  <li>Loan Amount: ₦{LOAN_AMOUNT.toLocaleString()}</li>
+                  <li>Duration: {normalizedLoanDuration} months</li>
                   <li>Interest Rate: 10%</li>
                   <li>
                     Repayment Type:{" "}
                     {repaymentTypeLabels[repaymentType] || repaymentType}
                   </li>
+                  {isEquatedRepayment && (
+                    <li>
+                      EMI:{" "}
+                      {useFixedPayment
+                        ? `Fixed at ₦${normalizedFixedMonthlyPayment.toLocaleString()}`
+                        : "Auto-calculated by backend"}
+                    </li>
+                  )}
                   <li>Status: Auto-approved & Disbursed</li>
                   <li>
                     Projected Disbursement Date: {projectedDisbursementDate} (
@@ -722,6 +788,11 @@ const TestInstallmentLoan = () => {
               <li>
                 Choose repayment type: Installment Payment (daily accrual) or
                 Equated Repayment (fixed EMI schedule)
+              </li>
+              <li>Set the loan duration in months</li>
+              <li>
+                For equated repayment, optionally toggle on a fixed monthly
+                payment amount — otherwise the EMI is calculated automatically
               </li>
               <li>
                 Add optional repayment(s) if you want to simulate payments
