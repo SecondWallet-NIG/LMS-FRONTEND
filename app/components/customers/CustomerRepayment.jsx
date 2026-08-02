@@ -51,6 +51,10 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
     repaymentReceipts: null,
   });
 
+  const isEquated = repaymentType === "equatedRepayment";
+  const usesAccrualFieldsForType =
+    repaymentType === "installmentPayment" || isEquated;
+
   const parsedLogAmount = parseRepaymentAmountInput(formData?.repaymentAmount);
   const exceedsOutstandingBalance =
     Number.isFinite(parsedLogAmount) &&
@@ -115,6 +119,9 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
   const headers = [
     { id: "createdAt", label: "Due Date" },
     { id: "amountDue", label: "Amount Due" },
+    ...(isEquated
+      ? [{ id: "scheduledAmountDue", label: "Scheduled Repayment" }]
+      : []),
     { id: "loggedBy", label: "Collected By" },
     { id: "repaymentMethod", label: "Payment Method" },
     { id: "amountPaid", label: "Amount Paid" },
@@ -136,50 +143,89 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
           ? Number(item.computedInterest)
           : Math.max(0, rawAmountDue - principal);
 
-      // const isInstallment = repaymentType === "installmentPayment";
-
-      const usesAccrualFields =
-        repaymentType === "installmentPayment" ||
-        repaymentType === "equatedRepayment";
+      const usesAccrualFields = usesAccrualFieldsForType;
 
       // Installment: amount due = principal + accrued interest (ledger) + penalty — not projected amountDue.
+      // Equated: same shape, but "accrued interest" is real-time (uncapped by the original schedule),
+      // matching accruedAmountDue/accruedInterestRemaining returned by the backend.
       let actualAmountDue;
       let displayInterest;
       if (usesAccrualFields) {
-        const maxScheduleInterest = Math.max(0, rawAmountDue - principal);
-        if (item?.interestRemaining != null && item?.interestRemaining !== "") {
-          displayInterest = Number(item.interestRemaining);
-        } else if (maxScheduleInterest <= 0 && computedInterest > 0) {
-          displayInterest = 0;
+        if (isEquated) {
+          displayInterest =
+            item?.accruedInterestRemaining != null &&
+            item?.accruedInterestRemaining !== ""
+              ? Number(item.accruedInterestRemaining)
+              : computedInterest;
+          actualAmountDue =
+            item?.accruedAmountDue != null && item?.accruedAmountDue !== ""
+              ? Number(item.accruedAmountDue)
+              : principal + displayInterest + overdueForInstallment;
         } else {
-          displayInterest = Math.min(computedInterest, maxScheduleInterest);
+          const maxScheduleInterest = Math.max(0, rawAmountDue - principal);
+          if (
+            item?.interestRemaining != null &&
+            item?.interestRemaining !== ""
+          ) {
+            displayInterest = Number(item.interestRemaining);
+          } else if (maxScheduleInterest <= 0 && computedInterest > 0) {
+            displayInterest = 0;
+          } else {
+            displayInterest = Math.min(computedInterest, maxScheduleInterest);
+          }
+          actualAmountDue =
+            item?.accruedAmountDue != null && item?.accruedAmountDue !== ""
+              ? Number(item.accruedAmountDue)
+              : principal + displayInterest + overdueForInstallment;
         }
-        actualAmountDue =
-          item?.accruedAmountDue != null && item?.accruedAmountDue !== ""
-            ? Number(item.accruedAmountDue)
-            : principal + displayInterest + overdueForInstallment;
       } else {
         actualAmountDue = principal + computedInterest + overdueForInstallment;
         displayInterest = computedInterest;
       }
 
+      // Scheduled (original-plan) figures — equated only.
+      const scheduledAmountDue =
+        item?.fixedSchedule?.amountDue != null
+          ? Number(item.fixedSchedule.amountDue)
+          : 0;
+      const scheduledPrincipal =
+        item?.fixedSchedule?.repaymentPrincipal != null
+          ? Number(item.fixedSchedule.repaymentPrincipal)
+          : 0;
+      const scheduledInterest =
+        item?.fixedSchedule?.repaymentInterest != null
+          ? Number(item.fixedSchedule.repaymentInterest)
+          : 0;
+
       const amountPaid = Number(item?.amountPaid) || 0;
       const paidFromInterest = Number(item?.amountPaidFromInterest) || 0;
       const paidFromPrincipal = Number(item?.amountPaidFromPrincipal) || 0;
-      const balanceFromBuckets =
-        item?.principalRemaining != null && item?.interestRemaining != null
-          ? Number(item.principalRemaining) +
-            Number(item.interestRemaining) +
-            overdueForInstallment
-          : null;
-      const balanceToPay =
-        usesAccrualFields && balanceFromBuckets != null
-          ? balanceFromBuckets
-          : usesAccrualFields &&
-              item?.balanceToPay != null &&
-              item?.balanceToPay !== ""
+
+      // Balance to pay: for equated, trust the backend's accrued-based balanceToPay
+      // directly (do not recompute from scheduled interestRemaining — that's a
+      // different, capped number now and would understate/overstate what's owed).
+      let balanceToPay;
+      if (isEquated) {
+        balanceToPay =
+          item?.balanceToPay != null && item?.balanceToPay !== ""
             ? Number(item.balanceToPay)
             : Math.max(0, actualAmountDue - amountPaid);
+      } else {
+        const balanceFromBuckets =
+          item?.principalRemaining != null && item?.interestRemaining != null
+            ? Number(item.principalRemaining) +
+              Number(item.interestRemaining) +
+              overdueForInstallment
+            : null;
+        balanceToPay =
+          usesAccrualFields && balanceFromBuckets != null
+            ? balanceFromBuckets
+            : usesAccrualFields &&
+                item?.balanceToPay != null &&
+                item?.balanceToPay !== ""
+              ? Number(item.balanceToPay)
+              : Math.max(0, actualAmountDue - amountPaid);
+      }
 
       const originalPrincipal =
         item?.fixedSchedule?.repaymentPrincipal != null
@@ -190,7 +236,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         originalPrincipal != null &&
         Math.abs(originalPrincipal - principal) > 0.5;
 
-      return {
+      const row = {
         id: item._id,
         createdAt: (
           <div className="text-md font-[500] text-gray-700">
@@ -214,12 +260,6 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
                   ` · Penalty: ₦${overdueForInstallment.toLocaleString()}`}
               </div>
             )}
-            {/* {principalAdjusted && (
-              <div className="text-xs text-amber-600 mt-0.5">
-                Principal reduced from ₦{originalPrincipal.toLocaleString()} —
-                an earlier overpayment was applied to this installment
-              </div>
-            )} */}
           </div>
         ),
         loggedBy: (
@@ -281,6 +321,26 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
           </button>
         ),
       };
+
+      if (isEquated) {
+        row.scheduledAmountDue = (
+          <div>
+            <div className="text-md font-[500] text-gray-700">
+              ₦ {scheduledAmountDue.toLocaleString()}
+            </div>
+            {(scheduledPrincipal > 0 || scheduledInterest > 0) && (
+              <div className="text-xs text-gray-500 mt-0.5">
+                {scheduledPrincipal > 0 &&
+                  `Principal: ₦${scheduledPrincipal.toLocaleString()}`}
+                {scheduledInterest > 0 &&
+                  ` · Interest: ₦${scheduledInterest.toLocaleString()}`}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      return row;
     });
   };
 
@@ -296,7 +356,6 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
 
   const handleInputChangeWithComma = (e) => {
     const value = e.target.value.replace(/,/g, "");
-    // const value = e.target.value;
     setFormData((prevData) => ({
       ...prevData,
       [e.target.name]: value,
@@ -317,7 +376,6 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
       return;
     }
 
-    // Prevent if it's not a digit and prevent multiple decimals
     if (
       !/^[0-9.]$/.test(e.key) ||
       (e.key === "." && e.target.value.includes("."))
@@ -325,11 +383,6 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
       e.preventDefault();
     }
   };
-  //  preventMinus = (e) => {
-  //   if (/[^0-9,]/g.test(e.key)) {
-  //     e.preventDefault();
-  //   }
-  // };
 
   const logRepaymentFunction = (e) => {
     e.preventDefault();
@@ -429,6 +482,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         toast.error(err?.message || "Could not reapply payment allocation");
       });
   };
+
   const handleClearBalanceChange = (e) => {
     if (e.target.checked) {
       setShowClearBalanceConfirm(true);
@@ -504,14 +558,6 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
                 Log Repayment
               </p>
             </div>
-            {/* <button
-              className="text-black"
-              onClick={() => {
-                setLogRepayment(!logRepayment);
-              }}
-            >
-              x
-            </button> */}
           </div>
           <div className="text-sm text-swGray pt-4">
             Provide payment information
