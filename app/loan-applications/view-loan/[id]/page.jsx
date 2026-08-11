@@ -1133,31 +1133,22 @@ const ViewLoan = () => {
                   ₦{" "}
                   {Number(
                     data?.data?.amountDueToPay ??
-                      (data?.data?.loanApplication?.repaymentType ===
-                      "installmentPayment"
-                        ? Number(
-                            data?.data?.penaltyDue ??
-                              data?.data?.loanApplication
-                                ?.amountAccruedForcurrentOverdue ??
-                              0,
-                          ) +
-                          Number(
-                            data?.data?.principalDueScheduled ??
-                              principalDue ??
-                              0,
-                          )
-                        : Number(
-                            data?.data?.penaltyDue ??
-                              data?.data?.loanApplication
-                                ?.amountAccruedForcurrentOverdue ??
-                              0,
-                          ) +
-                          Number(
-                            data?.data?.interestDue ??
-                              data?.data?.loanApplication?.currentInterest ??
-                              0,
-                          ) +
-                          Number(principalDue || 0)),
+                      Number(
+                        data?.data?.penaltyDue ??
+                          data?.data?.loanApplication
+                            ?.amountAccruedForcurrentOverdue ??
+                          0,
+                      ) +
+                        Number(
+                          data?.data?.interestDue ??
+                            data?.data?.loanApplication?.currentInterest ??
+                            0,
+                        ) +
+                        Number(
+                          data?.data?.principalDueScheduled ??
+                            principalDue ??
+                            0,
+                        ),
                   ).toLocaleString()}
                 </p>
               </div>

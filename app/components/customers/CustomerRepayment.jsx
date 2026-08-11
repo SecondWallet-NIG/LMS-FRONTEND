@@ -317,7 +317,11 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
                       : "bg-[#F8A9A3] text-white"
             } px-2 py-1 text-xs font-normal rounded-full`}
           >
-            {item.status === "Fully paid" ? "Paid" : item.status}
+            {Number(balanceToPay) > 0.1 && item.status === "Fully paid"
+              ? "Installment"
+              : item.status === "Fully paid"
+                ? "Paid"
+                : item.status}
           </button>
         ),
       };
