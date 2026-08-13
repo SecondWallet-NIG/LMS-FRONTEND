@@ -327,6 +327,75 @@ const PaymentPage = () => {
             <p className="min-w-[15rem]  text-swBlue ">Payment method</p>
             <p>{repaymentData?.result?.repaymentMethod}</p>
           </div>
+          <div className="flex">
+            <p className="min-w-[15rem] text-swBlue">Outstanding principal at log</p>
+            <p>
+              {repaymentData?.result?.outstandingPrincipalAtLog == null
+                ? "—"
+                : `₦ ${Number(
+                    repaymentData.result.outstandingPrincipalAtLog,
+                  ).toLocaleString()}`}
+            </p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem] text-swBlue">Interest accruing at log</p>
+            <p>
+              {repaymentData?.result?.currentInterestAtLog == null
+                ? "—"
+                : `₦ ${Number(
+                    repaymentData.result.currentInterestAtLog,
+                  ).toLocaleString()}`}
+            </p>
+          </div>
+          <div className="flex">
+            <p className="min-w-[15rem] text-swBlue">Overdue at log</p>
+            <p>
+              {repaymentData?.result?.overdueAmountAtLog == null
+                ? "—"
+                : `₦ ${Number(
+                    repaymentData.result.overdueAmountAtLog,
+                  ).toLocaleString()}`}
+            </p>
+          </div>
+          {repaymentData?.result?.status === "Approved" ? (
+            <>
+              <div className="flex">
+                <p className="min-w-[15rem] text-swBlue">
+                  Outstanding principal after payment
+                </p>
+                <p>
+                  {repaymentData?.result?.outstandingPrincipalAfterPayment ==
+                  null
+                    ? "—"
+                    : `₦ ${Number(
+                        repaymentData.result.outstandingPrincipalAfterPayment,
+                      ).toLocaleString()}`}
+                </p>
+              </div>
+              <div className="flex">
+                <p className="min-w-[15rem] text-swBlue">
+                  Interest accruing after payment
+                </p>
+                <p>
+                  {repaymentData?.result?.currentInterestAfterPayment == null
+                    ? "—"
+                    : `₦ ${Number(
+                        repaymentData.result.currentInterestAfterPayment,
+                      ).toLocaleString()}`}
+                </p>
+              </div>
+              <div className="flex">
+                <p className="min-w-[15rem] text-swBlue">Overdue after payment</p>
+                <p>
+                  {repaymentData?.result?.overdueAmountAfterPayment == null
+                    ? "—"
+                    : `₦ ${Number(
+                        repaymentData.result.overdueAmountAfterPayment,
+                      ).toLocaleString()}`}
+                </p>
+              </div>
+            </>
+          ) : null}
           {repaymentData?.result?.repaymentReceipts?.length > 0 &&
           repaymentData?.result?.repaymentReceipts?.[0] !== "null" ? (
             <div className="flex">

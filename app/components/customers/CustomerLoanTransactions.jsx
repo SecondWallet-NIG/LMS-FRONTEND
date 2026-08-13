@@ -33,6 +33,9 @@ const CustomerLoanTransactions = ({ loanId }) => {
     { id: "amount", label: "Amount", sortKey: "amount" },
     { id: "prevBalance", label: "Previous Balance", sortKey: "previousBalance" },
     { id: "currBalance", label: "Current Balance", sortKey: "currentBalance" },
+    { id: "outstandingPrincipal", label: "Outstanding Principal" },
+    { id: "currentInterest", label: "Interest Accruing" },
+    { id: "overdueAmount", label: "Overdue" },
     { id: "transactionStatement", label: "Transaction Type", sortKey: "transactionStatement" },
   ];
 
@@ -65,6 +68,33 @@ const CustomerLoanTransactions = ({ loanId }) => {
         <div>
           <div className="text-md font-light text-gray-700">
             ₦ {item?.currentBalance?.toLocaleString()}
+          </div>
+        </div>
+      ),
+      outstandingPrincipal: (
+        <div>
+          <div className="text-md font-light text-gray-700">
+            {item?.outstandingPrincipal == null
+              ? "—"
+              : `₦ ${Number(item.outstandingPrincipal).toLocaleString()}`}
+          </div>
+        </div>
+      ),
+      currentInterest: (
+        <div>
+          <div className="text-md font-light text-gray-700">
+            {item?.currentInterest == null
+              ? "—"
+              : `₦ ${Number(item.currentInterest).toLocaleString()}`}
+          </div>
+        </div>
+      ),
+      overdueAmount: (
+        <div>
+          <div className="text-md font-light text-gray-700">
+            {item?.overdueAmount == null
+              ? "—"
+              : `₦ ${Number(item.overdueAmount).toLocaleString()}`}
           </div>
         </div>
       ),
