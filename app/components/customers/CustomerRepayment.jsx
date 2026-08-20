@@ -20,6 +20,7 @@ import { format, isValid } from "date-fns";
 import { FaRegCalendar } from "react-icons/fa";
 import { DayPicker } from "react-day-picker";
 import { checkDecimal } from "../helpers/utils";
+import { formatScheduleDateIso } from "@/helpers";
 
 import ConfirmationModal from "../shared/warningModal/WarningModal";
 
@@ -240,7 +241,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         id: item._id,
         createdAt: (
           <div className="text-md font-[500] text-gray-700">
-            {item?.dueDate?.slice(0, 10)}
+            {formatScheduleDateIso(item?.dueDate)}
           </div>
         ),
 

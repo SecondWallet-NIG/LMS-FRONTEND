@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import ReusableDataTable from "../shared/tables/ReusableDataTable";
 import { ToastContainer } from "react-toastify";
-import { format } from "date-fns";
+import { formatScheduleDateIso } from "@/helpers";
 import "react-toastify/dist/ReactToastify.css";
 import { handleFileExtention } from "../helpers/utils";
 import CenterModal from "../modals/CenterModal";
@@ -45,7 +45,7 @@ const CustomerLoanTransactions = ({ loanId }) => {
       transactionDate: (
         <div>
           <div className="text-md font-light text-gray-700">
-            {item?.createdAt && format(new Date(item?.createdAt), "PPP")}
+            {item?.createdAt && formatScheduleDateIso(item.createdAt)}
           </div>
         </div>
       ),
