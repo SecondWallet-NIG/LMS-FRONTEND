@@ -48,6 +48,9 @@ const TestInstallmentLoan = () => {
   // NEW: duration is now user-controlled instead of a hardcoded constant
   const [loanDuration, setLoanDuration] = useState(5);
 
+  // Interest rate is user-controlled (defaults to 10%)
+  const [interestRate, setInterestRate] = useState(10);
+
   // NEW: lets the user decide whether to pin the EMI to a specific amount
   // (equatedRepayment only) or let the backend compute it from
   // amount / duration / interest.
@@ -102,6 +105,9 @@ const TestInstallmentLoan = () => {
     1,
     Math.min(360, parseInt(loanDuration, 10) || 1),
   );
+
+  // Normalized interest rate (%) driven by user input
+  const normalizedInterestRate = Math.max(0, parseFloat(interestRate) || 0);
 
   // NEW: normalized fixed payment amount, only meaningful when the toggle is on
   const normalizedFixedMonthlyPayment = Math.max(
@@ -216,7 +222,7 @@ const TestInstallmentLoan = () => {
         customerEmail: selectedCustomer.email,
         loanAmount: LOAN_AMOUNT,
         loanDuration: normalizedLoanDuration,
-        interestRate: 10,
+        interestRate: normalizedInterestRate,
         disbursementDaysAgo: normalizedDisbursementDaysAgo,
         repaymentType,
         // Only send fixedMonthlyPayment when the user explicitly opted into
@@ -444,6 +450,16 @@ const TestInstallmentLoan = () => {
                 placeholder="e.g. 5"
               />
 
+              <InputField
+                label="Interest Rate (%)"
+                type="number"
+                min="0"
+                step="0.01"
+                value={interestRate}
+                onChange={(e) => setInterestRate(e.target.value)}
+                placeholder="e.g. 10"
+              />
+
               {/* NEW: fixed-payment toggle, only relevant for equated repayment */}
               {isEquatedRepayment && (
                 <div className="border border-gray-200 rounded-md p-3">
@@ -483,7 +499,7 @@ const TestInstallmentLoan = () => {
                 <ul className="list-disc list-inside mt-2">
                   <li>Loan Amount: ₦{LOAN_AMOUNT.toLocaleString()}</li>
                   <li>Duration: {normalizedLoanDuration} months</li>
-                  <li>Interest Rate: 10%</li>
+                  <li>Interest Rate: {normalizedInterestRate}%</li>
                   <li>
                     Repayment Type:{" "}
                     {repaymentTypeLabels[repaymentType] || repaymentType}
