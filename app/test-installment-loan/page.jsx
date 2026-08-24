@@ -45,6 +45,9 @@ const TestInstallmentLoan = () => {
   const [activeLoanRepaymentType, setActiveLoanRepaymentType] =
     useState("installmentPayment");
 
+  // Loan amount is user-controlled (defaults to ₦100,000)
+  const [loanAmount, setLoanAmount] = useState(100000);
+
   // NEW: duration is now user-controlled instead of a hardcoded constant
   const [loanDuration, setLoanDuration] = useState(5);
 
@@ -78,8 +81,6 @@ const TestInstallmentLoan = () => {
   const [computationInProgress, setComputationInProgress] = useState(false);
   const pollIntervalRef = useRef(null);
 
-  const LOAN_AMOUNT = 100000;
-
   const clearComputationPoll = useCallback(() => {
     if (pollIntervalRef.current) {
       clearInterval(pollIntervalRef.current);
@@ -99,6 +100,9 @@ const TestInstallmentLoan = () => {
     new Date(Date.now() - normalizedDisbursementDaysAgo * 24 * 60 * 60 * 1000),
     "PPP",
   );
+
+  // Normalized loan amount driven by user input
+  const normalizedLoanAmount = Math.max(1, parseFloat(loanAmount) || 1);
 
   // NEW: normalized, validated duration (1-360 months) driven by user input
   const normalizedLoanDuration = Math.max(
@@ -220,7 +224,7 @@ const TestInstallmentLoan = () => {
       const userData = JSON.parse(localStorage.getItem("user"));
       const payload = {
         customerEmail: selectedCustomer.email,
-        loanAmount: LOAN_AMOUNT,
+        loanAmount: normalizedLoanAmount,
         loanDuration: normalizedLoanDuration,
         interestRate: normalizedInterestRate,
         disbursementDaysAgo: normalizedDisbursementDaysAgo,
@@ -439,6 +443,15 @@ const TestInstallmentLoan = () => {
                 />
               </div>
 
+              <InputField
+                label="Loan Amount (₦)"
+                type="number"
+                min="1"
+                value={loanAmount}
+                onChange={(e) => setLoanAmount(e.target.value)}
+                placeholder="e.g. 100000"
+              />
+
               {/* NEW: dynamic duration input, replaces the old hardcoded 5 months */}
               <InputField
                 label="Loan Duration (months)"
@@ -497,7 +510,7 @@ const TestInstallmentLoan = () => {
                   <strong>Default Values:</strong>
                 </p>
                 <ul className="list-disc list-inside mt-2">
-                  <li>Loan Amount: ₦{LOAN_AMOUNT.toLocaleString()}</li>
+                  <li>Loan Amount: ₦{normalizedLoanAmount.toLocaleString()}</li>
                   <li>Duration: {normalizedLoanDuration} months</li>
                   <li>Interest Rate: {normalizedInterestRate}%</li>
                   <li>
