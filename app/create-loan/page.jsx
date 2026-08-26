@@ -416,7 +416,8 @@ const CreateLoan = () => {
 
     payload.append("customerId", selectedCustomer?._id);
     payload.append("createdBy", userId?._id);
-    payload.append("tag", userId?.role.tag);
+    // Backend authorizes from JWT user + DB role; tag is informational only.
+    payload.append("tag", userId?.role?.tag || "");
 
     setLoading(true);
     e.preventDefault();

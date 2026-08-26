@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
 import Link from "next/link";
+import { canCreateLoan } from "../helpers/pageAuthRoles";
 
 const LoanReportTable = () => {
   const [userId, setUserId] = useState("");
@@ -103,7 +104,7 @@ const LoanReportTable = () => {
               className="underline"
               href={`/team-management/staff/${item?.createdBy?._id}`}
             >
-              {item?.createdBy?.user?.email}
+              {item?.createdBy?.email || item?.createdBy?.user?.email}
             </Link>
           </div>
         </div>
@@ -147,7 +148,7 @@ const LoanReportTable = () => {
             </div>
           }
           btnTextClick={() => {
-            roleTag === "LO"
+            canCreateLoan(roleTag)
               ? router.push("/create-loan")
               : router.push("/unauthorized");
           }}

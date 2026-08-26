@@ -59,6 +59,17 @@ export const createLoanAuthRoles = [
   "System Admin",
 ];
 
+/** Whether the signed-in role may open / submit create-loan (mirrors backend allowlist). */
+export const canCreateLoan = (roleTag, permissions = []) => {
+  if (roleTag && createLoanAuthRoles.includes(roleTag)) {
+    return true;
+  }
+  const perms = Array.isArray(permissions) ? permissions : [];
+  return perms.some((p) =>
+    /create[\s_-]?loan|loan[\s_-]?creat/i.test(String(p || ""))
+  );
+};
+
 // loan application
 export const loanApplicationAuthRoles = [
   "LO",

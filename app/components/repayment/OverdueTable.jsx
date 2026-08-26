@@ -6,6 +6,7 @@ import EditableButton from "../shared/editableButtonComponent/EditableButton";
 import { formatDate, formatTimeToAMPM } from "@/helpers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { canCreateLoan } from "../helpers/pageAuthRoles";
 
 const RepaymentOverdueTable = () => {
   const [loading, setLoading] = useState(false);
@@ -143,7 +144,7 @@ const RepaymentOverdueTable = () => {
             </div>
           }
           btnTextClick={() => {
-            roleTag === "LO"
+            canCreateLoan(roleTag)
               ? router.push("/create-loan")
               : router.push("/unauthorized");
           }}

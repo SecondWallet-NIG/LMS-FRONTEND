@@ -9,6 +9,7 @@ import { formatTimeToAMPM } from "@/helpers";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { getRepaymentSummary } from "@/redux/slices/loanRepaymentSlice";
+import { canCreateLoan } from "../../helpers/pageAuthRoles";
 
 const LoanArrearsAgingReport = () => {
   const dispatch = useDispatch();
@@ -205,7 +206,7 @@ const LoanArrearsAgingReport = () => {
               </div>
             }
             btnTextClick={() => {
-              roleTag === "LO"
+              canCreateLoan(roleTag)
                 ? router.push("/create-loan")
                 : router.push("/unauthorized");
             }}

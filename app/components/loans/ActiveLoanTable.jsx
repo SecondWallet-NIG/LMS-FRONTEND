@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
-import { hasCfoPermissions } from "../helpers/rolePermissions";
+import { canCreateLoan } from "../helpers/pageAuthRoles";
 const ActiveLoanTable = () => {
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
@@ -118,7 +118,9 @@ const ActiveLoanTable = () => {
             </div>
           }
 btnTextClick={() => {
-            roleTag === "LO" || roleTag === "CTO" || roleTag === "CEO" || hasCfoPermissions(roleTag) || roleTag === "Dir" || roleTag === "System Admin" ? router.push("/create-loan") : router.push("/unauthorized")
+            canCreateLoan(roleTag)
+              ? router.push("/create-loan")
+              : router.push("/unauthorized");
           }}
           filters={true}
           pagination={true}

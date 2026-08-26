@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/helpers";
 import { formatTimeToAMPM } from "@/helpers";
+import { canCreateLoan } from "../helpers/pageAuthRoles";
 
 
 const FullyPaidLoanTable = () => {
@@ -111,7 +112,9 @@ const FullyPaidLoanTable = () => {
             </div>
           }
           btnTextClick={() => {
-            roleTag === "LO" ? router.push("/create-loan") : router.push("/unauthorized")
+            canCreateLoan(roleTag)
+              ? router.push("/create-loan")
+              : router.push("/unauthorized");
           }}
           filters={true}
           pagination={true}
