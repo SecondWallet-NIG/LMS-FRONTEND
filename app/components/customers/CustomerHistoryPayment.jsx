@@ -16,6 +16,9 @@ const CustomerPaymentHistory = ({ loanId }) => {
     { id: "dateCollected", label: "Date Collected" },
     { id: "loggedBy", label: "Collected By" },
     { id: "repaymentMethod", label: "Payment Method" },
+    { id: "outstandingPrincipal", label: "Outstanding Principal" },
+    { id: "currentInterest", label: "Interest Accruing" },
+    { id: "overdueAmount", label: "Overdue" },
     { id: "status", label: "Payment Status" },
   ];
 
@@ -64,6 +67,47 @@ const CustomerPaymentHistory = ({ loanId }) => {
         <div>
           <div className="text-md font-[500] text-gray-700">
             {item?.repaymentMethod === null ? "NIL" : item?.repaymentMethod}
+          </div>
+        </div>
+      ),
+      outstandingPrincipal: (
+        <div>
+          <div className="text-md font-[500] text-gray-700">
+            {(() => {
+              const value =
+                item?.outstandingPrincipalAfterPayment ??
+                item?.outstandingPrincipalAtLog;
+              return value == null ? "—" : `₦ ${Number(value).toLocaleString()}`;
+            })()}
+          </div>
+          <div className="text-xs text-gray-500 mt-0.5">
+            {item?.outstandingPrincipalAfterPayment != null
+              ? "After payment"
+              : item?.outstandingPrincipalAtLog != null
+                ? "At log"
+                : ""}
+          </div>
+        </div>
+      ),
+      currentInterest: (
+        <div>
+          <div className="text-md font-[500] text-gray-700">
+            {(() => {
+              const value =
+                item?.currentInterestAfterPayment ?? item?.currentInterestAtLog;
+              return value == null ? "—" : `₦ ${Number(value).toLocaleString()}`;
+            })()}
+          </div>
+        </div>
+      ),
+      overdueAmount: (
+        <div>
+          <div className="text-md font-[500] text-gray-700">
+            {(() => {
+              const value =
+                item?.overdueAmountAfterPayment ?? item?.overdueAmountAtLog;
+              return value == null ? "—" : `₦ ${Number(value).toLocaleString()}`;
+            })()}
           </div>
         </div>
       ),

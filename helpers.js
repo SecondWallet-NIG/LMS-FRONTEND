@@ -1,4 +1,55 @@
 //import * as html2pdf from 'html2pdf.js';
+
+/** Legacy ledger stamps at …T23:00:00.000Z represent the next WAT calendar day. */
+const isLegacyT2300Stamp = (date) => {
+  const x = new Date(date);
+  return (
+    !Number.isNaN(x.getTime()) &&
+    x.getUTCHours() === 23 &&
+    x.getUTCMinutes() === 0 &&
+    x.getUTCSeconds() === 0
+  );
+};
+
+/** yyyy-MM-dd for the intended WAT schedule day of a stored timestamp. */
+export const scheduleCalendarIso = (input) => {
+  const x = input instanceof Date ? input : new Date(input);
+  if (Number.isNaN(x.getTime())) {
+    return "";
+  }
+  let y = x.getUTCFullYear();
+  let m = x.getUTCMonth();
+  let day = x.getUTCDate();
+  if (isLegacyT2300Stamp(x)) {
+    const next = new Date(Date.UTC(y, m, day + 1));
+    y = next.getUTCFullYear();
+    m = next.getUTCMonth();
+    day = next.getUTCDate();
+  }
+  const mm = String(m + 1).padStart(2, "0");
+  const dd = String(day).padStart(2, "0");
+  return `${y}-${mm}-${dd}`;
+};
+
+/** Format a ledger timestamp or yyyy-MM-dd as a readable schedule calendar date. */
+export const formatScheduleDateIso = (input) => {
+  if (input == null || input === "") {
+    return "";
+  }
+  let iso;
+  if (typeof input === "string") {
+    const trimmed = input.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+      iso = trimmed;
+    } else {
+      iso = scheduleCalendarIso(trimmed);
+    }
+  } else {
+    iso = scheduleCalendarIso(input);
+  }
+  return formatDate(iso);
+};
+
 export const formatDate = (inputDate) => {
   const months = [
     "Jan",

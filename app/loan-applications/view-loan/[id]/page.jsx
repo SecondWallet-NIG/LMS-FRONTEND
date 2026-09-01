@@ -88,7 +88,7 @@ const ViewLoan = () => {
   });
 
   const { statementData, statementPending } = useSelector(
-    (state) => state?.loanApplication
+    (state) => state?.loanApplication,
   );
   const [testTriggerLoading, setTestTriggerLoading] = useState(false);
   const [daysToAdvance, setDaysToAdvance] = useState(1);
@@ -102,7 +102,7 @@ const ViewLoan = () => {
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     if (!allowedExtensions.includes(fileExtension)) {
       setFileError(
-        "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf)."
+        "Invalid file type. Please select an image (.jpg, .jpeg, .png) or PDF (.pdf).",
       );
       return;
     }
@@ -250,7 +250,7 @@ const ViewLoan = () => {
         ) {
           updatedData.append(
             "numberOfRepayment",
-            data?.data?.loanApplication?.loanDuration
+            data?.data?.loanApplication?.loanDuration,
           );
         }
         if (
@@ -259,7 +259,7 @@ const ViewLoan = () => {
         ) {
           updatedData.append(
             "numberOfRepayment",
-            data?.data?.loanApplication?.loanDuration * 12
+            data?.data?.loanApplication?.loanDuration * 12,
           );
         }
         if (
@@ -268,7 +268,7 @@ const ViewLoan = () => {
         ) {
           updatedData.append(
             "numberOfRepayment",
-            data?.data?.loanApplication?.loanDuration / 3
+            data?.data?.loanApplication?.loanDuration / 3,
           );
         }
         if (
@@ -277,7 +277,7 @@ const ViewLoan = () => {
         ) {
           updatedData.append(
             "numberOfRepayment",
-            (data?.data?.loanApplication?.loanDuration * 12) / 3
+            (data?.data?.loanApplication?.loanDuration * 12) / 3,
           );
         }
         dispatch(updateLoanApplication({ loanId: id, payload: updatedData }))
@@ -332,7 +332,7 @@ const ViewLoan = () => {
         ) {
           updatedData.append(
             "numberOfRepayment",
-            (formData.loanDuration * 12) / 3
+            (formData.loanDuration * 12) / 3,
           );
           updatedData.append("loanDuration", formData.loanDuration);
         }
@@ -470,6 +470,7 @@ const ViewLoan = () => {
     { value: "bulletRepayment", label: "Bullet Repayment" },
     { value: "interestServicing", label: "Interest Servicing" },
     { value: "installmentPayment", label: "Installment Payment" },
+    { value: "equatedRepayment", label: "Equated Repayment" },
   ];
 
   const reducingBalrepaymentTypeData = [
@@ -494,7 +495,7 @@ const ViewLoan = () => {
     payload.append("disbursementReceipt", formData.docs);
     payload.append(
       "disbursementDate",
-      format(formData.disbursementDate, "yyyy-MM-dd")
+      format(formData.disbursementDate, "yyyy-MM-dd"),
     );
 
     setLoading(true);
@@ -522,7 +523,7 @@ const ViewLoan = () => {
         users.map((item) => ({
           label: item.firstName + " " + item.lastName,
           value: item._id,
-        }))
+        })),
       );
     }
   };
@@ -548,7 +549,7 @@ const ViewLoan = () => {
     (Array.isArray(data?.data?.dueRepayments)
       ? data?.data?.dueRepayments.reduce(
           (sum, r) => sum + Number(r?.principalDueRemaining || 0),
-          0
+          0,
         )
       : 0);
 
@@ -611,7 +612,7 @@ const ViewLoan = () => {
           headers: {
             Authorization: `Bearer ${userData?.data?.token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -645,7 +646,7 @@ const ViewLoan = () => {
           headers: {
             Authorization: `Bearer ${userData?.data?.token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -673,7 +674,7 @@ const ViewLoan = () => {
           headers: {
             Authorization: `Bearer ${userData?.data?.token}`,
           },
-        }
+        },
       );
 
       if (response.data.status === "success") {
@@ -682,7 +683,9 @@ const ViewLoan = () => {
       }
     } catch (error) {
       console.error("Error triggering overdue accrual:", error);
-      toast.error(error.response?.data?.error || "Failed to trigger overdue accrual");
+      toast.error(
+        error.response?.data?.error || "Failed to trigger overdue accrual",
+      );
     } finally {
       setTestTriggerLoading(false);
     }
@@ -724,7 +727,8 @@ const ViewLoan = () => {
                 <div className="shrink-0 mt-1 sm:mt-0">
                   <img
                     src={
-                      data?.data?.loanApplication?.customerId?.customerId?.profilePicture || 
+                      data?.data?.loanApplication?.customerId?.customerId
+                        ?.profilePicture ||
                       data?.data?.customerDetails?.profilePicture ||
                       "https://cdn-icons-png.flaticon.com/512/4128/4128349.png"
                     }
@@ -733,8 +737,8 @@ const ViewLoan = () => {
                     height={64}
                     className="rounded-full border-2 border-gray-50 shadow-sm"
                     onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'block';
+                      e.target.style.display = "none";
+                      e.target.nextSibling.style.display = "block";
                     }}
                   />
                 </div>
@@ -748,15 +752,19 @@ const ViewLoan = () => {
                       className={`${
                         data?.data?.loanApplication?.status === "Pending"
                           ? "bg-swIndicatorLightRed"
-                          : data?.data?.loanApplication?.status === "In Progress"
-                          ? "bg-swIndicatorYellow"
-                          : data?.data?.loanApplication?.status === "Ready for Disbursal"
-                          ? "bg-swIndicatorPurple"
-                          : data?.data?.loanApplication?.status === "Disbursed"
-                          ? "bg-swBlue"
-                          : data?.data?.loanApplication?.status === "Fully Paid"
-                          ? "bg-swGreen"
-                          : "bg-swIndicatorDarkRed"
+                          : data?.data?.loanApplication?.status ===
+                              "In Progress"
+                            ? "bg-swIndicatorYellow"
+                            : data?.data?.loanApplication?.status ===
+                                "Ready for Disbursal"
+                              ? "bg-swIndicatorPurple"
+                              : data?.data?.loanApplication?.status ===
+                                  "Disbursed"
+                                ? "bg-swBlue"
+                                : data?.data?.loanApplication?.status ===
+                                    "Fully Paid"
+                                  ? "bg-swGreen"
+                                  : "bg-swIndicatorDarkRed"
                       } px-2.5 py-0.5 rounded-full text-[10px] font-medium text-white uppercase tracking-wider shrink-0`}
                     >
                       {data?.data?.loanApplication?.status}
@@ -767,10 +775,14 @@ const ViewLoan = () => {
                   </p>
 
                   <div className="flex flex-wrap gap-2 items-center h-fit mt-3">
-                    {useriD?.role?.tag === "CFO" || useriD?.role?.tag === "FO" ? (
+                    {useriD?.role?.tag === "CFO" ||
+                    useriD?.role?.tag === "FO" ? (
                       <button
                         className="text-white text-xs bg-swBlue hover:bg-swBlueActiveStateBg px-3 py-1.5 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={data?.data?.loanApplication?.status !== "Ready for Disbursal"}
+                        disabled={
+                          data?.data?.loanApplication?.status !==
+                          "Ready for Disbursal"
+                        }
                         onClick={() => setLogRepayment(!logRepayment)}
                       >
                         Disburse
@@ -778,7 +790,11 @@ const ViewLoan = () => {
                     ) : null}
 
                     <button
-                      onClick={() => router.push(`/borrowers/profile/${data?.data?.customerDetails?._id}`)}
+                      onClick={() =>
+                        router.push(
+                          `/borrowers/profile/${data?.data?.customerDetails?._id}`,
+                        )
+                      }
                       className="text-swBlue text-xs border border-swBlue/20 hover:bg-swBlue/5 px-3 py-1.5 rounded-md font-medium transition-colors"
                     >
                       Profile
@@ -801,7 +817,9 @@ const ViewLoan = () => {
             <div className="w-full xl:w-[60%] flex flex-col gap-4 pl-0 xl:pl-2">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
-                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Loan ID</p>
+                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">
+                    Loan ID
+                  </p>
                   <div className="mt-1">
                     <p className="text-sm font-semibold text-swBlue">
                       {data?.data?.loanApplication?.loanId}
@@ -809,7 +827,9 @@ const ViewLoan = () => {
                   </div>
                 </div>
                 <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
-                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Loan Amount</p>
+                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">
+                    Loan Amount
+                  </p>
                   <div className="mt-1 flex justify-between items-center">
                     <p className="text-sm font-semibold text-swBlue">
                       ₦{" "}
@@ -820,7 +840,7 @@ const ViewLoan = () => {
                         className="p-1.5 rounded-md hover:bg-white cursor-pointer text-swGrey400 hover:text-swBlue transition-colors"
                         onClick={() => {
                           setLoanAmount(
-                            data?.data?.loanApplication?.loanAmount
+                            data?.data?.loanApplication?.loanAmount,
                           );
                           setOpenLoanAmount(true);
                         }}
@@ -831,7 +851,9 @@ const ViewLoan = () => {
                   </div>
                 </div>
                 <div className="rounded-xl border border-red-100 bg-red-50/50 p-3">
-                  <p className="text-[11px] font-medium text-red-400 uppercase tracking-wider">Total Outstanding Balance</p>
+                  <p className="text-[11px] font-medium text-red-400 uppercase tracking-wider">
+                    Total Outstanding Balance
+                  </p>
                   <div className="mt-1">
                     <p className="text-sm font-semibold text-swIndicatorLightRed">
                       ₦{" "}
@@ -841,12 +863,14 @@ const ViewLoan = () => {
                   </div>
                 </div>
                 <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
-                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Loan Creator</p>
+                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">
+                    Loan Creator
+                  </p>
                   <div className="mt-1">
                     <button
                       onClick={() => {
                         router.push(
-                          `/borrowers/profile/${data?.data?.customerDetails?._id}`
+                          `/borrowers/profile/${data?.data?.customerDetails?._id}`,
                         );
                       }}
                       className="text-sm font-medium text-swBlue hover:underline text-left"
@@ -857,12 +881,17 @@ const ViewLoan = () => {
                   </div>
                 </div>
                 <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
-                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">Date Disbursed</p>
+                  <p className="text-[11px] font-medium text-swGrey200 uppercase tracking-wider">
+                    Date Disbursed
+                  </p>
                   <div className="mt-1">
                     <p className="text-sm font-semibold text-swBlue">
                       {data?.data?.loanApplication?.disbursedAt &&
                         formatDate(
-                          data?.data?.loanApplication?.disbursedAt?.slice(0, 10)
+                          data?.data?.loanApplication?.disbursedAt?.slice(
+                            0,
+                            10,
+                          ),
                         )}
                     </p>
                   </div>
@@ -894,10 +923,11 @@ const ViewLoan = () => {
           </section>
           <div className="m-5 rounded-2xl border border-gray-100/90 bg-white shadow-sm overflow-hidden">
             <div className="flex justify-between items-center border-b border-gray-100 px-5 py-4 bg-gray-50/50">
-              <h6 className="font-semibold text-swBlue">
-                Loan Details
-              </h6>
-              {(useriD?.role?.tag === "ICO" || useriD?.role?.tag === "FO" || useriD?.role?.tag === "CTO" || useriD?.role?.tag === "System Admin") && (
+              <h6 className="font-semibold text-swBlue">Loan Details</h6>
+              {(useriD?.role?.tag === "ICO" ||
+                useriD?.role?.tag === "FO" ||
+                useriD?.role?.tag === "CTO" ||
+                useriD?.role?.tag === "System Admin") && (
                 <button
                   className="text-xs text-swBlue rounded-md border border-swBlue/20 hover:bg-swBlue/5 bg-white px-3 py-1.5 font-medium transition-colors"
                   onClick={() => setOpenCorrectLoanModal(!openCorrectLoanModal)}
@@ -909,11 +939,21 @@ const ViewLoan = () => {
             <div className="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Row 1 */}
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Loan Package</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Loan Package
+                </p>
                 <div className="flex justify-between items-center">
-                  <p className="text-sm font-semibold text-gray-800">{data?.data?.loanPackageDetails?.name}</p>
+                  <p className="text-sm font-semibold text-gray-800">
+                    {data?.data?.loanPackageDetails?.name}
+                  </p>
                   {hasDecline && hasDecline === true && (
-                    <button onClick={() => { setLoanAmount(data?.data?.loanApplication?.loanAmount); setOpenLoanPackage(true); }} className="text-gray-400 hover:text-swBlue transition-colors">
+                    <button
+                      onClick={() => {
+                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
+                        setOpenLoanPackage(true);
+                      }}
+                      className="text-gray-400 hover:text-swBlue transition-colors"
+                    >
                       <MdEdit size={16} />
                     </button>
                   )}
@@ -921,22 +961,36 @@ const ViewLoan = () => {
               </div>
 
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Maturity Amount</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Maturity Amount
+                </p>
                 <p className="text-sm font-semibold text-gray-800">
-                  ₦ {data?.data?.loanApplication?.loanMaturityAmount?.toLocaleString() || 0}
+                  ₦{" "}
+                  {data?.data?.loanApplication?.loanMaturityAmount?.toLocaleString() ||
+                    0}
                 </p>
               </div>
 
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Loan Period</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Loan Period
+                </p>
                 <div className="flex justify-between items-center">
                   <p className="text-sm font-semibold text-gray-800">
-                    {data?.data?.loanApplication?.loanDurationMetrics === "Yearly"
+                    {data?.data?.loanApplication?.loanDurationMetrics ===
+                    "Yearly"
                       ? `${data?.data?.loanApplication?.loanDuration}` * 12
-                      : `${data?.data?.loanApplication?.loanDuration}`} month(s)
+                      : `${data?.data?.loanApplication?.loanDuration}`}{" "}
+                    month(s)
                   </p>
                   {hasDecline && hasDecline === true && (
-                    <button onClick={() => { setLoanAmount(data?.data?.loanApplication?.loanAmount); setOpenLoanPeriod(true); }} className="text-gray-400 hover:text-swBlue transition-colors">
+                    <button
+                      onClick={() => {
+                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
+                        setOpenLoanPeriod(true);
+                      }}
+                      className="text-gray-400 hover:text-swBlue transition-colors"
+                    >
                       <MdEdit size={16} />
                     </button>
                   )}
@@ -944,21 +998,43 @@ const ViewLoan = () => {
               </div>
 
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Maturity Date</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Maturity Date
+                </p>
                 <p className="text-sm font-semibold text-gray-800">
-                  {data?.data?.loanApplication?.loanMaturityDate ? formatDate(data?.data?.loanApplication?.loanMaturityDate?.slice(0, 10)) : "N/A"}
+                  {data?.data?.loanApplication?.loanMaturityDate
+                    ? formatDate(
+                        data?.data?.loanApplication?.loanMaturityDate?.slice(
+                          0,
+                          10,
+                        ),
+                      )
+                    : "N/A"}
                 </p>
               </div>
 
               {/* Row 2 */}
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Monthly Interest Rate</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Monthly Interest Rate
+                </p>
                 <div className="flex justify-between items-center">
                   <p className="text-sm font-semibold text-gray-800">
-                    {data?.data?.loanApplication?.interestRate} % ({data?.data?.loanApplication?.interestType?.interestTypeCode})
+                    {data?.data?.loanApplication?.interestRate} % (
+                    {
+                      data?.data?.loanApplication?.interestType
+                        ?.interestTypeCode
+                    }
+                    )
                   </p>
                   {hasDecline && hasDecline === true && (
-                    <button onClick={() => { setLoanAmount(data?.data?.loanApplication?.loanAmount); setOpenInterestType(true); }} className="text-gray-400 hover:text-swBlue transition-colors">
+                    <button
+                      onClick={() => {
+                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
+                        setOpenInterestType(true);
+                      }}
+                      className="text-gray-400 hover:text-swBlue transition-colors"
+                    >
                       <MdEdit size={16} />
                     </button>
                   )}
@@ -966,13 +1042,25 @@ const ViewLoan = () => {
               </div>
 
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Repayment Type</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Repayment Type
+                </p>
                 <div className="flex justify-between items-center">
                   <p className="text-sm font-semibold text-gray-800">
-                    {repaymentTypeData?.find((option) => option?.value === data?.data?.loanApplication?.repaymentType)?.label || "N/A"}
+                    {repaymentTypeData?.find(
+                      (option) =>
+                        option?.value ===
+                        data?.data?.loanApplication?.repaymentType,
+                    )?.label || "N/A"}
                   </p>
                   {hasDecline && hasDecline === true && (
-                    <button onClick={() => { setLoanAmount(data?.data?.loanApplication?.loanAmount); setOpenRepaymentType(true); }} className="text-gray-400 hover:text-swBlue transition-colors">
+                    <button
+                      onClick={() => {
+                        setLoanAmount(data?.data?.loanApplication?.loanAmount);
+                        setOpenRepaymentType(true);
+                      }}
+                      className="text-gray-400 hover:text-swBlue transition-colors"
+                    >
                       <MdEdit size={16} />
                     </button>
                   )}
@@ -980,60 +1068,87 @@ const ViewLoan = () => {
               </div>
 
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm col-span-1 sm:col-span-2">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Outstanding Principal (from repayments)</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Outstanding Principal (from repayments)
+                </p>
                 <p className="text-sm font-semibold text-swIndicatorLightRed">
-                  ₦ {data?.data?.loanApplication?.outstandingPrincipal?.toLocaleString() || 0}
+                  ₦{" "}
+                  {data?.data?.loanApplication?.outstandingPrincipal?.toLocaleString() ||
+                    0}
                 </p>
               </div>
 
               {/* Row 3 - Dues */}
               <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Penalty Due</p>
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">
+                  Penalty Due
+                </p>
                 <p className="text-sm font-semibold text-swIndicatorLightRed">
-                  ₦ {Number(data?.data?.penaltyDue ?? data?.data?.loanApplication?.amountAccruedForcurrentOverdue ?? 0).toLocaleString()}
+                  ₦{" "}
+                  {Number(
+                    data?.data?.penaltyDue ??
+                      data?.data?.loanApplication
+                        ?.amountAccruedForcurrentOverdue ??
+                      0,
+                  ).toLocaleString()}
                 </p>
               </div>
 
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Current Principal Accruing</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Current Principal Accruing
+                </p>
                 <p className="text-sm font-semibold text-gray-800">
                   ₦{" "}
                   {Number(
                     data?.data?.loanApplication?.principalBaseForInterest ??
                       data?.data?.loanApplication?.outstandingPrincipal ??
-                      0
+                      0,
                   ).toLocaleString()}
                 </p>
               </div>
 
               <div className="rounded-xl border border-gray-100 bg-gray-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">Current Interest Accruing</p>
+                <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Current Interest Accruing
+                </p>
                 <p className="text-sm font-semibold text-gray-800">
                   ₦{" "}
                   {Number(
-                    data?.data?.loanApplication?.repaymentType === "installmentPayment"
-                      ? data?.data?.loanApplication?.currentInterest ?? 0
-                      : data?.data?.loanApplication?.currentInterest ??
+                    data?.data?.loanApplication?.repaymentType ===
+                      "installmentPayment"
+                      ? (data?.data?.loanApplication?.currentInterest ?? 0)
+                      : (data?.data?.loanApplication?.currentInterest ??
                           data?.data?.interestDue ??
-                          0
+                          0),
                   ).toLocaleString()}
                 </p>
               </div>
 
               <div className="rounded-xl border border-red-200 bg-red-50 p-4 shadow-sm">
-                <p className="text-[11px] font-bold text-red-600 uppercase tracking-wider mb-2">Current Outstanding Balance</p>
+                <p className="text-[11px] font-bold text-red-600 uppercase tracking-wider mb-2">
+                  Current Outstanding Balance
+                </p>
                 <p className="text-sm font-bold text-swIndicatorDarkRed">
                   ₦{" "}
                   {Number(
                     data?.data?.amountDueToPay ??
-                      (data?.data?.loanApplication?.repaymentType === "installmentPayment"
-                        ? Number(data?.data?.penaltyDue ?? data?.data?.loanApplication?.amountAccruedForcurrentOverdue ?? 0) +
-                          Number(
-                            data?.data?.principalDueScheduled ?? principalDue ?? 0
-                          )
-                        : Number(data?.data?.penaltyDue ?? data?.data?.loanApplication?.amountAccruedForcurrentOverdue ?? 0) +
-                          Number(data?.data?.interestDue ?? data?.data?.loanApplication?.currentInterest ?? 0) +
-                          Number(principalDue || 0))
+                      Number(
+                        data?.data?.penaltyDue ??
+                          data?.data?.loanApplication
+                            ?.amountAccruedForcurrentOverdue ??
+                          0,
+                      ) +
+                        Number(
+                          data?.data?.interestDue ??
+                            data?.data?.loanApplication?.currentInterest ??
+                            0,
+                        ) +
+                        Number(
+                          data?.data?.principalDueScheduled ??
+                            principalDue ??
+                            0,
+                        ),
                   ).toLocaleString()}
                 </p>
               </div>
@@ -1046,15 +1161,22 @@ const ViewLoan = () => {
             </h6>
             <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Number of Overdue days</p>
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">
+                  Number of Overdue days
+                </p>
                 <p className="text-sm font-semibold text-swDarkRed">
-                  {data?.data?.loanApplication?.currentOverdueDaysCount || 0} day(s)
+                  {data?.data?.loanApplication?.currentOverdueDaysCount || 0}{" "}
+                  day(s)
                 </p>
               </div>
               <div className="rounded-xl border border-red-100 bg-red-50/30 p-4 shadow-sm">
-                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">Overdue Period Amount</p>
+                <p className="text-[11px] font-medium text-red-500 uppercase tracking-wider mb-2">
+                  Overdue Period Amount
+                </p>
                 <p className="text-sm font-semibold text-swDarkRed">
-                  ₦ {data?.data?.loanApplication?.amountAccruedForcurrentOverdue?.toLocaleString() || 0}
+                  ₦{" "}
+                  {data?.data?.loanApplication?.amountAccruedForcurrentOverdue?.toLocaleString() ||
+                    0}
                 </p>
               </div>
             </div>
@@ -1062,56 +1184,66 @@ const ViewLoan = () => {
 
           {/* Test Loan Triggers Section — disabled (uncomment condition to re-enable) */}
           {false &&
-            data?.data?.loanApplication?.repaymentType === "installmentPayment" && (
-            <div className="mx-5 mt-5">
-              <div className="bg-yellow-50/50 border border-yellow-200/60 rounded-2xl p-5 shadow-sm">
-                <h6 className="font-semibold text-yellow-800 mb-4 flex items-center gap-2">
-                  <span>🧪</span> Test Loan Triggers <span className="text-xs font-normal text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded-full">Development Only</span>
-                </h6>
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button
-                      onClick={triggerDailyAccrual}
-                      disabled={testTriggerLoading}
-                      className="flex-1 text-sm bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50"
-                    >
-                      {testTriggerLoading ? "Processing..." : "Trigger Daily Interest Accrual"}
-                    </button>
-                    <button
-                      onClick={triggerOverdueAccrual}
-                      disabled={testTriggerLoading}
-                      className="flex-1 text-sm border border-yellow-600 text-yellow-700 hover:bg-yellow-100 py-2 px-4 rounded-md transition-colors disabled:opacity-50"
-                    >
-                      {testTriggerLoading ? "Processing..." : "Trigger Overdue Accrual"}
-                    </button>
-                  </div>
-                  <div className="flex gap-3 items-end bg-white/50 p-3 rounded-xl border border-yellow-100">
-                    <div className="flex-1">
-                      <InputField
-                        label="Advance Days"
-                        type="number"
-                        min="1"
-                        max="365"
-                        value={daysToAdvance}
-                        onChange={(e) => setDaysToAdvance(e.target.value)}
-                        placeholder="Enter days (1-365)"
-                      />
+            data?.data?.loanApplication?.repaymentType ===
+              "installmentPayment" && (
+              <div className="mx-5 mt-5">
+                <div className="bg-yellow-50/50 border border-yellow-200/60 rounded-2xl p-5 shadow-sm">
+                  <h6 className="font-semibold text-yellow-800 mb-4 flex items-center gap-2">
+                    <span>🧪</span> Test Loan Triggers{" "}
+                    <span className="text-xs font-normal text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded-full">
+                      Development Only
+                    </span>
+                  </h6>
+                  <div className="space-y-4">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <button
+                        onClick={triggerDailyAccrual}
+                        disabled={testTriggerLoading}
+                        className="flex-1 text-sm bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+                      >
+                        {testTriggerLoading
+                          ? "Processing..."
+                          : "Trigger Daily Interest Accrual"}
+                      </button>
+                      <button
+                        onClick={triggerOverdueAccrual}
+                        disabled={testTriggerLoading}
+                        className="flex-1 text-sm border border-yellow-600 text-yellow-700 hover:bg-yellow-100 py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+                      >
+                        {testTriggerLoading
+                          ? "Processing..."
+                          : "Trigger Overdue Accrual"}
+                      </button>
                     </div>
-                    <button
-                      onClick={advanceDays}
-                      disabled={testTriggerLoading}
-                      className="mb-0 bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50 h-[42px]"
-                    >
-                      {testTriggerLoading ? "Processing..." : "Advance Days"}
-                    </button>
+                    <div className="flex gap-3 items-end bg-white/50 p-3 rounded-xl border border-yellow-100">
+                      <div className="flex-1">
+                        <InputField
+                          label="Advance Days"
+                          type="number"
+                          min="1"
+                          max="365"
+                          value={daysToAdvance}
+                          onChange={(e) => setDaysToAdvance(e.target.value)}
+                          placeholder="Enter days (1-365)"
+                        />
+                      </div>
+                      <button
+                        onClick={advanceDays}
+                        disabled={testTriggerLoading}
+                        className="mb-0 bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50 h-[42px]"
+                      >
+                        {testTriggerLoading ? "Processing..." : "Advance Days"}
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-yellow-700/80 mt-2 font-medium">
+                      ⚠️ These buttons are for testing purposes only. Use them
+                      to simulate daily accruals and advance time for testing
+                      installment payment scenarios.
+                    </p>
                   </div>
-                  <p className="text-[11px] text-yellow-700/80 mt-2 font-medium">
-                    ⚠️ These buttons are for testing purposes only. Use them to simulate daily accruals and advance time for testing installment payment scenarios.
-                  </p>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           <div className="px-5 pb-5">
             <section id="loan-details">{/* <ReusableDataTables/> */}</section>
@@ -1225,14 +1357,17 @@ const ViewLoan = () => {
             </section>
           </div>
         </section>
-        <section id="loan_process" className="hidden md:block w-[30%] h-full bg-white border-l border-gray-200">
+        <section
+          id="loan_process"
+          className="hidden md:block w-[30%] h-full bg-white border-l border-gray-200"
+        >
           <div className="sticky top-0 h-screen overflow-y-auto pb-32">
             <p className="border-b border-gray-100 p-5 text-swBlue font-semibold bg-gray-50/50">
               Loan Processes
             </p>
             <div className="p-4">
-              <LoanProcessCard 
-                data={loanApprovals} 
+              <LoanProcessCard
+                data={loanApprovals}
                 useriD={useriD?._id}
                 loanCreatorId={data?.data?.loanApplication?.createdBy?._id}
                 onRequestApproval={(item) => {
@@ -1354,7 +1489,7 @@ const ViewLoan = () => {
           <div className="w-full mb-3">
             <SelectField
               value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
-                (option) => option?.value === formData?.loanPackage
+                (option) => option?.value === formData?.loanPackage,
               )}
               // disabled={selectedCustomer === null ? true : false}
               name="loanPackage"
@@ -1422,7 +1557,7 @@ const ViewLoan = () => {
           <div className="w-full mb-3">
             <SelectField
               value={repaymentTypeData?.find(
-                (option) => option?.value === formData?.repaymentType
+                (option) => option?.value === formData?.repaymentType,
               )}
               name="repaymentType"
               // disabled={formData.numberOfRepayment === 0 ? true : false}
@@ -1467,7 +1602,7 @@ const ViewLoan = () => {
             <div className="w-1/3">
               <SelectField
                 value={loanDurationMetricsData?.find(
-                  (option) => option?.value === formData?.loanDurationMetrics
+                  (option) => option?.value === formData?.loanDurationMetrics,
                 )}
                 name="loanDurationMetrics"
                 optionValue={loanDurationMetricsData}
@@ -1522,7 +1657,7 @@ const ViewLoan = () => {
             <div className="w-full mb-3">
               <SelectField
                 value={frequencyTypeData?.find(
-                  (option) => option?.value === formData?.loanFrequencyType
+                  (option) => option?.value === formData?.loanFrequencyType,
                 )}
                 name="loanFrequencyType"
                 optionValue={frequencyTypeData}
@@ -1581,7 +1716,7 @@ const ViewLoan = () => {
                       bankArr?.find(
                         (option) =>
                           option?.value ===
-                          data?.data?.customerDetails?.bankAccount?.bankName
+                          data?.data?.customerDetails?.bankAccount?.bankName,
                       )?.label
                     }
                   </p>
@@ -1623,7 +1758,7 @@ const ViewLoan = () => {
                 onChange={(selectedOption) => {
                   handleDisbursementSelectChange(
                     selectedOption,
-                    "paymentMethod"
+                    "paymentMethod",
                   );
                 }}
               />

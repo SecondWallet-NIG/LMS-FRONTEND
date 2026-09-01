@@ -23,6 +23,16 @@ const repaymentMethodOptions = [
   { value: "Bank transfer", label: "Bank transfer" },
 ];
 
+const testRepaymentTypeOptions = [
+  { value: "installmentPayment", label: "Installment Payment" },
+  { value: "equatedRepayment", label: "Equated Repayment" },
+];
+
+const repaymentTypeLabels = {
+  installmentPayment: "Installment Payment",
+  equatedRepayment: "Equated Repayment",
+};
+
 const TestInstallmentLoan = () => {
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.customer);
@@ -31,6 +41,25 @@ const TestInstallmentLoan = () => {
   const [loanApplicationId, setLoanApplicationId] = useState("");
   const [daysToAdvance, setDaysToAdvance] = useState(1);
   const [disbursementDaysAgo, setDisbursementDaysAgo] = useState(18);
+  const [repaymentType, setRepaymentType] = useState("installmentPayment");
+  const [activeLoanRepaymentType, setActiveLoanRepaymentType] =
+    useState("installmentPayment");
+
+  // Loan amount is user-controlled (defaults to ₦100,000)
+  const [loanAmount, setLoanAmount] = useState(100000);
+
+  // NEW: duration is now user-controlled instead of a hardcoded constant
+  const [loanDuration, setLoanDuration] = useState(5);
+
+  // Interest rate is user-controlled (defaults to 10%)
+  const [interestRate, setInterestRate] = useState(10);
+
+  // NEW: lets the user decide whether to pin the EMI to a specific amount
+  // (equatedRepayment only) or let the backend compute it from
+  // amount / duration / interest.
+  const [useFixedPayment, setUseFixedPayment] = useState(false);
+  const [fixedMonthlyPayment, setFixedMonthlyPayment] = useState(30000);
+
   const [repayments, setRepayments] = useState([
     {
       repaymentAmount: 0,
@@ -43,7 +72,10 @@ const TestInstallmentLoan = () => {
   const [loanInfo, setLoanInfo] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [successModalData, setSuccessModalData] = useState({ title: "", description: "" });
+  const [successModalData, setSuccessModalData] = useState({
+    title: "",
+    description: "",
+  });
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [computationInProgress, setComputationInProgress] = useState(false);
@@ -68,6 +100,26 @@ const TestInstallmentLoan = () => {
     new Date(Date.now() - normalizedDisbursementDaysAgo * 24 * 60 * 60 * 1000),
     "PPP",
   );
+
+  // Normalized loan amount driven by user input
+  const normalizedLoanAmount = Math.max(1, parseFloat(loanAmount) || 1);
+
+  // NEW: normalized, validated duration (1-360 months) driven by user input
+  const normalizedLoanDuration = Math.max(
+    1,
+    Math.min(360, parseInt(loanDuration, 10) || 1),
+  );
+
+  // Normalized interest rate (%) driven by user input
+  const normalizedInterestRate = Math.max(0, parseFloat(interestRate) || 0);
+
+  // NEW: normalized fixed payment amount, only meaningful when the toggle is on
+  const normalizedFixedMonthlyPayment = Math.max(
+    0,
+    parseFloat(fixedMonthlyPayment) || 0,
+  );
+
+  const isEquatedRepayment = repaymentType === "equatedRepayment";
 
   useEffect(() => {
     dispatch(getCustomers());
@@ -119,6 +171,9 @@ const TestInstallmentLoan = () => {
             setComputationInProgress(false);
             if (job.result) {
               setLoanInfo(job.result);
+              if (job.result.repaymentType) {
+                setActiveLoanRepaymentType(job.result.repaymentType);
+              }
             }
             const doneLoanId = loanId || job.result?.loanId || "";
             toast.success(
@@ -169,10 +224,19 @@ const TestInstallmentLoan = () => {
       const userData = JSON.parse(localStorage.getItem("user"));
       const payload = {
         customerEmail: selectedCustomer.email,
-        loanAmount: 100000,
-        loanDuration: 5,
-        interestRate: 10,
+        loanAmount: normalizedLoanAmount,
+        loanDuration: normalizedLoanDuration,
+        interestRate: normalizedInterestRate,
         disbursementDaysAgo: normalizedDisbursementDaysAgo,
+        repaymentType,
+        // Only send fixedMonthlyPayment when the user explicitly opted into
+        // a fixed EMI on an equated-repayment loan. Otherwise leave it out
+        // so the backend derives the EMI from amount/duration/interest.
+        ...(isEquatedRepayment &&
+          useFixedPayment &&
+          normalizedFixedMonthlyPayment > 0 && {
+            fixedMonthlyPayment: normalizedFixedMonthlyPayment,
+          }),
       };
       if (validRepayments.length > 0) {
         payload.repayments = validRepayments.map((r) => ({
@@ -198,6 +262,7 @@ const TestInstallmentLoan = () => {
       if (response.data?.success && response.data?.data) {
         const result = response.data.data;
         setLoanApplicationId(result.loanApplicationId);
+        setActiveLoanRepaymentType(result.repaymentType || repaymentType);
         setLoanInfo(result);
 
         if (result.async && result.jobId) {
@@ -305,17 +370,22 @@ const TestInstallmentLoan = () => {
     }
   };
 
+  // const isInstallmentAccrualLoan =
+  //   (loanInfo?.repaymentType || activeLoanRepaymentType) ===
+  //   "installmentPayment";
+  const isInstallmentAccrualLoan = true;
+
   return (
     <DashboardLayout>
       <main className="p-5">
         <ToastContainer />
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-swBlue">
-            Test Installment Loan
+            Test Loan (Installment & Equated)
           </h1>
           <p className="text-sm text-gray-600 mt-2">
-            Create test loans and trigger accruals for testing installment
-            payment scenarios
+            Create test loans with installment or equated repayment and trigger
+            accruals for testing payment scenarios
           </p>
         </div>
 
@@ -344,13 +414,117 @@ const TestInstallmentLoan = () => {
                   </p>
                 )}
               </div>
+              <div>
+                <SelectField
+                  label="Repayment Type"
+                  placeholder="Select repayment type"
+                  optionValue={testRepaymentTypeOptions}
+                  isSearchable={false}
+                  value={
+                    testRepaymentTypeOptions.find(
+                      (option) => option.value === repaymentType,
+                    ) || testRepaymentTypeOptions[0]
+                  }
+                  onChange={(selected) => {
+                    const val = selected?.value || "installmentPayment";
+                    setRepaymentType(val);
+                    if (val !== "equatedRepayment") {
+                      setUseFixedPayment(false);
+                    }
+                    setRepayments([
+                      {
+                        repaymentAmount: 0,
+                        dateCollected: new Date().toISOString().split("T")[0],
+                        repaymentNumber: "",
+                        repaymentMethod: "",
+                      },
+                    ]);
+                  }}
+                />
+              </div>
+
+              <InputField
+                label="Loan Amount (₦)"
+                type="number"
+                min="1"
+                value={loanAmount}
+                onChange={(e) => setLoanAmount(e.target.value)}
+                placeholder="e.g. 100000"
+              />
+
+              {/* NEW: dynamic duration input, replaces the old hardcoded 5 months */}
+              <InputField
+                label="Loan Duration (months)"
+                type="number"
+                min="1"
+                max="360"
+                value={loanDuration}
+                onChange={(e) => setLoanDuration(e.target.value)}
+                placeholder="e.g. 5"
+              />
+
+              <InputField
+                label="Interest Rate (%)"
+                type="number"
+                min="0"
+                step="0.01"
+                value={interestRate}
+                onChange={(e) => setInterestRate(e.target.value)}
+                placeholder="e.g. 10"
+              />
+
+              {/* NEW: fixed-payment toggle, only relevant for equated repayment */}
+              {isEquatedRepayment && (
+                <div className="border border-gray-200 rounded-md p-3">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={useFixedPayment}
+                      onChange={(e) => setUseFixedPayment(e.target.checked)}
+                      className="h-4 w-4"
+                    />
+                    Use a fixed monthly payment (EMI)
+                  </label>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {useFixedPayment
+                      ? "You're pinning the EMI to a specific amount below."
+                      : "Off: the backend will calculate the EMI from the loan amount, duration, and interest rate."}
+                  </p>
+                  {useFixedPayment && (
+                    <div className="mt-3">
+                      <InputField
+                        label="Fixed Monthly Payment (₦)"
+                        type="number"
+                        min="1"
+                        value={fixedMonthlyPayment}
+                        onChange={(e) => setFixedMonthlyPayment(e.target.value)}
+                        placeholder="e.g. 30000"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="text-sm text-gray-600">
-                <p><strong>Default Values:</strong></p>
+                <p>
+                  <strong>Default Values:</strong>
+                </p>
                 <ul className="list-disc list-inside mt-2">
-                  <li>Loan Amount: ₦100,000</li>
-                  <li>Duration: 5 months</li>
-                  <li>Interest Rate: 10%</li>
-                  <li>Repayment Type: Installment Payment</li>
+                  <li>Loan Amount: ₦{normalizedLoanAmount.toLocaleString()}</li>
+                  <li>Duration: {normalizedLoanDuration} months</li>
+                  <li>Interest Rate: {normalizedInterestRate}%</li>
+                  <li>
+                    Repayment Type:{" "}
+                    {repaymentTypeLabels[repaymentType] || repaymentType}
+                  </li>
+                  {isEquatedRepayment && (
+                    <li>
+                      EMI:{" "}
+                      {useFixedPayment
+                        ? `Fixed at ₦${normalizedFixedMonthlyPayment.toLocaleString()}`
+                        : "Auto-calculated by backend"}
+                    </li>
+                  )}
                   <li>Status: Auto-approved & Disbursed</li>
                   <li>
                     Projected Disbursement Date: {projectedDisbursementDate} (
@@ -410,7 +584,10 @@ const TestInstallmentLoan = () => {
                               )
                             }
                           >
-                            <FaRegCalendar size={18} className="text-gray-500 shrink-0" />
+                            <FaRegCalendar
+                              size={18}
+                              className="text-gray-500 shrink-0"
+                            />
                             <span className="text-sm text-gray-800">
                               {r.dateCollected
                                 ? format(
@@ -429,7 +606,9 @@ const TestInstallmentLoan = () => {
                                     ? new Date(r.dateCollected + "T12:00:00")
                                     : undefined,
                                 }}
-                                modifiersClassNames={{ selected: "my-selected" }}
+                                modifiersClassNames={{
+                                  selected: "my-selected",
+                                }}
                                 onDayClick={(value) => {
                                   const next = [...repayments];
                                   next[idx] = {
@@ -455,7 +634,9 @@ const TestInstallmentLoan = () => {
                           variant="secondary"
                           disabled={loading || repayments.length <= 1}
                           onClick={() =>
-                            setRepayments(repayments.filter((_, i) => i !== idx))
+                            setRepayments(
+                              repayments.filter((_, i) => i !== idx),
+                            )
                           }
                           className="h-10"
                         >
@@ -521,6 +702,14 @@ const TestInstallmentLoan = () => {
                   <span>{loanInfo.loanId || loanApplicationId}</span>
                 </div>
                 <div className="flex justify-between">
+                  <span className="font-medium">Repayment Type:</span>
+                  <span>
+                    {repaymentTypeLabels[loanInfo.repaymentType] ||
+                      loanInfo.repaymentType ||
+                      "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
                   <span className="font-medium">Disbursement date:</span>
                   <span>
                     {loanInfo.disbursedAt
@@ -534,7 +723,9 @@ const TestInstallmentLoan = () => {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-medium">Outstanding Principal (from repayments):</span>
+                  <span className="font-medium">
+                    Outstanding Principal (from repayments):
+                  </span>
                   <span>
                     ₦{loanInfo.outstandingPrincipal?.toLocaleString() ?? "N/A"}
                   </span>
@@ -588,7 +779,9 @@ const TestInstallmentLoan = () => {
                   <Button
                     variant="secondary"
                     onClick={triggerDailyAccrual}
-                    disabled={loading || !loanApplicationId}
+                    disabled={
+                      loading || !loanApplicationId || !isInstallmentAccrualLoan
+                    }
                     className="w-full text-sm"
                   >
                     Trigger Daily Interest
@@ -596,12 +789,21 @@ const TestInstallmentLoan = () => {
                   <Button
                     variant="secondary"
                     onClick={triggerOverdueAccrual}
-                    disabled={loading || !loanApplicationId}
+                    disabled={
+                      loading || !loanApplicationId || !isInstallmentAccrualLoan
+                    }
                     className="w-full text-sm"
                   >
                     Trigger Overdue Accrual
                   </Button>
                 </div>
+                {!isInstallmentAccrualLoan && loanApplicationId && (
+                  <p className="text-xs text-amber-700">
+                    Daily interest and overdue triggers apply to installment
+                    payment loans only. Equated loans use the fixed EMI
+                    schedule.
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -612,23 +814,41 @@ const TestInstallmentLoan = () => {
             </h2>
             <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700">
               <li>Select a customer from the dropdown</li>
-              <li>Add optional repayment(s) if you want to simulate payments</li>
+              <li>
+                Choose repayment type: Installment Payment (daily accrual) or
+                Equated Repayment (fixed EMI schedule)
+              </li>
+              <li>Set the loan duration in months</li>
+              <li>
+                For equated repayment, optionally toggle on a fixed monthly
+                payment amount — otherwise the EMI is calculated automatically
+              </li>
+              <li>
+                Add optional repayment(s) if you want to simulate payments
+              </li>
               <li>
                 Click &quot;Create Test Loan & Simulate Repayments&quot; - loan
                 will be auto-approved, disbursed, and repayments applied
               </li>
-              <li>Use &quot;Trigger Daily Interest&quot; to accrue interest for today</li>
-              <li>Use &quot;Advance Days&quot; to simulate multiple days passing</li>
               <li>
-                Use &quot;Trigger Overdue Accrual&quot; to calculate penalties for
-                overdue loans
+                For installment loans, use &quot;Trigger Daily Interest&quot; to
+                accrue interest for today
+              </li>
+              <li>
+                Use &quot;Advance Days&quot; to simulate multiple days passing
+              </li>
+              <li>
+                For installment loans, use &quot;Trigger Overdue Accrual&quot;
+                to calculate penalties for overdue loans
               </li>
               <li>Navigate to the loan details page to verify schedule</li>
             </ol>
             {loanApplicationId && (
               <div className="mt-4 p-3 bg-white rounded">
                 <p className="text-sm font-medium">Loan Application ID:</p>
-                <p className="text-xs font-mono break-all">{loanApplicationId}</p>
+                <p className="text-xs font-mono break-all">
+                  {loanApplicationId}
+                </p>
                 <div className="flex flex-wrap gap-3 mt-2">
                   <a
                     href="/loan-applications"
