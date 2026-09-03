@@ -60,6 +60,8 @@ const CreateLoan = () => {
   const [noOfRepayments, setNoOfRepayment] = useState(0);
   const [roleTag, setRoleTag] = useState("");
   const [loanPackageInterestRate, setLoanPackageInterestRate] = useState({});
+  const [useFixedPayment, setUseFixedPayment] = useState(false);
+  const [fixedMonthlyPayment, setFixedMonthlyPayment] = useState("");
   const [fileError, setFileError] = useState({
     collaterals: "",
     applicationForm: "",
@@ -144,10 +146,12 @@ const CreateLoan = () => {
     { value: "bulletRepayment", label: "Bullet Repayment" },
     { value: "interestServicing", label: "Interest Servicing" },
     { value: "installmentPayment", label: "Installment Payment" },
+    { value: "equatedRepayment", label: "Equated Repayment" },
   ];
 
   const reducingBalrepaymentTypeData = [
     { value: "installmentPayment", label: "Installment Payment" },
+    { value: "equatedRepayment", label: "Equated Repayment" },
   ];
 
   const loanDurationMetricsData = [
@@ -301,6 +305,31 @@ const CreateLoan = () => {
     });
   };
 
+  const isEquatedRepayment = formData.repaymentType === "equatedRepayment";
+  const normalizedFixedMonthlyPayment = Math.max(
+    0,
+    parseFloat(String(fixedMonthlyPayment).replace(/,/g, "")) || 0
+  );
+  const shouldSendFixedPayment =
+    isEquatedRepayment &&
+    useFixedPayment &&
+    normalizedFixedMonthlyPayment > 0;
+
+  const handleRepaymentTypeChange = (selectedOption) => {
+    handleSelectChange(selectedOption, "repaymentType");
+    if (selectedOption.value !== "equatedRepayment") {
+      setUseFixedPayment(false);
+    }
+  };
+
+  const handleUseFixedPaymentChange = (e) => {
+    setUseFixedPayment(e.target.checked);
+  };
+
+  const handleFixedMonthlyPaymentChange = (e) => {
+    setFixedMonthlyPayment(e.target.value);
+  };
+
   const fetchInterest = (e) => {
     setIsLoading(true);
     const isFormDataValid = validateFormData(formData);
@@ -315,6 +344,9 @@ const CreateLoan = () => {
         loanFrequencyType: formData.loanFrequencyType,
         interestRate: formData.interestRate,
         startDate: "",
+        ...(shouldSendFixedPayment && {
+          fixedMonthlyPayment: normalizedFixedMonthlyPayment,
+        }),
       };
       if (e?.preventDefault) e.preventDefault();
       dispatch(calculateInterest(payload))
@@ -442,6 +474,9 @@ const CreateLoan = () => {
     payload.append("managementTotal", formData.managementTotal);
     payload.append("numberOfRepayment", formData.numberOfRepayment);
     payload.append("repaymentType", formData.repaymentType);
+    if (shouldSendFixedPayment) {
+      payload.append("fixedMonthlyPayment", normalizedFixedMonthlyPayment);
+    }
     payload.append("assetType", formData.assetType);
     payload.append("loanDurationMetrics", formData.loanDurationMetrics);
     payload.append("loanFrequencyType", formData.loanFrequencyType);
@@ -1048,11 +1083,42 @@ const CreateLoan = () => {
                   required={true}
                   placeholder={"Select repayment type"}
                   isSearchable={false}
-                  onChange={(selectedOption) => {
-                    handleSelectChange(selectedOption, "repaymentType");
-                  }}
+                  onChange={handleRepaymentTypeChange}
                 />
               </div>
+              {isEquatedRepayment && (
+                <div className="border border-gray-200 rounded-md p-3">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={useFixedPayment}
+                      onChange={handleUseFixedPaymentChange}
+                      className="h-4 w-4"
+                      aria-label="Use a fixed monthly payment"
+                    />
+                    Use a fixed monthly payment (EMI)
+                  </label>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {useFixedPayment
+                      ? "You're pinning the EMI to a specific amount below."
+                      : "Off: the backend will calculate the EMI from the loan amount, duration, and interest rate."}
+                  </p>
+                  {useFixedPayment && (
+                    <div className="mt-3">
+                      <InputField
+                        label="Fixed Monthly Payment"
+                        name="fixedMonthlyPayment"
+                        onKeyPress={preventMinus}
+                        onWheel={() => document.activeElement.blur()}
+                        value={fixedMonthlyPayment}
+                        onChange={handleFixedMonthlyPaymentChange}
+                        placeholder="e.g. 30000"
+                        endIcon={<p className="text-swGray">NGN &#8358;</p>}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
                 </div>
               </div>
 
