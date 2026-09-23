@@ -124,7 +124,7 @@ const CreateLoan = () => {
 
   useEffect(() => {
     const loanpackage = loanPackage?.data?.data.find(
-      (item) => item._id === formData.loanPackage
+      (item) => item._id === formData.loanPackage,
     );
     setLoanPackageInterestRate(loanpackage);
   }, [formData.loanPackage, loanPackage?.data?.data]);
@@ -150,6 +150,7 @@ const CreateLoan = () => {
   ];
 
   const reducingBalrepaymentTypeData = [
+    { value: "interestServicing", label: "Interest Servicing" },
     { value: "installmentPayment", label: "Installment Payment" },
     { value: "equatedRepayment", label: "Equated Repayment" },
   ];
@@ -246,7 +247,7 @@ const CreateLoan = () => {
     const numberWithNoCommas = stringWithNoCommas.replace(/,/g, "");
     const formattedNumber = numberWithNoCommas.replace(
       /\B(?=(\d{3})+(?!\d))/g,
-      ","
+      ",",
     );
     return formattedNumber;
   };
@@ -308,12 +309,10 @@ const CreateLoan = () => {
   const isEquatedRepayment = formData.repaymentType === "equatedRepayment";
   const normalizedFixedMonthlyPayment = Math.max(
     0,
-    parseFloat(String(fixedMonthlyPayment).replace(/,/g, "")) || 0
+    parseFloat(String(fixedMonthlyPayment).replace(/,/g, "")) || 0,
   );
   const shouldSendFixedPayment =
-    isEquatedRepayment &&
-    useFixedPayment &&
-    normalizedFixedMonthlyPayment > 0;
+    isEquatedRepayment && useFixedPayment && normalizedFixedMonthlyPayment > 0;
 
   const handleRepaymentTypeChange = (selectedOption) => {
     handleSelectChange(selectedOption, "repaymentType");
@@ -408,7 +407,7 @@ const CreateLoan = () => {
   const deleteFile = (name, inputName) => {
     if (inputName === "collaterals") {
       const newFiles = formData.collaterals.filter(
-        (file, index) => index !== name
+        (file, index) => index !== name,
       );
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -428,13 +427,13 @@ const CreateLoan = () => {
     ) {
       if (formData.loanAmount < loanPackageInterestRate?.loanAmountRange?.min) {
         toast.error(
-          `Loan amount cannot be less than ₦${loanPackageInterestRate?.loanAmountRange?.min.toLocaleString()}`
+          `Loan amount cannot be less than ₦${loanPackageInterestRate?.loanAmountRange?.min.toLocaleString()}`,
         );
       } else if (
         formData.loanAmount > loanPackageInterestRate?.loanAmountRange?.max
       ) {
         toast.error(
-          `Loan amount cannot be more than ₦${loanPackageInterestRate?.loanAmountRange?.max.toLocaleString()}`
+          `Loan amount cannot be more than ₦${loanPackageInterestRate?.loanAmountRange?.max.toLocaleString()}`,
         );
       }
       return;
@@ -445,13 +444,13 @@ const CreateLoan = () => {
     ) {
       if (formData.interestRate < loanPackageInterestRate?.interestRate?.min) {
         toast.error(
-          `Interest rate cannot be less than ${loanPackageInterestRate?.interestRate?.min}%`
+          `Interest rate cannot be less than ${loanPackageInterestRate?.interestRate?.min}%`,
         );
       } else if (
         formData.interestRate > loanPackageInterestRate?.interestRate?.max
       ) {
         toast.error(
-          `Interest rate cannot be more than ${loanPackageInterestRate?.interestRate?.max}%`
+          `Interest rate cannot be more than ${loanPackageInterestRate?.interestRate?.max}%`,
         );
       }
       return;
@@ -632,497 +631,540 @@ const CreateLoan = () => {
       {currentStep === 1 ? (
         <main className="min-h-full bg-gradient-to-b from-[#f0f6fc] via-gray-50 to-gray-50 text-swGray">
           <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-4 py-6 text-sm sm:px-8 lg:flex-row lg:items-start">
-          <div className="w-full flex-1 space-y-6 lg:max-w-none lg:pr-2">
-            <header className="flex flex-col gap-4 rounded-2xl border border-white/70 bg-white/85 p-5 shadow-md shadow-swBlue/5 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex min-w-0 gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-swBlue to-swDarkBlue text-white shadow-lg shadow-swBlue/25 ring-4 ring-white/60">
-                  <LuBanknote size={26} strokeWidth={2} />
+            <div className="w-full flex-1 space-y-6 lg:max-w-none lg:pr-2">
+              <header className="flex flex-col gap-4 rounded-2xl border border-white/70 bg-white/85 p-5 shadow-md shadow-swBlue/5 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-swBlue to-swDarkBlue text-white shadow-lg shadow-swBlue/25 ring-4 ring-white/60">
+                    <LuBanknote size={26} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-swBlue/80">
+                      New application
+                    </p>
+                    <h1 className="mt-0.5 text-xl font-bold tracking-tight text-swGrey500 sm:text-2xl">
+                      Initiate loan application
+                    </h1>
+                    <p className="mt-1 text-xs text-swGrey200 sm:text-sm">
+                      Select a borrower, choose a package, and define loan
+                      terms.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-swBlue/80">
-                    New application
-                  </p>
-                  <h1 className="mt-0.5 text-xl font-bold tracking-tight text-swGrey500 sm:text-2xl">
-                    Initiate loan application
-                  </h1>
-                  <p className="mt-1 text-xs text-swGrey200 sm:text-sm">
-                    Select a borrower, choose a package, and define loan terms.
-                  </p>
+                <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                  <Link
+                    href="/create-borrower"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-swBlue bg-swBlue px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-white hover:text-swBlue"
+                  >
+                    <LuUserPlus size={18} strokeWidth={2.25} />
+                    Add new borrower
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={savedLoans}
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-swBlue/25 bg-white px-4 py-2.5 text-sm font-semibold text-swBlue shadow-sm transition hover:border-swBlue hover:bg-swBlueActiveStateBg"
+                  >
+                    <LuSave size={18} strokeWidth={2.25} />
+                    Save draft
+                  </button>
                 </div>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                <Link
-                  href="/create-borrower"
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-swBlue bg-swBlue px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-white hover:text-swBlue"
-                >
-                  <LuUserPlus size={18} strokeWidth={2.25} />
-                  Add new borrower
-                </Link>
-                <button
-                  type="button"
-                  onClick={savedLoans}
-                  className="inline-flex cursor-pointer items-center gap-2 rounded-xl border-2 border-swBlue/25 bg-white px-4 py-2.5 text-sm font-semibold text-swBlue shadow-sm transition hover:border-swBlue hover:bg-swBlueActiveStateBg"
-                >
-                  <LuSave size={18} strokeWidth={2.25} />
-                  Save draft
-                </button>
-              </div>
-            </header>
+              </header>
 
-            <nav
-              className="flex flex-col gap-3 rounded-2xl border border-gray-100/90 bg-white/95 p-3 shadow-sm backdrop-blur-sm sm:flex-row sm:items-stretch sm:gap-3"
-              aria-label="Application steps"
-            >
-              <div
-                className="flex flex-1 items-center gap-3 rounded-xl border border-swBlue/25 bg-swBlueActiveStateBg/60 p-3"
-                aria-current="step"
+              <nav
+                className="flex flex-col gap-3 rounded-2xl border border-gray-100/90 bg-white/95 p-3 shadow-sm backdrop-blur-sm sm:flex-row sm:items-stretch sm:gap-3"
+                aria-label="Application steps"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-swBlue to-swDarkBlue text-sm font-bold text-white shadow-md shadow-swBlue/25">
-                  1
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
-                    You are here
-                  </p>
-                  <p className="font-semibold text-swGrey500">
-                    Details & documents
-                  </p>
-                </div>
-              </div>
-              <div
-                className="hidden h-auto w-px shrink-0 bg-gradient-to-b from-transparent via-gray-200 to-transparent sm:block"
-                aria-hidden
-              />
-              <button
-                type="button"
-                onClick={goToReviewStep}
-                disabled={
-                  formData.repaymentType === null || isLoading === true
-                }
-                title="Open interest preview (same as Preview interest)"
-                className="flex flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left transition hover:border-swBlue/40 hover:bg-swBlueActiveStateBg/40 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-swBlue/35 bg-gray-50 text-sm font-bold text-swBlue">
-                  2
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-swGrey200">
-                    Go to next
-                  </p>
-                  <p className="font-medium text-swGrey500">
-                    Review & create
-                  </p>
-                </div>
-              </button>
-            </nav>
-
-            <section className="rounded-2xl border border-gray-100/90 bg-white p-5 shadow-sm sm:p-6">
-              <div className="mb-5 flex items-center gap-3 border-b border-gray-100 pb-4">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-swBlueActiveStateBg text-swBlue">
-                  <LuClipboardList size={20} strokeWidth={2} />
-                </span>
-                <div>
-                  <h2 className="text-base font-bold text-swGrey500 sm:text-lg">
-                    Loan details
-                  </h2>
-                  <p className="text-xs text-swGrey200 sm:text-sm">
-                    Required fields are marked with *
-                  </p>
-                </div>
-              </div>
-            <div className="flex flex-col gap-6">
-              <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
-                <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
-                  <LuSparkles size={14} className="text-amber-500" />
-                  Borrower & product
-                </h3>
-                <div className="space-y-4">
-              <div className="">
-                <label className="mb-2 block text-xs font-medium text-swGrey500">
-                  Select Customer <span className="ml-1 text-swIndicatorLightRed">*</span>
-                </label>
-                <button
-                  type="button"
-                  className="group flex w-full items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-3.5 text-left shadow-sm transition hover:border-swBlue/35 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-swBlue/25"
-                  onClick={() => {
-                    setIsOpen(true);
-                  }}
+                <div
+                  className="flex flex-1 items-center gap-3 rounded-xl border border-swBlue/25 bg-swBlueActiveStateBg/60 p-3"
+                  aria-current="step"
                 >
-                  <span className="flex min-w-0 flex-1 items-center gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-swBlueActiveStateBg text-swBlue transition group-hover:bg-swBlue group-hover:text-white">
-                      <LuSearch size={18} strokeWidth={2.25} />
-                    </span>
-                    {selectedCustomer != null ? (
-                      <span className="min-w-0">
-                        <span className="block truncate font-semibold text-swGrey500">
-                          {selectedCustomer.firstName} {selectedCustomer.lastName}
-                        </span>
-                        <span className="block truncate text-xs text-swGrey200">
-                          Tap to change borrower
-                        </span>
-                      </span>
-                    ) : (
-                      <span className="text-sm text-swGrey200">
-                        Search and select customer
-                      </span>
-                    )}
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-swBlue to-swDarkBlue text-sm font-bold text-white shadow-md shadow-swBlue/25">
+                    1
                   </span>
-                  <LuChevronRight
-                    className="shrink-0 text-swGrey200 transition group-hover:translate-x-0.5 group-hover:text-swBlue"
-                    size={20}
-                  />
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                      You are here
+                    </p>
+                    <p className="font-semibold text-swGrey500">
+                      Details & documents
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className="hidden h-auto w-px shrink-0 bg-gradient-to-b from-transparent via-gray-200 to-transparent sm:block"
+                  aria-hidden
+                />
+                <button
+                  type="button"
+                  onClick={goToReviewStep}
+                  disabled={
+                    formData.repaymentType === null || isLoading === true
+                  }
+                  title="Open interest preview (same as Preview interest)"
+                  className="flex flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left transition hover:border-swBlue/40 hover:bg-swBlueActiveStateBg/40 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-swBlue/35 bg-gray-50 text-sm font-bold text-swBlue">
+                    2
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-swGrey200">
+                      Go to next
+                    </p>
+                    <p className="font-medium text-swGrey500">
+                      Review & create
+                    </p>
+                  </div>
                 </button>
-              </div>
-              <SelectField
-                value={modifyLoanPackageData(loanPackage?.data?.data)?.find(
-                  (option) => option.value === formData.loanPackage
-                )}
-                disabled={selectedCustomer === null ? true : false}
-                name="loanPackage"
-                optionValue={modifyLoanPackageData(loanPackage?.data?.data)}
-                label={"Loan Package "}
-                required={true}
-                placeholder={"Select loan package"}
-                isSearchable={false}
-                onChange={(selectedOption) => {
-                  handleSelectChange(selectedOption, "loanPackage");
-                  setLoanPackageText(selectedOption.label);
-                  setLoanPackageRate(selectedOption.interestRate);
-                }}
-              />
-              <div>
-                <InputField
-                  disabled={formData.loanPackage === null ? true : false}
-                  name="interestRate"
-                  required={true}
-                  //ariaLabel={"Number input"}
-                  //onKeyPress={preventMinus}
-                  onWheel={() => document.activeElement.blur()}
-                  activeBorderColor="border-swBlue"
-                  endIcon={<p className="text-swGray">%</p>}
-                  label="Interest Rate"
-                  value={formData?.interestRate}
-                  placeholder={`Enter interest rate`}
-                  isActive="loan-amount"
-                  onChange={(e) => {
-                    setInputState(e);
+              </nav>
 
-                    if (formData.commitmentValue > 0) {
-                      updateCommitmentTotal(e);
-                    }
-                    if (
-                      formData.loanPackage &&
-                      formData.loanDuration &&
-                      formData.repaymentType
-                    ) {
-                      calculateInterest(
-                        e.target.value,
-                        formData.loanPackage,
-                        formData.loanDuration,
-                        formData.repaymentType
-                      );
-                    }
-                  }}
-                  inputOpen={isInputOpen}
-                />
-                <p
-                  className={`mt-1.5 rounded-lg px-3 py-2 text-xs leading-relaxed ${
-                    formData?.interestRate <
-                      loanPackageInterestRate?.interestRate?.min ||
-                    formData?.interestRate >
-                      loanPackageInterestRate?.interestRate?.max
-                      ? "bg-red-50 font-medium text-swIndicatorLightRed"
-                      : "bg-slate-50 text-swGrey200"
-                  }`}
-                >
-                  {formData?.interestRate <
-                  loanPackageInterestRate?.interestRate?.min
-                    ? `Interest rate cannot be less than ${loanPackageInterestRate?.interestRate?.min}%`
-                    : formData?.interestRate >
-                      loanPackageInterestRate?.interestRate?.max
-                    ? `Interest rate cannot be more than ${loanPackageInterestRate?.interestRate?.max}%`
-                    : `min = ${
-                        loanPackageInterestRate?.interestRate?.min || 0
-                      }% and max = ${
-                        loanPackageInterestRate?.interestRate?.max || 0
-                      }%`}
-                </p>
-              </div>
-              {formData.loanPackage === "65390f290d0a83675c9517b3" ? (
-                <SelectField
-                  value={assetTypeData?.find(
-                    (option) => option.value === formData.assetType
-                  )}
-                  disabled={formData.loanPackage === null ? true : false}
-                  name="assetType"
-                  optionValue={assetTypeData}
-                  label={"Asset Type"}
-                  required={true}
-                  placeholder={"Select asset type"}
-                  isSearchable={false}
-                  onChange={(selectedOption) =>
-                    handleSelectChange(selectedOption, "assetType")
-                  }
-                />
-              ) : null}
+              <section className="rounded-2xl border border-gray-100/90 bg-white p-5 shadow-sm sm:p-6">
+                <div className="mb-5 flex items-center gap-3 border-b border-gray-100 pb-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-swBlueActiveStateBg text-swBlue">
+                    <LuClipboardList size={20} strokeWidth={2} />
+                  </span>
+                  <div>
+                    <h2 className="text-base font-bold text-swGrey500 sm:text-lg">
+                      Loan details
+                    </h2>
+                    <p className="text-xs text-swGrey200 sm:text-sm">
+                      Required fields are marked with *
+                    </p>
+                  </div>
                 </div>
-              </div>
-
-              <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
-                <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
-                  <LuBanknote size={14} className="text-emerald-600" />
-                  Terms & amounts
-                </h3>
-                <div className="space-y-4">
-              <div>
-                <InputField
-                  disabled={formData.loanPackage === null ? true : false}
-                  name="loanAmount"
-                  required={true}
-                  ariaLabel={"Number input"}
-                  onKeyPress={preventMinus}
-                  onWheel={() => document.activeElement.blur()}
-                  activeBorderColor="border-swBlue"
-                  endIcon={<p className="text-swGray">NGN &#8358;</p>}
-                  label="Loan amount (Principal)"
-                  value={formData?.loanAmount?.toLocaleString()}
-                  placeholder="Enter loan amount"
-                  isActive="loan-amount"
-                  onChange={(e) => {
-                    setInputState(e);
-                    if (formData.commitmentValue > 0) {
-                      updateCommitmentTotal(e);
-                    }
-                    if (
-                      formData.loanPackage &&
-                      formData.loanDuration &&
-                      formData.repaymentType
-                    ) {
-                      calculateInterest(
-                        e.target.value,
-                        formData.loanPackage,
-                        formData.loanDuration,
-                        formData.repaymentType
-                      );
-                    }
-                  }}
-                  inputOpen={isInputOpen}
-                />
-                <p
-                  className={`mt-1.5 rounded-lg px-3 py-2 text-xs leading-relaxed ${
-                    formData?.loanAmount <
-                      loanPackageInterestRate?.loanAmountRange?.min ||
-                    formData?.loanAmount >
-                      loanPackageInterestRate?.loanAmountRange?.max
-                      ? "bg-red-50 font-medium text-swIndicatorLightRed"
-                      : "bg-slate-50 text-swGrey200"
-                  }`}
-                >
-                  {formData?.loanAmount <
-                  loanPackageInterestRate?.loanAmountRange?.min
-                    ? `Amount cannot be less than ₦${loanPackageInterestRate?.loanAmountRange?.min.toLocaleString()}`
-                    : formData?.loanAmount >
-                      loanPackageInterestRate?.loanAmountRange?.max
-                    ? `Amount cannot be more than ₦${loanPackageInterestRate?.loanAmountRange?.max.toLocaleString()}`
-                    : `min = ₦${
-                        loanPackageInterestRate?.loanAmountRange?.min.toLocaleString() ||
-                        0
-                      } and max = ₦${
-                        loanPackageInterestRate?.loanAmountRange?.max.toLocaleString() ||
-                        0
-                      }`}
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-2 items-end">
-                <div className="w-full sm:w-1/3">
-                  <SelectField
-                    value={loanDurationMetricsData.find(
-                      (option) => option.value === formData.loanDurationMetrics
-                    )}
-                    name="loanDurationMetrics"
-                    disabled={formData.loanAmount === 0 ? true : false}
-                    optionValue={loanDurationMetricsData}
-                    label={"Duration"}
-                    required={true}
-                    placeholder={"duration metics"}
-                    isSearchable={false}
-                    onChange={(selectedOption) => {
-                      handleSelectChange(selectedOption, "loanDurationMetrics");
-                    }}
-                  />
-                </div>
-                <div className="w-full sm:w-2/3">
-                  <InputField
-                    disabled={
-                      formData.loanDurationMetrics === null ? true : false
-                    }
-                    value={formData?.loanDuration}
-                    required={false}
-                    name="loanDuration"
-                    onKeyPress={preventMinus}
-                    onWheel={() => document.activeElement.blur()}
-                    activeBorderColor="border-swBlue"
-                    placeholder="Enter number"
-                    onChange={(e) => {
-                      setInputState(e);
-                      //  calCommitmentTotal(e);
-                    }}
-                  />
-                </div>
-              </div>
-                </div>
-              </div>
-
-              <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
-                <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
-                  <LuCalculator size={14} className="text-violet-600" />
-                  Fees & repayment
-                </h3>
-                <div className="space-y-4">
-              <div className="flex gap-2">
-                <div className="w-full">
-                  <InputField
-                    value={formData.commitmentValue}
-                    label="Commitment Fees"
-                    disabled={formData.loanDuration === "" ? true : false}
-                    required={true}
-                    name="commitmentValue"
-                    onKeyPress={preventMinus}
-                    onWheel={() => document.activeElement.blur()}
-                    activeBorderColor="border-swBlue"
-                    placeholder="Enter Value"
-                    onChange={(e) => {
-                      setInputState(e);
-                      calCommitmentTotal(e);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div className="w-full">
-                  <InputField
-                    value={formData.managementValue}
-                    label="Management Fees"
-                    disabled={formData.commitmentValue === "" ? true : false}
-                    required={true}
-                    name="managementValue"
-                    onKeyPress={preventMinus}
-                    onWheel={() => document.activeElement.blur()}
-                    activeBorderColor="border-swBlue"
-                    placeholder="Enter Value"
-                    onChange={(e) => {
-                      setInputState(e);
-                      calManagementTotal(e);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-5 sm:gap-2">
-                <div className="w-full sm:w-1/3">
-                  <SelectField
-                    value={frequencyTypeData.find(
-                      (option) => option.value === formData.loanFrequencyType
-                    )}
-                    name="loanFrequencyType"
-                    disabled={formData.commitmentValue === "" ? true : false}
-                    optionValue={frequencyTypeData}
-                    label={"Loan Frequency Type"}
-                    required={true}
-                    placeholder={"Select frequency type"}
-                    isSearchable={false}
-                    onChange={(selectedOption) => {
-                      handleSelectChange(selectedOption, "loanFrequencyType");
-                      calcRepaymentsNo(selectedOption.value);
-                    }}
-                  />
-                </div>
-                <div className="w-full sm:w-2/3">
-                  <InputField
-                    disabled={true}
-                    label="Number of Repayments"
-                    required={true}
-                    name="numberOfRepayment"
-                    onKeyPress={preventMinus}
-                    onWheel={() => document.activeElement.blur()}
-                    value={formData.numberOfRepayment}
-                    activeBorderColor="border-swBlue"
-                    placeholder="Enter number of repayment"
-                  />
-                </div>
-              </div>
-              <div className="w-full">
-                <SelectField
-                  value={modifyInterestTypeData(interestType?.data?.data)?.find(
-                    (option) => option.value === formData.interestType
-                  )}
-                  name="interestType"
-                  disabled={formData.numberOfRepayment === "" ? true : false}
-                  optionValue={modifyInterestTypeData(interestType?.data?.data)}
-                  label={"Interest Type"}
-                  required={true}
-                  placeholder={"Select interest type"}
-                  isSearchable={false}
-                  onChange={(selectedOption) => {
-                    handleSelectChange(selectedOption, "interestType");
-                  }}
-                />
-              </div>
-              <div className="w-full">
-                <SelectField
-                  value={repaymentTypeData.find(
-                    (option) => option.value === formData.repaymentType
-                  )}
-                  name="repaymentType"
-                  disabled={formData.numberOfRepayment === "" ? true : false}
-                  optionValue={
-                    formData.interestType === "65392ef8f3b65979e7047c44"
-                      ? reducingBalrepaymentTypeData
-                      : repaymentTypeData
-                  }
-                  label={"Repayment Type"}
-                  required={true}
-                  placeholder={"Select repayment type"}
-                  isSearchable={false}
-                  onChange={handleRepaymentTypeChange}
-                />
-              </div>
-              {isEquatedRepayment && (
-                <div className="border border-gray-200 rounded-md p-3">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={useFixedPayment}
-                      onChange={handleUseFixedPaymentChange}
-                      className="h-4 w-4"
-                      aria-label="Use a fixed monthly payment"
-                    />
-                    Use a fixed monthly payment (EMI)
-                  </label>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {useFixedPayment
-                      ? "You're pinning the EMI to a specific amount below."
-                      : "Off: the backend will calculate the EMI from the loan amount, duration, and interest rate."}
-                  </p>
-                  {useFixedPayment && (
-                    <div className="mt-3">
-                      <InputField
-                        label="Fixed Monthly Payment"
-                        name="fixedMonthlyPayment"
-                        onKeyPress={preventMinus}
-                        onWheel={() => document.activeElement.blur()}
-                        value={fixedMonthlyPayment}
-                        onChange={handleFixedMonthlyPaymentChange}
-                        placeholder="e.g. 30000"
-                        endIcon={<p className="text-swGray">NGN &#8358;</p>}
+                <div className="flex flex-col gap-6">
+                  <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
+                    <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
+                      <LuSparkles size={14} className="text-amber-500" />
+                      Borrower & product
+                    </h3>
+                    <div className="space-y-4">
+                      <div className="">
+                        <label className="mb-2 block text-xs font-medium text-swGrey500">
+                          Select Customer{" "}
+                          <span className="ml-1 text-swIndicatorLightRed">
+                            *
+                          </span>
+                        </label>
+                        <button
+                          type="button"
+                          className="group flex w-full items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-3.5 text-left shadow-sm transition hover:border-swBlue/35 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-swBlue/25"
+                          onClick={() => {
+                            setIsOpen(true);
+                          }}
+                        >
+                          <span className="flex min-w-0 flex-1 items-center gap-3">
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-swBlueActiveStateBg text-swBlue transition group-hover:bg-swBlue group-hover:text-white">
+                              <LuSearch size={18} strokeWidth={2.25} />
+                            </span>
+                            {selectedCustomer != null ? (
+                              <span className="min-w-0">
+                                <span className="block truncate font-semibold text-swGrey500">
+                                  {selectedCustomer.firstName}{" "}
+                                  {selectedCustomer.lastName}
+                                </span>
+                                <span className="block truncate text-xs text-swGrey200">
+                                  Tap to change borrower
+                                </span>
+                              </span>
+                            ) : (
+                              <span className="text-sm text-swGrey200">
+                                Search and select customer
+                              </span>
+                            )}
+                          </span>
+                          <LuChevronRight
+                            className="shrink-0 text-swGrey200 transition group-hover:translate-x-0.5 group-hover:text-swBlue"
+                            size={20}
+                          />
+                        </button>
+                      </div>
+                      <SelectField
+                        value={modifyLoanPackageData(
+                          loanPackage?.data?.data,
+                        )?.find(
+                          (option) => option.value === formData.loanPackage,
+                        )}
+                        disabled={selectedCustomer === null ? true : false}
+                        name="loanPackage"
+                        optionValue={modifyLoanPackageData(
+                          loanPackage?.data?.data,
+                        )}
+                        label={"Loan Package "}
+                        required={true}
+                        placeholder={"Select loan package"}
+                        isSearchable={false}
+                        onChange={(selectedOption) => {
+                          handleSelectChange(selectedOption, "loanPackage");
+                          setLoanPackageText(selectedOption.label);
+                          setLoanPackageRate(selectedOption.interestRate);
+                        }}
                       />
-                    </div>
-                  )}
-                </div>
-              )}
-                </div>
-              </div>
+                      <div>
+                        <InputField
+                          disabled={
+                            formData.loanPackage === null ? true : false
+                          }
+                          name="interestRate"
+                          required={true}
+                          //ariaLabel={"Number input"}
+                          //onKeyPress={preventMinus}
+                          onWheel={() => document.activeElement.blur()}
+                          activeBorderColor="border-swBlue"
+                          endIcon={<p className="text-swGray">%</p>}
+                          label="Interest Rate"
+                          value={formData?.interestRate}
+                          placeholder={`Enter interest rate`}
+                          isActive="loan-amount"
+                          onChange={(e) => {
+                            setInputState(e);
 
-              {/* <div className="flex gap-2 items-end">
+                            if (formData.commitmentValue > 0) {
+                              updateCommitmentTotal(e);
+                            }
+                            if (
+                              formData.loanPackage &&
+                              formData.loanDuration &&
+                              formData.repaymentType
+                            ) {
+                              calculateInterest(
+                                e.target.value,
+                                formData.loanPackage,
+                                formData.loanDuration,
+                                formData.repaymentType,
+                              );
+                            }
+                          }}
+                          inputOpen={isInputOpen}
+                        />
+                        <p
+                          className={`mt-1.5 rounded-lg px-3 py-2 text-xs leading-relaxed ${
+                            formData?.interestRate <
+                              loanPackageInterestRate?.interestRate?.min ||
+                            formData?.interestRate >
+                              loanPackageInterestRate?.interestRate?.max
+                              ? "bg-red-50 font-medium text-swIndicatorLightRed"
+                              : "bg-slate-50 text-swGrey200"
+                          }`}
+                        >
+                          {formData?.interestRate <
+                          loanPackageInterestRate?.interestRate?.min
+                            ? `Interest rate cannot be less than ${loanPackageInterestRate?.interestRate?.min}%`
+                            : formData?.interestRate >
+                                loanPackageInterestRate?.interestRate?.max
+                              ? `Interest rate cannot be more than ${loanPackageInterestRate?.interestRate?.max}%`
+                              : `min = ${
+                                  loanPackageInterestRate?.interestRate?.min ||
+                                  0
+                                }% and max = ${
+                                  loanPackageInterestRate?.interestRate?.max ||
+                                  0
+                                }%`}
+                        </p>
+                      </div>
+                      {formData.loanPackage === "65390f290d0a83675c9517b3" ? (
+                        <SelectField
+                          value={assetTypeData?.find(
+                            (option) => option.value === formData.assetType,
+                          )}
+                          disabled={
+                            formData.loanPackage === null ? true : false
+                          }
+                          name="assetType"
+                          optionValue={assetTypeData}
+                          label={"Asset Type"}
+                          required={true}
+                          placeholder={"Select asset type"}
+                          isSearchable={false}
+                          onChange={(selectedOption) =>
+                            handleSelectChange(selectedOption, "assetType")
+                          }
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
+                    <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
+                      <LuBanknote size={14} className="text-emerald-600" />
+                      Terms & amounts
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <InputField
+                          disabled={
+                            formData.loanPackage === null ? true : false
+                          }
+                          name="loanAmount"
+                          required={true}
+                          ariaLabel={"Number input"}
+                          onKeyPress={preventMinus}
+                          onWheel={() => document.activeElement.blur()}
+                          activeBorderColor="border-swBlue"
+                          endIcon={<p className="text-swGray">NGN &#8358;</p>}
+                          label="Loan amount (Principal)"
+                          value={formData?.loanAmount?.toLocaleString()}
+                          placeholder="Enter loan amount"
+                          isActive="loan-amount"
+                          onChange={(e) => {
+                            setInputState(e);
+                            if (formData.commitmentValue > 0) {
+                              updateCommitmentTotal(e);
+                            }
+                            if (
+                              formData.loanPackage &&
+                              formData.loanDuration &&
+                              formData.repaymentType
+                            ) {
+                              calculateInterest(
+                                e.target.value,
+                                formData.loanPackage,
+                                formData.loanDuration,
+                                formData.repaymentType,
+                              );
+                            }
+                          }}
+                          inputOpen={isInputOpen}
+                        />
+                        <p
+                          className={`mt-1.5 rounded-lg px-3 py-2 text-xs leading-relaxed ${
+                            formData?.loanAmount <
+                              loanPackageInterestRate?.loanAmountRange?.min ||
+                            formData?.loanAmount >
+                              loanPackageInterestRate?.loanAmountRange?.max
+                              ? "bg-red-50 font-medium text-swIndicatorLightRed"
+                              : "bg-slate-50 text-swGrey200"
+                          }`}
+                        >
+                          {formData?.loanAmount <
+                          loanPackageInterestRate?.loanAmountRange?.min
+                            ? `Amount cannot be less than ₦${loanPackageInterestRate?.loanAmountRange?.min.toLocaleString()}`
+                            : formData?.loanAmount >
+                                loanPackageInterestRate?.loanAmountRange?.max
+                              ? `Amount cannot be more than ₦${loanPackageInterestRate?.loanAmountRange?.max.toLocaleString()}`
+                              : `min = ₦${
+                                  loanPackageInterestRate?.loanAmountRange?.min.toLocaleString() ||
+                                  0
+                                } and max = ₦${
+                                  loanPackageInterestRate?.loanAmountRange?.max.toLocaleString() ||
+                                  0
+                                }`}
+                        </p>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-2 items-end">
+                        <div className="w-full sm:w-1/3">
+                          <SelectField
+                            value={loanDurationMetricsData.find(
+                              (option) =>
+                                option.value === formData.loanDurationMetrics,
+                            )}
+                            name="loanDurationMetrics"
+                            disabled={formData.loanAmount === 0 ? true : false}
+                            optionValue={loanDurationMetricsData}
+                            label={"Duration"}
+                            required={true}
+                            placeholder={"duration metics"}
+                            isSearchable={false}
+                            onChange={(selectedOption) => {
+                              handleSelectChange(
+                                selectedOption,
+                                "loanDurationMetrics",
+                              );
+                            }}
+                          />
+                        </div>
+                        <div className="w-full sm:w-2/3">
+                          <InputField
+                            disabled={
+                              formData.loanDurationMetrics === null
+                                ? true
+                                : false
+                            }
+                            value={formData?.loanDuration}
+                            required={false}
+                            name="loanDuration"
+                            onKeyPress={preventMinus}
+                            onWheel={() => document.activeElement.blur()}
+                            activeBorderColor="border-swBlue"
+                            placeholder="Enter number"
+                            onChange={(e) => {
+                              setInputState(e);
+                              //  calCommitmentTotal(e);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 rounded-xl border border-gray-100/80 bg-gradient-to-b from-gray-50/80 to-white p-4 sm:p-5">
+                    <h3 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-swGrey200">
+                      <LuCalculator size={14} className="text-violet-600" />
+                      Fees & repayment
+                    </h3>
+                    <div className="space-y-4">
+                      <div className="flex gap-2">
+                        <div className="w-full">
+                          <InputField
+                            value={formData.commitmentValue}
+                            label="Commitment Fees"
+                            disabled={
+                              formData.loanDuration === "" ? true : false
+                            }
+                            required={true}
+                            name="commitmentValue"
+                            onKeyPress={preventMinus}
+                            onWheel={() => document.activeElement.blur()}
+                            activeBorderColor="border-swBlue"
+                            placeholder="Enter Value"
+                            onChange={(e) => {
+                              setInputState(e);
+                              calCommitmentTotal(e);
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="w-full">
+                          <InputField
+                            value={formData.managementValue}
+                            label="Management Fees"
+                            disabled={
+                              formData.commitmentValue === "" ? true : false
+                            }
+                            required={true}
+                            name="managementValue"
+                            onKeyPress={preventMinus}
+                            onWheel={() => document.activeElement.blur()}
+                            activeBorderColor="border-swBlue"
+                            placeholder="Enter Value"
+                            onChange={(e) => {
+                              setInputState(e);
+                              calManagementTotal(e);
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-5 sm:gap-2">
+                        <div className="w-full sm:w-1/3">
+                          <SelectField
+                            value={frequencyTypeData.find(
+                              (option) =>
+                                option.value === formData.loanFrequencyType,
+                            )}
+                            name="loanFrequencyType"
+                            disabled={
+                              formData.commitmentValue === "" ? true : false
+                            }
+                            optionValue={frequencyTypeData}
+                            label={"Loan Frequency Type"}
+                            required={true}
+                            placeholder={"Select frequency type"}
+                            isSearchable={false}
+                            onChange={(selectedOption) => {
+                              handleSelectChange(
+                                selectedOption,
+                                "loanFrequencyType",
+                              );
+                              calcRepaymentsNo(selectedOption.value);
+                            }}
+                          />
+                        </div>
+                        <div className="w-full sm:w-2/3">
+                          <InputField
+                            disabled={true}
+                            label="Number of Repayments"
+                            required={true}
+                            name="numberOfRepayment"
+                            onKeyPress={preventMinus}
+                            onWheel={() => document.activeElement.blur()}
+                            value={formData.numberOfRepayment}
+                            activeBorderColor="border-swBlue"
+                            placeholder="Enter number of repayment"
+                          />
+                        </div>
+                      </div>
+                      <div className="w-full">
+                        <SelectField
+                          value={modifyInterestTypeData(
+                            interestType?.data?.data,
+                          )?.find(
+                            (option) => option.value === formData.interestType,
+                          )}
+                          name="interestType"
+                          disabled={
+                            formData.numberOfRepayment === "" ? true : false
+                          }
+                          optionValue={modifyInterestTypeData(
+                            interestType?.data?.data,
+                          )}
+                          label={"Interest Type"}
+                          required={true}
+                          placeholder={"Select interest type"}
+                          isSearchable={false}
+                          onChange={(selectedOption) => {
+                            handleSelectChange(selectedOption, "interestType");
+                          }}
+                        />
+                      </div>
+                      <div className="w-full">
+                        <SelectField
+                          value={repaymentTypeData.find(
+                            (option) => option.value === formData.repaymentType,
+                          )}
+                          name="repaymentType"
+                          disabled={
+                            formData.numberOfRepayment === "" ? true : false
+                          }
+                          optionValue={
+                            formData.interestType === "65392ef8f3b65979e7047c44"
+                              ? reducingBalrepaymentTypeData
+                              : repaymentTypeData
+                          }
+                          label={"Repayment Type"}
+                          required={true}
+                          placeholder={"Select repayment type"}
+                          isSearchable={false}
+                          onChange={handleRepaymentTypeChange}
+                        />
+                      </div>
+                      {isEquatedRepayment && (
+                        <div className="border border-gray-200 rounded-md p-3">
+                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={useFixedPayment}
+                              onChange={handleUseFixedPaymentChange}
+                              className="h-4 w-4"
+                              aria-label="Use a fixed monthly payment"
+                            />
+                            Use a fixed monthly payment (EMI)
+                          </label>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {useFixedPayment
+                              ? "You're pinning the EMI to a specific amount below."
+                              : "Off: the backend will calculate the EMI from the loan amount, duration, and interest rate."}
+                          </p>
+                          {useFixedPayment && (
+                            <div className="mt-3">
+                              <InputField
+                                label="Fixed Monthly Payment"
+                                name="fixedMonthlyPayment"
+                                onKeyPress={preventMinus}
+                                onWheel={() => document.activeElement.blur()}
+                                value={fixedMonthlyPayment}
+                                onChange={handleFixedMonthlyPaymentChange}
+                                placeholder="e.g. 30000"
+                                endIcon={
+                                  <p className="text-swGray">NGN &#8358;</p>
+                                }
+                              />
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* <div className="flex gap-2 items-end">
                   <div className="w-1/3">
                     <SelectField
                       name="commitmentType"
@@ -1159,187 +1201,197 @@ const CreateLoan = () => {
                     <AiOutlinePlus size={20} />
                   </div>
                 </div> */}
-            </div>
-            </section>
+                </div>
+              </section>
 
-            <section className="rounded-2xl border border-gray-100/90 bg-white p-5 shadow-sm sm:p-6">
-              <div className="mb-5 flex items-center gap-3 border-b border-gray-100 pb-4">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10">
-                  <LuFileUp size={20} strokeWidth={2} />
-                </span>
-                <div>
-                  <h2 className="text-base font-bold text-swGrey500 sm:text-lg">
-                    Documents & uploads
-                  </h2>
-                  <p className="text-xs text-swGrey200 sm:text-sm">
-                    PDF, JPG, or PNG — max size per your server policy
+              <section className="rounded-2xl border border-gray-100/90 bg-white p-5 shadow-sm sm:p-6">
+                <div className="mb-5 flex items-center gap-3 border-b border-gray-100 pb-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-4 ring-emerald-500/10">
+                    <LuFileUp size={20} strokeWidth={2} />
+                  </span>
+                  <div>
+                    <h2 className="text-base font-bold text-swGrey500 sm:text-lg">
+                      Documents & uploads
+                    </h2>
+                    <p className="text-xs text-swGrey200 sm:text-sm">
+                      PDF, JPG, or PNG — max size per your server policy
+                    </p>
+                  </div>
+                </div>
+                <div className="mb-6 grid grid-cols-1 gap-5 xs:grid-cols-2 sm:grid-cols-3 [background-image:radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] rounded-xl p-3 sm:p-4">
+                  {renderFileInput(
+                    "Upload Collateral documents",
+                    "collaterals",
+                  )}
+                  {renderFileInput(
+                    "Upload Loan Application form",
+                    "applicationForm",
+                  )}
+                  {renderFileInput(
+                    "Upload Loan Affidavit document",
+                    "loanAffidavit",
+                  )}
+                  {renderFileInput("Upload Guarantor Form", "guarantorForm")}
+                  {renderFileInput(
+                    "Upload Account Statement",
+                    "statementOfAccounts",
+                  )}
+                  {renderFileInput("Proof of Ownership", "proofOfOwnership")}
+                  {renderFileInput("Power of Attorney", "powerOfAttorney")}
+                </div>
+              </section>
+
+              <div className="sticky bottom-0 z-30 mt-4 border-t border-gray-200/80 bg-gradient-to-t from-gray-50 via-gray-50/95 to-transparent pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 md:hidden">
+                <div className="rounded-2xl border border-gray-200/80 bg-white/95 p-4 shadow-2xl shadow-swBlue/10 backdrop-blur-md">
+                  <p className="mb-3 text-center text-[11px] font-semibold uppercase tracking-wide text-swGrey200">
+                    Continue when ready
                   </p>
+                  <div className="flex flex-col gap-3">
+                    <EditableButton
+                      blueBtn={true}
+                      disabled={
+                        formData.repaymentType === null || loading === true
+                          ? true
+                          : false
+                      }
+                      className={"w-full"}
+                      label={"Preview Interest"}
+                      onClick={goToReviewStep}
+                    />
+                    <EditableButton
+                      blueBtn={true}
+                      disabled={
+                        formData.repaymentType === null || loading === true
+                          ? true
+                          : false
+                      }
+                      startIcon={
+                        loading && (
+                          <Rings
+                            height="20"
+                            width="20"
+                            color="#ffffff"
+                            radius="2"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                            ariaLabel="rings-loading"
+                          />
+                        )
+                      }
+                      className={`w-full ${loading === true && "cursor-not-allowed"}`}
+                      label={"Create Loan"}
+                      onClick={submitLoan}
+                    />
+                  </div>
                 </div>
               </div>
-            <div className="mb-6 grid grid-cols-1 gap-5 xs:grid-cols-2 sm:grid-cols-3 [background-image:radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] rounded-xl p-3 sm:p-4">
-              {renderFileInput("Upload Collateral documents", "collaterals")}
-              {renderFileInput(
-                "Upload Loan Application form",
-                "applicationForm"
-              )}
-              {renderFileInput(
-                "Upload Loan Affidavit document",
-                "loanAffidavit"
-              )}
-              {renderFileInput("Upload Guarantor Form", "guarantorForm")}
-              {renderFileInput(
-                "Upload Account Statement",
-                "statementOfAccounts"
-              )}
-              {renderFileInput("Proof of Ownership", "proofOfOwnership")}
-              {renderFileInput("Power of Attorney", "powerOfAttorney")}
             </div>
-            </section>
+            <aside className="hidden w-full shrink-0 border-t border-gray-200/80 pt-6 md:block lg:w-[300px] xl:w-[320px] lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+              <div className="sticky top-4 max-h-[calc(100vh-6rem)] space-y-3 overflow-y-auto overscroll-contain rounded-2xl border border-gray-100/90 bg-gradient-to-b from-white via-white to-swBlueActiveStateBg/20 p-4 shadow-lg shadow-swBlue/5 ring-1 ring-black/[0.03]">
+                <div className="border-b border-gray-100 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-swBlue text-white shadow-md">
+                      <LuPanelRight size={18} strokeWidth={2.25} />
+                    </span>
+                    <div>
+                      <p className="text-lg font-bold text-swGrey500">
+                        At a glance
+                      </p>
+                      <p className="text-[11px] leading-snug text-swGrey200">
+                        Snapshot only — full fields stay on the left
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                {selectedCustomer != null ? (
+                  <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
+                    <BorrowerAvatar
+                      key={`${selectedCustomer?._id ?? "c"}-${getProfilePictureSrc(selectedCustomer) ?? "no-photo"}`}
+                      customer={selectedCustomer}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-swGrey500">
+                        {selectedCustomer.firstName} {selectedCustomer.lastName}
+                      </p>
+                      <p className="truncate text-xs text-swGrey200">
+                        {selectedCustomer.phoneNumber?.replace(/^\+/, "") ||
+                          "—"}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="rounded-lg border border-dashed border-gray-200 bg-gray-50/80 px-3 py-2 text-center text-xs text-swGrey200">
+                    No borrower selected yet
+                  </p>
+                )}
 
-            <div className="sticky bottom-0 z-30 mt-4 border-t border-gray-200/80 bg-gradient-to-t from-gray-50 via-gray-50/95 to-transparent pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 md:hidden">
-              <div className="rounded-2xl border border-gray-200/80 bg-white/95 p-4 shadow-2xl shadow-swBlue/10 backdrop-blur-md">
-                <p className="mb-3 text-center text-[11px] font-semibold uppercase tracking-wide text-swGrey200">
-                  Continue when ready
+                <div className="rounded-xl border border-swBlue/20 bg-swBlueActiveStateBg/50 p-3">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                    Principal
+                  </p>
+                  <p className="text-lg font-bold tabular-nums text-swGrey500 sm:text-xl">
+                    ₦{formatNumber(formData.loanAmount) || "0"}
+                  </p>
+                </div>
+
+                <dl className="space-y-0 text-sm">
+                  <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
+                    <dt className="text-swGrey200">Package</dt>
+                    <dd className="max-w-[60%] text-right font-medium text-swGrey500">
+                      {loanPackageText || "—"}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
+                    <dt className="text-swGrey200">Rate & tenor</dt>
+                    <dd className="text-right font-medium text-swGrey500">
+                      {formData?.interestRate ?? "—"}% ·{" "}
+                      {formData.loanDuration || "—"}{" "}
+                      {formData.loanDurationMetrics || ""}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
+                    <dt className="text-swGrey200">Repayment</dt>
+                    <dd className="max-w-[58%] text-right font-medium text-swGrey500">
+                      {repaymentTypeData.find(
+                        (o) => o.value === formData.repaymentType,
+                      )?.label || "—"}{" "}
+                      · {formData.numberOfRepayment || 0} pymt
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-2 py-2">
+                    <dt className="text-swGrey200">Fees (est.)</dt>
+                    <dd className="text-right font-semibold tabular-nums text-swGrey500">
+                      ₦
+                      {(
+                        (Number(formData.commitmentTotal) || 0) +
+                        (Number(formData.managementTotal) || 0)
+                      ).toLocaleString()}
+                    </dd>
+                  </div>
+                </dl>
+
+                {interest != null && !Number.isNaN(Number(interest)) && (
+                  <div className="rounded-lg border border-emerald-100 bg-emerald-50/60 px-3 py-2">
+                    <p className="text-[10px] font-bold uppercase tracking-wide text-emerald-800">
+                      Est. interest (maturity)
+                    </p>
+                    <p className="text-sm font-bold tabular-nums text-emerald-900">
+                      ₦
+                      {Number(interest)
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    </p>
+                  </div>
+                )}
+
+                <p className="text-center text-[10px] leading-relaxed text-swGrey200">
+                  Full breakdown appears after you tap{" "}
+                  <span className="font-semibold text-swGrey400">
+                    Preview interest
+                  </span>
+                  .
                 </p>
-                <div className="flex flex-col gap-3">
-                  <EditableButton
-                    blueBtn={true}
-                    disabled={
-                      formData.repaymentType === null || loading === true
-                        ? true
-                        : false
-                    }
-                    className={"w-full"}
-                    label={"Preview Interest"}
-                    onClick={goToReviewStep}
-                  />
-                  <EditableButton
-                    blueBtn={true}
-                    disabled={
-                      formData.repaymentType === null || loading === true
-                        ? true
-                        : false
-                    }
-                    startIcon={
-                      loading && (
-                        <Rings
-                          height="20"
-                          width="20"
-                          color="#ffffff"
-                          radius="2"
-                          wrapperStyle={{}}
-                          wrapperClass=""
-                          visible={true}
-                          ariaLabel="rings-loading"
-                        />
-                      )
-                    }
-                    className={`w-full ${loading === true && "cursor-not-allowed"}`}
-                    label={"Create Loan"}
-                    onClick={submitLoan}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <aside className="hidden w-full shrink-0 border-t border-gray-200/80 pt-6 md:block lg:w-[300px] xl:w-[320px] lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
-            <div className="sticky top-4 max-h-[calc(100vh-6rem)] space-y-3 overflow-y-auto overscroll-contain rounded-2xl border border-gray-100/90 bg-gradient-to-b from-white via-white to-swBlueActiveStateBg/20 p-4 shadow-lg shadow-swBlue/5 ring-1 ring-black/[0.03]">
-            <div className="border-b border-gray-100 pb-3">
-              <div className="flex items-center gap-2">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-swBlue text-white shadow-md">
-                  <LuPanelRight size={18} strokeWidth={2.25} />
-                </span>
-                <div>
-                  <p className="text-lg font-bold text-swGrey500">At a glance</p>
-                  <p className="text-[11px] leading-snug text-swGrey200">
-                    Snapshot only — full fields stay on the left
-                  </p>
-                </div>
-              </div>
-            </div>
-            {selectedCustomer != null ? (
-              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
-                <BorrowerAvatar
-                  key={`${selectedCustomer?._id ?? "c"}-${getProfilePictureSrc(selectedCustomer) ?? "no-photo"}`}
-                  customer={selectedCustomer}
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-swGrey500">
-                    {selectedCustomer.firstName} {selectedCustomer.lastName}
-                  </p>
-                  <p className="truncate text-xs text-swGrey200">
-                    {selectedCustomer.phoneNumber?.replace(/^\+/, "") || "—"}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <p className="rounded-lg border border-dashed border-gray-200 bg-gray-50/80 px-3 py-2 text-center text-xs text-swGrey200">
-                No borrower selected yet
-              </p>
-            )}
-
-            <div className="rounded-xl border border-swBlue/20 bg-swBlueActiveStateBg/50 p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
-                Principal
-              </p>
-              <p className="text-lg font-bold tabular-nums text-swGrey500 sm:text-xl">
-                ₦{formatNumber(formData.loanAmount) || "0"}
-              </p>
-            </div>
-
-            <dl className="space-y-0 text-sm">
-              <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
-                <dt className="text-swGrey200">Package</dt>
-                <dd className="max-w-[60%] text-right font-medium text-swGrey500">
-                  {loanPackageText || "—"}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
-                <dt className="text-swGrey200">Rate & tenor</dt>
-                <dd className="text-right font-medium text-swGrey500">
-                  {formData?.interestRate ?? "—"}% · {formData.loanDuration || "—"}{" "}
-                  {formData.loanDurationMetrics || ""}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
-                <dt className="text-swGrey200">Repayment</dt>
-                <dd className="max-w-[58%] text-right font-medium text-swGrey500">
-                  {repaymentTypeData.find(
-                    (o) => o.value === formData.repaymentType
-                  )?.label || "—"}{" "}
-                  · {formData.numberOfRepayment || 0} pymt
-                </dd>
-              </div>
-              <div className="flex justify-between gap-2 py-2">
-                <dt className="text-swGrey200">Fees (est.)</dt>
-                <dd className="text-right font-semibold tabular-nums text-swGrey500">
-                  ₦
-                  {(
-                    (Number(formData.commitmentTotal) || 0) +
-                    (Number(formData.managementTotal) || 0)
-                  ).toLocaleString()}
-                </dd>
-              </div>
-            </dl>
-
-            {interest != null && !Number.isNaN(Number(interest)) && (
-              <div className="rounded-lg border border-emerald-100 bg-emerald-50/60 px-3 py-2">
-                <p className="text-[10px] font-bold uppercase tracking-wide text-emerald-800">
-                  Est. interest (maturity)
-                </p>
-                <p className="text-sm font-bold tabular-nums text-emerald-900">
-                  ₦
-                  {Number(interest)
-                    .toFixed(2)
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </p>
-              </div>
-            )}
-
-            <p className="text-center text-[10px] leading-relaxed text-swGrey200">
-              Full breakdown appears after you tap{" "}
-              <span className="font-semibold text-swGrey400">Preview interest</span>.
-            </p>
 
                 <div className="flex flex-col gap-3 border-t border-gray-100 pt-3">
                   <EditableButton
@@ -1382,234 +1434,249 @@ const CreateLoan = () => {
                     onClick={submitLoan}
                   />
                 </div>
-            </div>
-          </aside>
+              </div>
+            </aside>
           </div>
         </main>
       ) : null}
 
       {currentStep === 2 && (
         <main className="min-h-full bg-gradient-to-b from-[#f0f6fc] via-gray-50 to-gray-50 text-swGray">
-        <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="w-full rounded-2xl border border-gray-100/90 bg-white p-4 shadow-sm sm:p-6 lg:w-2/3">
-            <nav
-              className="mb-6 flex flex-col gap-3 rounded-xl border border-swBlue/15 bg-gradient-to-r from-swBlueActiveStateBg/60 to-white p-3 shadow-inner sm:flex-row sm:items-stretch sm:gap-3"
-              aria-label="Application steps"
-            >
-              <button
-                type="button"
-                onClick={() => setCurrentStep(1)}
-                className="flex flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left transition hover:border-swBlue/40 hover:bg-swBlueActiveStateBg/40 hover:shadow-sm"
-              >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-swBlue/35 bg-white text-sm font-bold text-swBlue shadow-sm">
-                  1
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
-                    Go back
-                  </p>
-                  <p className="font-semibold text-swGrey500">
-                    Details & documents
-                  </p>
-                </div>
-              </button>
-              <div
-                className="hidden h-auto w-px shrink-0 bg-gradient-to-b from-transparent via-gray-200 to-transparent sm:block"
-                aria-hidden
-              />
-              <div
-                className="flex flex-1 items-center gap-3 rounded-xl border border-swBlue/25 bg-swBlueActiveStateBg/60 p-3"
-                aria-current="step"
-              >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-swBlue to-swDarkBlue text-sm font-bold text-white shadow-md shadow-swBlue/25">
-                  2
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
-                    You are here
-                  </p>
-                  <p className="font-semibold text-swGrey500">Review & create</p>
-                </div>
-              </div>
-            </nav>
-            <div className="overflow-hidden rounded-xl border border-gray-100/80 bg-gray-50/30">
-            <PreviewInterest
-              formData={formData}
-              selectedCustomer={selectedCustomer}
-              setCurrentStep={setCurrentStep}
-              data={interestValue?.data}
-            />
-            </div>
-
-            <div className="mt-6 flex flex-col gap-3 border-t border-gray-100 pt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(1)}
-                className="order-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-swGrey500 shadow-sm transition hover:border-swBlue/35 hover:bg-swBlueActiveStateBg/50 hover:text-swBlue sm:order-1 sm:w-auto"
-              >
-                <LuArrowLeft size={18} strokeWidth={2.25} className="shrink-0" />
-                Back to edit details
-              </button>
-              <p className="order-1 hidden text-xs text-swGrey200 sm:order-2 sm:mr-auto sm:inline sm:max-w-xs">
-                <LuPencil
-                  size={14}
-                  className="mr-1 inline align-text-bottom text-swBlue"
-                />
-                Return to step 1 to change any value, then run{" "}
-                <span className="font-medium text-swGrey400">Preview interest</span>{" "}
-                again to refresh numbers.
-              </p>
-              <div className="md:hidden">
-                <EditableButton
-                  blueBtn={true}
-                  disabled={
-                    formData.repaymentType === null || loading === true
-                      ? true
-                      : false
-                  }
-                  startIcon={
-                    loading && (
-                      <Rings
-                        height="20"
-                        width="20"
-                        color="#ffffff"
-                        radius="2"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                        visible={true}
-                        ariaLabel="rings-loading"
-                      />
-                    )
-                  }
-                  className={`w-full ${loading === true && "cursor-not-allowed"}`}
-                  label={"Create Loan"}
-                  onClick={submitLoan}
-                />
-              </div>
-            </div>
-          </div>
-          <aside className="hidden w-full shrink-0 border-t border-gray-200/80 pt-6 md:block lg:w-[300px] xl:w-[320px] lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
-            <div className="sticky top-4 max-h-[calc(100vh-6rem)] space-y-3 overflow-y-auto overscroll-contain rounded-2xl border border-gray-100/90 bg-gradient-to-b from-white via-white to-swBlueActiveStateBg/20 p-4 shadow-lg shadow-swBlue/5 ring-1 ring-black/[0.03]">
-            <div className="border-b border-gray-100 pb-3">
-              <div className="flex items-center gap-2">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-swBlue text-white shadow-md">
-                  <LuPanelRight size={18} strokeWidth={2.25} />
-                </span>
-                <div>
-                  <p className="text-lg font-bold text-swGrey500">Review snapshot</p>
-                  <p className="text-[11px] leading-snug text-swGrey200">
-                    Key figures from your preview — full schedule is on the left
-                  </p>
-                </div>
-              </div>
-            </div>
-            {selectedCustomer != null ? (
-              <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
-                <BorrowerAvatar
-                  key={`${selectedCustomer?._id ?? "c"}-${getProfilePictureSrc(selectedCustomer) ?? "no-photo"}`}
-                  customer={selectedCustomer}
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-swGrey500">
-                    {selectedCustomer.firstName} {selectedCustomer.lastName}
-                  </p>
-                  <p className="truncate text-xs text-swGrey200">
-                    {selectedCustomer.phoneNumber?.replace(/^\+/, "") || "—"}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <p className="rounded-lg border border-dashed border-gray-200 bg-gray-50/80 px-3 py-2 text-center text-xs text-swGrey200">
-                No borrower selected yet
-              </p>
-            )}
-
-            <div className="rounded-xl border border-swBlue/20 bg-swBlueActiveStateBg/50 p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
-                Principal
-              </p>
-              <p className="text-lg font-bold tabular-nums text-swGrey500 sm:text-xl">
-                ₦{formatNumber(formData.loanAmount) || "0"}
-              </p>
-            </div>
-
-            <div className="rounded-xl border-2 border-swBlue/30 bg-white p-3 shadow-sm">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-swGrey200">
-                Total at maturity
-              </p>
-              <p className="text-xl font-bold tabular-nums text-swBlue">
-                ₦
-                {interestValue?.data?.totalPayments != null
-                  ? String(interestValue.data.totalPayments).replace(
-                      /\B(?=(\d{3})+(?!\d))/g,
-                      ","
-                    )
-                  : "—"}
-              </p>
-            </div>
-
-            <dl className="space-y-0 text-sm">
-              <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
-                <dt className="text-swGrey200">Interest (preview)</dt>
-                <dd className="font-semibold tabular-nums text-swGrey500">
-                  ₦
-                  {interestValue?.data?.totalInterestPayments != null
-                    ? Number(interestValue.data.totalInterestPayments)
-                        .toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    : "—"}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-2 py-2">
-                <dt className="text-swGrey200">Fees (commitment + mgmt)</dt>
-                <dd className="font-semibold tabular-nums text-swGrey500">
-                  ₦
-                  {(
-                    (Number(formData.commitmentTotal) || 0) +
-                    (Number(formData.managementTotal) || 0)
-                  ).toLocaleString()}
-                </dd>
-              </div>
-            </dl>
-
-            <p className="text-center text-[10px] leading-relaxed text-swGrey200">
-              Line-by-line breakdown is in the preview panel.
-            </p>
-
-                <div className="border-t border-gray-100 pt-3">
-                  <EditableButton
-                    blueBtn={true}
-                    disabled={
-                      formData.repaymentType === null || loading === true
-                        ? true
-                        : false
-                    }
-                    startIcon={
-                      loading && (
-                        <Rings
-                          height="20"
-                          width="20"
-                          color="#ffffff"
-                          radius="2"
-                          wrapperStyle={{}}
-                          wrapperClass=""
-                          visible={true}
-                          ariaLabel="rings-loading"
-                        />
-                      )
-                    }
-                    className={`w-full ${
-                      loading === true && "cursor-not-allowed"
-                    }`}
-                    label={"Create Loan"}
-                    onClick={submitLoan}
+          <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+              <div className="w-full rounded-2xl border border-gray-100/90 bg-white p-4 shadow-sm sm:p-6 lg:w-2/3">
+                <nav
+                  className="mb-6 flex flex-col gap-3 rounded-xl border border-swBlue/15 bg-gradient-to-r from-swBlueActiveStateBg/60 to-white p-3 shadow-inner sm:flex-row sm:items-stretch sm:gap-3"
+                  aria-label="Application steps"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep(1)}
+                    className="flex flex-1 items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-left transition hover:border-swBlue/40 hover:bg-swBlueActiveStateBg/40 hover:shadow-sm"
+                  >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-swBlue/35 bg-white text-sm font-bold text-swBlue shadow-sm">
+                      1
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                        Go back
+                      </p>
+                      <p className="font-semibold text-swGrey500">
+                        Details & documents
+                      </p>
+                    </div>
+                  </button>
+                  <div
+                    className="hidden h-auto w-px shrink-0 bg-gradient-to-b from-transparent via-gray-200 to-transparent sm:block"
+                    aria-hidden
+                  />
+                  <div
+                    className="flex flex-1 items-center gap-3 rounded-xl border border-swBlue/25 bg-swBlueActiveStateBg/60 p-3"
+                    aria-current="step"
+                  >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-swBlue to-swDarkBlue text-sm font-bold text-white shadow-md shadow-swBlue/25">
+                      2
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                        You are here
+                      </p>
+                      <p className="font-semibold text-swGrey500">
+                        Review & create
+                      </p>
+                    </div>
+                  </div>
+                </nav>
+                <div className="overflow-hidden rounded-xl border border-gray-100/80 bg-gray-50/30">
+                  <PreviewInterest
+                    formData={formData}
+                    selectedCustomer={selectedCustomer}
+                    setCurrentStep={setCurrentStep}
+                    data={interestValue?.data}
                   />
                 </div>
+
+                <div className="mt-6 flex flex-col gap-3 border-t border-gray-100 pt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep(1)}
+                    className="order-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-swGrey500 shadow-sm transition hover:border-swBlue/35 hover:bg-swBlueActiveStateBg/50 hover:text-swBlue sm:order-1 sm:w-auto"
+                  >
+                    <LuArrowLeft
+                      size={18}
+                      strokeWidth={2.25}
+                      className="shrink-0"
+                    />
+                    Back to edit details
+                  </button>
+                  <p className="order-1 hidden text-xs text-swGrey200 sm:order-2 sm:mr-auto sm:inline sm:max-w-xs">
+                    <LuPencil
+                      size={14}
+                      className="mr-1 inline align-text-bottom text-swBlue"
+                    />
+                    Return to step 1 to change any value, then run{" "}
+                    <span className="font-medium text-swGrey400">
+                      Preview interest
+                    </span>{" "}
+                    again to refresh numbers.
+                  </p>
+                  <div className="md:hidden">
+                    <EditableButton
+                      blueBtn={true}
+                      disabled={
+                        formData.repaymentType === null || loading === true
+                          ? true
+                          : false
+                      }
+                      startIcon={
+                        loading && (
+                          <Rings
+                            height="20"
+                            width="20"
+                            color="#ffffff"
+                            radius="2"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                            ariaLabel="rings-loading"
+                          />
+                        )
+                      }
+                      className={`w-full ${loading === true && "cursor-not-allowed"}`}
+                      label={"Create Loan"}
+                      onClick={submitLoan}
+                    />
+                  </div>
+                </div>
+              </div>
+              <aside className="hidden w-full shrink-0 border-t border-gray-200/80 pt-6 md:block lg:w-[300px] xl:w-[320px] lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+                <div className="sticky top-4 max-h-[calc(100vh-6rem)] space-y-3 overflow-y-auto overscroll-contain rounded-2xl border border-gray-100/90 bg-gradient-to-b from-white via-white to-swBlueActiveStateBg/20 p-4 shadow-lg shadow-swBlue/5 ring-1 ring-black/[0.03]">
+                  <div className="border-b border-gray-100 pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-swBlue text-white shadow-md">
+                        <LuPanelRight size={18} strokeWidth={2.25} />
+                      </span>
+                      <div>
+                        <p className="text-lg font-bold text-swGrey500">
+                          Review snapshot
+                        </p>
+                        <p className="text-[11px] leading-snug text-swGrey200">
+                          Key figures from your preview — full schedule is on
+                          the left
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  {selectedCustomer != null ? (
+                    <div className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
+                      <BorrowerAvatar
+                        key={`${selectedCustomer?._id ?? "c"}-${getProfilePictureSrc(selectedCustomer) ?? "no-photo"}`}
+                        customer={selectedCustomer}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-swGrey500">
+                          {selectedCustomer.firstName}{" "}
+                          {selectedCustomer.lastName}
+                        </p>
+                        <p className="truncate text-xs text-swGrey200">
+                          {selectedCustomer.phoneNumber?.replace(/^\+/, "") ||
+                            "—"}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="rounded-lg border border-dashed border-gray-200 bg-gray-50/80 px-3 py-2 text-center text-xs text-swGrey200">
+                      No borrower selected yet
+                    </p>
+                  )}
+
+                  <div className="rounded-xl border border-swBlue/20 bg-swBlueActiveStateBg/50 p-3">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-swBlue">
+                      Principal
+                    </p>
+                    <p className="text-lg font-bold tabular-nums text-swGrey500 sm:text-xl">
+                      ₦{formatNumber(formData.loanAmount) || "0"}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border-2 border-swBlue/30 bg-white p-3 shadow-sm">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-swGrey200">
+                      Total at maturity
+                    </p>
+                    <p className="text-xl font-bold tabular-nums text-swBlue">
+                      ₦
+                      {interestValue?.data?.totalPayments != null
+                        ? String(interestValue.data.totalPayments).replace(
+                            /\B(?=(\d{3})+(?!\d))/g,
+                            ",",
+                          )
+                        : "—"}
+                    </p>
+                  </div>
+
+                  <dl className="space-y-0 text-sm">
+                    <div className="flex justify-between gap-2 border-b border-gray-100 py-2">
+                      <dt className="text-swGrey200">Interest (preview)</dt>
+                      <dd className="font-semibold tabular-nums text-swGrey500">
+                        ₦
+                        {interestValue?.data?.totalInterestPayments != null
+                          ? Number(interestValue.data.totalInterestPayments)
+                              .toFixed(2)
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          : "—"}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between gap-2 py-2">
+                      <dt className="text-swGrey200">
+                        Fees (commitment + mgmt)
+                      </dt>
+                      <dd className="font-semibold tabular-nums text-swGrey500">
+                        ₦
+                        {(
+                          (Number(formData.commitmentTotal) || 0) +
+                          (Number(formData.managementTotal) || 0)
+                        ).toLocaleString()}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <p className="text-center text-[10px] leading-relaxed text-swGrey200">
+                    Line-by-line breakdown is in the preview panel.
+                  </p>
+
+                  <div className="border-t border-gray-100 pt-3">
+                    <EditableButton
+                      blueBtn={true}
+                      disabled={
+                        formData.repaymentType === null || loading === true
+                          ? true
+                          : false
+                      }
+                      startIcon={
+                        loading && (
+                          <Rings
+                            height="20"
+                            width="20"
+                            color="#ffffff"
+                            radius="2"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                            ariaLabel="rings-loading"
+                          />
+                        )
+                      }
+                      className={`w-full ${
+                        loading === true && "cursor-not-allowed"
+                      }`}
+                      label={"Create Loan"}
+                      onClick={submitLoan}
+                    />
+                  </div>
+                </div>
+              </aside>
             </div>
-          </aside>
-        </div>
-        </div>
+          </div>
         </main>
       )}
 
