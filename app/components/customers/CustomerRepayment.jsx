@@ -53,8 +53,13 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
   });
 
   const isEquated = repaymentType === "equatedRepayment";
+  // Interest servicing reports the same accrual fields as installment, so it
+  // reads the remaining amounts rather than the cycle totals — otherwise a
+  // settled cycle keeps showing its full interest in the Amount Due column.
   const usesAccrualFieldsForType =
-    repaymentType === "installmentPayment" || isEquated;
+    repaymentType === "installmentPayment" ||
+    repaymentType === "interestServicing" ||
+    isEquated;
 
   const parsedLogAmount = parseRepaymentAmountInput(formData?.repaymentAmount);
   const exceedsOutstandingBalance =
