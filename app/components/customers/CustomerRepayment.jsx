@@ -53,13 +53,12 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
   });
 
   const isEquated = repaymentType === "equatedRepayment";
-  // Interest servicing reports the same accrual fields as installment, so it
-  // reads the remaining amounts rather than the cycle totals — otherwise a
-  // settled cycle keeps showing its full interest in the Amount Due column.
+  // Interest servicing is allocated with equated rules on the backend, so its
+  // amount due and balance come from the same accrued fields as equated.
+  const usesEquatedAmounts =
+    isEquated || repaymentType === "interestServicing";
   const usesAccrualFieldsForType =
-    repaymentType === "installmentPayment" ||
-    repaymentType === "interestServicing" ||
-    isEquated;
+    repaymentType === "installmentPayment" || usesEquatedAmounts;
 
   const parsedLogAmount = parseRepaymentAmountInput(formData?.repaymentAmount);
   const exceedsOutstandingBalance =
@@ -157,7 +156,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
       let actualAmountDue;
       let displayInterest;
       if (usesAccrualFields) {
-        if (isEquated) {
+        if (usesEquatedAmounts) {
           displayInterest =
             item?.accruedInterestRemaining != null &&
             item?.accruedInterestRemaining !== ""
@@ -211,7 +210,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
       // directly (do not recompute from scheduled interestRemaining — that's a
       // different, capped number now and would understate/overstate what's owed).
       let balanceToPay;
-      if (isEquated) {
+      if (usesEquatedAmounts) {
         balanceToPay =
           item?.balanceToPay != null && item?.balanceToPay !== ""
             ? Number(item.balanceToPay)
