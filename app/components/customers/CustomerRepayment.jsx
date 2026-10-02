@@ -56,7 +56,9 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
   // Interest servicing is allocated with equated rules on the backend, so its
   // amount due and balance come from the same accrued fields as equated.
   const usesEquatedAmounts =
-    isEquated || repaymentType === "interestServicing";
+    isEquated ||
+    repaymentType === "interestServicing" ||
+    repaymentType === "bulletRepayment";
   const usesAccrualFieldsForType =
     repaymentType === "installmentPayment" || usesEquatedAmounts;
 

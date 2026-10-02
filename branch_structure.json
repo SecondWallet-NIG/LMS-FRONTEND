@@ -1,0 +1,33 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "bullet-loan-type",
+    "fixed-column-transaction",
+    "live-uat",
+    "main",
+    "origin",
+    "staging",
+    "staging-equated-option",
+    "staging-loan-servicing"
+  ],
+  "parent": {
+    "bullet-loan-type": "main",
+    "fixed-column-transaction": "main",
+    "live-uat": "main",
+    "main": null,
+    "origin": "main",
+    "staging": "main",
+    "staging-equated-option": "staging",
+    "staging-loan-servicing": "staging"
+  },
+  "order": [
+    "main",
+    "bullet-loan-type",
+    "fixed-column-transaction",
+    "live-uat",
+    "origin",
+    "staging",
+    "staging-equated-option",
+    "staging-loan-servicing"
+  ]
+}

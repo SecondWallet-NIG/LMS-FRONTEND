@@ -27,12 +27,14 @@ const testRepaymentTypeOptions = [
   { value: "installmentPayment", label: "Installment Payment" },
   { value: "equatedRepayment", label: "Equated Repayment" },
   { value: "interestServicing", label: "Interest Servicing" },
+  { value: "bulletRepayment", label: "Bullet Repayment" },
 ];
 
 const repaymentTypeLabels = {
   installmentPayment: "Installment Payment",
   equatedRepayment: "Equated Repayment",
   interestServicing: "Interest Servicing",
+  bulletRepayment: "Bullet Repayment",
 };
 
 const TestInstallmentLoan = () => {
