@@ -950,6 +950,8 @@ function ReusableDataTable({
   filterParams,
   userId,
   role,
+  stickyHeader = false,
+  maxHeight = "70vh",
 }) {
   const [data, setData] = useState(initialData || []);
   const [dataId, setDataId] = useState([]);
@@ -1678,16 +1680,21 @@ function ReusableDataTable({
           </div>
         )}
         {data?.length > 0 && loading == false ? (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse overflow-hidden rounded-xl bg-white">
+          <div
+            className="overflow-auto rounded-xl"
+            style={stickyHeader ? { maxHeight } : undefined}
+          >
+            <table className="w-full border-separate border-spacing-0 bg-white">
               <thead>
-                <tr className="bg-swLightGray/70">
+                <tr>
                   {headers
                     .filter((item) => dataId.includes(item.id))
                     .map((header) => (
                       <th
                         key={header.id}
-                        className="whitespace-nowrap border-b border-gray-100 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-swGray cursor-pointer select-none"
+                        className={`whitespace-nowrap border-b border-gray-200 bg-gray-50 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-swGray cursor-pointer select-none ${
+                          stickyHeader ? "sticky top-0 z-10" : ""
+                        }`}
                         onClick={() => handleSort(header)}
                         aria-label={`Sort by ${header.label}`}
                         aria-sort={
@@ -1732,14 +1739,14 @@ function ReusableDataTable({
                         }
                       }
                     }}
-                    className="cursor-pointer transition-colors hover:bg-swLightGray/60 odd:bg-white even:bg-gray-50/40 border-b border-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-swBlue/25"
+                    className="cursor-pointer transition-colors hover:bg-swLightGray/60 odd:bg-white even:bg-gray-50/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-swBlue/25"
                   >
                     {headers
-                      .filter((item) => dataId.includes(item.id))
+                      .filter((h) => dataId.includes(h.id))
                       .map((header) => (
                         <td
                           key={header.id}
-                          className="whitespace-nowrap px-4 py-4 text-xs font-semibold text-swGrey500"
+                          className="whitespace-nowrap border-b border-gray-100 px-4 py-4 text-xs font-semibold text-swGrey500"
                         >
                           {item[header.id]}
                         </td>
