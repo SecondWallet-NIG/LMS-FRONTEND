@@ -134,14 +134,16 @@ const CustomerLoanTransactions = ({ loanId }) => {
     <div className="w-full">
       <ToastContainer />
       <ReusableDataTable
-        dataTransformer={customDataTransformer}
-        headers={headers}
-        initialData={[]}
-        apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/${loanId}/transactions`}
-        sortedBy={{ field: "transactionDate", direction: "desc" }}
-        filters={true}
-        pagination={true}
-      />
+      dataTransformer={customDataTransformer}
+      headers={headers}
+      initialData={[]}
+      apiEndpoint={`${process.env.NEXT_PUBLIC_API_URL}/api/loan-application/${loanId}/transactions`}
+      sortedBy={{ field: "transactionDate", direction: "desc" }}
+      filters={true}
+      pagination={true}
+      stickyHeader
+      maxHeight="70vh"
+    />
 
       <div>
         {handleFileExtention(url) === "pdf" ? (
