@@ -471,10 +471,12 @@ const ViewLoan = () => {
     { value: "interestServicing", label: "Interest Servicing" },
     { value: "installmentPayment", label: "Installment Payment" },
     { value: "equatedRepayment", label: "Equated Repayment" },
+    { value: "moratorium", label: "Moratorium" },
   ];
 
   const reducingBalrepaymentTypeData = [
     { value: "installmentPayment", label: "Installment Payment" },
+    { value: "moratorium", label: "Moratorium" },
   ];
 
   const loanDurationMetricsData = [
