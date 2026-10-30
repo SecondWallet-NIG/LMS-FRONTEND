@@ -53,6 +53,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
   });
 
   const isEquated = repaymentType === "equatedRepayment";
+  const isMoratorium = repaymentType === "moratorium";
   // Interest servicing is allocated with equated rules on the backend, so its
   // amount due and balance come from the same accrued fields as equated.
   const usesEquatedAmounts =
@@ -60,7 +61,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
     repaymentType === "interestServicing" ||
     repaymentType === "bulletRepayment";
   const usesAccrualFieldsForType =
-    repaymentType === "installmentPayment" || usesEquatedAmounts;
+    repaymentType === "installmentPayment" || isMoratorium || usesEquatedAmounts;
 
   const parsedLogAmount = parseRepaymentAmountInput(formData?.repaymentAmount);
   const exceedsOutstandingBalance =
@@ -524,7 +525,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         </p>
       )}
       <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-        {repaymentType === "installmentPayment" &&
+        {(repaymentType === "installmentPayment" || isMoratorium) &&
           status !== "Closed Off" &&
           status !== "Declined" && (
             <Button
