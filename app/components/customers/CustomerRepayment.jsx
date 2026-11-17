@@ -524,7 +524,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         </p>
       )}
       <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-        {repaymentType === "installmentPayment" &&
+        {usesAccrualFieldsForType &&
           status !== "Closed Off" &&
           status !== "Declined" && (
             <Button
@@ -557,7 +557,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         onClose={() => setShowReapplyConfirm(false)}
         onConfirm={handleReapplyAllocations}
         title="Reapply payment allocation?"
-        message="This replays the loan ledger from disbursement and reapplies every approved payment in date order (interest before principal on each installment). Use this to fix loans that were allocated incorrectly. This may take a minute."
+        message="This replays the loan ledger from disbursement and reapplies every approved payment in date order (interest before principal on each schedule row). Use this to fix loans that were allocated incorrectly. This may take a minute."
         confirmText="Reapply"
         cancelText="Cancel"
       />
