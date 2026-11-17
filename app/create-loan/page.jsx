@@ -94,6 +94,7 @@ const CreateLoan = () => {
     powerOfAttorney: null || "null",
     statementOfAccounts: null || "null",
     customerId: "",
+    waiverDuration: "",
   });
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -147,12 +148,14 @@ const CreateLoan = () => {
     { value: "interestServicing", label: "Interest Servicing" },
     { value: "installmentPayment", label: "Installment Payment" },
     { value: "equatedRepayment", label: "Equated Repayment" },
+    { value: "moratorium", label: "Moratorium" },
   ];
 
   const reducingBalrepaymentTypeData = [
     { value: "interestServicing", label: "Interest Servicing" },
     { value: "installmentPayment", label: "Installment Payment" },
     { value: "equatedRepayment", label: "Equated Repayment" },
+    { value: "moratorium", label: "Moratorium" },
   ];
 
   const loanDurationMetricsData = [
@@ -162,6 +165,7 @@ const CreateLoan = () => {
 
   const validateFormData = (formData) => {
     for (const key in formData) {
+      if (key === "waiverDuration") continue;
       if (formData[key] === null || formData[key] === 0) {
         if (
           key === "applicationForm" ||
@@ -307,6 +311,11 @@ const CreateLoan = () => {
   };
 
   const isEquatedRepayment = formData.repaymentType === "equatedRepayment";
+  const isMoratorium = formData.repaymentType === "moratorium";
+  const loanDurationInMonths =
+    (formData.loanDurationMetrics === "Yearly" ? 12 : 1) *
+    (Number(formData.loanDuration) || 0);
+  const maxWaiverDuration = Math.max(0, loanDurationInMonths - 1);
   const normalizedFixedMonthlyPayment = Math.max(
     0,
     parseFloat(String(fixedMonthlyPayment).replace(/,/g, "")) || 0,
@@ -318,6 +327,9 @@ const CreateLoan = () => {
     handleSelectChange(selectedOption, "repaymentType");
     if (selectedOption.value !== "equatedRepayment") {
       setUseFixedPayment(false);
+    }
+    if (selectedOption.value !== "moratorium") {
+      setFormData((prev) => ({ ...prev, waiverDuration: "" }));
     }
   };
 
@@ -331,6 +343,18 @@ const CreateLoan = () => {
 
   const fetchInterest = (e) => {
     setIsLoading(true);
+    if (
+      formData.repaymentType === "moratorium" &&
+      (!formData.waiverDuration ||
+        Number(formData.waiverDuration) < 1 ||
+        Number(formData.waiverDuration) > maxWaiverDuration)
+    ) {
+      toast.error(
+        `Waiver duration must be between 1 and ${maxWaiverDuration} month(s)`,
+      );
+      setIsLoading(false);
+      return;
+    }
     const isFormDataValid = validateFormData(formData);
     if (isFormDataValid === true) {
       const payload = {
@@ -345,6 +369,10 @@ const CreateLoan = () => {
         startDate: "",
         ...(shouldSendFixedPayment && {
           fixedMonthlyPayment: normalizedFixedMonthlyPayment,
+        }),
+        ...(isMoratorium && {
+          waiver: true,
+          waiverDuration: Number(formData.waiverDuration) || 1,
         }),
       };
       if (e?.preventDefault) e.preventDefault();
@@ -475,6 +503,13 @@ const CreateLoan = () => {
     payload.append("repaymentType", formData.repaymentType);
     if (shouldSendFixedPayment) {
       payload.append("fixedMonthlyPayment", normalizedFixedMonthlyPayment);
+    }
+    if (isMoratorium) {
+      payload.append("waiver", "true");
+      payload.append(
+        "waiverDuration",
+        String(Number(formData.waiverDuration) || 1),
+      );
     }
     payload.append("assetType", formData.assetType);
     payload.append("loanDurationMetrics", formData.loanDurationMetrics);
@@ -1159,6 +1194,31 @@ const CreateLoan = () => {
                               />
                             </div>
                           )}
+                        </div>
+                      )}
+                      {isMoratorium && (
+                        <div className="border border-gray-200 rounded-md p-3">
+                          <InputField
+                            label="Waiver Duration"
+                            name="waiverDuration"
+                            type="number"
+                            step="1"
+                            value={formData.waiverDuration}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                waiverDuration: e.target.value.replace(/\D/g, ""),
+                              }))
+                            }
+                            placeholder="Enter waiver duration"
+                          />
+                          {formData.waiverDuration &&
+                            (Number(formData.waiverDuration) < 1 ||
+                              Number(formData.waiverDuration) > maxWaiverDuration) && (
+                              <p className="mt-1 text-sm text-red-500">
+                                Waiver duration must be between 1 and {maxWaiverDuration} month(s).
+                              </p>
+                            )}
                         </div>
                       )}
                     </div>

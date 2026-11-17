@@ -53,6 +53,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
   });
 
   const isEquated = repaymentType === "equatedRepayment";
+  const isMoratorium = repaymentType === "moratorium";
   // Interest servicing is allocated with equated rules on the backend, so its
   // amount due and balance come from the same accrued fields as equated.
   const usesEquatedAmounts =
@@ -60,7 +61,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
     repaymentType === "interestServicing" ||
     repaymentType === "bulletRepayment";
   const usesAccrualFieldsForType =
-    repaymentType === "installmentPayment" || usesEquatedAmounts;
+    repaymentType === "installmentPayment" || isMoratorium || usesEquatedAmounts;
 
   const parsedLogAmount = parseRepaymentAmountInput(formData?.repaymentAmount);
   const exceedsOutstandingBalance =
@@ -126,9 +127,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
   const headers = [
     { id: "createdAt", label: "Due Date" },
     { id: "amountDue", label: "Amount Due" },
-    ...(isEquated
-      ? [{ id: "scheduledAmountDue", label: "Scheduled Repayment" }]
-      : []),
+    { id: "scheduledAmountDue", label: "Scheduled Repayment" },
     { id: "loggedBy", label: "Collected By" },
     { id: "repaymentMethod", label: "Payment Method" },
     { id: "amountPaid", label: "Amount Paid" },
@@ -190,7 +189,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         displayInterest = computedInterest;
       }
 
-      // Scheduled (original-plan) figures — equated only.
+      // Scheduled (original-plan) figures for the repayment schedule.
       const scheduledAmountDue =
         item?.fixedSchedule?.amountDue != null
           ? Number(item.fixedSchedule.amountDue)
@@ -333,23 +332,21 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         ),
       };
 
-      if (isEquated) {
-        row.scheduledAmountDue = (
-          <div>
-            <div className="text-md font-[500] text-gray-700">
-              ₦ {scheduledAmountDue.toLocaleString()}
-            </div>
-            {(scheduledPrincipal > 0 || scheduledInterest > 0) && (
-              <div className="text-xs text-gray-500 mt-0.5">
-                {scheduledPrincipal > 0 &&
-                  `Principal: ₦${scheduledPrincipal.toLocaleString()}`}
-                {scheduledInterest > 0 &&
-                  ` · Interest: ₦${scheduledInterest.toLocaleString()}`}
-              </div>
-            )}
+      row.scheduledAmountDue = (
+        <div>
+          <div className="text-md font-[500] text-gray-700">
+            ₦ {scheduledAmountDue.toLocaleString()}
           </div>
-        );
-      }
+          {(scheduledPrincipal > 0 || scheduledInterest > 0) && (
+            <div className="text-xs text-gray-500 mt-0.5">
+              {scheduledPrincipal > 0 &&
+                `Principal: ₦${scheduledPrincipal.toLocaleString()}`}
+              {scheduledInterest > 0 &&
+                ` · Interest: ₦${scheduledInterest.toLocaleString()}`}
+            </div>
+          )}
+        </div>
+      );
 
       return row;
     });

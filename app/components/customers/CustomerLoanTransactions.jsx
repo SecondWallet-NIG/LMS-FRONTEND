@@ -121,7 +121,7 @@ const CustomerLoanTransactions = ({ loanId }) => {
 >
   {
     item?.transactionStatement === "ON_START_OVERDUE_FEE_TOPUP" || item?.transactionStatement === "CRON_OVERDUE_FEE_TOPUP"
-      ? "Overdue Accrual"
+      ? "Overdue Fee"
       : item?.transactionStatement
   }
 </button>

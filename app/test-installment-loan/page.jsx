@@ -28,6 +28,7 @@ const testRepaymentTypeOptions = [
   { value: "equatedRepayment", label: "Equated Repayment" },
   { value: "interestServicing", label: "Interest Servicing" },
   { value: "bulletRepayment", label: "Bullet Repayment" },
+  { value: "moratorium", label: "Moratorium" },
 ];
 
 const repaymentTypeLabels = {
@@ -35,6 +36,7 @@ const repaymentTypeLabels = {
   equatedRepayment: "Equated Repayment",
   interestServicing: "Interest Servicing",
   bulletRepayment: "Bullet Repayment",
+  moratorium: "Moratorium",
 };
 
 const TestInstallmentLoan = () => {
@@ -63,6 +65,7 @@ const TestInstallmentLoan = () => {
   // amount / duration / interest.
   const [useFixedPayment, setUseFixedPayment] = useState(false);
   const [fixedMonthlyPayment, setFixedMonthlyPayment] = useState(30000);
+  const [waiverDuration, setWaiverDuration] = useState("");
 
   const [repayments, setRepayments] = useState([
     {
@@ -122,6 +125,12 @@ const TestInstallmentLoan = () => {
     0,
     parseFloat(fixedMonthlyPayment) || 0,
   );
+
+  const normalizedWaiverDuration = Math.max(
+    0,
+    parseInt(waiverDuration, 10) || 0,
+  );
+  const maxWaiverDuration = Math.max(0, normalizedLoanDuration - 1);
 
   const isEquatedRepayment = repaymentType === "equatedRepayment";
 
@@ -213,6 +222,16 @@ const TestInstallmentLoan = () => {
       toast.error("Please select a customer");
       return;
     }
+    if (
+      repaymentType === "moratorium" &&
+      (normalizedWaiverDuration < 1 ||
+        normalizedWaiverDuration > maxWaiverDuration)
+    ) {
+      toast.error(
+        `Waiver duration must be between 1 and ${maxWaiverDuration} month(s)`,
+      );
+      return;
+    }
 
     const validRepayments = Array.isArray(repayments)
       ? repayments.filter(
@@ -241,6 +260,10 @@ const TestInstallmentLoan = () => {
           normalizedFixedMonthlyPayment > 0 && {
             fixedMonthlyPayment: normalizedFixedMonthlyPayment,
           }),
+        ...(repaymentType === "moratorium" && {
+          waiver: true,
+          waiverDuration: normalizedWaiverDuration,
+        }),
       };
       if (validRepayments.length > 0) {
         payload.repayments = validRepayments.map((r) => ({
@@ -435,6 +458,9 @@ const TestInstallmentLoan = () => {
                     if (val !== "equatedRepayment") {
                       setUseFixedPayment(false);
                     }
+                    if (val !== "moratorium") {
+                      setWaiverDuration("");
+                    }
                     setRepayments([
                       {
                         repaymentAmount: 0,
@@ -506,6 +532,28 @@ const TestInstallmentLoan = () => {
                       />
                     </div>
                   )}
+                </div>
+              )}
+
+              {repaymentType === "moratorium" && (
+                <div className="border border-gray-200 rounded-md p-3">
+                  <InputField
+                    label="Waiver Duration"
+                    type="number"
+                    step="1"
+                    value={waiverDuration}
+                    onChange={(e) =>
+                      setWaiverDuration(e.target.value.replace(/\D/g, ""))
+                    }
+                    placeholder="Enter waiver duration"
+                  />
+                  {waiverDuration &&
+                    (normalizedWaiverDuration < 1 ||
+                      normalizedWaiverDuration > maxWaiverDuration) && (
+                      <p className="mt-1 text-sm text-red-500">
+                        Waiver duration must be between 1 and {maxWaiverDuration} month(s).
+                      </p>
+                    )}
                 </div>
               )}
 
