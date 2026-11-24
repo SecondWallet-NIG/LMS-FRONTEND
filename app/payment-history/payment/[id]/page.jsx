@@ -296,6 +296,14 @@ const PaymentPage = () => {
             <p className="min-w-[15rem]  text-swBlue">Amount Logged</p>
             <p>₦ {repaymentData?.result?.amountLogged?.toLocaleString()}</p>
           </div>
+          {parseFloat(repaymentData?.result?.excessAmount || 0) > 0.01 ? (
+            <div className="flex">
+              <p className="min-w-[15rem] text-swDarkRed">Overpayment</p>
+              <p className="font-semibold text-swDarkRed">
+                ₦ {parseFloat(repaymentData.result.excessAmount).toLocaleString()}
+              </p>
+            </div>
+          ) : null}
           <div className="flex">
             <p className="min-w-[15rem] text-swBlue">Date Logged</p>
             <p>{formatDate(repaymentData?.result?.createdAt?.slice(0, 10))}</p>

@@ -89,6 +89,11 @@ const PaymentHistoryTable = () => {
           <div className="text-[14px] pt-2 font-[500] text-gray-700">
             ₦ {item?.amountLogged.toLocaleString()}
           </div>
+          {parseFloat(item?.excessAmount || 0) > 0.01 ? (
+            <div className="text-xs font-semibold text-swDarkRed pt-1">
+              Overpayment ₦ {parseFloat(item.excessAmount).toLocaleString()}
+            </div>
+          ) : null}
         </div>
       ),
 
