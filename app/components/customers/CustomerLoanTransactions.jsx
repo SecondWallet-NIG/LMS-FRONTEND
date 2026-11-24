@@ -115,6 +115,8 @@ const CustomerLoanTransactions = ({ loanId }) => {
       ? "bg-[#ffeb3b] text-[#f57c00] text-xs font-normal px-2 py-1 rounded-full"
       : item?.transactionStatement === "CRON_OVERDUE_FEE_TOPUP"
       ? "bg-[#ff9800] text-[#bf360c] text-xs font-normal px-2 py-1 rounded-full"
+      : item?.transactionStatement === "Customer overpayment"
+      ? "bg-[#ffebee] text-[#c62828] text-xs font-normal px-2 py-1 rounded-full"
       : "bg-[#e8eaf6] text-[#303f9f] text-xs font-normal px-2 py-1 rounded-full"
     }
   `}

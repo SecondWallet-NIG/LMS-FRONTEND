@@ -204,9 +204,15 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
           ? Number(item.fixedSchedule.repaymentInterest)
           : 0;
 
-      const amountPaid = Number(item?.amountPaid) || 0;
       const paidFromInterest = Number(item?.amountPaidFromInterest) || 0;
       const paidFromPrincipal = Number(item?.amountPaidFromPrincipal) || 0;
+      const amountPaid = usesAccrualFieldsForType
+        ? Number(
+            (
+              paidFromPrincipal + paidFromInterest
+            ).toFixed(2),
+          )
+        : Number(item?.amountPaid) || 0;
 
       // Balance to pay: for equated, trust the backend's accrued-based balanceToPay
       // directly (do not recompute from scheduled interestRemaining — that's a
@@ -286,10 +292,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
         amountPaid: (
           <div>
             <div className="text-md font-[500] text-gray-700">
-              ₦{" "}
-              {item?.amountPaid === null
-                ? "0"
-                : item?.amountPaid.toLocaleString()}
+              ₦ {amountPaid.toLocaleString()}
             </div>
             {usesAccrualFields &&
               amountPaid > 0 &&
@@ -401,13 +404,6 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
 
     if (!Number.isFinite(amountToLog) || amountToLog <= 0) {
       toast.error("Enter a valid repayment amount greater than zero");
-      return;
-    }
-
-    if (amountToLog > outstandingBalance + LOG_AMOUNT_EPS) {
-      toast.error(
-        `Amount cannot exceed outstanding balance (₦${outstandingBalance.toLocaleString()})`,
-      );
       return;
     }
 
@@ -598,9 +594,15 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
                   handleInputChangeWithComma(e);
                 }}
                 hintText={
-                  outstandingBalance > 0
-                    ? `Maximum loggable amount: ₦${outstandingBalance.toLocaleString()} (total outstanding balance). Excess applies to upcoming installments on approval.`
-                    : "Amount paid that received the current repayment amount will spill into the next repayment cycle"
+                  outstandingBalance > 0 &&
+                  Number.isFinite(parsedLogAmount) &&
+                  parsedLogAmount > outstandingBalance + LOG_AMOUNT_EPS
+                    ? `₦${outstandingBalance.toLocaleString()} closes the loan; ₦${(
+                        parsedLogAmount - outstandingBalance
+                      ).toLocaleString()} will be recorded as overpayment.`
+                    : outstandingBalance > 0
+                      ? `Amount due to close: ₦${outstandingBalance.toLocaleString()}. Extra above this is overpayment (not applied to the loan). Mid-loan extra below this reduces principal.`
+                      : "Enter the amount received"
                 }
               />
             </div>
@@ -738,7 +740,7 @@ const CustomerRepayment = ({ loanId, status, repaymentType, data }) => {
                 Cancel
               </Button>
               <Button
-                disabled={loading || exceedsOutstandingBalance}
+                disabled={loading}
                 variant="secondary"
                 onClick={logRepaymentFunction}
               >

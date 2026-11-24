@@ -860,6 +860,17 @@ const ViewLoan = () => {
                       {data?.data?.loanApplication?.outstandingBalance?.toLocaleString() ||
                         0}
                     </p>
+                    {parseFloat(
+                      data?.data?.loanApplication?.totalExcessAmount || 0,
+                    ) > 0.01 ? (
+                      <p className="mt-1 text-xs font-semibold text-swDarkRed">
+                        Closed with ₦{" "}
+                        {parseFloat(
+                          data?.data?.loanApplication?.totalExcessAmount,
+                        ).toLocaleString()}{" "}
+                        overpayment
+                      </p>
+                    ) : null}
                   </div>
                 </div>
                 <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3">
